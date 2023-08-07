@@ -20,3 +20,8 @@ export type {ITimePickerProps} from './timePicker/timePicker';
 //export type {ITreeSelectNode, ITreeSelectValue, ITreeSelectProps, ITreeSelectPlainValue, ITreeSelectCallbacks} from './treeSelect/treeSelect';
 //export type {ITreeSelectApi} from './treeSelect/hooks/api';
 
+export {ButtonsRow} from './buttonsRow/buttonsRow';
+export type {IButtonsRowApi, IFormButton, IFormButtons} from './buttonsRow/buttonsRow';
+
+export {Modal} from './modal/modal';
+export type {IFormType, IModalProps as ModalProps} from './modal/modal';

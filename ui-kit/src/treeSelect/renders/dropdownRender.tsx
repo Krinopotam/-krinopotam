@@ -1,5 +1,5 @@
 import React from 'react';
-import {DropdownStatus} from 'baseComponents/treeSelect/renders/dropdownStatus';
+import {DropdownStatus} from './dropdownStatus';
 
 export const DropdownRender = ({
     menu,
@@ -11,7 +11,7 @@ export const DropdownRender = ({
     fetching: boolean;
     error: string;
     minSymbols: number;
-}): JSX.Element => (
+}): React.JSX.Element => (
     <>
         {menu}
         <DropdownStatus fetching={fetching} error={error} minSymbols={minSymbols} />

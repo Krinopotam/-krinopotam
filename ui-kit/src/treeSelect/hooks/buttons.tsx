@@ -1,12 +1,12 @@
-import {IFormButtons} from 'baseComponents/buttonsRow';
+import {IFormButtons} from '../../buttonsRow/buttonsRow';
 import {HelpersObjects} from "@krinopotam/js-helpers";
 import React, {useMemo} from 'react';
-import {ITreeSelectApi} from 'baseComponents/treeSelect';
+import {ITreeSelectApi} from './api';
 import {DeleteOutlined, EditOutlined, PlusOutlined} from '@ant-design/icons';
 import {IDFormModalApi} from 'baseComponents/dFormModal/hooks/api';
 import {MessageBoxApi} from 'baseComponents/messageBox/messageBoxApi';
 import {MessageBox} from 'baseComponents/messageBox';
-import {ITreeSelectDeletePromise} from 'baseComponents/treeSelect/treeSelect';
+import {ITreeSelectDeletePromise} from '../treeSelect';
 
 /** Generate buttons */
 export const useInitButtons = (api: ITreeSelectApi, formApi: IDFormModalApi) => {

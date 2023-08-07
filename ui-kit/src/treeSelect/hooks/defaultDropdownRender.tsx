@@ -1,5 +1,5 @@
 import React, {useCallback} from 'react';
-import {DropdownRender} from 'baseComponents/treeSelect/renders/dropdownRender';
+import {DropdownRender} from '../renders/dropdownRender';
 
 export const useDefaultDropdownRender = ({fetchError, fetching, minSymbols}: {fetchError: string; fetching: boolean; minSymbols: number}) => {
     return useCallback(

@@ -6,7 +6,7 @@
  * @license MIT
  */
 
-import {ButtonsRow, IButtonsRowApi, IFormButtons} from 'baseComponents/buttonsRow';
+import {ButtonsRow, IButtonsRowApi, IFormButtons} from '../../buttonsRow/buttonsRow';
 
 import React from 'react';
 
@@ -24,7 +24,7 @@ interface ITreeSelectButtonsRenderProps {
     context?: unknown;
 }
 
-export const ButtonsRender = ({containerId, buttons, buttonsApi, context}: ITreeSelectButtonsRenderProps): JSX.Element | null => {
+export const ButtonsRender = ({containerId, buttons, buttonsApi, context}: ITreeSelectButtonsRenderProps): React.JSX.Element | null => {
     if (!buttons || Object.keys(buttons).length === 0) return null;
 
     return <ButtonsRow formId={containerId} buttons={buttons} apiRef={buttonsApi} context={context} arrowsSelection={false} />;

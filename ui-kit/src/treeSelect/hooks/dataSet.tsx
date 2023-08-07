@@ -1,5 +1,5 @@
 import React, {useCallback, useState} from 'react';
-import {ITreeSelectNode, ITreeSelectProps} from 'baseComponents/treeSelect';
+import {ITreeSelectNode, ITreeSelectProps} from '../treeSelect';
 
 export const useDataSet = (
     titleRender: ITreeSelectProps['titleRender'],

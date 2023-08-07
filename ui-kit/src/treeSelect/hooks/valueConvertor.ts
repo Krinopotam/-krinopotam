@@ -1,7 +1,7 @@
 import React, {useCallback, useRef, useState} from 'react';
 import {HelpersObjects} from "@krinopotam/js-helpers";
-import {ITreeSelectNode, ITreeSelectPlainValue, ITreeSelectProps, ITreeSelectValue} from 'baseComponents/treeSelect';
-import {ITreeSelectApi} from 'baseComponents/treeSelect/hooks/api';
+import {ITreeSelectNode, ITreeSelectPlainValue, ITreeSelectProps, ITreeSelectValue} from '../treeSelect';
+import {ITreeSelectApi} from './api';
 
 export interface ITreeSelectInternalValue {
     value: string | number;

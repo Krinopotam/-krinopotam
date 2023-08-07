@@ -1,9 +1,9 @@
 import {useMemo, useState} from 'react';
 import {HelpersStrings} from "@krinopotam/js-helpers";
-import {ITreeSelectNode} from 'baseComponents/treeSelect';
+import {ITreeSelectNode} from '../treeSelect';
 import {IDFormModalApi} from 'baseComponents/dFormModal/hooks/api';
 import {IDFormModalProps} from 'baseComponents/dFormModal/dFormModal';
-import {ITreeSelectApi} from 'baseComponents/treeSelect/hooks/api';
+import {ITreeSelectApi} from './api';
 
 export const useEditableInit = (api: ITreeSelectApi): [typeof formProps, typeof formApi] => {
     const treeProps = api.getProps();

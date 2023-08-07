@@ -1,26 +1,31 @@
 import {TreeSelect as AntdTreeSelect} from 'antd';
 import React from 'react';
-import {ITreeSelectProps} from 'baseComponents/treeSelect';
-import {useDropdownStyle} from 'baseComponents/treeSelect/hooks/dropdownStyle';
-import {NotFound} from 'baseComponents/treeSelect/renders/notFound';
-import {useDefaultDropdownRender} from 'baseComponents/treeSelect/hooks/defaultDropdownRender';
-import {ITreeSelectApi} from 'baseComponents/treeSelect/hooks/api';
-import {IAntTreeSelectProps} from 'baseComponents/treeSelect/treeSelect';
-import {useDefaultFilter} from "baseComponents/treeSelect/hooks/filter";
+import {ITreeSelectProps} from '../treeSelect';
+import {useDropdownStyle} from '../hooks/dropdownStyle';
+import {NotFound} from './notFound';
+import {useDefaultDropdownRender} from '../hooks/defaultDropdownRender';
+import {ITreeSelectApi} from '../hooks/api';
+import {IAntTreeSelectProps} from '../treeSelect';
+import {useDefaultFilter} from "../hooks/filter";
 
 // For clarity. Antd has labels for a node(1) and for the selected value(2). fieldNames.label property sets the node label(1) and treeNodeLabelProp sets the selected value label(2)
 // In order not to get confused, we will consider Node's label is title(1), and Label of the selected value is label(2)
 // For the implementation of the capabilities of the Title & Labels  renders, we add to dataSet 2 service fields: __title & __label
-export const TreeSelectRender = ({
-    api,
-    antProps,
-}: ITreeSelectProps & {
-    api: ITreeSelectApi;
-    antProps: IAntTreeSelectProps;
-}) => {
+export const TreeSelectRender = (
+    {
+        api,
+        antProps,
+    }: ITreeSelectProps & {
+        api: ITreeSelectApi;
+        antProps: IAntTreeSelectProps;
+    }): React.JSX.Element => {
     const treeProps = api.getProps();
     const _dropdownStyle = useDropdownStyle(treeProps.dropdownStyle);
-    const defaultDropdownRender = useDefaultDropdownRender({fetchError: api.getFetchError(), fetching: api.getIsFetching(), minSymbols: api.getMinSymbols()});
+    const defaultDropdownRender = useDefaultDropdownRender({
+        fetchError: api.getFetchError(),
+        fetching: api.getIsFetching(),
+        minSymbols: api.getMinSymbols()
+    });
     const defaultFilter = useDefaultFilter(api);
 
     return (
@@ -68,7 +73,8 @@ export const TreeSelectRender = ({
                 api.fetchData(searchString, true);
             }}
             notFoundContent={
-                treeProps.notFoundContent || <NotFound fetching={api.getIsFetching()} error={api.getFetchError()} minSymbols={api.getMinSymbols()} />
+                treeProps.notFoundContent ||
+                <NotFound fetching={api.getIsFetching()} error={api.getFetchError()} minSymbols={api.getMinSymbols()}/>
             }
             dropdownRender={treeProps.dropdownRender || defaultDropdownRender}
         />

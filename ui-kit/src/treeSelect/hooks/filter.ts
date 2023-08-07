@@ -1,6 +1,6 @@
-import {ITreeSelectNode} from 'baseComponents/treeSelect';
+import {ITreeSelectNode} from '../treeSelect';
 import {useCallback} from 'react';
-import {ITreeSelectApi} from "baseComponents/treeSelect/hooks/api";
+import {ITreeSelectApi} from "./api";
 
 export const useDefaultFilter = (api:ITreeSelectApi) => {
     const fields = api.getProps().fieldNames
