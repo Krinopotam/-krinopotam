@@ -2,7 +2,7 @@
 	"name": "@krinopotam/common-hooks",
 	"version": "1.0.0",
 	"description": "Common hooks for Krinopotam's projects",
-	"private": true,
+	"private": false,
 	"author": "Maxim Zaytsev",
 	"license": "ISC",
 	"main": "src/index.ts",

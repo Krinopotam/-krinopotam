@@ -1,7 +1,6 @@
 'use strict'
 
 const webpack = require('webpack');
-const TerserPlugin = require('terser-webpack-plugin');
 
 module.exports = (env, argv) => {
     const NODE_ENV = (argv.mode && argv.mode === 'production') ? 'production' : 'development';
@@ -54,17 +53,7 @@ module.exports = (env, argv) => {
         devtool: NODE_ENV === 'development' ? "eval-source-map" : false,
 
         optimization: {
-            minimize: NODE_ENV === 'production', //сжатие
-            minimizer: [
-                new TerserPlugin({
-                    extractComments: false, //не вытаскивать комментарии в отдельный файл
-                    terserOptions: {
-                        format: {
-                            comments: /@license/i, //сохранять комментарии только  в части лицензий
-                        },
-                    },
-                }),
-            ],
+            minimize: false, //сжатие
         },
 
         target: ['web', 'es5'],

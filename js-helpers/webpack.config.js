@@ -1,7 +1,7 @@
 'use strict'
 
 const webpack = require('webpack');
-const TerserPlugin = require('terser-webpack-plugin');
+const path = require('path');
 
 module.exports = (env, argv) => {
     const NODE_ENV = (argv.mode && argv.mode === 'production') ? 'production' : 'development';
@@ -10,28 +10,34 @@ module.exports = (env, argv) => {
         mode: NODE_ENV,
 
         entry: {
-			'index' : './src/index.ts',
+			'js-helpers' : './src/index.ts',
+            'js-helpers.min': './src/index.ts'
         },
 
         output: {
-            publicPath: '/assets/',
-            path: __dirname + '/dist',
-
-            chunkFilename: '[name].js',
+            path: path.resolve(__dirname, '_bundles'),
             filename: '[name].js',
+            libraryTarget: 'umd',
+            library: 'js-helpers',
+            umdNamedDefine: true,
             clean: true //очистка public перед рендером
+        },
+
+        resolve: {
+            extensions: ['*', ".ts", ".tsx", ".js", ".jsx"],
         },
 
         module: {
             rules: [
                 {
 					test: /\.ts(x?)$/,
-					exclude: /node_modules/,
+					//exclude: /node_modules/,
 					use: 
 					[
+                        /*
 						{
 							loader: 'babel-loader', // uses babel-loader for the specified file types (no ts-loader needed)							
-						},
+						},*/
                         {
                             loader: "ts-loader",
 							options: {
@@ -45,26 +51,14 @@ module.exports = (env, argv) => {
             ]
         },
 
-        resolve: {
-            extensions: ['*', ".ts", ".tsx", ".js", ".jsx"],
-        },
+
 
         watch: NODE_ENV === 'development', //после запуска webpack он будет висеть в фоне и автоматически мониторить и перекомпилировать изменения (только в режиме разработки)
 
-        devtool: NODE_ENV === 'development' ? "eval-source-map" : false,
+        devtool: 'source-map',
 
         optimization: {
-            minimize: NODE_ENV === 'production', //сжатие
-            minimizer: [
-                new TerserPlugin({
-                    extractComments: false, //не вытаскивать комментарии в отдельный файл
-                    terserOptions: {
-                        format: {
-                            comments: /@license/i, //сохранять комментарии только  в части лицензий
-                        },
-                    },
-                }),
-            ],
+            minimize: false, //сжатие
         },
 
         target: ['web', 'es5'],

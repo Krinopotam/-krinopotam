@@ -1,5 +1,5 @@
 /**
- * @KrinObjectHelpers
+ * @ObjectHelpers
  * @version 0.0.1
  * @link omegatester@gmail.com
  * @author Maksim Zaytsev
