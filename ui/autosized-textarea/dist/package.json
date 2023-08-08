@@ -1,7 +1,7 @@
 {
-	"name": "@krinopotam/ui-button",
-	"version": "1.0.4",
-	"description": "UI buttons Krinopotam's projects",
+	"name": "@krinopotam/ui-autosized-textarea",
+	"version": "1.0.0",
+	"description": "UI autosized textarea for Krinopotam's projects",
 	"private": false,
 	"author": "Maxim Zaytsev",
 	"license": "ISC",
@@ -36,8 +36,8 @@
 		"webpack-cli": "^5.0.1"
 	},
 	"dependencies": {
-		"@krinopotam/js-helpers": "^1.0.1",
-		"@krinopotam/ui-forms-dispatcher": "^1.0.3",
-		"antd": "^5.8.2"
+		"@krinopotam/js-helpers": "^1.0.7",
+		"antd": "^5.8.2",
+		"styled-components": "^6.0.7"
 	}
 }

@@ -1,6 +1,6 @@
 import {Card, Col, Row, Typography} from 'antd';
 import React, {useCallback} from 'react';
-import {Button} from '../button/button';
+import {Button} from '@krinopotam/ui-button';
 
 const {Text} = Typography;
 

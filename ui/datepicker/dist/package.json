@@ -1,7 +1,7 @@
 {
-	"name": "@krinopotam/ui-button",
-	"version": "1.0.4",
-	"description": "UI buttons Krinopotam's projects",
+	"name": "@krinopotam/ui-datepicker",
+	"version": "1.0.0",
+	"description": "UI date picker Krinopotam's projects",
 	"private": false,
 	"author": "Maxim Zaytsev",
 	"license": "ISC",
@@ -38,6 +38,7 @@
 	"dependencies": {
 		"@krinopotam/js-helpers": "^1.0.1",
 		"@krinopotam/ui-forms-dispatcher": "^1.0.3",
-		"antd": "^5.8.2"
+		"antd": "^5.8.2",
+		"dayjs": "^1.11.9"
 	}
 }

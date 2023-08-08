@@ -1,5 +1,5 @@
 import React from 'react';
-import {LoadingError} from '../loadingError/loadingError';
+import {LoadingError} from '@krinopotam/ui-loading-error';
 import {Spin} from 'antd';
 
 export interface ILoginContainerProps {
