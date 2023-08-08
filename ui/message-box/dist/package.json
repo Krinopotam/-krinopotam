@@ -1,6 +1,6 @@
 {
-	"name": "@krinopotam/message-box",
-	"version": "1.0.1",
+	"name": "@krinopotam/ui-message-box",
+	"version": "1.0.3",
 	"description": "Message Box for Krinopotam's projects",
 	"private": false,
 	"author": "Maxim Zaytsev",
