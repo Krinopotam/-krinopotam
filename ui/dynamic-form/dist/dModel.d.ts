@@ -115,7 +115,7 @@ export declare class DModel {
     validateField(fieldName: string, noEvents?: boolean): string;
     getFieldProps(fieldName: string): IDFormFieldProps;
     setFieldProps(fieldName: string, fieldProps: IDFormFieldProps): void;
-    updateFieldProps(fieldName: string, updatedProps: Partial<IDFormFieldProps>): void;
+    updateFieldProps(fieldName: string, updatedProps: Record<string, unknown>): void;
     isGroupHidden(tabName: string, groupName: string): boolean;
     setGroupHidden(tabName: string, groupName: string, value: boolean): void;
     getFirstVisibleFieldInGroup(tabName: string, groupName: string): IDFormFieldProps | undefined;

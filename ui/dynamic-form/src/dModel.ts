@@ -240,20 +240,20 @@ export class DModel {
 
         //the form props have changed
         this._formProps = formProps;
-        this._formMode = formProps.formMode || 'create';
+        this._formMode = formProps.formMode ?? 'create';
         this._formReadOnly = !!formProps.readOnly;
-        this._validationRules = formProps.validationRules || ({} as IDFormFieldValidationRules);
+        this._validationRules = formProps.validationRules ?? ({} as IDFormFieldValidationRules);
 
         const oldFieldsProps = this.getFieldsProps();
         if (oldFieldsProps !== formProps.fieldsProps) {
             // the fields props have changed
-            this._fieldsProps = formProps.fieldsProps || {};
+            this._fieldsProps = formProps.fieldsProps ?? {};
             this._tabsProps = this.preparePropsCollection(this._fieldsProps);
 
             [this._labels, this._values, this._hidden, this._readOnly, this._disabled] = this.initFieldsParameters(
                 oldFieldsProps,
                 formProps.fieldsProps,
-                formProps.formMode || 'create'
+                formProps.formMode ?? 'create'
             );
         }
 
@@ -274,8 +274,8 @@ export class DModel {
         for (const fieldName in fieldsProps) {
             const field = fieldsProps[fieldName];
 
-            const tabName = field.tab || '[__default__]';
-            const groupName = field.inlineGroup || '[__group__]' + i++;
+            const tabName = field.tab ?? '[__default__]';
+            const groupName = field.inlineGroup ?? '[__group__]' + i++;
 
             if (!tabsProps[tabName]) tabsProps[tabName] = {};
             if (!tabsProps[tabName][groupName]) tabsProps[tabName][groupName] = {};
@@ -534,7 +534,7 @@ export class DModel {
 
         let prevGroupValue = false;
         const field = this.getFieldProps('fieldName');
-        if (field && field.tab && field.inlineGroup) prevGroupValue = this.isGroupHidden(field.tab, field.inlineGroup);
+        if (field?.tab && field.inlineGroup) prevGroupValue = this.isGroupHidden(field.tab, field.inlineGroup);
 
         this._hidden[fieldName] = value;
         if (value) this.setFieldReady(fieldName, false, true); //the hidden fields are not ready because they are not rendered, but form ready status not changed
@@ -547,7 +547,7 @@ export class DModel {
         this.emitFieldRender(fieldName);
         if (!this.getFormProps().noAutoHideDependedFields) this.hideDependedFields(fieldName);
 
-        if (!field || !field.tab || !field.inlineGroup) return;
+        if (!field?.tab || !field.inlineGroup) return;
         const curGroupValue = this.isGroupHidden(field.tab, field.inlineGroup);
         if (prevGroupValue !== curGroupValue) this.emitGroupRender(field.tab, field.inlineGroup);
     }
@@ -662,7 +662,7 @@ export class DModel {
      * @param fieldName
      * @param updatedProps
      */
-    public updateFieldProps(fieldName: string, updatedProps: Partial<IDFormFieldProps>) {
+    public updateFieldProps(fieldName: string, updatedProps: Record<string, unknown>) {
         const curProps = this.getFieldProps(fieldName);
         if (!curProps) return;
         this.setFieldProps(fieldName, {...curProps, ...updatedProps});
@@ -675,7 +675,7 @@ export class DModel {
      * @returns inline group hidden status
      */
     public isGroupHidden(tabName: string, groupName: string): boolean {
-        if (!this._tabsProps[tabName] || !this._tabsProps[tabName][groupName]) return true;
+        if (!this._tabsProps?.[tabName]?.[groupName]) return true;
 
         for (const fieldName in this._tabsProps[tabName][groupName]) {
             if (!this.isFieldHidden(fieldName)) return false;
@@ -691,7 +691,7 @@ export class DModel {
      * @param value - hidden status
      */
     public setGroupHidden(tabName: string, groupName: string, value: boolean) {
-        if (!this._tabsProps[tabName] || !this._tabsProps[tabName][groupName]) return;
+        if (!this._tabsProps?.[tabName]?.[groupName]) return;
 
         let prevValue = this.isGroupHidden(tabName, groupName);
         for (const fieldName in this._tabsProps[tabName][groupName]) {
@@ -710,7 +710,7 @@ export class DModel {
      * @returns returns a first visible field in the inline group
      */
     public getFirstVisibleFieldInGroup(tabName: string, groupName: string): IDFormFieldProps | undefined {
-        if (!this._tabsProps[tabName] || !this._tabsProps[tabName][groupName]) return undefined;
+        if (!this._tabsProps?.[tabName]?.[groupName]) return undefined;
 
         for (const fieldName in this._tabsProps[tabName][groupName]) {
             if (!this.isFieldHidden(fieldName)) return this.getFieldsProps()[fieldName];
@@ -1158,8 +1158,8 @@ export class DModel {
                 onSubmitError?.(values, objectResult.error.message || '', objectResult.error.code || 400, this);
                 this._callbacks?.onSubmitError?.(values, objectResult.error.message || '', objectResult.error.code || 400, this);
             } else {
-                onSubmitSuccess?.(values, objectResult.data || values, this);
-                this._callbacks?.onSubmitSuccess?.(values, objectResult.data || values, this);
+                onSubmitSuccess?.(values, objectResult.data ?? values, this);
+                this._callbacks?.onSubmitSuccess?.(values, objectResult.data ?? values, this);
             }
 
             onSubmitComplete?.(values, errors, this);
@@ -1218,7 +1218,7 @@ export class DModel {
 
         for (const childName in fieldsProps) {
             const childProps = fieldsProps[childName];
-            if (!childProps || !childProps.dependsOn || childProps.dependsOn.indexOf(fieldName) < 0) continue;
+            if (!childProps?.dependsOn || childProps.dependsOn.indexOf(fieldName) < 0) continue;
             this.setFieldHidden(childName, this.isFieldMustBeHidden(childName, fieldsProps, this.getFormValues(), this._hidden));
         }
     }
@@ -1308,10 +1308,10 @@ export class DModel {
     private emitGroupRender(tabName: string, groupName: string) {
         if (!this._groupRenderSnapshots[tabName]) this._groupRenderSnapshots[tabName] = {};
         const result =
-            this._groupRenderSnapshots[tabName] && this._groupRenderSnapshots[tabName][groupName] ? this._groupRenderSnapshots[tabName][groupName]() + 1 : 0;
+            this._groupRenderSnapshots[tabName]?.[groupName] ? this._groupRenderSnapshots[tabName][groupName]() + 1 : 0;
         this._groupRenderSnapshots[tabName][groupName] = () => result;
 
-        if (!this._groupRenderListeners[tabName] || !this._groupRenderListeners[tabName][groupName]) return;
+        if (!this._groupRenderListeners?.[tabName]?.[groupName]) return;
         for (const listener of this._groupRenderListeners[tabName][groupName]) listener();
     }
 

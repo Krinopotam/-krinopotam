@@ -41,18 +41,19 @@ export class DModel {
         this._validator = new BaseValidator();
     }
     reinitModel(formProps, callbacks) {
+        var _a, _b, _c, _d;
         this._callbacks = callbacks;
         if (this._formProps === formProps)
             return;
         this._formProps = formProps;
-        this._formMode = formProps.formMode || 'create';
+        this._formMode = (_a = formProps.formMode) !== null && _a !== void 0 ? _a : 'create';
         this._formReadOnly = !!formProps.readOnly;
-        this._validationRules = formProps.validationRules || {};
+        this._validationRules = (_b = formProps.validationRules) !== null && _b !== void 0 ? _b : {};
         const oldFieldsProps = this.getFieldsProps();
         if (oldFieldsProps !== formProps.fieldsProps) {
-            this._fieldsProps = formProps.fieldsProps || {};
+            this._fieldsProps = (_c = formProps.fieldsProps) !== null && _c !== void 0 ? _c : {};
             this._tabsProps = this.preparePropsCollection(this._fieldsProps);
-            [this._labels, this._values, this._hidden, this._readOnly, this._disabled] = this.initFieldsParameters(oldFieldsProps, formProps.fieldsProps, formProps.formMode || 'create');
+            [this._labels, this._values, this._hidden, this._readOnly, this._disabled] = this.initFieldsParameters(oldFieldsProps, formProps.fieldsProps, (_d = formProps.formMode) !== null && _d !== void 0 ? _d : 'create');
         }
         const oldDataSet = this.getFormDataSet();
         if (oldDataSet !== formProps.dataSet)
@@ -61,14 +62,15 @@ export class DModel {
             this._hidden = this.calculateHiddenFields(this.getFieldsProps(), this.getFormValues(), this._hidden);
     }
     preparePropsCollection(fieldsProps) {
+        var _a, _b;
         const tabsProps = {};
         if (!fieldsProps)
             return tabsProps;
         let i = 1;
         for (const fieldName in fieldsProps) {
             const field = fieldsProps[fieldName];
-            const tabName = field.tab || '[__default__]';
-            const groupName = field.inlineGroup || '[__group__]' + i++;
+            const tabName = (_a = field.tab) !== null && _a !== void 0 ? _a : '[__default__]';
+            const groupName = (_b = field.inlineGroup) !== null && _b !== void 0 ? _b : '[__group__]' + i++;
             if (!tabsProps[tabName])
                 tabsProps[tabName] = {};
             if (!tabsProps[tabName][groupName])
@@ -211,7 +213,7 @@ export class DModel {
         const prevValue = this.isFieldHidden(fieldName);
         let prevGroupValue = false;
         const field = this.getFieldProps('fieldName');
-        if (field && field.tab && field.inlineGroup)
+        if ((field === null || field === void 0 ? void 0 : field.tab) && field.inlineGroup)
             prevGroupValue = this.isGroupHidden(field.tab, field.inlineGroup);
         this._hidden[fieldName] = value;
         if (value)
@@ -223,7 +225,7 @@ export class DModel {
         this.emitFieldRender(fieldName);
         if (!this.getFormProps().noAutoHideDependedFields)
             this.hideDependedFields(fieldName);
-        if (!field || !field.tab || !field.inlineGroup)
+        if (!(field === null || field === void 0 ? void 0 : field.tab) || !field.inlineGroup)
             return;
         const curGroupValue = this.isGroupHidden(field.tab, field.inlineGroup);
         if (prevGroupValue !== curGroupValue)
@@ -299,7 +301,8 @@ export class DModel {
         this.setFieldProps(fieldName, Object.assign(Object.assign({}, curProps), updatedProps));
     }
     isGroupHidden(tabName, groupName) {
-        if (!this._tabsProps[tabName] || !this._tabsProps[tabName][groupName])
+        var _a, _b;
+        if (!((_b = (_a = this._tabsProps) === null || _a === void 0 ? void 0 : _a[tabName]) === null || _b === void 0 ? void 0 : _b[groupName]))
             return true;
         for (const fieldName in this._tabsProps[tabName][groupName]) {
             if (!this.isFieldHidden(fieldName))
@@ -308,7 +311,8 @@ export class DModel {
         return true;
     }
     setGroupHidden(tabName, groupName, value) {
-        if (!this._tabsProps[tabName] || !this._tabsProps[tabName][groupName])
+        var _a, _b;
+        if (!((_b = (_a = this._tabsProps) === null || _a === void 0 ? void 0 : _a[tabName]) === null || _b === void 0 ? void 0 : _b[groupName]))
             return;
         let prevValue = this.isGroupHidden(tabName, groupName);
         for (const fieldName in this._tabsProps[tabName][groupName]) {
@@ -321,7 +325,8 @@ export class DModel {
         this.emitGroupRender(tabName, groupName);
     }
     getFirstVisibleFieldInGroup(tabName, groupName) {
-        if (!this._tabsProps[tabName] || !this._tabsProps[tabName][groupName])
+        var _a, _b;
+        if (!((_b = (_a = this._tabsProps) === null || _a === void 0 ? void 0 : _a[tabName]) === null || _b === void 0 ? void 0 : _b[groupName]))
             return undefined;
         for (const fieldName in this._tabsProps[tabName][groupName]) {
             if (!this.isFieldHidden(fieldName))
@@ -556,7 +561,7 @@ export class DModel {
         return this._formProps;
     }
     submit(onSubmitSuccess, onSubmitError, onSubmitComplete) {
-        var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1, _2;
+        var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1, _2, _3, _4;
         if (this.isFormSubmitting())
             return;
         this.incrementSubmitCount();
@@ -614,32 +619,32 @@ export class DModel {
                 (_o = (_m = this._callbacks) === null || _m === void 0 ? void 0 : _m.onSubmitError) === null || _o === void 0 ? void 0 : _o.call(_m, values, objectResult.error.message || '', objectResult.error.code || 400, this);
             }
             else {
-                onSubmitSuccess === null || onSubmitSuccess === void 0 ? void 0 : onSubmitSuccess(values, objectResult.data || values, this);
-                (_q = (_p = this._callbacks) === null || _p === void 0 ? void 0 : _p.onSubmitSuccess) === null || _q === void 0 ? void 0 : _q.call(_p, values, objectResult.data || values, this);
+                onSubmitSuccess === null || onSubmitSuccess === void 0 ? void 0 : onSubmitSuccess(values, (_p = objectResult.data) !== null && _p !== void 0 ? _p : values, this);
+                (_r = (_q = this._callbacks) === null || _q === void 0 ? void 0 : _q.onSubmitSuccess) === null || _r === void 0 ? void 0 : _r.call(_q, values, (_s = objectResult.data) !== null && _s !== void 0 ? _s : values, this);
             }
             onSubmitComplete === null || onSubmitComplete === void 0 ? void 0 : onSubmitComplete(values, errors, this);
-            (_s = (_r = this._callbacks) === null || _r === void 0 ? void 0 : _r.onSubmitComplete) === null || _s === void 0 ? void 0 : _s.call(_r, values, errors, this);
+            (_u = (_t = this._callbacks) === null || _t === void 0 ? void 0 : _t.onSubmitComplete) === null || _u === void 0 ? void 0 : _u.call(_t, values, errors, this);
             return;
         }
         this.setFormSubmitting(false);
         if (typeof result === 'boolean') {
             if (result) {
                 onSubmitSuccess === null || onSubmitSuccess === void 0 ? void 0 : onSubmitSuccess(values, values, this);
-                (_u = (_t = this._callbacks) === null || _t === void 0 ? void 0 : _t.onSubmitSuccess) === null || _u === void 0 ? void 0 : _u.call(_t, values, values, this);
+                (_w = (_v = this._callbacks) === null || _v === void 0 ? void 0 : _v.onSubmitSuccess) === null || _w === void 0 ? void 0 : _w.call(_v, values, values, this);
             }
             else {
                 onSubmitError === null || onSubmitError === void 0 ? void 0 : onSubmitError(values, 'Неизвестная ошибка', 400, this);
-                (_w = (_v = this._callbacks) === null || _v === void 0 ? void 0 : _v.onSubmitError) === null || _w === void 0 ? void 0 : _w.call(_v, values, 'Неизвестная ошибка', 400, this);
+                (_y = (_x = this._callbacks) === null || _x === void 0 ? void 0 : _x.onSubmitError) === null || _y === void 0 ? void 0 : _y.call(_x, values, 'Неизвестная ошибка', 400, this);
             }
             onSubmitComplete === null || onSubmitComplete === void 0 ? void 0 : onSubmitComplete(values, errors, this);
-            (_y = (_x = this._callbacks) === null || _x === void 0 ? void 0 : _x.onSubmitComplete) === null || _y === void 0 ? void 0 : _y.call(_x, values, errors, this);
+            (_0 = (_z = this._callbacks) === null || _z === void 0 ? void 0 : _z.onSubmitComplete) === null || _0 === void 0 ? void 0 : _0.call(_z, values, errors, this);
             return;
         }
         if (typeof result === 'undefined') {
             onSubmitSuccess === null || onSubmitSuccess === void 0 ? void 0 : onSubmitSuccess(values, values, this);
             onSubmitComplete === null || onSubmitComplete === void 0 ? void 0 : onSubmitComplete(values, errors, this);
-            (_0 = (_z = this._callbacks) === null || _z === void 0 ? void 0 : _z.onSubmitSuccess) === null || _0 === void 0 ? void 0 : _0.call(_z, values, values, this);
-            (_2 = (_1 = this._callbacks) === null || _1 === void 0 ? void 0 : _1.onSubmitComplete) === null || _2 === void 0 ? void 0 : _2.call(_1, values, errors, this);
+            (_2 = (_1 = this._callbacks) === null || _1 === void 0 ? void 0 : _1.onSubmitSuccess) === null || _2 === void 0 ? void 0 : _2.call(_1, values, values, this);
+            (_4 = (_3 = this._callbacks) === null || _3 === void 0 ? void 0 : _3.onSubmitComplete) === null || _4 === void 0 ? void 0 : _4.call(_3, values, errors, this);
         }
     }
     getSubmitCount() {
@@ -655,7 +660,7 @@ export class DModel {
             return;
         for (const childName in fieldsProps) {
             const childProps = fieldsProps[childName];
-            if (!childProps || !childProps.dependsOn || childProps.dependsOn.indexOf(fieldName) < 0)
+            if (!(childProps === null || childProps === void 0 ? void 0 : childProps.dependsOn) || childProps.dependsOn.indexOf(fieldName) < 0)
                 continue;
             this.setFieldHidden(childName, this.isFieldMustBeHidden(childName, fieldsProps, this.getFormValues(), this._hidden));
         }
@@ -717,11 +722,12 @@ export class DModel {
         };
     }
     emitGroupRender(tabName, groupName) {
+        var _a, _b, _c;
         if (!this._groupRenderSnapshots[tabName])
             this._groupRenderSnapshots[tabName] = {};
-        const result = this._groupRenderSnapshots[tabName] && this._groupRenderSnapshots[tabName][groupName] ? this._groupRenderSnapshots[tabName][groupName]() + 1 : 0;
+        const result = ((_a = this._groupRenderSnapshots[tabName]) === null || _a === void 0 ? void 0 : _a[groupName]) ? this._groupRenderSnapshots[tabName][groupName]() + 1 : 0;
         this._groupRenderSnapshots[tabName][groupName] = () => result;
-        if (!this._groupRenderListeners[tabName] || !this._groupRenderListeners[tabName][groupName])
+        if (!((_c = (_b = this._groupRenderListeners) === null || _b === void 0 ? void 0 : _b[tabName]) === null || _c === void 0 ? void 0 : _c[groupName]))
             return;
         for (const listener of this._groupRenderListeners[tabName][groupName])
             listener();
