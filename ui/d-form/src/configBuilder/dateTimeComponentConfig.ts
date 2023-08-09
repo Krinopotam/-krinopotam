@@ -1,4 +1,4 @@
-import {IDFormFieldProps} from 'baseComponents/dForm/components/baseComponent';
+import {IDFormFieldProps} from '../components/baseComponent';
 import {BaseComponentConfig} from './baseComponentConfig';
 import {IDFormFieldDateTimeProps, DateTimeComponent} from 'baseComponents/dForm/components/dateTimeComponent';
 

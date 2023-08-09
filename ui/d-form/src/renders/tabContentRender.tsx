@@ -6,11 +6,11 @@
  * @license MIT
  */
 
-import React, { useSyncExternalStore } from 'react';
+import React, {useSyncExternalStore} from 'react';
 
-import { BaseComponent } from '../components/baseComponent';
-import { FieldGroupRender } from './fieldGroupRender';
-import { IDFormApi } from "../hooks/api";
+import {BaseComponent} from '../components/baseComponent';
+import {FieldGroupRender} from './fieldGroupRender';
+import {IDFormApi} from "../hooks/api";
 
 interface IFieldsRenderProps {
     /** Tab name */
@@ -24,6 +24,7 @@ export const TabContentRender = ({tabName, formApi}: IFieldsRenderProps): React.
     useExternalRenderCall(formApi, tabName);
 
     const groupsProp = formApi.model.getGroupsProps(tabName);
+    const formProps = formApi.getFormProps();
 
     return (
         <>
@@ -31,10 +32,12 @@ export const TabContentRender = ({tabName, formApi}: IFieldsRenderProps): React.
                 if (Object.keys(groupsProp[groupName]).length === 0) return null;
 
                 if (Object.keys(groupsProp[groupName]).length > 1) {
-                    return <FieldGroupRender key={groupName} formApi={formApi} tabName={tabName} groupName={groupName} />;
+                    return <FieldGroupRender key={groupName} formApi={formApi} tabName={tabName} groupName={groupName}/>;
                 } else {
                     const fieldName = Object.keys(groupsProp[groupName])[0];
-                    return <BaseComponent key={fieldName} formApi={formApi} fieldName={fieldName} />;
+                    const fieldProps = formProps?.fieldsProps?.[fieldName]
+                    if (!fieldProps) return null;
+                    return <BaseComponent key={fieldName} formApi={formApi} fieldName={fieldName} fieldProps={fieldProps}/>;
                 }
             })}
         </>

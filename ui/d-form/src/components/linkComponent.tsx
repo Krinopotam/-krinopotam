@@ -19,9 +19,11 @@ export interface IDFormFieldLinkProps extends IDFormFieldProps {
     target?: '_blank' | '_self' | '_parent' | '_top';
 }
 
-export const LinkComponent = ({formApi, fieldName}: IDFormComponentProps): JSX.Element => {
-    const formProps = formApi.getFormProps();
-    const fieldProps = formProps.fieldsProps[fieldName] as IDFormFieldLinkProps;
+interface IDFormLinkComponentProps extends IDFormComponentProps {
+    fieldProps: IDFormFieldLinkProps
+}
+
+export const LinkComponent = ({formApi, fieldName, fieldProps}: IDFormLinkComponentProps): React.JSX.Element => {
     const value = formApi.model.getFieldValue(fieldName) as string | undefined;
 
     useEffect(() => {

@@ -26,9 +26,11 @@ export interface IDFormFieldSwitchProps extends IDFormFieldProps {
     loading?: boolean;
 }
 
-export const SwitchComponent = ({formApi, fieldName}: IDFormComponentProps): JSX.Element => {
-    const formProps = formApi.getFormProps();
-    const fieldProps = formProps.fieldsProps[fieldName] as IDFormFieldSwitchProps;
+interface IDFormSwitchComponentProps extends IDFormComponentProps {
+    fieldProps: IDFormFieldSwitchProps
+}
+
+export const SwitchComponent = ({formApi, fieldName, fieldProps}: IDFormSwitchComponentProps): React.JSX.Element => {
     const value = formApi.model.getFieldValue(fieldName) as boolean | undefined;
 
     const onChange = useCallback(

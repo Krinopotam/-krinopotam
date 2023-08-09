@@ -12,6 +12,7 @@ import {Checkbox} from 'antd';
 import type {CheckboxChangeEvent} from 'antd/es/checkbox';
 import {IDFormComponentProps, IDFormFieldProps} from './baseComponent';
 
+
 // !used in configGenerator parsing. Don't use curly brackets and multi rows comments!
 export interface IDFormFieldCheckBoxProps extends IDFormFieldProps {
     /** default value */
@@ -21,8 +22,12 @@ export interface IDFormFieldCheckBoxProps extends IDFormFieldProps {
     indeterminate?: boolean;
 }
 
-export const CheckboxComponent = ({formApi, fieldName}: IDFormComponentProps): React.JSX.Element => {
-    const formProps = formApi.getFormProps();
+interface IDFormCheckboxComponentProps extends IDFormComponentProps{
+    fieldProps: IDFormFieldCheckBoxProps
+}
+
+export const CheckboxComponent = ({formApi, fieldName, fieldProps}: IDFormCheckboxComponentProps): React.JSX.Element => {
+    const value = formApi.model.getFieldValue(fieldName) as boolean;
 
     const onChange = useCallback(
         (e: CheckboxChangeEvent) => {
@@ -36,10 +41,6 @@ export const CheckboxComponent = ({formApi, fieldName}: IDFormComponentProps): R
     useEffect(() => {
         formApi.model.setFieldReady(fieldName, true);
     }, [fieldName, formApi.model]);
-
-    if (!formProps?.fieldsProps?.[fieldName]) return <></>
-    const fieldProps = formProps.fieldsProps[fieldName] as IDFormFieldCheckBoxProps;
-    const value = formApi.model.getFieldValue(fieldName) as boolean;
 
     return (
         <Checkbox

@@ -27,14 +27,14 @@ interface IFieldGroupRenderProps {
 export const FieldGroupRender = ({tabName, groupName, formApi}: IFieldGroupRenderProps): React.JSX.Element | null => {
     useExternalRenderCall(formApi, tabName, groupName);
     const formProps = formApi.getFormProps();
-    
+
     const fields = formApi.model.getGroupsProps(tabName)[groupName];
 
     const firstField = formApi.model.getFirstVisibleFieldInGroup(tabName, groupName);
     const groupHidden = !firstField;
 
     let groupLabel: React.ReactNode = '';
-    if (formProps.layout === 'horizontal') groupLabel = firstField && firstField.label ? firstField.label : groupName;
+    if (formProps.layout === 'horizontal') groupLabel = firstField?.label ?? groupName;
 
     let isFirst = true;
     return (
@@ -43,9 +43,11 @@ export const FieldGroupRender = ({tabName, groupName, formApi}: IFieldGroupRende
                 <Form.Item label={groupLabel} style={{margin: 0}}>
                     <div style={{display: 'inline-flex', gap: '24px', alignItems: 'center', width: '100%'}}>
                         {Object.keys(fields).map((fieldName) => {
+                            const fieldProps = formProps?.fieldsProps?.[fieldName]
+                            if (!fieldProps) return null;
                             const noLabel = formProps.layout === 'horizontal' && !!groupLabel && isFirst;
                             isFirst = false;
-                            return <BaseComponent key={fieldName} formApi={formApi} fieldName={fieldName} noLabel={noLabel} />;
+                            return <BaseComponent key={fieldName} formApi={formApi} fieldName={fieldName} fieldProps={fieldProps} noLabel={noLabel}/>;
                         })}
                     </div>
                 </Form.Item>
@@ -60,7 +62,7 @@ const useExternalRenderCall = (formApi: IDFormApi, tabName: string, groupName: s
     const snaps = formApi.model.getGroupRenderSnapshots();
 
     const getSnapshot = () => {
-        if (!snaps[tabName] || !snaps[tabName][groupName]) return undefined;
+        if (!snaps?.[tabName]?.[groupName]) return undefined;
         return snaps[tabName][groupName];
     };
 

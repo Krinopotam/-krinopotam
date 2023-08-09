@@ -56,14 +56,13 @@ type ValueType = string | string[] | number | number[] | LabeledValue | LabeledV
 export interface IDFormFieldSelectProps extends IDFormFieldProps {
     dataSet: ISelectComponentElement[];
 
-    /** Show clear button */
-    allowClear?: boolean;
+    /** Allow clear and show clear button */
+    allowClear?: boolean | {
+        clearIcon?: React.ReactNode;
+    };
 
     /** Whether the current search will be cleared on selecting an item. Only applies when mode is set to multiple or tags (default true) */
     autoClearSearchValue?: boolean;
-
-    /** The custom clear icon */
-    clearIcon?: React.ReactNode;
 
     /** Whether active first option by default */
     defaultActiveFirstOption?: boolean;
@@ -81,7 +80,7 @@ export interface IDFormFieldSelectProps extends IDFormFieldProps {
     dropdownRender?: (originNode: React.ReactElement) => React.ReactElement;
 
     /** Customize node label, value, options field name */
-    fieldNames?:SelectProps['fieldNames'],
+    fieldNames?: SelectProps['fieldNames'],
 
     /** If true, filter options by input, if function, filter options against it. */
     filterOption?: boolean | ((inputValue: string, option?: OptionType) => boolean);
@@ -135,7 +134,7 @@ export interface IDFormFieldSelectProps extends IDFormFieldProps {
     showSearch?: boolean;
 
     /** The custom suffix icon */
-    suffixIcon?: React.ReactNode;
+    suffixIcon?: React.ReactNode | null;
 
     /** Customize tag render, only applies when mode is set to multiple or tags */
     tagRender?: (props: CustomTagProps) => React.ReactElement;
@@ -147,17 +146,11 @@ export interface IDFormFieldSelectProps extends IDFormFieldProps {
     virtual?: boolean;
 }
 
-/**
- * Base Select control
- *
- * @param formModelApi
- * @param formProps
- * @param fieldName
- * @constructor
- */
-export const SelectComponent = ({formApi, fieldName}: IDFormComponentProps): JSX.Element => {
-    const formProps = formApi.getFormProps();
-    const fieldProps = formProps.fieldsProps[fieldName] as IDFormFieldSelectProps;
+interface IDFormSelectComponentProps extends IDFormComponentProps {
+    fieldProps: IDFormFieldSelectProps
+}
+
+export const SelectComponent = ({formApi, fieldName, fieldProps}: IDFormSelectComponentProps): React.JSX.Element => {
     const value = formApi.model.getFieldValue(fieldName) as string | string[] | number | number[] | LabeledValue | LabeledValue[];
 
     const onChange = useCallback(
@@ -200,7 +193,6 @@ export const SelectComponent = ({formApi, fieldName}: IDFormComponentProps): JSX
             allowClear={typeof fieldProps.allowClear === 'undefined' ? true : fieldProps.allowClear}
             autoClearSearchValue={fieldProps.autoClearSearchValue}
             autoFocus={fieldProps.autoFocus}
-            clearIcon={fieldProps.clearIcon}
             defaultActiveFirstOption={fieldProps.defaultActiveFirstOption}
             defaultOpen={fieldProps.defaultOpen}
             disabled={formApi.model.isFieldDisabled(fieldName) || formApi.model.isFieldReadOnly(fieldName)}
@@ -224,7 +216,6 @@ export const SelectComponent = ({formApi, fieldName}: IDFormComponentProps): JSX
             placement={fieldProps.placement}
             popupClassName={fieldProps.popupClassName}
             removeIcon={fieldProps.removeIcon}
-            showArrow={fieldProps.showArrow}
             showSearch={fieldProps.showSearch}
             suffixIcon={fieldProps.suffixIcon}
             tagRender={fieldProps.tagRender}

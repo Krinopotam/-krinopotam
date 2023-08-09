@@ -27,6 +27,10 @@ export interface IDFormTextEditorProps extends IDFormFieldInputProps {
     toolbar: [];
 }
 
+interface IDFormTextEditorComponentProps extends IDFormComponentProps {
+    fieldProps: IDFormTextEditorProps
+}
+
 const defaultColorList = [
     '#000000',
     '#e60000',
@@ -77,9 +81,7 @@ const defaultToolbar = [
     ['clean'],
 ];
 
-export const TextEditorComponent = ({formApi, fieldName}: IDFormComponentProps): JSX.Element => {
-    const formProps = formApi.getFormProps();
-    const fieldProps = formProps.fieldsProps[fieldName] as IDFormTextEditorProps;
+export const TextEditorComponent = ({formApi, fieldName, fieldProps}: IDFormTextEditorComponentProps): React.JSX.Element => {
     const value = formApi.model.getFieldValue(fieldName) as string | undefined;
     const formats = fieldProps.formats || defaultFormats;
     const toolbar = fieldProps.toolbar || defaultToolbar;

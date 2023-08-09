@@ -127,23 +127,22 @@ export interface IDFormComponentProps {
     /** field name */
     fieldName: string;
 
+    /** field props */
+    fieldProps: IDFormFieldProps
+
     /** form api instance */
     formApi: IDFormApi;
 }
 
-export const BaseComponent = ({fieldName, formApi, noLabel}: IDFormComponentProps & {noLabel?: boolean}): React.JSX.Element => {
+export const BaseComponent = ({fieldName, fieldProps, formApi, noLabel}: IDFormComponentProps & {noLabel?: boolean}): React.JSX.Element => {
     useExternalRenderCall(formApi, fieldName);
-    const formProps = formApi.getFormProps();
-    if (!formProps?.fieldsProps?.[fieldName]) return <></>
-
-    const fieldProps = formProps.fieldsProps[fieldName];
 
     const error = formApi.model.getFieldError(fieldName);
     const fieldTouched = formApi.model.isFieldTouched(fieldName);
     const fieldHidden = formApi.model.isFieldHidden(fieldName);
     const formSubmitCount = formApi.model.getSubmitCount();
 
-    const Component = formProps.fieldsProps[fieldName].component;
+    const Component = fieldProps.component;
 
     const style = {
         //marginBottom: formProps.layout !== 'horizontal' ? 0 : undefined,
@@ -164,7 +163,7 @@ export const BaseComponent = ({fieldName, formApi, noLabel}: IDFormComponentProp
                     validateStatus={(fieldTouched || formSubmitCount > 0) && error ? 'error' : ''}
                     style={style}
                 >
-                    <Component fieldName={fieldName} formApi={formApi} />
+                    <Component fieldName={fieldName} fieldProps={fieldProps} formApi={formApi} />
                 </Form.Item>
             ) : null}
         </Animate>

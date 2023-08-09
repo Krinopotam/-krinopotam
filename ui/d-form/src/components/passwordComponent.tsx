@@ -26,9 +26,11 @@ export interface IDFormFieldPasswordProps extends IDFormFieldProps {
     iconRender?: (visible: boolean) => React.ReactNode;
 }
 
-export const PasswordComponent = ({formApi, fieldName}: IDFormComponentProps): JSX.Element => {
-    const formProps = formApi.getFormProps();
-    const fieldProps = formProps.fieldsProps[fieldName] as IDFormFieldPasswordProps;
+interface IDFormPasswordComponentProps extends IDFormComponentProps {
+    fieldProps: IDFormFieldPasswordProps
+}
+
+export const PasswordComponent = ({formApi, fieldName, fieldProps}: IDFormPasswordComponentProps): React.JSX.Element => {
     const value = formApi.model.getFieldValue(fieldName) as string | number | readonly string[] | undefined;
 
     const onChange = useCallback(

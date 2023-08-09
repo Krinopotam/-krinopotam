@@ -112,6 +112,6 @@ export class BaseComponentConfig<T>  {
 
     /** Get field config */
     getConfig() {
-        return this._config as IDFormFieldProps
+        return this._config as unknown as IDFormFieldProps
     }
 }

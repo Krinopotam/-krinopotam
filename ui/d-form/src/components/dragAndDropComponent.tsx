@@ -49,11 +49,11 @@ export interface IDFormFieldDragAndDropProps extends IDFormFieldProps {
     type?: UploadType;
 }
 
-export const DragAndDropComponent = ({formApi, fieldName}: IDFormComponentProps): JSX.Element => {
-    const formProps = formApi.getFormProps();
-    const fieldProps = formProps.fieldsProps[fieldName] as IDFormFieldDragAndDropProps;
-    //const value = formApi.model.getValue(fieldName) as string | number | readonly string[] | undefined;
+interface IDFormDragAndDropComponentProps extends IDFormComponentProps {
+    fieldProps: IDFormFieldDragAndDropProps
+}
 
+export const DragAndDropComponent = ({formApi, fieldName, fieldProps}: IDFormDragAndDropComponentProps): React.JSX.Element => {
     const onChange = useCallback(
         (e: UploadChangeParam<UploadFile<unknown>>) => {
             formApi.model.setFieldValue(fieldName, e.fileList || null);

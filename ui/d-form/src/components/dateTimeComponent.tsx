@@ -12,8 +12,6 @@ import dayjs, {Dayjs} from 'dayjs';
 import {DatePicker, IDatePickerProps} from '@krinopotam/ui-datepicker';
 import {IDFormComponentProps, IDFormFieldProps} from './baseComponent';
 
-//import {DatePicker} from 'Components/datePicker';
-
 // !used in configGenerator parsing. Don't use curly brackets and multi rows comments!
 export interface IDFormFieldDateTimeProps extends IDFormFieldProps {
     /** Whether to show clear button */
@@ -65,7 +63,7 @@ export interface IDFormFieldDateTimeProps extends IDFormFieldProps {
     popupStyle?: CSSProperties;
 
     /** The preset ranges for quick selection */
-    presets?:IDatePickerProps['presets']
+    presets?: IDatePickerProps['presets']
 
     /** The custom prev icon */
     prevIcon?: React.ReactNode;
@@ -76,7 +74,7 @@ export interface IDFormFieldDateTimeProps extends IDFormFieldProps {
     /** Whether to show 'Now' button on panel when showTime is set */
     showNow?: boolean;
 
-    /** To provide an additional time selection	object */
+    /** To provide an additional time selection    object */
     showTime?: boolean;
 
     /** Whether to show Today button (default true) */
@@ -98,13 +96,16 @@ export interface IDFormFieldDateTimeProps extends IDFormFieldProps {
     onOk?: (date: Dayjs) => void;
 }
 
-export const DateTimeComponent = ({formApi, fieldName}: IDFormComponentProps): React.JSX.Element => {
-    const formProps = formApi.getFormProps();
-    const {format, default: defaultFieldValue, ...fieldPros} = formProps.fieldsProps[fieldName] as IDFormFieldDateTimeProps;
+interface IDFormDatetimeComponentProps extends IDFormComponentProps {
+    fieldProps: IDFormFieldDateTimeProps
+}
+
+export const DateTimeComponent = ({formApi, fieldName, fieldProps}: IDFormDatetimeComponentProps): React.JSX.Element => {
+    const {format, default: defaultFieldValue, ...fieldPros} = fieldProps;
 
     const defaultDateFormat = 'DD.MM.YYYY';
     const defaultTimeFormat = 'HH:mm:ss';
-    const dateTimeFormat = format || defaultDateFormat + (fieldPros.showTime ? ' ' + defaultTimeFormat : '');
+    const dateTimeFormat = format ?? defaultDateFormat + (fieldPros.showTime ? ' ' + defaultTimeFormat : '');
 
     let value = formApi.model.getFieldValue(fieldName) as string | undefined;
     let fieldValue = value ? dayjs(value, dateTimeFormat) : undefined;

@@ -50,7 +50,7 @@ function addComponentsToOptions() {
         props.modulePath = '../components/' + component.name + '.tsx';
         props.savePath = '../configBuilder/' + component.name + 'Config.ts';
         props.typeName = component.interface;
-        props.typePath = 'baseComponents/dForm/components/' + component.name;
+        props.typePath = '../components/' + component.name;
         options[component.name] = props;
     }
 }
@@ -89,7 +89,7 @@ function prepareAlignedStatusMsg(componentName, status, width) {
  * @returns {boolean}
  */
 function logStatus(componentName, error) {
-    console.log(prepareAlignedStatusMsg(componentName, error ? error : 'OK', 40));
+    console.log(prepareAlignedStatusMsg(componentName, error || 'OK', 40));
 }
 //endregion
 
@@ -153,7 +153,7 @@ function getComponentClassProps(componentName) {
     delete properties['component'];
 
     //region unique components extra processing
-    let treeSelectImport = undefined;
+    let treeSelectImport;
     if (componentName === 'treeSelectComponent') {
         const treeSelectProperties = parsingMethods.parseProperties(options.treeSelect);
         delete treeSelectProperties['onChange'];

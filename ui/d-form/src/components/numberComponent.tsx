@@ -71,15 +71,16 @@ export interface IDFormFieldNumberProps extends IDFormFieldProps {
     prefixCls?: string;
 }
 
-export const NumberComponent = ({formApi, fieldName}: IDFormComponentProps): JSX.Element => {
-    const formProps = formApi.getFormProps();
-    const fieldProps = formProps.fieldsProps[fieldName] as IDFormFieldNumberProps;
+interface IDFormNumberComponentProps extends IDFormComponentProps {
+    fieldProps: IDFormFieldNumberProps
+}
 
+export const NumberComponent = ({formApi, fieldName, fieldProps}: IDFormNumberComponentProps): React.JSX.Element => {
     const value = formApi.model.getFieldValue(fieldName) as number | undefined;
 
     const onChange = useCallback(
         (val: string | number | null) => {
-            formApi.model.setFieldValue(fieldName, val || 0);
+            formApi.model.setFieldValue(fieldName, val ?? 0);
             formApi.model.setFieldDirty(fieldName, true);
         },
         [fieldName, formApi.model]
