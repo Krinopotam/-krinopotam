@@ -1,7 +1,7 @@
 {
 	"name": "@krinopotam/ui-button",
 	"version": "1.0.4",
-	"description": "UI buttons Krinopotam's projects",
+	"description": "UI buttons for Krinopotam's projects",
 	"private": false,
 	"author": "Maxim Zaytsev",
 	"license": "ISC",
