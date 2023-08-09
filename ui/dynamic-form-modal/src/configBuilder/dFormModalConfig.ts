@@ -6,7 +6,9 @@ import {BaseComponentConfig} from '@krinopotam/ui-dynamic-form/configBuilder/bas
 import {IDModalProps, IDFormModalProps} from '../dFormModal';
 
 
-export class DFormModalConfig<T> extends DFormConfig<T> {
+export class DFormModalConfig<T>  extends DFormConfig<T> {
+
+
 
 
     /** A mutable object to merge with these controls api */
@@ -210,7 +212,7 @@ export class DFormModalConfig<T> extends DFormConfig<T> {
 
     /** Get form config */
     getConfig() {
-        return this._config as unknown as IDFormModalProps
+        return this._config as unknown as IDFormModalProps 
     }
 
     /** Add tabs */

@@ -3,6 +3,7 @@ import { IDFormApi } from '../hooks/api';
 import { IDFormFieldCheckBoxProps } from './checkboxComponent';
 import { IDFormFieldDateTimeProps } from './dateTimeComponent';
 import { IDFormFieldDragAndDropProps } from './dragAndDropComponent';
+import { IDFormFieldTabulatorGridProps } from './tabulatorGridComponent';
 import { IDFormFieldInputProps } from './inputComponent';
 import { IDFormFieldLinkProps } from './linkComponent';
 import { IDFormFieldNumberProps } from './numberComponent';
@@ -10,6 +11,7 @@ import { IDFormFieldPasswordProps } from './passwordComponent';
 import { IDFormFieldSelectProps } from './selectComponent';
 import { IDFormFieldSwitchProps } from './switchComponent';
 import { IDFormFieldTextAreaProps } from './textAreaComponent';
+import { IDFormFieldTreeSelectProps } from './treeSelectComponent';
 import { DModel } from "../dModel";
 export interface IDFormFieldProps {
     component: React.FC<IDFormComponentProps>;
@@ -40,7 +42,7 @@ export interface IDFormFieldCallbacks {
     onValidated?: (value: unknown, error: string, isSubmit: boolean, model: DModel) => void;
 }
 export type IDFormFieldsProps = Record<string, IDFormFieldProps>;
-export type IDFormAnyFieldProps = IDFormFieldProps | IDFormFieldCheckBoxProps | IDFormFieldDateTimeProps | IDFormFieldDragAndDropProps | IDFormFieldInputProps | IDFormFieldLinkProps | IDFormFieldNumberProps | IDFormFieldPasswordProps | IDFormFieldSelectProps | IDFormFieldSwitchProps | IDFormFieldTextAreaProps;
+export type IDFormAnyFieldProps = IDFormFieldProps | IDFormFieldCheckBoxProps | IDFormFieldDateTimeProps | IDFormFieldDragAndDropProps | IDFormFieldTabulatorGridProps | IDFormFieldInputProps | IDFormFieldLinkProps | IDFormFieldNumberProps | IDFormFieldPasswordProps | IDFormFieldSelectProps | IDFormFieldSwitchProps | IDFormFieldTextAreaProps | IDFormFieldTreeSelectProps;
 export interface IDFormComponentProps {
     fieldName: string;
     fieldProps: IDFormFieldProps;

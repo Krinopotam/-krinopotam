@@ -20,10 +20,10 @@ const options = {
         typePath: '../dFormModal',
     },
     treeSelect: {
-        modulePath: '../../treeSelect/treeSelect.tsx',
+        modulePath: '../../../treeSelect/src/treeSelect.tsx',
         savePath: '',
         typeName: 'ITreeSelectProps',
-        typePath: 'baseComponents/treeSelect/treeSelect',
+        typePath: '@krinopotam/ui-treeselect',
     },
 };
 

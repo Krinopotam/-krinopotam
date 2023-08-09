@@ -1,9 +1,7 @@
 import { IDFormDataSet, IDFormDataSourcePromise, IDFormMode, IDFormProps } from './dForm';
 import { IDFormFieldProps, IDFormFieldsProps } from './components/baseComponent';
+import { TPromise } from '@krinopotam/service-types';
 import React from 'react';
-export type TPromise<T, F = unknown> = {
-    catch<TResult = never>(onrejected?: ((reason: F) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;
-} & Promise<T>;
 export interface IDFormModelCallbacks {
     onFieldValueChanged?: (fieldName: string, value: unknown, prevValue: unknown, model: DModel) => void;
     onFieldTouchedStateChanged?: (fieldName: string, state: boolean, model: DModel) => void;

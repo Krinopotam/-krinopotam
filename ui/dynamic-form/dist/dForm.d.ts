@@ -1,8 +1,9 @@
 import './css/antdAnimation.css';
-import { IDFormSubmitResultObject, IDFormSubmitResultPromise, TPromise } from './dModel';
+import { IDFormSubmitResultObject, IDFormSubmitResultPromise } from './dModel';
 import { IFormButtons } from '@krinopotam/ui-buttons-row';
 import { IDFormApi } from './hooks/api';
 import React from 'react';
+import { TPromise } from '@krinopotam/service-types';
 import { IDFormFieldsProps } from './components/baseComponent';
 import { IRuleType } from './validators/baseValidator';
 export interface IDFormProps {

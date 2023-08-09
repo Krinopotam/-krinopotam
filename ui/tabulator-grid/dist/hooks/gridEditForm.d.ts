@@ -1,0 +1,38 @@
+/// <reference types="react" />
+import { IGridApi } from "./api";
+export declare const usePrepareEditFormProps: (gridApi: IGridApi) => {
+    callbacks?: (import("@krinopotam/ui-dynamic-form-modal").IDFormModalCallbacks & import("@krinopotam/ui-dynamic-form").IDFormCallbacks) | undefined;
+    closeFormConfirmMessage?: import("react").ReactNode;
+    title?: string | undefined;
+    width?: number | undefined;
+    minWidth?: number | undefined;
+    maxWidth?: number | undefined;
+    bodyHeight?: number | undefined;
+    bodyMinHeight?: number | undefined;
+    bodyMaxHeight?: number | undefined;
+    bodyStyle?: import("react").CSSProperties | undefined;
+    notScrollable?: boolean | undefined;
+    resizable?: boolean | undefined;
+    isOpened?: boolean | undefined;
+    apiRef?: unknown;
+    formId?: string | undefined;
+    buttons?: import("@krinopotam/ui-buttons-row").IFormButtons | null | undefined;
+    className?: string | undefined;
+    containerClassName?: string | undefined;
+    contentIndent?: number | undefined;
+    dataSet?: import("@krinopotam/ui-dynamic-form").IDFormDataSet | undefined;
+    parentDataSet?: import("@krinopotam/ui-dynamic-form").IDFormDataSet | undefined;
+    fieldsProps?: import("@krinopotam/ui-dynamic-form/components/baseComponent").IDFormFieldsProps | undefined;
+    formType?: import("@krinopotam/ui-dynamic-form").IFormType | undefined;
+    labelCol?: Record<string, unknown> | undefined;
+    layout?: "horizontal" | "vertical" | undefined;
+    formMode?: import("@krinopotam/ui-dynamic-form").IDFormMode | undefined;
+    readOnly?: boolean | undefined;
+    noAutoHideDependedFields?: boolean | undefined;
+    tabsProps?: import("@krinopotam/ui-dynamic-form").IDFormTabsProps | undefined;
+    unfilledForm?: boolean | undefined;
+    validationRules?: import("@krinopotam/ui-dynamic-form").IDFormFieldValidationRules | undefined;
+    wrapperCol?: Record<string, unknown> | undefined;
+    confirmChanges?: boolean | undefined;
+    submitConfirmMessage?: import("react").ReactNode;
+} | undefined;

@@ -6,7 +6,7 @@ import {MessageBox} from '@krinopotam/ui-message-box';
 import {HelpersObjects}  from "@krinopotam/js-helpers";
 import {useCallback} from 'react';
 
-export interface IDFormModalApi extends Omit<IDFormApi, 'getFormProps' | 'setFormProps'> {
+export interface IDFormModalApi extends IDFormApi {
     /** Get the current modal form props */
     getFormProps: () => IDFormModalProps;
 
@@ -22,6 +22,8 @@ export interface IDFormModalApi extends Omit<IDFormApi, 'getFormProps' | 'setFor
     /** Close controls without confirmation*/
     forceClose: () => void;
 }
+
+export {IDFormApi} from '@krinopotam/ui-dynamic-form/hooks/api'
 
 export const useInitModalFormApi = (
     formId: string,

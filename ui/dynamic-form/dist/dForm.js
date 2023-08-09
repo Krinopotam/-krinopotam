@@ -9,9 +9,10 @@ import { useGetButtons } from './hooks/buttons';
 import { useUpdateMessageBoxTheme } from '@krinopotam/ui-message-box';
 import { useGetActualProps } from '@krinopotam/common-hooks';
 export const DForm = (props) => {
+    var _a;
     useUpdateMessageBoxTheme();
     const [formProps, updateFormProps] = useGetActualProps(props);
-    const [formId] = useState(formProps.formId || 'dForm-' + HelpersStrings.getUuid());
+    const [formId] = useState((_a = formProps.formId) !== null && _a !== void 0 ? _a : 'dForm-' + HelpersStrings.getUuid());
     const [formApi] = useState((formProps.apiRef || {}));
     const [buttonsApi] = useState({});
     const formButtons = useGetButtons(formProps, formApi);

@@ -7,7 +7,7 @@
  */
 
 import {IDFormComponentProps, IDFormFieldProps} from './baseComponent';
-import {ITreeSelectProps, ITreeSelectValue, TreeSelect} from 'baseComponents/treeSelect';
+import {ITreeSelectProps, ITreeSelectValue, TreeSelect} from '@krinopotam/ui-treeselect';
 import React, {useCallback, useEffect, useMemo} from 'react';
 import {HelpersObjects} from '@krinopotam/js-helpers';
 
@@ -35,7 +35,7 @@ export const TreeSelectComponent = ({formApi, fieldName, fieldProps}: IDFormTree
 
     const onChange = useCallback(
         (value: ITreeSelectValue) => {
-            formApi.model.setFieldValue(fieldName, value || null);
+            formApi.model.setFieldValue(fieldName, value ?? null);
             formApi.model.setFieldDirty(fieldName, true);
 
             fieldProps.callbacks?.onChange?.(value);
@@ -66,7 +66,7 @@ export const TreeSelectComponent = ({formApi, fieldName, fieldProps}: IDFormTree
             disabled={formApi.model.isFieldDisabled(fieldName)}
             readOnly={formApi.model.isFieldReadOnly(fieldName)}
             value={value}
-            placeholder={fieldProps.placeholder || 'Выберите из списка'}
+            placeholder={fieldProps.placeholder ?? 'Выберите из списка'}
             allowClear={fieldProps.allowClear !== false}
             callbacks={{
                 onChange: onChange,

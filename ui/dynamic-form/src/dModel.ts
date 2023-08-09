@@ -9,15 +9,10 @@
 import {IDFormDataSet, IDFormDataSourcePromise, IDFormFieldValidationRules, IDFormMode, IDFormProps} from './dForm';
 import {IDFormFieldProps, IDFormFieldsProps} from './components/baseComponent';
 import {HelpersObjects} from '@krinopotam/js-helpers';
+import {TPromise} from '@krinopotam/service-types';
 
 import {BaseValidator} from './validators/baseValidator';
 import React from 'react';
-
-/** Type for promise with typed Resolve and Reject. F.e. TPromise<{data: Record<string, unknown>}, {message: string; code: number}>; */
-export type TPromise<T, F = unknown> = {
-    catch<TResult = never>(onrejected?: ((reason: F) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;
-} & Promise<T>;
-
 
 export interface IDFormModelCallbacks {
     // Fields callbacks

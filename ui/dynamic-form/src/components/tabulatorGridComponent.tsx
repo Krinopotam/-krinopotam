@@ -6,14 +6,12 @@
  * @license MIT
  */
 
-import React, {useEffect, useMemo, useRef, useState} from 'react';
+import React, {useMemo, useRef, useState} from 'react';
 
 import {IDFormComponentProps, IDFormFieldProps} from './baseComponent';
-import TabulatorGrid, {IGridCallbacks, IGridRowData} from 'baseComponents/tabulatorGrid/tabulatorGrid';
-import {IReactTabulatorProps} from 'baseComponents/tabulatorGrid/reactTabulator/reactTabulator';
-import {IFormButton, IFormButtons} from 'baseComponents/buttonsRow';
-import {IDFormModalProps} from 'baseComponents/dFormModal/dFormModal';
-import {IGridApi} from 'baseComponents/tabulatorGrid/hooks/api';
+import TabulatorGrid, {IGridCallbacks, IGridRowData, IReactTabulatorProps, IGridApi} from '@krinopotam/ui-tabulator-grid';
+import {IFormButton, IFormButtons} from '@krinopotam/ui-buttons-row';
+import {IDFormModalProps} from '@krinopotam/ui-dynamic-form-modal';
 
 // !used in configGenerator parsing. Don't use multi rows comments!
 export interface IDFormFieldTabulatorGridProps extends Omit<IDFormFieldProps, 'width'> {
@@ -143,9 +141,10 @@ export interface IDFormFieldTabulatorGridProps extends Omit<IDFormFieldProps, 'w
     columnDefaults?: IReactTabulatorProps['columnDefaults'];
 }
 
-interface IDFormTabulatorGridComponentProps extends IDFormComponentProps{
+interface IDFormTabulatorGridComponentProps extends IDFormComponentProps {
     fieldProps: IDFormFieldTabulatorGridProps
 }
+
 export const TabulatorGridComponent = ({formApi, fieldName, fieldProps}: IDFormTabulatorGridComponentProps): React.JSX.Element => {
     const value = formApi.model.getFieldValue(fieldName) as IGridRowData[];
     const prevDataSetRef = useRef<IGridRowData[]>();
@@ -165,10 +164,10 @@ export const TabulatorGridComponent = ({formApi, fieldName, fieldProps}: IDFormT
 
     const callbacks = useMemo(() => {
         const _onDataSetChange = fieldProps.callbacks?.onDataSetChange;
-        const updatedCallbacks = fieldProps.callbacks || {};
-        updatedCallbacks.onDataSetChange = (dataSet: IGridRowData[], gridApi) => {
+        const updatedCallbacks = fieldProps.callbacks ?? {};
+        updatedCallbacks.onDataSetChange = (dataSet: IGridRowData[] | undefined, gridApi) => {
             prevValueRef.current = dataSet;
-            formApi.model.setFieldValue(fieldName, dataSet || undefined);
+            formApi.model.setFieldValue(fieldName, dataSet ?? undefined);
             if (formApi.model.isFieldReady(fieldName)) {
                 formApi.model.setFieldDirty(fieldName, true);
                 formApi.model.setFieldTouched(fieldName, true);

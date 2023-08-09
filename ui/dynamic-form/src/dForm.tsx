@@ -8,11 +8,11 @@
 
 import './css/antdAnimation.css';
 
-import {DModel, IDFormModelCallbacks, IDFormSubmitResultObject, IDFormSubmitResultPromise, TPromise} from './dModel';
+import {DModel, IDFormModelCallbacks, IDFormSubmitResultObject, IDFormSubmitResultPromise} from './dModel';
 import {IButtonsRowApi, IFormButtons} from '@krinopotam/ui-buttons-row';
 import {IDFormApi, useInitFormApi} from './hooks/api';
 import React, {useEffect, useRef, useState} from 'react';
-
+import {TPromise} from '@krinopotam/service-types';
 import {FormRender} from './renders/formRender';
 import {IDFormFieldsProps} from './components/baseComponent';
 import {IRuleType} from './validators/baseValidator';
@@ -215,7 +215,7 @@ export const DForm = (props: IDFormProps): React.JSX.Element => {
     const [formProps, updateFormProps] = useGetActualProps(props); //props can be set both by parent component and via api
 
     //region Common component states
-    const [formId] = useState(formProps.formId || 'dForm-' + HelpersStrings.getUuid());
+    const [formId] = useState(formProps.formId ?? 'dForm-' + HelpersStrings.getUuid());
     const [formApi] = useState((formProps.apiRef || {}) as IDFormApi);
     const [buttonsApi] = useState({} as IButtonsRowApi);
     const formButtons = useGetButtons(formProps, formApi); //init buttons
