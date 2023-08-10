@@ -11,6 +11,8 @@ import {ITreeSelectProps, ITreeSelectValue, TreeSelect} from '@krinopotam/ui-tre
 import React, {useCallback, useEffect, useMemo} from 'react';
 import {HelpersObjects} from '@krinopotam/js-helpers';
 
+export type {ITreeSelectValue, ITreeSelectCallbacks, ITreeSelectNode, ITreeSelectPlainValue, ITreeSelectDeletePromise, ITreeSelectSourcePromise} from '@krinopotam/ui-treeselect';
+
 //region Types
 type IDFormFieldTreeSelectProps_ = ITreeSelectProps & IDFormFieldProps;
 

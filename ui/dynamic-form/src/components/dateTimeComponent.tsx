@@ -12,6 +12,8 @@ import dayjs, {Dayjs} from 'dayjs';
 import {DatePicker, IDatePickerProps} from '@krinopotam/ui-datepicker';
 import {IDFormComponentProps, IDFormFieldProps} from './baseComponent';
 
+export {default as dayjs, Dayjs} from 'dayjs';
+
 // !used in configGenerator parsing. Don't use multi rows comments!
 export interface IDFormFieldDateTimeProps extends IDFormFieldProps {
     /** Whether to show clear button */

@@ -15,6 +15,8 @@ import {SelectProps} from "rc-select/lib/Select";
 
 const {Option} = Select;
 
+export {LabeledValue} from 'antd/es/select';
+
 /**
  * Item of select control or enum table column
  */

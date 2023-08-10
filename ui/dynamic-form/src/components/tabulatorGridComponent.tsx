@@ -141,6 +141,8 @@ export interface IDFormFieldTabulatorGridProps extends Omit<IDFormFieldProps, 'w
     columnDefaults?: IReactTabulatorProps['columnDefaults'];
 }
 
+export type {IGridRowData, IGridDataFetchPromise, IGridDataSourcePromise, IGridDeletePromise, ITabulatorRow} from '@krinopotam/ui-tabulator-grid';
+
 interface IDFormTabulatorGridComponentProps extends IDFormComponentProps {
     fieldProps: IDFormFieldTabulatorGridProps
 }
