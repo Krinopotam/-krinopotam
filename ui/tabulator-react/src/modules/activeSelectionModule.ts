@@ -1,4 +1,7 @@
-import {TabulatorFull as Tabulator, Module, ScrollToRowPosition, Options, RowComponent} from 'tabulator-tables';
+//import {TabulatorFull as Tabulator, Module, ScrollToRowPosition, Options, RowComponent} from 'tabulator-tables';
+import {TabulatorFull as Tabulator, RowComponent, Module} from '../../../tabulator/dist/js/tabulator_esm';
+import {Options, ScrollToRowPosition} from '../../../tabulator/types';
+
 import {IRow, IModule} from './innerTypes';
 
 //region Interfaces
@@ -30,7 +33,7 @@ export interface IActiveSelectionModuleTable {
     getActiveRow: () => RowComponent | undefined;
 
     /** Get active row data */
-    getActiveRowData: () => Record<'id' | string, unknown> | undefined;
+    getActiveRowData: () => Record<string, unknown> | undefined;
 
     /** Get first node row */
     getFirstRow: () => RowComponent | undefined;
@@ -55,7 +58,7 @@ type ISelectMode = 'select' | 'deselect' | 'invert';
 //endregion
 
 export class ActiveSelectionModule extends Module {
-    private table: IActiveSelectionTabulator;
+    public table: IActiveSelectionTabulator;
     private activeRow: RowComponent | undefined = undefined;
 
     constructor(table: Tabulator) {

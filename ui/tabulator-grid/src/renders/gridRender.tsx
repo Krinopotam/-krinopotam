@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect} from 'react';
-import ReactTabulator, {ITabulator} from '../reactTabulator/reactTabulator';
+import ReactTabulator, {ITabulator} from '@krinopotam/ui-tabulator-react';
 import {IGridApi} from '../hooks/api';
 import dispatcher from '@krinopotam/ui-forms-dispatcher';
 import {IGridProps} from '../tabulatorGrid';

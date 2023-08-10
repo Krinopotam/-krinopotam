@@ -1,5 +1,5 @@
 import {IGridApi} from './api';
-import {IReactTabulatorProps} from '../reactTabulator/reactTabulator';
+import {IReactTabulatorProps} from '@krinopotam/ui-tabulator-react';
 import {useMemo} from 'react';
 import dispatcher from '@krinopotam/ui-forms-dispatcher';
 

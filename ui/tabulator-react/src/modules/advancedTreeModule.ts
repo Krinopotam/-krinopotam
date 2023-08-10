@@ -1,4 +1,6 @@
-import {TabulatorFull as Tabulator, Module, Options} from 'tabulator-tables';
+//import {TabulatorFull as Tabulator, Module, Options} from 'tabulator-tables';
+import {TabulatorFull as Tabulator} from '../../../tabulator/dist/js/tabulator_esm';
+import {Options, Module} from '../../../tabulator/types';
 import {IModule} from './innerTypes';
 
 //region Interfaces
@@ -250,7 +252,7 @@ export class AdvancedTreeModule extends Module {
     }
 
     private getLastFilterField() {
-        return this.lastFilteredField || '';
+        return this.lastFilteredField ?? '';
     }
 }
 

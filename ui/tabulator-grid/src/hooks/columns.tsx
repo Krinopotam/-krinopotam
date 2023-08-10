@@ -1,8 +1,7 @@
 import {ColumnDefinition} from "tabulator-tables";
 import {IGridApi} from "./api";
 import {useMemo} from "react";
-import {IReactTabulatorProps} from "../reactTabulator/reactTabulator";
-import {IFilterFunction} from "../reactTabulator/modules/advancedTreeModule";
+import {IReactTabulatorProps, IFilterFunction} from "@krinopotam/ui-tabulator-react";
 
 export const useColumnDef = (columnDef: ColumnDefinition | undefined, gridApi: IGridApi) => {
     return useMemo(() => {

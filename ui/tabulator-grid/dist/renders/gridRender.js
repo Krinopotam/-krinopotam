@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
-import ReactTabulator from '../reactTabulator/reactTabulator';
+import ReactTabulator from '@krinopotam/ui-tabulator-react';
 import dispatcher from '@krinopotam/ui-forms-dispatcher';
 import { useEvents } from '../hooks/events';
 import { useColumnDef, usePrepareColumns } from '../hooks/columns';

@@ -1,6 +1,6 @@
 import 'tabulator-tables/dist/css/tabulator_simple.css';
 import React from 'react';
-import { IReactTabulatorProps } from './reactTabulator/reactTabulator';
+import { IReactTabulatorProps } from '@krinopotam/ui-tabulator-react';
 import { IFormButton, IFormButtons } from '@krinopotam/ui-buttons-row';
 import { IDFormModalProps } from '@krinopotam/ui-dynamic-form-modal';
 import { TPromise } from '@krinopotam/service-types';

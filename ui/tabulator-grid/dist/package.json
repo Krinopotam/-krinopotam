@@ -1,6 +1,6 @@
 {
 	"name": "@krinopotam/ui-tabulator-grid",
-	"version": "1.0.3",
+	"version": "1.0.4",
 	"description": "UI Tabulator grid for Krinopotam's projects",
 	"private": false,
 	"author": "Maxim Zaytsev",
@@ -9,7 +9,7 @@
 	"scripts": {
 		"dev": "webpack --mode development",
 		"prod": "webpack --mode production",
-		"build": "tsc -p tsconfig.json && cp package.json dist/package.json",
+		"build": "tsc -p tsconfig.json",
 		"start": "http-server --port 8080 -P http://localhost:8080?"
 	},
 	"devDependencies": {
@@ -46,6 +46,7 @@
 		"@krinopotam/ui-loading-container": "^1.0.0",
 		"@krinopotam/ui-message-box": "^1.0.3",
 		"@krinopotam/ui-modal": "^1.0.3",
+		"@krinopotam/ui-tabulator-react": "^1.0.1",
 		"ahooks": "^3.7.8",
 		"tabulator-tables": "^5.5.1"
 	}

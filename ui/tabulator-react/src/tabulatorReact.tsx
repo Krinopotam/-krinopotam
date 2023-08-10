@@ -1,4 +1,5 @@
-import {EventCallBackMethods, RowComponent, TabulatorFull as Tabulator} from 'tabulator-tables';
+import {RowComponent, TabulatorFull as Tabulator} from '../../tabulator/dist/js/tabulator_esm';
+import {EventCallBackMethods} from '../../tabulator/types';
 import React from 'react';
 import {useInit} from './hooks/init';
 import {
@@ -10,6 +11,7 @@ import {IAdvancedTreeTabulator} from './modules/advancedTreeModule';
 import {HelpersStrings} from "@krinopotam/js-helpers";
 
 type _ITabulator = IAdvancedTreeTabulator & IActiveSelectionTabulator & Tabulator
+
 export interface ITabulator extends _ITabulator {
     /** is table initialized */
     initialized: boolean;
@@ -47,7 +49,7 @@ export interface IReactTabulatorProps extends Omit<ITabulator['options'], 'foote
     resizableColumnFit?: boolean;
 }
 
-const ReactTabulator = ({onTableRef, gridId, events, containerClassName, width, minWidth, maxWidth, ...props}: IReactTabulatorProps): React.JSX.Element => {
+const TabulatorReact = ({onTableRef, gridId, events, containerClassName, width, minWidth, maxWidth, ...props}: IReactTabulatorProps): React.JSX.Element => {
     const containerRef = React.useRef<HTMLDivElement>(null as unknown as HTMLDivElement);
     const tableRef = React.useRef<ITabulator>();
 
@@ -60,7 +62,7 @@ const ReactTabulator = ({onTableRef, gridId, events, containerClassName, width, 
     containerStyle.maxWidth = maxWidth;
     containerStyle.minWidth = minWidth;
 
-    return <div ref={containerRef} id={gridId ?? newId} data-instance={gridId ?? newId} className={containerClassName} style={containerStyle} />;
+    return <div ref={containerRef} id={gridId ?? newId} data-instance={gridId ?? newId} className={containerClassName} style={containerStyle}/>;
 };
 
-export default ReactTabulator;
+export default TabulatorReact;

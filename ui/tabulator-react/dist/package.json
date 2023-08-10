@@ -1,7 +1,7 @@
 {
-	"name": "@krinopotam/ui-tabulator-grid",
-	"version": "1.0.4",
-	"description": "UI Tabulator grid for Krinopotam's projects",
+	"name": "@krinopotam/ui-tabulator-react",
+	"version": "1.0.2",
+	"description": "UI Tabulator react for Krinopotam's projects",
 	"private": false,
 	"author": "Maxim Zaytsev",
 	"license": "ISC",
@@ -38,16 +38,7 @@
 		"webpack-cli": "^5.0.1"
 	},
 	"dependencies": {
-		"@krinopotam/js-helpers": "^1.0.1",
-		"@krinopotam/service-types": "^1.0.1",
-		"@krinopotam/ui-buttons-row": "^1.0.6",
-		"@krinopotam/ui-dynamic-form-modal": "^1.0.3",
-		"@krinopotam/ui-forms-dispatcher": "^1.0.3",
-		"@krinopotam/ui-loading-container": "^1.0.0",
-		"@krinopotam/ui-message-box": "^1.0.3",
-		"@krinopotam/ui-modal": "^1.0.3",
-		"@krinopotam/ui-tabulator-react": "^1.0.1",
-		"ahooks": "^3.7.8",
+		"@krinopotam/js-helpers": "^1.0.17",
 		"tabulator-tables": "^5.5.1"
 	}
 }

@@ -1,6 +1,6 @@
 import React from 'react';
 import {EventCallBackMethods, TabulatorFull as Tabulator} from 'tabulator-tables';
-import {IReactTabulatorProps, ITabulator} from '../reactTabulator';
+import {IReactTabulatorProps, ITabulator} from '../tabulatorReact';
 import {render} from 'react-dom';
 import {ActiveSelectionModule} from '../modules/activeSelectionModule';
 import {AdvancedTreeModule} from '../modules/advancedTreeModule';

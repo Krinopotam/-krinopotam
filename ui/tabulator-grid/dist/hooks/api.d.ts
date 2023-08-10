@@ -4,7 +4,7 @@ import { IButtonsRowApi } from '@krinopotam/ui-buttons-row';
 import { TPromise } from '@krinopotam/service-types';
 import { IGridProps, IGridRowData } from '../tabulatorGrid';
 import { RowComponent, ScrollToRowPosition, TabulatorFull as Tabulator } from 'tabulator-tables';
-import { ITabulator } from '../reactTabulator/reactTabulator';
+import { ITabulator } from '@krinopotam/ui-tabulator-react';
 type IRowKey = IGridRowData['id'];
 type IRowKeys = IRowKey | IRowKey[];
 export interface IGridApi {
