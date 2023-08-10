@@ -1,6 +1,6 @@
 {
 	"name": "@krinopotam/ui-tabulator-grid",
-	"version": "1.0.2",
+	"version": "1.0.3",
 	"description": "UI Tabulator grid for Krinopotam's projects",
 	"private": false,
 	"author": "Maxim Zaytsev",
@@ -47,6 +47,6 @@
 		"@krinopotam/ui-message-box": "^1.0.3",
 		"@krinopotam/ui-modal": "^1.0.3",
 		"ahooks": "^3.7.8",
-		"tabulator-tables": "^5.4.4"
+		"tabulator-tables": "^5.5.1"
 	}
 }

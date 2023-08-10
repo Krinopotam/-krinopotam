@@ -22,14 +22,14 @@ export const LoadingContainer = ({
     notHideContent,
     caption,
 }: ILoginContainerProps): React.JSX.Element => {
-    const tip = caption || 'Пожалуйста, подождите...';
+    const tip = caption ?? 'Пожалуйста, подождите...';
     return (
         <LoadingError errorMessage={error?.message} retryHandler={retryHandler}>
             {
                 <Spin spinning={isLoading} delay={0} tip={tip}>
                     {isLoading && !notHideContent ? (
                         <>
-                            {skeleton ? skeleton : null}
+                            {skeleton ?? null}
                             <div style={{display: 'none'}}>{children}</div>
                         </>
                     ) : (
