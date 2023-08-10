@@ -12,6 +12,7 @@ var __rest = (this && this.__rest) || function (s, e) {
 import React, { useCallback, useEffect } from 'react';
 import dayjs from 'dayjs';
 import { DatePicker } from '@krinopotam/ui-datepicker';
+export { default as dayjs, Dayjs } from 'dayjs';
 export const DateTimeComponent = ({ formApi, fieldName, fieldProps }) => {
     const { format, default: defaultFieldValue } = fieldProps, fieldPros = __rest(fieldProps, ["format", "default"]);
     const defaultDateFormat = 'DD.MM.YYYY';

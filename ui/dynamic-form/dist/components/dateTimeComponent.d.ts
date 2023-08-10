@@ -2,6 +2,7 @@ import React, { CSSProperties } from 'react';
 import { Dayjs } from 'dayjs';
 import { IDatePickerProps } from '@krinopotam/ui-datepicker';
 import { IDFormComponentProps, IDFormFieldProps } from './baseComponent';
+export { default as dayjs, Dayjs } from 'dayjs';
 export interface IDFormFieldDateTimeProps extends IDFormFieldProps {
     allowClear?: boolean;
     clearIcon?: React.ReactNode;
@@ -34,4 +35,3 @@ interface IDFormDatetimeComponentProps extends IDFormComponentProps {
     fieldProps: IDFormFieldDateTimeProps;
 }
 export declare const DateTimeComponent: ({ formApi, fieldName, fieldProps }: IDFormDatetimeComponentProps) => React.JSX.Element;
-export {};

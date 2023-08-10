@@ -47,8 +47,8 @@ export interface IDFormFieldTabulatorGridProps extends Omit<IDFormFieldProps, 'w
     headerVisible?: IReactTabulatorProps['headerVisible'];
     columnDefaults?: IReactTabulatorProps['columnDefaults'];
 }
+export type { IGridRowData, IGridDataFetchPromise, IGridDataSourcePromise, IGridDeletePromise, ITabulatorRow } from '@krinopotam/ui-tabulator-grid';
 interface IDFormTabulatorGridComponentProps extends IDFormComponentProps {
     fieldProps: IDFormFieldTabulatorGridProps;
 }
 export declare const TabulatorGridComponent: ({ formApi, fieldName, fieldProps }: IDFormTabulatorGridComponentProps) => React.JSX.Element;
-export {};

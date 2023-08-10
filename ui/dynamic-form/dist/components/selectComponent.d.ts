@@ -2,6 +2,7 @@ import React from 'react';
 import { IDFormComponentProps, IDFormFieldProps } from './baseComponent';
 import { LabeledValue } from 'antd/es/select';
 import { SelectProps } from "rc-select/lib/Select";
+export { LabeledValue } from 'antd/es/select';
 export interface ISelectComponentElement {
     id: string | number;
     title: string | React.ReactNode;
@@ -69,4 +70,3 @@ interface IDFormSelectComponentProps extends IDFormComponentProps {
 }
 export declare const SelectComponent: ({ formApi, fieldName, fieldProps }: IDFormSelectComponentProps) => React.JSX.Element;
 export declare const SelectComponentElementRenderTitle: (fieldProps: ISelectComponentElement, setColorDisabled?: boolean) => React.JSX.Element;
-export {};

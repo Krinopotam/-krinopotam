@@ -13,7 +13,7 @@ call npm run build
 @echo:
 @echo --------------- Package publishing ------------------------------
 cd dist
-rem call npm publish --access public
+call npm publish --access public
 
 @echo:
 @echo --------------- Publishing complete -----------------------------

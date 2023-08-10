@@ -38,4 +38,4 @@ export {TreeSelectComponent} from "@krinopotam/ui-dynamic-form/components/treeSe
 export type {IDFormFieldTreeSelectProps} from "@krinopotam/ui-dynamic-form/components/treeSelectComponent"
 
 export {TabulatorGridComponent} from "@krinopotam/ui-dynamic-form/components/tabulatorGridComponent"
-export type {IDFormFieldTabulatorGridProps} from "@krinopotam/ui-dynamic-form/components/tabulatorGridComponent"
+export type {IDFormFieldTabulatorGridProps, IGridRowData, IGridDeletePromise, IGridDataSourcePromise, IGridDataFetchPromise, ITabulatorRow} from "@krinopotam/ui-dynamic-form/components/tabulatorGridComponent"
