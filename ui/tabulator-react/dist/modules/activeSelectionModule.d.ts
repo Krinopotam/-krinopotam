@@ -29,7 +29,7 @@ export interface IRowComponent extends RowComponent, IActiveSelectionModuleRow {
     _row: IRow;
 }
 export declare class ActiveSelectionModule extends Module {
-    private table;
+    table: IActiveSelectionTabulator;
     private activeRow;
     constructor(table: Tabulator);
     initialize(): void;

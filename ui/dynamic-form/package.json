@@ -1,6 +1,6 @@
 {
 	"name": "@krinopotam/ui-dynamic-form",
-	"version": "1.0.8",
+	"version": "1.0.9",
 	"description": "UI dynamic form for Krinopotam's projects",
 	"private": false,
 	"author": "Maxim Zaytsev",
@@ -45,7 +45,7 @@
 		"@krinopotam/ui-loading-container": "^1.0.0",
 		"@krinopotam/ui-message-box": "^1.0.4",
 		"@krinopotam/ui-modal": "^1.0.3",
-		"@krinopotam/ui-tabulator-grid": "^1.0.2",
+		"@krinopotam/ui-tabulator-grid": "^1.0.5",
 		"@krinopotam/ui-treeselect": "^1.0.5",
 		"antd": "^5.8.2",
 		"rc-animate": "^3.1.1",

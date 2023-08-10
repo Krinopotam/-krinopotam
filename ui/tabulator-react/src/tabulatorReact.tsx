@@ -1,5 +1,4 @@
-import {RowComponent, TabulatorFull as Tabulator} from '../../tabulator/dist/js/tabulator_esm';
-import {EventCallBackMethods} from '../../tabulator/types';
+import {EventCallBackMethods, RowComponent, TabulatorFull as Tabulator} from 'tabulator-tables';
 import React from 'react';
 import {useInit} from './hooks/init';
 import {

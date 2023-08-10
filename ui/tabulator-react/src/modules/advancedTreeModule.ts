@@ -1,6 +1,4 @@
-//import {TabulatorFull as Tabulator, Module, Options} from 'tabulator-tables';
-import {TabulatorFull as Tabulator} from '../../../tabulator/dist/js/tabulator_esm';
-import {Options, Module} from '../../../tabulator/types';
+import {TabulatorFull as Tabulator, Module, Options} from 'tabulator-tables';
 import {IModule} from './innerTypes';
 
 //region Interfaces
@@ -171,8 +169,8 @@ export class AdvancedTreeModule extends Module {
         if (!matchFunction) return undefined;
         const filter = (filterVal: AnyType, rowValue: AnyType, rowData: AnyType, filterParams: AnyType, force?: boolean) => {
             const fieldName = this.getFilterFieldName(filterVal, rowValue, rowData, filterParams);
-            const indexField = this.table.options.index || 'id';
-            const childrenField = this.table.options.dataTreeChildField || 'children';
+            const indexField = this.table.options.index ?? 'id';
+            const childrenField = this.table.options.dataTreeChildField ?? 'children';
 
             if (force === true) {
                 this.setFilterCache(fieldName, rowData[indexField], true);

@@ -113,9 +113,10 @@ export class AdvancedTreeModule extends Module {
         if (!matchFunction)
             return undefined;
         const filter = (filterVal, rowValue, rowData, filterParams, force) => {
+            var _a, _b;
             const fieldName = this.getFilterFieldName(filterVal, rowValue, rowData, filterParams);
-            const indexField = this.table.options.index || 'id';
-            const childrenField = this.table.options.dataTreeChildField || 'children';
+            const indexField = (_a = this.table.options.index) !== null && _a !== void 0 ? _a : 'id';
+            const childrenField = (_b = this.table.options.dataTreeChildField) !== null && _b !== void 0 ? _b : 'children';
             if (force === true) {
                 this.setFilterCache(fieldName, rowData[indexField], true);
                 for (const childRow of rowData[childrenField] || [])
