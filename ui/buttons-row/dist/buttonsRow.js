@@ -53,7 +53,8 @@ const ButtonComponent = ({ name, button, position, context, }) => {
     }
 };
 const useApi = (props, curButtons, setCurButtons) => {
-    const [api] = useState((props.apiRef && {}));
+    var _a;
+    const [api] = useState(((_a = props.apiRef) !== null && _a !== void 0 ? _a : {}));
     return useMemo(() => {
         api.buttons = (buttons) => {
             if (typeof buttons === 'undefined')

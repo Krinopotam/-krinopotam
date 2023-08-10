@@ -198,7 +198,7 @@ const ButtonComponent = ({
 };
 
 const useApi = (props: IButtonRowProps, curButtons: IFormButtons, setCurButtons: (buttons: IFormButtons) => void): IButtonsRowApi => {
-    const [api] = useState((props.apiRef && {}) as IButtonsRowApi);
+    const [api] = useState((props.apiRef ?? {}) as IButtonsRowApi);
     return useMemo(() => {
         api.buttons = (buttons) => {
             if (typeof buttons === 'undefined') return curButtons;
@@ -346,8 +346,7 @@ const keyDownHandler = (e: KeyboardEvent, props: React.MutableRefObject<IButtonR
 
     if (props.current.arrowsSelection || typeof props.current.arrowsSelection === 'undefined') {
         if (
-            target &&
-            target.closest('.managed-dynamic-buttons-row') && //TODO: think about how to get rid of this class
+            target?.closest('.managed-dynamic-buttons-row') && //TODO: think about how to get rid of this class
             target.tagName.toLocaleUpperCase() !== 'INPUT' &&
             target.tagName.toLocaleUpperCase() !== 'TEXTAREA' &&
             !(target.tagName.toLocaleUpperCase() === 'BUTTON' && target.getAttribute('role') === 'switch')

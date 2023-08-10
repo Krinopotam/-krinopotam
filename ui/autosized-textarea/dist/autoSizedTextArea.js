@@ -59,7 +59,8 @@ const useGetInputBoundsStyle = (textAreaRef) => {
         borderRightWidth: 0,
     });
     useEffect(() => {
-        if (!textAreaRef.current || !textAreaRef.current.resizableTextArea)
+        var _a;
+        if (!((_a = textAreaRef === null || textAreaRef === void 0 ? void 0 : textAreaRef.current) === null || _a === void 0 ? void 0 : _a.resizableTextArea))
             return;
         const calculatedStyles = window.getComputedStyle(textAreaRef.current.resizableTextArea.textArea, null);
         setInputStyle({
@@ -95,12 +96,12 @@ const useCalculateSize = (sizerRef, placeholderSizerRef, value, inputBoundsStyle
             inputBoundsStyle.paddingBottom +
             inputBoundsStyle.borderTopWidth +
             inputBoundsStyle.borderBottomWidth +
-            (extraHeight || 0);
+            (extraHeight !== null && extraHeight !== void 0 ? extraHeight : 0);
         const paddingWidth = inputBoundsStyle.paddingLeft +
             inputBoundsStyle.paddingRight +
             inputBoundsStyle.borderLeftWidth +
             inputBoundsStyle.borderRightWidth +
-            (extraWidth || 0);
+            (extraWidth !== null && extraWidth !== void 0 ? extraWidth : 0);
         const sizerStyles = window.getComputedStyle(sizerRef.current, null);
         const sizerHeight = parseInt(sizerStyles.height, 10);
         const sizerWidth = parseInt(sizerStyles.width, 10);
@@ -118,7 +119,7 @@ const useCalculateSize = (sizerRef, placeholderSizerRef, value, inputBoundsStyle
 };
 const usePrepareInputStyles = (style, inputHeight, inputWidth) => {
     return useMemo(() => {
-        return HelpersObjects.mergeObjects(style || {}, {
+        return HelpersObjects.mergeObjects(style !== null && style !== void 0 ? style : {}, {
             height: inputHeight,
             width: inputWidth,
             transition: 'none',

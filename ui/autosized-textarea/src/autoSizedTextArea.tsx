@@ -62,7 +62,7 @@ export const AutoSizedTextArea = React.forwardRef<TextAreaRef, IAutoSizedTextAre
          extraWidth,
          placeholder,
          ...props
-     }, ref): JSX.Element => {
+     }, ref): React.JSX.Element => {
         const sizerRef = useRef<HTMLDivElement>(null);
         const placeholderSizerRef = useRef<HTMLDivElement>(null);
         const inputBoundsStyle = useGetInputBoundsStyle(ref as React.RefObject<TextAreaRef>);
@@ -99,7 +99,7 @@ const useGetInputBoundsStyle = (textAreaRef: React.RefObject<TextAreaRef>): IInp
         borderRightWidth: 0,
     });
     useEffect(() => {
-        if (!textAreaRef.current || !textAreaRef.current.resizableTextArea) return;
+        if (!textAreaRef?.current?.resizableTextArea) return;
         const calculatedStyles = window.getComputedStyle(textAreaRef.current.resizableTextArea.textArea, null);
         setInputStyle({
             paddingTop: parseInt(calculatedStyles.paddingTop, 10),
@@ -148,13 +148,13 @@ const useCalculateSize = (
             inputBoundsStyle.paddingBottom +
             inputBoundsStyle.borderTopWidth +
             inputBoundsStyle.borderBottomWidth +
-            (extraHeight || 0);
+            (extraHeight ?? 0);
         const paddingWidth =
             inputBoundsStyle.paddingLeft +
             inputBoundsStyle.paddingRight +
             inputBoundsStyle.borderLeftWidth +
             inputBoundsStyle.borderRightWidth +
-            (extraWidth || 0);
+            (extraWidth ?? 0);
         const sizerStyles = window.getComputedStyle(sizerRef.current, null);
         const sizerHeight = parseInt(sizerStyles.height, 10);
         const sizerWidth = parseInt(sizerStyles.width, 10);
@@ -176,7 +176,7 @@ const useCalculateSize = (
 
 const usePrepareInputStyles = (style: CSSProperties | undefined, inputHeight: number, inputWidth: number) => {
     return useMemo(() => {
-        return HelpersObjects.mergeObjects(style || {}, {
+        return HelpersObjects.mergeObjects(style ?? {}, {
             height: inputHeight,
             width: inputWidth,
             transition: 'none',

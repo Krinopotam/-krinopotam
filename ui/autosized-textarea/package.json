@@ -1,6 +1,6 @@
 {
 	"name": "@krinopotam/ui-autosized-textarea",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "UI autosized textarea for Krinopotam's projects",
 	"private": false,
 	"author": "Maxim Zaytsev",
