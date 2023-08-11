@@ -26,7 +26,7 @@ export const FormBodyRender = ({formApi}: IFormBodyRenderProps): React.JSX.Eleme
     const tabs = formApi.model.getTabsProps();
     if (Object.keys(tabs).length === 0) return null;
 
-    const indentStyle = {height: formProps.contentIndent || 12, background: token.colorBgElevated};
+    const indentStyle = {height: formProps.contentIndent ?? 12, background: token.colorBgElevated};
     if (Object.keys(tabs).length === 1) {
         const firstTab = Object.keys(tabs)[0];
         return (

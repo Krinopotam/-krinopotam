@@ -7,6 +7,6 @@
   "license": "ISC",
   "main": "index.js",
   "scripts": {
-    "build": "tsc -p tsconfig.json && cp package.json dist/package.json"
+    "build": "tsc -p tsconfig.json"
   }
 }

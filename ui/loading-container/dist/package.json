@@ -1,7 +1,7 @@
 {
 	"name": "@krinopotam/ui-loading-container",
-	"version": "1.0.0",
-	"description": "UI loading-container Krinopotam's projects",
+	"version": "1.0.1",
+	"description": "UI loading-container for Krinopotam's projects",
 	"private": false,
 	"author": "Maxim Zaytsev",
 	"license": "ISC",
@@ -9,7 +9,7 @@
 	"scripts": {
 		"dev": "webpack --mode development",
 		"prod": "webpack --mode production",
-		"build": "tsc -p tsconfig.json && cp package.json dist/package.json",
+		"build": "tsc -p tsconfig.json",
 		"start": "http-server --port 8080 -P http://localhost:8080?"
 	},
 	"devDependencies": {

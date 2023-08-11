@@ -11,11 +11,9 @@ var __rest = (this && this.__rest) || function (s, e) {
 };
 import './css/messageBox.css';
 import { Modal, Spin } from 'antd';
-import { ButtonsRender } from '@krinopotam/ui-modal';
+import { ButtonsRender, HeaderRender, ModalRender } from '@krinopotam/ui-modal';
 import { ContentRender } from './renders/contentRender';
-import { HeaderRender } from '@krinopotam/ui-modal';
 import { MessageBoxApi } from './messageBoxApi';
-import { ModalRender } from '@krinopotam/ui-modal';
 import React from 'react';
 import dispatcher from '@krinopotam/ui-forms-dispatcher';
 import { HelpersStrings, HelpersObjects } from "@krinopotam/js-helpers";
@@ -146,7 +144,7 @@ class MessageBox {
         return messageBoxApi;
     }
     triggerButtonClick(buttonName, button) {
-        if (button && button.onClick && !button.disabled && !button.hidden)
+        if ((button === null || button === void 0 ? void 0 : button.onClick) && !button.disabled && !button.hidden)
             button.onClick(buttonName, button);
     }
     generateModalConfig({ formId, title, content, afterClose, buttons, centered = true, closable = true, maskClosable = true, type, onClose, }) {

@@ -1,15 +1,16 @@
 {
 	"name": "@krinopotam/ui-message-box",
-	"version": "1.0.4",
+	"version": "1.0.7",
 	"description": "Message Box for Krinopotam's projects",
 	"private": false,
 	"author": "Maxim Zaytsev",
 	"license": "ISC",
 	"main": "index.js",
+	"style": "css/messageBox.css",
 	"scripts": {
 		"dev": "webpack --mode development",
 		"prod": "webpack --mode production",
-		"build": "tsc -p tsconfig.json && cp package.json dist/package.json",
+		"build": "tsc -p tsconfig.json",
 		"start": "http-server --port 8080 -P http://localhost:8080?"
 	},
 	"devDependencies": {
@@ -45,9 +46,8 @@
 		"@ant-design/cssinjs": "^1.5.6",
 		"@ant-design/icons": "^5.0.1",
 		"@krinopotam/js-helpers": "^1.0.1",
-		"@krinopotam/ui-modal": "^1.0.3",
 		"@krinopotam/ui-buttons-row": "^1.0.6",
-		"antd": "^5.8.2",
-		"styled-components": "^5.3.3"
+		"@krinopotam/ui-modal": "^1.0.3",
+		"antd": "^5.8.2"
 	}
 }

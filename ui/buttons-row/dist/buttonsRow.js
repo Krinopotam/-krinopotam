@@ -185,8 +185,7 @@ const keyDownHandler = (e, props, api) => {
     if (key === 'f5' || (e.ctrlKey && e.shiftKey && key === 'r'))
         return;
     if (props.current.arrowsSelection || typeof props.current.arrowsSelection === 'undefined') {
-        if (target &&
-            target.closest('.managed-dynamic-buttons-row') &&
+        if ((target === null || target === void 0 ? void 0 : target.closest('.managed-dynamic-buttons-row')) &&
             target.tagName.toLocaleUpperCase() !== 'INPUT' &&
             target.tagName.toLocaleUpperCase() !== 'TEXTAREA' &&
             !(target.tagName.toLocaleUpperCase() === 'BUTTON' && target.getAttribute('role') === 'switch')) {

@@ -1,6 +1,6 @@
 {
 	"name": "@krinopotam/ui-timepicker",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "UI time picker Krinopotam's projects",
 	"private": false,
 	"author": "Maxim Zaytsev",
@@ -9,7 +9,7 @@
 	"scripts": {
 		"dev": "webpack --mode development",
 		"prod": "webpack --mode production",
-		"build": "tsc -p tsconfig.json && cp package.json dist/package.json",
+		"build": "tsc -p tsconfig.json",
 		"start": "http-server --port 8080 -P http://localhost:8080?"
 	},
 	"devDependencies": {
@@ -37,7 +37,6 @@
 	},
 	"dependencies": {
 		"@krinopotam/js-helpers": "^1.0.1",
-		"@krinopotam/ui-forms-dispatcher": "^1.0.3",
 		"antd": "^5.8.2"
 	}
 }

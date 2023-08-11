@@ -1,6 +1,6 @@
 {
 	"name": "@krinopotam/ui-buttons-row",
-	"version": "1.0.7",
+	"version": "1.0.8",
 	"description": "UI buttons row for Krinopotam's projects",
 	"private": false,
 	"author": "Maxim Zaytsev",
@@ -9,7 +9,7 @@
 	"scripts": {
 		"dev": "webpack --mode development",
 		"prod": "webpack --mode production",
-		"build": "tsc -p tsconfig.json && cp package.json dist/package.json",
+		"build": "tsc -p tsconfig.json",
 		"start": "http-server --port 8080 -P http://localhost:8080?"
 	},
 	"devDependencies": {

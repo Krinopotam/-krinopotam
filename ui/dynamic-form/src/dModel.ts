@@ -137,7 +137,7 @@ export class DModel {
     private _labels: Record<string, React.ReactNode | undefined> = {};
 
     /** field values */
-    private _values: Record<string, unknown | undefined> = {};
+    private _values: Record<string, unknown> = {};
 
     /** touched field statuses */
     private _touched: Record<string, boolean | undefined> = {};
@@ -837,7 +837,7 @@ export class DModel {
      * @param noEvents- does not raise events/callbacks and the field rerender
      */
     public setFormValues(dataSet: IDFormDataSet | undefined, noEvents?: boolean) {
-        const newDataSet = noEvents ? dataSet : this._callbacks.onDataSetChange?.(dataSet, this) || dataSet;
+        const newDataSet = noEvents ? dataSet : this._callbacks.onDataSetChange?.(dataSet, this) ?? dataSet;
 
         this._dataSet = newDataSet;
         const fieldsProps = this.getFieldsProps();

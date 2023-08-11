@@ -12,12 +12,9 @@ import './css/messageBox.css';
 import {IFormButton, IFormButtons} from '@krinopotam/ui-buttons-row';
 import {Modal, ModalFuncProps, Spin} from 'antd';
 
-import {ButtonsRender} from '@krinopotam/ui-modal';
+import {ButtonsRender, HeaderRender, IFormType, ModalRender} from '@krinopotam/ui-modal';
 import {ContentRender} from './renders/contentRender';
-import {HeaderRender} from '@krinopotam/ui-modal';
-import {IFormType} from '@krinopotam/ui-modal';
 import {MessageBoxApi} from './messageBoxApi';
-import {ModalRender} from '@krinopotam/ui-modal';
 import {ModalStaticFunctions} from 'antd/es/modal/confirm';
 import React from 'react';
 import dispatcher from '@krinopotam/ui-forms-dispatcher';
@@ -206,7 +203,7 @@ class MessageBox {
     }
 
     private triggerButtonClick(buttonName: string, button: IFormButton | undefined | null) {
-        if (button && button.onClick && !button.disabled && !button.hidden) button.onClick(buttonName, button);
+        if (button?.onClick && !button.disabled && !button.hidden) button.onClick(buttonName, button);
     }
 
     private generateModalConfig({
