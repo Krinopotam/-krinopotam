@@ -15,7 +15,9 @@ export declare class TextEditorComponentConfig<T> extends BaseComponentConfig<T>
     dependsOn(value: IDFormFieldProps['dependsOn']): this;
     width(value: IDFormFieldProps['width']): this;
     autoFocus(value: IDFormFieldProps['autoFocus']): this;
+    requiredMark(value: IDFormFieldProps['requiredMark']): this;
     callbacks(value: IDFormFieldProps['callbacks']): this;
+    style(value: IDFormFieldProps['style']): this;
     formats(value: IDFormTextEditorProps['formats']): this;
     toolbar(value: IDFormTextEditorProps['toolbar']): this;
     getConfig(): IDFormTextEditorProps;

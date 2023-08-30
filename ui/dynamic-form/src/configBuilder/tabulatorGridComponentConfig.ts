@@ -83,9 +83,21 @@ export class TabulatorGridComponentConfig<T>  extends BaseComponentConfig<T> {
         return this;
     }
 
+    /** Mark Field Label as Required */
+    requiredMark(value: IDFormFieldProps['requiredMark']) {
+        this._config.requiredMark = value;
+        return this;
+    }
+
     /** Grid callbacks */
     callbacks(value: IDFormFieldTabulatorGridProps['callbacks']) {
         this._config.callbacks = value;
+        return this;
+    }
+
+    /** Field CSS style */
+    style(value: IDFormFieldProps['style']) {
+        this._config.style = value;
         return this;
     }
 

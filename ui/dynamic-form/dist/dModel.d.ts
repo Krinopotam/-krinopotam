@@ -158,7 +158,7 @@ export declare class DModel {
     private isFieldMustBeHidden;
     subscribeRenderField(fieldName: string): (listener: () => void) => () => void;
     private emitFieldRender;
-    getFieldRenderSnapshots(): Record<string, never> | Record<string, () => number>;
+    getFieldRenderSnapshots(): Record<string, () => number> | Record<string, never>;
     subscribeRenderGroup(tabName: string, groupName: string): (listener: () => void) => () => void;
     private emitGroupRender;
     getGroupRenderSnapshots(): Record<string, never> | Record<string, Record<string, () => number>>;

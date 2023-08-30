@@ -15,7 +15,9 @@ export declare class DragAndDropComponentConfig<T> extends BaseComponentConfig<T
     dependsOn(value: IDFormFieldProps['dependsOn']): this;
     width(value: IDFormFieldProps['width']): this;
     autoFocus(value: IDFormFieldProps['autoFocus']): this;
+    requiredMark(value: IDFormFieldProps['requiredMark']): this;
     callbacks(value: IDFormFieldProps['callbacks']): this;
+    style(value: IDFormFieldProps['style']): this;
     accept(value: IDFormFieldDragAndDropProps['accept']): this;
     action(value: IDFormFieldDragAndDropProps['action']): this;
     beforeUpload(value: IDFormFieldDragAndDropProps['beforeUpload']): this;

@@ -29,6 +29,8 @@ const options = {
 
 const componentsList = [
     {name: 'baseComponent', interface: 'IDFormFieldProps'},
+    {name: 'customComponent', interface: 'IDFormFieldCustomProps'},
+    {name: 'dividerComponent', interface: 'IDFormFieldDividerProps'},
     {name: 'checkboxComponent', interface: 'IDFormFieldCheckBoxProps'},
     {name: 'dateTimeComponent', interface: 'IDFormFieldDateTimeProps'},
     {name: 'dragAndDropComponent', interface: 'IDFormFieldDragAndDropProps'},
@@ -198,7 +200,7 @@ function getFormClassProps(componentName) {
     const formOptions = options[componentName];
     const properties = parsingMethods.parseProperties(formOptions);
     properties['fieldsProps'] = {...properties['fieldsProps'], type: 'Record<keyof T, IDFormFieldProps>'};
-    properties['validationRules'] = {...properties['validationRules'], type: 'Record<keyof T, IRuleType[]>'};
+    properties['validationRules'] = {...properties['validationRules'], type: 'Partial<Record<keyof T, IRuleType[]>>'};
     delete properties['formId'];
 
     return {

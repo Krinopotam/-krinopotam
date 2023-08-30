@@ -15,7 +15,9 @@ export declare class SelectComponentConfig<T> extends BaseComponentConfig<T> {
     dependsOn(value: IDFormFieldProps['dependsOn']): this;
     width(value: IDFormFieldProps['width']): this;
     autoFocus(value: IDFormFieldProps['autoFocus']): this;
+    requiredMark(value: IDFormFieldProps['requiredMark']): this;
     callbacks(value: IDFormFieldProps['callbacks']): this;
+    style(value: IDFormFieldProps['style']): this;
     dataSet(value: IDFormFieldSelectProps['dataSet']): this;
     allowClear(value: IDFormFieldSelectProps['allowClear']): this;
     autoClearSearchValue(value: IDFormFieldSelectProps['autoClearSearchValue']): this;

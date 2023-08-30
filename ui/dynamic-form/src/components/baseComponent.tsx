@@ -6,7 +6,7 @@
  * @license MIT
  */
 
-import React, {useSyncExternalStore} from 'react';
+import React, {useMemo, useSyncExternalStore} from 'react';
 
 import Animate from 'rc-animate';
 import {Form} from 'antd';
@@ -54,8 +54,14 @@ export interface IDFormFieldProps {
     /** Get focus by default */
     autoFocus?: boolean;
 
+    /** Mark Field Label as Required */
+    requiredMark?: boolean
+
     /** Field callbacks */
     callbacks?: IDFormFieldCallbacks;
+
+    /** Field CSS style */
+    style?: React.CSSProperties
 }
 
 export interface IDFormFieldCallbacks {
@@ -107,23 +113,25 @@ export interface IDFormComponentProps {
     formApi: IDFormApi;
 }
 
-export const BaseComponent = ({fieldName, fieldProps, formApi, noLabel}: IDFormComponentProps & {noLabel?: boolean}): React.JSX.Element => {
+export const BaseComponent = ({fieldName, fieldProps, formApi, noLabel}: IDFormComponentProps & { noLabel?: boolean }): React.JSX.Element => {
     useExternalRenderCall(formApi, fieldName);
 
     const error = formApi.model.getFieldError(fieldName);
-    const fieldTouched = formApi.model.isFieldTouched(fieldName);
     const fieldHidden = formApi.model.isFieldHidden(fieldName);
-    const formSubmitCount = formApi.model.getSubmitCount();
 
     const Component = fieldProps.component;
 
-    const style = {
-        //marginBottom: formProps.layout !== 'horizontal' ? 0 : undefined,
-        width: fieldProps.width,
-        flexGrow: fieldProps.width ? 0 : 1,
-        flexShrink: fieldProps.width ? 0 : 1,
-        flexBasis: fieldProps.width ? undefined : 0,
-    };
+    const style: React.CSSProperties = useMemo(() => {
+        const baseStyle: React.CSSProperties = {
+            //marginBottom: formProps.layout !== 'horizontal' ? 0 : undefined,
+            width: fieldProps.width,
+            flexGrow: fieldProps.width ? 0 : 1,
+            flexShrink: fieldProps.width ? 0 : 1,
+            flexBasis: fieldProps.width ? undefined : 0,
+        };
+
+        return {...baseStyle, ...fieldProps.style}
+    }, [fieldProps.style, fieldProps.width])
 
     return (
         <Animate component="" transitionName="zoom">
@@ -132,11 +140,14 @@ export const BaseComponent = ({fieldName, fieldProps, formApi, noLabel}: IDFormC
                     key={'item_' + fieldName}
                     label={!noLabel ? fieldProps.label : undefined}
                     //name={fieldName} //!Do not specify "name". Components inside Form.Item with "name" property will turn into controlled mode, which makes "defaultValue" and "value" not work anymore
-                    help={(fieldTouched || formSubmitCount > 0) && error ? error : ''}
-                    validateStatus={(fieldTouched || formSubmitCount > 0) && error ? 'error' : ''}
+                    //help={(fieldTouched || formSubmitCount > 0) && error ? error : ''}
+                    //validateStatus={(fieldTouched || formSubmitCount > 0) && error ? 'error' : ''}
+                    help={error || undefined}
+                    validateStatus={error ? 'error' : undefined}
+                    required={!!fieldProps.requiredMark}
                     style={style}
                 >
-                    <Component fieldName={fieldName} fieldProps={fieldProps} formApi={formApi} />
+                    <Component fieldName={fieldName} fieldProps={fieldProps} formApi={formApi}/>
                 </Form.Item>
             ) : null}
         </Animate>

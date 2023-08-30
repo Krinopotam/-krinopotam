@@ -16,7 +16,9 @@ export declare class TreeSelectComponentConfig<T> extends BaseComponentConfig<T>
     dependsOn(value: IDFormFieldProps['dependsOn']): this;
     width(value: IDFormFieldProps['width']): this;
     autoFocus(value: IDFormFieldProps['autoFocus']): this;
+    requiredMark(value: IDFormFieldProps['requiredMark']): this;
     callbacks(value: ITreeSelectProps['callbacks']): this;
+    style(value: IDFormFieldProps['style']): this;
     apiRef(value: ITreeSelectProps['apiRef']): this;
     treeSelectId(value: ITreeSelectProps['treeSelectId']): this;
     value(value: ITreeSelectProps['value']): this;

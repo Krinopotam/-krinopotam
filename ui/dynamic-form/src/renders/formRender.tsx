@@ -6,14 +6,14 @@
  * @license MIT
  */
 
-import { IFormButtons } from '@krinopotam/ui-buttons-row';
-import React, { useEffect, useSyncExternalStore } from 'react';
+import {IFormButtons} from '@krinopotam/ui-buttons-row';
+import React, {useEffect, useSyncExternalStore} from 'react';
 
-import { ButtonsRender } from '@krinopotam/ui-modal';
-import { Form } from 'antd';
-import { FormBodyRender } from './formBodyRender';
-import { IDFormApi } from '../hooks/api';
-import { LoadingContainer } from '@krinopotam/ui-loading-container';
+import {ButtonsRender} from '@krinopotam/ui-modal';
+import {Form} from 'antd';
+import {FormBodyRender} from './formBodyRender';
+import {IDFormApi} from '../hooks/api';
+import {LoadingContainer} from '@krinopotam/ui-loading-container';
 
 interface IFormRenderProps {
     /** form api instance */
@@ -32,31 +32,36 @@ interface IFormRenderProps {
 export const FormRender = ({formApi, formButtons}: IFormRenderProps): React.JSX.Element => {
     useExternalRenderCall(formApi);
 
-    const formProps = formApi.getFormProps(); 
+    const formProps = formApi.getFormProps();
     let labelCol = formProps.labelCol;
     if (!labelCol) labelCol = formProps.layout === 'horizontal' ? {span: 8} : {span: 0};
+
+    if (!labelCol.style) labelCol.style = {paddingBottom: 2}
+    else if (typeof labelCol.style.paddingBottom === 'undefined') labelCol.style.paddingBottom = 2
 
     let wrapperCol = formProps.wrapperCol;
     if (!wrapperCol) wrapperCol = formProps.layout === 'horizontal' ? {span: 16} : {span: 24};
 
     return (
-        <div className={'managed-dynamic-buttons-row ' + (formProps.containerClassName || '')}>
+        <div className={'managed-dynamic-buttons-row ' + (formProps.containerClassName ?? '')}>
             <LoadingContainer
                 isLoading={formApi.model.isFormFetching() || (formApi.model.isFormSubmitting() && !formProps.confirmChanges)}
                 notHideContent={true}
             >
                 <Form
+                    colon={false}
                     className={formProps.className}
                     name={formApi.getFormId()}
                     labelCol={labelCol}
                     wrapperCol={wrapperCol}
                     //onFinish={formApi.model.submit}
                     autoComplete="off"
+                    labelAlign={formProps.labelAlign}
                     layout={formProps.layout === 'horizontal' ? 'horizontal' : 'vertical'}
                 >
-                    <FormInit formApi={formApi} />
+                    <FormInit formApi={formApi}/>
 
-                    <FormBodyRender formApi={formApi} />
+                    <FormBodyRender formApi={formApi}/>
 
                     <ButtonsRender
                         formId={formApi.getFormId()}
@@ -83,7 +88,7 @@ const useExternalRenderCall = (formApi: IDFormApi) => {
 };
 
 /** Special component to fire onFormInit event before another events*/
-const FormInit = ({formApi}: {formApi: IDFormApi}): React.JSX.Element | null => {
+const FormInit = ({formApi}: { formApi: IDFormApi }): React.JSX.Element | null => {
     useEffect(() => {
         formApi.model.setFormInit();
     }, [formApi.model]);

@@ -22,7 +22,7 @@ export declare class DFormConfig<T> {
     noAutoHideDependedFields(value: IDFormProps['noAutoHideDependedFields']): this;
     tabsProps(value: IDFormProps['tabsProps']): this;
     unfilledForm(value: IDFormProps['unfilledForm']): this;
-    validationRules(value: Record<keyof T, IRuleType[]>): this;
+    validationRules(value: Partial<Record<keyof T, IRuleType[]>>): this;
     wrapperCol(value: IDFormProps['wrapperCol']): this;
     confirmChanges(value: IDFormProps['confirmChanges']): this;
     submitConfirmMessage(value: IDFormProps['submitConfirmMessage']): this;

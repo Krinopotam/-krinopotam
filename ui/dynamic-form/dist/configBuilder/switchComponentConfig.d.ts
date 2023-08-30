@@ -15,7 +15,9 @@ export declare class SwitchComponentConfig<T> extends BaseComponentConfig<T> {
     dependsOn(value: IDFormFieldProps['dependsOn']): this;
     width(value: IDFormFieldProps['width']): this;
     autoFocus(value: IDFormFieldProps['autoFocus']): this;
+    requiredMark(value: IDFormFieldProps['requiredMark']): this;
     callbacks(value: IDFormFieldProps['callbacks']): this;
+    style(value: IDFormFieldProps['style']): this;
     checkedChildren(value: IDFormFieldSwitchProps['checkedChildren']): this;
     unCheckedChildren(value: IDFormFieldSwitchProps['unCheckedChildren']): this;
     loading(value: IDFormFieldSwitchProps['loading']): this;

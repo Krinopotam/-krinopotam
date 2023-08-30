@@ -1,6 +1,6 @@
 {
 	"name": "@krinopotam/ui-dynamic-form-modal",
-	"version": "1.0.13",
+	"version": "1.0.15",
 	"description": "UI dynamic modal form for Krinopotam's projects",
 	"private": false,
 	"author": "Maxim Zaytsev",
@@ -37,12 +37,12 @@
 	},
 	"dependencies": {
 		"@krinopotam/common-hooks": "^1.0.1",
-		"@krinopotam/js-helpers": "^1.0.1",
-		"@krinopotam/ui-buttons-row": "^1.0.6",
-		"@krinopotam/ui-dynamic-form": "^1.0.6",
-		"@krinopotam/ui-forms-dispatcher": "^1.0.3",
-		"@krinopotam/ui-loading-container": "^1.0.0",
-		"@krinopotam/ui-message-box": "^1.0.3",
-		"@krinopotam/ui-modal": "^1.0.3"
+		"@krinopotam/js-helpers": "^1.0.17",
+		"@krinopotam/ui-buttons-row": "^1.0.8",
+		"@krinopotam/ui-dynamic-form": "^1.0.10",
+		"@krinopotam/ui-forms-dispatcher": "^1.0.5",
+		"@krinopotam/ui-loading-container": "^1.0.1",
+		"@krinopotam/ui-message-box": "^1.0.7",
+		"@krinopotam/ui-modal": "^1.0.4"
 	}
 }

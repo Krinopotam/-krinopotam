@@ -398,8 +398,8 @@ export class DModel {
         return this._values;
     }
     setFormValues(dataSet, noEvents) {
-        var _a, _b;
-        const newDataSet = noEvents ? dataSet : ((_b = (_a = this._callbacks).onDataSetChange) === null || _b === void 0 ? void 0 : _b.call(_a, dataSet, this)) || dataSet;
+        var _a, _b, _c;
+        const newDataSet = noEvents ? dataSet : (_c = (_b = (_a = this._callbacks).onDataSetChange) === null || _b === void 0 ? void 0 : _b.call(_a, dataSet, this)) !== null && _c !== void 0 ? _c : dataSet;
         this._dataSet = newDataSet;
         const fieldsProps = this.getFieldsProps();
         for (const fieldName in fieldsProps) {

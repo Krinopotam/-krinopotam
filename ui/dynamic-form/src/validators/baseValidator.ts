@@ -57,7 +57,7 @@ export class BaseValidator {
         if (!values || !validationRules) return errors;
 
         for (const name in validationRules) {
-            if (hidden && hidden[name]) continue;
+            if (hidden?.[name]) continue;
             const val = values[name] ? values[name] : null;
             const errorMsg = this.validateValue(val, validationRules[name], values);
             if (errorMsg) errors[name] = errorMsg;

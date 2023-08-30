@@ -43,7 +43,7 @@ function parseInterfaceText(options) {
     const fileContent = loadFile(options);
     const matcher = new RegExp(
         //'export interface ' + options.typeName + '\\s*(?:extends\\s[A-Za-z_<>,\'"\\s]*\\s*)?{[\\r\\n]([a-zA-Z\\d\\s/*&?:;,.\'`"@_=<>|()\\[\\]+-]*)[\\n\\r]}',
-        'export interface ' + options.typeName + '\\s*(?:extends\\s[A-Za-z_<>,\'"\\s]*\\s*)?{(([^{}]|{[^{}]*})*)}',
+        'export interface ' + options.typeName + '\\s*(?:extends\\s[A-Za-z_<>,\'"\\s|]*\\s*)?{(([^{}]|{[^{}]*})*)}',
         'gm'
     );
 

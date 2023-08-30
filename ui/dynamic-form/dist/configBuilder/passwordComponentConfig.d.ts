@@ -15,7 +15,9 @@ export declare class PasswordComponentConfig<T> extends BaseComponentConfig<T> {
     dependsOn(value: IDFormFieldProps['dependsOn']): this;
     width(value: IDFormFieldProps['width']): this;
     autoFocus(value: IDFormFieldProps['autoFocus']): this;
+    requiredMark(value: IDFormFieldProps['requiredMark']): this;
     callbacks(value: IDFormFieldProps['callbacks']): this;
+    style(value: IDFormFieldProps['style']): this;
     showCount(value: IDFormFieldPasswordProps['showCount']): this;
     maxLength(value: IDFormFieldPasswordProps['maxLength']): this;
     iconRender(value: IDFormFieldPasswordProps['iconRender']): this;

@@ -15,7 +15,9 @@ export declare class NumberComponentConfig<T> extends BaseComponentConfig<T> {
     dependsOn(value: IDFormFieldProps['dependsOn']): this;
     width(value: IDFormFieldProps['width']): this;
     autoFocus(value: IDFormFieldProps['autoFocus']): this;
+    requiredMark(value: IDFormFieldProps['requiredMark']): this;
     callbacks(value: IDFormFieldProps['callbacks']): this;
+    style(value: IDFormFieldProps['style']): this;
     addonAfter(value: IDFormFieldNumberProps['addonAfter']): this;
     addonBefore(value: IDFormFieldNumberProps['addonBefore']): this;
     controls(value: IDFormFieldNumberProps['controls']): this;

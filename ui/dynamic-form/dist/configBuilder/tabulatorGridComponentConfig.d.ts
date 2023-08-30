@@ -15,7 +15,9 @@ export declare class TabulatorGridComponentConfig<T> extends BaseComponentConfig
     dependsOn(value: IDFormFieldProps['dependsOn']): this;
     width(value: IDFormFieldTabulatorGridProps['width']): this;
     autoFocus(value: IDFormFieldProps['autoFocus']): this;
+    requiredMark(value: IDFormFieldProps['requiredMark']): this;
     callbacks(value: IDFormFieldTabulatorGridProps['callbacks']): this;
+    style(value: IDFormFieldProps['style']): this;
     id(value: IDFormFieldTabulatorGridProps['id']): this;
     gridMode(value: IDFormFieldTabulatorGridProps['gridMode']): this;
     dataTree(value: IDFormFieldTabulatorGridProps['dataTree']): this;

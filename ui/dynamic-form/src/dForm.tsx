@@ -21,12 +21,14 @@ import {useCallbacks} from './hooks/callbacks';
 import {useGetButtons} from './hooks/buttons';
 import {useUpdateMessageBoxTheme} from '@krinopotam/ui-message-box';
 import {useGetActualProps} from '@krinopotam/common-hooks';
+import {ColProps} from "antd";
+import {FormLabelAlign} from "antd/es/form/interface";
 
 //import './dynamicForm.css';
 
 //region Types
 /** Form properties*/
-// !used in configGenerator parsing. Don't use curly brackets and multi rows comments!
+// !used in configGenerator parsing. Don't use multi rows comments!
 export interface IDFormProps {
     /** A mutable object to merge with these controls api */
     apiRef?: unknown;
@@ -62,7 +64,13 @@ export interface IDFormProps {
     formType?: IFormType;
 
     /** label column parameters, for example span:'8' */
-    labelCol?: Record<string, unknown>;
+    labelCol?: ColProps;
+
+    /** wrapper column parameters, for example span:'16' */
+    wrapperCol?: ColProps;
+
+    /** text align of label of all items */
+    labelAlign?: FormLabelAlign
 
     /** Form layout (horizontal or vertical). Vertical is default */
     layout?: 'horizontal' | 'vertical';
@@ -88,9 +96,6 @@ export interface IDFormProps {
     /** Validation rules */
     validationRules?: IDFormFieldValidationRules;
 
-    /** wrapper column parameters, for example span:'16' */
-    wrapperCol?: Record<string, unknown>;
-
     /** Should the form request confirmation before the form submitting or cancel, if the form data was changed by the user  */
     confirmChanges?: boolean;
 
@@ -102,6 +107,7 @@ export interface IDFormProps {
 }
 
 export type IFormType = 'primary' | 'confirm' | 'info' | 'success' | 'error' | 'warning';
+
 export interface IDFormTabsProps {
     /** Tabs panes height (default 40)*/
     height?: number;
@@ -114,7 +120,7 @@ export interface IDFormDataSet extends Record<string, unknown> {
     id?: string | number;
 }
 
-export type IDFormDataSourcePromise = TPromise<{data: Record<string, unknown>}, {message: string; code: number}>;
+export type IDFormDataSourcePromise = TPromise<{ data: Record<string, unknown> }, { message: string; code: number }>;
 
 export type IDFormFieldValidationRules = Record<string, IRuleType[]>;
 
@@ -180,7 +186,7 @@ export interface IDFormCallbacks {
     onDataFetch?: (formApi: IDFormApi) => IDFormDataSourcePromise | undefined;
 
     /** fires when the form fetch success */
-    onDataFetchSuccess?: (result: {data: Record<string, unknown>}, formApi: IDFormApi) => boolean | void;
+    onDataFetchSuccess?: (result: { data: Record<string, unknown> }, formApi: IDFormApi) => boolean | void;
 
     /** fires when the form fetch failed */
     onDataFetchError?: (message: string, code: number, formApi: IDFormApi) => boolean | void;
@@ -229,7 +235,7 @@ export const DForm = (props: IDFormProps): React.JSX.Element => {
 
     useFormMounted(formApi);
 
-    return <FormRender formApi={formApi} formButtons={formButtons} />;
+    return <FormRender formApi={formApi} formButtons={formButtons}/>;
 };
 
 const useFormModel = (formId: string, formProps: IDFormProps, callbacks: IDFormModelCallbacks) => {

@@ -114,7 +114,7 @@ export class DFormModalConfig<T>  extends DFormConfig<T> {
     }
 
     /** Validation rules */
-    validationRules(value: Record<keyof T, IRuleType[]>) {
+    validationRules(value: Partial<Record<keyof T, IRuleType[]>>) {
         this._config.validationRules = value;
         return this;
     }

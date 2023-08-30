@@ -6,6 +6,8 @@ import React from 'react';
 import { TPromise } from '@krinopotam/service-types';
 import { IDFormFieldsProps } from './components/baseComponent';
 import { IRuleType } from './validators/baseValidator';
+import { ColProps } from "antd";
+import { FormLabelAlign } from "antd/es/form/interface";
 export interface IDFormProps {
     apiRef?: unknown;
     formId?: string;
@@ -18,7 +20,9 @@ export interface IDFormProps {
     parentDataSet?: IDFormDataSet;
     fieldsProps?: IDFormFieldsProps;
     formType?: IFormType;
-    labelCol?: Record<string, unknown>;
+    labelCol?: ColProps;
+    wrapperCol?: ColProps;
+    labelAlign?: FormLabelAlign;
     layout?: 'horizontal' | 'vertical';
     formMode?: IDFormMode;
     readOnly?: boolean;
@@ -26,7 +30,6 @@ export interface IDFormProps {
     tabsProps?: IDFormTabsProps;
     unfilledForm?: boolean;
     validationRules?: IDFormFieldValidationRules;
-    wrapperCol?: Record<string, unknown>;
     confirmChanges?: boolean;
     submitConfirmMessage?: React.ReactNode;
 }

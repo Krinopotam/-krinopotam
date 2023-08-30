@@ -53,8 +53,16 @@ export class TreeSelectComponentConfig extends BaseComponentConfig {
         this._config.autoFocus = value;
         return this;
     }
+    requiredMark(value) {
+        this._config.requiredMark = value;
+        return this;
+    }
     callbacks(value) {
         this._config.callbacks = value;
+        return this;
+    }
+    style(value) {
+        this._config.style = value;
         return this;
     }
     apiRef(value) {
