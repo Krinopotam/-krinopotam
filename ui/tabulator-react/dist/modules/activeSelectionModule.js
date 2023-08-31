@@ -59,7 +59,7 @@ export class ActiveSelectionModule extends Module {
         var _a, _b, _c, _d;
         const _this = this;
         const prevActiveRow = this.activeRow;
-        this.activeRow = row !== null && row !== void 0 ? row : undefined;
+        this.activeRow = row || undefined;
         if (prevActiveRow !== this.activeRow) {
             if (clearSelection || !row)
                 this.table.deselectRow();

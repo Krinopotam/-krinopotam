@@ -118,7 +118,7 @@ export class ActiveSelectionModule extends Module {
     public setActiveRow(row: RowComponent | undefined | null, clearSelection?: boolean, scrollPosition?: ScrollToRowPosition) {
         const _this = this as unknown as IModule;
         const prevActiveRow = this.activeRow;
-        this.activeRow = row ?? undefined;
+        this.activeRow = row || undefined;
 
         if (prevActiveRow !== this.activeRow) {
             if (clearSelection || !row) this.table.deselectRow();

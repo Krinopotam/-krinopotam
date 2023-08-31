@@ -3,7 +3,7 @@ import {IGridApi} from "./api";
 import {useMemo} from "react";
 import {IReactTabulatorProps, IFilterFunction} from "@krinopotam/ui-tabulator-react";
 
-export const useColumnDef = (columnDef: ColumnDefinition | undefined, gridApi: IGridApi) => {
+export const useColumnDef = (columnDef: Partial<ColumnDefinition> | undefined, gridApi: IGridApi) => {
     return useMemo(() => {
         const colDef: Partial<ColumnDefinition> = {
             resizable: 'header',

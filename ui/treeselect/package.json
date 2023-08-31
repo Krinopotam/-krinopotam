@@ -42,6 +42,7 @@
 		"@krinopotam/ui-buttons-row": "^1.0.3",
 		"@krinopotam/ui-dynamic-form-modal": "^1.0.1",
 		"@krinopotam/ui-message-box": "^1.0.4",
-		"antd": "^5.8.2"
+		"antd": "^5.8.2",
+		"lodash.debounce": "^4.0.8"
 	}
 }

@@ -24,7 +24,9 @@ export declare const usePrepareEditFormProps: (gridApi: IGridApi) => {
     parentDataSet?: import("@krinopotam/ui-dynamic-form").IDFormDataSet | undefined;
     fieldsProps?: import("@krinopotam/ui-dynamic-form/components/baseComponent").IDFormFieldsProps | undefined;
     formType?: import("@krinopotam/ui-dynamic-form").IFormType | undefined;
-    labelCol?: Record<string, unknown> | undefined;
+    labelCol?: import("antd").ColProps | undefined;
+    wrapperCol?: import("antd").ColProps | undefined;
+    labelAlign?: import("antd/es/form/interface").FormLabelAlign | undefined;
     layout?: "horizontal" | "vertical" | undefined;
     formMode?: import("@krinopotam/ui-dynamic-form").IDFormMode | undefined;
     readOnly?: boolean | undefined;
@@ -32,7 +34,6 @@ export declare const usePrepareEditFormProps: (gridApi: IGridApi) => {
     tabsProps?: import("@krinopotam/ui-dynamic-form").IDFormTabsProps | undefined;
     unfilledForm?: boolean | undefined;
     validationRules?: import("@krinopotam/ui-dynamic-form").IDFormFieldValidationRules | undefined;
-    wrapperCol?: Record<string, unknown> | undefined;
     confirmChanges?: boolean | undefined;
     submitConfirmMessage?: import("react").ReactNode;
 } | undefined;
