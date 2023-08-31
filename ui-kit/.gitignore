@@ -16,5 +16,3 @@ yarn-error.log
 /public/assets/components
 /app/sql_logger.cfg
 /storage/logs
-/dist
-/build
