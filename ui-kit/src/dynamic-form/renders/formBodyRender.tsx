@@ -11,17 +11,20 @@ import React from 'react';
 import {TabContentRender} from './tabContentRender';
 import {TabsRender} from './tabsRender';
 import {theme} from 'antd';
+import {IDFormProps} from "../dForm";
 
 const {useToken} = theme;
 
 interface IFormBodyRenderProps {
+    /** Form props*/
+    formProps:IDFormProps
+
     /** form api instance */
     formApi: IDFormApi;
 }
 
 /** Render form body */
-export const FormBodyRender = ({formApi}: IFormBodyRenderProps): React.JSX.Element | null => {
-    const formProps = formApi.getFormProps();
+export const FormBodyRender = ({formProps, formApi}: IFormBodyRenderProps): React.JSX.Element | null => {
     const {token} = useToken();
     const tabs = formApi.model.getTabsProps();
     if (Object.keys(tabs).length === 0) return null;
@@ -32,7 +35,7 @@ export const FormBodyRender = ({formApi}: IFormBodyRenderProps): React.JSX.Eleme
         return (
             <>
                 <div style={indentStyle} />
-                <TabContentRender formApi={formApi} tabName={firstTab} />
+                <TabContentRender formProps={formProps} formApi={formApi} tabName={firstTab} />
             </>
         );
     } else {

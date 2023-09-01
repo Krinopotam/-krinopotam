@@ -6,7 +6,7 @@
  * @license MIT
  */
 
-import {IFormButtons} from '../../buttons-row/buttonsRow';
+import {IFormButtons} from '../../buttons-row';
 import React, {useEffect, useSyncExternalStore} from 'react';
 
 import {ButtonsRender} from '../../modal';
@@ -14,8 +14,12 @@ import {Form} from 'antd';
 import {FormBodyRender} from './formBodyRender';
 import {IDFormApi} from '../hooks/api';
 import {LoadingContainer} from '../../loading-container';
+import {IDFormProps} from "../dForm";
 
 interface IFormRenderProps {
+    /** Form props*/
+    formProps:IDFormProps
+
     /** form api instance */
     formApi: IDFormApi;
 
@@ -29,10 +33,9 @@ interface IFormRenderProps {
     isSubmitting?: boolean;
 }
 
-export const FormRender = ({formApi, formButtons}: IFormRenderProps): React.JSX.Element => {
+export const FormRender = ({formProps, formApi, formButtons}: IFormRenderProps): React.JSX.Element => {
     useExternalRenderCall(formApi);
 
-    const formProps = formApi.getFormProps();
     let labelCol = formProps.labelCol;
     if (!labelCol) labelCol = formProps.layout === 'horizontal' ? {span: 8} : {span: 0};
 
@@ -61,7 +64,7 @@ export const FormRender = ({formApi, formButtons}: IFormRenderProps): React.JSX.
                 >
                     <FormInit formApi={formApi}/>
 
-                    <FormBodyRender formApi={formApi}/>
+                    <FormBodyRender formProps={formProps} formApi={formApi}/>
 
                     <ButtonsRender
                         formId={formApi.getFormId()}

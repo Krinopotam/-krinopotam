@@ -2,7 +2,7 @@ import React, {useCallback} from 'react';
 import {Space, Typography} from 'antd';
 
 import {DModel} from '../dModel';
-import {IButtonsRowApi} from '../../buttons-row/buttonsRow';
+import {IButtonsRowApi} from '../../buttons-row';
 import {IDFormProps} from '../dForm';
 import {MessageBox} from '../../message-box';
 

@@ -235,7 +235,7 @@ export const DForm = (props: IDFormProps): React.JSX.Element => {
 
     useFormMounted(formApi);
 
-    return <FormRender formApi={formApi} formButtons={formButtons}/>;
+    return <FormRender formProps={formProps} formApi={formApi} formButtons={formButtons}/>;
 };
 
 const useFormModel = (formId: string, formProps: IDFormProps, callbacks: IDFormModelCallbacks) => {

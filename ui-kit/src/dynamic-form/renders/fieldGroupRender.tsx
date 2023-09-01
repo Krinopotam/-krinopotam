@@ -12,8 +12,12 @@ import Animate from 'rc-animate';
 import {BaseComponent} from '../components/baseComponent';
 import {Form} from 'antd';
 import {IDFormApi} from '../hooks/api';
+import {IDFormProps} from "../dForm";
 
 interface IFieldGroupRenderProps {
+    /** Form props*/
+    formProps:IDFormProps
+
     /** tab name */
     tabName: string;
 
@@ -24,9 +28,8 @@ interface IFieldGroupRenderProps {
     formApi: IDFormApi;
 }
 
-export const FieldGroupRender = ({tabName, groupName, formApi}: IFieldGroupRenderProps): React.JSX.Element | null => {
+export const FieldGroupRender = ({formProps, tabName, groupName, formApi}: IFieldGroupRenderProps): React.JSX.Element | null => {
     useExternalRenderCall(formApi, tabName, groupName);
-    const formProps = formApi.getFormProps();
 
     const fields = formApi.model.getGroupsProps(tabName)[groupName];
 

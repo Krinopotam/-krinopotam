@@ -11,8 +11,12 @@ import React, {useSyncExternalStore} from 'react';
 import {BaseComponent} from '../components/baseComponent';
 import {FieldGroupRender} from './fieldGroupRender';
 import {IDFormApi} from "../hooks/api";
+import {IDFormProps} from "../dForm";
 
 interface IFieldsRenderProps {
+    /** Form props*/
+    formProps:IDFormProps
+
     /** Tab name */
     tabName: string;
 
@@ -20,11 +24,10 @@ interface IFieldsRenderProps {
     formApi: IDFormApi;
 }
 
-export const TabContentRender = ({tabName, formApi}: IFieldsRenderProps): React.JSX.Element => {
+export const TabContentRender = ({formProps, tabName, formApi}: IFieldsRenderProps): React.JSX.Element => {
     useExternalRenderCall(formApi, tabName);
 
     const groupsProp = formApi.model.getGroupsProps(tabName);
-    const formProps = formApi.getFormProps();
 
     return (
         <>
@@ -32,7 +35,7 @@ export const TabContentRender = ({tabName, formApi}: IFieldsRenderProps): React.
                 if (Object.keys(groupsProp[groupName]).length === 0) return null;
 
                 if (Object.keys(groupsProp[groupName]).length > 1) {
-                    return <FieldGroupRender key={groupName} formApi={formApi} tabName={tabName} groupName={groupName}/>;
+                    return <FieldGroupRender key={groupName} formProps={formProps} formApi={formApi} tabName={tabName} groupName={groupName}/>;
                 } else {
                     const fieldName = Object.keys(groupsProp[groupName])[0];
                     const fieldProps = formProps?.fieldsProps?.[fieldName]

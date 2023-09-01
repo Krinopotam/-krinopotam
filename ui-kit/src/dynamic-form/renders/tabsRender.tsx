@@ -18,13 +18,15 @@ import {TabNavListProps} from 'rc-tabs/lib/TabNavList';
 const {useToken} = theme;
 
 interface ITabsRenderProps {
+    /** Form props*/
+    formProps:IDFormProps
+
     /** form api instance */
     formApi: IDFormApi;
 }
 
 /** All tab bars renderer */
-export const TabsRender = ({formApi}: ITabsRenderProps): React.JSX.Element => {
-    const formProps = formApi.getFormProps();
+export const TabsRender = ({formProps, formApi}: ITabsRenderProps): React.JSX.Element => {
     //there is no sense to use memo (rendering is not very often)
     const tabs = formApi.model.getTabsProps();
     const items: TabsProps['items'] = [];
@@ -33,7 +35,7 @@ export const TabsRender = ({formApi}: ITabsRenderProps): React.JSX.Element => {
             key: tabName,
             label: tabName,
             forceRender: true,
-            children: <TabContentRender tabName={tabName} formApi={formApi} />,
+            children: <TabContentRender formProps={formProps} tabName={tabName} formApi={formApi} />,
         });
     }
 
