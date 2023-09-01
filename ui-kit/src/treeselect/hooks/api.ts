@@ -5,7 +5,7 @@ import  {useIsMountedRef} from '@krinopotam/common-hooks';
 import {useDataFetcher} from './dataFetcher';
 import runDebounce from 'lodash.debounce';
 import {ITreeSelectInternalValue, usePlainValuesToNodes, useValueConvertor} from './valueConvertor';
-import {IButtonsRowApi} from '../../buttons-row/buttonsRow';
+import {IButtonsRowApi} from '../../buttons-row';
 import {HelpersStrings, HelpersObjects} from "@krinopotam/js-helpers";
 
 export interface ITreeSelectApi {

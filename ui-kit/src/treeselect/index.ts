@@ -10,6 +10,6 @@ export type {
     ITreeSelectSourcePromise
 } from './treeSelect';
 
-export {ITreeSelectApi} from "./hooks/api";
+export type {ITreeSelectApi} from "./hooks/api";
 
 

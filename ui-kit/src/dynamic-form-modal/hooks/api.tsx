@@ -1,4 +1,4 @@
-import {IButtonsRowApi} from '../../buttons-row/buttonsRow';
+import {IButtonsRowApi} from '../../buttons-row';
 import {IDFormProps, IDFormApi} from '../../dynamic-form';
 import {IDFormModalProps} from '../dFormModal';
 import {MessageBox} from '../../message-box';
@@ -22,7 +22,7 @@ export interface IDFormModalApi extends IDFormApi {
     forceClose: () => void;
 }
 
-export {IDFormApi} from '../../dynamic-form/hooks/api'
+export type {IDFormApi} from '../../dynamic-form/hooks/api'
 
 export const useInitModalFormApi = (
     formId: string,

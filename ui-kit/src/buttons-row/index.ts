@@ -1,1 +1,2 @@
-export {ButtonsRow, IButtonsRowApi, ButtonsGroup, IFormButton, IFormButtons} from "./buttonsRow";
+export {ButtonsRow, ButtonsGroup} from "./buttonsRow";
+export type {IButtonsRowApi, IFormButton, IFormButtons} from "./buttonsRow";
