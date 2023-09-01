@@ -9,7 +9,11 @@
 	"scripts": {
 		"dist": "tsc -p tsconfig.json",
 		"build": "tsc && vite build",
-		"dev": "vite --mode examples"
+		"preview": "vite preview",
+		"dev": "vite --mode examples",
+		"storybook": "storybook dev -p 6007",
+		"build-storybook": "storybook build",
+		"init-msw": "msw init public/"
 	},
 	"devDependencies": {
 		"@types/node": "^18.14.6",
@@ -29,7 +33,19 @@
 		"react-router-dom": "^6.15.0",
 		"ts-loader": "^9.2.6",
 		"typescript": "^5.0.0",
-		"vite": "^4.4.9"
+		"vite": "^4.4.9",
+
+		"@storybook/addon-essentials": "^7.4.0",
+		"@storybook/addon-interactions": "^7.4.0",
+		"@storybook/addon-links": "^7.4.0",
+		"@storybook/blocks": "^7.4.0",
+		"@storybook/jest": "^0.2.2",
+		"@storybook/react": "^7.4.0",
+		"@storybook/react-vite": "^7.4.0",
+		"@storybook/testing-library": "^0.2.0",
+		"msw": "^1.2.1",
+		"msw-storybook-addon": "^1.8.0",
+		"storybook": "^7.4.0"
 	},
 	"dependencies": {
 		"@krinopotam/common-hooks": "^1.0.1",
