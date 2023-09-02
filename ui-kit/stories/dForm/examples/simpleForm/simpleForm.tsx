@@ -20,6 +20,7 @@ const formProps = new DFormConfig<IFields>('Test form')
     .buttons({ok: {position: 'right'}})
     .getConfig();
 
+/** Simple Dynamic form example */
 export const SimpleForm = (props?: IDFormProps): React.JSX.Element => {
     const compProps = {...formProps, ...props}
     return (
