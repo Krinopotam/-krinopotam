@@ -14,7 +14,7 @@ import {Input} from 'antd';
 // !used in configGenerator parsing. Don't use multi rows comments!
 export interface IDFormFieldInputProps extends IDFormFieldProps {
     /** Default value */
-    default?: string | number;
+    default?: string | number | unknown;
 
     /** Whether show text count */
     showCount?: boolean;
@@ -23,7 +23,7 @@ export interface IDFormFieldInputProps extends IDFormFieldProps {
     maxLength?: number;
 }
 
-interface IDFormInputComponentProps extends IDFormComponentProps {
+export interface IDFormInputComponentProps extends IDFormComponentProps {
     fieldProps: IDFormFieldInputProps
 }
 

@@ -9,7 +9,7 @@
 import './css/antdAnimation.css';
 
 import {DModel, IDFormModelCallbacks, IDFormSubmitResultObject, IDFormSubmitResultPromise} from './dModel';
-import {IButtonsRowApi, IFormButtons} from '../buttons-row/buttonsRow';
+import {IButtonsRowApi, IFormButtons} from '../buttons-row';
 import {IDFormApi, useInitFormApi} from './hooks/api';
 import React, {useEffect, useRef, useState} from 'react';
 import {TPromise} from '@krinopotam/service-types';

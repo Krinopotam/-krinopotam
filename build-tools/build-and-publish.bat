@@ -1,6 +1,6 @@
 @echo:
 @echo --------------- Update package.json version ---------------------
-node c:\nginx\www\@krinopotam\build-tools\update-package-version.js package.json
+node d:\Projects\@krinopotam\build-tools\update-package-version.js package.json
 
 @echo:
 @echo --------------- Clear dist folder -------------------------------

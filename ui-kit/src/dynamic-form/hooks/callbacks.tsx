@@ -90,7 +90,6 @@ export const useCallbacks = (formProps: IDFormProps, formApi: IDFormApi) => {
             /** fires when a form ready state changed */
             onFormReadyStateChanged: (state: boolean) => {
                 if (formProps.callbacks?.onFormReadyStateChanged?.(state, formApi) === false) return;
-                console.log('formReady: ' + state); //TODO: Remove after tests
                 if (state) formApi.buttonsApi.disabled?.('ok', false);
                 else formApi.buttonsApi.disabled?.('ok', true);
             },

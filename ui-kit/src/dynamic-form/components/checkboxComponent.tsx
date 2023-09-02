@@ -14,7 +14,7 @@ import {IDFormComponentProps, IDFormFieldProps} from './baseComponent';
 
 
 // !used in configGenerator parsing. Don't use multi rows comments!
-export interface IDFormFieldCheckBoxProps extends IDFormFieldProps {
+export interface IDFormFieldCheckBoxProps extends Omit<IDFormFieldProps, 'placeholder'> {
     /** default value */
     default?: boolean;
 

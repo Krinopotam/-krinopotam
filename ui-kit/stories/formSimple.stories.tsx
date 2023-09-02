@@ -3,6 +3,7 @@ import {DFormConfig} from "../src/dynamic-form/configBuilder/dFormConfig";
 import {InputComponentConfig} from "../src/dynamic-form/configBuilder/inputComponentConfig";
 import {PasswordComponentConfig} from "../src/dynamic-form/configBuilder/passwordComponentConfig";
 
+
 export default {
     component: DForm,
     title: 'Dynamic form',

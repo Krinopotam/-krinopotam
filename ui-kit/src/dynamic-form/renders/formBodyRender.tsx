@@ -39,6 +39,6 @@ export const FormBodyRender = ({formProps, formApi}: IFormBodyRenderProps): Reac
             </>
         );
     } else {
-        return <TabsRender formApi={formApi} />;
+        return <TabsRender formProps={formProps} formApi={formApi} />;
     }
 };

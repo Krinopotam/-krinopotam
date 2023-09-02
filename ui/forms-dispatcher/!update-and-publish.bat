@@ -1,1 +1,0 @@
-call c:\nginx\www\@krinopotam\build-tools\update-and-publish.bat

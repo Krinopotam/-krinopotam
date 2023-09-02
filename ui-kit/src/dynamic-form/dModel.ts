@@ -368,7 +368,7 @@ export class DModel {
         this._labels[fieldName] = value;
         if (noEvents || prevValue === value) return;
         this._callbacks?.onFieldLabelChanged?.(fieldName, value, prevValue, this);
-        this.getFieldProps('fieldName')?.callbacks?.onLabelChanged?.(value, prevValue, this);
+        this.getFieldProps(fieldName)?.callbacks?.onLabelChanged?.(value, prevValue, this);
         this.emitFieldRender(fieldName);
     }
 
@@ -397,8 +397,7 @@ export class DModel {
         if (noEvents || prevValue === value) return;
 
         this._callbacks?.onFieldValueChanged?.(fieldName, value, prevValue, this);
-        this.getFieldProps('fieldName')?.callbacks?.onValueChanged?.(value, prevValue, this);
-
+        this.getFieldProps(fieldName)?.callbacks?.onValueChanged?.(value, prevValue, this);
         this.emitFieldRender(fieldName);
 
         this.validateField(fieldName);
@@ -427,7 +426,7 @@ export class DModel {
         if (noEvents || prevValue === value) return;
 
         this._callbacks?.onFieldTouchedStateChanged?.(fieldName, value, this);
-        this.getFieldProps('fieldName')?.callbacks?.onTouchedStateChanged?.(value, this);
+        this.getFieldProps(fieldName)?.callbacks?.onTouchedStateChanged?.(value, this);
     }
 
     /**
@@ -450,7 +449,7 @@ export class DModel {
         this._dirty[fieldName] = value;
         if (!noEvents && prevValue !== value) {
             this._callbacks?.onFieldDirtyStateChanged?.(fieldName, value, this);
-            this.getFieldProps('fieldName')?.callbacks?.onDirtyStateChanged?.(value, this);
+            this.getFieldProps(fieldName)?.callbacks?.onDirtyStateChanged?.(value, this);
         }
 
         let formDirty = value;
@@ -486,7 +485,7 @@ export class DModel {
         this._disabled[fieldName] = value;
         if (noEvents || prevValue === value) return;
         this._callbacks?.onFieldDisabledStateChanged?.(fieldName, value, this);
-        this.getFieldProps('fieldName')?.callbacks?.onDisabledStateChanged?.(value, this);
+        this.getFieldProps(fieldName)?.callbacks?.onDisabledStateChanged?.(value, this);
         this.emitFieldRender(fieldName);
     }
 
@@ -510,7 +509,7 @@ export class DModel {
         this._readOnly[fieldName] = value;
         if (noEvents || prevValue === value) return;
         this._callbacks?.onFieldReadOnlyStateChanged?.(fieldName, value, this);
-        this.getFieldProps('fieldName')?.callbacks?.onReadOnlyStateChanged?.(value, this);
+        this.getFieldProps(fieldName)?.callbacks?.onReadOnlyStateChanged?.(value, this);
         this.emitFieldRender(fieldName);
     }
 
@@ -533,7 +532,7 @@ export class DModel {
         const prevValue = this.isFieldHidden(fieldName);
 
         let prevGroupValue = false;
-        const field = this.getFieldProps('fieldName');
+        const field = this.getFieldProps(fieldName);
         if (field?.tab && field.inlineGroup) prevGroupValue = this.isGroupHidden(field.tab, field.inlineGroup);
 
         this._hidden[fieldName] = value;
@@ -574,7 +573,7 @@ export class DModel {
         this._ready[fieldName] = value;
         if (!noEvents && value && prevValue !== value) {
             this._callbacks?.onFieldReady?.(fieldName, this);
-            this.getFieldProps('fieldName')?.callbacks?.onReady?.(this);
+            this.getFieldProps(fieldName)?.callbacks?.onReady?.(this);
         }
         this.setFormReady(value);
     }
@@ -605,7 +604,7 @@ export class DModel {
         if (noEvents || prevValue === value) return;
 
         this._callbacks?.onFieldErrorChanged?.(fieldName, value, this);
-        this.getFieldProps('fieldName')?.callbacks?.onErrorChanged?.(value, this);
+        this.getFieldProps(fieldName)?.callbacks?.onErrorChanged?.(value, this);
 
         if (value) this._callbacks?.onFormHasErrors?.(this.getFormValues(), errors, this);
         else {
@@ -632,7 +631,7 @@ export class DModel {
 
         if (!noEvents && !this.isFieldHidden(fieldName)) {
             this._callbacks?.onFieldValidated?.(fieldName, this.getFieldValue(fieldName), error, this.isFormSubmitting(), this);
-            this.getFieldProps('fieldName')?.callbacks?.onValidated?.(this.getFieldValue(fieldName), error, this.isFormSubmitting(), this);
+            this.getFieldProps(fieldName)?.callbacks?.onValidated?.(this.getFieldValue(fieldName), error, this.isFormSubmitting(), this);
             this.emitFieldRender(fieldName);
         }
         return error;

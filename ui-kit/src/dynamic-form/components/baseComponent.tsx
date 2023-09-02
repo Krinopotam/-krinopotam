@@ -12,6 +12,7 @@ import Animate from 'rc-animate';
 import {Form} from 'antd';
 import {IDFormApi} from '../hooks/api';
 import {DModel} from "../dModel";
+import {AnyType} from '@krinopotam/service-types'
 
 // !used in configGenerator parsing. Don't use multi rows comments!
 export interface IDFormFieldProps {
@@ -34,7 +35,7 @@ export interface IDFormFieldProps {
     inlineGroup?: string;
 
     /** Field default value */
-    default?: unknown;
+    default?: AnyType;
 
     /** If field default state is hidden */
     hidden?: boolean;

@@ -1,12 +1,22 @@
 import {defineConfig, UserConfig} from 'vite'
+import * as path from "path";
 import react from '@vitejs/plugin-react-swc'
 
-const devExamplesCfg: UserConfig = {
+const commonCfg: UserConfig = {
     plugins: [react()],
+    resolve: {
+        alias: {
+            "@src": path.resolve(__dirname, "./src"),
+        },
+    },
     build: {
-		target:'modules',
+        target: 'modules',
         //minify: 'terser',
     },
+}
+
+const devExamplesCfg: UserConfig = {
+    ...commonCfg,
     server: {
         open: 'index.html',
     }
@@ -15,10 +25,8 @@ const devExamplesCfg: UserConfig = {
 // noinspection JSUnusedGlobalSymbols
 export default defineConfig(({command, mode}) => {
     if (command === 'serve') {
-        if (mode === 'examples') return devExamplesCfg
+        if (mode === 'demo') return devExamplesCfg
     }
 
-    return {
-        plugins: [react()],
-    }
+    return commonCfg
 })

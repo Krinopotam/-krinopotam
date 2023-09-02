@@ -1,4 +1,0 @@
-import React from 'react';
-export const Home = () => {
-    return (React.createElement("h1", null, "\u041F\u0440\u0438\u043C\u0435\u0440\u044B \u0438\u0441\u043F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u043D\u0438\u044F \u043A\u043E\u043C\u043F\u043E\u043D\u0435\u043D\u0442\u043E\u0432"));
-};

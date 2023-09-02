@@ -1,0 +1,15 @@
+import {Canvas, Controls, Meta, Source, } from '@storybook/blocks';
+
+import * as stories from './formDependedField.stories';
+
+<Meta of={stories} />
+
+# Checkbox
+
+A checkbox is a square box that can be activated or deactivated when ticked.
+
+Use checkboxes to select one or more options from a list of choices.
+
+<Canvas of={stories.Default} />
+<Controls of={stories.Default} />
+<Source of={stories.Default}  type="code" language="tsx" dark={true} transform={(code)=>code.replace(/(\(\) => {)([\s\S]*)(return <[\s\S]*\n})/gm,'$2')}/>
