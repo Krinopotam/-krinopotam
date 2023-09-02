@@ -12,13 +12,13 @@ function run() {
  * @param {string} curPath
  */
 function recursiveDirectoriesRun(curPath) {
-    const fileList = fs.readdirSync(curPath, {withFileTypes:true});
+    const fileList = fs.readdirSync(curPath, {withFileTypes: true});
     //console.log(fileList)
 
     for (const entity of fileList) {
         if (entity.isDirectory()) recursiveDirectoriesRun(curPath + '/' + entity.name);
         else {
-            console.log(curPath, entity.name)
+            processFile(entity.name, curPath)
         }
     }
 }
@@ -29,129 +29,64 @@ function recursiveDirectoriesRun(curPath) {
  * @param {string} filePath
  */
 function processFile(fileName, filePath) {
+    const extensions = "ts|js|tsx|jsx";
 
-}
+    const fnPattern = new RegExp('^(.*)\\.stories\\.(' + extensions + ')$', 'gi');
+    if (!fileName.match(fnPattern)) return;
+    //if (!fileName.match(/^(.*)\.stories\.(ts|js|tsx|jsx)$/gi)) return;
 
-const examplesRoot = __dirname + '/components';
-const importExamplesRoot = '../components/';
-const importPagesRoot = './pages/';
-const pagesPath = __dirname + '/pages';
+    const storyFileContent = fs.readFileSync(filePath + '/' + fileName, {encoding: 'utf8', flag: 'r'});
 
-/**
- * @param {string} string
- * @returns {string}
- */
-function upperFirstLetter(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-}
+    const pattern = /\/\* AUTO-SOURCE-INJECT-START \*\/([\s\S]*)\/\* AUTO-SOURCE-INJECT-END \*\//gi
 
-/**
- * @param {string} string
- * @returns {string}
- */
-function lowerFirstLetter(string) {
-    return string.charAt(0).toLowerCase() + string.slice(1);
-}
+    if (!storyFileContent.match(pattern)) return;
 
-/**
- *
- * @param {string} componentFileName
- * @param {string} componentPath
- * @param {string} source
- * @param {string} pagesPath
- * @returns {string}
- */
-function generatePageComponent(componentFileName, componentPath, source, pagesPath) {
-    const moduleName = componentFileName.split('.')[0];
-    const componentName = upperFirstLetter(moduleName);
+    const parts = fileName.split('.');
+    const sourceFileName = parts[0];
 
-    const pageComponentName = componentName + 'Page';
+    const extList = extensions.split('|')
+    for (const ext of extList) {
+        const sourceFn = filePath + '/' + sourceFileName + '.' + ext
+        if (!fs.existsSync(sourceFn)) continue
 
-    source = source.replaceAll(/\s*\{\/\*Description Start\*\/}[\S\s]*?\{\/\*Description End\*\/}/gi, ''); //remove {/*Description Start/*} blocks
-    source = source.replaceAll(/\s*\/\*Description Start\*\/[\S\s]*?\/\*Description End\*\//gi, ''); //remove /*Description Start*/ blocks
+        let fileSource = fs.readFileSync(sourceFn, {encoding: 'utf8', flag: 'r'});
+        fileSource = clearSource(fileSource)
 
-    source = source.replaceAll(/\$\{/g, '\\${');
-    source = source.replaceAll(/`/g, '\\`');
+        const newStoryFileContent = storyFileContent.replace(pattern, '/* AUTO-SOURCE-INJECT-START */\n' +
+            '            source: {\n' +
+            '                language: \'' + ext + '\',\n' +
+            '                format: true,\n' +
+            '                // language=text\n' +
+            '                code: `' + fileSource + '                `\n' +
+            '            }\n' +
+            '            /* AUTO-SOURCE-INJECT-END */')
 
-    const importStr = `
-    import React from 'react';
-    import {${componentName}} from '${importExamplesRoot + moduleName}';
-    import { Divider } from 'antd';
-    import SyntaxHighlighter from 'react-syntax-highlighter';
-    import {darcula, docco} from 'react-syntax-highlighter/dist/esm/styles/hljs';\n`;
-
-    const bodyStr = `
-    export const ${pageComponentName} = (props: {darkMode: boolean}): React.JSX.Element => {
-    // language=text
-    const source = \`${source}\`
-    return (
-        <>
-            <div>
-                <${componentName} />
-            </div>
-            <Divider />
-            <div>
-                <SyntaxHighlighter language="javascript" style={props.darkMode ? darcula : docco}>
-                    {source}
-                </SyntaxHighlighter>
-            </div>
-        </>
-    );
-};
-`;
-    const pageFileName = lowerFirstLetter(pageComponentName) + '.tsx';
-
-    const content = importStr + bodyStr;
-    fs.writeFileSync(pagesPath + '/' + pageFileName, content, {encoding: 'utf8', flag: 'w'});
-
-    const routeStr = `                <Route path="${componentName}" element={<${pageComponentName} darkMode={props.darkMode} />} />;`;
-    const routeImportStr = `    import {${pageComponentName}} from '${importPagesRoot + moduleName + 'Page'}';`;
-    return [routeStr, routeImportStr];
-}
-
-/**
- *
- * @param {string} routers
- * @param {string} imports
- */
-function generateExamplesRoutes(imports, routers) {
-    const result = `
-    import React from 'react';
-    import {Route, Routes} from 'react-router-dom';
-    import {ExamplesLayout} from './examplesLayout';
-    import {Home} from './home';
-${imports}
-
-export const ExamplesRoutes = (props: {darkMode: boolean; setDarkMode: (mode:boolean) => void}) => {
-    return (
-        <Routes>
-            <Route path="/" element={<ExamplesLayout setDarkMode={props.setDarkMode} />}>
-                <Route index element={<Home />} />
-${routers}
-                <Route path="*" element={<Home />} />
-            </Route>
-        </Routes>
-    );
-};
-`;
-    fs.writeFileSync(__dirname + '/examplesRoutes.tsx', result, {encoding: 'utf8', flag: 'w'});
-}
-
-function run2() {
-    console.log(__dirname + '/' + examplesRoot);
-    const fileList = fs.readdirSync(examplesRoot);
-
-    let routers = '';
-    let imports = '';
-    for (const fileName of fileList) {
-        const fileSource = fs.readFileSync(examplesRoot + '/' + fileName, {encoding: 'utf8', flag: 'r'});
-        const [routeStr, importStr] = generatePageComponent(fileName, examplesRoot, fileSource, pagesPath);
-
-        routers = routers + routeStr + '\n';
-        imports = imports + importStr + '\n';
+        fs.writeFileSync(filePath + '/' + fileName, newStoryFileContent, {encoding: 'utf8', flag: 'w'});
+        console.log('File content "' + sourceFileName + '.' + ext + '" injected to ', filePath + '/' + fileName)
+        return;
     }
 
-    generateExamplesRoutes(imports, routers);
+    console.log("No source file for stories ", filePath + '/' + fileName)
+}
+
+
+/**
+ *  * @param {string} source
+ */
+function clearSource(source) {
+    source = source.replaceAll(/\s*\{\/\*Description Start\*\/}[\S\s]*?\{\/\*Description End\*\/}/gi, ''); //remove {/*Description Start/*} blocks
+    source = source.replaceAll(/\s*\/\*Description Start\*\/[\S\s]*?\/\*Description End\*\//gi, ''); //remove /*Description Start*/ blocks
+    source = source.replaceAll(/\/\/ noinspection DuplicatedCode/gi, ''); //remove // noinspection DuplicatedCode
+    source = source.replaceAll(/['"]@src\//gi, '@krinopotam/ui-kit/'); //remove // noinspection DuplicatedCode
+
+    const sourceLines = source.split(/\r?\n/);
+    let newSource = ""
+    for (const line of sourceLines) {
+        if (line.trim().length === 0) continue
+        newSource = newSource + '\n' + '                    ' + line
+    }
+
+    return newSource + '\n'
 }
 
 run();

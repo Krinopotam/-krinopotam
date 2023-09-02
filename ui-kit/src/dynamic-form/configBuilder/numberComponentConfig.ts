@@ -1,6 +1,6 @@
-import {IDFormFieldProps} from '../components/baseComponent';
+import {IDFormFieldProps} from '@src/dynamic-form/components/baseComponent';
 import {BaseComponentConfig} from './baseComponentConfig';
-import {IDFormFieldNumberProps, NumberComponent} from '../components/numberComponent';
+import {IDFormFieldNumberProps, NumberComponent} from '@src/dynamic-form/components/numberComponent';
 
 
 export class NumberComponentConfig<T>  extends BaseComponentConfig<T> {

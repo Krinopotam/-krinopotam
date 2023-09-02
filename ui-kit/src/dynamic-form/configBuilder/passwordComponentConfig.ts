@@ -1,6 +1,6 @@
-import {IDFormFieldProps} from '../components/baseComponent';
+import {IDFormFieldProps} from '@src/dynamic-form/components/baseComponent';
 import {BaseComponentConfig} from './baseComponentConfig';
-import {IDFormFieldPasswordProps, PasswordComponent} from '../components/passwordComponent';
+import {IDFormFieldPasswordProps, PasswordComponent} from '@src/dynamic-form/components/passwordComponent';
 
 
 export class PasswordComponentConfig<T>  extends BaseComponentConfig<T> {

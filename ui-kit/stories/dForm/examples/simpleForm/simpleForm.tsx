@@ -1,7 +1,7 @@
 // noinspection DuplicatedCode
 
 import React from 'react';
-import {DForm} from '@src/dynamic-form';
+import {DForm, IDFormProps} from '@src/dynamic-form';
 import {DFormConfig} from '@src/dynamic-form/configBuilder/dFormConfig';
 import {InputComponentConfig} from '@src/dynamic-form/configBuilder/inputComponentConfig';
 import {PasswordComponentConfig} from '@src/dynamic-form/configBuilder/passwordComponentConfig';
@@ -20,15 +20,15 @@ const formProps = new DFormConfig<IFields>('Test form')
     .buttons({ok: {position: 'right'}})
     .getConfig();
 
-export const FormSimple = (): React.JSX.Element => {
+export const SimpleForm = (props?: IDFormProps): React.JSX.Element => {
+    const compProps = {...formProps, ...props}
     return (
         <>
-            {/*Description Start*/}
-            <h1>Пример простой формы с вертикальным расположением подписей полей</h1>
-            {/*Description End*/}
             <div style={{maxWidth: 500}}>
-                <DForm {...formProps} />
+                <DForm {...compProps} />
             </div>
         </>
     );
 };
+
+export default SimpleForm

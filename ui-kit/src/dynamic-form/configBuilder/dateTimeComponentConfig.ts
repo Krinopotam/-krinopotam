@@ -1,6 +1,6 @@
-import {IDFormFieldProps} from '../components/baseComponent';
+import {IDFormFieldProps} from '@src/dynamic-form/components/baseComponent';
 import {BaseComponentConfig} from './baseComponentConfig';
-import {IDFormFieldDateTimeProps, DateTimeComponent} from '../components/dateTimeComponent';
+import {IDFormFieldDateTimeProps, DateTimeComponent} from '@src/dynamic-form/components/dateTimeComponent';
 
 
 export class DateTimeComponentConfig<T>  extends BaseComponentConfig<T> {

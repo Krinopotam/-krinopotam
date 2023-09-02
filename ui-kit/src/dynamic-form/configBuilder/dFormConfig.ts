@@ -1,7 +1,7 @@
 import {IDFormProps} from '../dForm';
 import {BaseComponentConfig} from './baseComponentConfig';
-import {IDFormFieldProps} from '../components/baseComponent';
-import {IRuleType} from '../validators/baseValidator';
+import {IDFormFieldProps} from '@src/dynamic-form/components/baseComponent';
+import {IRuleType} from '@src/dynamic-form/validators/baseValidator';
 
 
 export class DFormConfig<T>  {
@@ -114,9 +114,9 @@ export class DFormConfig<T>  {
         return this;
     }
 
-    /** Tabs properties */
-    tabsProps(value: IDFormProps['tabsProps']) {
-        this._config.tabsProps = value;
+    /** Tabs panes height (default 40)*/
+    tabsHeight(value: IDFormProps['tabsHeight']) {
+        this._config.tabsHeight = value;
         return this;
     }
 

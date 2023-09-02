@@ -1,8 +1,8 @@
-import {IDFormProps} from '../../dynamic-form';
-import {IDFormFieldProps} from '../../dynamic-form/components/baseComponent';
-import {IRuleType} from '../../dynamic-form/validators/baseValidator';
-import {DFormConfig} from '../../dynamic-form/configBuilder/dFormConfig';
-import {BaseComponentConfig} from '../../dynamic-form/configBuilder/baseComponentConfig';
+import {IDFormProps} from '@src/dynamic-form';
+import {IDFormFieldProps} from '@src/dynamic-form/components/baseComponent';
+import {IRuleType} from '@src/dynamic-form/validators/baseValidator';
+import {DFormConfig} from '@src/dynamic-form/configBuilder/dFormConfig';
+import {BaseComponentConfig} from '@src/dynamic-form/configBuilder/baseComponentConfig';
 import {IDModalProps, IDFormModalProps} from '../dFormModal';
 
 
@@ -77,6 +77,18 @@ export class DFormModalConfig<T>  extends DFormConfig<T> {
         return this;
     }
 
+    /** wrapper column parameters, for example span:'16' */
+    wrapperCol(value: IDFormProps['wrapperCol']) {
+        this._config.wrapperCol = value;
+        return this;
+    }
+
+    /** text align of label of all items */
+    labelAlign(value: IDFormProps['labelAlign']) {
+        this._config.labelAlign = value;
+        return this;
+    }
+
     /** Form layout (horizontal or vertical). Vertical is default */
     layout(value: IDFormProps['layout']) {
         this._config.layout = value;
@@ -101,9 +113,9 @@ export class DFormModalConfig<T>  extends DFormConfig<T> {
         return this;
     }
 
-    /** Tabs properties */
-    tabsProps(value: IDFormProps['tabsProps']) {
-        this._config.tabsProps = value;
+    /** Tabs panes height (default 40)*/
+    tabsHeight(value: IDFormProps['tabsHeight']) {
+        this._config.tabsHeight = value;
         return this;
     }
 
@@ -116,12 +128,6 @@ export class DFormModalConfig<T>  extends DFormConfig<T> {
     /** Validation rules */
     validationRules(value: Partial<Record<keyof T, IRuleType[]>>) {
         this._config.validationRules = value;
-        return this;
-    }
-
-    /** wrapper column parameters, for example span:'16' */
-    wrapperCol(value: IDFormProps['wrapperCol']) {
-        this._config.wrapperCol = value;
         return this;
     }
 

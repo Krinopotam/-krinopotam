@@ -84,8 +84,8 @@ export interface IDFormProps {
     /** Disable automatic hiding the fields if they depend on the fields for which the values are not set */
     noAutoHideDependedFields?: boolean;
 
-    /** Tabs properties */
-    tabsProps?: IDFormTabsProps;
+    /** Tabs panes height (default 40)*/
+    tabsHeight?:number
 
     /** Form parent item data */
     // formParentData?: IFormDataSet;
@@ -107,11 +107,6 @@ export interface IDFormProps {
 }
 
 export type IFormType = 'primary' | 'confirm' | 'info' | 'success' | 'error' | 'warning';
-
-export interface IDFormTabsProps {
-    /** Tabs panes height (default 40)*/
-    height?: number;
-}
 
 export type IDFormMode = 'view' | 'create' | 'update' | 'clone' | 'delete';
 

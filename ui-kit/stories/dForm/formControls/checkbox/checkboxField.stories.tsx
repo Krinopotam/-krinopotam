@@ -2,7 +2,6 @@
 
 import type {Meta, StoryObj} from '@storybook/react'
 import CheckboxField from "./checkboxField";
-import TextareaField from "../textarea/textareaField";
 import {componentsCallbacks} from "../_common/componentsCallbacks";
 
 export default {
@@ -14,7 +13,7 @@ export default {
     },
 } satisfies Meta<typeof CheckboxField>
 
-type Story = StoryObj<typeof TextareaField>;
+type Story = StoryObj<typeof CheckboxField>;
 
 export const Playground: Story = {
     args: {

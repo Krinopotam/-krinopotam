@@ -1,6 +1,6 @@
-import {IDFormFieldProps} from '../components/baseComponent';
+import {IDFormFieldProps} from '@src/dynamic-form/components/baseComponent';
 import {BaseComponentConfig} from './baseComponentConfig';
-import {IDFormFieldTabulatorGridProps, TabulatorGridComponent} from '../components/tabulatorGridComponent';
+import {IDFormFieldTabulatorGridProps, TabulatorGridComponent} from '@src/dynamic-form/components/tabulatorGridComponent';
 
 
 export class TabulatorGridComponentConfig<T>  extends BaseComponentConfig<T> {

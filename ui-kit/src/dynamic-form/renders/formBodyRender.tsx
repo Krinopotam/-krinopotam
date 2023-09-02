@@ -17,7 +17,7 @@ const {useToken} = theme;
 
 interface IFormBodyRenderProps {
     /** Form props*/
-    formProps:IDFormProps
+    formProps: IDFormProps
 
     /** form api instance */
     formApi: IDFormApi;
@@ -25,20 +25,19 @@ interface IFormBodyRenderProps {
 
 /** Render form body */
 export const FormBodyRender = ({formProps, formApi}: IFormBodyRenderProps): React.JSX.Element | null => {
-    const {token} = useToken();
     const tabs = formApi.model.getTabsProps();
     if (Object.keys(tabs).length === 0) return null;
 
-    const indentStyle = {height: formProps.contentIndent ?? 12, background: token.colorBgElevated};
     if (Object.keys(tabs).length === 1) {
         const firstTab = Object.keys(tabs)[0];
         return (
             <>
-                <div style={indentStyle} />
-                <TabContentRender formProps={formProps} formApi={formApi} tabName={firstTab} />
+                <div style={{marginTop:formProps.contentIndent ?? 12}}>
+                    <TabContentRender formProps={formProps} formApi={formApi} tabName={firstTab}/>
+                </div>
             </>
         );
     } else {
-        return <TabsRender formProps={formProps} formApi={formApi} />;
+        return <TabsRender formProps={formProps} formApi={formApi}/>;
     }
 };

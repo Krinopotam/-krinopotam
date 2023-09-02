@@ -1,6 +1,6 @@
-import {IDFormFieldProps} from '../components/baseComponent';
+import {IDFormFieldProps} from '@src/dynamic-form/components/baseComponent';
 import {BaseComponentConfig} from './baseComponentConfig';
-import {IDFormFieldSelectProps, SelectComponent} from '../components/selectComponent';
+import {IDFormFieldSelectProps, SelectComponent} from '@src/dynamic-form/components/selectComponent';
 
 
 export class SelectComponentConfig<T>  extends BaseComponentConfig<T> {

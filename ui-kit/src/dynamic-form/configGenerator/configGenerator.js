@@ -15,7 +15,7 @@ const options = {
     },
     dFormModal: {
         modulePath: '../../dynamic-form-modal/dFormModal.tsx',
-        savePath: '../../dynamic-form-modal/src/configBuilder/dFormModalConfig.ts',
+        savePath: '../../dynamic-form-modal/configBuilder/dFormModalConfig.ts',
         typeName: 'IDModalProps',
         typePath: '../dFormModal',
     },
@@ -23,7 +23,7 @@ const options = {
         modulePath: '../../treeselect/treeSelect.tsx',
         savePath: '',
         typeName: 'ITreeSelectProps',
-        typePath: '../../treeselect',
+        typePath: '@src/treeselect',
     },
 };
 
@@ -52,7 +52,7 @@ function addComponentsToOptions() {
         props.modulePath = '../components/' + component.name + '.tsx';
         props.savePath = '../configBuilder/' + component.name + 'Config.ts';
         props.typeName = component.interface;
-        props.typePath = '../components/' + component.name;
+        props.typePath = '@src/dynamic-form/components/' + component.name;
         options[component.name] = props;
     }
 }
@@ -208,8 +208,8 @@ function getFormClassProps(componentName) {
         imports: {
             IDFormProps: formOptions.typePath,
             BaseComponentConfig: './baseComponentConfig',
-            IDFormFieldProps: '../components/baseComponent',
-            IRuleType: '../validators/baseValidator',
+            IDFormFieldProps: '@src/dynamic-form/components/baseComponent',
+            IRuleType: '@src/dynamic-form/validators/baseValidator',
         },
         constructor: {
             parameters: {formId: 'string'},
@@ -243,11 +243,11 @@ function getFormModalClassProps(componentName) {
         className: formModalClassname + '<T>',
         extends: 'DFormConfig<T>',
         imports: {
-            IDFormProps: '../../dynamic-form',
-            IDFormFieldProps: '../../dynamic-form/components/baseComponent',
-            IRuleType: '../../dynamic-form/validators/baseValidator',
-            DFormConfig: '../../dynamic-form/configBuilder/dFormConfig',
-            BaseComponentConfig: '../../dynamic-form/configBuilder/baseComponentConfig',
+            IDFormProps: '@src/dynamic-form',
+            IDFormFieldProps: '@src/dynamic-form/components/baseComponent',
+            IRuleType: '@src/dynamic-form/validators/baseValidator',
+            DFormConfig: '@src/dynamic-form/configBuilder/dFormConfig',
+            BaseComponentConfig: '@src/dynamic-form/configBuilder/baseComponentConfig',
             IDModalProps: formModalOptions.typePath,
             IDFormModalProps: formModalOptions.typePath,
         },
@@ -277,7 +277,7 @@ function saveConfigClass(componentName, classGenerator) {
         const classProps = classGenerator(componentName);
         const classTxt = classMethods.generateClass(classProps);
         parsingMethods.saveFile(componentOptions.savePath, classTxt);
-        logStatus(componentName);
+        logStatus(componentName, componentOptions.savePath);
     } catch (e) {
         logStatus(componentName, e.message);
     }

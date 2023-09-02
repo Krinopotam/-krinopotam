@@ -1,7 +1,8 @@
 //import '../src/index.css';
 import '@storybook/addon-console'
-import {Controls, Description, Primary, Source, Title} from "@storybook/blocks";
-import React from "react";
+import {Controls, Description, Primary, Title} from "@storybook/blocks";
+import React, {FC} from "react";
+import MainDecorator from "./templates/mainDecorator";
 
 /** @type { import('@storybook/react').Preview } */
 const preview = {
@@ -28,6 +29,13 @@ const preview = {
             },
         },
     },
+    decorators: [
+        (Story: FC) => (
+            <MainDecorator>
+                <Story/>
+            </MainDecorator>
+        ),
+    ],
 };
 
 export default preview;

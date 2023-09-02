@@ -50,7 +50,7 @@ const TabBarRender = (props: TabNavListProps, DefaultTabBar: ComponentType<TabNa
     const style = {...props.style};
     //style.backgroundColor = token.colorBgContainer;
     style.backgroundColor = token.colorBgElevated;
-    style.height = formProps?.tabsProps?.height || 35;
+    style.height = formProps?.tabsHeight || 35;
 
     const indent = formProps.contentIndent || 12;
     const indentStyle = {height: indent, backgroundColor: style.backgroundColor};

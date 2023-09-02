@@ -1,4 +1,4 @@
-import {IDFormFieldProps} from '../components/baseComponent';
+import {IDFormFieldProps} from '@src/dynamic-form/components/baseComponent';
 import {IRuleType} from '../validators/baseValidator';
 
 

@@ -1,0 +1,3 @@
+node ./injectSources.js
+
+pause

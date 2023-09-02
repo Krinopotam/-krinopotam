@@ -1,6 +1,6 @@
-import {IDFormFieldProps} from '../components/baseComponent';
+import {IDFormFieldProps} from '@src/dynamic-form/components/baseComponent';
 import {BaseComponentConfig} from './baseComponentConfig';
-import {IDFormTextEditorProps, TextEditorComponent} from '../components/textEditorComponent';
+import {IDFormTextEditorProps, TextEditorComponent} from '@src/dynamic-form/components/textEditorComponent';
 
 
 export class TextEditorComponentConfig<T>  extends BaseComponentConfig<T> {
