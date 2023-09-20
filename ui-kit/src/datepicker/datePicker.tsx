@@ -10,16 +10,23 @@ import {DatePicker as AntDatePicker} from 'antd';
 import {DatePickerProps as AntDatePickerProps} from "antd/lib/date-picker";
 import 'antd/es/date-picker/style/index';
 import {Dayjs} from 'dayjs';
-import {DisabledTime} from 'rc-picker/lib/interface';
 import {SharedTimeProps} from 'rc-picker/lib/panels/TimePanel/index';
 import React from "react";
+import {dayjs} from "@src/dynamic-form/components/dateTimeComponent";
+import {DisabledTime} from 'rc-picker/lib/interface';
 
 
-export type IDatePickerProps = Omit<AntDatePickerProps, "picker"> & {
+export type IDatePickerProps = Omit<AntDatePickerProps, 'mode' | 'picker' | 'showTime'> & {
+    mode?: 'time' | 'date' | 'dateTime' | 'week' | 'month' | 'quarter' | 'year';
+    timeMode?: 'seconds' | 'minutes' | 'hours'
     readOnly?: boolean;
-    showTime?: boolean | SharedTimeProps<Dayjs>;
-    disabledTime?: DisabledTime<Dayjs>;
-    showNow?: boolean;
+    format?: string;
+    value?: string | Dayjs;
+
+    disabledTime?: DisabledTime<Dayjs>; //WORKAROUND: re-added type since AntDatePickerProps doesn't expose it
+    showNow?: boolean; //WORKAROUND: re-added type since AntDatePickerProps doesn't expose it
+    showToday?: boolean; //WORKAROUND: re-added type since AntDatePickerProps doesn't expose it
+    popupClassName?: string; //WORKAROUND: re-added type since AntDatePickerProps doesn't expose it
 };
 
 
@@ -31,21 +38,22 @@ dp.displayName = "DatePicker"
 */
 
 export const DatePicker = ({
+                               mode,
+                               timeMode,
                                readOnly,
                                allowClear,
                                open,
                                inputReadOnly,
                                panelRender,
-                               showTime,
                                format,
+                               value,
                                ...props
                            }: IDatePickerProps): React.JSX.Element => {
-    const defaultDateFormat = 'DD.MM.YYYY';
-    const defaultTimeFormat = 'HH:mm:ss';
-    const dateTimeFormat = format || defaultDateFormat + (showTime ? ' ' + defaultTimeFormat : '');
 
-    let showTimeFormat = showTime;
-    if (showTimeFormat === true) showTimeFormat = {format: dateTimeFormat} as SharedTimeProps<Dayjs>;
+
+    const [fieldMode, fieldPicker, fieldFormat, fieldShowTime] = GetTimePickerParams(mode, timeMode, format)
+
+    const fieldValue = value ? dayjs(value, fieldFormat) : undefined;
 
     return (
         <AntDatePicker
@@ -54,12 +62,91 @@ export const DatePicker = ({
             open={readOnly ? false : open}
             inputReadOnly={readOnly ? true : inputReadOnly}
             panelRender={readOnly ? () => null : panelRender}
-            showTime={showTimeFormat}
-            format={dateTimeFormat}
+            showTime={fieldShowTime}
 
-            className={props.className}
+            format={fieldFormat}
+            mode={fieldMode}
+            picker={fieldPicker}
+
+            value={fieldValue}
+
         />
         //<AntDatePicker {...props} />
     );
 };
 
+type IDatePickerMode = "time" | "date" | "week" | "month" | "quarter" | "year" | undefined
+type IDatePickerPickerMode = "date" | "week" | "month" | "quarter" | "year" | undefined
+
+export const GetTimePickerParams = (mode: IDatePickerProps['mode'], timeMode: IDatePickerProps['timeMode'], format?: string): [IDatePickerMode, IDatePickerPickerMode, string, SharedTimeProps<Dayjs> | undefined] => {
+    let fieldMode: IDatePickerMode
+    let fieldPicker: IDatePickerPickerMode
+
+    let timeFormat = "HH:mm:ss"
+    if (timeMode === 'minutes') timeFormat = "HH:mm"
+    else if (timeMode === 'hours') timeFormat = "HH"
+
+    const fieldFormat = GetTimePickerFormat(mode, timeMode, format);
+
+    let fieldShowTime: SharedTimeProps<Dayjs> | undefined
+    if (!mode || mode === 'date') {
+        fieldMode = 'date';
+    } else if (mode === 'time') {
+        fieldMode = 'time';
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore - antd datePicker bug - no type for time picker
+        fieldPicker = 'time';
+    } else if (mode === 'dateTime') {
+        fieldMode = 'date';
+        fieldShowTime = {format: timeFormat}
+    } else if (mode === 'week') {
+        fieldMode = 'week';
+        fieldPicker = 'week';
+    } else if (mode === 'month') {
+        fieldMode = 'month';
+        fieldPicker = 'month';
+    } else if (mode === 'quarter') {
+        fieldMode = 'quarter';
+        fieldPicker = 'quarter';
+    } else if (mode === 'year') {
+        fieldMode = 'year';
+        fieldPicker = 'year';
+    }
+
+    return [fieldMode, fieldPicker, fieldFormat, fieldShowTime]
+}
+
+export const GetTimePickerFormat = (mode: IDatePickerProps['mode'], timeMode: IDatePickerProps['timeMode'], format?: IDatePickerProps['format']) => {
+    let timeFormat = "HH:mm:ss"
+    if (timeMode === 'minutes') timeFormat = "HH:mm"
+    else if (timeMode === 'hours') timeFormat = "HH"
+
+    let fieldFormat: string;
+
+    switch (mode) {
+        case 'time':
+            fieldFormat = format ?? timeFormat;
+            break;
+        case 'dateTime':
+            fieldFormat = format ?? 'DD.MM.YYYY ' + timeFormat
+            break;
+        case 'week':
+            fieldFormat = format ?? 'YYYY-wo'
+            break;
+        case 'month':
+            fieldFormat = format ?? 'MMMM YYYY'
+            break;
+        case 'quarter':
+            fieldFormat = format ?? 'Q кв'
+            break;
+        case 'year':
+            fieldFormat = format ?? 'YYYY'
+            break;
+        case 'date':
+        default:
+            fieldFormat = format ?? 'DD.MM.YYYY'
+            break;
+    }
+
+    return fieldFormat
+}

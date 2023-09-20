@@ -14,7 +14,7 @@ import {Switch} from 'antd';
 // !used in configGenerator parsing. Don't use multi rows comments!
 export interface IDFormFieldSwitchProps extends IDFormFieldProps {
     /** Default value */
-    default?: boolean;
+    value?: boolean;
 
     /** The content to be shown when the state is checked */
     checkedChildren?: React.ReactNode;
@@ -55,6 +55,7 @@ export const SwitchComponent = ({formApi, fieldName, fieldProps}: IDFormSwitchCo
             loading={fieldProps.loading}
             onChange={onChange}
             unCheckedChildren={fieldProps.unCheckedChildren}
+            style={fieldProps.style}
         />
     );
 };

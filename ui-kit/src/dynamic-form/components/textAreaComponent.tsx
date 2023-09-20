@@ -27,7 +27,7 @@ export interface IDFormFieldTextAreaProps extends IDFormFieldInputProps {
     rows?: number;
 
     /** Default value */
-    default?: string | number;
+    value?: string | number;
 
     /** Text wrap parameters. Specifies how the text in a text area is to be wrapped when submitted in a form */
     wrap?: 'soft | hard';
@@ -71,6 +71,7 @@ export const TextAreaComponent = ({formApi, fieldName, fieldProps}: IDFormTextAr
             showCount={fieldProps.showCount}
             value={value}
             wrap={fieldProps.wrap}
+            style={fieldProps.style}
         />
     );
 };

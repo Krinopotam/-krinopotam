@@ -31,6 +31,7 @@ export default {
                         )
                         .buttons({ok: {position: 'right'}})
                         .getConfig();
+                    /** Simple Dynamic form example */
                     export const SimpleForm = (props?: IDFormProps): React.JSX.Element => {
                         const compProps = {...formProps, ...props}
                         return (

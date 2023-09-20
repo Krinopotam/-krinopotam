@@ -303,7 +303,7 @@ export class DModel {
 
             let fieldValue: unknown = undefined;
             if (oldField === field) fieldValue = this._values[fieldName]; // keep the user entered value if the field props have not changed
-            if (mode === 'create' && field.default && !fieldValue) fieldValue = field.default;
+            if (mode === 'create' && field.value && !fieldValue) fieldValue = field.value;
 
             labels[fieldName] = field.label;
             values[fieldName] = fieldValue;
@@ -394,11 +394,13 @@ export class DModel {
         const values = this.getFormValues();
         values[fieldName] = value;
 
-        if (noEvents || prevValue === value) return;
+        if (prevValue === value) return;
 
+        this.emitFieldRender(fieldName);
+
+        if (noEvents) return;
         this._callbacks?.onFieldValueChanged?.(fieldName, value, prevValue, this);
         this.getFieldProps(fieldName)?.callbacks?.onValueChanged?.(value, prevValue, this);
-        this.emitFieldRender(fieldName);
 
         this.validateField(fieldName);
 

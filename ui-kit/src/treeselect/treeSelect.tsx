@@ -7,7 +7,7 @@ import {useEditableInit} from './hooks/useEditForm';
 import {ITreeSelectApi, useInitApi} from './hooks/api';
 import  {useGetActualProps} from '@krinopotam/common-hooks';
 import {TPromise} from '@krinopotam/service-types';
-import {ButtonsRow, IButtonsRowApi, IFormButtons} from '../buttons-row/buttonsRow';
+import {ButtonsRow, IButtonsRowApi, IFormButtons} from '@src/buttons-row/buttonsRow';
 import {useInitButtons} from './hooks/buttons';
 
 //region Types

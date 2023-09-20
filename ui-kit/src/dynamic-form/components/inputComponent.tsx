@@ -14,7 +14,7 @@ import {Input} from 'antd';
 // !used in configGenerator parsing. Don't use multi rows comments!
 export interface IDFormFieldInputProps extends IDFormFieldProps {
     /** Default value */
-    default?: string | number | unknown;
+    value?: string | number | unknown;
 
     /** Whether show text count */
     showCount?: boolean;
@@ -57,6 +57,7 @@ export const InputComponent = ({formApi, fieldName, fieldProps}: IDFormInputComp
             readOnly={formApi.model.isFieldReadOnly(fieldName)}
             showCount={fieldProps.showCount}
             value={value}
+            style={fieldProps.style}
         />
     );
 };

@@ -7,8 +7,8 @@
  */
 
 import {IDFormComponentProps, IDFormFieldProps} from './baseComponent';
-import {ITreeSelectProps, ITreeSelectValue, TreeSelect} from '../../treeselect';
-import React, {useCallback, useEffect, useMemo} from 'react';
+import {ITreeSelectProps, ITreeSelectValue, TreeSelect} from '@src/treeselect';
+import React, {CSSProperties, useCallback, useEffect, useMemo} from 'react';
 import {HelpersObjects} from '@krinopotam/js-helpers';
 
 export type {ITreeSelectValue, ITreeSelectCallbacks, ITreeSelectNode, ITreeSelectPlainValue, ITreeSelectDeletePromise, ITreeSelectSourcePromise} from '../../treeselect';
@@ -19,15 +19,12 @@ type IDFormFieldTreeSelectProps_ = ITreeSelectProps & IDFormFieldProps;
 // !used in configGenerator parsing. Don't use multi rows comments!
 export interface IDFormFieldTreeSelectProps extends IDFormFieldTreeSelectProps_ {
     /** Default value */
-    default?: ITreeSelectValue | string;
-
-    /** @deprecated The callback should not be used. Use callbacks.onChange instead  */
-    onCustomChange?: (value: unknown) => void;
+    value?: ITreeSelectValue | string;
 }
 
 //endregion
 
-interface IDFormTreeSelectComponentProps extends IDFormComponentProps{
+interface IDFormTreeSelectComponentProps extends IDFormComponentProps {
     fieldProps: IDFormFieldTreeSelectProps
 }
 
@@ -41,7 +38,6 @@ export const TreeSelectComponent = ({formApi, fieldName, fieldProps}: IDFormTree
             formApi.model.setFieldDirty(fieldName, true);
 
             fieldProps.callbacks?.onChange?.(value);
-            fieldProps.onCustomChange?.(value);
         },
         [fieldName, fieldProps, formApi.model]
     );
@@ -59,9 +55,11 @@ export const TreeSelectComponent = ({formApi, fieldName, fieldProps}: IDFormTree
         formApi.model.setFieldReady(fieldName, true);
     }, [fieldName, formApi.model]);
 
+    const style: CSSProperties = {width: '100%', ...fieldProps.style}
+
     return (
         <TreeSelect
-            style={{width: '100%'}}
+            style={style}
             {...treeProps}
             autoFocus={fieldProps.autoFocus}
             defaultValueCallback={fieldProps.defaultValueCallback}
@@ -83,14 +81,13 @@ export const TreeSelectComponent = ({formApi, fieldName, fieldProps}: IDFormTree
 const useGetTreeSelectProps = (props: IDFormFieldTreeSelectProps) => {
     return useMemo((): ITreeSelectProps => {
         const result = HelpersObjects.splitObject(props, [
-            'onCustomChange',
             'component',
             'helpClass',
             'label',
             'placeholder',
             'tab',
             'inlineGroup',
-            'default',
+            'value',
             'hidden',
             'dependsOn',
             'width',

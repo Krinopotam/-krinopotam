@@ -43,8 +43,8 @@ export class BaseComponentConfig<T>  {
     }
 
     /** Field default value */
-    default(value: IDFormFieldProps['default']) {
-        this._config.default = value;
+    value(value: IDFormFieldProps['value']) {
+        this._config.value = value;
         return this;
     }
 
@@ -99,6 +99,12 @@ export class BaseComponentConfig<T>  {
     /** Field CSS style */
     style(value: IDFormFieldProps['style']) {
         this._config.style = value;
+        return this;
+    }
+
+    /** Row field container CSS style */
+    rowStyle(value: IDFormFieldProps['rowStyle']) {
+        this._config.rowStyle = value;
         return this;
     }
 

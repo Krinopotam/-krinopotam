@@ -1,6 +1,6 @@
-import {IDFormFieldCallbacks} from "@src/dynamic-form/components/baseComponent";
+import {IDFormFieldProps} from "@src/dynamic-form/components/baseComponent";
 
-export const componentsCallbacks: IDFormFieldCallbacks ={
+export const componentsCallbacks: Omit<IDFormFieldProps, 'component'> ={
     onValueChanged: (...args) => {
         console.log('onValueChanged',args)
     },

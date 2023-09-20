@@ -1,27 +1,51 @@
+// noinspection DuplicatedCode
+
 import type {Meta, StoryObj} from '@storybook/react';
 import TextareaField from "./textareaField";
 import {componentsCallbacks} from "../_common/componentsCallbacks";
 
 export default {
+    title: 'DForm/Controls/TextArea',
     component: TextareaField,
-    title: 'DForm/Components/TextAreaComponent',
+    tags: ['autodocs'],
     parameters: {
-        docs: {source: {code: null,},},
+        docs: {
+            /* AUTO-SOURCE-INJECT-START */
+            source: {
+                language: 'tsx',
+                format: true,
+                // language=text
+                code: `
+                    import React from "react";
+                    import {DForm} from @krinopotam/ui-kit/dynamic-form";
+                    import {IDFormFieldTextAreaProps, TextAreaComponent} from @krinopotam/ui-kit/dynamic-form/components/textAreaComponent";
+                    type IComponent = Omit<IDFormFieldTextAreaProps, 'component'>
+                    /** DynamicForm Textarea component */
+                    export const TextareaField = (props: IComponent): React.JSX.Element => <DForm
+                        buttons={null}
+                        fieldsProps={
+                            {field1: {...props, component: TextAreaComponent}}
+                        }
+                    />
+                    export default TextareaField
+                `
+            }
+            /* AUTO-SOURCE-INJECT-END */
+        },
     },
-} as Meta<typeof TextareaField>;
+} satisfies Meta<typeof TextareaField>;
 
 type Story = StoryObj<typeof TextareaField>;
 
-//👇 Throws a type error it the args don't match the component props
 export const Playground: Story = {
     args: {
-        label: 'Text area field',
+        label: 'TextArea field',
     },
 };
 
 export const Callbacks: Story = {
     args: {
-        label: 'Text area field',
+        label: 'TextArea field',
         callbacks: componentsCallbacks
     },
 };

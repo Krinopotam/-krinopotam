@@ -42,8 +42,8 @@ export class SelectComponentConfig<T>  extends BaseComponentConfig<T> {
     }
 
     /** Initial selected option */
-    default(value: IDFormFieldSelectProps['default']) {
-        this._config.default = value;
+    value(value: IDFormFieldSelectProps['value']) {
+        this._config.value = value;
         return this;
     }
 
@@ -98,6 +98,12 @@ export class SelectComponentConfig<T>  extends BaseComponentConfig<T> {
     /** Field CSS style */
     style(value: IDFormFieldProps['style']) {
         this._config.style = value;
+        return this;
+    }
+
+    /** Row field container CSS style */
+    rowStyle(value: IDFormFieldProps['rowStyle']) {
+        this._config.rowStyle = value;
         return this;
     }
 

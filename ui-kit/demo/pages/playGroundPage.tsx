@@ -103,12 +103,12 @@ const formProps = new DFormModalConfig<IFields>('TestFormModalConfig')
     .addTab(
         'Tab1',
         new InputComponentConfig<IFields>('profess').label('Профессия').showCount(true).maxLength(50).inlineGroup('row1'),
-        new InputComponentConfig<IFields>('specialty').label('Специализация').default('дефолтная специализация').dependsOn(['profess']).inlineGroup('row1'),
+        new InputComponentConfig<IFields>('specialty').label('Специализация').value('дефолтная специализация').dependsOn(['profess']).inlineGroup('row1'),
 
         new DateTimeComponentConfig<IFields>('assignDate').label('Дата назначения'),
 
-        new InputComponentConfig<IFields>('name').label('Имя пользователя').default('дефолтное имя пользователя').dependsOn(['profess']).inlineGroup('row2'),
-        new InputComponentConfig<IFields>('login').label('Логин').default('дефолтный логин').dependsOn(['name', 'specialty']).inlineGroup('row2'),
+        new InputComponentConfig<IFields>('name').label('Имя пользователя').value('дефолтное имя пользователя').dependsOn(['profess']).inlineGroup('row2'),
+        new InputComponentConfig<IFields>('login').label('Логин').value('дефолтный логин').dependsOn(['name', 'specialty']).inlineGroup('row2'),
 
         new TreeSelectComponentConfig<IFields>('departments')
             .label('Подразделение')
@@ -116,7 +116,7 @@ const formProps = new DFormModalConfig<IFields>('TestFormModalConfig')
             .noCacheFetchedData(false)
             .debounce(300)
             // .minSearchLength(1)
-            // .default({label: 'default value', id: 'id-01'})
+            // .value({label: 'default value', id: 'id-01'})
             // .multiple(true)
             // .treeCheckable(true)
             // .dataSource(GetApiAppUsersSelect('', {search: '', limit: 0}))

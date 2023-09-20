@@ -71,7 +71,7 @@ export interface IDFormFieldSelectProps extends IDFormFieldProps {
     defaultOpen?: boolean;
 
     /** Initial selected option */
-    default?: ValueType;
+    value?: ValueType;
 
     /** The className of dropdown menu */
     popupClassName?: string;
@@ -222,6 +222,7 @@ export const SelectComponent = ({formApi, fieldName, fieldProps}: IDFormSelectCo
             tokenSeparators={fieldProps.tokenSeparators}
             value={currentValue}
             virtual={fieldProps.virtual}
+            style={fieldProps.style}
         >
             {options}
         </Select>

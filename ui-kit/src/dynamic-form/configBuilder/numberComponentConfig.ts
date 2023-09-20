@@ -42,8 +42,8 @@ export class NumberComponentConfig<T>  extends BaseComponentConfig<T> {
     }
 
     /** Default value */
-    default(value: IDFormFieldNumberProps['default']) {
-        this._config.default = value;
+    value(value: IDFormFieldNumberProps['value']) {
+        this._config.value = value;
         return this;
     }
 
@@ -98,6 +98,12 @@ export class NumberComponentConfig<T>  extends BaseComponentConfig<T> {
     /** Field CSS style */
     style(value: IDFormFieldProps['style']) {
         this._config.style = value;
+        return this;
+    }
+
+    /** Row field container CSS style */
+    rowStyle(value: IDFormFieldProps['rowStyle']) {
+        this._config.rowStyle = value;
         return this;
     }
 

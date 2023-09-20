@@ -20,7 +20,7 @@ const formProps = new DFormConfig<IFields>('Test form')
     .layout('horizontal')
     .labelCol({style: {fontWeight: 600}})
     .addFields(
-        new CustomComponentConfig<IFields>('statusRow').default(<><b>Образец </b><i>контента</i></>),
+        new CustomComponentConfig<IFields>('statusRow').value(<><b>Образец </b><i>контента</i></>),
         new InputComponentConfig<IFields>('login').label('Логин').requiredMark(true),
         new DividerComponentConfig<IFields>('divider1').title('DividerTitle').style({marginBottom: 0}),
         new PasswordComponentConfig<IFields>('password').label('Пароль'),

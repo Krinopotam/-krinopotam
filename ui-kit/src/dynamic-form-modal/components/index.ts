@@ -1,5 +1,5 @@
 export {BaseComponent} from "../../dynamic-form/components/baseComponent"
-export type {IDFormComponentProps, IDFormFieldProps, IDFormFieldsProps, IDFormFieldCallbacks} from "../../dynamic-form/components/baseComponent"
+export type {IDFormComponentProps, IDFormFieldProps, IDFormFieldsProps} from "../../dynamic-form/components/baseComponent"
 
 export {LinkComponent} from "../../dynamic-form/components/linkComponent"
 export type {IDFormFieldLinkProps} from "../../dynamic-form/components/linkComponent"

@@ -6,7 +6,7 @@
  * @license MIT
  */
 
-import React, {useCallback, useEffect} from 'react';
+import React, {CSSProperties, useCallback, useEffect} from 'react';
 
 import {IDFormComponentProps, IDFormFieldProps} from './baseComponent';
 import {InputNumber} from 'antd';
@@ -27,7 +27,7 @@ export interface IDFormFieldNumberProps extends IDFormFieldProps {
     decimalSeparator?: string;
 
     /** Default value */
-    default?: string | number;
+    value?: string | number;
 
     /** Specifies the format of the value presented. Transform `value` to display value show in input */
     formatter?: InputNumberProps['formatter'];
@@ -93,6 +93,8 @@ export const NumberComponent = ({formApi, fieldName, fieldProps}: IDFormNumberCo
         formApi.model.setFieldReady(fieldName, true);
     }, [fieldName, formApi.model]);
 
+    const style: CSSProperties = {width: '100%', ...fieldProps.style}
+
     return (
         <InputNumber
             addonAfter={fieldProps.addonAfter}
@@ -119,7 +121,7 @@ export const NumberComponent = ({formApi, fieldName, fieldProps}: IDFormNumberCo
             readOnly={formApi.model.isFieldReadOnly(fieldName)}
             step={fieldProps.step}
             stringMode={fieldProps.stringMode}
-            style={{width: '100%'}}
+            style={style}
             upHandler={fieldProps.upHandler}
             value={value}
         />

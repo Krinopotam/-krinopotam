@@ -9,7 +9,7 @@
 import './css/antdAnimation.css';
 
 import {DModel, IDFormModelCallbacks, IDFormSubmitResultObject, IDFormSubmitResultPromise} from './dModel';
-import {IButtonsRowApi, IFormButtons} from '../buttons-row';
+import {IButtonsRowApi, IFormButtons} from '@src/buttons-row';
 import {IDFormApi, useInitFormApi} from './hooks/api';
 import React, {useEffect, useRef, useState} from 'react';
 import {TPromise} from '@krinopotam/service-types';
@@ -19,7 +19,7 @@ import {IRuleType} from './validators/baseValidator';
 import {HelpersStrings} from '@krinopotam/js-helpers';
 import {useCallbacks} from './hooks/callbacks';
 import {useGetButtons} from './hooks/buttons';
-import {useUpdateMessageBoxTheme} from '../message-box';
+import {useUpdateMessageBoxTheme} from '@src/message-box';
 import {useGetActualProps} from '@krinopotam/common-hooks';
 import {ColProps} from "antd";
 import {FormLabelAlign} from "antd/es/form/interface";

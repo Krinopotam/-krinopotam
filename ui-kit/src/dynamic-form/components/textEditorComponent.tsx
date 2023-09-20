@@ -18,7 +18,7 @@ import ReactQuill from 'react-quill';
 //TODO add all properties
 export interface IDFormTextEditorProps extends IDFormFieldInputProps {
     /** Default value */
-    default?: string | number;
+    value?: string | number;
 
     /** Allowed formats. This is separate from adding a control in the Toolbar. For example, you can configure Quill to allow bolded content to be pasted into an editor that has no bold button in the toolbar */
     formats: ['header', 'bold', 'italic', 'underline', 'strike', 'blockquote', 'list', 'bullet', 'indent', 'link', 'color', 'background'];
@@ -115,6 +115,7 @@ export const TextEditorComponent = ({formApi, fieldName, fieldProps}: IDFormText
             modules={modules}
             formats={formats}
             readOnly={formApi.model.isFieldReadOnly(fieldName) || formApi.model.isFieldDisabled(fieldName)}
+            style={fieldProps.style}
         />
     );
 };

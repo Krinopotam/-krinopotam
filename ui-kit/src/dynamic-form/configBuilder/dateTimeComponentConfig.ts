@@ -42,8 +42,8 @@ export class DateTimeComponentConfig<T>  extends BaseComponentConfig<T> {
     }
 
     /** Default value. If start time or end time is null or undefined, the date range will be an open interval */
-    default(value: IDFormFieldDateTimeProps['default']) {
-        this._config.default = value;
+    value(value: IDFormFieldDateTimeProps['value']) {
+        this._config.value = value;
         return this;
     }
 
@@ -101,6 +101,12 @@ export class DateTimeComponentConfig<T>  extends BaseComponentConfig<T> {
         return this;
     }
 
+    /** Row field container CSS style */
+    rowStyle(value: IDFormFieldProps['rowStyle']) {
+        this._config.rowStyle = value;
+        return this;
+    }
+
     /** Whether to show clear button */
     allowClear(value: IDFormFieldDateTimeProps['allowClear']) {
         this._config.allowClear = value;
@@ -143,9 +149,15 @@ export class DateTimeComponentConfig<T>  extends BaseComponentConfig<T> {
         return this;
     }
 
-    /** The picker panel mode */
+    /** The DatePicker mode */
     mode(value: IDFormFieldDateTimeProps['mode']) {
         this._config.mode = value;
+        return this;
+    }
+
+    /** The DatePicker time mode */
+    timeMode(value: IDFormFieldDateTimeProps['timeMode']) {
+        this._config.timeMode = value;
         return this;
     }
 
@@ -170,12 +182,6 @@ export class DateTimeComponentConfig<T>  extends BaseComponentConfig<T> {
     /** Customize panel render */
     panelRender(value: IDFormFieldDateTimeProps['panelRender']) {
         this._config.panelRender = value;
-        return this;
-    }
-
-    /** Set picker type (default date) */
-    picker(value: IDFormFieldDateTimeProps['picker']) {
-        this._config.picker = value;
         return this;
     }
 

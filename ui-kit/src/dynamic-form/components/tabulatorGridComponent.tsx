@@ -9,9 +9,9 @@
 import React, {useMemo, useRef, useState} from 'react';
 
 import {IDFormComponentProps, IDFormFieldProps} from './baseComponent';
-import TabulatorGrid, {IGridCallbacks, IGridRowData, IReactTabulatorProps, IGridApi} from '../../tabulator-grid';
-import {IFormButton, IFormButtons} from '../../buttons-row/buttonsRow';
-import {IDFormModalProps} from '../../dynamic-form-modal';
+import TabulatorGrid, {IGridCallbacks, IGridRowData, IReactTabulatorProps, IGridApi} from '@src/tabulator-grid';
+import {IFormButton, IFormButtons} from '@src/buttons-row';
+import {IDFormModalProps} from '@src/dynamic-form-modal';
 
 // !used in configGenerator parsing. Don't use multi rows comments!
 export interface IDFormFieldTabulatorGridProps extends Omit<IDFormFieldProps, 'width'> {

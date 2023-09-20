@@ -3,10 +3,7 @@ import {App, ConfigProvider, theme} from 'antd';
 import {BrowserRouter} from 'react-router-dom';
 import {ExamplesRoutes} from './examplesRoutes';
 import React, {useState} from 'react';
-import dayjs from 'dayjs';
 import ruRU from 'antd/locale/ru_RU';
-
-dayjs.locale('ru');
 
 export const ExamplesApp = (): React.JSX.Element => {
     const [darkMode, setDarkMode] = useState(false);

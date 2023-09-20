@@ -41,9 +41,9 @@ export class DividerComponentConfig<T>  extends BaseComponentConfig<T> {
         return this;
     }
 
-    /** Field default value */
-    default(value: IDFormFieldProps['default']) {
-        this._config.default = value;
+    /** Divider title */
+    value(value: IDFormFieldDividerProps['value']) {
+        this._config.value = value;
         return this;
     }
 
@@ -101,25 +101,31 @@ export class DividerComponentConfig<T>  extends BaseComponentConfig<T> {
         return this;
     }
 
-    /** Divider title */
-    title(value: IDFormFieldDividerProps['title']) {
-        this._config.title = value;
+    /** Row field container CSS style */
+    rowStyle(value: IDFormFieldProps['rowStyle']) {
+        this._config.rowStyle = value;
         return this;
     }
 
-    /** Divider title without heading style */
+    /** Divider text show as plain style */
     plain(value: IDFormFieldDividerProps['plain']) {
         this._config.plain = value;
         return this;
     }
 
-    /** without heading style orientation */
+    /** Whether line is dashed */
+    dashed(value: IDFormFieldDividerProps['dashed']) {
+        this._config.dashed = value;
+        return this;
+    }
+
+    /** The position of a title inside divider */
     orientation(value: IDFormFieldDividerProps['orientation']) {
         this._config.orientation = value;
         return this;
     }
 
-    /** without heading style orientation margin */
+    /** The margin-left/right between the title and its closest border, while the orientation must be left or right */
     orientationMargin(value: IDFormFieldDividerProps['orientationMargin']) {
         this._config.orientationMargin = value;
         return this;

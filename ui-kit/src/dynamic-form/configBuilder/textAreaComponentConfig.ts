@@ -42,8 +42,8 @@ export class TextAreaComponentConfig<T>  extends BaseComponentConfig<T> {
     }
 
     /** Default value */
-    default(value: IDFormFieldTextAreaProps['default']) {
-        this._config.default = value;
+    value(value: IDFormFieldTextAreaProps['value']) {
+        this._config.value = value;
         return this;
     }
 
@@ -98,6 +98,12 @@ export class TextAreaComponentConfig<T>  extends BaseComponentConfig<T> {
     /** Field CSS style */
     style(value: IDFormFieldProps['style']) {
         this._config.style = value;
+        return this;
+    }
+
+    /** Row field container CSS style */
+    rowStyle(value: IDFormFieldProps['rowStyle']) {
+        this._config.rowStyle = value;
         return this;
     }
 

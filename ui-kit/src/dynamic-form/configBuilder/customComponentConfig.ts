@@ -42,8 +42,8 @@ export class CustomComponentConfig<T>  extends BaseComponentConfig<T> {
     }
 
     
-    default(value: IDFormFieldCustomProps['default']) {
-        this._config.default = value;
+    value(value: IDFormFieldCustomProps['value']) {
+        this._config.value = value;
         return this;
     }
 
@@ -89,8 +89,8 @@ export class CustomComponentConfig<T>  extends BaseComponentConfig<T> {
         return this;
     }
 
-    /** Field callbacks */
-    callbacks(value: IDFormFieldProps['callbacks']) {
+    
+    callbacks(value: IDFormFieldCustomProps['callbacks']) {
         this._config.callbacks = value;
         return this;
     }
@@ -98,6 +98,12 @@ export class CustomComponentConfig<T>  extends BaseComponentConfig<T> {
     /** Field CSS style */
     style(value: IDFormFieldProps['style']) {
         this._config.style = value;
+        return this;
+    }
+
+    /** Row field container CSS style */
+    rowStyle(value: IDFormFieldProps['rowStyle']) {
+        this._config.rowStyle = value;
         return this;
     }
 

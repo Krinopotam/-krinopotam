@@ -43,8 +43,8 @@ export class TreeSelectComponentConfig<T>  extends BaseComponentConfig<T> {
     }
 
     /** Default value */
-    default(value: IDFormFieldTreeSelectProps['default']) {
-        this._config.default = value;
+    value(value: IDFormFieldTreeSelectProps['value']) {
+        this._config.value = value;
         return this;
     }
 
@@ -102,6 +102,12 @@ export class TreeSelectComponentConfig<T>  extends BaseComponentConfig<T> {
         return this;
     }
 
+    /** Row field container CSS style */
+    rowStyle(value: IDFormFieldProps['rowStyle']) {
+        this._config.rowStyle = value;
+        return this;
+    }
+
     /** A mutable object to merge with these controls api */
     apiRef(value: ITreeSelectProps['apiRef']) {
         this._config.apiRef = value;
@@ -111,12 +117,6 @@ export class TreeSelectComponentConfig<T>  extends BaseComponentConfig<T> {
     /** Tree TreeSelect id */
     treeSelectId(value: ITreeSelectProps['treeSelectId']) {
         this._config.treeSelectId = value;
-        return this;
-    }
-
-    /** Value */
-    value(value: ITreeSelectProps['value']) {
-        this._config.value = value;
         return this;
     }
 
@@ -207,12 +207,6 @@ export class TreeSelectComponentConfig<T>  extends BaseComponentConfig<T> {
     /** Edit buttons*/
     editButtons(value: ITreeSelectProps['editButtons']) {
         this._config.editButtons = value;
-        return this;
-    }
-
-    /** @deprecated The callback should not be used. Use callbacks.onChange instead  */
-    onCustomChange(value: IDFormFieldTreeSelectProps['onCustomChange']) {
-        this._config.onCustomChange = value;
         return this;
     }
 

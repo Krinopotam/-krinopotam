@@ -6,7 +6,7 @@
  * @license MIT
  */
 
-import React, {useMemo, useSyncExternalStore} from 'react';
+import React, {useSyncExternalStore} from 'react';
 
 import Animate from 'rc-animate';
 import {Form} from 'antd';
@@ -35,7 +35,7 @@ export interface IDFormFieldProps {
     inlineGroup?: string;
 
     /** Field default value */
-    default?: AnyType;
+    value?: AnyType;
 
     /** If field default state is hidden */
     hidden?: boolean;
@@ -58,15 +58,12 @@ export interface IDFormFieldProps {
     /** Mark Field Label as Required */
     requiredMark?: boolean
 
-    /** Field callbacks */
-    callbacks?: IDFormFieldCallbacks;
-
     /** Field CSS style */
     style?: React.CSSProperties
-}
 
-export interface IDFormFieldCallbacks {
-    // Form Fields callbacks
+    /** Row field container CSS style */
+    rowStyle?: React.CSSProperties
+
 
     /** fires when the value of a field changed */
     onValueChanged?: (value: unknown, prevValue: unknown, model: DModel) => void;
@@ -122,17 +119,15 @@ export const BaseComponent = ({fieldName, fieldProps, formApi, noLabel}: IDFormC
 
     const Component = fieldProps.component;
 
-    const style: React.CSSProperties = useMemo(() => {
-        const baseStyle: React.CSSProperties = {
-            //marginBottom: formProps.layout !== 'horizontal' ? 0 : undefined,
-            width: fieldProps.width,
-            flexGrow: fieldProps.width ? 0 : 1,
-            flexShrink: fieldProps.width ? 0 : 1,
-            flexBasis: fieldProps.width ? undefined : 0,
-        };
-
-        return {...baseStyle, ...fieldProps.style}
-    }, [fieldProps.style, fieldProps.width])
+    const style: React.CSSProperties = {
+        //marginBottom: formProps.layout !== 'horizontal' ? 0 : undefined,
+        width: fieldProps.width,
+        flexGrow: fieldProps.width ? 0 : 1,
+        flexShrink: fieldProps.width ? 0 : 1,
+        flexBasis: fieldProps.width ? undefined : 0,
+        marginBottom: Component.name === 'DividerComponent' || Component.name === 'CustomComponent' ? 0: undefined, //WORKAROUND
+        ...fieldProps.rowStyle
+    };
 
     return (
         <Animate component="" transitionName="zoom">

@@ -4,7 +4,7 @@ import React, {useCallback} from 'react';
 import {Button} from '@src/button';
 import {IDFormModalApi, DFormModal} from '@src/dynamic-form-modal';
 import {DFormModalConfig, NumberComponentConfig, TabulatorGridComponentConfig, InputComponentConfig} from '@src/dynamic-form-modal/configBuilder';
-import {IGridRowData, IDFormFieldTabulatorGridProps} from "../../dynamic-form-modal/components";
+import {IGridRowData, IDFormFieldTabulatorGridProps} from '@src/dynamic-form-modal/components';
 
 /** Tabulator grid edit form type */
 type IPerson = {
@@ -75,7 +75,7 @@ const formProps = new DFormModalConfig<IUsers>('Test form')
             .label('Пользователи')
             .columns(columns)
             .layout('fitColumns')
-            //.default(gridDefaultData)
+            //.value(gridDefaultData)
             .height(300)
             .editFormProps(editFormProps)
             .confirmDelete(true)
