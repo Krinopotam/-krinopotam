@@ -23,6 +23,7 @@ import {useUpdateMessageBoxTheme} from '@src/messageBox';
 import {useGetActualProps} from '@krinopotam/common-hooks';
 import {ColProps} from "antd";
 import {FormLabelAlign} from "antd/es/form/interface";
+import {RequiredMark} from "antd/es/form/Form";
 
 //import './dynamicForm.css';
 
@@ -101,6 +102,9 @@ export interface IDFormProps {
 
     /** Confirm message before the form submitting */
     submitConfirmMessage?: React.ReactNode;
+
+    /** Required mark style. Can use required mark or optional mark. You can not config to single Form.Item since this is a Form level config */
+    requiredMark?: RequiredMark;
 
     // /** Close dirty controls confirm message. If null or empty string - no confirm */
     // closeFormConfirmMessage?: string | null;

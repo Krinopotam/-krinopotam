@@ -90,6 +90,12 @@ export class BaseComponentConfig<T>  {
         return this;
     }
 
+    /** Config tooltip info */
+    tooltip(value: IDFormFieldProps['tooltip']) {
+        this._config.tooltip = value;
+        return this;
+    }
+
     /** Field CSS style */
     style(value: IDFormFieldProps['style']) {
         this._config.style = value;

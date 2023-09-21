@@ -18,7 +18,7 @@ import {IDFormProps} from "../dForm";
 
 interface IFormRenderProps {
     /** Form props*/
-    formProps:IDFormProps
+    formProps: IDFormProps
 
     /** form api instance */
     formApi: IDFormApi;
@@ -36,14 +36,10 @@ interface IFormRenderProps {
 export const FormRender = ({formProps, formApi, formButtons}: IFormRenderProps): React.JSX.Element => {
     useExternalRenderCall(formApi);
 
-    let labelCol = formProps.labelCol;
-    if (!labelCol) labelCol = formProps.layout === 'horizontal' ? {span: 8} : {span: 0};
+    const labelCol = {span: (formProps.layout === 'horizontal' ? 8 : 24), ...formProps.labelCol};
+    labelCol.style = {paddingBottom: 2, ...formProps.labelCol?.style}
 
-    if (!labelCol.style) labelCol.style = {paddingBottom: 2}
-    else if (typeof labelCol.style.paddingBottom === 'undefined') labelCol.style.paddingBottom = 2
-
-    let wrapperCol = formProps.wrapperCol;
-    if (!wrapperCol) wrapperCol = formProps.layout === 'horizontal' ? {span: 16} : {span: 24};
+    const wrapperCol = {span: (formProps.layout === 'horizontal' ? 16 : 24), ...formProps.wrapperCol};
 
     return (
         <div className={'managed-dynamic-buttons-row ' + (formProps.containerClassName ?? '')}>
@@ -61,6 +57,7 @@ export const FormRender = ({formProps, formApi, formButtons}: IFormRenderProps):
                     autoComplete="off"
                     labelAlign={formProps.labelAlign}
                     layout={formProps.layout === 'horizontal' ? 'horizontal' : 'vertical'}
+                    requiredMark={formProps.requiredMark}
                 >
                     <FormInit formApi={formApi}/>
 

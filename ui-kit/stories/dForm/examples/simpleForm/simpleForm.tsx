@@ -14,7 +14,7 @@ interface IFields {
 const formProps = new DFormConfig<IFields>('Test form')
     .confirmChanges(true)
     .addFields(
-        new InputComponentConfig<IFields>('login').label('Логин'),
+        new InputComponentConfig<IFields>('login').label('Логин').tooltip('Ввод логина'),
         new PasswordComponentConfig<IFields>('password').label('Пароль')
     )
     .buttons({ok: {position: 'right'}})

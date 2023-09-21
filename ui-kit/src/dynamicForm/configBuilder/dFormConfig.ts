@@ -144,6 +144,12 @@ export class DFormConfig<T>  {
         return this;
     }
 
+    /** Required mark style. Can use required mark or optional mark. You can not config to single Form.Item since this is a Form level config */
+    requiredMark(value: IDFormProps['requiredMark']) {
+        this._config.requiredMark = value;
+        return this;
+    }
+
 
     /** Add fields or fields inline groups */
     addFields(...args: BaseComponentConfig<T>[]) {

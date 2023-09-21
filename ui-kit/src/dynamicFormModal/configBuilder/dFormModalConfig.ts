@@ -143,6 +143,12 @@ export class DFormModalConfig<T>  extends DFormConfig<T> {
         return this;
     }
 
+    /** Required mark style. Can use required mark or optional mark. You can not config to single Form.Item since this is a Form level config */
+    requiredMark(value: IDFormProps['requiredMark']) {
+        this._config.requiredMark = value;
+        return this;
+    }
+
     /** Confirm message before the form closing, if form is dirty */
     closeFormConfirmMessage(value: IDModalProps['closeFormConfirmMessage']) {
         this._config.closeFormConfirmMessage = value;

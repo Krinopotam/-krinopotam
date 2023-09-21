@@ -28,6 +28,7 @@ import {IDFormFieldTabulatorGridProps} from "@src/dynamicForm/components/tabulat
 import {IDFormFieldTextAreaProps} from "@src/dynamicForm/components/textAreaComponent";
 import {IDFormFieldQuillEditorProps} from "@src/dynamicForm/components/quillEditorComponent";
 import {IDFormFieldTreeSelectProps} from "@src/dynamicForm/components/treeSelectComponent";
+import {LabelTooltipType} from "antd/es/form/FormItemLabel";
 
 // !used in configGenerator parsing. Don't use multi rows comments!
 export interface IDFormFieldProps {
@@ -72,6 +73,9 @@ export interface IDFormFieldProps {
 
     /** Mark Field Label as Required */
     requiredMark?: boolean
+
+    /** Config tooltip info */
+    tooltip?: LabelTooltipType;
 
     /** Field CSS style */
     style?: React.CSSProperties
@@ -159,7 +163,7 @@ export const BaseComponent = ({fieldName, fieldProps, formApi, noLabel}: IDFormC
         flexShrink: fieldProps.width ? 0 : 1,
         flexBasis: fieldProps.width ? undefined : 0,
         marginBottom: Component.name === 'DividerComponent' || Component.name === 'CustomComponent' ? 0 : undefined, //WORKAROUND
-        ...fieldProps.rowStyle
+        ...fieldProps.rowStyle,
     };
 
     return (
@@ -174,6 +178,7 @@ export const BaseComponent = ({fieldName, fieldProps, formApi, noLabel}: IDFormC
                     help={error || undefined}
                     validateStatus={error ? 'error' : undefined}
                     required={!!fieldProps.requiredMark}
+                    tooltip={fieldProps.tooltip}
                     style={style}
                 >
                     <Component fieldName={fieldName} fieldProps={fieldProps} formApi={formApi}/>
