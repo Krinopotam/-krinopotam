@@ -82,15 +82,13 @@ const formProps = new DFormModalConfig<IUsers>('Test form')
             .height(300)
             .editFormProps(editFormProps)
             .confirmDelete(true)
-            .callbacks({
-                onDataFetch: () => {
-                    return new Promise((resolve, reject) => {
-                        setTimeout(() => {
-                            if (Math.random() < 0.5) reject({message: 'Ошибка загрузки данных', code: 400});
-                            else resolve({data: gridDefaultData});
-                        }, 1000);
-                    });
-                },
+            .onDataFetch(() => {
+                return new Promise((resolve, reject) => {
+                    setTimeout(() => {
+                        if (Math.random() < 0.5) reject({message: 'Ошибка загрузки данных', code: 400});
+                        else resolve({data: gridDefaultData});
+                    }, 1000);
+                });
             })
     )
     .width(900)

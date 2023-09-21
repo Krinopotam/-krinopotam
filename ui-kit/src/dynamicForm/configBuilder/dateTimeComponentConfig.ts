@@ -305,6 +305,24 @@ export class DateTimeComponentConfig<T>  extends BaseComponentConfig<T> {
         return this;
     }
 
+    /** */
+    onSelect(value: IDFormFieldDateTimeProps['onSelect']) {
+        this._config.onSelect = value;
+        return this;
+    }
+
+    /** Callback function for panel changing */
+    onPanelChange(value: IDFormFieldDateTimeProps['onPanelChange']) {
+        this._config.onPanelChange = value;
+        return this;
+    }
+
+    /** Callback function for mouse down */
+    onMouseDown(value: IDFormFieldDateTimeProps['onMouseDown']) {
+        this._config.onMouseDown = value;
+        return this;
+    }
+
 
     /** Get field config */
     getConfig() {

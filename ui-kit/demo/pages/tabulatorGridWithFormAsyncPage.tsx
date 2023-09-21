@@ -84,23 +84,23 @@ export const TabulatorGridWithFormAsync = (): React.JSX.Element => {
                 confirmDelete
                 height={500}
                 layout={'fitColumns'}
-                callbacks={{
-                    onDataFetch: () => {
-                        return new Promise((resolve, reject) => {
-                            setTimeout(() => {
-                                if (Math.random() < 0.3) reject({message: 'Ошибка загрузки данных', code: 400});
-                                else resolve({data: dataSet});
-                            }, 2000);
-                        });
-                    },
-                    onDelete: () => {
-                        return new Promise((resolve, reject) => {
-                            setTimeout(() => {
-                                if (Math.random() < 0.3) reject({message: 'Ошибка удаления строк', code: 400});
-                                else resolve({data: {result: 'OK'}});
-                            }, 2000);
-                        });
-                    },
+
+                onDataFetch={() => {
+                    return new Promise((resolve, reject) => {
+                        setTimeout(() => {
+                            if (Math.random() < 0.3) reject({message: 'Ошибка загрузки данных', code: 400});
+                            else resolve({data: dataSet});
+                        }, 2000);
+                    });
+                }}
+
+                onDelete={() => {
+                    return new Promise((resolve, reject) => {
+                        setTimeout(() => {
+                            if (Math.random() < 0.3) reject({message: 'Ошибка удаления строк', code: 400});
+                            else resolve({data: {result: 'OK'}});
+                        }, 2000);
+                    });
                 }}
             />
         </>

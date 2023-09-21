@@ -13,7 +13,7 @@ import React, {useCallback} from 'react';
 import {Button} from '@src/button';
 import {IDFormModalApi, DFormModal} from '@src/dynamicFormModal';
 import {DFormModalConfig, NumberComponentConfig, TabulatorGridComponentConfig, InputComponentConfig} from '@src/dynamicFormModal/configBuilder';
-import {IGridRowData, IDFormFieldTabulatorGridProps} from "@src/dynamicFormModal/components";
+import {IGridRowData, IDFormFieldTabulatorGridProps} from '@src/dynamicFormModal/components';
 
 /** Tabulator grid edit form type */
 type IPerson = {
