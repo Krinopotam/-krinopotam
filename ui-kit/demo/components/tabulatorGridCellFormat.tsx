@@ -3,7 +3,7 @@
 import React from 'react';
 
 import {ColumnDefinition} from 'tabulator-tables';
-import TabulatorGrid,  {IReactTabulatorProps, IGridRowData} from "@src/tabulator-grid";
+import TabulatorGrid,  {IReactTabulatorProps, IGridRowData} from "@src/tabulatorGrid";
 
 const data: IGridRowData[] = [
     {id: '01', surname: 'Иванов', name: 'Иван', patronymic: 'Иванович', email: 'ivanov@mail.ru', birthday: '11.01.1980'},

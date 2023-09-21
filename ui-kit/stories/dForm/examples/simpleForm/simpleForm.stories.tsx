@@ -15,10 +15,10 @@ export default {
                 // language=text
                 code: `
                     import React from 'react';
-                    import {DForm, IDFormProps} from @krinopotam/ui-kit/dynamic-form';
-                    import {DFormConfig} from @krinopotam/ui-kit/dynamic-form/configBuilder/dFormConfig';
-                    import {InputComponentConfig} from @krinopotam/ui-kit/dynamic-form/configBuilder/inputComponentConfig';
-                    import {PasswordComponentConfig} from @krinopotam/ui-kit/dynamic-form/configBuilder/passwordComponentConfig';
+                    import {DForm, IDFormProps} from @krinopotam/ui-kit/dynamicForm';
+                    import {DFormConfig} from @krinopotam/ui-kit/dynamicForm/configBuilder/dFormConfig';
+                    import {InputComponentConfig} from @krinopotam/ui-kit/dynamicForm/configBuilder/inputComponentConfig';
+                    import {PasswordComponentConfig} from @krinopotam/ui-kit/dynamicForm/configBuilder/passwordComponentConfig';
                     interface IFields {
                         login: string;
                         password: string;

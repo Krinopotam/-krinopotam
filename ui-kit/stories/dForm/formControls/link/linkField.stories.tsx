@@ -3,7 +3,7 @@
 import type {Meta, StoryObj} from '@storybook/react'
 import LinkField from "./linkField";
 import {componentsCallbacks} from "../_common/componentsCallbacks";
-import {IDFormLinkComponentCallbacks} from "@src/dynamic-form/components/linkComponent";
+import {IDFormLinkComponentCallbacks} from "@src/dynamicForm/components/linkComponent";
 
 export default {
     title: 'DForm/Controls/Link',
@@ -18,14 +18,14 @@ export default {
                 // language=text
                 code: `
                     import React from "react";
-                    import {DForm} from @krinopotam/ui-kit/dynamic-form";
-                    import {IDFormFieldLinkProps, LinkComponent} from @krinopotam/ui-kit/dynamic-form/components/linkComponent";
+                    import {DForm} from @krinopotam/ui-kit/dynamicForm";
+                    import {IDFormFieldLinkProps, LinkComponent} from @krinopotam/ui-kit/dynamicForm/components/linkComponent";
                     type IComponent = Omit<IDFormFieldLinkProps, 'component'>
                     /** DynamicForm Link component */
                     export const LinkField = (props: IComponent): React.JSX.Element => <DForm
                         buttons={null}
                         fieldsProps={
-                            {field1: {...props, component: LinkComponent}}
+                            {field1: {...props, component: LinkComponent} satisfies IDFormFieldLinkProps}
                         }
                     />
                     export default LinkField

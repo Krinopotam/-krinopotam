@@ -3,12 +3,12 @@
 import React, {useCallback} from 'react';
 
 import {Button} from '@src/button';
-import {DFormModal, IDFormModalApi} from '@src/dynamic-form-modal';
-import {DFormModalConfig} from '@src/dynamic-form-modal/configBuilder';
-import {InputComponentConfig} from '@src/dynamic-form/configBuilder/inputComponentConfig';
-import {NumberComponentConfig} from '@src/dynamic-form/configBuilder/numberComponentConfig';
-import {IReactTabulatorProps, IGridRowData} from "../../tabulator-grid";
-import {TabulatorGridComponentConfig} from '@src/dynamic-form/configBuilder/tabulatorGridComponentConfig';
+import {DFormModal, IDFormModalApi} from '@src/dynamicFormModal';
+import {DFormModalConfig} from '@src/dynamicFormModal/configBuilder';
+import {InputComponentConfig} from '@src/dynamicForm/configBuilder/inputComponentConfig';
+import {NumberComponentConfig} from '@src/dynamicForm/configBuilder/numberComponentConfig';
+import {IReactTabulatorProps, IGridRowData} from "@src/tabulatorGrid";
+import {TabulatorGridComponentConfig} from '@src/dynamicForm/configBuilder/tabulatorGridComponentConfig';
 
 /** Tabulator grid edit form type */
 type IPerson = {

@@ -1,8 +1,8 @@
 import React from "react";
-import {DForm} from "@src/dynamic-form";
-import {CustomComponent, IDFormFieldCustomProps} from "@src/dynamic-form/components/customComponent";
-import {InputComponent} from "@src/dynamic-form/components/inputComponent";
-import {IDFormFieldCheckBoxProps} from "@src/dynamic-form/components/checkboxComponent";
+import {DForm} from "@src/dynamicForm";
+import {CustomComponent, IDFormFieldCustomProps} from "@src/dynamicForm/components/customComponent";
+import {IDFormFieldInputProps, InputComponent} from "@src/dynamicForm/components/inputComponent";
+import {IDFormFieldCheckBoxProps} from "@src/dynamicForm/components/checkboxComponent";
 
 type IComponent = Omit<IDFormFieldCheckBoxProps, 'component' | 'callbacks'>
 
@@ -11,8 +11,8 @@ export const AutoUpdateCustomField = (props: IComponent): React.JSX.Element => <
     buttons={null}
     fieldsProps={
         {
-            field1: {label: "Enter value", component: InputComponent},
-            field2: {...props, component: CustomComponent, callbacks: {onRender: MyComponent}} as IDFormFieldCustomProps,
+            field1: {label: "Enter value", component: InputComponent} satisfies IDFormFieldInputProps,
+            field2: {...props, component: CustomComponent, onRender: MyComponent} satisfies IDFormFieldCustomProps,
         }
     }
     callbacks={{
@@ -25,6 +25,6 @@ export const AutoUpdateCustomField = (props: IComponent): React.JSX.Element => <
 
 export default AutoUpdateCustomField
 
-const MyComponent = (value: string): React.ReactNode => {
+const MyComponent = (value: React.ReactNode): React.ReactNode => {
     return <h3>Entered value: &ldquo;<span style={{color: 'red'}}>{value}</span>&rdquo;</h3>
 }

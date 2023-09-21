@@ -1,7 +1,7 @@
-import {DForm} from '../../../src/dynamic-form';
+import {DForm} from '@src/dynamicForm';
 import React from "react";
-import {DFormConfig} from "../../../src/dynamic-form/configBuilder/dFormConfig";
-import {InputComponentConfig} from "../../../src/dynamic-form/configBuilder/inputComponentConfig";
+import {DFormConfig} from "@src/dynamicForm/configBuilder/dFormConfig";
+import {InputComponentConfig} from "@src/dynamicForm/configBuilder/inputComponentConfig";
 
 export default {
     title: 'Dform/Examples/FormDependedFields',

@@ -19,18 +19,18 @@ export default {
                 // language=text
                 code: `
                     import React from "react";
-                    import {DForm} from @krinopotam/ui-kit/dynamic-form";
-                    import {CustomComponent, IDFormFieldCustomProps} from @krinopotam/ui-kit/dynamic-form/components/customComponent";
-                    import {InputComponent} from @krinopotam/ui-kit/dynamic-form/components/inputComponent";
-                    import {IDFormFieldCheckBoxProps} from @krinopotam/ui-kit/dynamic-form/components/checkboxComponent";
+                    import {DForm} from @krinopotam/ui-kit/dynamicForm";
+                    import {CustomComponent, IDFormFieldCustomProps} from @krinopotam/ui-kit/dynamicForm/components/customComponent";
+                    import {IDFormFieldInputProps, InputComponent} from @krinopotam/ui-kit/dynamicForm/components/inputComponent";
+                    import {IDFormFieldCheckBoxProps} from @krinopotam/ui-kit/dynamicForm/components/checkboxComponent";
                     type IComponent = Omit<IDFormFieldCheckBoxProps, 'component' | 'callbacks'>
                     /** DynamicForm Custom component */
                     export const AutoUpdateCustomField = (props: IComponent): React.JSX.Element => <DForm
                         buttons={null}
                         fieldsProps={
                             {
-                                field1: {label: "Enter value", component: InputComponent},
-                                field2: {...props, component: CustomComponent, callbacks: {onRender: MyComponent}} as IDFormFieldCustomProps,
+                                field1: {label: "Enter value", component: InputComponent} satisfies IDFormFieldInputProps,
+                                field2: {...props, component: CustomComponent, onRender: MyComponent} satisfies IDFormFieldCustomProps,
                             }
                         }
                         callbacks={{
@@ -41,7 +41,7 @@ export default {
                         }}
                     />
                     export default AutoUpdateCustomField
-                    const MyComponent = (value: string): React.ReactNode => {
+                    const MyComponent = (value: React.ReactNode): React.ReactNode => {
                         return <h3>Entered value: &ldquo;<span style={{color: 'red'}}>{value}</span>&rdquo;</h3>
                     }
                 `

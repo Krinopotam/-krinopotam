@@ -1,7 +1,7 @@
 // noinspection DuplicatedCode
 
 import type {Meta, StoryObj} from '@storybook/react'
-import {DatePicker} from "@src/datepicker";
+import {DatePicker} from "@src/datePicker";
 
 
 export default {

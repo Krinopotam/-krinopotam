@@ -1,11 +1,11 @@
 // noinspection DuplicatedCode
 
 import React from 'react';
-import {DFormModalConfig} from '@src/dynamic-form-modal/configBuilder';
-import {InputComponentConfig} from '@src/dynamic-form/configBuilder/inputComponentConfig';
-import {TreeSelectComponentConfig} from '@src/dynamic-form/configBuilder/treeSelectComponentConfig';
-import {NumberComponentConfig} from '@src/dynamic-form/configBuilder/numberComponentConfig';
-import TabulatorGrid, {IReactTabulatorProps, IGridRowData} from '@src/tabulator-grid';
+import {DFormModalConfig} from '@src/dynamicFormModal/configBuilder';
+import {InputComponentConfig} from '@src/dynamicForm/configBuilder/inputComponentConfig';
+import {TreeSelectComponentConfig} from '@src/dynamicForm/configBuilder/treeSelectComponentConfig';
+import {NumberComponentConfig} from '@src/dynamicForm/configBuilder/numberComponentConfig';
+import TabulatorGrid, {IReactTabulatorProps, IGridRowData} from '@src/tabulatorGrid';
 
 const columns: IReactTabulatorProps['columns'] = [
     {title: 'Name', field: 'name'},

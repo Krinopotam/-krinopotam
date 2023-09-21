@@ -17,8 +17,8 @@ export default {
                 // language=text
                 code: `
                     import React from "react";
-                    import {DForm} from @krinopotam/ui-kit/dynamic-form";
-                    import {IDFormFieldPasswordProps, PasswordComponent} from @krinopotam/ui-kit/dynamic-form/components/passwordComponent";
+                    import {DForm} from @krinopotam/ui-kit/dynamicForm";
+                    import {IDFormFieldPasswordProps, PasswordComponent} from @krinopotam/ui-kit/dynamicForm/components/passwordComponent";
                     type IComponent = Omit<IDFormFieldPasswordProps, 'component'>
                     /** DynamicForm Password component */
                     export const PasswordField = (props: IComponent): React.JSX.Element => <DForm
@@ -45,6 +45,6 @@ export const Playground: Story = {
 export const Callbacks: Story = {
     args: {
         label: 'Password field',
-        callbacks: componentsCallbacks
+        ...componentsCallbacks
     },
 };

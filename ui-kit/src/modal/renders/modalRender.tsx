@@ -6,7 +6,7 @@
  * @license MIT
  */
 
-import { DraggableRender } from './draggableRender';
+import { DraggableRender } from '@src/modal';
 import React from 'react';
 
 export const ModalRender = (node: React.ReactNode): React.JSX.Element => {

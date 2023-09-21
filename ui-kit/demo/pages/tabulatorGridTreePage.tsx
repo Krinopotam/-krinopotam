@@ -10,7 +10,7 @@
     const source = `// noinspection DuplicatedCode
 
 import React from 'react';
-import TabulatorGrid, {IReactTabulatorProps, IGridRowData} from '@src/tabulator-grid';
+import TabulatorGrid, {IReactTabulatorProps, IGridRowData} from '@src/tabulatorGrid';
 
 const columns: IReactTabulatorProps['columns'] = [
     {title: 'Name', field: 'name'},

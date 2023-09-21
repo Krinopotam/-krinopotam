@@ -1,6 +1,6 @@
 import React from "react";
-import {DForm} from "@src/dynamic-form";
-import {IDFormFieldNumberProps, NumberComponent} from "@src/dynamic-form/components/numberComponent";
+import {DForm} from "@src/dynamicForm";
+import {IDFormFieldNumberProps, NumberComponent} from "@src/dynamicForm/components/numberComponent";
 
 type IComponent = Omit<IDFormFieldNumberProps, 'component'>
 
@@ -8,7 +8,7 @@ type IComponent = Omit<IDFormFieldNumberProps, 'component'>
 export const NumberField = (props: IComponent): React.JSX.Element => <DForm
     buttons={null}
     fieldsProps={
-        {field1: {...props, component: NumberComponent}}
+        {field1: {...props, component: NumberComponent} satisfies IDFormFieldNumberProps }
     }/>
 
 export default NumberField

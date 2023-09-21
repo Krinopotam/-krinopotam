@@ -1,5 +1,5 @@
 import {Col, Row, TreeSelectProps} from 'antd';
-import {DFormModal, IDFormModalProps} from '../dynamic-form-modal';
+import {DFormModal, IDFormModalProps} from '@src/dynamicFormModal';
 import React, {useEffect, useMemo, useState} from 'react';
 import {HelpersStrings, HelpersObjects} from "@krinopotam/js-helpers";
 import {TreeSelectRender} from './renders/treeSelectRender';
@@ -7,7 +7,7 @@ import {useEditableInit} from './hooks/useEditForm';
 import {ITreeSelectApi, useInitApi} from './hooks/api';
 import  {useGetActualProps} from '@krinopotam/common-hooks';
 import {TPromise} from '@krinopotam/service-types';
-import {ButtonsRow, IButtonsRowApi, IFormButtons} from '@src/buttons-row/buttonsRow';
+import {ButtonsRow, IButtonsRowApi, IFormButtons} from '@src/buttonsRow/buttonsRow';
 import {useInitButtons} from './hooks/buttons';
 
 //region Types

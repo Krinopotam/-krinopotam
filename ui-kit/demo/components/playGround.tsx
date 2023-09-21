@@ -6,7 +6,7 @@ import React, {useCallback} from 'react';
 
 import dayjs from 'dayjs';
 import {Button} from '@src/button';
-import {IDFormModalApi, DFormModal} from '@src/dynamic-form-modal';
+import {IDFormModalApi, DFormModal} from '@src/dynamicFormModal';
 import {
     DFormModalConfig,
     DateTimeComponentConfig,
@@ -15,8 +15,8 @@ import {
     SwitchComponentConfig,
     TabulatorGridComponentConfig,
     PasswordComponentConfig
-} from '@src/dynamic-form-modal/configBuilder';
-import {IRuleType} from '@src/dynamic-form/validators/baseValidator';
+} from '@src/dynamicFormModal/configBuilder';
+import {IRuleType} from '@src/dynamicForm/validators/baseValidator';
 
 dayjs.locale('ru');
 

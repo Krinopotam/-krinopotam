@@ -1,6 +1,6 @@
 import React from "react";
-import {DForm} from "@src/dynamic-form";
-import {IDFormFieldPasswordProps, PasswordComponent} from "@src/dynamic-form/components/passwordComponent";
+import {DForm} from "@src/dynamicForm";
+import {IDFormFieldPasswordProps, PasswordComponent} from "@src/dynamicForm/components/passwordComponent";
 
 type IComponent = Omit<IDFormFieldPasswordProps, 'component'>
 

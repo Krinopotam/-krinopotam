@@ -18,14 +18,14 @@ export default {
                 // language=text
                 code: `
                     import React from "react";
-                    import {DForm} from @krinopotam/ui-kit/dynamic-form";
-                    import {IDFormFieldDateTimeProps, DateTimeComponent} from @krinopotam/ui-kit/dynamic-form/components/dateTimeComponent";
+                    import {DForm} from @krinopotam/ui-kit/dynamicForm";
+                    import {IDFormFieldDateTimeProps, DateTimeComponent} from @krinopotam/ui-kit/dynamicForm/components/dateTimeComponent";
                     type IComponent = Omit<IDFormFieldDateTimeProps, 'component'>
                     /** DynamicForm DateTime component */
                     export const DateTimeField = (props: IComponent): React.JSX.Element => <DForm
                         buttons={null}
                         fieldsProps={
-                            {field1: {...props, component: DateTimeComponent}}
+                            {field1: {...props, component: DateTimeComponent} satisfies IDFormFieldDateTimeProps}
                         }
                     />
                     export default DateTimeField
@@ -89,6 +89,6 @@ export const Callbacks: Story = {
     args: {
         label: 'DateTime field',
         mode:'dateTime',
-        callbacks: componentsCallbacks
+        ...componentsCallbacks
     },
 };

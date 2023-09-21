@@ -1,7 +1,7 @@
 import {useMemo, useState} from 'react';
 import {HelpersStrings} from "@krinopotam/js-helpers";
 import {ITreeSelectNode} from '../treeSelect';
-import {IDFormModalProps, IDFormModalApi} from '../../dynamic-form-modal';
+import {IDFormModalProps, IDFormModalApi} from '@src/dynamicFormModal';
 import {ITreeSelectApi} from './api';
 
 export const useEditableInit = (api: ITreeSelectApi): [typeof formProps, typeof formApi] => {

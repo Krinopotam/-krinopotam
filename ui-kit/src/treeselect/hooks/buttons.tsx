@@ -1,10 +1,10 @@
-import {IFormButtons} from '../../buttons-row/buttonsRow';
+import {IFormButtons} from '@src/buttonsRow/buttonsRow';
 import {HelpersObjects} from "@krinopotam/js-helpers";
 import React, {useMemo} from 'react';
 import {ITreeSelectApi} from './api';
 import {DeleteOutlined, EditOutlined, PlusOutlined} from '@ant-design/icons';
-import {IDFormModalApi} from '../../dynamic-form-modal';
-import {MessageBoxApi, MessageBox} from '../../message-box';
+import {IDFormModalApi} from '@src/dynamicFormModal';
+import {MessageBoxApi, MessageBox} from '@src/messageBox';
 import {ITreeSelectDeletePromise} from '../treeSelect';
 
 /** Generate buttons */

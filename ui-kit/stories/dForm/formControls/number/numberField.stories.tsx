@@ -17,14 +17,14 @@ export default {
                 // language=text
                 code: `
                     import React from "react";
-                    import {DForm} from @krinopotam/ui-kit/dynamic-form";
-                    import {IDFormFieldNumberProps, NumberComponent} from @krinopotam/ui-kit/dynamic-form/components/numberComponent";
+                    import {DForm} from @krinopotam/ui-kit/dynamicForm";
+                    import {IDFormFieldNumberProps, NumberComponent} from @krinopotam/ui-kit/dynamicForm/components/numberComponent";
                     type IComponent = Omit<IDFormFieldNumberProps, 'component'>
                     /** DynamicForm Number component */
                     export const NumberField = (props: IComponent): React.JSX.Element => <DForm
                         buttons={null}
                         fieldsProps={
-                            {field1: {...props, component: NumberComponent}}
+                            {field1: {...props, component: NumberComponent} satisfies IDFormFieldNumberProps }
                         }/>
                     export default NumberField
                 `
@@ -45,6 +45,6 @@ export const Playground: Story = {
 export const Callbacks: Story = {
     args: {
         label: 'Number field',
-        callbacks: componentsCallbacks
+        ...componentsCallbacks
     },
 };

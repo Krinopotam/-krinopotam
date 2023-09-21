@@ -1,6 +1,6 @@
 import React from "react";
-import {DForm} from "@src/dynamic-form";
-import {IDFormFieldLinkProps, LinkComponent} from "@src/dynamic-form/components/linkComponent";
+import {DForm} from "@src/dynamicForm";
+import {IDFormFieldLinkProps, LinkComponent} from "@src/dynamicForm/components/linkComponent";
 
 type IComponent = Omit<IDFormFieldLinkProps, 'component'>
 
@@ -8,7 +8,7 @@ type IComponent = Omit<IDFormFieldLinkProps, 'component'>
 export const LinkField = (props: IComponent): React.JSX.Element => <DForm
     buttons={null}
     fieldsProps={
-        {field1: {...props, component: LinkComponent}}
+        {field1: {...props, component: LinkComponent} satisfies IDFormFieldLinkProps}
     }
 />
 

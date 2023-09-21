@@ -1,8 +1,8 @@
 // noinspection DuplicatedCode
 
 import React from 'react';
-import {DFormModalConfig, NumberComponentConfig, InputComponentConfig} from '@src/dynamic-form-modal/configBuilder';
-import TabulatorGrid, {IReactTabulatorProps, IGridRowData} from '@src/tabulator-grid';
+import {DFormModalConfig, NumberComponentConfig, InputComponentConfig} from '@src/dynamicFormModal/configBuilder';
+import TabulatorGrid, {IReactTabulatorProps, IGridRowData} from '@src/tabulatorGrid';
 
 type IPerson = {
     id: string;
@@ -78,23 +78,23 @@ export const TabulatorGridWithFormAsync = (): React.JSX.Element => {
                 confirmDelete
                 height={500}
                 layout={'fitColumns'}
-                callbacks={{
-                    onDataFetch: () => {
-                        return new Promise((resolve, reject) => {
-                            setTimeout(() => {
-                                if (Math.random() < 0.3) reject({message: 'Ошибка загрузки данных', code: 400});
-                                else resolve({data: dataSet});
-                            }, 2000);
-                        });
-                    },
-                    onDelete: () => {
-                        return new Promise((resolve, reject) => {
-                            setTimeout(() => {
-                                if (Math.random() < 0.3) reject({message: 'Ошибка удаления строк', code: 400});
-                                else resolve({data: {result: 'OK'}});
-                            }, 2000);
-                        });
-                    },
+
+                onDataFetch={() => {
+                    return new Promise((resolve, reject) => {
+                        setTimeout(() => {
+                            if (Math.random() < 0.3) reject({message: 'Ошибка загрузки данных', code: 400});
+                            else resolve({data: dataSet});
+                        }, 2000);
+                    });
+                }}
+
+                onDelete={() => {
+                    return new Promise((resolve, reject) => {
+                        setTimeout(() => {
+                            if (Math.random() < 0.3) reject({message: 'Ошибка удаления строк', code: 400});
+                            else resolve({data: {result: 'OK'}});
+                        }, 2000);
+                    });
                 }}
             />
         </>

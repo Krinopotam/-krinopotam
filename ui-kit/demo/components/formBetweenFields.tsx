@@ -1,10 +1,10 @@
 // noinspection DuplicatedCode
 
-import {DForm} from '@src/dynamic-form';
-import {DFormConfig} from '@src/dynamic-form/configBuilder/dFormConfig';
+import {DForm} from '@src/dynamicForm';
+import {DFormConfig} from '@src/dynamicForm/configBuilder/dFormConfig';
 import React from 'react';
-import {TreeSelectComponentConfig} from '@src/dynamic-form/configBuilder/treeSelectComponentConfig';
-import {IDFormFieldTreeSelectProps} from '@src/dynamic-form/components/treeSelectComponent';
+import {TreeSelectComponentConfig} from '@src/dynamicForm/configBuilder/treeSelectComponentConfig';
+import {IDFormFieldTreeSelectProps} from '@src/dynamicForm/components/treeSelectComponent';
 
 interface IFields {
     tip: string;

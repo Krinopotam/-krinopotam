@@ -1,7 +1,7 @@
-import {DForm} from '../src/dynamic-form';
-import {DFormConfig} from "../src/dynamic-form/configBuilder/dFormConfig";
-import {InputComponentConfig} from "../src/dynamic-form/configBuilder/inputComponentConfig";
-import {PasswordComponentConfig} from "../src/dynamic-form/configBuilder/passwordComponentConfig";
+import {DForm} from '@src/dynamicForm';
+import {DFormConfig} from "@src/dynamicForm/configBuilder/dFormConfig";
+import {InputComponentConfig} from "@src/dynamicForm/configBuilder/inputComponentConfig";
+import {PasswordComponentConfig} from "@src/dynamicForm/configBuilder/passwordComponentConfig";
 
 
 export default {

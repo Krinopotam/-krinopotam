@@ -7,7 +7,7 @@
  */
 
 import {useEffect} from 'react';
-import dispatcher from '../../forms-dispatcher';
+import dispatcher from '@src/formsDispatcher';
 
 export const useInitFormDispatcher = (formId: string, isFormOpen: boolean) => {
     useEffect(() => {

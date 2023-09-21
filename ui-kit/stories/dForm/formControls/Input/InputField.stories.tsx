@@ -18,14 +18,14 @@ export default {
                 // language=text
                 code: `
                     import React from "react";
-                    import {DForm} from @krinopotam/ui-kit/dynamic-form";
-                    import {IDFormFieldInputProps, InputComponent} from @krinopotam/ui-kit/dynamic-form/components/inputComponent";
+                    import {DForm} from @krinopotam/ui-kit/dynamicForm";
+                    import {IDFormFieldInputProps, InputComponent} from @krinopotam/ui-kit/dynamicForm/components/inputComponent";
                     type IComponent = Omit<IDFormFieldInputProps, 'component'>
                     /** DynamicForm Input component */
                     export const InputField = (props: IComponent): React.JSX.Element => <DForm
                         buttons={null}
                         fieldsProps={
-                            {field1: {...props, component: InputComponent}}
+                            {field1: {...props, component: InputComponent} satisfies IDFormFieldInputProps}
                         }
                     />
                     export default InputField
@@ -46,6 +46,6 @@ export const Playground: Story = {
 export const Callbacks: Story = {
     args: {
         label: 'Input field',
-        callbacks: componentsCallbacks
+        ...componentsCallbacks
     },
 };

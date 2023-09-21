@@ -41,7 +41,7 @@ const preview:Preview = {
         },
         options: {
             storySort: {
-                order: ['DForm', ['Controls', 'Examples', 'Advanced Examples']],
+                order: ['Controls', 'DForm', ['Controls', 'Examples', 'Advanced Examples']],
             },
         },
     },

@@ -12,7 +12,7 @@
 import React, {useCallback, useState} from 'react';
 
 import {Button} from '@src/button';
-import TabulatorGrid, {IReactTabulatorProps, IGridProps, IGridApi, IGridRowData} from '@src/tabulator-grid';
+import TabulatorGrid, {IReactTabulatorProps, IGridProps, IGridApi, IGridRowData} from '@src/tabulatorGrid';
 
 const columns: IReactTabulatorProps['columns'] = [
     {title: 'Column 1', field: 'col1'},

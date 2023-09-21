@@ -21,14 +21,14 @@ if exist src\css (
 	robocopy src\css dist\css /E /NJH /NJS /NFL /NDL
 )
 
-if exist src\dynamic-form\css (
-	@echo src\dynamic-form\css
-	robocopy src\dynamic-form\css dist\dynamic-form\css /E /NJH /NJS /NFL /NDL
+if exist src\dynamicForm\css (
+	@echo src\dynamicForm\css
+	robocopy src\dynamicForm\css dist\dynamicForm\css /E /NJH /NJS /NFL /NDL
 )
 
-if exist src\message-box\css (
-	@echo src\message-box\css
-	robocopy src\message-box\css dist\message-box\css /E /NJH /NJS /NFL /NDL
+if exist src\messageBox\css (
+	@echo src\messageBox\css
+	robocopy src\messageBox\css dist\messageBox\css /E /NJH /NJS /NFL /NDL
 )
 
 if exist src\modal\css (

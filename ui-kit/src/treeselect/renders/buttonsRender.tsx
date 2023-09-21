@@ -6,7 +6,7 @@
  * @license MIT
  */
 
-import {ButtonsRow, IButtonsRowApi, IFormButtons} from '../../buttons-row/buttonsRow';
+import {ButtonsRow, IButtonsRowApi, IFormButtons} from '@src/buttonsRow/buttonsRow';
 
 import React from 'react';
 

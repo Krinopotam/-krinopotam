@@ -1,6 +1,6 @@
 import React from "react";
-import {DForm} from "@src/dynamic-form";
-import {IDFormFieldCheckBoxProps, CheckboxComponent} from "@src/dynamic-form/components/checkboxComponent";
+import {DForm} from "@src/dynamicForm";
+import {IDFormFieldCheckBoxProps, CheckboxComponent} from "@src/dynamicForm/components/checkboxComponent";
 
 type IComponent = Omit<IDFormFieldCheckBoxProps, 'component'>
 
@@ -8,7 +8,7 @@ type IComponent = Omit<IDFormFieldCheckBoxProps, 'component'>
 export const CheckboxField = (props: IComponent): React.JSX.Element => <DForm
     buttons={null}
     fieldsProps={
-        {field1: {...props, component: CheckboxComponent}}
+        {field1: {...props, component: CheckboxComponent} satisfies IDFormFieldCheckBoxProps}
     }/>
 
 export default CheckboxField

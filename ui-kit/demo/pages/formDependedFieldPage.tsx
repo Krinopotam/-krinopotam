@@ -10,9 +10,9 @@
     const source = `// noinspection DuplicatedCode
 
 import React from 'react';
-import {DForm} from '@src/dynamic-form';
-import {DFormConfig} from '@src/dynamic-form/configBuilder/dFormConfig';
-import {InputComponentConfig} from '@src/dynamic-form/configBuilder/inputComponentConfig';
+import {DForm} from '@src/dynamicForm';
+import {DFormConfig} from '@src/dynamicForm/configBuilder/dFormConfig';
+import {InputComponentConfig} from '@src/dynamicForm/configBuilder/inputComponentConfig';
 
 interface IFields {
     field1: string;

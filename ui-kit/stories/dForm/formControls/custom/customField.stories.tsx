@@ -18,14 +18,14 @@ export default {
                 // language=text
                 code: `
                     import React from "react";
-                    import {DForm} from @krinopotam/ui-kit/dynamic-form";
-                    import {IDFormFieldCustomProps, CustomComponent} from @krinopotam/ui-kit/dynamic-form/components/customComponent";
+                    import {DForm} from @krinopotam/ui-kit/dynamicForm";
+                    import {IDFormFieldCustomProps, CustomComponent} from @krinopotam/ui-kit/dynamicForm/components/customComponent";
                     type IComponent = Omit<IDFormFieldCustomProps, 'component'>
                     /** DynamicForm Custom component */
                     export const CustomField = (props: IComponent): React.JSX.Element => <DForm
                         buttons={null}
                         fieldsProps={
-                            {field1: {...props, component: CustomComponent}}
+                            {field1: {...props, component: CustomComponent} satisfies IDFormFieldCustomProps}
                         }
                     />
                     export default CustomField

@@ -1,11 +1,11 @@
 // noinspection DuplicatedCode
 
 import React from 'react';
-import {DForm} from '@src/dynamic-form';
-import {IDFormModalApi} from '@src/dynamic-form-modal';
-import {DFormConfig} from '@src/dynamic-form/configBuilder/dFormConfig';
-import {TreeSelectComponentConfig} from '@src/dynamic-form/configBuilder/treeSelectComponentConfig';
-import {IDFormFieldTreeSelectProps} from "@src/dynamic-form/components/treeSelectComponent";
+import {DForm} from '@src/dynamicForm';
+import {IDFormModalApi} from '@src/dynamicFormModal';
+import {DFormConfig} from '@src/dynamicForm/configBuilder/dFormConfig';
+import {TreeSelectComponentConfig} from '@src/dynamicForm/configBuilder/treeSelectComponentConfig';
+import {IDFormFieldTreeSelectProps} from "@src/dynamicForm/components/treeSelectComponent";
 
 interface IFields {
     department: {id: string; title: string};

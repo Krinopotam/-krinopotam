@@ -11,8 +11,8 @@
 
 import React, {useCallback} from 'react';
 import {Button} from '@src/button';
-import {IDFormModalApi, DFormModal} from '@src/dynamic-form-modal';
-import {DFormModalConfig, InputComponentConfig, PasswordComponentConfig} from '@src/dynamic-form-modal/configBuilder';
+import {IDFormModalApi, DFormModal} from '@src/dynamicFormModal';
+import {DFormModalConfig, InputComponentConfig, PasswordComponentConfig} from '@src/dynamicFormModal/configBuilder';
 
 interface IFields {
     login: string;

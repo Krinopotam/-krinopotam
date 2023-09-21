@@ -18,17 +18,22 @@ export default {
                 // language=text
                 code: `
                     import React from "react";
-                    import {DForm} from @krinopotam/ui-kit/dynamic-form";
-                    import {IDFormFieldCustomProps, CustomComponent} from @krinopotam/ui-kit/dynamic-form/components/customComponent";
-                    type IComponent = Omit<IDFormFieldCustomProps, 'component'>
-                    /** DynamicForm Custom component */
-                    export const CustomField = (props: IComponent): React.JSX.Element => <DForm
+                    import {DForm} from @krinopotam/ui-kit/dynamicForm";
+                    import {IDFormFieldDividerProps, DividerComponent} from @krinopotam/ui-kit/dynamicForm/components/dividerComponent";
+                    import {IDFormFieldInputProps, InputComponent} from @krinopotam/ui-kit/dynamicForm/components/inputComponent";
+                    type IComponent = Omit<IDFormFieldDividerProps, 'component'>
+                    /** DynamicForm Divider component */
+                    export const DividerField = (props: IComponent): React.JSX.Element => <DForm
                         buttons={null}
                         fieldsProps={
-                            {field1: {...props, component: CustomComponent}}
+                            {
+                                field1: {label: 'Field 1', component: InputComponent} satisfies IDFormFieldInputProps,
+                                divider: {...props, component: DividerComponent} satisfies IDFormFieldDividerProps,
+                                field2: {label: 'Field 2', component: InputComponent} satisfies IDFormFieldInputProps,
+                            }
                         }
                     />
-                    export default CustomField
+                    export default DividerField
                 `
             }
             /* AUTO-SOURCE-INJECT-END */

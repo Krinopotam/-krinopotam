@@ -12,7 +12,7 @@ import 'antd/es/date-picker/style/index';
 import {Dayjs} from 'dayjs';
 import {SharedTimeProps} from 'rc-picker/lib/panels/TimePanel/index';
 import React from "react";
-import {dayjs} from "@src/dynamic-form/components/dateTimeComponent";
+import {dayjs} from "@src/dynamicForm/components/dateTimeComponent";
 import {DisabledTime} from 'rc-picker/lib/interface';
 
 
@@ -51,7 +51,7 @@ export const DatePicker = ({
                            }: IDatePickerProps): React.JSX.Element => {
 
 
-    const [fieldMode, fieldPicker, fieldFormat, fieldShowTime] = GetTimePickerParams(mode, timeMode, format)
+    const [fieldMode, fieldPicker, fieldFormat, fieldShowTime] = GetDatePickerParams(mode, timeMode, format)
 
     const fieldValue = value ? dayjs(value, fieldFormat) : undefined;
 
@@ -69,7 +69,6 @@ export const DatePicker = ({
             picker={fieldPicker}
 
             value={fieldValue}
-
         />
         //<AntDatePicker {...props} />
     );
@@ -78,7 +77,7 @@ export const DatePicker = ({
 type IDatePickerMode = "time" | "date" | "week" | "month" | "quarter" | "year" | undefined
 type IDatePickerPickerMode = "date" | "week" | "month" | "quarter" | "year" | undefined
 
-export const GetTimePickerParams = (mode: IDatePickerProps['mode'], timeMode: IDatePickerProps['timeMode'], format?: string): [IDatePickerMode, IDatePickerPickerMode, string, SharedTimeProps<Dayjs> | undefined] => {
+export const GetDatePickerParams = (mode: IDatePickerProps['mode'], timeMode: IDatePickerProps['timeMode'], format?: string): [IDatePickerMode, IDatePickerPickerMode, string, SharedTimeProps<Dayjs> | undefined] => {
     let fieldMode: IDatePickerMode
     let fieldPicker: IDatePickerPickerMode
 
@@ -86,7 +85,7 @@ export const GetTimePickerParams = (mode: IDatePickerProps['mode'], timeMode: ID
     if (timeMode === 'minutes') timeFormat = "HH:mm"
     else if (timeMode === 'hours') timeFormat = "HH"
 
-    const fieldFormat = GetTimePickerFormat(mode, timeMode, format);
+    const fieldFormat = GetDatePickerFormat(mode, timeMode, format);
 
     let fieldShowTime: SharedTimeProps<Dayjs> | undefined
     if (!mode || mode === 'date') {
@@ -116,7 +115,7 @@ export const GetTimePickerParams = (mode: IDatePickerProps['mode'], timeMode: ID
     return [fieldMode, fieldPicker, fieldFormat, fieldShowTime]
 }
 
-export const GetTimePickerFormat = (mode: IDatePickerProps['mode'], timeMode: IDatePickerProps['timeMode'], format?: IDatePickerProps['format']) => {
+export const GetDatePickerFormat = (mode: IDatePickerProps['mode'], timeMode: IDatePickerProps['timeMode'], format?: IDatePickerProps['format']) => {
     let timeFormat = "HH:mm:ss"
     if (timeMode === 'minutes') timeFormat = "HH:mm"
     else if (timeMode === 'hours') timeFormat = "HH"

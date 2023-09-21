@@ -1,6 +1,6 @@
 import React from "react";
-import {DForm} from "@src/dynamic-form";
-import {IDFormFieldCustomProps, CustomComponent} from "@src/dynamic-form/components/customComponent";
+import {DForm} from "@src/dynamicForm";
+import {IDFormFieldCustomProps, CustomComponent} from "@src/dynamicForm/components/customComponent";
 
 type IComponent = Omit<IDFormFieldCustomProps, 'component'>
 
@@ -8,7 +8,7 @@ type IComponent = Omit<IDFormFieldCustomProps, 'component'>
 export const CustomField = (props: IComponent): React.JSX.Element => <DForm
     buttons={null}
     fieldsProps={
-        {field1: {...props, component: CustomComponent}}
+        {field1: {...props, component: CustomComponent} satisfies IDFormFieldCustomProps}
     }
 />
 
