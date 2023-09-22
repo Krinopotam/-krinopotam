@@ -1,6 +1,5 @@
 import {IDFormFieldProps} from '@src/dynamicForm/components/baseComponent';
 import {BaseComponentConfig} from './baseComponentConfig';
-import {IDFormFieldLinkProps, LinkComponent} from '@src/dynamicForm/components/linkComponent';
 
 
 export class LinkComponentConfig<T>  extends BaseComponentConfig<T> {

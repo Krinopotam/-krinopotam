@@ -1,6 +1,5 @@
 import {IDFormFieldProps} from '@src/dynamicForm/components/baseComponent';
 import {BaseComponentConfig} from './baseComponentConfig';
-import {IDFormFieldCheckBoxProps, CheckboxComponent} from '@src/dynamicForm/components/checkboxComponent';
 
 
 export class CheckboxComponentConfig<T>  extends BaseComponentConfig<T> {

@@ -1,6 +1,5 @@
 import {IDFormFieldProps} from '@src/dynamicForm/components/baseComponent';
 import {BaseComponentConfig} from './baseComponentConfig';
-import {IDFormFieldDragAndDropProps, DragAndDropComponent} from '@src/dynamicForm/components/dragAndDropComponent';
 
 
 export class DragAndDropComponentConfig<T>  extends BaseComponentConfig<T> {

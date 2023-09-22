@@ -1,6 +1,5 @@
 import {IDFormFieldProps} from '@src/dynamicForm/components/baseComponent';
 import {BaseComponentConfig} from './baseComponentConfig';
-import {IDFormFieldQuillEditorProps, QuillEditorComponent} from '@src/dynamicForm/components/quillEditorComponent';
 
 
 export class QuillEditorComponentConfig<T>  extends BaseComponentConfig<T> {

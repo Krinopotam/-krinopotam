@@ -15,7 +15,7 @@ import {DFormConfig} from '@src/dynamicForm/configBuilder/dFormConfig';
 import {TreeSelectComponentConfig} from '@src/dynamicForm/configBuilder/treeSelectComponentConfig';
 
 interface IFields {
-    departments: {id: string; title: string};
+    departments: { id: string; title: string };
 }
 
 const dataSet = [
@@ -126,15 +126,13 @@ const formProps = new DFormConfig<IFields>('Test form')
             .label('Подразделения')
             .fetchMode('onUse')
             .noCacheFetchedData(true)
-            .callbacks({
-                onDataFetch: () => {
-                    return new Promise((resolve, reject) => {
-                        setTimeout(() => {
-                            if (Math.random() < 0.0) reject({message: 'Ошибка загрузки данных', code: 400});
-                            else resolve({data: dataSet});
-                        }, 2000);
-                    });
-                },
+            .onDataFetch(() => {
+                return new Promise((resolve, reject) => {
+                    setTimeout(() => {
+                        if (Math.random() < 0.0) reject({message: 'Ошибка загрузки данных', code: 400});
+                        else resolve({data: dataSet});
+                    }, 2000);
+                });
             })
     )
     .buttons(null)

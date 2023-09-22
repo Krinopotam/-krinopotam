@@ -6,7 +6,7 @@ import {DFormConfig} from '@src/dynamicForm/configBuilder/dFormConfig';
 import {TreeSelectComponentConfig} from '@src/dynamicForm/configBuilder/treeSelectComponentConfig';
 
 interface IFields {
-    departments: {id: string; title: string};
+    departments: { id: string; title: string };
 }
 
 const dataSet = [
@@ -117,15 +117,13 @@ const formProps = new DFormConfig<IFields>('Test form')
             .label('Подразделения')
             .fetchMode('onUse')
             .noCacheFetchedData(true)
-            .callbacks({
-                onDataFetch: () => {
-                    return new Promise((resolve, reject) => {
-                        setTimeout(() => {
-                            if (Math.random() < 0.0) reject({message: 'Ошибка загрузки данных', code: 400});
-                            else resolve({data: dataSet});
-                        }, 2000);
-                    });
-                },
+            .onDataFetch(() => {
+                return new Promise((resolve, reject) => {
+                    setTimeout(() => {
+                        if (Math.random() < 0.0) reject({message: 'Ошибка загрузки данных', code: 400});
+                        else resolve({data: dataSet});
+                    }, 2000);
+                });
             })
     )
     .buttons(null)
@@ -140,13 +138,13 @@ export const TreeSelectAsync = (): React.JSX.Element => {
             <p>Для примера, с вероятность 30% произойдет ошибка загрузки данных</p>
             <p>
                 Режим запроса данных определяется при помощи параметра <b>fetchMode</b>
-                </p>
-                <ul>
+            </p>
+            <ul>
                 <li><b>onLoad</b> - запрос данных сразу при загрузке компонента TreeView (по умолчанию)</li>
                 <li><b>onUse</b> - загрузка данных при открытии выпадающей формы TreeView</li>
             </ul>
             <p>
-                Если данные загружены в полном объеме (с пустой строкой поиска), то они кэшируются. Параметр <b>noCacheFetchedData</b> позволяет изменить данное поведение. 
+                Если данные загружены в полном объеме (с пустой строкой поиска), то они кэшируются. Параметр <b>noCacheFetchedData</b> позволяет изменить данное поведение.
             </p>
             {/*Description End*/}
             <div style={{maxWidth: 500}}>

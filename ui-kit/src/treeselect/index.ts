@@ -5,7 +5,6 @@ export type {
     ITreeSelectProps,
     ITreeSelectValue,
     IAntTreeSelectProps,
-    ITreeSelectCallbacks,
     ITreeSelectDeletePromise,
     ITreeSelectSourcePromise
 } from './treeSelect';

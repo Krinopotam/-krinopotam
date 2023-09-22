@@ -5,12 +5,12 @@ import {DForm} from '@src/dynamicForm';
 import {DFormConfig} from '@src/dynamicForm/configBuilder/dFormConfig';
 import {TreeSelectComponentConfig} from '@src/dynamicForm/configBuilder/treeSelectComponentConfig';
 import {ITreeSelectSourcePromise} from '@src/treeselect'
-import {HelpersObjects}  from "@krinopotam/js-helpers";
+import {HelpersObjects} from "@krinopotam/js-helpers";
 
 
 /*Description Start*/
 interface IFields {
-    departments: {id: string; title: string};
+    departments: { id: string; title: string };
 }
 
 interface IDataRow {
@@ -162,10 +162,8 @@ const formProps = new DFormConfig<IFields>('Test form')
             .fetchMode('onUse')
             .noCacheFetchedData(true)
             .minSearchLength(1)
-            .callbacks({
-                onDataFetch: (search: string) => {
-                    return asyncFetch(search) as ITreeSelectSourcePromise;
-                },
+            .onDataFetch((search: string) => {
+                return asyncFetch(search) as ITreeSelectSourcePromise;
             })
     )
     .buttons(null)

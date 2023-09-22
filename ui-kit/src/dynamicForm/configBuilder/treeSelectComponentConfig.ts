@@ -1,7 +1,5 @@
 import {IDFormFieldProps} from '@src/dynamicForm/components/baseComponent';
 import {BaseComponentConfig} from './baseComponentConfig';
-import {IDFormFieldTreeSelectProps, TreeSelectComponent} from '@src/dynamicForm/components/treeSelectComponent';
-import {ITreeSelectProps} from '@src/treeselect';
 
 
 export class TreeSelectComponentConfig<T>  extends BaseComponentConfig<T> {
@@ -156,8 +154,8 @@ export class TreeSelectComponentConfig<T>  extends BaseComponentConfig<T> {
         return this;
     }
 
-    /** fires when a field is completely initialized, its data is loaded */
-    onReady(value: IDFormFieldProps['onReady']) {
+    
+    onReady(value: IDFormFieldTreeSelectProps['onReady']) {
         this._config.onReady = value;
         return this;
     }
@@ -210,7 +208,7 @@ export class TreeSelectComponentConfig<T>  extends BaseComponentConfig<T> {
         return this;
     }
 
-    /**  Start etching remote data on load control or on use control (example, open dropdown). Default OnLoad */
+    /**  Start fetching remote data on load control or on use control (example, open dropdown). Default OnLoad */
     fetchMode(value: ITreeSelectProps['fetchMode']) {
         this._config.fetchMode = value;
         return this;
@@ -270,9 +268,39 @@ export class TreeSelectComponentConfig<T>  extends BaseComponentConfig<T> {
         return this;
     }
 
-    /** The TreeSelect callbacks */
-    callbacks(value: ITreeSelectProps['callbacks']) {
-        this._config.callbacks = value;
+    /** Fires on input value cleared */
+    onClear(value: ITreeSelectProps['onClear']) {
+        this._config.onClear = value;
+        return this;
+    }
+
+    /** fires when the TreeSelect trying to fetch data */
+    onDataFetch(value: ITreeSelectProps['onDataFetch']) {
+        this._config.onDataFetch = value;
+        return this;
+    }
+
+    /** fires when the TreeSelect fetch success */
+    onDataFetchSuccess(value: ITreeSelectProps['onDataFetchSuccess']) {
+        this._config.onDataFetchSuccess = value;
+        return this;
+    }
+
+    /** fires when the TreeSelect fetch failed */
+    onDataFetchError(value: ITreeSelectProps['onDataFetchError']) {
+        this._config.onDataFetchError = value;
+        return this;
+    }
+
+    /** fires after the completion of fetching the data, regardless of the result */
+    onDataFetchComplete(value: ITreeSelectProps['onDataFetchComplete']) {
+        this._config.onDataFetchComplete = value;
+        return this;
+    }
+
+    /** Callback executed when selected node delete */
+    onDelete(value: ITreeSelectProps['onDelete']) {
+        this._config.onDelete = value;
         return this;
     }
 

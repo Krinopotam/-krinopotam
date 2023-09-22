@@ -54,7 +54,7 @@ const deleteHandler = (api: ITreeSelectApi) => {
 
     let messageBox: MessageBoxApi;
     const removeRows = () => {
-        const deletePromise = treeProps.callbacks?.onDelete?.(selectedNodes, api);
+        const deletePromise = treeProps?.onDelete?.(selectedNodes, api);
 
         if (HelpersObjects.isPromise(deletePromise)) {
             if (!treeProps.confirmDelete) {

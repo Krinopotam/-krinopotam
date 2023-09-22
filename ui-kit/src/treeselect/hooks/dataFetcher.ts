@@ -19,7 +19,7 @@ export const useDataFetcher = (api: ITreeSelectApi) => {
             api.setSetMynSymbols(0);
             api.setSetFetchError(null);
 
-            const dataSource = treeProps.callbacks?.onDataFetch?.(searchString, api);
+            const dataSource = treeProps?.onDataFetch?.(searchString, api);
             if (!dataSource) {
                 api.setIsAllFetched(true);
                 return;
@@ -37,13 +37,13 @@ export const useDataFetcher = (api: ITreeSelectApi) => {
 
                     if (!api.getIsReady()) {
                         api.setIsReady(true);
-                        treeProps?.callbacks?.onReady?.();
+                        treeProps?.onReady?.();
                     }
 
                     api.setIsFetching(false);
 
-                    treeProps.callbacks?.onDataFetchSuccess?.(result, api);
-                    treeProps.callbacks?.onDataFetchComplete?.(api);
+                    treeProps?.onDataFetchSuccess?.(result, api);
+                    treeProps?.onDataFetchComplete?.(api);
                 },
                 (error: { message: string }) => {
                     if (!api.isMounted()) return;

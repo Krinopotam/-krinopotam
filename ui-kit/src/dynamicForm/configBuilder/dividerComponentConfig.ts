@@ -1,6 +1,5 @@
 import {IDFormFieldProps} from '@src/dynamicForm/components/baseComponent';
 import {BaseComponentConfig} from './baseComponentConfig';
-import {IDFormFieldDividerProps, DividerComponent} from '@src/dynamicForm/components/dividerComponent';
 
 
 export class DividerComponentConfig<T>  extends BaseComponentConfig<T> {

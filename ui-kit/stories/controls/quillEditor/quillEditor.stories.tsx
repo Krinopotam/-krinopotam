@@ -26,6 +26,7 @@ export const Default: Story = {
 
 export const ToolbarConfig: Story = {
     args: {
+        placeholder:'Input text',
         toolbar:[['bold', 'italic', 'underline'], ['link']]
     },
 }

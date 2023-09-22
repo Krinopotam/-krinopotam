@@ -111,6 +111,7 @@ const dataSet = [
 interface IEditFormFields {
     title: string;
 }
+
 const editForm = new DFormModalConfig<IEditFormFields>('EditForm')
     .confirmChanges(true)
     .bodyHeight(100)
@@ -128,7 +129,7 @@ const editForm = new DFormModalConfig<IEditFormFields>('EditForm')
     .getConfig();
 
 interface IFields {
-    departments: {id: string; title: string};
+    departments: { id: string; title: string };
 }
 
 const formProps = new DFormConfig<IFields>('Test form')
@@ -139,15 +140,13 @@ const formProps = new DFormConfig<IFields>('Test form')
             .editFormProps(editForm)
             .confirmDelete(true)
             .dataSet(dataSet)
-            .callbacks({
-                onDelete: () => {
-                    return new Promise((resolve, reject) => {
-                        setTimeout(() => {
-                            if (Math.random() < 0.3) reject({message: 'Ошибка удаления строк', code: 400});
-                            else resolve({data: {result: 'OK'}});
-                        }, 2000);
-                    });
-                },
+            .onDelete(() => {
+                return new Promise((resolve, reject) => {
+                    setTimeout(() => {
+                        if (Math.random() < 0.3) reject({message: 'Ошибка удаления строк', code: 400});
+                        else resolve({data: {result: 'OK'}});
+                    }, 2000);
+                });
             })
     )
     .buttons(null)

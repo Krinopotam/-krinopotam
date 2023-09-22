@@ -1,22 +1,33 @@
-/**
- * @typedef {Object} IClassProps
- * @property {string} className
- * @property {Object.<string, string>} [imports] - import props
- * @property {Object.<string, {[access]: string, [value]:string, type:string}>} [fields] - fields props
- * @property {{parameters: Object.<string, string>, rows:string[]}} [constructor] - constructor props
- * @property {Object.<string, {name: string, type: string, sourceType: string, comment}>} [propMethods] - propMethods
- * @property {Object.<string, string>} [additionalMethods] - additional methods props
- * @property {string} [types] - types props
- * @property {string} [implements] - types props
- * @property {string} [extends] - types props
- **/
+export interface IClassProps {
+    className: string,
 
-/**
- * Generate class text
- * @param {IClassProps} props
- * @returns {string}
- */
-module.exports.generateClass = function generateClass2(props) {
+    /** import props */
+    imports?: Record<string, string>,
+
+    /** fields props */
+    fields?: Record<string, { access?: string, value?: string, type: string }>
+
+    /** constructor props */
+    constructor?: { parameters: Record<string, string>, rows: string[] }
+
+    /** propMethods */
+    propMethods?: Record<string, { name: string, type: string, sourceType: string, comment: string }>
+
+    /** additional methods props */
+    additionalMethods?: Record<string, string>
+
+    /** types props */
+    types?: string
+
+    /** implements props */
+    implements?: string
+
+    /** extends props */
+    extends?: string
+}
+
+/** Generate class text  */
+export const generateClass = (props: IClassProps) => {
     return `${generateImports(props.imports)}
 ${props.types || ''}
 export class ${props.className} ${props.implements ? ' implements ' + props.implements : ''}${props.extends ? ' extends ' + props.extends : ''} {
@@ -27,16 +38,12 @@ ${generateAdditionalMethods(props.additionalMethods)}
 }`;
 };
 
-/**
- * generate import section
- * @param {Object.<string, string>} imports
- * @returns {string}
- */
-function generateImports(imports) {
+/** generate import section  */
+function generateImports(imports: IClassProps['imports']) {
     if (!imports) return '';
     let result = '';
 
-    const groupedImport = {};
+    const groupedImport: Record<string, string> = {};
     for (const resourceName in imports) {
         const resourcePath = imports[resourceName];
         if (!resourcePath) continue;
@@ -52,12 +59,8 @@ function generateImports(imports) {
     return result;
 }
 
-/**
- * Generate class fields section props
- * @param {Object.<string, {[access]: string, [value]:string, type:string}>} props
- * @returns {string}
- */
-function generateClassFields(props) {
+/** Generate class fields section props  */
+function generateClassFields(props: IClassProps['fields']) {
     if (!props) return '';
 
     let result = '';
@@ -71,12 +74,8 @@ function generateClassFields(props) {
     return result;
 }
 
-/**
- * Generate class constructor
- * @param {{parameters: Object.<string, string>, rows:string[]}} props
- * @returns {string}
- */
-function generateClassConstructor(props) {
+/** Generate class constructor  */
+function generateClassConstructor(props: IClassProps['constructor']) {
     if (!props) return '';
 
     let rows = '';
@@ -103,12 +102,8 @@ ${rows}
     }`;
 }
 
-/**
- * Generate property set methods
- * @param {Object.<string, {name: string, type: string, sourceType: string, comment}>} props
- * @returns {string}
- */
-function generatePropsMethods(props) {
+/** Generate property set methods */
+function generatePropsMethods(props: IClassProps['propMethods']) {
     if (!props) return '';
     let result = '';
     for (const name in props) {
@@ -118,12 +113,8 @@ function generatePropsMethods(props) {
     return result;
 }
 
-/**
- * Generate additional class methods
- * @param {Object.<string, string>} props
- * @returns {string}
- */
-function generateAdditionalMethods(props) {
+/** Generate additional class methods  */
+function generateAdditionalMethods(props: IClassProps['additionalMethods']) {
     if (!props) return '';
 
     let rows = '';
@@ -136,21 +127,12 @@ function generateAdditionalMethods(props) {
     return rows;
 }
 
-/**
- * @param {string} importName
- * @param {string} importPath
- * @returns {string}
- */
-function getImportTemplate(importName, importPath) {
+function getImportTemplate(importName: string, importPath: string) {
     return `import {${importName}} from '${importPath}';`;
 }
 
-/**
- * Generate the property set function
- * @param {{name: string, type: string, sourceType: string, comment}}  prop
- * @returns {string}
- */
-function generateProperty(prop) {
+/** Generate the property set function */
+function generateProperty(prop: { name: string, type: string, sourceType: string, comment: string }) {
     return `    ${prop.comment}
     ${prop.name}(value: ${prop.type}) {
         this._config.${prop.name} = value;

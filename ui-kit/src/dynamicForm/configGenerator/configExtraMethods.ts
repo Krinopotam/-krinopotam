@@ -1,20 +1,20 @@
 //region Form config extra methods
 // language=text
-module.exports.addField = `/** Add fields or fields inline groups */
+export const  addField = `/** Add fields or fields inline groups */
     addFields(...args: BaseComponentConfig<T>[]) {
         this.addFieldsConfig(undefined, args);
         return this;
     }`;
 
 // language=text
-module.exports.addTabs = `/** Add tabs */
+export const  addTabs = `/** Add tabs */
     addTab(tabName: string, ...args: BaseComponentConfig<T>[]) {
         this.addFieldsConfig(tabName, args);
         return this;
     }`;
 
 // language=text
-module.exports.addFieldsConfig = `/** Add field properties to form config */
+export const  addFieldsConfig = `/** Add field properties to form config */
     protected addFieldsConfig(tabName: string | undefined, configs: BaseComponentConfig<T>[]) {
         for (const config of configs) {
             this.updateFieldsProps(config, tabName);
@@ -23,7 +23,7 @@ module.exports.addFieldsConfig = `/** Add field properties to form config */
     }`;
 
 // language=text
-module.exports.updateFieldsProps = `/** Update the field properties */
+export const  updateFieldsProps = `/** Update the field properties */
     protected updateFieldsProps(configClass: BaseComponentConfig<T>, tabName?: string) {
         const id  = configClass.getId();
         const fieldProps = configClass.getConfig();
@@ -44,19 +44,19 @@ module.exports.updateFieldsProps = `/** Update the field properties */
 
 //region Components config extra methods
 // language=text
-module.exports.getId = `/** Get component id */
+export const  getId = `/** Get component id */
     getId() {
         return this._id;
     }`;
 
 // language=text
-module.exports.getValidationRules = `/** Get validation rules */
+export const  getValidationRules = `/** Get validation rules */
     getValidationRules() {
         return this._validationRules;
     }`;
 
 // language=text
-module.exports.addValidationRules =`/** Add validation rules */
+export const  addValidationRules =`/** Add validation rules */
     validationRules(...args: IRuleType[]) {
         for (const rule of args) {
             this._validationRules.push(rule)

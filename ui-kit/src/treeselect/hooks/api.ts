@@ -197,13 +197,13 @@ const useApiSetValue = (setValue: (value: ITreeSelectValue | null) => void, api:
             setValue(newVal ?? []);
 
             if (!newVal) {
-                treeProps.callbacks?.onChange?.(null);
+                treeProps?.onChange?.(null);
             } else if (!treeProps.multiple) {
-                treeProps.callbacks?.onChange?.(
+                treeProps?.onChange?.(
                     HelpersObjects.isArray(newVal) && (newVal as ITreeSelectNode[]).length > 0 ? (newVal as ITreeSelectNode[])[0] : (newVal as ITreeSelectNode)
                 );
             } else {
-                treeProps.callbacks?.onChange?.(newVal || []);
+                treeProps?.onChange?.(newVal || []);
             }
         },
         [api, setValue]

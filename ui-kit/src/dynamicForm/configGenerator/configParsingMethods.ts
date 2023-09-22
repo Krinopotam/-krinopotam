@@ -1,13 +1,13 @@
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const fs = require('fs');
+
+import fs from "fs";
+
+export type IComponentOptions = { modulePath: string, savePath: string, typeName: string, typePath: string }
+export type IProperty = { name: string, type: string, sourceType: string, comment: string }
 
 //region File data load/save
-/**
- * Load file
- * @param {{modulePath: string, savePath: string, typeName: string,typePath: string}} options
- * @returns {string}
- */
-function loadFile(options) {
+/** Load file */
+function loadFile(options: IComponentOptions) {
     const path = __dirname + '/' + options.modulePath;
     try {
         return fs.readFileSync(path, 'utf8');
@@ -16,63 +16,54 @@ function loadFile(options) {
     }
 }
 
-/**
- * Save content to file
- * @param {string} filePath
- * @param {string} content
- * @returns {string|undefined}
- */
-module.exports.saveFile = function saveFile(filePath, content) {
+/**  Save content to file */
+export const saveFile = (filePath: string, content: string): string | undefined => {
     const path = __dirname + '/' + filePath;
     try {
         fs.writeFileSync(path, content, 'utf8');
     } catch (err) {
-        return err;
+        return err as string;
     }
 };
 
 //endregion
 
 //region Parse interface properties
-/**
- * Get interface text from file content
- * @param {{modulePath: string, savePath: string, typeName: string,typePath: string}} options
- * @returns {string}
- */
-function parseInterfaceText(options) {
+/** Get interface text from file content */
+export const parseInterfaceText = (options: IComponentOptions) => {
     const fileContent = loadFile(options);
+    if (!fileContent) throw new Error(
+        'file parsing Error: Empty file "' + options.modulePath
+    );
+
     const matcher = new RegExp(
         //'export interface ' + options.typeName + '\\s*(?:extends\\s[A-Za-z_<>,\'"\\s]*\\s*)?{[\\r\\n]([a-zA-Z\\d\\s/*&?:;,.\'`"@_=<>|()\\[\\]+-]*)[\\n\\r]}',
         'export interface ' + options.typeName + '\\s*(?:extends\\s[A-Za-z_<>,\'"\\s|]*\\s*)?{(([^{}]|{[^{}]*})*)}',
         'gm'
     );
 
-    let matched = matcher.exec(fileContent);
+    const matched = matcher.exec(fileContent);
     if (!matched || typeof matched[1] === 'undefined') {
         throw new Error(
             'file parsing Error: Can not find interface "' +
-                options.typeName +
-                '" in the file "' +
-                options.modulePath +
-                '" content\nMatcher: ' +
-                matcher.toString()
+            options.typeName +
+            '" in the file "' +
+            options.modulePath +
+            '" content\nMatcher: ' +
+            matcher.toString()
         );
     }
 
     return matched[1];
 }
 
-/**
- * Get properties collection
- * @param {{modulePath: string, savePath: string, typeName: string,typePath: string}} options
- * @returns {Object<string, {name: string, type: string, sourceType: string, comment}>}
- */
-module.exports.parseProperties = function parseProperties(options) {
+/**  Get properties collection */
+export const parseProperties = (options: IComponentOptions) => {
     const interfaceText = parseInterfaceText(options);
     const rows = interfaceText.split('\n');
     rows.push('//');
 
-    let result = {};
+    const result: Record<string, IProperty> = {};
     let prevComment = '';
     for (const elem of rows) {
         const curRow = elem.trim();
@@ -95,14 +86,8 @@ module.exports.parseProperties = function parseProperties(options) {
     return result;
 };
 
-/**
- * Parse property
- * @param {string} commentRow
- * @param {string} propertyRow
- * @param {{modulePath: string, savePath: string, typeName: string,typePath: string}} options
- * @returns {{name: string, sourceType: string, comment, type: string}|undefined}
- */
-function getProperty(commentRow, propertyRow, options) {
+/** Parse property  */
+export const getProperty = (commentRow: string, propertyRow: string, options: IComponentOptions): IProperty | undefined => {
     const [part1, ...rest] = propertyRow.split(':');
     const part2 = rest.join(':');
 
