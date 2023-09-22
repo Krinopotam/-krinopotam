@@ -6,31 +6,15 @@ const importExamplesRoot = '../components/';
 const importPagesRoot = './pages/';
 const pagesPath = __dirname + '/pages';
 
-/**
- * @param {string} string
- * @returns {string}
- */
-function upperFirstLetter(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
+function upperFirstLetter(val: string) {
+    return val.charAt(0).toUpperCase() + val.slice(1);
 }
 
-/**
- * @param {string} string
- * @returns {string}
- */
-function lowerFirstLetter(string) {
-    return string.charAt(0).toLowerCase() + string.slice(1);
+function lowerFirstLetter(val: string) {
+    return val.charAt(0).toLowerCase() + val.slice(1);
 }
 
-/**
- *
- * @param {string} componentFileName
- * @param {string} componentPath
- * @param {string} source
- * @param {string} pagesPath
- * @returns {string}
- */
-function generatePageComponent(componentFileName, componentPath, source, pagesPath) {
+function generatePageComponent(componentFileName: string, componentPath: string, source: string, pagesPath: string) {
     const moduleName = componentFileName.split('.')[0];
     const componentName = upperFirstLetter(moduleName);
 
@@ -42,6 +26,7 @@ function generatePageComponent(componentFileName, componentPath, source, pagesPa
     source = source.replaceAll(/\$\{/g, '\\${');
     source = source.replaceAll(/`/g, '\\`');
 
+    // language=text
     const importStr = `
     import React from 'react';
     import {${componentName}} from '${importExamplesRoot + moduleName}';
@@ -73,17 +58,14 @@ function generatePageComponent(componentFileName, componentPath, source, pagesPa
     const content = importStr + bodyStr;
     fs.writeFileSync(pagesPath + '/' + pageFileName, content, {encoding: 'utf8', flag: 'w'});
 
+    // language=text
     const routeStr = `                <Route path="${componentName}" element={<${pageComponentName} darkMode={props.darkMode} />} />;`;
     const routeImportStr = `    import {${pageComponentName}} from '${importPagesRoot + moduleName + 'Page'}';`;
     return [routeStr, routeImportStr];
 }
 
-/**
- *
- * @param {string} routers
- * @param {string} imports
- */
-function generateExamplesRoutes(imports, routers) {
+function generateExamplesRoutes(imports:string, routers:string) {
+    // language=text
     const result = `
     import React from 'react';
     import {Route, Routes} from 'react-router-dom';

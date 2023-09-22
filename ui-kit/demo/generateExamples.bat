@@ -1,4 +1,4 @@
 rem normal mode
-node ./examplesDescriptionGenerator.js
+call npx tsx ./examplesDescriptionGenerator.ts
 
 pause
