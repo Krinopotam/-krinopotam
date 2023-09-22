@@ -1,5 +1,4 @@
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const fs = require('fs');
+import fs from "fs";
 
 const storiesFolder = __dirname
 
@@ -11,7 +10,7 @@ function run() {
  *
  * @param {string} curPath
  */
-function recursiveDirectoriesRun(curPath) {
+function recursiveDirectoriesRun(curPath: string) {
     const fileList = fs.readdirSync(curPath, {withFileTypes: true});
     //console.log(fileList)
 
@@ -23,12 +22,7 @@ function recursiveDirectoriesRun(curPath) {
     }
 }
 
-/**
- *
- * @param {string} fileName
- * @param {string} filePath
- */
-function processFile(fileName, filePath) {
+function processFile(fileName: string, filePath: string) {
     const extensions = "ts|js|tsx|jsx";
 
     const fnPattern = new RegExp('^(.*)\\.stories\\.(' + extensions + ')$', 'gi');
@@ -69,11 +63,7 @@ function processFile(fileName, filePath) {
     console.log("No source file for stories ", filePath + '/' + fileName)
 }
 
-
-/**
- *  * @param {string} source
- */
-function clearSource(source) {
+function clearSource(source: string) {
     source = source.replaceAll(/\s*\{\/\*Description Start\*\/}[\S\s]*?\{\/\*Description End\*\/}/gi, ''); //remove {/*Description Start/*} blocks
     source = source.replaceAll(/\s*\/\*Description Start\*\/[\S\s]*?\/\*Description End\*\//gi, ''); //remove /*Description Start*/ blocks
     source = source.replaceAll(/\/\/ noinspection DuplicatedCode/gi, ''); //remove // noinspection DuplicatedCode

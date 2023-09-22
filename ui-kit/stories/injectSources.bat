@@ -1,3 +1,3 @@
-node ./injectSources.js
+call npx tsx ./injectSources.ts
 
 pause
