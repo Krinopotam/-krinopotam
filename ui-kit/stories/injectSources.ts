@@ -27,7 +27,6 @@ function processFile(fileName: string, filePath: string) {
 
     const fnPattern = new RegExp('^(.*)\\.stories\\.(' + extensions + ')$', 'gi');
     if (!fileName.match(fnPattern)) return;
-    //if (!fileName.match(/^(.*)\.stories\.(ts|js|tsx|jsx)$/gi)) return;
 
     const storyFileContent = fs.readFileSync(filePath + '/' + fileName, {encoding: 'utf8', flag: 'r'});
 

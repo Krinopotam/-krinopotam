@@ -4,6 +4,8 @@ import type {Meta, StoryObj} from '@storybook/react'
 import {ITreeSelectNode, TreeSelect} from "@src/treeselect";
 import {UserOutlined} from "@ant-design/icons"
 import React from "react";
+import {HelpersObjects} from "@krinopotam/js-helpers";
+import {InputComponent} from "@src/dynamicForm/components/inputComponent";
 
 
 export default {
@@ -138,7 +140,6 @@ const commonArgs: Story['args'] = {
     dataSet: dataSet,
     style: {width: 400},
     placeholder: 'Select value',
-    size:'small'
 }
 export const Default: Story = {
     args: {
@@ -182,7 +183,7 @@ export const CustomRenders: Story = {
                 <>
                     {treeNode.title}
                     <br/>
-                    <small style={{color: '#808080'}}><UserOutlined /> {' '+ treeNode.head}</small>
+                    <small style={{color: '#808080'}}><UserOutlined/> {' ' + treeNode.head}</small>
                 </>
             );
         },
@@ -202,3 +203,103 @@ export const CustomRenders: Story = {
     },
 }
 
+export const AsyncFetch: Story = {
+    args: {
+        ...commonArgs,
+
+        fetchMode: 'onUse',
+        noCacheFetchedData: true,
+        onDataFetch: () => {
+            return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    if (Math.random() < 0.0) reject({message: 'Ошибка загрузки данных', code: 400});
+                    else resolve({data: dataSet});
+                }, 2000);
+            });
+        },
+    },
+}
+
+const filterDataSet = (nodes: ITreeSelectNode[], search: string) => {
+    const result: ITreeSelectNode[] = [];
+    let resultChildren: ITreeSelectNode[] = [];
+    for (const node of nodes) {
+        const nodeClone = HelpersObjects.cloneObject(node);
+        if (node.children && node.children.length > 0) resultChildren = filterDataSet(node.children, search);
+
+        if (resultChildren.length > 0) {
+            nodeClone.children = resultChildren;
+            result.push(nodeClone);
+            continue;
+        }
+
+        const findIndex = node.title?.toString().toLowerCase().indexOf(search.toLowerCase());
+        if (typeof findIndex !== 'undefined' && findIndex >= 0) result.push(nodeClone);
+    }
+
+    return result;
+};
+
+export const AsyncSearch: Story = {
+    args: {
+        ...commonArgs,
+
+        fetchMode: 'onUse',
+        noCacheFetchedData: true,
+        minSearchLength: 1,
+        onDataFetch: (search: string) => {
+            return new Promise((resolve) => {
+                setTimeout(() => {
+                    const result = filterDataSet(dataSet, search);
+                    resolve({data: result});
+                }, 1000);
+            })
+        }
+    },
+}
+
+export const Editable: Story = {
+    args: {
+        ...commonArgs,
+        confirmDelete: true,
+        editFormProps: {
+            confirmChanges: true,
+            bodyHeight: 100,
+            fieldsProps: {
+                title: {component: InputComponent, label: 'Department'}
+            }
+        }
+    },
+}
+
+export const EditableAsync: Story = {
+    args: {
+        ...commonArgs,
+        confirmDelete: true,
+        onDelete: () => {
+            return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    if (Math.random() < 0.1) reject({message: 'Ошибка удаления строк', code: 400});
+                    else resolve({data: {result: 'OK'}});
+                }, 2000);
+            });
+        },
+        editFormProps: {
+            confirmChanges: true,
+            bodyHeight: 100,
+            callbacks: {
+                onSubmit: (values: Record<string, unknown>) => {
+                    return new Promise((resolve, reject) => {
+                        setTimeout(() => {
+                            if (Math.random() < 0.3) reject({message: 'Ошибка сохранения', code: 400});
+                            else resolve({data: values});
+                        }, 3000);
+                    });
+                },
+            },
+            fieldsProps: {
+                title: {component: InputComponent, label: 'Department'}
+            }
+        }
+    },
+}
