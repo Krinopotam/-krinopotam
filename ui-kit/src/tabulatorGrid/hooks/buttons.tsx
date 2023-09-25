@@ -202,35 +202,8 @@ const useGetFilterToggleButton = (gridApi: IGridApi): IFormButton | undefined =>
             size: 'small',
             //disabled: !activeRowKey || selectedRow.length !== 1,
             onClick: () => {
-                // Show/hide filters
-                // *Workaround:
-                // Tabulator allows to show/hide headerFilter only via updateColumnDefinition, which is very slow and leads to glitches and regenerates all columns
-                // Let's use a workaround. We include headerFilter on grid initialization and hide it in CSS. When necessary, we display it, but this requires additional style calculations.
-                const filterHeight = 33;
-                const tableHolder = document.querySelector<HTMLElement>('#' + gridApi.getGridId() + ' .tabulator-tableholder');
-                const headerElements = document.querySelectorAll<HTMLElement>('#' + gridApi.getGridId() + ' .tabulator-col');
-                const filterElements = document.querySelectorAll<HTMLElement>('#' + gridApi.getGridId() + ' .tabulator-header-filter');
-                if (!tableHolder || !headerElements || !filterElements) return;
-
-                //console.log(gridApi.tableApi)
-                //temp0.modules['filter'].showHeaderFilterElements()
                 toggle.current = !toggle.current;
-                if (!toggle.current) gridApi.tableApi?.clearHeaderFilter();
-
-                filterElements.forEach((elem) => {
-                    elem.style.display = !toggle.current ? 'none' : 'block';
-                });
-
-                let headerHeight = 0;
-                headerElements.forEach((elem) => {
-                    headerHeight = elem.offsetHeight;
-                    elem.style.height = elem.offsetHeight + filterHeight * (toggle.current ? 1 : -1) + 'px';
-                });
-
-                const tableHolderOffset = headerHeight + filterHeight * (toggle.current ? 1 : -1);
-                tableHolder.style.minHeight = 'calc(100% - ' + tableHolderOffset + 'px)';
-                tableHolder.style.height = 'calc(100% - ' + tableHolderOffset + 'px)';
-                tableHolder.style.maxHeight = 'calc(100% - ' + tableHolderOffset + 'px)';
+                gridApi.tableApi?.toggleInlineFilter(toggle.current)
 
                 gridApi.buttonsApi.updateButtons({
                     filterToggle: {

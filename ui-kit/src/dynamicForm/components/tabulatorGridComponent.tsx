@@ -9,7 +9,7 @@
 import React, {useCallback, useMemo, useRef, useState} from 'react';
 
 import {IDFormComponentProps, IDFormFieldProps} from './baseComponent';
-import TabulatorGrid, {IGridRowData, IReactTabulatorProps, IGridDataSourcePromise, IGridDeletePromise, IGridApi} from '@src/tabulatorGrid';
+import TabulatorGrid, {IGridRowData, ITabulatorProps, IGridDataSourcePromise, IGridDeletePromise, IGridApi} from '@src/tabulatorGrid';
 import {IFormButton, IFormButtons} from 'src/buttonsRow';
 import {IDFormModalProps} from '@src/dynamicFormModal';
 import {IDFormApi} from "@src/dynamicForm";
@@ -37,7 +37,7 @@ export interface IDFormFieldTabulatorGridProps extends Omit<IDFormFieldProps, 'w
     dataTreeChildIndent?: number;
 
     /** Grid columns */
-    columns: IReactTabulatorProps['columns'];
+    columns: ITabulatorProps['columns'];
 
     /** Grid class name */
     className?: string;
@@ -60,85 +60,85 @@ export interface IDFormFieldTabulatorGridProps extends Omit<IDFormFieldProps, 'w
     placeholder?: string;
 
     /** Table layout */
-    layout?: IReactTabulatorProps['layout'];
+    layout?: ITabulatorProps['layout'];
 
     /** Adjust to the data each time you load it into the table */
-    layoutColumnsOnNewData?: IReactTabulatorProps['layoutColumnsOnNewData'];
+    layoutColumnsOnNewData?: ITabulatorProps['layoutColumnsOnNewData'];
 
     /** Grid container width*/
-    width?: IReactTabulatorProps['width'];
+    width?: ITabulatorProps['width'];
 
     /** Grid container max width*/
-    maxWidth?: IReactTabulatorProps['maxWidth'];
+    maxWidth?: ITabulatorProps['maxWidth'];
 
     /** Grid container min width*/
-    minWidth?: IReactTabulatorProps['minWidth'];
+    minWidth?: ITabulatorProps['minWidth'];
 
     /** Grid height*/
-    height?: IReactTabulatorProps['height'];
+    height?: ITabulatorProps['height'];
 
     /** Min grid height*/
-    minHeight?: IReactTabulatorProps['minHeight'];
+    minHeight?: ITabulatorProps['minHeight'];
 
     /** Max grid height*/
-    maxHeight?: IReactTabulatorProps['maxHeight'];
+    maxHeight?: ITabulatorProps['maxHeight'];
 
     /** allow multi select */
-    multiSelect?: IReactTabulatorProps['multiSelect'];
+    multiSelect?: ITabulatorProps['multiSelect'];
 
     /** Resize a column its neighbouring column has the opposite resize applied to keep to total width of columns the same */
-    resizableColumnFit?: IReactTabulatorProps['resizableColumnFit'];
+    resizableColumnFit?: ITabulatorProps['resizableColumnFit'];
 
     /** Row height */
-    rowHeight?: IReactTabulatorProps['rowHeight'];
+    rowHeight?: ITabulatorProps['rowHeight'];
 
     /** Is the user can resize rows */
-    resizableRows?: IReactTabulatorProps['resizableRows'];
+    resizableRows?: ITabulatorProps['resizableRows'];
 
     /** is columns movable */
-    movableColumns?: IReactTabulatorProps['movableColumns'];
+    movableColumns?: ITabulatorProps['movableColumns'];
 
     /** is rows movable */
-    movableRows?: IReactTabulatorProps['movableRows'];
+    movableRows?: ITabulatorProps['movableRows'];
 
     /** Group rows by field/fields data*/
-    groupBy?: IReactTabulatorProps['groupBy'];
+    groupBy?: ITabulatorProps['groupBy'];
 
     /** Store column state in browser local storage */
-    persistence?: IReactTabulatorProps['persistence'];
+    persistence?: ITabulatorProps['persistence'];
 
     /** Local storage key  */
-    persistenceID?: IReactTabulatorProps['persistenceID'];
+    persistenceID?: ITabulatorProps['persistenceID'];
 
     /** Persistent layout */
-    persistentLayout?: IReactTabulatorProps['persistentLayout'];
+    persistentLayout?: ITabulatorProps['persistentLayout'];
 
     /** Persistent Filter */
-    persistentFilter?: IReactTabulatorProps['persistentFilter'];
+    persistentFilter?: ITabulatorProps['persistentFilter'];
 
     /** Persistent sort */
-    persistentSort?: IReactTabulatorProps['persistentSort'];
+    persistentSort?: ITabulatorProps['persistentSort'];
 
     /** Frozen rows*/
-    frozenRows?: IReactTabulatorProps['frozenRows'];
+    frozenRows?: ITabulatorProps['frozenRows'];
 
     /** Frozen row field name/names (default: id) */
-    frozenRowsField?: IReactTabulatorProps['frozenRowsField'];
+    frozenRowsField?: ITabulatorProps['frozenRowsField'];
 
     /** Initial filter */
-    initialFilter?: IReactTabulatorProps['initialFilter'];
+    initialFilter?: ITabulatorProps['initialFilter'];
 
     /** Initial sort */
-    initialSort?: IReactTabulatorProps['initialSort'];
+    initialSort?: ITabulatorProps['initialSort'];
 
     /** Initial header filter */
-    initialHeaderFilter?: IReactTabulatorProps['initialHeaderFilter'];
+    initialHeaderFilter?: ITabulatorProps['initialHeaderFilter'];
 
     /** Is the header should be visible */
-    headerVisible?: IReactTabulatorProps['headerVisible'];
+    headerVisible?: ITabulatorProps['headerVisible'];
 
     /** Default column properties */
-    columnDefaults?: IReactTabulatorProps['columnDefaults'];
+    columnDefaults?: ITabulatorProps['columnDefaults'];
 
     // --- callbacks -----------------------------------------------------
 

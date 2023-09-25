@@ -3,9 +3,9 @@
 import React, {useCallback, useState} from 'react';
 
 import {Button} from '@src/button';
-import TabulatorGrid, {IReactTabulatorProps, IGridProps, IGridApi, IGridRowData} from '@src/tabulatorGrid';
+import TabulatorGrid, {ITabulatorProps, IGridProps, IGridApi, IGridRowData} from '@src/tabulatorGrid';
 
-const columns: IReactTabulatorProps['columns'] = [
+const columns: ITabulatorProps['columns'] = [
     {title: 'Column 1', field: 'col1'},
     {title: 'Column 2', field: 'col2'},
     {title: 'Column 3', field: 'col3'},

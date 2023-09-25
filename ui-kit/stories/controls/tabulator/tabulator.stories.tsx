@@ -1,59 +1,46 @@
 // noinspection DuplicatedCode
 
-import React from 'react';
-import TabulatorGrid, {ITabulatorProps, IGridRowData} from '@src/tabulatorGrid';
+import type {Meta, StoryObj} from '@storybook/react'
+import Tabulator from "@src/tabulatorBase";
+import React from "react";
 
-const columns: ITabulatorProps['columns'] = [
-    {title: 'Name', field: 'name'},
-    {title: 'Age', field: 'age', hozAlign: 'left', formatter: 'progress'},
-    {title: 'Favourite Color', field: 'col'},
-    {title: 'Date Of Birth', field: 'dob', hozAlign: 'center'},
-    {title: 'Rating', field: 'rating', hozAlign: 'center', formatter: 'star'},
-    {title: 'Passed?', field: 'passed', hozAlign: 'center', formatter: 'tickCross'},
-];
 
-/*Description Start*/
-/*
-const data: IGridRowData[] = [
-    {
-        id: '1',
-        name: 'Root',
-        age: '12',
-        col: 'red',
-        dob: '',
-        children: [
-            {id: '1_1', name: 'Child 1', age: '4', col: 'green', dob: '22/05/20119'},
-            {id: '1_2', name: 'Child 2', age: '2', col: 'orange', dob: '01/08/2021'},
-        ],
+export default {
+    title: 'Controls/Tabulator',
+    component: Tabulator,
+    tags: ['autodocs'],
+    parameters: {
+        docs: {
+            /* AUTO-SOURCE-INJECT-START */
+            /* AUTO-SOURCE-INJECT-END */
+        }
     },
-];
-*/
+} satisfies Meta<typeof Tabulator>
 
-/*Description End*/
 
-const data: IGridRowData[] = [
+const dataSet = [
     {
         id: '1',
-        name: 'Oli Bob1',
-        age: '12',
+        name: 'Ivanov Ivan Ivanovich',
+        age: '65',
         col: 'red',
         dob: '',
         children: [
-            {id: '1_1', name: 'Oli Bob1 Child 1', age: '4', col: 'green', dob: '22/05/20119'},
-            {id: '1_2', name: 'Oli Bob1 Child 2', age: '2', col: 'orange', dob: '01/08/2021'},
+            {id: '1_1', name: 'Ivanova Alina Ivanovna', age: '17', col: 'green', dob: '22/05/2019'},
+            {id: '1_2', name: 'Ivanov Petr Ivanovich', age: '16', col: 'orange', dob: '01/08/2021'},
             {
                 id: '1_3',
-                name: 'Oli Bob1 Child 3',
-                age: '23',
+                name: 'Ivanov Sergey Ivanovich',
+                age: '33',
                 col: 'yellow',
-                dob: '31/01/2000',
+                dob: '31/01/1990',
                 children: [
-                    {id: '1_3_1', name: 'Oli Bob1 Grandson 1', age: '1', col: 'blue', dob: '14/05/2022'},
-                    {id: '1_3_2', name: 'Oli Bob1 Grandson 2', age: '2', col: 'green', dob: '22/05/2021'},
-                    {id: '1_3_3', name: 'Oli Bob1 Grandson 3', age: '3', col: 'orange', dob: '01/08/2020'},
+                    {id: '1_3_1', name: 'Ivanova Olga Sergeevna', age: '1', col: 'blue', dob: '14/05/2022'},
+                    {id: '1_3_2', name: 'Ivanov Maksim Sergeevich', age: '2', col: 'green', dob: '22/05/2021'},
+                    {id: '1_3_3', name: 'Ivanov Danil Sergeevich', age: '3', col: 'orange', dob: '01/08/2020'},
                 ],
             },
-            {id: '1_4', name: 'Oli Bob1 Child 4', age: '11', col: 'red', dob: '30/12/2012'},
+            {id: '1_4', name: 'Ivanov Oleg Ivanovich', age: '11', col: 'red', dob: '30/12/2012'},
         ],
     },
     {
@@ -63,7 +50,7 @@ const data: IGridRowData[] = [
         col: 'blue',
         dob: '14/05/1982',
         children: [
-            {id: '2_1', name: 'Mary May1 Child 1', age: '4', col: 'green', dob: '22/05/20119'},
+            {id: '2_1', name: 'Mary May1 Child 1', age: '4', col: 'green', dob: '22/05/2019'},
             {id: '2_2', name: 'Mary May1 Child 2', age: '2', col: 'orange', dob: '01/08/2021'},
             {
                 id: '2_3',
@@ -100,13 +87,22 @@ const data: IGridRowData[] = [
     {id: '20', name: 'Margret Marmajuke4', age: '16', col: 'yellow', dob: '31/01/1999'},
 ];
 
-export const TabulatorGridTree = (): React.JSX.Element => {
-    return (
-        <>
-            {/*Description Start*/}
-            <h1>Пример иерархического грида Tabulator</h1>
-            {/*Description End*/}
-            <TabulatorGrid id={'TabulatorGridTree'} columns={columns} dataSet={data} dataTree={true} height={500} layout={'fitColumns'} />
-        </>
-    );
-};
+type Story = StoryObj<typeof Tabulator>;
+export const Simple: Story = {
+    args: {
+        data: dataSet,
+
+        columns: [
+            {title: 'Name', field: 'name'},
+            {title: 'Age', field: 'age', hozAlign: 'left', formatter: 'progress'},
+            {title: 'Favourite Color', field: 'col'},
+            {title: 'Date Of Birth', field: 'dob', hozAlign: 'center'},
+            {title: 'Rating', field: 'rating', hozAlign: 'center', formatter: 'star'},
+            {title: 'Passed?', field: 'passed', hozAlign: 'center', formatter: 'tickCross'},
+        ],
+
+        height:500,
+        layout:'fitColumns',
+        footerElement:<div>dsfdsfdsfdsfdsfdsfdsfsdf</div>
+    },
+}

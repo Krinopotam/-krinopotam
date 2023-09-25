@@ -1,13 +1,12 @@
-import 'tabulator-tables/dist/css/tabulator_simple.css';
-import React, {useRef, useState} from 'react';
-import {IReactTabulatorProps, ITabulator} from '../tabulatorReact';
+import React, {useEffect, useRef, useState} from 'react';
+import {ITabulatorProps, ITabulator} from '@src/tabulatorBase';
 import {IButtonsRowApi, IFormButton, IFormButtons} from '@src/buttonsRow/buttonsRow';
-import {IDFormModalProps, IDFormModalApi} from '../dynamicFormModal';
+import {IDFormModalProps, IDFormModalApi} from '@src/dynamicFormModal';
 import {TPromise} from '@krinopotam/service-types';
 import {IGridApi, useInitGridApi} from './hooks/api';
 import {useInitialFetchData} from './hooks/initialFetchRows';
 import {ContainerRender} from './renders/containerRender';
-import {Stylization} from './stylization';
+import {ITabulatorEvents} from "@src/tabulatorBase/tabulatorBase";
 
 export interface IGridRowData extends Record<string, unknown> {
     /** Row id */
@@ -38,7 +37,7 @@ export interface IGridProps {
     dataTreeChildIndent?: number;
 
     /** Grid columns */
-    columns: IReactTabulatorProps['columns'];
+    columns: ITabulatorProps['columns'];
 
     /** Grid data set */
     dataSet?: IGridRowData[];
@@ -67,85 +66,88 @@ export interface IGridProps {
     placeholder?: string;
 
     /** Table layout */
-    layout?: IReactTabulatorProps['layout'];
+    layout?: ITabulatorProps['layout'];
 
     /** Adjust to the data each time you load it into the table */
-    layoutColumnsOnNewData?: IReactTabulatorProps['layoutColumnsOnNewData'];
+    layoutColumnsOnNewData?: ITabulatorProps['layoutColumnsOnNewData'];
 
     /** Grid container width*/
-    width?: IReactTabulatorProps['width'];
+    width?: ITabulatorProps['width'];
 
     /** Grid container max width*/
-    maxWidth?: IReactTabulatorProps['maxWidth'];
+    maxWidth?: ITabulatorProps['maxWidth'];
 
     /** Grid container min width*/
-    minWidth?: IReactTabulatorProps['minWidth'];
+    minWidth?: ITabulatorProps['minWidth'];
 
     /** Grid height*/
-    height?: IReactTabulatorProps['height'];
+    height?: ITabulatorProps['height'];
 
     /** Min grid height*/
-    minHeight?: IReactTabulatorProps['minHeight'];
+    minHeight?: ITabulatorProps['minHeight'];
 
     /** Max grid height*/
-    maxHeight?: IReactTabulatorProps['maxHeight'];
+    maxHeight?: ITabulatorProps['maxHeight'];
 
     /** allow multi select */
-    multiSelect?: IReactTabulatorProps['multiSelect'];
+    multiSelect?: ITabulatorProps['multiSelect'];
 
     /** Resize a column its neighbouring column has the opposite resize applied to keep to total width of columns the same */
-    resizableColumnFit?: IReactTabulatorProps['resizableColumnFit'];
+    resizableColumnFit?: ITabulatorProps['resizableColumnFit'];
 
     /** Row height */
-    rowHeight?: IReactTabulatorProps['rowHeight'];
+    rowHeight?: ITabulatorProps['rowHeight'];
 
     /** Is the user can resize rows */
-    resizableRows?: IReactTabulatorProps['resizableRows'];
+    resizableRows?: ITabulatorProps['resizableRows'];
 
     /** is columns movable */
-    movableColumns?: IReactTabulatorProps['movableColumns'];
+    movableColumns?: ITabulatorProps['movableColumns'];
 
     /** is rows movable */
-    movableRows?: IReactTabulatorProps['movableRows'];
+    movableRows?: ITabulatorProps['movableRows'];
 
     /** Group rows by field/fields data*/
-    groupBy?: IReactTabulatorProps['groupBy'];
+    groupBy?: ITabulatorProps['groupBy'];
 
     /** Store column state in browser local storage */
-    persistence?: IReactTabulatorProps['persistence'];
+    persistence?: ITabulatorProps['persistence'];
 
     /** Local storage key  */
-    persistenceID?: IReactTabulatorProps['persistenceID'];
+    persistenceID?: ITabulatorProps['persistenceID'];
 
     /** Persistent layout */
-    persistentLayout?: IReactTabulatorProps['persistentLayout'];
+    persistentLayout?: ITabulatorProps['persistentLayout'];
 
     /** Persistent Filter */
-    persistentFilter?: IReactTabulatorProps['persistentFilter'];
+    persistentFilter?: ITabulatorProps['persistentFilter'];
 
     /** Persistent sort */
-    persistentSort?: IReactTabulatorProps['persistentSort'];
+    persistentSort?: ITabulatorProps['persistentSort'];
 
     /** Frozen rows*/
-    frozenRows?: IReactTabulatorProps['frozenRows'];
+    frozenRows?: ITabulatorProps['frozenRows'];
 
     /** Frozen row field name/names (default: id) */
-    frozenRowsField?: IReactTabulatorProps['frozenRowsField'];
+    frozenRowsField?: ITabulatorProps['frozenRowsField'];
 
     /** Initial filter */
-    initialFilter?: IReactTabulatorProps['initialFilter'];
+    initialFilter?: ITabulatorProps['initialFilter'];
 
     /** Initial sort */
-    initialSort?: IReactTabulatorProps['initialSort'];
+    initialSort?: ITabulatorProps['initialSort'];
 
     /** Initial header filter */
-    initialHeaderFilter?: IReactTabulatorProps['initialHeaderFilter'];
+    initialHeaderFilter?: ITabulatorProps['initialHeaderFilter'];
 
     /** Is the header should be visible */
-    headerVisible?: IReactTabulatorProps['headerVisible'];
+    headerVisible?: ITabulatorProps['headerVisible'];
 
     /** Default column properties */
-    columnDefaults?: IReactTabulatorProps['columnDefaults'];
+    columnDefaults?: ITabulatorProps['columnDefaults'];
+
+    /** Grid events*/
+    events?: ITabulatorEvents;
 
     // --- callbacks -----------------------------------------------------
 
@@ -182,17 +184,12 @@ const TabulatorGrid = (props: IGridProps): React.JSX.Element => {
     const [editFormApi] = useState<IDFormModalApi>({} as IDFormModalApi);
     const [buttonsApi] = useState({} as IButtonsRowApi & { refreshButtons: () => void });
     const [gridApi] = useState((props.apiRef || {}) as IGridApi);
-    const [initQue] = useState([] as (() => void)[]);
 
-    useInitGridApi({gridApi, props, tableRef, editFormApi, buttonsApi, initQue: initQue});
+    useInitGridApi({gridApi, props, tableRef, editFormApi, buttonsApi});
+
     useInitialFetchData(gridApi);
 
-    return (
-        <>
-            <Stylization/>
-            <ContainerRender tableRef={tableRef} gridApi={gridApi} gridProps={props}/>
-        </>
-    );
+    return <ContainerRender tableRef={tableRef} gridApi={gridApi} gridProps={props}/>
 };
 
 export default TabulatorGrid;

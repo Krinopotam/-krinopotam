@@ -7,7 +7,7 @@ import {DFormModal, IDFormModalApi} from '@src/dynamicFormModal';
 import {DFormModalConfig} from '@src/dynamicFormModal/configBuilder';
 import {InputComponentConfig} from '@src/dynamicForm/configBuilder/inputComponentConfig';
 import {NumberComponentConfig} from '@src/dynamicForm/configBuilder/numberComponentConfig';
-import {IReactTabulatorProps, IGridRowData} from "@src/tabulatorGrid";
+import {ITabulatorProps, IGridRowData} from "@src/tabulatorGrid";
 import {TabulatorGridComponentConfig} from '@src/dynamicForm/configBuilder/tabulatorGridComponentConfig';
 
 /** Tabulator grid edit form type */
@@ -24,7 +24,7 @@ interface IUsers {
     users: Record<string, unknown>[];
 }
 
-const columns: IReactTabulatorProps['columns'] = [
+const columns: ITabulatorProps['columns'] = [
     {title: 'Name', field: 'name'},
     {title: 'Age', field: 'age', hozAlign: 'left', formatter: 'progress'},
     {title: 'Favourite Color', field: 'col'},

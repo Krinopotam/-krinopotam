@@ -1,4 +1,3 @@
-import '@storybook/addon-console'
 import {Controls, Description, Primary, Title} from "@storybook/blocks";
 import React from "react";
 import MainDecorator from "./templates/mainDecorator";

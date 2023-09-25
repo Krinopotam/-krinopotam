@@ -5,6 +5,10 @@ import {GlobalToken, theme} from 'antd';
 const {useToken} = theme;
 
 const TabulatorCss = createGlobalStyle`
+  .tazim {
+    color:red;
+  }
+  
   .tabulator {
     background-color:  ${(props: GlobalToken) => props.colorBgContainer};
     

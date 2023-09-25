@@ -7,7 +7,7 @@ import {TPromise} from '@krinopotam/service-types';
 import {MessageBox} from '@src/messageBox';
 import {IGridProps, IGridRowData} from '../tabulatorGrid';
 import {RowComponent, ScrollToRowPosition, TabulatorFull as Tabulator} from 'tabulator-tables';
-import {ITabulator} from '@src/tabulatorReact';
+import {ITabulator} from '@src/tabulatorBase';
 
 type IRowKey = IGridRowData['id'];
 type IRowKeys = IRowKey | IRowKey[];
@@ -62,7 +62,7 @@ export interface IGridApi {
     getActiveRow: () => IGridRowData | undefined;
 
     /* Get next row key */
-    getNextRowKey: (key: IRowKey| undefined, step?: number) => IRowKey | undefined;
+    getNextRowKey: (key: IRowKey | undefined, step?: number) => IRowKey | undefined;
 
     /* Get previous row key */
     getPrevRowKey: (key: IRowKey | undefined, step?: number) => IRowKey | undefined;
@@ -101,34 +101,26 @@ export interface IGridApi {
     editFormApi: IDFormModalApi;
 
     /** Buttons api */
-    buttonsApi: IButtonsRowApi & {refreshButtons: () => void};
+    buttonsApi: IButtonsRowApi & { refreshButtons: () => void };
 
     /** Fetch data */
     fetchData: (dataSource?: IGridDataFetchPromise) => void;
-
-    /** Add function to init que. This function will be called on table init complete event*/
-    addToInitQue: (func: () => void) => void;
-
-    /** Get init que */
-    getInitQue: () => (() => void)[];
 }
 
-export type IGridDataFetchPromise = TPromise<{data: IGridRowData[]}, {message: string; code: number}>;
+export type IGridDataFetchPromise = TPromise<{ data: IGridRowData[] }, { message: string; code: number }>;
 
 export const useInitGridApi = ({
-    gridApi,
-    props,
-    tableRef,
-    editFormApi,
-    buttonsApi,
-    initQue,
-}: {
+                                   gridApi,
+                                   props,
+                                   tableRef,
+                                   editFormApi,
+                                   buttonsApi,
+                               }: {
     gridApi: IGridApi;
     props: IGridApi['gridProps'];
     tableRef: MutableRefObject<Tabulator | undefined>;
     editFormApi: IGridApi['editFormApi'];
     buttonsApi: IGridApi['buttonsApi'];
-    initQue: (() => void)[];
 }): IGridApi => {
     const dataSetRef = useRef<IGridProps['dataSet']>(undefined);
     const [isLoading, setIsLoading] = useState(false);
@@ -163,8 +155,7 @@ export const useInitGridApi = ({
     gridApi.deleteRowsByKeys = useApiDeleteRowsByKeys(dataSetRef, gridApi);
     gridApi.deleteRows = useApiDeleteRows(gridApi);
     gridApi.fetchData = useApiFetchData(gridApi);
-    gridApi.addToInitQue = useApiAddToInitQue(initQue);
-    gridApi.getInitQue = useApiGetInitQue(initQue);
+
     /*
     gridApi.selectAll = useApiSelectAll(gridApi);
     gridApi.selectNextRow = useApiSelectNextRow(gridApi);
@@ -201,17 +192,12 @@ const useApiGetDataSet = (dataSetRef: React.MutableRefObject<IGridProps['dataSet
 const useApiSetDataSet = (dataSetRef: React.MutableRefObject<IGridProps['dataSet']>, gridApi: IGridApi): IGridApi['setDataSet'] => {
     return useCallback(
         (dataSet: IGridProps['dataSet'] | null) => {
+            if (!gridApi.tableApi) return;
             const newDataSet = gridApi.gridProps?.onDataSetChange?.(dataSet ?? undefined, gridApi) ?? dataSet;
             dataSetRef.current = newDataSet as IGridProps['dataSet'];
-            if (gridApi.tableApi?.initialized) {
-                gridApi.tableApi?.deselectRow();
-                gridApi.tableApi?.clearData();
-                gridApi.tableApi?.addData(dataSetRef.current);
-            } else {
-                gridApi.addToInitQue(() => {
-                    gridApi.tableApi?.addData(dataSetRef.current);
-                });
-            }
+            gridApi.tableApi?.deselectRow();
+            gridApi.tableApi?.clearData();
+            gridApi.tableApi?.addData(dataSetRef.current);
         },
         [dataSetRef, gridApi]
     );
@@ -235,18 +221,19 @@ const useApiSetIsLoading = (setIsLoading: React.Dispatch<React.SetStateAction<bo
 const useApiSetActiveRowKey = (gridApi: IGridApi): IGridApi['setActiveRowKey'] => {
     return useCallback(
         (key: IRowKey | null, clearSelection?: boolean, scrollPosition?: ScrollToRowPosition) => {
-            gridApi.tableApi?.setActiveRowByKey(key, clearSelection, scrollPosition);
+            if (!gridApi.tableApi) return;
+            gridApi.tableApi.setActiveRowByKey(key, clearSelection, scrollPosition);
         },
         [gridApi]
     );
 };
 
 const useApiGetActiveRowKey = (gridApi: IGridApi): IGridApi['getActiveRowKey'] => {
-    return useCallback(() => (gridApi.tableApi?.initialized ? gridApi.tableApi?.getActiveRowKey() : undefined), [gridApi]);
+    return useCallback(() => (gridApi.tableApi?.getActiveRowKey?.()), [gridApi]);
 };
 
 const useApiGetActiveNode = (gridApi: IGridApi): IGridApi['getActiveNode'] => {
-    return useCallback(() => (gridApi.tableApi?.initialized ? gridApi.tableApi?.getActiveRow() : undefined), [gridApi]);
+    return useCallback(() => (gridApi.tableApi?.getActiveRow?.()), [gridApi]);
 };
 
 const useApiGetActiveRow = (gridApi: IGridApi): IGridApi['getActiveRow'] => {
@@ -258,7 +245,7 @@ const useApiGetActiveRow = (gridApi: IGridApi): IGridApi['getActiveRow'] => {
 const useApiGetNextRowKey = (gridApi: IGridApi): IGridApi['getNextRowKey'] => {
     return useCallback(
         (key: IRowKey | undefined, step?: number) => {
-            if (!key) return undefined;
+            if (!gridApi.tableApi || !key) return undefined;
             if (!step) step = 1;
             let curNode: RowComponent | undefined = gridApi.tableApi?.getRow(key);
             if (!curNode) return undefined;
@@ -277,7 +264,7 @@ const useApiGetNextRowKey = (gridApi: IGridApi): IGridApi['getNextRowKey'] => {
 const useApiGetPrevRowKey = (gridApi: IGridApi): IGridApi['getPrevRowKey'] => {
     return useCallback(
         (key: IRowKey | undefined, step?: number) => {
-            if (!key) return undefined;
+            if (!gridApi.tableApi || !key) return undefined;
             if (!step) step = 1;
             let curNode: RowComponent | undefined = gridApi.tableApi?.getRow(key);
             if (!curNode) return undefined;
@@ -312,6 +299,8 @@ const useApiGetSelectedRowKeys = (gridApi: IGridApi): IGridApi['getSelectedRowKe
 const useApiSetSelectedRowsKeys = (gridApi: IGridApi): IGridApi['setSelectedRowKeys'] => {
     return useCallback(
         (keys: IRowKeys | null | undefined, clearPrevSelection?: boolean) => {
+            if (!gridApi.tableApi) return;
+
             if (!keys || clearPrevSelection) gridApi.tableApi?.deselectRow();
 
             const selKeys: IRowKey[] = HelpersObjects.isArray(keys) ? (keys as IRowKey[]) : [keys as IRowKey];
@@ -322,19 +311,11 @@ const useApiSetSelectedRowsKeys = (gridApi: IGridApi): IGridApi['setSelectedRowK
 };
 
 const useApiGetSelectedNodes = (gridApi: IGridApi): IGridApi['getSelectedNodes'] => {
-    const emptyArray = useRef<RowComponent[]>([]);
-    return useCallback((): RowComponent[] => {
-        if (!gridApi.tableApi?.initialized) return emptyArray.current;
-        return gridApi.tableApi.getSelectedRows();
-    }, [gridApi]);
+    return useCallback((): RowComponent[] => gridApi.tableApi?.getSelectedRows?.() ?? [], [gridApi]);
 };
 
 const useApiGetSelectedRows = (gridApi: IGridApi): IGridApi['getSelectedRows'] => {
-    const emptyArray = useRef<IGridRowData[]>([]);
-    return useCallback((): IGridRowData[] => {
-        if (!gridApi.tableApi?.initialized) return emptyArray.current;
-        return gridApi.tableApi.getSelectedData() as IGridRowData[];
-    }, [gridApi]);
+    return useCallback((): IGridRowData[] => gridApi.tableApi?.getSelectedData?.() ?? [], [gridApi]);
 };
 
 const useApiGetNodeByKey = (gridApi: IGridApi): IGridApi['getNodeByKey'] => {
@@ -598,18 +579,6 @@ const useApiFetchData = (gridApi: IGridApi): IGridApi['fetchData'] => {
         },
         [gridApi]
     );
-};
-
-const useApiAddToInitQue = (initQue: (() => void)[]) => {
-    return useCallback(
-        (func: () => void) => {
-            initQue.push(func);
-        },
-        [initQue]
-    );
-};
-const useApiGetInitQue = (initQue: (() => void)[]) => {
-    return useCallback(() => initQue, [initQue]);
 };
 
 /*

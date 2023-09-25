@@ -6,7 +6,7 @@ import {usePrepareEditFormProps} from '../hooks/gridEditForm';
 import {MenuRow} from './menuRow';
 import {GridRender} from "./gridRender";
 import {IGridProps} from "../tabulatorGrid";
-import {ITabulator} from "@src/tabulatorReact";
+import {ITabulator} from "@src/tabulatorBase";
 
 export const ContainerRender = ({tableRef, gridApi, gridProps}: {tableRef: React.MutableRefObject<ITabulator | undefined>; gridApi: IGridApi; gridProps:IGridProps}): React.JSX.Element => {
     const editFormProps = usePrepareEditFormProps(gridApi);

@@ -1,9 +1,9 @@
 // noinspection DuplicatedCode
 
 import React from 'react';
-import TabulatorGrid, {IReactTabulatorProps, IGridRowData} from '@src/tabulatorGrid';
+import TabulatorGrid, {ITabulatorProps, IGridRowData} from '@src/tabulatorGrid';
 
-const columns: IReactTabulatorProps['columns'] = [
+const columns: ITabulatorProps['columns'] = [
     {title: 'Name', field: 'name'},
     {title: 'Age', field: 'age', hozAlign: 'left', formatter: 'progress'},
     {title: 'Favourite Color', field: 'col'},

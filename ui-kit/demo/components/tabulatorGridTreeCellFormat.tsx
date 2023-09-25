@@ -2,7 +2,7 @@
 
 import React from 'react';
 import {ColumnDefinition} from 'tabulator-tables';
-import TabulatorGrid, {IReactTabulatorProps, IGridRowData} from '@src/tabulatorGrid';
+import TabulatorGrid, {ITabulatorProps, IGridRowData} from '@src/tabulatorGrid';
 
 const data: IGridRowData[] = [
     {id: '01', surname: 'Иванов', name: 'Иван', patronymic: 'Иванович', email: 'ivanov@mail.ru', birthday: '11.01.1980', children:[
@@ -67,7 +67,7 @@ const fioSorter: ColumnDefinition['sorter'] = (_a, _b, aRow, bRow): number => {
     return valA > valB ? 1 : -1; //you must return the difference between the two values
 };
 
-const columns: IReactTabulatorProps['columns'] = [
+const columns: ITabulatorProps['columns'] = [
     {
         title: 'ФИО',
         field: 'fio',

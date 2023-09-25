@@ -154,9 +154,10 @@ function getComponentClassProps(componentName: string) {
         },
     };
 
-    if (classProps.imports?.[componentOptions.typeName]) classProps.imports[componentOptions.typeName] = componentOptions.typePath;
-    if (classProps.imports?.[capitalizeFirstLetter(componentName)]) classProps.imports[capitalizeFirstLetter(componentName)] = componentOptions.typePath;
-    if (treeSelectImport && classProps.imports?.['ITreeSelectProps']) classProps.imports['ITreeSelectProps'] = treeSelectImport;
+    if (!classProps.imports) classProps.imports = {};
+    classProps.imports[componentOptions.typeName] = componentOptions.typePath;
+    classProps.imports[capitalizeFirstLetter(componentName)] = componentOptions.typePath;
+    if (treeSelectImport) classProps.imports['ITreeSelectProps'] = treeSelectImport;
     return classProps;
 }
 

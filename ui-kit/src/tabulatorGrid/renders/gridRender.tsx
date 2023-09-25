@@ -1,10 +1,9 @@
 import React, {useCallback, useEffect} from 'react';
-import ReactTabulator, {ITabulator} from '@src/tabulatorReact';
+import ReactTabulator, {ITabulator} from '@src/tabulatorBase';
 import {IGridApi} from '../hooks/api';
 import dispatcher from '@src/formsDispatcher';
 import {IGridProps} from '../tabulatorGrid';
 import {useEvents} from '../hooks/events';
-import {useColumnDef, usePrepareColumns} from '../hooks/columns';
 
 const GridRender_ = (
     {
@@ -16,14 +15,13 @@ const GridRender_ = (
         gridApi: IGridApi;
         gridProps: IGridProps;
     }): React.JSX.Element => {
-    const columnDef = useColumnDef(gridProps.columnDefaults, gridApi);
-    const columns = usePrepareColumns(gridProps.columns, gridProps.dataTree, gridApi);
-    const events = useEvents(gridApi);
+    const events = useEvents(gridApi, gridProps.events);
 
     const onTableRef = useCallback(
-        (tabulatorRef: React.MutableRefObject<ITabulator | undefined>) => {
+        (tabulatorRef: React.MutableRefObject<ITabulator>) => {
             tableRef.current = tabulatorRef.current;
             gridApi.tableApi = tabulatorRef.current;
+            console.log( gridApi.tableApi)
         },
         [gridApi, tableRef]
     );
@@ -37,12 +35,13 @@ const GridRender_ = (
             onTableRef={onTableRef}
             gridId={gridApi.getGridId()}
             dataTree={gridProps.dataTree}
-            dataTreeChildField={gridProps.dataTreeChildField ?? 'children'}
-            dataTreeParentField={gridProps.dataTreeParentField ?? 'parent'}
-            dataTreeChildIndent={gridProps.dataTreeChildIndent ?? 22}
+            dataTreeChildField={gridProps.dataTreeChildField}
+            dataTreeParentField={gridProps.dataTreeParentField}
+            dataTreeChildIndent={gridProps.dataTreeChildIndent}
             dataTreeFilter={true}
             data={gridApi.getDataSet()}
-            columns={columns}
+            columns={gridProps.columns}
+            columnDefaults={gridProps.columnDefaults}
             containerClassName={gridProps.className}
             placeholder={gridProps.placeholder ?? 'Строки отсутствуют'}
             layout={gridProps.layout ?? 'fitData'}
@@ -53,7 +52,6 @@ const GridRender_ = (
             height={gridProps.height}
             maxHeight={gridProps.maxHeight}
             minHeight={gridProps.minHeight}
-            selectable={false} //We don't use built selectable mode. We use the custom selection algorithm
             multiSelect={gridProps.multiSelect}
             resizableColumnFit={gridProps.resizableColumnFit}
             rowHeight={gridProps.rowHeight}
@@ -71,10 +69,8 @@ const GridRender_ = (
             initialFilter={gridProps.initialFilter}
             initialSort={gridProps.initialSort}
             headerVisible={gridProps.headerVisible !== false}
-            columnDefaults={columnDef}
             sortMode={gridProps.gridMode}
             filterMode={gridProps.gridMode}
-            dataTreeBranchElement={false}
             /*rowFormatter={(row: RowComponent) => {
                     const table = row.getTable() as ITabulator;
                     if (!tableBuilt) return;

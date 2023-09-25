@@ -15,9 +15,10 @@ export interface IAdvancedTreeModuleTableOptions {
 export type IFilterFunction = (filterVal: AnyType, rowValue: AnyType, rowData: AnyType, filterParams: AnyType) => boolean
 
 export interface IAdvancedTreeModuleTable {
-    getBaseTreeDataFilter: (
-        matchFunction: IFilterFunction | undefined
-    ) => IFilterFunction;
+    getBaseTreeDataFilter: (matchFunction: IFilterFunction | undefined) => IFilterFunction;
+
+    /** Show/hide inline filter */
+    toggleInlineFilter: (show: boolean) => void
 }
 
 
@@ -140,11 +141,9 @@ export class AdvancedTreeModule extends Module {
         this.table = table as IAdvancedTreeTabulator;
         const _this = this as unknown as IModule;
 
-        const filterFunctions = this.prepareDefaultFilters();
-        Tabulator.extendModule('filter', 'filters', filterFunctions);
-
         _this.registerTableOption('dataTreeParentField', undefined);
         _this.registerTableFunction('getBaseTreeDataFilter', this.getBaseTreeDataFilter.bind(this));
+        _this.registerTableFunction('toggleInlineFilter', this.toggleInlineFilter.bind(this));
     }
 
     // noinspection JSUnusedGlobalSymbols
@@ -153,12 +152,15 @@ export class AdvancedTreeModule extends Module {
 
         const _this = this as unknown as IModule;
         _this.subscribe('filter-changed', this.onFilterChanged.bind(this));
+
+        const filterFunctions = this.prepareDefaultFilters();
+        Tabulator.extendModule('filter', 'filters', filterFunctions);
     }
 
     private prepareDefaultFilters() {
         const newDefFilters: typeof defaultFilters = {};
         for (const key in defaultFilters) {
-            if (this.table.options.dataTree) newDefFilters[key] = defaultFilters[key];
+            if (!this.table.options.dataTree) newDefFilters[key] = defaultFilters[key];
             else newDefFilters[key] = this.getBaseTreeDataFilter(defaultFilters[key]);
         }
 
@@ -251,6 +253,35 @@ export class AdvancedTreeModule extends Module {
 
     private getLastFilterField() {
         return this.lastFilteredField ?? '';
+    }
+
+    public toggleInlineFilter(show: boolean) {
+        // Show/hide filters
+        // *Workaround:
+        // Tabulator allows to show/hide headerFilter only via updateColumnDefinition, which is very slow and leads to glitches and regenerates all columns
+        // Let's use a workaround. We include headerFilter on grid initialization and hide it in CSS. When necessary, we display it, but this requires additional style calculations.
+        const filterHeight = 33;
+        const tableHolder = this.table.element.querySelector<HTMLElement>('.tabulator-tableholder');
+        const headerElements = this.table.element.querySelectorAll<HTMLElement>('.tabulator-col');
+        const filterElements = this.table.element.querySelectorAll<HTMLElement>('.tabulator-header-filter');
+        if (!tableHolder || !headerElements || !filterElements) return;
+
+        if (!show) this.table.clearHeaderFilter();
+
+        filterElements.forEach((elem) => {
+            elem.style.display = !show ? 'none' : 'block';
+        });
+
+        let headerHeight = 0;
+        headerElements.forEach((elem) => {
+            headerHeight = elem.offsetHeight;
+            elem.style.height = elem.offsetHeight + filterHeight * (show ? 1 : -1) + 'px';
+        });
+
+        const tableHolderOffset = headerHeight + filterHeight * (show ? 1 : -1);
+        tableHolder.style.minHeight = 'calc(100% - ' + tableHolderOffset + 'px)';
+        tableHolder.style.height = 'calc(100% - ' + tableHolderOffset + 'px)';
+        tableHolder.style.maxHeight = 'calc(100% - ' + tableHolderOffset + 'px)';
     }
 }
 

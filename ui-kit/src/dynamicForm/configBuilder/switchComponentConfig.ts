@@ -1,5 +1,6 @@
 import {IDFormFieldProps} from '@src/dynamicForm/components/baseComponent';
 import {BaseComponentConfig} from './baseComponentConfig';
+import {IDFormFieldSwitchProps, SwitchComponent} from '@src/dynamicForm/components/switchComponent';
 
 
 export class SwitchComponentConfig<T>  extends BaseComponentConfig<T> {

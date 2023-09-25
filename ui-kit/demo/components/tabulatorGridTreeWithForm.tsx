@@ -5,9 +5,9 @@ import {DFormModalConfig} from '@src/dynamicFormModal/configBuilder';
 import {InputComponentConfig} from '@src/dynamicForm/configBuilder/inputComponentConfig';
 import {TreeSelectComponentConfig} from '@src/dynamicForm/configBuilder/treeSelectComponentConfig';
 import {NumberComponentConfig} from '@src/dynamicForm/configBuilder/numberComponentConfig';
-import TabulatorGrid, {IReactTabulatorProps, IGridRowData} from '@src/tabulatorGrid';
+import TabulatorGrid, {ITabulatorProps, IGridRowData} from '@src/tabulatorGrid';
 
-const columns: IReactTabulatorProps['columns'] = [
+const columns: ITabulatorProps['columns'] = [
     {title: 'Name', field: 'name'},
     {title: 'Age', field: 'age', hozAlign: 'left', formatter: 'progress'},
     {title: 'Favourite Color', field: 'col'},

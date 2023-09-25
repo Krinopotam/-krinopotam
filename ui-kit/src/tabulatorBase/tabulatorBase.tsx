@@ -1,3 +1,4 @@
+import 'tabulator-tables/dist/css/tabulator_simple.css';
 import {EventCallBackMethods, RowComponent, TabulatorFull as Tabulator} from 'tabulator-tables';
 import React from 'react';
 import {useInit} from './hooks/init';
@@ -8,19 +9,17 @@ import {
 } from './modules/activeSelectionModule';
 import {IAdvancedTreeTabulator} from './modules/advancedTreeModule';
 import {HelpersStrings} from "@krinopotam/js-helpers";
+import {Stylization} from "@src/tabulatorBase/stylization";
 
-type _ITabulator = IAdvancedTreeTabulator & IActiveSelectionTabulator & Tabulator
-
-export interface ITabulator extends _ITabulator {
-    /** is table initialized */
-    initialized: boolean;
-}
+export type ITabulator = IAdvancedTreeTabulator & IActiveSelectionTabulator & Tabulator
 
 export type ITabulatorRow = RowComponent & IActiveSelectionModuleRow;
 
-export interface IReactTabulatorProps extends Omit<ITabulator['options'], 'footerElement'> {
+export type ITabulatorEvents = Partial<EventCallBackMethods> & IActiveSelectionModuleTableEvents;
+
+export interface ITabulatorProps extends Omit<ITabulator['options'], 'footerElement'> {
     /** On the tableRef ready callback */
-    onTableRef?: (ref: React.MutableRefObject<ITabulator | undefined>) => void;
+    onTableRef?: (ref: React.MutableRefObject<ITabulator>) => void;
 
     /** Grid ID*/
     gridId?: string;
@@ -48,7 +47,7 @@ export interface IReactTabulatorProps extends Omit<ITabulator['options'], 'foote
     resizableColumnFit?: boolean;
 }
 
-const TabulatorReact = ({onTableRef, gridId, events, containerClassName, width, minWidth, maxWidth, ...props}: IReactTabulatorProps): React.JSX.Element => {
+const TabulatorBase = ({onTableRef, gridId, events, containerClassName, width, minWidth, maxWidth, ...props}: ITabulatorProps): React.JSX.Element => {
     const containerRef = React.useRef<HTMLDivElement>(null as unknown as HTMLDivElement);
     const tableRef = React.useRef<ITabulator>();
 
@@ -56,12 +55,14 @@ const TabulatorReact = ({onTableRef, gridId, events, containerClassName, width, 
 
     useInit({props, events, containerRef, tableRef, onTableRef});
 
-    const containerStyle: React.CSSProperties = {};
-    containerStyle.width = width;
-    containerStyle.maxWidth = maxWidth;
-    containerStyle.minWidth = minWidth;
+    const containerStyle: React.CSSProperties = {width: width, maxWidth: maxWidth, minWidth: minWidth};
 
-    return <div ref={containerRef} id={gridId ?? newId} data-instance={gridId ?? newId} className={containerClassName} style={containerStyle}/>;
+    return (
+        <>
+            <Stylization/>
+            <div ref={containerRef} id={gridId ?? newId} data-instance={gridId ?? newId} className={containerClassName} style={containerStyle}/>
+        </>
+    );
 };
 
-export default TabulatorReact;
+export default TabulatorBase;

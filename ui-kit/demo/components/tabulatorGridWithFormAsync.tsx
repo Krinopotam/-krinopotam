@@ -2,7 +2,7 @@
 
 import React from 'react';
 import {DFormModalConfig, NumberComponentConfig, InputComponentConfig} from '@src/dynamicFormModal/configBuilder';
-import TabulatorGrid, {IReactTabulatorProps, IGridRowData} from '@src/tabulatorGrid';
+import TabulatorGrid, {ITabulatorProps, IGridRowData} from '@src/tabulatorGrid';
 
 type IPerson = {
     id: string;
@@ -12,7 +12,7 @@ type IPerson = {
     dob: string;
 };
 
-const columns: IReactTabulatorProps['columns'] = [
+const columns: ITabulatorProps['columns'] = [
     {title: 'Name', field: 'name'},
     {title: 'Age', field: 'age', hozAlign: 'left', formatter: 'progress'},
     {title: 'Favourite Color', field: 'col'},

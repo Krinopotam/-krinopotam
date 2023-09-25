@@ -6,7 +6,7 @@ import {IGridRowData} from "../tabulatorGrid";
 
 export const usePrepareEditFormProps = (gridApi: IGridApi) => {
     return useMemo(() => {
-        const editFormProps = gridApi.gridProps.editFormProps;
+        const editFormProps = gridApi.gridProps?.editFormProps;
         if (!editFormProps) return undefined;
 
         const formProps = {...editFormProps};
