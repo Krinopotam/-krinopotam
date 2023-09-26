@@ -2,12 +2,6 @@
 import {IComponentOptions, parseProperties, saveFile} from "@src/dynamicForm/configGenerator/configParsingMethods";
 import {addField, addFieldsConfig, addTabs, addValidationRules, getId, getValidationRules, updateFieldsProps} from "@src/dynamicForm/configGenerator/configExtraMethods";
 import {generateClass, IClassProps} from "@src/dynamicForm/configGenerator/configClassMethods";
-import {parse, withCustomConfig, Parser} from "react-docgen-typescript";
-import ts, {displayPartsToString, SyntaxKind} from "typescript";
-import path from "path";
-import fs from "fs";
-import {FileParser, ParserOptions, withCompilerOptions} from "../../../react-docgen-typescript-master/src";
-
 
 const options: Record<string, IComponentOptions> = {
     dForm: {
@@ -122,94 +116,8 @@ function getBaseComponentClassProps(componentName: string) {
 }
 
 
-function prepareConfigs(
-    tsconfigPath: string,
-    parserOpts: ParserOptions
-):[ts.CompilerOptions, ParserOptions] {
-    const basePath = path.dirname(tsconfigPath);
-    const { config } = ts.readConfigFile(tsconfigPath, filename =>
-        fs.readFileSync(filename, 'utf8')
-    );
-
-    const { options } = ts.parseJsonConfigFileContent(
-        config,
-        ts.sys,
-        basePath,
-        {},
-        tsconfigPath
-    );
-
-    return [options, parserOpts];
-}
-
 /** Generate component config class props */
 function getComponentClassProps(componentName: string) {
-    console.log('----------------------')
-
-    const componentFile =  'c:/nginx/www/@krinopotam/ui-kit/src/dynamicForm/components/inputComponent.tsx'
-
-    const tsconfigPath = 'c:\\nginx\\www\\@krinopotam\\ui-kit\\tsconfig.json';
-    /*
-    const parser = withCustomConfig(tsconfigPath, {
-        //propFilter: prop => !/@types[\\/]react[\\/]/.test(prop.parent?.fileName || '')
-        customComponentTypes:['IDFormFieldInputProps']
-    });
-    const components = parser.parse(componentFile);
-
-    console.log(JSON.stringify(components, null, 2));*/
-
-    const [compilerOptions, parseOptions] = prepareConfigs(tsconfigPath, {})
-    const program = ts.createProgram([componentFile], compilerOptions);
-    const parser = new Parser(program, parseOptions);
-
-    const sourceFile =  program.getSourceFile(componentFile)
-
-    const checker = program.getTypeChecker();
-    const moduleSymbol = checker.getSymbolAtLocation(sourceFile as ts.SourceFile) as ts.Symbol;
-
-    //const props = parser.getPropsInfo(propsType, defaultProps);
-    //const type = checker.getTypeOfSymbolAtLocation(moduleSymbol, moduleSymbol?.declarations);
-    const exports = checker.getExportsOfModule(moduleSymbol);
-    //console.log(exports)
-
-    const docs= exports.map(exp => {
-        let rootExp = exp;
-        const declaration = rootExp.valueDeclaration || rootExp.declarations![0];
-        const type = checker.getTypeOfSymbolAtLocation(rootExp, declaration);
-
-        const propsType =
-            parser.extractPropsFromTypeIfStatelessComponent(type) ||
-            parser.extractPropsFromTypeIfStatefulComponent(type);
-
-
-        //const documentation = displayPartsToString(symbol.getDocumentationComment(checker));
-
-
-        const props = exp ? parser.getPropsInfo(exp, {}) : '';
-        console.log(type)
-
-        /*
-        let type = checker.typeToString(checker.getTypeOfSymbolAtLocation(symbol, declaration));
-
-
-        if (declaration.kind === SyntaxKind.InterfaceDeclaration) {
-            type = checker.typeToString(checker.getTypeAtLocation(declaration));
-        }
-
-        return {
-            name: symbol.getName(),
-            kind: declaration.kind,
-            documentation,
-            type  // this is `'FooProps'` now \o/
-        }*/
-    });
-
-    console.log(docs)
-
-
-
-
-
     const baseComponentsClassProps = getBaseComponentClassProps('baseComponent');
 
     //component options
