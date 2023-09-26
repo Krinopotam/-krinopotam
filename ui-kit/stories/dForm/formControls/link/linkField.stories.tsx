@@ -2,8 +2,6 @@
 
 import type {Meta, StoryObj} from '@storybook/react'
 import LinkField from "./linkField";
-import {componentsCallbacks} from "../_common/componentsCallbacks";
-import {IDFormLinkComponentCallbacks} from "@src/dynamicForm/components/linkComponent";
 
 export default {
     title: 'DForm/Controls/Link',
@@ -43,40 +41,6 @@ export const Playground: Story = {
         href: 'https://ya.ru',
         value: 'Click me',
         target: '_blank',
-        callbacks: {
-            onClick: () => {alert('Link clicked')}
-        }
     },
 }
 
-const linkCallbacks: IDFormLinkComponentCallbacks = {
-    onClick: (...args) => { console.log('onClick', args) },
-    onContextMenu: (...args) => { console.log('onContextMenu', args) },
-    onDoubleClick: (...args) => { console.log('onDoubleClick', args) },
-    onDrag: (...args) => { console.log('onDrag', args) },
-    onDragEnd: (...args) => { console.log('onDragEnd', args) },
-    onDragEnter: (...args) => { console.log('onDragEnter', args) },
-    onDragExit: (...args) => { console.log('onDragExit', args) },
-    onDragLeave: (...args) => { console.log('onDragLeave', args) },
-    onDragOver: (...args) => { console.log('onDragOver', args) },
-    onDragStart: (...args) => { console.log('onDragStart', args) },
-    onDrop: (...args) => { console.log('onDrop', args) },
-    onMouseDown: (...args) => { console.log('onMouseDown', args) },
-    onMouseEnter: (...args) => { console.log('onMouseEnter', args) },
-    onMouseLeave: (...args) => { console.log('onMouseLeave', args) },
-    onMouseMove: (...args) => { console.log('onMouseMove', args) },
-    onMouseOut: (...args) => { console.log('onMouseOut', args) },
-    onMouseOver: (...args) => { console.log('onMouseOver', args) },
-    onMouseUp: (...args) => { console.log('onMouseUp', args) },
-}
-const callbacks = {...componentsCallbacks, ...linkCallbacks}
-
-export const Callbacks: Story = {
-    args: {
-        label: 'Link field',
-        href: 'https://ya.ru',
-        value: 'Click me',
-        target: '_blank',
-        callbacks: callbacks
-    },
-};

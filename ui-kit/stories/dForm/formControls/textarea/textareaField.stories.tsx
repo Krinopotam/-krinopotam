@@ -2,7 +2,6 @@
 
 import type {Meta, StoryObj} from '@storybook/react';
 import TextAreaField from "./textAreaField";
-import {componentsCallbacks} from "../_common/componentsCallbacks";
 
 export default {
     title: 'DForm/Controls/TextArea',
@@ -40,13 +39,6 @@ type Story = StoryObj<typeof TextAreaField>;
 export const Playground: Story = {
     args: {
         label: 'TextArea field',
-    },
-};
-
-export const Callbacks: Story = {
-    args: {
-        label: 'TextArea field',
-        ...componentsCallbacks
     },
 };
 

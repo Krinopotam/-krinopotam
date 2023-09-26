@@ -2,7 +2,6 @@
 
 import type {Meta, StoryObj} from '@storybook/react'
 import PasswordField from "./passwordField";
-import {componentsCallbacks} from "../_common/componentsCallbacks";
 
 export default {
     title: 'DForm/Controls/Password',
@@ -41,10 +40,3 @@ export const Playground: Story = {
         label: 'Password field',
     },
 }
-
-export const Callbacks: Story = {
-    args: {
-        label: 'Password field',
-        ...componentsCallbacks
-    },
-};

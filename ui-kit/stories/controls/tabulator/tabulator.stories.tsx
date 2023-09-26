@@ -91,7 +91,7 @@ type Story = StoryObj<typeof Tabulator>;
 export const Simple: Story = {
     args: {
         data: dataSet,
-
+        //headerFilterHidden:true,
         columns: [
             {title: 'Name', field: 'name'},
             {title: 'Age', field: 'age', hozAlign: 'left', formatter: 'progress'},

@@ -7,11 +7,11 @@ import {
     IActiveSelectionModuleTableEvents,
     IActiveSelectionTabulator,
 } from './modules/activeSelectionModule';
-import {IAdvancedTreeTabulator} from './modules/advancedTreeModule';
+import {IAdvancedHeaderFilterTabulator} from './modules/advancedHeaderFilterModule';
 import {HelpersStrings} from "@krinopotam/js-helpers";
 import {Stylization} from "@src/tabulatorBase/stylization";
 
-export type ITabulator = IAdvancedTreeTabulator & IActiveSelectionTabulator & Tabulator
+export type ITabulator = IAdvancedHeaderFilterTabulator & IActiveSelectionTabulator & Tabulator
 
 export type ITabulatorRow = RowComponent & IActiveSelectionModuleRow;
 

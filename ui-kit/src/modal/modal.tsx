@@ -47,6 +47,9 @@ export type IModalProps = AntModalProps & {
 
     /** Is the for can be resized (show the resize handler). Default: true */
     resizable?: boolean;
+
+    /** Footer content */
+    footer?:React.ReactNode
 };
 
 export const Modal = ({resizable = true, ...props}: IModalProps): React.JSX.Element => {

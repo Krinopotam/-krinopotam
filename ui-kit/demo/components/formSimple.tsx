@@ -11,6 +11,9 @@ interface IFields {
     password: string;
 }
 
+
+
+
 const formProps = new DFormConfig<IFields>('Test form')
     .confirmChanges(true)
     .addFields(

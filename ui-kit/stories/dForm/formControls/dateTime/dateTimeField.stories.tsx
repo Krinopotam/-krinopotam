@@ -1,7 +1,6 @@
 // noinspection DuplicatedCode
 
 import type {Meta, StoryObj} from '@storybook/react'
-import {componentsCallbacks} from "../_common/componentsCallbacks";
 import DateTimeField from "./dateTimeField";
 
 
@@ -83,12 +82,3 @@ export const Year: Story = {
         width: 200
     },
 }
-
-
-export const Callbacks: Story = {
-    args: {
-        label: 'DateTime field',
-        mode:'dateTime',
-        ...componentsCallbacks
-    },
-};

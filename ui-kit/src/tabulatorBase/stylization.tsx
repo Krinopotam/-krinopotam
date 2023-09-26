@@ -37,12 +37,6 @@ const TabulatorCss = createGlobalStyle`
           color: ${(props: GlobalToken) => props.colorText};
         }
 
-        /* Workaround to hide/show headerFilter */
-        .tabulator-header-filter {
-          display: none;
-        }
-        /* ------- */
-        
         .tabulator-header-filter input {
           color: ${(props: GlobalToken) => props.colorText};
           font-size: ${(props: GlobalToken) => props.fontSize}px;

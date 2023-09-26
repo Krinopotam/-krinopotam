@@ -190,7 +190,6 @@ const deleteHandler = (gridApi: IGridApi) => {
 
 /** Get update button props */
 const useGetFilterToggleButton = (gridApi: IGridApi): IFormButton | undefined => {
-    const toggle = useRef(false);
     return useMemo(() => {
         const gridProps = gridApi.gridProps;
         if (gridProps.buttons?.filterToggle === null) return undefined;
@@ -200,14 +199,22 @@ const useGetFilterToggleButton = (gridApi: IGridApi): IFormButton | undefined =>
             icon: <FilterOutlined />,
             position: 'right',
             size: 'small',
+            active:true,
             //disabled: !activeRowKey || selectedRow.length !== 1,
+
             onClick: () => {
-                toggle.current = !toggle.current;
-                gridApi.tableApi?.toggleInlineFilter(toggle.current)
+                const show = gridApi.tableApi?.toggleHeaderFilter()
+                // gridApi.tableApi?.updateColumnDefinition("name", {headerFilter:false})
+                // gridApi.tableApi?.updateColumnDefinition("age", {headerFilter:false})
+                // gridApi.tableApi?.updateColumnDefinition("col", {headerFilter:false})
+                // gridApi.tableApi?.updateColumnDefinition("dob", {headerFilter:false})
+                // gridApi.tableApi?.updateColumnDefinition("rating", {headerFilter:false})
+                // gridApi.tableApi?.updateColumnDefinition("passed", {headerFilter:false})
+
 
                 gridApi.buttonsApi.updateButtons({
                     filterToggle: {
-                        active: toggle.current,
+                        active: show,
                     },
                 });
             },

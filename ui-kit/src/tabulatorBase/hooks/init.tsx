@@ -3,7 +3,7 @@ import {ColumnDefinition, EventCallBackMethods, TabulatorFull as Tabulator} from
 import {ITabulatorProps, ITabulator} from '../tabulatorBase';
 import {createRoot} from 'react-dom/client';
 import {ActiveSelectionModule} from '../modules/activeSelectionModule';
-import {AdvancedTreeModule, IFilterFunction} from '../modules/advancedTreeModule';
+import {AdvancedHeaderFilterModule, IFilterFunction} from '../modules/advancedHeaderFilterModule';
 import {collapseButton, expandButton} from '../parts/icons';
 import {setPatches} from '../patches/setPatches';
 import {FooterHOC} from "@src/tabulatorBase/parts/footerHOC";
@@ -54,11 +54,11 @@ const initTabulator = async ({
     const $container = containerRef.current as HTMLDivElement; // mounted DOM element
     const propOptions = await propsToOptions(props, tableRef);
 
-    tableRef.current = await initTabulatorClass($container, propOptions, events);
+    tableRef.current = await initTabulatorClass($container, propOptions, props, events);
     onTableRef?.(tableRef as React.MutableRefObject<ITabulator>);
 };
 
-function syncRender(component: React.JSX.Element, container: HTMLElement): Promise<HTMLElement> {
+const syncRender = async (component: React.JSX.Element, container: HTMLElement): Promise<HTMLElement> => {
     return new Promise((resolve) => {
         const root = createRoot(container);
         root.render(<FooterHOC onEffect={() => {resolve(container)}}>{component}</FooterHOC>);
@@ -74,7 +74,7 @@ const propsToOptions = async (props: ITabulatorProps, tableRef: React.MutableRef
         output.footerElement = el.innerHTML;
     }
 
-    output.columnDefaults = prepareColumnDefaults(output.columnDefaults, tableRef)
+    output.columnDefaults = prepareColumnDefaults(output.columnDefaults, output.dataTree, tableRef)
     output.columns = prepareColumns(output.columns, output.dataTree, tableRef)
 
     if (!props.dataTreeChildField) output.dataTreeChildField = 'children'
@@ -96,32 +96,28 @@ const propsToOptions = async (props: ITabulatorProps, tableRef: React.MutableRef
     return output;
 };
 
-const initTabulatorClass = async ($container: HTMLDivElement, options: ITabulator['options'], events?: Partial<EventCallBackMethods>): Promise<ITabulator> => {
+const initTabulatorClass = async ($container: HTMLDivElement, options: ITabulator['options'], props: ITabulatorProps, events?: Partial<EventCallBackMethods>): Promise<ITabulator> => {
     Tabulator.registerModule(ActiveSelectionModule);
-    Tabulator.registerModule(AdvancedTreeModule);
+    Tabulator.registerModule(AdvancedHeaderFilterModule);
 
     return new Promise((resolve) => {
         const tableApi = new Tabulator($container, options) as ITabulator;
         setPatches(tableApi); //TODO: Monkey patches. Check if the developer fixed it
 
         if (!events) events = {}
-        const _tableBuilt = events.tableBuilt
-
-        events.tableBuilt = () => {
-            resolve(tableApi)
-            _tableBuilt?.();
-        }
 
         for (const eventName in events) {
             const handler = events[eventName as keyof EventCallBackMethods];
             if (!handler) continue;
             tableApi?.on(eventName as keyof EventCallBackMethods, handler);
         }
+
+        tableApi?.on('tableBuilt', () => { resolve(tableApi) })
     });
 }
 
 
-const prepareColumnDefaults = (columnDef: Partial<ColumnDefinition> | undefined, tableRef: React.MutableRefObject<ITabulator | undefined>) => {
+const prepareColumnDefaults = (columnDef: Partial<ColumnDefinition> | undefined, dataTree: boolean | undefined, tableRef: React.MutableRefObject<ITabulator | undefined>) => {
 
     const colDef: Partial<ColumnDefinition> = {
         resizable: 'header',
@@ -132,6 +128,8 @@ const prepareColumnDefaults = (columnDef: Partial<ColumnDefinition> | undefined,
     const userColDef = columnDef ?? ({} as ColumnDefinition);
 
     const resultColDef = {...colDef, ...userColDef} as ColumnDefinition;
+
+    if (!dataTree) return resultColDef;
 
     if (typeof userColDef.headerFilterFunc === 'function') {
         resultColDef.headerFilterFunc = treeFilterFunction(tableRef, userColDef.headerFilterFunc as IFilterFunction)

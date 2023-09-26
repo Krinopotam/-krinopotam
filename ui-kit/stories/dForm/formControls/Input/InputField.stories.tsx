@@ -2,8 +2,6 @@
 
 import type {Meta, StoryObj} from '@storybook/react'
 import InputField from "./inputField";
-import {componentsCallbacks} from "../_common/componentsCallbacks";
-
 
 export default {
     title: 'DForm/Controls/Input',
@@ -42,10 +40,3 @@ export const Playground: Story = {
         label: 'Input field',
     },
 }
-
-export const Callbacks: Story = {
-    args: {
-        label: 'Input field',
-        ...componentsCallbacks
-    },
-};

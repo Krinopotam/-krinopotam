@@ -11,6 +11,7 @@
 		"build": "tsc && vite build",
 		"preview": "vite preview",
 		"dev": "vite --mode demo",
+		"playground": "vite --mode playground",
 		"storybook": "storybook dev -p 6007",
 		"build-storybook": "storybook build",
 		"init-msw": "msw init public/"
@@ -47,6 +48,7 @@
 		"npm": "^9.8.1",
 		"prettier": "^3.0.3",
 		"react": "^18.2.0",
+		"react-docgen-typescript": "^2.2.2",
 		"react-dom": "^18.2.0",
 		"react-router-dom": "^6.15.0",
 		"storybook": "^7.4.2",

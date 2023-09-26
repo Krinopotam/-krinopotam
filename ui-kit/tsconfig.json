@@ -109,6 +109,6 @@
     // "skipDefaultLibCheck": true,                      /* Skip type checking .d.ts files that are included with TypeScript. */
     "skipLibCheck": true                                 /* Skip type checking all .d.ts files. */
   },
-  "include": ["src/**/*", "stories/**/*", ".storybook/**/*", "demo/**/*"],
+  "include": ["src/**/*", "stories/**/*", ".storybook/**/*", "demo/**/*", "playground/**/*"],
   "exclude": ["node_modules/**/*", "dist/**/*", "src/configGenerator/**/*"]
 }

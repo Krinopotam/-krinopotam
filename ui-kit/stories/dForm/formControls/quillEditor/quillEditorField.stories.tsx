@@ -2,7 +2,6 @@
 
 import type {Meta, StoryObj} from '@storybook/react';
 import QuillEditorField from "./quillEditorField";
-import {componentsCallbacks} from "../_common/componentsCallbacks";
 
 export default {
     title: 'DForm/Controls/QuillEditor',
@@ -42,11 +41,3 @@ export const Playground: Story = {
         label: 'Text editor field',
     },
 };
-
-export const Callbacks: Story = {
-    args: {
-        label: 'Text editor field',
-        ...componentsCallbacks
-    },
-};
-

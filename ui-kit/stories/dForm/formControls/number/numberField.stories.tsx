@@ -2,7 +2,6 @@
 
 import type {Meta, StoryObj} from '@storybook/react'
 import NumberField from "./numberField";
-import {componentsCallbacks} from "../_common/componentsCallbacks";
 
 export default {
     title: 'DForm/Controls/Number',
@@ -41,10 +40,3 @@ export const Playground: Story = {
         label: 'Number field',
     },
 }
-
-export const Callbacks: Story = {
-    args: {
-        label: 'Number field',
-        ...componentsCallbacks
-    },
-};

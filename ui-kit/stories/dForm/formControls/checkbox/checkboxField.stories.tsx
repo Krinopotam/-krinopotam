@@ -2,7 +2,6 @@
 
 import type {Meta, StoryObj} from '@storybook/react'
 import CheckboxField from "./checkboxField";
-import {componentsCallbacks} from "../_common/componentsCallbacks";
 
 export default {
     title: 'DForm/Controls/Checkbox',
@@ -41,10 +40,3 @@ export const Playground: Story = {
         label: 'Checkbox field',
     },
 }
-
-export const Callbacks: Story = {
-    args: {
-        label: 'Checkbox field',
-        ...componentsCallbacks
-    },
-};
