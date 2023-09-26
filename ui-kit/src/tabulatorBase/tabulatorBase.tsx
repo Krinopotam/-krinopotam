@@ -59,7 +59,7 @@ const TabulatorBase = ({onTableRef, gridId, events, containerClassName, width, m
 
     return (
         <>
-            <Stylization/>
+            <Stylization striped={true}/>
             <div ref={containerRef} id={gridId ?? newId} data-instance={gridId ?? newId} className={containerClassName} style={containerStyle}/>
         </>
     );

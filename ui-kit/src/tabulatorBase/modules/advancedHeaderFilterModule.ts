@@ -27,108 +27,6 @@ export interface IAdvancedHeaderFilterModuleTable {
 
 //endregion
 
-const defaultFilters: Record<string, IFilterFunction | undefined> = {
-    //equal to
-    '=': function (filterVal, rowVal) {
-        return rowVal == filterVal;
-    },
-
-    //less than
-    '<': function (filterVal, rowVal) {
-        return rowVal < filterVal;
-    },
-
-    //less than or equal to
-    '<=': function (filterVal, rowVal) {
-        return rowVal <= filterVal;
-    },
-
-    //greater than
-    '>': function (filterVal, rowVal) {
-        return rowVal > filterVal;
-    },
-
-    //greater than or equal to
-    '>=': function (filterVal, rowVal) {
-        return rowVal >= filterVal;
-    },
-
-    //not equal to
-    '!=': function (filterVal, rowVal) {
-        return rowVal != filterVal;
-    },
-
-    regex: function (filterVal, rowVal) {
-        if (typeof filterVal == 'string') filterVal = new RegExp(filterVal);
-
-        return filterVal.test(rowVal);
-    },
-
-    //contains the string
-    like: function (filterVal, rowVal) {
-        if (filterVal === null || typeof filterVal === 'undefined') {
-            return rowVal === filterVal;
-        } else {
-            if (typeof rowVal !== 'undefined' && rowVal !== null) {
-                return String(rowVal).toLowerCase().indexOf(filterVal.toLowerCase()) > -1;
-            } else {
-                return false;
-            }
-        }
-    },
-
-    //contains the keywords
-    keywords: function (filterVal, rowVal, _rowData, filterParams) {
-        const keywords = filterVal.toLowerCase().split(typeof filterParams.separator === 'undefined' ? ' ' : filterParams.separator),
-            value = String(rowVal === null || typeof rowVal === 'undefined' ? '' : rowVal).toLowerCase(),
-            matches = [];
-
-        keywords.forEach((keyword: string) => {
-            if (value.includes(keyword)) {
-                matches.push(true);
-            }
-        });
-
-        return filterParams.matchAll ? matches.length === keywords.length : !!matches.length;
-    },
-
-    //starts with the string
-    starts: function (filterVal, rowVal) {
-        if (filterVal === null || typeof filterVal === 'undefined') {
-            return rowVal === filterVal;
-        } else {
-            if (typeof rowVal !== 'undefined' && rowVal !== null) {
-                return String(rowVal).toLowerCase().startsWith(filterVal.toLowerCase());
-            } else {
-                return false;
-            }
-        }
-    },
-
-    //ends with the string
-    ends: function (filterVal, rowVal) {
-        if (filterVal === null || typeof filterVal === 'undefined') {
-            return rowVal === filterVal;
-        } else {
-            if (typeof rowVal !== 'undefined' && rowVal !== null) {
-                return String(rowVal).toLowerCase().endsWith(filterVal.toLowerCase());
-            } else {
-                return false;
-            }
-        }
-    },
-
-    //in array
-    in: function (filterVal, rowVal) {
-        if (Array.isArray(filterVal)) {
-            return filterVal.length ? filterVal.indexOf(rowVal) > -1 : true;
-        } else {
-            console.warn('Filter Error - filter value is not an array:', filterVal);
-            return false;
-        }
-    },
-};
-
 export class AdvancedHeaderFilterModule extends Module {
     private table: IAdvancedHeaderFilterTabulator;
 
@@ -313,3 +211,106 @@ export class AdvancedHeaderFilterModule extends Module {
 }
 
 AdvancedHeaderFilterModule.moduleName = 'advancedHeaderFilter';
+
+
+const defaultFilters: Record<string, IFilterFunction | undefined> = {
+    //equal to
+    '=': function (filterVal, rowVal) {
+        return rowVal == filterVal;
+    },
+
+    //less than
+    '<': function (filterVal, rowVal) {
+        return rowVal < filterVal;
+    },
+
+    //less than or equal to
+    '<=': function (filterVal, rowVal) {
+        return rowVal <= filterVal;
+    },
+
+    //greater than
+    '>': function (filterVal, rowVal) {
+        return rowVal > filterVal;
+    },
+
+    //greater than or equal to
+    '>=': function (filterVal, rowVal) {
+        return rowVal >= filterVal;
+    },
+
+    //not equal to
+    '!=': function (filterVal, rowVal) {
+        return rowVal != filterVal;
+    },
+
+    regex: function (filterVal, rowVal) {
+        if (typeof filterVal == 'string') filterVal = new RegExp(filterVal);
+
+        return filterVal.test(rowVal);
+    },
+
+    //contains the string
+    like: function (filterVal, rowVal) {
+        if (filterVal === null || typeof filterVal === 'undefined') {
+            return rowVal === filterVal;
+        } else {
+            if (typeof rowVal !== 'undefined' && rowVal !== null) {
+                return String(rowVal).toLowerCase().indexOf(filterVal.toLowerCase()) > -1;
+            } else {
+                return false;
+            }
+        }
+    },
+
+    //contains the keywords
+    keywords: function (filterVal, rowVal, _rowData, filterParams) {
+        const keywords = filterVal.toLowerCase().split(typeof filterParams.separator === 'undefined' ? ' ' : filterParams.separator),
+            value = String(rowVal === null || typeof rowVal === 'undefined' ? '' : rowVal).toLowerCase(),
+            matches = [];
+
+        keywords.forEach((keyword: string) => {
+            if (value.includes(keyword)) {
+                matches.push(true);
+            }
+        });
+
+        return filterParams.matchAll ? matches.length === keywords.length : !!matches.length;
+    },
+
+    //starts with the string
+    starts: function (filterVal, rowVal) {
+        if (filterVal === null || typeof filterVal === 'undefined') {
+            return rowVal === filterVal;
+        } else {
+            if (typeof rowVal !== 'undefined' && rowVal !== null) {
+                return String(rowVal).toLowerCase().startsWith(filterVal.toLowerCase());
+            } else {
+                return false;
+            }
+        }
+    },
+
+    //ends with the string
+    ends: function (filterVal, rowVal) {
+        if (filterVal === null || typeof filterVal === 'undefined') {
+            return rowVal === filterVal;
+        } else {
+            if (typeof rowVal !== 'undefined' && rowVal !== null) {
+                return String(rowVal).toLowerCase().endsWith(filterVal.toLowerCase());
+            } else {
+                return false;
+            }
+        }
+    },
+
+    //in array
+    in: function (filterVal, rowVal) {
+        if (Array.isArray(filterVal)) {
+            return filterVal.length ? filterVal.indexOf(rowVal) > -1 : true;
+        } else {
+            console.warn('Filter Error - filter value is not an array:', filterVal);
+            return false;
+        }
+    },
+};
