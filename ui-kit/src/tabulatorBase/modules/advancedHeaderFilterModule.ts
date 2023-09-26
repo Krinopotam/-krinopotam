@@ -312,4 +312,4 @@ export class AdvancedHeaderFilterModule extends Module {
     }
 }
 
-AdvancedHeaderFilterModule.moduleName = 'advancedTree';
+AdvancedHeaderFilterModule.moduleName = 'advancedHeaderFilter';
