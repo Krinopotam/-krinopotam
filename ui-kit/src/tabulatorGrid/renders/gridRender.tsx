@@ -21,7 +21,6 @@ const GridRender_ = (
         (tabulatorRef: React.MutableRefObject<ITabulator>) => {
             tableRef.current = tabulatorRef.current;
             gridApi.tableApi = tabulatorRef.current;
-            console.log( gridApi.tableApi)
         },
         [gridApi, tableRef]
     );

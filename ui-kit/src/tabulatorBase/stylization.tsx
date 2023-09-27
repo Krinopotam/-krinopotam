@@ -12,16 +12,56 @@ const TabulatorCss = createGlobalStyle<IStyleType>`
   .tabulator {
     background-color: ${(props: GlobalToken) => props.colorBgContainer};
 
-    .tabulator-header {
-      background-color: transparent;
-      border-top-right-radius: ${(props: GlobalToken) => props.borderRadius}px;
-      border-top-left-radius: ${(props: GlobalToken) => props.borderRadius}px;
-      border-bottom-color: ${(props: GlobalToken) => props.colorBorderSecondary};
+    border-color: ${(props: GlobalToken) => props.colorBorder};
+    border-style: solid;
+    border-width: thin;
+    border-radius: ${(props: GlobalToken) => props.borderRadius}px;
 
+    .tabulator-header {
+      //background-color: transparent;
+      background-color: ${(props: GlobalToken) => props.colorBgLayout};
+      border-bottom-color: ${(props: GlobalToken) => props.colorBorder};
+
+      /** left frozen column header border */
+
+      .tabulator-calcs-holder {
+        border:0;
+        border-top: 1px solid ${(props: GlobalToken) => props.colorBorder};
+        background-color: ${(props: GlobalToken) => props.colorBgLayout} !important;
+
+        .tabulator-calcs-top {
+          background-color: ${(props: GlobalToken) => props.colorBgLayout} !important;
+          border: 0;
+
+          .tabulator-cell {
+            border-right: 1px solid ${(props: GlobalToken) => props.colorBorder};
+          }
+        }
+
+        .tabulator-frozen.tabulator-frozen-left {
+          border-right: 2px solid ${(props: GlobalToken) => props.colorBorder};
+        }
+        .tabulator-frozen.tabulator-frozen-right {
+          border-left: 2px solid ${(props: GlobalToken) => props.colorBorder};
+        }
+      }
+
+      .tabulator-col-resize-handle:hover {
+        background-color: ${(props: GlobalToken) => props.colorPrimaryHover};
+      }
+      
       .tabulator-col {
-        background-color: ${(props: GlobalToken) => props.colorFillQuaternary};
+        background-color: ${(props: GlobalToken) => props.colorBgLayout};
         border-right-color: ${(props: GlobalToken) => props.colorBorderSecondary};
 
+        &.tabulator-frozen.tabulator-frozen-left {
+          border-right: 2px solid ${(props: GlobalToken) => props.colorBorder};
+        }
+
+        &.tabulator-frozen.tabulator-frozen-right {
+          border-left: 2px solid ${(props: GlobalToken) => props.colorBorder};
+        }
+        
         &.tabulator-sortable {
           &.tabulator-col-sorter-element:hover {
             background-color: ${(props: GlobalToken) => props.colorFillQuaternary};
@@ -80,36 +120,76 @@ const TabulatorCss = createGlobalStyle<IStyleType>`
               //background-color: ${(props: GlobalToken) => props.colorPrimaryBgHover};
           }
 
-          &.tabulator-selected {
+          &.tabulator-selected .tabulator-cell {
             background-color: ${(props: GlobalToken) => props.colorPrimaryBg};
-
-            &.tabulator-row-even {
-              background-color: ${(props: GlobalToken) => props.colorPrimaryBg};
-            }
           }
 
-          &.tabulator-selected:hover {
+          &.tabulator-selected.tabulator-row-even .tabulator-cell {
+            background-color: ${(props: GlobalToken) => props.colorPrimaryBg};
+          }
+
+          &.tabulator-selected:hover .tabulator-cell {
               //background-color: ${(props: GlobalToken) => props.colorPrimaryBgHover};
           }
 
-          &.tabulator-active {
+          &.tabulator-active .tabulator-cell {
             background-color: ${(props: GlobalToken) => props.colorPrimaryBgHover};
-
-            &.tabulator-row-even {
-              background-color: ${(props: GlobalToken) => props.colorPrimaryBgHover};
-            }
           }
 
-          &.tabulator-row-odd {
+          &.tabulator-active.tabulator-row-even .tabulator-cell {
+            background-color: ${(props: GlobalToken) => props.colorPrimaryBgHover};
+          }
+
+          &.tabulator-row-odd .tabulator-cell {
             //background-color: transparent;
           }
 
-          &.tabulator-row-even {
-            background-color: ${(props) => {return props.striped ? props.colorFillAlter : "transparent"}};
+
+          &.tabulator-row-even .tabulator-cell {
+            background-color: ${(props) => {return props.striped ? props.colorBgLayout : "transparent"}};
           }
 
           .tabulator-cell {
+            background-color: ${(props: GlobalToken) => props.colorBgContainer};
             border-right-color: ${(props: GlobalToken) => props.colorBorderSecondary};
+
+            &.tabulator-frozen.tabulator-frozen-left {
+              border-right: 2px solid ${(props: GlobalToken) => props.colorBorder};
+            }
+            &.tabulator-frozen.tabulator-frozen-right {
+              border-left: 2px solid ${(props: GlobalToken) => props.colorBorder};
+            }
+          }
+        }
+      }
+    }
+
+    .tabulator-footer {
+      color: ${(props: GlobalToken) => props.colorText};
+      font-size: ${(props: GlobalToken) => props.fontSize}px;
+      background-color: ${(props: GlobalToken) => props.colorBgLayout};
+      border-top-color: ${(props: GlobalToken) => props.colorBorder};
+
+      .tabulator-calcs-holder {
+        background-color: ${(props: GlobalToken) => props.colorBgLayout} !important;
+        border: 0;
+        border-bottom: ${(props: GlobalToken) => props.colorBorder};
+        border-bottom-style: solid;
+        border-bottom-width: thin;
+
+        .tabulator-calcs-bottom {
+          border: 0;
+          background-color: ${(props: GlobalToken) => props.colorBgLayout} !important;
+
+          .tabulator-cell {
+            border-color: ${(props: GlobalToken) => props.colorBorder};
+          }
+
+          .tabulator-frozen.tabulator-frozen-left {
+            border-right: 2px solid ${(props: GlobalToken) => props.colorBorder};
+          }
+          .tabulator-frozen.tabulator-frozen-right {
+            border-left: 2px solid ${(props: GlobalToken) => props.colorBorder};
           }
         }
       }

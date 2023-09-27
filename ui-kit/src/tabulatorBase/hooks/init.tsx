@@ -121,8 +121,8 @@ const prepareColumnDefaults = (columnDef: Partial<ColumnDefinition> | undefined,
 
     const colDef: Partial<ColumnDefinition> = {
         resizable: 'header',
-        headerFilter: true,
-        headerFilterFunc: 'like',
+        //headerFilter: true,
+        //headerFilterFunc: 'like',
     };
 
     const userColDef = columnDef ?? ({} as ColumnDefinition);
