@@ -1,23 +1,24 @@
 
     import React from 'react';
-    import {FormFetching} from '../../components/dynamicForm/formFetching';
+    import {ModalFormFetching} from '../../components/dynamicFormModal/modalFormFetching';
     import { Divider } from 'antd';
     import SyntaxHighlighter from 'react-syntax-highlighter';
     import {darcula, docco} from 'react-syntax-highlighter/dist/esm/styles/hljs';
 
-    export const PageFormFetching = (props: {darkMode: boolean}): React.JSX.Element => {
+    export const PageModalFormFetching = (props: {darkMode: boolean}): React.JSX.Element => {
     // language=text
     const source = `
-import React from 'react';
-import {DForm} from @krinopotam/ui-kit/dynamicForm';
-import {DFormConfig} from @krinopotam/ui-kit/dynamicForm/configBuilder/dFormConfig';
-import {InputComponentConfig} from @krinopotam/ui-kit/dynamicForm/configBuilder/inputComponentConfig';
+import React, {useCallback} from 'react';
+import {Button} from @krinopotam/ui-kit/button';
+import {IDFormModalApi, DFormModal} from @krinopotam/ui-kit/dynamicFormModal';
+import {DFormModalConfig, InputComponentConfig} from @krinopotam/ui-kit/dynamicFormModal/configBuilder';
 interface IFields {
     position: string;
     department: string;
 }
-const formProps = new DFormConfig<IFields>('Test form')
-    .formMode('update')
+const formApi = {} as IDFormModalApi;
+const formProps = new DFormModalConfig<IFields>('Test form')
+    .apiRef(formApi)
     .confirmChanges(true)
     .addFields(
         new InputComponentConfig<IFields>('position').label('Должность'),
@@ -34,11 +35,15 @@ const formProps = new DFormConfig<IFields>('Test form')
     })
     .buttons({ok: {position: 'right'}})
     .getConfig();
-export const FormFetching = (): React.JSX.Element => {
+export const ModalFormFetching = (): React.JSX.Element => {
+    const onClick = useCallback(() => {
+        formApi.open('update');
+    }, []);
     return (
         <>
             <div style={{maxWidth: 500}}>
-                <DForm {...formProps} />
+                <Button onClick={onClick}>Открыть форму</Button>
+                <DFormModal {...formProps} />
             </div>
         </>
     );
@@ -47,7 +52,7 @@ export const FormFetching = (): React.JSX.Element => {
     return (
         <>
             <div>
-                <FormFetching />
+                <ModalFormFetching />
             </div>
             <Divider />
             <div>
@@ -59,4 +64,4 @@ export const FormFetching = (): React.JSX.Element => {
     );
 };
 
-export default PageFormFetching;
+export default PageModalFormFetching;

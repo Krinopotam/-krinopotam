@@ -1,38 +1,34 @@
 
     import React from 'react';
-    import {FormWithTemplatedFields} from '../../components/dynamicForm/formWithTemplatedFields';
+    import {TreeSelectAsyncSearch} from '../../components/treeSelect/treeSelectAsyncSearch';
     import { Divider } from 'antd';
     import SyntaxHighlighter from 'react-syntax-highlighter';
     import {darcula, docco} from 'react-syntax-highlighter/dist/esm/styles/hljs';
 
-    export const PageFormWithTemplatedFields = (props: {darkMode: boolean}): React.JSX.Element => {
+    export const PageTreeSelectAsyncSearch = (props: {darkMode: boolean}): React.JSX.Element => {
     // language=text
     const source = `
 import React from 'react';
 import {DForm} from @krinopotam/ui-kit/dynamicForm';
 import {DFormConfig} from @krinopotam/ui-kit/dynamicForm/configBuilder/dFormConfig';
-import {InputComponentConfig} from @krinopotam/ui-kit/dynamicForm/configBuilder/inputComponentConfig';
-import {PasswordComponentConfig} from @krinopotam/ui-kit/dynamicForm/configBuilder/passwordComponentConfig';
-interface IFields {
-    name: string;
-    login: string;
-    cnt: number;
-}
-const login = <T,>() => {
-    return new InputComponentConfig<T>('login1' as keyof T).label('Логин');
-};
-const password = <T,>() => {
-    return new PasswordComponentConfig<T>('password' as keyof T).label('Пароль');
-};
+import {TreeSelectComponentConfig} from @krinopotam/ui-kit/dynamicForm/configBuilder/treeSelectComponentConfig';
+import {ITreeSelectSourcePromise} from @krinopotam/ui-kit/treeselect'
+import {HelpersObjects} from "@krinopotam/js-helpers";
 const formProps = new DFormConfig<IFields>('Test form')
     .confirmChanges(true)
     .addFields(
-        login().label('Имя пользователя'),
-        password()
+        new TreeSelectComponentConfig<IFields>('departments')
+            .label('Подразделения')
+            .fetchMode('onUse')
+            .noCacheFetchedData(true)
+            .minSearchLength(1)
+            .onDataFetch((search: string) => {
+                return asyncFetch(search) as ITreeSelectSourcePromise;
+            })
     )
-    .buttons({ok: {position: 'right'}})
+    .buttons(null)
     .getConfig();
-export const FormWithTemplatedFields = (): React.JSX.Element => {
+export const TreeSelectAsyncSearch = (): React.JSX.Element => {
     return (
         <>
             <div style={{maxWidth: 500}}>
@@ -45,7 +41,7 @@ export const FormWithTemplatedFields = (): React.JSX.Element => {
     return (
         <>
             <div>
-                <FormWithTemplatedFields />
+                <TreeSelectAsyncSearch />
             </div>
             <Divider />
             <div>
@@ -57,4 +53,4 @@ export const FormWithTemplatedFields = (): React.JSX.Element => {
     );
 };
 
-export default PageFormWithTemplatedFields;
+export default PageTreeSelectAsyncSearch;

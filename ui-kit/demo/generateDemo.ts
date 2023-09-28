@@ -1,15 +1,11 @@
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-// noinspection DuplicatedCode
-
 import fs from "fs";
 import {HelpersStrings} from '@krinopotam/js-helpers'
+import React from "react";
 
 
 const _componentsFolder = 'components';
 const _pagesFolder = 'pages';
 const _examplesRoot = __dirname + '/' + _componentsFolder;
-const _importExamplesRoot = '../' + _componentsFolder + '/';
-const _importPagesRoot = './' + _pagesFolder + '/';
 const _pagesPath = __dirname + '/' + _pagesFolder;
 
 interface IFileInfo {
@@ -29,28 +25,12 @@ function run() {
     //clear pages folder
     fs.rmSync(_pagesPath, {recursive: true, force: true})
     if (!fs.existsSync(_pagesPath)) fs.mkdirSync(_pagesPath, {recursive: true});
-
+    console.log('Generated:')
     const files = recursiveDirectoriesRun(_examplesRoot, _componentsFolder)
+    menuItemsSorting(files)
     const [routesString, routeImportString] = generatePages(files)
     generateRoutes(routesString, routeImportString)
     generateMenuProps(files)
-    //console.log(JSON.stringify(files))
-    /*
-    console.log(__dirname + '/' + examplesRoot);
-    const fileList = fs.readdirSync(examplesRoot);
-
-    let routers = '';
-    let imports = '';
-    for (const fileName of fileList) {
-        const fileSource = fs.readFileSync(examplesRoot + '/' + fileName, {encoding: 'utf8', flag: 'r'});
-        const [routeStr, importStr] = generatePageComponent(fileName, examplesRoot, fileSource, pagesPath);
-
-        routers = routers + routeStr + '\n';
-        imports = imports + importStr + '\n';
-    }
-
-    generateExamplesRoutes(imports, routers);
-    */
 }
 
 //region Prepare components files info
@@ -60,7 +40,7 @@ function recursiveDirectoriesRun(curDir: string, curDirFromRoot: string, files?:
     if (!files) files = [];
     for (const entity of fileList) {
         if (entity.isDirectory()) {
-            const folder: IFileInfo = {fileName: entity.name, fileDir: curDir, fileDirFromRoot: curDirFromRoot}
+            const folder: IFileInfo = {fileName: entity.name, fileDir: curDir, fileDirFromRoot: curDirFromRoot, menuItemName: upperFirstLetter(camelCaseSplit(entity.name))}
             folder.children = recursiveDirectoriesRun(curDir + '/' + entity.name, curDirFromRoot + '/' + entity.name);
             files.push(folder);
         } else {
@@ -81,7 +61,6 @@ function processFile(fileName: string, fileDir: string, curDirFromRoot: string):
     let fileContent = fs.readFileSync(fileDir + '/' + fileName, {encoding: 'utf8', flag: 'r'});
     if (!fileContent) return undefined;
 
-
     const [componentName, menuItemName] = parseFileProperties(fileName, fileContent)
     fileContent = clearSource(fileContent)
 
@@ -100,6 +79,7 @@ function parseFileProperties(fileName: string, fileContent: string) {
 
     const fName = getFileNameMainPart(fileName);
     if (!componentName) componentName = upperFirstLetter(fName)
+
     const menuItemName = upperFirstLetter(camelCaseSplit(fName));
 
     return [componentName, menuItemName]
@@ -115,7 +95,7 @@ function clearSource(source: string) {
     let newSource = ""
     for (const line of sourceLines) {
         if (line.trim().length === 0) continue
-        newSource = newSource + '\n' + '                    ' + line
+        newSource = newSource + '\n' + line
     }
 
     return newSource + '\n'
@@ -129,13 +109,9 @@ function prepareMenuProps(filesInfo: IFileInfo[], level: number = 1) {
     let result = '['
     for (const file of filesInfo) {
         if (file.children?.length) {
-
-            const folderName = file.fileName;
-            result = result + '\n' + ' '.repeat(level * 4) + 'getItem("' + folderName + '", "' + HelpersStrings.getUuid() + '", <FolderOutlined />, ' + prepareMenuProps(file.children, level + 1) + '),';
+            result = result + `\n${' '.repeat(level * 4)}getItem("${file.menuItemName}", "${HelpersStrings.getUuid()}", <FolderOutlined />, ${prepareMenuProps(file.children, level + 1)}),`;
         } else {
-            const componentName = file.componentName;
-            const menuItemName = file.menuItemName;
-            result = result + '\n' + ' '.repeat(level * 4) + 'getItem(<Link to="' + componentName + '">' + menuItemName + '</Link>, "' + HelpersStrings.getUuid() + '"),'
+            result = result + `\n${' '.repeat(level * 4)}getItem(<Link to="${file.componentName}">${file.menuItemName}</Link>, "${HelpersStrings.getUuid()}"),`
         }
     }
     result = result + ']'
@@ -173,9 +149,9 @@ function getItem(label: React.ReactNode, key: React.Key, icon?: React.ReactNode,
 
 
 //<editor-fold desc="Generate pages">
-function generatePages(filesInfo: IFileInfo[], subFolderPath = '', relativePathToRoot = ''): [string, string] {
+function generatePages(filesInfo: IFileInfo[], subFolderPath = '', relativePathToRoot = '', level: number = 0): [string, string] {
     let routesStrings = ''
-    let routeImportStrings=''
+    let routeImportStrings = ''
     if (filesInfo.length === 0) return [routesStrings, routeImportStrings]
     for (const file of filesInfo) {
         if (file.children?.length) {
@@ -183,11 +159,12 @@ function generatePages(filesInfo: IFileInfo[], subFolderPath = '', relativePathT
             const folderFullPath = _pagesPath + subFolderPath + '/' + folderName;
             if (!fs.existsSync(folderFullPath)) fs.mkdirSync(folderFullPath, {recursive: true});
 
-            const [routeStr, routeImportStr] = generatePages(file.children, subFolderPath + '/' + folderName, relativePathToRoot + '../')
+            console.log(' '.repeat(level * 4), folderName)
+            const [routeStr, routeImportStr] = generatePages(file.children, subFolderPath + '/' + folderName, relativePathToRoot + '../', level + 1)
             routesStrings = routesStrings + routeStr + '\n';
             routeImportStrings = routeImportStrings + routeImportStr + '\n';
         } else {
-            const [routeStr, routeImportStr] = generatePageComponent(file, subFolderPath, '../' + relativePathToRoot);
+            const [routeStr, routeImportStr] = generatePageComponent(file, subFolderPath, '../' + relativePathToRoot, level);
             routesStrings = routesStrings + routeStr + '\n';
             routeImportStrings = routeImportStrings + routeImportStr + '\n';
         }
@@ -196,15 +173,13 @@ function generatePages(filesInfo: IFileInfo[], subFolderPath = '', relativePathT
     return [routesStrings, routeImportStrings]
 }
 
-function generatePageComponent(file: IFileInfo, subFolderPath: string, relativeRoot: string) {
-    console.log(subFolderPath)
+function generatePageComponent(file: IFileInfo, subFolderPath: string, relativeRoot: string, level: number) {
     const componentModulePath = relativeRoot + trimExtension(file.fileDirFromRoot);
     const componentName = file.componentName
     const pageComponentName = 'Page' + file.componentName;
 
     const pagesPath: string = _pagesPath + subFolderPath + '/Page' + upperFirstLetter(file.fileName)
     const pageModulePath = './' + _pagesFolder + subFolderPath + '/Page' + trimExtension(upperFirstLetter(file.fileName));
-    console.log(pageModulePath)
 
     let source = file.source!
     source = source.replaceAll(/\$\{/g, '\\${');
@@ -236,14 +211,19 @@ function generatePageComponent(file: IFileInfo, subFolderPath: string, relativeR
         </>
     );
 };
+
+export default ${pageComponentName};
 `;
 
     const content = importStr + bodyStr;
     fs.writeFileSync(pagesPath, content, {encoding: 'utf8', flag: 'w'});
 
     // language=text
-    const routeStr = `                <Route path="${componentName}" element={<${pageComponentName} darkMode={props.darkMode} />} />;`;
-    const routeImportStr = `    import {${pageComponentName}} from '${pageModulePath}';`;
+    const routeStr = `                    <Route path="${componentName}" element={<${pageComponentName} darkMode={props.darkMode} />} />;`;
+    //const routeImportStr = `    import {${pageComponentName}} from '${pageModulePath}';`;
+    const routeImportStr = `    const ${pageComponentName} = lazy(() => import('${pageModulePath}'))`;
+
+    console.log(' '.repeat(level * 4), pagesPath)
     return [routeStr, routeImportStr];
 }
 
@@ -254,7 +234,7 @@ function generatePageComponent(file: IFileInfo, subFolderPath: string, relativeR
 function generateRoutes(routers: string, imports: string) {
     // language=text
     const result = `
-    import React from 'react';
+    import React, {lazy, Suspense} from 'react';
     import {Route, Routes} from 'react-router-dom';
     import {DemoLayout} from './demoLayout';
     import {Home} from './home';
@@ -262,17 +242,35 @@ ${imports}
 
 export const DemoRoutes = (props: {darkMode: boolean; setDarkMode: (mode:boolean) => void}) => {
     return (
-        <Routes>
-            <Route path="/" element={<DemoLayout setDarkMode={props.setDarkMode} />}>
-                <Route index element={<Home />} />
+        <Suspense fallback={<div>Loading...</div>}>
+            <Routes>
+                <Route path="/" element={<DemoLayout setDarkMode={props.setDarkMode} />}>
+                    <Route index element={<Home />} />
 ${routers}
-                <Route path="*" element={<Home />} />
-            </Route>
-        </Routes>
+                    <Route path="*" element={<Home />} />
+                </Route>
+            </Routes>
+        </Suspense>
     );
 };
 `;
     fs.writeFileSync(__dirname + '/demoRoutes.tsx', result, {encoding: 'utf8', flag: 'w'});
+}
+
+//endregion
+
+//region Sorting
+function menuItemsSorting(items: IFileInfo[]) {
+    items.sort((a, b) => {
+        if (a.children?.length) menuItemsSorting(a.children)
+        if (b.children?.length) menuItemsSorting(b.children)
+
+        if (a.children?.length && b.children?.length) {
+            if (a.fileName === b.fileName) return 0;
+            else return a.fileName > b.fileName ? 1 : -1
+        } else if (a.children?.length) return -1
+        else return 1
+    })
 }
 
 //endregion
@@ -300,10 +298,6 @@ function trimExtension(fileName: string) {
 
 function upperFirstLetter(val: string) {
     return val.charAt(0).toUpperCase() + val.slice(1);
-}
-
-function lowerFirstLetter(val: string) {
-    return val.charAt(0).toLowerCase() + val.slice(1);
 }
 
 //endregion

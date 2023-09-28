@@ -1,28 +1,28 @@
 
     import React from 'react';
-    import {FormSubmitting} from '../../../components/dynamicForm/validation/formSubmitting';
+    import {ModalFormSubmitting} from '../../components/dynamicFormModal/modalFormSubmitting';
     import { Divider } from 'antd';
     import SyntaxHighlighter from 'react-syntax-highlighter';
     import {darcula, docco} from 'react-syntax-highlighter/dist/esm/styles/hljs';
 
-    export const PageFormSubmitting = (props: {darkMode: boolean}): React.JSX.Element => {
+    export const PageModalFormSubmitting = (props: {darkMode: boolean}): React.JSX.Element => {
     // language=text
     const source = `
-import React from 'react';
-import {DForm} from @krinopotam/ui-kit/dynamicForm';
-import {DFormConfig} from @krinopotam/ui-kit/dynamicForm/configBuilder/dFormConfig';
-import {InputComponentConfig} from @krinopotam/ui-kit/dynamicForm/configBuilder/inputComponentConfig';
-import {PasswordComponentConfig} from @krinopotam/ui-kit/dynamicForm/configBuilder/passwordComponentConfig';
+import React, {useCallback} from 'react';
+import {Button} from @krinopotam/ui-kit/button';
+import {IDFormModalApi, DFormModal} from @krinopotam/ui-kit/dynamicFormModal';
+import {DFormModalConfig, InputComponentConfig, PasswordComponentConfig} from @krinopotam/ui-kit/dynamicFormModal/configBuilder';
 interface IFields {
     login: string;
     password: string;
 }
-const formProps = new DFormConfig<IFields>('Test form')
+const formApi = {} as IDFormModalApi;
+const formProps = new DFormModalConfig<IFields>('Test form')
+    .apiRef(formApi)
     .confirmChanges(true)
     .addFields(
         new InputComponentConfig<IFields>('login').label('Логин'),
-        new PasswordComponentConfig<IFields>('password').label('Пароль')
-    )
+        new PasswordComponentConfig<IFields>('password').label('Пароль'))
     .callbacks({
         onSubmit: () => {
             return new Promise((resolve, reject) => {
@@ -33,22 +33,25 @@ const formProps = new DFormConfig<IFields>('Test form')
             });
         },
     })
-    .buttons({ok: {position: 'right'}})
     .getConfig();
-export const FormSubmitting = (): React.JSX.Element => {
+export const ModalFormSubmitting = (): React.JSX.Element => {
+    const onClick = useCallback(() => {
+        formApi.open('create');
+    }, []);
     return (
         <>
-            <div style={{maxWidth: 500}}>
-                <DForm {...formProps} />
-            </div>
-        </>
+        <div style={{maxWidth: 500}}>
+            <Button onClick={onClick}>Открыть форму</Button>
+            <DFormModal {...formProps} />
+        </div>
+            </>
     );
 };
 `
     return (
         <>
             <div>
-                <FormSubmitting />
+                <ModalFormSubmitting />
             </div>
             <Divider />
             <div>
@@ -60,4 +63,4 @@ export const FormSubmitting = (): React.JSX.Element => {
     );
 };
 
-export default PageFormSubmitting;
+export default PageModalFormSubmitting;
