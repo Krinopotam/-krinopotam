@@ -17,7 +17,11 @@ export type ITabulatorRow = RowComponent & IActiveSelectionModuleRow;
 
 export type ITabulatorEvents = Partial<EventCallBackMethods> & IActiveSelectionModuleTableEvents;
 
-export interface ITabulatorProps extends Omit<ITabulator['options'], 'footerElement'> {
+/**
+ * resizableRows works unstable. There are problems with scrolling due to the rearrangement of virtual lines of different sizes
+ */
+
+export interface ITabulatorProps extends Omit<ITabulator['options'], 'footerElement' | 'resizableRows'> {
     /** On the tableRef ready callback */
     onTableRef?: (ref: React.MutableRefObject<ITabulator>) => void;
 

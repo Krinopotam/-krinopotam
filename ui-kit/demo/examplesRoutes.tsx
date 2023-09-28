@@ -1,7 +1,6 @@
 
     import React from 'react';
     import {Route, Routes} from 'react-router-dom';
-    import {ExamplesLayout} from './examplesLayout';
     import {Home} from './home';
     import {FormBetweenFieldsPage} from './pages/formBetweenFieldsPage';
     import {FormDependedFieldPage} from './pages/formDependedFieldPage';
@@ -38,12 +37,13 @@
     import {TreeSelectNodeRenderPage} from './pages/treeSelectNodeRenderPage';
     import {TreeSelectWithFormPage} from './pages/treeSelectWithFormPage';
     import {TreeSelectWithFormAsyncPage} from './pages/treeSelectWithFormAsyncPage';
+    import {DemoLayout} from "./demoLayout";
 
 
 export const ExamplesRoutes = (props: {darkMode: boolean; setDarkMode: (mode:boolean) => void}) => {
     return (
         <Routes>
-            <Route path="/" element={<ExamplesLayout setDarkMode={props.setDarkMode} />}>
+            <Route path="/" element={<DemoLayout setDarkMode={props.setDarkMode} />}>
                 <Route index element={<Home />} />
                 <Route path="FormBetweenFields" element={<FormBetweenFieldsPage darkMode={props.darkMode} />} />;
                 <Route path="FormDependedField" element={<FormDependedFieldPage darkMode={props.darkMode} />} />;

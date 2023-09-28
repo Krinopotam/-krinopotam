@@ -46,13 +46,16 @@ const TabulatorCss = createGlobalStyle<IStyleType>`
         }
       }
 
-      .tabulator-col-resize-handle:hover {
-        background-color: ${(props: GlobalToken) => props.colorPrimaryHover};
+      .tabulator-col-resize-handle {
+        transition: background-color 0.5s ease;
+        &:hover {
+          background-color: ${(props: GlobalToken) => props.colorPrimaryHover};
+        }
       }
       
       .tabulator-col {
         background-color: ${(props: GlobalToken) => props.colorBgLayout};
-        border-right-color: ${(props: GlobalToken) => props.colorBorderSecondary};
+        border-right-color: ${(props: GlobalToken) => props.colorBorder};
 
         &.tabulator-frozen.tabulator-frozen-left {
           border-right: 2px solid ${(props: GlobalToken) => props.colorBorder};
@@ -77,6 +80,10 @@ const TabulatorCss = createGlobalStyle<IStyleType>`
           color: ${(props: GlobalToken) => props.colorText};
         }
 
+        &.tabulator-col-group .tabulator-col-group-cols {
+          border-top: 1px solid ${(props: GlobalToken) => props.colorBorder};
+        }
+        
         .tabulator-header-filter input {
           color: ${(props: GlobalToken) => props.colorText};
           font-size: ${(props: GlobalToken) => props.fontSize}px;
@@ -148,7 +155,15 @@ const TabulatorCss = createGlobalStyle<IStyleType>`
           &.tabulator-row-even .tabulator-cell {
             background-color: ${(props) => {return props.striped ? props.colorBgLayout : "transparent"}};
           }
-
+          
+          /** Highlight row resize handler  */
+          .tabulator-row-resize-handle {
+            transition: background-color 0.5s ease;
+            &:hover {
+              background-color: ${(props: GlobalToken) => props.colorPrimaryHover};
+            }
+          }
+          
           .tabulator-cell {
             background-color: ${(props: GlobalToken) => props.colorBgContainer};
             border-right-color: ${(props: GlobalToken) => props.colorBorderSecondary};

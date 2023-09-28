@@ -60,6 +60,8 @@
 		"@krinopotam/common-hooks": "^1.0.1",
 		"@krinopotam/js-helpers": "^1.0.17",
 		"@krinopotam/service-types": "^1.0.5",
+		"@tanstack/react-table": "^8.10.3",
+		"@tanstack/table-core": "^8.10.3",
 		"ahooks": "^3.7.8",
 		"antd": "^5.9.2",
 		"lodash.debounce": "^4.0.8",

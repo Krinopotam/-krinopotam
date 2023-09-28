@@ -74,38 +74,42 @@ const dataSet = [
         ],
     },
     {id: '3', name: 'Christine Lobowski1', age: '42', col: 'green', dob: '22/05/1982', rating: 4, passed: true},
-    {id: '4', name: 'Brendon Philips1', age: '125', col: 'orange', dob: '01/08/1980', rating: 3, passed: false},
-    {id: '5', name: 'Margret Marmajuke1', age: '16', col: 'yellow', dob: '31/01/1999', rating: 5, passed: true},
+    {id: '4', name: 'Brendon Philips1', age: '125', col: 'orange', dob: '05/08/1980', rating: 3, passed: false},
+    {id: '5', name: 'Margret Marmajuke1', age: '16', col: 'yellow', dob: '04/02/1999', rating: 5, passed: true},
     {id: '6', name: 'Oli Bob2', age: '12', col: 'red', dob: '', rating: 2, passed: true},
     {id: '7', name: 'Mary May2', age: '1', col: 'blue', dob: '14/05/1982', rating: 1, passed: true},
-    {id: '8', name: 'Christine Lobowski2', age: '42', col: 'green', dob: '22/05/1982', rating: 0, passed: false},
+    {id: '8', name: 'Christine Lobowski2', age: '42', col: 'green', dob: '21/04/1982', rating: 0, passed: false},
     {id: '9', name: 'Brendon Philips2', age: '125', col: 'orange', dob: '01/08/1980', rating: 4, passed: true},
-    {id: '10', name: 'Margret Marmajuke2', age: '16', col: 'yellow', dob: '01/01/1999', rating: 2, passed: false},
+    {id: '10', name: 'Margret Marmajuke2', age: '16', col: 'yellow', dob: '17/01/1999', rating: 2, passed: false},
     {id: '11', name: 'Oli Bob3', age: '12', col: 'red', dob: '', rating: 4, passed: false},
     {id: '12', name: 'Mary May3', age: '1', col: 'blue', dob: '14/05/1982', rating: 5, passed: true},
-    {id: '13', name: 'Christine Lobowski3', age: '42', col: 'green', dob: '22/05/1982', rating: 3, passed: true},
+    {id: '13', name: 'Christine Lobowski3', age: '42', col: 'green', dob: '15/05/1982', rating: 3, passed: true},
     {id: '14', name: 'Brendon Philips3', age: '125', col: 'orange', dob: '01/08/1980', rating: 1, passed: true},
-    {id: '15', name: 'Margret Marmajuke3', age: '16', col: 'yellow', dob: '31/01/1999', rating: 0, passed: false},
+    {id: '15', name: 'Margret Marmajuke3', age: '16', col: 'yellow', dob: '11/02/1999', rating: 0, passed: false},
     {id: '16', name: 'Oli Bob4', age: '12', col: 'red', dob: '', rating: 3, passed: false},
     {id: '17', name: 'Mary May4', age: '1', col: 'blue', dob: '14/05/1982', rating: 4, passed: true},
-    {id: '18', name: 'Christine Lobowski4', age: '42', col: 'green', dob: '22/05/1982', rating: 4, passed: true},
-    {id: '19', name: 'Brendon Philips4', age: '125', col: 'orange', dob: '01/08/1980', rating: 5, passed: false},
-    {id: '20', name: 'Margret Marmajuke4', age: '16', col: 'yellow', dob: '31/01/1999', rating: 4, passed: true},
+    {id: '18', name: 'Christine Lobowski4', age: '42', col: 'green', dob: '22/03/1982', rating: 4, passed: true},
+    {id: '19', name: 'Brendon Philips4', age: '125', col: 'orange', dob: '17/06/1980', rating: 5, passed: false},
+    {id: '20', name: 'Margret Marmajuke4', age: '16', col: 'yellow', dob: '20/01/1999', rating: 4, passed: true},
 ];
 
 const columns: ColumnDefinition[] = [
-    {title: 'Name', field: 'name', headerFilter: true, headerFilterFunc: 'like', frozen:true},
-    {title: 'Age', field: 'age', hozAlign: 'left', formatter: 'progress', bottomCalc:"avg", bottomCalcParams:{precision:3}},
+    {title: 'Name', field: 'name', headerFilter: true, headerFilterFunc: 'like', frozen: true},
+    {title: 'Age', field: 'age', hozAlign: 'left', formatter: 'progress', bottomCalc: "avg", bottomCalcParams: {precision: 3}, topCalc: 'sum'},
     {title: 'Favourite Color', field: 'col', headerFilter: true, headerFilterFunc: 'like'},
-    {title: 'Rating', field: 'rating', hozAlign: 'center', formatter: 'star', headerFilter: true, headerFilterFunc: '='},
-    {title: 'Passed?', field: 'passed', hozAlign: 'center', formatter: 'tickCross', headerFilter: true, headerFilterFunc: '='},
+    {
+        title: 'Results',
+        columns: [
+            {title: 'Rating', field: 'rating', hozAlign: 'center', formatter: 'star', headerFilter: true, headerFilterFunc: '='},
+            {title: 'Passed?', field: 'passed', hozAlign: 'center', formatter: 'tickCross', headerFilter: true, headerFilterFunc: '='},
+        ]
+    },
+
     {
         title: 'Date Of Birth', field: 'dob', hozAlign: 'center',
         formatter: dateTimeFormatter, formatterParams: {inputFormat: 'DD/MM/YYYY', outputFormat: 'DD.MM.YYYY'},
         sorter: dateTimeSorter, sorterParams: {format: 'DD/MM/YYYY'},
-        headerFilter: true, headerFilterFunc: 'like',
-        frozen:true,
-        topCalc:'sum'
+        headerFilter: true, headerFilterFunc: 'like'
     }
 ]
 
@@ -125,7 +129,7 @@ export const Simple: Story = {
 export const Tree: Story = {
     args: {
         ...baseArgs,
-        dataTree:true
+        dataTree: true
     },
 }
 
@@ -136,9 +140,39 @@ export const WithFooter: Story = {
     },
 }
 
-export const ResizableRows: Story = {
+export const PaginationLocal: Story = {
     args: {
         ...baseArgs,
-        resizableRows:true
+        height:undefined,
+        pagination:true,
+        paginationMode:'local',
+        paginationSize:10,
+        paginationSizeSelector:[5, 10, 50, 100],
+        movableColumns:true,
+        paginationCounter:"rows",
+    },
+}
+
+export const PaginationRemote: Story = {
+    args: {
+        ...baseArgs,
+        height:undefined,
+        pagination:true,
+        paginationMode:'remote',
+        paginationSize:10,
+        paginationSizeSelector:[5, 10, 50, 100],
+        movableColumns:true,
+        paginationCounter:"rows",
+
+        ajaxURLGenerator:function(url, config, params){
+            //url - the url from the ajaxURL property or setData function
+            //config - the request config object from the ajaxConfig property
+            //params - the params object from the ajaxParams property, this will also include any pagination, filter and sorting properties based on table setup
+
+            //return request url
+            const result =  url + "?params=" + encodeURI(JSON.stringify(params)); //encode parameters as a json object
+            console.log(result)
+            return result
+        }
     },
 }

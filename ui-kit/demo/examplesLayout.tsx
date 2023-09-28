@@ -22,7 +22,9 @@ const items: MenuProps['items'] = [
     getItem(<Link to="home">Начало</Link>, 'home', <HomeOutlined />),
     {type: 'divider', key: 'divider1'},
     getItem('DForm - Форма', 'dForm', <FolderOutlined />, [
-        getItem(<Link to="FormSimple">Простая форма (вертикальная)</Link>, 'FormSimple'),
+        getItem(<Link to="FormSimple">Простая форма (вертикальная)</Link>, 'FormSimple', <FolderOutlined />, [
+            getItem(<Link to="FormSimpleHorizontal">Простая форма (горизонтальная)</Link>, 'FormSimpleHorizontal'),
+        ]),
         getItem(<Link to="FormSimpleHorizontal">Простая форма (горизонтальная)</Link>, 'FormSimpleHorizontal'),
         getItem(<Link to="FormWithTemplatedFields">Простая форма с шаблонами полей</Link>, 'FormWithTemplatedFields'),
         getItem(<Link to="FormDependedField">Форма с зависимыми друг от друга полями</Link>, 'FormDependedField'),
