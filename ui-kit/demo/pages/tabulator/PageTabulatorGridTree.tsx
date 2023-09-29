@@ -15,19 +15,7 @@ import {dateTimeSorter} from @krinopotam/ui-kit/tabulatorBase/sorters/dateTime";
 const columnDefaults: ITabulatorProps['columnDefaults'] = {
     resizable: 'header',
     headerFilter: true,
-    headerFilterFunc:(filterVal, rowVal)=> {
-        const ffff=0
-        console.log('11111111111111')
-    if (filterVal === null || typeof filterVal === 'undefined') {
-        return rowVal === filterVal;
-    } else {
-        if (typeof rowVal !== 'undefined' && rowVal !== null) {
-            return String(rowVal).toLowerCase().indexOf(filterVal.toLowerCase()) > -1;
-        } else {
-            return false;
-        }
-    }
-}
+    headerFilterFunc: 'like'
 };
 const columns: ITabulatorProps['columns'] = [
     {title: 'Name', field: 'name'},

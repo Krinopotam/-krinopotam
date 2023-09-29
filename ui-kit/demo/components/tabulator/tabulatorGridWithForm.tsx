@@ -17,6 +17,7 @@ type IPerson = {
 const columnDefaults: ITabulatorProps['columnDefaults'] = {
     resizable: 'header',
     headerFilter: true,
+    headerFilterFunc: 'like'
 };
 
 const columns: ITabulatorProps['columns'] = [

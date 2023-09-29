@@ -1,9 +1,9 @@
 import React from 'react';
-import {ColumnDefinition, EventCallBackMethods, TabulatorFull as Tabulator} from 'tabulator-tables';
+import {EventCallBackMethods, TabulatorFull as Tabulator} from 'tabulator-tables';
 import {ITabulatorProps, ITabulator} from '../tabulatorBase';
 import {createRoot} from 'react-dom/client';
 import {ActiveSelectionModule} from '../modules/activeSelectionModule';
-import {AdvancedHeaderFilterModule, IFilterFunction} from '../modules/advancedHeaderFilterModule';
+import {AdvancedHeaderFilterModule} from '../modules/advancedHeaderFilterModule';
 import {collapseButton, expandButton} from '../parts/icons';
 import {setPatches} from '../patches/setPatches';
 import {FooterHOC} from "@src/tabulatorBase/parts/footerHOC";
@@ -52,7 +52,7 @@ const initTabulator = async ({
     onTableRef?: (ref: React.MutableRefObject<ITabulator>) => void;
 }) => {
     const $container = containerRef.current as HTMLDivElement; // mounted DOM element
-    const propOptions = await propsToOptions(props, tableRef);
+    const propOptions = await propsToOptions(props);
 
     tableRef.current = await initTabulatorClass($container, propOptions, props, events);
     onTableRef?.(tableRef as React.MutableRefObject<ITabulator>);
@@ -65,7 +65,7 @@ const syncRender = async (component: React.JSX.Element, container: HTMLElement):
     });
 }
 
-const propsToOptions = async (props: ITabulatorProps, tableRef: React.MutableRefObject<ITabulator | undefined>) => {
+const propsToOptions = async (props: ITabulatorProps) => {
     const output = {...props} as ITabulator['options'];
 
     if (typeof props.footerElement === 'object') {
@@ -73,9 +73,6 @@ const propsToOptions = async (props: ITabulatorProps, tableRef: React.MutableRef
         const el = await syncRender(props.footerElement, document.createElement('div'));
         output.footerElement = el.innerHTML;
     }
-
-    //output.columnDefaults = prepareColumnDefaults(props.columnDefaults || {}, props.dataTree, tableRef)
-    //output.columns = prepareColumns(props.columns, props.dataTree, tableRef)
 
     if (!props.dataTreeChildField) output.dataTreeChildField = 'children'
     if (!props.dataTreeParentField) output.dataTreeParentField = 'parent'
@@ -101,9 +98,7 @@ const initTabulatorClass = async ($container: HTMLDivElement, options: ITabulato
     Tabulator.registerModule(AdvancedHeaderFilterModule);
 
     return new Promise((resolve) => {
-        console.log('before')
         const tableApi = new Tabulator($container, options) as ITabulator;
-        console.log('after')
         setPatches(tableApi); //TODO: Monkey patches. Check if the developer fixed it
 
         if (!events) events = {}
@@ -117,37 +112,3 @@ const initTabulatorClass = async ($container: HTMLDivElement, options: ITabulato
         tableApi?.on('tableBuilt', () => { resolve(tableApi) })
     });
 }
-
-
-//region Wrap columns headerFilterFunc into TreeFilterFunc
-const prepareColumnDefaults = (columnDef: Partial<ColumnDefinition> | undefined, dataTree: boolean | undefined, tableRef: React.MutableRefObject<ITabulator | undefined>) => {
-    if (!dataTree || !columnDef) return columnDef;
-    return wrapTreeFilterFunc(columnDef, tableRef)
-}
-
-const prepareColumns = (columns: ITabulatorProps['columns'], dataTree: boolean | undefined, tableRef: React.MutableRefObject<ITabulator | undefined>) => {
-    if (!dataTree || !columns) return columns;
-
-    const resultColumns: Partial<ColumnDefinition>[] = [];
-    for (const column of columns) {
-        resultColumns.push(wrapTreeFilterFunc(column, tableRef));
-    }
-
-    return resultColumns as ITabulatorProps['columns'];
-}
-
-const wrapTreeFilterFunc = (columnDef: Partial<ColumnDefinition>, tableRef: React.MutableRefObject<ITabulator | undefined>): Partial<ColumnDefinition> => {
-    //return columnDef;
-    if (typeof columnDef?.headerFilterFunc !== 'function') return columnDef;
-
-    const columnDefClone = {...columnDef} as ColumnDefinition;
-
-    columnDefClone.headerFilterFunc = (filterVal, rowValue, rowData, filterParams) => {
-        if (!tableRef.current) return true;
-        const filterFunction = tableRef.current.getBaseTreeDataFilter(columnDef.headerFilterFunc as IFilterFunction);
-        return filterFunction(filterVal, rowValue, rowData, filterParams);
-    }
-
-    return columnDefClone
-}
-//endregion

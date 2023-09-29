@@ -1,7 +1,7 @@
 // noinspection DuplicatedCode
 
 import type {Meta, StoryObj} from '@storybook/react'
-import Tabulator from "@src/tabulatorBase";
+import Tabulator, {ITabulatorProps} from "@src/tabulatorBase";
 import React from "react";
 import {ColumnDefinition} from "tabulator-tables";
 import {dateTimeFormatter} from "@src/tabulatorBase/formatters/dateTime";
@@ -116,8 +116,14 @@ const columns: ColumnDefinition[] = [
 const baseArgs: Story['args'] = {
     data: dataSet,
     columns: columns,
+    columnDefaults: {
+        resizable: 'header',
+        headerFilter: true,
+        headerFilterFunc: 'like'
+    },
     height: 500,
     layout: 'fitColumns',
+
 }
 
 type Story = StoryObj<typeof Tabulator>;
@@ -143,34 +149,34 @@ export const WithFooter: Story = {
 export const PaginationLocal: Story = {
     args: {
         ...baseArgs,
-        height:undefined,
-        pagination:true,
-        paginationMode:'local',
-        paginationSize:10,
-        paginationSizeSelector:[5, 10, 50, 100],
-        movableColumns:true,
-        paginationCounter:"rows",
+        height: undefined,
+        pagination: true,
+        paginationMode: 'local',
+        paginationSize: 10,
+        paginationSizeSelector: [5, 10, 50, 100],
+        movableColumns: true,
+        paginationCounter: "rows",
     },
 }
 
 export const PaginationRemote: Story = {
     args: {
         ...baseArgs,
-        height:undefined,
-        pagination:true,
-        paginationMode:'remote',
-        paginationSize:10,
-        paginationSizeSelector:[5, 10, 50, 100],
-        movableColumns:true,
-        paginationCounter:"rows",
+        height: undefined,
+        pagination: true,
+        paginationMode: 'remote',
+        paginationSize: 10,
+        paginationSizeSelector: [5, 10, 50, 100],
+        movableColumns: true,
+        paginationCounter: "rows",
 
-        ajaxURLGenerator:function(url, config, params){
+        ajaxURLGenerator: function (url, config, params) {
             //url - the url from the ajaxURL property or setData function
             //config - the request config object from the ajaxConfig property
             //params - the params object from the ajaxParams property, this will also include any pagination, filter and sorting properties based on table setup
 
             //return request url
-            const result =  url + "?params=" + encodeURI(JSON.stringify(params)); //encode parameters as a json object
+            const result = url + "?params=" + encodeURI(JSON.stringify(params)); //encode parameters as a json object
             console.log(result)
             return result
         }

@@ -19,6 +19,7 @@ import {dateTimeSorter} from @krinopotam/ui-kit/tabulatorBase/sorters/dateTime";
 const columnDefaults: ITabulatorProps['columnDefaults'] = {
     resizable: 'header',
     headerFilter: true,
+    headerFilterFunc: 'like'
 };
 const columns: ITabulatorProps['columns'] = [
     {title: 'Name', field: 'name'},

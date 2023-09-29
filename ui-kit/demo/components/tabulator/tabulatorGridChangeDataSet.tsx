@@ -8,6 +8,7 @@ import TabulatorGrid, {ITabulatorProps, IGridProps, IGridApi, IGridRowData} from
 const columnDefaults: ITabulatorProps['columnDefaults'] = {
     resizable: 'header',
     headerFilter: true,
+    headerFilterFunc: 'like'
 };
 
 const columns: ITabulatorProps['columns'] = [

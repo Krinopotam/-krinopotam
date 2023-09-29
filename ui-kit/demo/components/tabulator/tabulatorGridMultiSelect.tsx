@@ -8,6 +8,7 @@ import {dateTimeFormatter} from "@src/tabulatorBase/formatters/dateTime";
 const columnDefaults: ITabulatorProps['columnDefaults'] = {
     resizable: 'header',
     headerFilter: true,
+    headerFilterFunc: 'like'
 };
 
 const columns: ITabulatorProps['columns'] = [

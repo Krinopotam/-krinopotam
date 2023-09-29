@@ -15,6 +15,7 @@ import {dateTimeFormatter} from @krinopotam/ui-kit/tabulatorBase/formatters/date
 const columnDefaults: ITabulatorProps['columnDefaults'] = {
     resizable: 'header',
     headerFilter: true,
+    headerFilterFunc: 'like'
 };
 const columns: ITabulatorProps['columns'] = [
     {title: 'Name', field: 'name', headerFilter: true},
