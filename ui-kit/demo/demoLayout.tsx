@@ -1,7 +1,7 @@
 import {Divider, Layout, Menu, Space, Switch, theme} from 'antd';
 import {Outlet} from 'react-router-dom';
 
-import React, {useCallback} from 'react';
+import React, {Suspense, useCallback} from 'react';
 import {menuItems} from "./menuProps";
 
 const {Sider, Content} = Layout;
@@ -41,6 +41,7 @@ export const DemoLayout = (props: { setDarkMode: (mode: boolean) => void }): Rea
                     </Sider>
                     <Layout style={{paddingLeft: 25, paddingRight: 24}}>
                         {/*breadcrumb */}
+
                         <Content
                             style={{
                                 padding: 24,
@@ -49,7 +50,10 @@ export const DemoLayout = (props: { setDarkMode: (mode: boolean) => void }): Rea
                                 background: colorBgContainer,
                             }}
                         >
-                            <Outlet/>
+                            {/* eslint-disable-next-line react/jsx-no-undef */}
+                            <Suspense fallback={<div>Loading...</div>}>
+                                <Outlet/>
+                            </Suspense>
                         </Content>
                     </Layout>
                 </Layout>
