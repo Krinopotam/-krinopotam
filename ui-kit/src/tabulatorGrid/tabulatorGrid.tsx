@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useRef, useState} from 'react';
 import {ITabulatorProps, ITabulator} from '@src/tabulatorBase';
 import {IButtonsRowApi, IFormButton, IFormButtons} from '@src/buttonsRow/buttonsRow';
 import {IDFormModalProps, IDFormModalApi} from '@src/dynamicFormModal';
@@ -99,7 +99,7 @@ export interface IGridProps {
     rowHeight?: ITabulatorProps['rowHeight'];
 
     /** Is the user can resize rows */
-    resizableRows?: ITabulatorProps['resizableRows'];
+    //resizableRows?: ITabulatorProps['resizableRows'];
 
     /** is columns movable */
     movableColumns?: ITabulatorProps['movableColumns'];
@@ -142,6 +142,9 @@ export interface IGridProps {
 
     /** Is the header should be visible */
     headerVisible?: ITabulatorProps['headerVisible'];
+
+    /** Hide HeaderFilter when grid is initialized */
+    headerFilterHidden?:ITabulatorProps['headerFilterHidden']
 
     /** Default column properties */
     columnDefaults?: ITabulatorProps['columnDefaults'];

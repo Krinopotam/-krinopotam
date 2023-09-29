@@ -1,7 +1,7 @@
 
     import React from 'react';
     import {TabulatorGridTree} from '../../components/tabulator/tabulatorGridTree';
-    import { Divider } from 'antd';
+    import { Divider, Collapse } from 'antd';
     import SyntaxHighlighter from 'react-syntax-highlighter';
     import {darcula, docco} from 'react-syntax-highlighter/dist/esm/styles/hljs';
 
@@ -10,13 +10,32 @@
     const source = `
 import React from 'react';
 import TabulatorGrid, {ITabulatorProps, IGridRowData} from @krinopotam/ui-kit/tabulatorGrid';
+import {dateTimeFormatter} from @krinopotam/ui-kit/tabulatorBase/formatters/dateTime";
+import {dateTimeSorter} from @krinopotam/ui-kit/tabulatorBase/sorters/dateTime";
+const columnDefaults: ITabulatorProps['columnDefaults'] = {
+    resizable: 'header',
+    headerFilter: true,
+    headerFilterFunc:(filterVal, rowVal)=> {
+        const ffff=0
+        console.log('11111111111111')
+    if (filterVal === null || typeof filterVal === 'undefined') {
+        return rowVal === filterVal;
+    } else {
+        if (typeof rowVal !== 'undefined' && rowVal !== null) {
+            return String(rowVal).toLowerCase().indexOf(filterVal.toLowerCase()) > -1;
+        } else {
+            return false;
+        }
+    }
+}
+};
 const columns: ITabulatorProps['columns'] = [
     {title: 'Name', field: 'name'},
     {title: 'Age', field: 'age', hozAlign: 'left', formatter: 'progress'},
     {title: 'Favourite Color', field: 'col'},
-    {title: 'Date Of Birth', field: 'dob', hozAlign: 'center'},
-    {title: 'Rating', field: 'rating', hozAlign: 'center', formatter: 'star'},
-    {title: 'Passed?', field: 'passed', hozAlign: 'center', formatter: 'tickCross'},
+    {title: 'Date Of Birth', field: 'dob', hozAlign: 'center', formatter: dateTimeFormatter, formatterParams: {inputFormat: 'DD/MM/YYYY', outputFormat: 'DD.MM.YYYY'}, sorter: dateTimeSorter, sorterParams: {format: 'DD/MM/YYYY'}},
+    {title: 'Rating', field: 'rating', hozAlign: 'center', formatter: 'star', headerFilterFunc: '='},
+    {title: 'Passed?', field: 'passed', hozAlign: 'center', formatter: 'tickCross', headerFilterFunc: '='},
 ];
 const data: IGridRowData[] = [
     {
@@ -89,7 +108,7 @@ const data: IGridRowData[] = [
 export const TabulatorGridTree = (): React.JSX.Element => {
     return (
         <>
-            <TabulatorGrid id={'TabulatorGridTree'} columns={columns} dataSet={data} dataTree={true} height={500} layout={'fitColumns'} />
+            <TabulatorGrid id={'TabulatorGridTree'} columnDefaults={columnDefaults} columns={columns} dataSet={data} dataTree={true} height={500} layout={'fitColumns'}/>
         </>
     );
 };
@@ -101,9 +120,9 @@ export const TabulatorGridTree = (): React.JSX.Element => {
             </div>
             <Divider />
             <div>
-                <SyntaxHighlighter language="javascript" style={props.darkMode ? darcula : docco}>
-                    {source}
-                </SyntaxHighlighter>
+                <Collapse 
+                    items={[{key: 1, label: 'Show source', children: <SyntaxHighlighter language="javascript" style={props.darkMode ? darcula : docco}>{source}</SyntaxHighlighter>}]}>
+                </Collapse>
             </div>
         </>
     );

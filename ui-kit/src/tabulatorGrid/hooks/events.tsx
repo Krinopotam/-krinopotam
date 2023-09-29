@@ -34,6 +34,10 @@ export const useEvents = (gridApi: IGridApi, events: ITabulatorEvents | undefine
                 events?.activeRowChanged?.(row);
                 gridApi.buttonsApi.refreshButtons();
             },
+            tableBuilt:()=>{
+                events?.tableBuilt?.();
+                gridApi.buttonsApi.refreshButtons();
+            }
         };
     }, [events, gridApi]);
 };

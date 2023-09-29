@@ -1,4 +1,4 @@
-import {TabulatorFull as Tabulator, Module, Options} from 'tabulator-tables';
+import {TabulatorFull as Tabulator, Module, Options, ColumnDefinition} from 'tabulator-tables';
 import {IModule} from './innerTypes';
 import {AnyType} from "@krinopotam/service-types";
 
@@ -22,6 +22,12 @@ export interface IAdvancedHeaderFilterModuleTable {
 
     /** Show/hide inline filter */
     toggleHeaderFilter: (show?: boolean) => boolean
+
+    /** Return header filter visible status */
+    isHeaderFilterVisible: () => boolean
+
+    /** Return header filter available (if there is at least one column with headerFilter) */
+    isHeaderFilterAvailable: () => boolean
 }
 
 
@@ -47,6 +53,8 @@ export class AdvancedHeaderFilterModule extends Module {
         _this.registerTableOption('headerFilterHidden', undefined);
         _this.registerTableFunction('getBaseTreeDataFilter', this.getBaseTreeDataFilter.bind(this));
         _this.registerTableFunction('toggleHeaderFilter', this.toggleHeaderFilter.bind(this));
+        _this.registerTableFunction('isHeaderFilterVisible', this.isHeaderFilterVisible.bind(this));
+        _this.registerTableFunction('isHeaderFilterAvailable', this.isHeaderFilterAvailable.bind(this));
     }
 
     // noinspection JSUnusedGlobalSymbols
@@ -55,7 +63,7 @@ export class AdvancedHeaderFilterModule extends Module {
         _this.subscribe('filter-changed', this.onFilterChanged.bind(this));
 
         if (this.table.options.dataTree) {
-            const filterFunctions = this.prepareDefaultFilters();
+            const filterFunctions = this.wrapDefaultFilters();
             Tabulator.extendModule('filter', 'filters', filterFunctions);
         }
 
@@ -63,17 +71,28 @@ export class AdvancedHeaderFilterModule extends Module {
     }
 
     public onTableBuiltHandler() {
+        if (this.table.options.dataTree) this.wrapUserFilters()
+
         if (this.table.options.headerFilterHidden) this.toggleHeaderFilter(false);
         else this.headerFilterStatus = true;
     }
 
-    private prepareDefaultFilters() {
+    /** Wrap default filters to treeData filter */
+    private wrapDefaultFilters() {
         const newDefFilters: typeof defaultFilters = {};
         for (const key in defaultFilters) {
             newDefFilters[key] = this.getBaseTreeDataFilter(defaultFilters[key]);
         }
 
         return newDefFilters;
+    }
+
+    private wrapUserFilters() {
+        const filterColumns = this.table.modules.filter.headerFilterColumns
+        for (const column of filterColumns) {
+            if (typeof column.definition?.headerFilterFunc !== 'function') continue
+            column.definition.headerFilterFunc = this.getBaseTreeDataFilter(column.definition.headerFilterFunc)
+        }
     }
 
     public getBaseTreeDataFilter(matchFunction: IFilterFunction | undefined) {
@@ -207,6 +226,16 @@ export class AdvancedHeaderFilterModule extends Module {
         tableHolder.style.maxHeight = 'calc(100% - ' + tableHolderOffset + 'px)';
 
         return this.headerFilterStatus
+    }
+
+    public isHeaderFilterVisible() {
+        if (!this.isHeaderFilterAvailable()) return false;
+        return this.headerFilterStatus;
+    }
+
+    public isHeaderFilterAvailable() {
+        const filterCols = this.table.columnManager.columns.filter((column: { definition: ColumnDefinition }) => !!column?.definition?.headerFilter)
+        return filterCols.length > 0;
     }
 }
 

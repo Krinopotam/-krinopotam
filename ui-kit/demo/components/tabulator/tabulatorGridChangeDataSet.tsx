@@ -5,6 +5,11 @@ import React, {useCallback, useState} from 'react';
 import {Button} from '@src/button';
 import TabulatorGrid, {ITabulatorProps, IGridProps, IGridApi, IGridRowData} from '@src/tabulatorGrid';
 
+const columnDefaults: ITabulatorProps['columnDefaults'] = {
+    resizable: 'header',
+    headerFilter: true,
+};
+
 const columns: ITabulatorProps['columns'] = [
     {title: 'Column 1', field: 'col1'},
     {title: 'Column 2', field: 'col2'},
@@ -56,7 +61,7 @@ export const TabulatorGridChangeDataSet = (): React.JSX.Element => {
             <br />
             <Button onClick={updateDataViaApiAsync}>Обновить dataSet асинхронно через Api</Button> - ререндер вызывается, так как закрывается лоадером на время
             загрузки, но используется мемоизированный компонет. Поэтому фактически ререндера нет.
-            <TabulatorGrid id={'TabulatorGridSimple'} apiRef={gridApi} columns={columns} dataSet={dataSet} height={500} layout={'fitColumns'} />
+            <TabulatorGrid id={'TabulatorGridSimple'} apiRef={gridApi} columnDefaults={columnDefaults} columns={columns} dataSet={dataSet} height={500} layout={'fitColumns'} />
         </>
     );
 };

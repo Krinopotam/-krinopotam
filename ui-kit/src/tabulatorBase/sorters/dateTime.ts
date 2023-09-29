@@ -6,7 +6,13 @@ export interface IDateTimeSorterParams {
     alignEmptyValues?: 'top'|'bottom';
 }
 export const dateTimeSorter: ColumnDefinition['sorter'] = function (a, b, aRow, bRow, column, dir, params:IDateTimeSorterParams) {
-    const format = params.format || "DD.MM.YYYY HH:mm:ss";
+    let format = params.format;
+    if (!format) {
+        if (a.length === 10) format = 'DD.MM.YYYY';
+        else if (a.length === 16) format = 'DD.MM.YYYY HH:mm';
+        else format = "DD.MM.YYYY HH:mm:ss";
+    }
+
     const alignEmptyValues = params.alignEmptyValues;
     let emptyAlign = 0;
 

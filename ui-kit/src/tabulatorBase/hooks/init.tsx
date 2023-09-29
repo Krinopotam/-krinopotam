@@ -74,8 +74,8 @@ const propsToOptions = async (props: ITabulatorProps, tableRef: React.MutableRef
         output.footerElement = el.innerHTML;
     }
 
-    output.columnDefaults = prepareColumnDefaults(output.columnDefaults, output.dataTree, tableRef)
-    output.columns = prepareColumns(output.columns, output.dataTree, tableRef)
+    //output.columnDefaults = prepareColumnDefaults(props.columnDefaults || {}, props.dataTree, tableRef)
+    //output.columns = prepareColumns(props.columns, props.dataTree, tableRef)
 
     if (!props.dataTreeChildField) output.dataTreeChildField = 'children'
     if (!props.dataTreeParentField) output.dataTreeParentField = 'parent'
@@ -101,7 +101,9 @@ const initTabulatorClass = async ($container: HTMLDivElement, options: ITabulato
     Tabulator.registerModule(AdvancedHeaderFilterModule);
 
     return new Promise((resolve) => {
+        console.log('before')
         const tableApi = new Tabulator($container, options) as ITabulator;
+        console.log('after')
         setPatches(tableApi); //TODO: Monkey patches. Check if the developer fixed it
 
         if (!events) events = {}
@@ -117,48 +119,35 @@ const initTabulatorClass = async ($container: HTMLDivElement, options: ITabulato
 }
 
 
+//region Wrap columns headerFilterFunc into TreeFilterFunc
 const prepareColumnDefaults = (columnDef: Partial<ColumnDefinition> | undefined, dataTree: boolean | undefined, tableRef: React.MutableRefObject<ITabulator | undefined>) => {
-
-    const colDef: Partial<ColumnDefinition> = {
-        resizable: 'header',
-        //headerFilter: true,
-        //headerFilterFunc: 'like',
-    };
-
-    const userColDef = columnDef ?? ({} as ColumnDefinition);
-
-    const resultColDef = {...colDef, ...userColDef} as ColumnDefinition;
-
-    if (!dataTree) return resultColDef;
-
-    if (typeof userColDef.headerFilterFunc === 'function') {
-        resultColDef.headerFilterFunc = treeFilterFunction(tableRef, userColDef.headerFilterFunc as IFilterFunction)
-    }
-
-    return resultColDef;
+    if (!dataTree || !columnDef) return columnDef;
+    return wrapTreeFilterFunc(columnDef, tableRef)
 }
 
 const prepareColumns = (columns: ITabulatorProps['columns'], dataTree: boolean | undefined, tableRef: React.MutableRefObject<ITabulator | undefined>) => {
-    if (!columns || !dataTree) return columns;
+    if (!dataTree || !columns) return columns;
 
-    const resultColumns = [];
-
+    const resultColumns: Partial<ColumnDefinition>[] = [];
     for (const column of columns) {
-        const colClone = {...column};
-        if (typeof column.headerFilterFunc === 'function') {
-            colClone.headerFilterFunc = treeFilterFunction(tableRef, colClone.headerFilterFunc as IFilterFunction)
-        }
-
-        resultColumns.push(colClone);
+        resultColumns.push(wrapTreeFilterFunc(column, tableRef));
     }
 
-    return resultColumns;
+    return resultColumns as ITabulatorProps['columns'];
 }
 
-const treeFilterFunction = (tableRef: React.MutableRefObject<ITabulator | undefined>, userFilterFunc: IFilterFunction): IFilterFunction => {
-    return (filterVal, rowValue, rowData, filterParams) => {
+const wrapTreeFilterFunc = (columnDef: Partial<ColumnDefinition>, tableRef: React.MutableRefObject<ITabulator | undefined>): Partial<ColumnDefinition> => {
+    //return columnDef;
+    if (typeof columnDef?.headerFilterFunc !== 'function') return columnDef;
+
+    const columnDefClone = {...columnDef} as ColumnDefinition;
+
+    columnDefClone.headerFilterFunc = (filterVal, rowValue, rowData, filterParams) => {
         if (!tableRef.current) return true;
-        const filterFunction = tableRef.current.getBaseTreeDataFilter(userFilterFunc);
+        const filterFunction = tableRef.current.getBaseTreeDataFilter(columnDef.headerFilterFunc as IFilterFunction);
         return filterFunction(filterVal, rowValue, rowData, filterParams);
-    };
+    }
+
+    return columnDefClone
 }
+//endregion

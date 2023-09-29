@@ -14,8 +14,21 @@ export const dateTimeFormatter: ColumnDefinition['formatter'] = function (cell, 
     //onRendered - function to call when the formatter has been rendered
     const value = cell.getValue();
     if (!value) return '';
-    const inputFormat = formatterParams.inputFormat || "DD.MM.YYYY HH:mm:ss";
-    const outputFormat = formatterParams.outputFormat || "DD.MM.YYYY HH:mm:ss";
+
+    let inputFormat = formatterParams.inputFormat || "DD.MM.YYYY HH:mm:ss";
+    let outputFormat = formatterParams.outputFormat || "DD.MM.YYYY HH:mm:ss";
+    if (!inputFormat) {
+        if (value.length === 10) inputFormat = 'DD.MM.YYYY';
+        else if (value.length === 16) inputFormat = 'DD.MM.YYYY HH:mm';
+        else inputFormat = "DD.MM.YYYY HH:mm:ss";
+    }
+
+    if (!outputFormat) {
+        if (value.length === 10) outputFormat = 'DD.MM.YYYY';
+        else if (value.length === 16) outputFormat = 'DD.MM.YYYY HH:mm';
+        else outputFormat = "DD.MM.YYYY HH:mm:ss";
+    }
+
     const invalid = typeof formatterParams.invalidPlaceholder !== 'undefined' ? formatterParams.invalidPlaceholder : '';
 
     const dt = dayjs(value, inputFormat)

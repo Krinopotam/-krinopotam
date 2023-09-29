@@ -1,7 +1,7 @@
 
     import React from 'react';
     import {TabulatorGridCellFormat} from '../../components/tabulator/tabulatorGridCellFormat';
-    import { Divider } from 'antd';
+    import { Divider, Collapse } from 'antd';
     import SyntaxHighlighter from 'react-syntax-highlighter';
     import {darcula, docco} from 'react-syntax-highlighter/dist/esm/styles/hljs';
 
@@ -10,7 +10,8 @@
     const source = `
 import React from 'react';
 import {ColumnDefinition} from 'tabulator-tables';
-import TabulatorGrid,  {ITabulatorProps, IGridRowData} from @krinopotam/ui-kit/tabulatorGrid";
+import TabulatorGrid, {ITabulatorProps, IGridRowData} from @krinopotam/ui-kit/tabulatorGrid";
+import {dateTimeSorter} from @krinopotam/ui-kit/tabulatorBase/sorters/dateTime";
 const data: IGridRowData[] = [
     {id: '01', surname: 'Иванов', name: 'Иван', patronymic: 'Иванович', email: 'ivanov@mail.ru', birthday: '11.01.1980'},
     {id: '02', surname: 'Петров', name: 'Петр', patronymic: 'Петрович', email: 'petrov@mail.ru', birthday: '15.02.1975'},
@@ -63,6 +64,10 @@ const fioSorter: ColumnDefinition['sorter'] = (_a, _b, aRow, bRow): number => {
     if (valA === valB) return 0;
     return valA > valB ? 1 : -1; //you must return the difference between the two values
 };
+const columnDefaults: ITabulatorProps['columnDefaults'] = {
+    resizable: 'header',
+    headerFilter: true,
+};
 const columns: ITabulatorProps['columns'] = [
     {
         title: 'ФИО',
@@ -70,16 +75,20 @@ const columns: ITabulatorProps['columns'] = [
         formatter: fioFormatter,
         headerFilterFunc: fioFilter,
         sorter: fioSorter,
+        headerFilter:undefined
     },
     {
         title: 'День рождения',
         field: 'birthday',
+        sorter: dateTimeSorter,
+        //sorterParams:{format:'DD.MM.YYYY'} - you can set custom format. Default DD.MM.YYYY
+        headerFilter:undefined
     },
 ];
 export const TabulatorGridCellFormat = (): React.JSX.Element => {
     return (
         <>
-            <TabulatorGrid id={'TabulatorGridCellFormat'} columns={columns} dataSet={data} height={500} layout={'fitColumns'} />
+            <TabulatorGrid id={'TabulatorGridCellFormat'} columnDefaults={columnDefaults} columns={columns} dataSet={data} height={500} layout={'fitColumns'}/>
         </>
     );
 };
@@ -91,9 +100,9 @@ export const TabulatorGridCellFormat = (): React.JSX.Element => {
             </div>
             <Divider />
             <div>
-                <SyntaxHighlighter language="javascript" style={props.darkMode ? darcula : docco}>
-                    {source}
-                </SyntaxHighlighter>
+                <Collapse 
+                    items={[{key: 1, label: 'Show source', children: <SyntaxHighlighter language="javascript" style={props.darkMode ? darcula : docco}>{source}</SyntaxHighlighter>}]}>
+                </Collapse>
             </div>
         </>
     );

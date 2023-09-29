@@ -189,7 +189,7 @@ function generatePageComponent(file: IFileInfo, subFolderPath: string, relativeR
     const importStr = `
     import React from 'react';
     import {${componentName}} from '${componentModulePath}';
-    import { Divider } from 'antd';
+    import { Divider, Collapse } from 'antd';
     import SyntaxHighlighter from 'react-syntax-highlighter';
     import {darcula, docco} from 'react-syntax-highlighter/dist/esm/styles/hljs';\n`;
 
@@ -204,9 +204,9 @@ function generatePageComponent(file: IFileInfo, subFolderPath: string, relativeR
             </div>
             <Divider />
             <div>
-                <SyntaxHighlighter language="javascript" style={props.darkMode ? darcula : docco}>
-                    {source}
-                </SyntaxHighlighter>
+                <Collapse 
+                    items={[{key: 1, label: 'Show source', children: <SyntaxHighlighter language="javascript" style={props.darkMode ? darcula : docco}>{source}</SyntaxHighlighter>}]}>
+                </Collapse>
             </div>
         </>
     );

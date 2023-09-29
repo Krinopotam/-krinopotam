@@ -3,6 +3,8 @@
 import React from 'react';
 import {ColumnDefinition} from 'tabulator-tables';
 import TabulatorGrid, {ITabulatorProps, IGridRowData} from '@src/tabulatorGrid';
+import {dateTimeFormatter} from "@src/tabulatorBase/formatters/dateTime";
+import {dateTimeSorter} from "@src/tabulatorBase/sorters/dateTime";
 
 const data: IGridRowData[] = [
     {id: '01', surname: 'Иванов', name: 'Иван', patronymic: 'Иванович', email: 'ivanov@mail.ru', birthday: '11.01.1980', children:[
@@ -67,6 +69,11 @@ const fioSorter: ColumnDefinition['sorter'] = (_a, _b, aRow, bRow): number => {
     return valA > valB ? 1 : -1; //you must return the difference between the two values
 };
 
+const columnDefaults: ITabulatorProps['columnDefaults'] = {
+    resizable: 'header',
+    headerFilter: true,
+};
+
 const columns: ITabulatorProps['columns'] = [
     {
         title: 'ФИО',
@@ -78,6 +85,7 @@ const columns: ITabulatorProps['columns'] = [
     {
         title: 'День рождения',
         field: 'birthday',
+        sorter: dateTimeSorter
     },
 ];
 
@@ -89,7 +97,7 @@ export const TabulatorGridTreeCellFormat = (): React.JSX.Element => {
             <p>В данном примере в ячейке столбца ФИО отображаются данные из полей surname, name, patronymic и email</p>
             <p>Фильтр и сортировка расчитываются по каждому из этих полей</p>
             {/*Description End*/}
-            <TabulatorGrid id={'TabulatorGridTreeCellFormat'} columns={columns} dataSet={data} dataTree={true} height={500} layout={'fitColumns'} />
+            <TabulatorGrid id={'TabulatorGridTreeCellFormat'} columnDefaults={columnDefaults} columns={columns} dataSet={data} dataTree={true} height={500} layout={'fitColumns'} />
         </>
     );
 };

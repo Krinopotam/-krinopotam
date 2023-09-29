@@ -1,10 +1,10 @@
 import {IFormButton, IFormButtons} from '@src/buttonsRow/buttonsRow';
-import React, {useCallback, useMemo, useRef, useState} from 'react';
+import React, {useCallback, useMemo, useState} from 'react';
 import {CopyOutlined, DeleteOutlined, EditOutlined, EyeOutlined, FilterOutlined, PlusOutlined} from '@ant-design/icons';
 import {MessageBox, MessageBoxApi} from '@src/messageBox';
 import {HelpersObjects} from '@krinopotam/js-helpers';
 import {IGridApi} from './api';
-import {IGridDeletePromise, IGridRowData} from '@src/tabulatorGrid';
+import {IGridDeletePromise, IGridRowData, ITabulator} from '@src/tabulatorGrid';
 
 export const useInitButtons = (gridApi: IGridApi): IFormButtons => {
     const [, refreshButtons] = useState({});
@@ -19,7 +19,7 @@ export const useInitButtons = (gridApi: IGridApi): IFormButtons => {
     const cloneButton = useGetCloneButton(gridApi, activeRow, selectedRows);
     const updateButton = useGetUpdateButton(gridApi, activeRow, selectedRows);
     const deleteButton = useGetDeleteButton(gridApi, selectedRows);
-    const filterToggleButton = useGetFilterToggleButton(gridApi);
+    const filterToggleButton = useGetFilterToggleButton(gridApi, gridApi.tableApi);
 
     return useMemo(() => {
         const defaultButtons = {
@@ -50,7 +50,7 @@ const useGetViewButton = (gridApi: IGridApi, activeRow: IGridRowData | undefined
 
         return {
             title: 'Просмотреть',
-            icon: <EyeOutlined />,
+            icon: <EyeOutlined/>,
             position: 'right',
             size: 'small',
             disabled: !activeRow || selectedRows.length !== 1,
@@ -72,7 +72,7 @@ const useGetCreateButton = (gridApi: IGridApi): IFormButton | undefined => {
         if (!gridProps.editFormProps || gridProps.readOnly || gridProps.buttons?.create === null) return undefined;
         return {
             title: 'Создать',
-            icon: <PlusOutlined />,
+            icon: <PlusOutlined/>,
             position: 'right',
             size: 'small',
             onClick: () => {
@@ -92,7 +92,7 @@ const useGetCloneButton = (gridApi: IGridApi, activeRow: IGridRowData | undefine
 
         return {
             title: 'Клонировать',
-            icon: <CopyOutlined />,
+            icon: <CopyOutlined/>,
             position: 'right',
             size: 'small',
             disabled: !activeRow || selectedRows.length !== 1,
@@ -114,7 +114,7 @@ const useGetUpdateButton = (gridApi: IGridApi, activeRow: IGridRowData | undefin
 
         return {
             title: 'Редактировать',
-            icon: <EditOutlined />,
+            icon: <EditOutlined/>,
             position: 'right',
             size: 'small',
             disabled: !activeRow || selectedRows.length !== 1,
@@ -135,7 +135,7 @@ const useGetDeleteButton = (gridApi: IGridApi, selectedRows: IGridRowData[]): IF
 
         return {
             title: 'Удалить',
-            icon: <DeleteOutlined />,
+            icon: <DeleteOutlined/>,
             position: 'right',
             danger: true,
             size: 'small',
@@ -189,28 +189,23 @@ const deleteHandler = (gridApi: IGridApi) => {
 };
 
 /** Get update button props */
-const useGetFilterToggleButton = (gridApi: IGridApi): IFormButton | undefined => {
+const useGetFilterToggleButton = (gridApi: IGridApi, tableApi: ITabulator|undefined): IFormButton | undefined => {
     return useMemo(() => {
         const gridProps = gridApi.gridProps;
         if (gridProps.buttons?.filterToggle === null) return undefined;
 
+        if (!tableApi?.isHeaderFilterVisible()) return undefined
+
         return {
             title: '',
-            icon: <FilterOutlined />,
+            icon: <FilterOutlined/>,
             position: 'right',
             size: 'small',
-            active:true,
+            active: gridApi.tableApi?.isHeaderFilterVisible(),
             //disabled: !activeRowKey || selectedRow.length !== 1,
 
             onClick: () => {
-                const show = gridApi.tableApi?.toggleHeaderFilter()
-                // gridApi.tableApi?.updateColumnDefinition("name", {headerFilter:false})
-                // gridApi.tableApi?.updateColumnDefinition("age", {headerFilter:false})
-                // gridApi.tableApi?.updateColumnDefinition("col", {headerFilter:false})
-                // gridApi.tableApi?.updateColumnDefinition("dob", {headerFilter:false})
-                // gridApi.tableApi?.updateColumnDefinition("rating", {headerFilter:false})
-                // gridApi.tableApi?.updateColumnDefinition("passed", {headerFilter:false})
-
+                const show = tableApi?.toggleHeaderFilter()
 
                 gridApi.buttonsApi.updateButtons({
                     filterToggle: {
@@ -219,7 +214,7 @@ const useGetFilterToggleButton = (gridApi: IGridApi): IFormButton | undefined =>
                 });
             },
         };
-    }, [gridApi]);
+    }, [gridApi, tableApi]);
 };
 
 const getRowDataSet = (gridApi: IGridApi, parent: boolean, empty?: boolean) => {

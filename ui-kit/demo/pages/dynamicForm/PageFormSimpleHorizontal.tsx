@@ -1,7 +1,7 @@
 
     import React from 'react';
     import {FormSimpleHorizontal} from '../../components/dynamicForm/formSimpleHorizontal';
-    import { Divider } from 'antd';
+    import { Divider, Collapse } from 'antd';
     import SyntaxHighlighter from 'react-syntax-highlighter';
     import {darcula, docco} from 'react-syntax-highlighter/dist/esm/styles/hljs';
 
@@ -43,9 +43,9 @@ export const FormSimpleHorizontal = (): React.JSX.Element => {
             </div>
             <Divider />
             <div>
-                <SyntaxHighlighter language="javascript" style={props.darkMode ? darcula : docco}>
-                    {source}
-                </SyntaxHighlighter>
+                <Collapse 
+                    items={[{key: 1, label: 'Show source', children: <SyntaxHighlighter language="javascript" style={props.darkMode ? darcula : docco}>{source}</SyntaxHighlighter>}]}>
+                </Collapse>
             </div>
         </>
     );

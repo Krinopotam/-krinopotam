@@ -2,14 +2,22 @@
 
 import React from 'react';
 import TabulatorGrid, {ITabulatorProps, IGridRowData} from '@src/tabulatorGrid';
+import {dateTimeFormatter} from "@src/tabulatorBase/formatters/dateTime";
+import {dateTimeSorter} from "@src/tabulatorBase/sorters/dateTime";
+
+const columnDefaults: ITabulatorProps['columnDefaults'] = {
+    resizable: 'header',
+    headerFilter: true,
+    headerFilterFunc:'like'
+};
 
 const columns: ITabulatorProps['columns'] = [
     {title: 'Name', field: 'name'},
     {title: 'Age', field: 'age', hozAlign: 'left', formatter: 'progress'},
     {title: 'Favourite Color', field: 'col'},
-    {title: 'Date Of Birth', field: 'dob', hozAlign: 'center'},
-    {title: 'Rating', field: 'rating', hozAlign: 'center', formatter: 'star'},
-    {title: 'Passed?', field: 'passed', hozAlign: 'center', formatter: 'tickCross'},
+    {title: 'Date Of Birth', field: 'dob', hozAlign: 'center', formatter: dateTimeFormatter, formatterParams: {inputFormat: 'DD/MM/YYYY', outputFormat: 'DD.MM.YYYY'}, sorter: dateTimeSorter, sorterParams: {format: 'DD/MM/YYYY'}},
+    {title: 'Rating', field: 'rating', hozAlign: 'center', formatter: 'star', headerFilterFunc: '='},
+    {title: 'Passed?', field: 'passed', hozAlign: 'center', formatter: 'tickCross', headerFilterFunc: '='},
 ];
 
 /*Description Start*/
@@ -106,7 +114,7 @@ export const TabulatorGridTree = (): React.JSX.Element => {
             {/*Description Start*/}
             <h1>Пример иерархического грида Tabulator</h1>
             {/*Description End*/}
-            <TabulatorGrid id={'TabulatorGridTree'} columns={columns} dataSet={data} dataTree={true} height={500} layout={'fitColumns'} />
+            <TabulatorGrid id={'TabulatorGridTree'} columnDefaults={columnDefaults} columns={columns} dataSet={data} dataTree={true} height={500} layout={'fitColumns'}/>
         </>
     );
 };

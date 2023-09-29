@@ -6,14 +6,21 @@ import {InputComponentConfig} from '@src/dynamicForm/configBuilder/inputComponen
 import {TreeSelectComponentConfig} from '@src/dynamicForm/configBuilder/treeSelectComponentConfig';
 import {NumberComponentConfig} from '@src/dynamicForm/configBuilder/numberComponentConfig';
 import TabulatorGrid, {ITabulatorProps, IGridRowData} from '@src/tabulatorGrid';
+import {dateTimeFormatter} from "@src/tabulatorBase/formatters/dateTime";
+import {dateTimeSorter} from "@src/tabulatorBase/sorters/dateTime";
+
+const columnDefaults: ITabulatorProps['columnDefaults'] = {
+    resizable: 'header',
+    headerFilter: true,
+};
 
 const columns: ITabulatorProps['columns'] = [
     {title: 'Name', field: 'name'},
     {title: 'Age', field: 'age', hozAlign: 'left', formatter: 'progress'},
     {title: 'Favourite Color', field: 'col'},
-    {title: 'Date Of Birth', field: 'dob', hozAlign: 'center'},
-    {title: 'Rating', field: 'rating', hozAlign: 'center', formatter: 'star'},
-    {title: 'Passed?', field: 'passed', hozAlign: 'center', formatter: 'tickCross'},
+    {title: 'Date Of Birth', field: 'dob', hozAlign: 'center', formatter: dateTimeFormatter, formatterParams: {inputFormat: 'DD/MM/YYYY', outputFormat: 'DD.MM.YYYY'}, sorter: dateTimeSorter, sorterParams: {format: 'DD/MM/YYYY'}},
+    {title: 'Rating', field: 'rating', hozAlign: 'center', formatter: 'star', headerFilterFunc: '='},
+    {title: 'Passed?', field: 'passed', hozAlign: 'center', formatter: 'tickCross', headerFilterFunc: '='},
 ];
 
 const data: IGridRowData[] = [
@@ -115,6 +122,7 @@ export const TabulatorGridTreeWithForm = (): React.JSX.Element => {
             {/*Description End*/}
             <TabulatorGrid
                 id={'TabulatorGridTreeWithForm'}
+                columnDefaults={columnDefaults}
                 columns={columns}
                 dataSet={data}
                 dataTree={true}

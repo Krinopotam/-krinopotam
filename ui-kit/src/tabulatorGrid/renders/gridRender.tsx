@@ -54,7 +54,7 @@ const GridRender_ = (
             multiSelect={gridProps.multiSelect}
             resizableColumnFit={gridProps.resizableColumnFit}
             rowHeight={gridProps.rowHeight}
-            resizableRows={gridProps.resizableRows}
+            //resizableRows={gridProps.resizableRows} //works unstable. When changing the line height, scrolling is disrupted in virtual mode
             movableColumns={gridProps.movableColumns !== false}
             movableRows={gridProps.movableRows}
             groupBy={gridProps.groupBy}

@@ -1,5 +1,5 @@
 import 'tabulator-tables/dist/css/tabulator_simple.css';
-import {EventCallBackMethods, RowComponent, TabulatorFull as Tabulator} from 'tabulator-tables';
+import {ColumnDefinition, ColumnLookup, EventCallBackMethods, RowComponent, TabulatorFull as Tabulator} from 'tabulator-tables';
 import React from 'react';
 import {useInit} from './hooks/init';
 import {
@@ -11,7 +11,13 @@ import {IAdvancedHeaderFilterTabulator} from './modules/advancedHeaderFilterModu
 import {HelpersStrings} from "@krinopotam/js-helpers";
 import {Stylization} from "@src/tabulatorBase/stylization";
 
-export type ITabulator = IAdvancedHeaderFilterTabulator & IActiveSelectionTabulator & Tabulator
+type _ITabulator = IAdvancedHeaderFilterTabulator & IActiveSelectionTabulator & Tabulator
+export interface ITabulator extends _ITabulator {
+    /**  Tabulator property type correction */
+    updateColumnDefinition:(column: ColumnLookup, definition: Partial<ColumnDefinition>) => Promise<void>
+}
+
+
 
 export type ITabulatorRow = RowComponent & IActiveSelectionModuleRow;
 

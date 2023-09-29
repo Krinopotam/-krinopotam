@@ -1,7 +1,7 @@
 
     import React from 'react';
     import {TabulatorGridChangeDataSet} from '../../components/tabulator/tabulatorGridChangeDataSet';
-    import { Divider } from 'antd';
+    import { Divider, Collapse } from 'antd';
     import SyntaxHighlighter from 'react-syntax-highlighter';
     import {darcula, docco} from 'react-syntax-highlighter/dist/esm/styles/hljs';
 
@@ -11,6 +11,10 @@
 import React, {useCallback, useState} from 'react';
 import {Button} from @krinopotam/ui-kit/button';
 import TabulatorGrid, {ITabulatorProps, IGridProps, IGridApi, IGridRowData} from @krinopotam/ui-kit/tabulatorGrid';
+const columnDefaults: ITabulatorProps['columnDefaults'] = {
+    resizable: 'header',
+    headerFilter: true,
+};
 const columns: ITabulatorProps['columns'] = [
     {title: 'Column 1', field: 'col1'},
     {title: 'Column 2', field: 'col2'},
@@ -53,7 +57,7 @@ export const TabulatorGridChangeDataSet = (): React.JSX.Element => {
             <br />
             <Button onClick={updateDataViaApiAsync}>Обновить dataSet асинхронно через Api</Button> - ререндер вызывается, так как закрывается лоадером на время
             загрузки, но используется мемоизированный компонет. Поэтому фактически ререндера нет.
-            <TabulatorGrid id={'TabulatorGridSimple'} apiRef={gridApi} columns={columns} dataSet={dataSet} height={500} layout={'fitColumns'} />
+            <TabulatorGrid id={'TabulatorGridSimple'} apiRef={gridApi} columnDefaults={columnDefaults} columns={columns} dataSet={dataSet} height={500} layout={'fitColumns'} />
         </>
     );
 };
@@ -65,9 +69,9 @@ export const TabulatorGridChangeDataSet = (): React.JSX.Element => {
             </div>
             <Divider />
             <div>
-                <SyntaxHighlighter language="javascript" style={props.darkMode ? darcula : docco}>
-                    {source}
-                </SyntaxHighlighter>
+                <Collapse 
+                    items={[{key: 1, label: 'Show source', children: <SyntaxHighlighter language="javascript" style={props.darkMode ? darcula : docco}>{source}</SyntaxHighlighter>}]}>
+                </Collapse>
             </div>
         </>
     );
