@@ -3,21 +3,11 @@ import {TabulatorFull as Tabulator, Module, ScrollToRowPosition, Options, RowCom
 import {IRow, IModule} from './innerTypes';
 
 //region Interfaces
-export interface IActiveSelectionTabulator extends Tabulator, IActiveSelectionModuleTable {
-    options: Options & IActiveSelectionModuleTableOptions;
-}
+export interface IActiveSelectionTabulator extends Tabulator {
+    options: Options & {
+        multiSelect?: boolean;
+    };
 
-export interface IActiveSelectionModuleTableEvents {
-    activeRowChanged?: (row: RowComponent) => void;
-    keyUp?: (e: KeyboardEvent) => void | boolean;
-    keyDown?: (e: KeyboardEvent) => void | boolean;
-}
-
-export interface IActiveSelectionModuleTableOptions {
-    multiSelect?: boolean;
-}
-
-export interface IActiveSelectionModuleTable {
     /** Get active row by row node */
     setActiveRow: (row: RowComponent | undefined | null, clearSelection?: boolean, scrollPosition?: ScrollToRowPosition) => void;
 
@@ -43,6 +33,12 @@ export interface IActiveSelectionModuleTable {
     setTableBodyFocus: () => void;
 }
 
+export interface IActiveSelectionModuleTableEvents {
+    activeRowChanged?: (row: RowComponent) => void;
+    keyUp?: (e: KeyboardEvent) => void | boolean;
+    keyDown?: (e: KeyboardEvent) => void | boolean;
+}
+
 export interface IActiveSelectionModuleRow {
     isActive: () => boolean;
     setActive: (clearSelection?: boolean, scrollPosition?: ScrollToRowPosition) => void;
@@ -53,6 +49,7 @@ export interface IRowComponent extends RowComponent, IActiveSelectionModuleRow {
 }
 
 type ISelectMode = 'select' | 'deselect' | 'invert';
+
 //endregion
 
 export class ActiveSelectionModule extends Module {
@@ -85,6 +82,7 @@ export class ActiveSelectionModule extends Module {
         this.bindEvents();
         _this.subscribe('table-destroy', this.unbindEvents.bind(this));
     }
+
     rowClickHandler(e: PointerEvent, row: IRow) {
         const options = this.table.options;
         const rowNode = row.getComponent();
@@ -457,6 +455,7 @@ export class ActiveSelectionModule extends Module {
     private onShiftKeyUp() {
         this.table.element.style.userSelect = 'initial';
     }
+
     //endregion
 
     public setTableBodyFocus() {

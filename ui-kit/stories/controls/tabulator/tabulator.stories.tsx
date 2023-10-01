@@ -1,11 +1,10 @@
 // noinspection DuplicatedCode
 
 import type {Meta, StoryObj} from '@storybook/react'
-import Tabulator, {ITabulatorProps} from "@src/tabulatorBase";
+import Tabulator, {ITabulatorColumns} from "@src/tabulatorBase";
 import React from "react";
-import {ColumnDefinition} from "tabulator-tables";
-import {dateTimeFormatter} from "@src/tabulatorBase/formatters/dateTime";
 import {dateTimeSorter} from "@src/tabulatorBase/sorters/dateTime";
+import {dateTimeFormatter} from "@src/tabulatorBase/formatters/dateTime";
 
 export default {
     title: 'Controls/Tabulator',
@@ -20,7 +19,7 @@ export default {
 } satisfies Meta<typeof Tabulator>
 
 
-const dataSet = [
+const _dataSet = [
     {
         id: '1',
         name: 'Ivanov Ivan Ivanovich',
@@ -93,15 +92,15 @@ const dataSet = [
     {id: '20', name: 'Margret Marmajuke4', age: '16', col: 'yellow', dob: '20/01/1999', rating: 4, passed: true},
 ];
 
-const columns: ColumnDefinition[] = [
+const columns: ITabulatorColumns = [
     {title: 'Name', field: 'name', headerFilter: true, headerFilterFunc: 'like', frozen: true},
     {title: 'Age', field: 'age', hozAlign: 'left', formatter: 'progress', bottomCalc: "avg", bottomCalcParams: {precision: 3}, topCalc: 'sum'},
     {title: 'Favourite Color', field: 'col', headerFilter: true, headerFilterFunc: 'like'},
     {
         title: 'Results',
         columns: [
-            {title: 'Rating', field: 'rating', hozAlign: 'center', formatter: 'star', headerFilter: true, headerFilterFunc: '='},
-            {title: 'Passed?', field: 'passed', hozAlign: 'center', formatter: 'tickCross', headerFilter: true, headerFilterFunc: '='},
+            {title: 'Rating', field: 'rating', hozAlign: 'center', formatter: 'star', headerFilter: 'star', headerFilterFunc: '='},
+            {title: 'Passed?', field: 'passed', hozAlign: 'center', formatter: 'tickCross', headerFilter: 'tickCross', headerFilterFunc: '='},
         ]
     },
 
@@ -114,7 +113,7 @@ const columns: ColumnDefinition[] = [
 ]
 
 const baseArgs: Story['args'] = {
-    data: dataSet,
+    data: _dataSet,
     columns: columns,
     columnDefaults: {
         resizable: 'header',
@@ -123,13 +122,21 @@ const baseArgs: Story['args'] = {
     },
     height: 500,
     layout: 'fitColumns',
-
+    movableColumns: true,
 }
 
 type Story = StoryObj<typeof Tabulator>;
 export const Simple: Story = {
     args: {
         ...baseArgs
+    },
+}
+
+export const WithoutHeaderFilter: Story = {
+    args: {
+        ...baseArgs,
+        headerFilterHidden:true,
+        footerElement: <div>My Footer</div>
     },
 }
 export const Tree: Story = {
@@ -154,7 +161,6 @@ export const PaginationLocal: Story = {
         paginationMode: 'local',
         paginationSize: 10,
         paginationSizeSelector: [5, 10, 50, 100],
-        movableColumns: true,
         paginationCounter: "rows",
     },
 }
@@ -162,23 +168,25 @@ export const PaginationLocal: Story = {
 export const PaginationRemote: Story = {
     args: {
         ...baseArgs,
+        data: undefined,
         height: undefined,
         pagination: true,
-        paginationMode: 'remote',
-        paginationSize: 10,
+        paginationSize: 5,
         paginationSizeSelector: [5, 10, 50, 100],
-        movableColumns: true,
         paginationCounter: "rows",
-
-        ajaxURLGenerator: function (url, config, params) {
-            //url - the url from the ajaxURL property or setData function
-            //config - the request config object from the ajaxConfig property
-            //params - the params object from the ajaxParams property, this will also include any pagination, filter and sorting properties based on table setup
-
-            //return request url
-            const result = url + "?params=" + encodeURI(JSON.stringify(params)); //encode parameters as a json object
-            console.log(result)
-            return result
-        }
+        paginationMode: 'remote',
+        filterMode: "remote",
+        sortMode: 'remote',
+        ajaxURL: '-', //ajax URL. Workaround: if you need to use your own fetcher (for example Axios), then you must specify any non-empty string
+        ajaxRequestFunc: (url, config, params) => {
+            return new Promise((resolve) => {
+                setTimeout(() => {
+                    //make any remote fetch
+                    const dataSet = _dataSet.slice((params.page - 1) * params.size, params.page * params.size); //remote fetch imitation
+                    resolve({data: dataSet, last_page: 4})
+                }, 1000)
+            })
+        },
+        ajaxParams: {key1: "value1", key2: "value2"} //any additional params (you can pass a callback)
     },
 }

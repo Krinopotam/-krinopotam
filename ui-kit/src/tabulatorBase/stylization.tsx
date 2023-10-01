@@ -10,8 +10,8 @@ interface IStyleType extends GlobalToken {
 
 const TabulatorCss = createGlobalStyle<IStyleType>`
   .tabulator {
+    color: ${(props: GlobalToken) => props.colorText};
     background-color: ${(props: GlobalToken) => props.colorBgContainer};
-
     border-color: ${(props: GlobalToken) => props.colorBorder};
     border-style: solid;
     border-width: thin;
@@ -25,11 +25,12 @@ const TabulatorCss = createGlobalStyle<IStyleType>`
       /** left frozen column header border */
 
       .tabulator-calcs-holder {
-        border:0;
+        border: 0;
         border-top: 1px solid ${(props: GlobalToken) => props.colorBorder};
         background-color: ${(props: GlobalToken) => props.colorBgLayout} !important;
 
         .tabulator-calcs-top {
+          color: ${(props: GlobalToken) => props.colorText};
           background-color: ${(props: GlobalToken) => props.colorBgLayout} !important;
           border: 0;
 
@@ -41,6 +42,7 @@ const TabulatorCss = createGlobalStyle<IStyleType>`
         .tabulator-frozen.tabulator-frozen-left {
           border-right: 2px solid ${(props: GlobalToken) => props.colorBorder};
         }
+
         .tabulator-frozen.tabulator-frozen-right {
           border-left: 2px solid ${(props: GlobalToken) => props.colorBorder};
         }
@@ -48,11 +50,12 @@ const TabulatorCss = createGlobalStyle<IStyleType>`
 
       .tabulator-col-resize-handle {
         transition: background-color 0.5s ease;
+
         &:hover {
           background-color: ${(props: GlobalToken) => props.colorPrimaryHover};
         }
       }
-      
+
       .tabulator-col {
         background-color: ${(props: GlobalToken) => props.colorBgLayout};
         border-right-color: ${(props: GlobalToken) => props.colorBorder};
@@ -64,7 +67,7 @@ const TabulatorCss = createGlobalStyle<IStyleType>`
         &.tabulator-frozen.tabulator-frozen-right {
           border-left: 2px solid ${(props: GlobalToken) => props.colorBorder};
         }
-        
+
         &.tabulator-sortable {
           &.tabulator-col-sorter-element:hover {
             background-color: ${(props: GlobalToken) => props.colorFillQuaternary};
@@ -83,7 +86,7 @@ const TabulatorCss = createGlobalStyle<IStyleType>`
         &.tabulator-col-group .tabulator-col-group-cols {
           border-top: 1px solid ${(props: GlobalToken) => props.colorBorder};
         }
-        
+
         .tabulator-header-filter input {
           color: ${(props: GlobalToken) => props.colorText};
           font-size: ${(props: GlobalToken) => props.fontSize}px;
@@ -153,17 +156,21 @@ const TabulatorCss = createGlobalStyle<IStyleType>`
 
 
           &.tabulator-row-even .tabulator-cell {
-            background-color: ${(props) => {return props.striped ? props.colorBgLayout : "transparent"}};
+            background-color: ${(props) => {
+              return props.striped ? props.colorBgLayout : "transparent"
+            }};
           }
-          
+
           /** Highlight row resize handler  */
+
           .tabulator-row-resize-handle {
             transition: background-color 0.5s ease;
+
             &:hover {
               background-color: ${(props: GlobalToken) => props.colorPrimaryHover};
             }
           }
-          
+
           .tabulator-cell {
             background-color: ${(props: GlobalToken) => props.colorBgContainer};
             border-right-color: ${(props: GlobalToken) => props.colorBorderSecondary};
@@ -171,6 +178,7 @@ const TabulatorCss = createGlobalStyle<IStyleType>`
             &.tabulator-frozen.tabulator-frozen-left {
               border-right: 2px solid ${(props: GlobalToken) => props.colorBorder};
             }
+
             &.tabulator-frozen.tabulator-frozen-right {
               border-left: 2px solid ${(props: GlobalToken) => props.colorBorder};
             }
@@ -203,8 +211,74 @@ const TabulatorCss = createGlobalStyle<IStyleType>`
           .tabulator-frozen.tabulator-frozen-left {
             border-right: 2px solid ${(props: GlobalToken) => props.colorBorder};
           }
+
           .tabulator-frozen.tabulator-frozen-right {
             border-left: 2px solid ${(props: GlobalToken) => props.colorBorder};
+          }
+        }
+      }
+
+      .tabulator-paginator {
+        color: ${(props: GlobalToken) => props.colorText};
+
+        button.tabulator-page {
+          color: ${(props: GlobalToken) => props.colorText};
+          transition: all 0.2s;
+          border-radius: ${(props: GlobalToken) => props.borderRadius}px;
+          padding: 0;
+          min-width: 32px;
+          height: 32px;
+          margin-inline-end: 8px;
+          text-align: center;
+          vertical-align: middle;
+          cursor: pointer;
+          user-select: none;
+          line-height: 30px;
+
+          &.active:not(:disabled) {
+            color: ${(props: GlobalToken) => props.colorText};
+            border: 1px solid ${(props: GlobalToken) => props.colorPrimary};
+            font-weight: 600;
+          }
+
+          &:not(:disabled) {
+            background-color: ${(props: GlobalToken) => props.colorBgLayout};
+            border-style: hidden;
+
+            &:hover {
+              background-color: ${(props: GlobalToken) => props.colorBgTextHover};
+            }
+          }
+
+          &:disabled {
+            border-style: hidden;
+            background-color: transparent;
+            color: ${(props: GlobalToken) => props.colorTextQuaternary};
+            opacity: 1;
+            cursor: not-allowed;
+          }
+        }
+        
+        select.tabulator-page-size {
+          min-width: 32px;
+          height: 32px;
+          border-radius: ${(props: GlobalToken) => props.borderRadius}px;
+          border-color: ${(props: GlobalToken) => props.colorBorder};
+          color: ${(props: GlobalToken) => props.colorText};
+          background-color: ${(props: GlobalToken) => props.colorBgContainer};
+          border-style: solid;
+          border-width: 1px;
+
+          &:focus {
+            border-color: ${(props: GlobalToken) => props.colorPrimaryHover};
+            box-shadow: 0 0 0 2px ${(props: GlobalToken) => props.controlOutline};
+            border-inline-end-width: 1px;
+            outline: 0;
+          }
+          
+          
+          &:hover {
+            border: 1px solid ${(props: GlobalToken) => props.colorPrimaryHover};
           }
         }
       }

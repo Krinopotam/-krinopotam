@@ -11,7 +11,6 @@
 import React from 'react';
 import {ColumnDefinition} from 'tabulator-tables';
 import TabulatorGrid, {ITabulatorProps, IGridRowData} from @krinopotam/ui-kit/tabulatorGrid';
-import {dateTimeFormatter} from @krinopotam/ui-kit/tabulatorBase/formatters/dateTime";
 import {dateTimeSorter} from @krinopotam/ui-kit/tabulatorBase/sorters/dateTime";
 const data: IGridRowData[] = [
     {id: '01', surname: 'Иванов', name: 'Иван', patronymic: 'Иванович', email: 'ivanov@mail.ru', birthday: '11.01.1980', children:[
@@ -72,6 +71,7 @@ const fioSorter: ColumnDefinition['sorter'] = (_a, _b, aRow, bRow): number => {
 const columnDefaults: ITabulatorProps['columnDefaults'] = {
     resizable: 'header',
     headerFilter: true,
+    headerFilterFunc: 'like'
 };
 const columns: ITabulatorProps['columns'] = [
     {

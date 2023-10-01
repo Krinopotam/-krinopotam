@@ -1,24 +1,19 @@
 import {TabulatorFull as Tabulator, Module, Options, ColumnDefinition} from 'tabulator-tables';
 import {IModule} from './innerTypes';
 import {AnyType} from "@krinopotam/service-types";
+import {ITabulatorFilterFunc} from "@src/tabulatorBase/tabulatorBase";
 
 //region Interfaces
-export interface IAdvancedHeaderFilterTabulator extends Tabulator, IAdvancedHeaderFilterModuleTable {
-    options: Options & IAdvancedHeaderFilterModuleTableOptions;
-}
+export interface IAdvancedHeaderFilterTabulator extends Tabulator {
+    options: Options & {
+        /** The parent key field name */
+        dataTreeParentField?: string | number;
 
-export interface IAdvancedHeaderFilterModuleTableOptions {
-    /** The parent key field name */
-    dataTreeParentField?: string | number;
+        /** Hide HeaderFilter when grid is initialized */
+        headerFilterHidden?: boolean
+    };
 
-    /** Hide HeaderFilter when grid is initialized */
-    headerFilterHidden?: boolean
-}
-
-export type IFilterFunction = (filterVal: AnyType, rowValue: AnyType, rowData: AnyType, filterParams: AnyType) => boolean
-
-export interface IAdvancedHeaderFilterModuleTable {
-    getBaseTreeDataFilter: (matchFunction: IFilterFunction | undefined) => IFilterFunction;
+    getBaseTreeDataFilter: (matchFunction: ITabulatorFilterFunc | undefined) => ITabulatorFilterFunc;
 
     /** Show/hide inline filter */
     toggleHeaderFilter: (show?: boolean) => boolean
@@ -29,7 +24,6 @@ export interface IAdvancedHeaderFilterModuleTable {
     /** Return header filter available (if there is at least one column with headerFilter) */
     isHeaderFilterAvailable: () => boolean
 }
-
 
 //endregion
 
@@ -48,6 +42,16 @@ export class AdvancedHeaderFilterModule extends Module {
 
         this.table = table as IAdvancedHeaderFilterTabulator;
         const _this = this as unknown as IModule;
+
+
+        /** for debug
+        const viewPort = document.createElement("button");
+        viewPort.innerHTML = "Toggle header"
+        document.body.appendChild(viewPort);
+        viewPort.onclick = () => {
+            this.toggleHeaderFilter()
+        }
+        */
 
         _this.registerTableOption('dataTreeParentField', undefined);
         _this.registerTableOption('headerFilterHidden', undefined);
@@ -95,7 +99,7 @@ export class AdvancedHeaderFilterModule extends Module {
         }
     }
 
-    public getBaseTreeDataFilter(matchFunction: IFilterFunction | undefined) {
+    public getBaseTreeDataFilter(matchFunction: ITabulatorFilterFunc | undefined) {
         if (!matchFunction) return undefined;
         const filter = (filterVal: AnyType, rowValue: AnyType, rowData: AnyType, filterParams: AnyType, force?: boolean) => {
             const fieldName = this.getFilterFieldName(filterVal, rowValue, rowData, filterParams);
@@ -220,12 +224,27 @@ export class AdvancedHeaderFilterModule extends Module {
 
         tabulatorHeader.style.height = tabulatorHeader.offsetHeight + filterHeight * (show ? 1 : -1) + 'px'
 
+        const tableHolderHeight = this.parseHeight(tableHolder.style.height);
+        if (tableHolderHeight) {
+            tableHolder.style.minHeight = 'calc(100% - ' + (tableHolderHeight + filterHeight * (show ? 1 : -1)) + 'px)';
+            tableHolder.style.height = 'calc(100% - ' + (tableHolderHeight + filterHeight * (show ? 1 : -1)) + 'px)';
+            tableHolder.style.maxHeight = 'calc(100% - ' + (tableHolderHeight + filterHeight * (show ? 1 : -1)) + 'px)';
+            return this.headerFilterStatus
+        }
+
         const tableHolderOffset = headerHeight + filterHeight * (show ? 1 : -1);
         tableHolder.style.minHeight = 'calc(100% - ' + tableHolderOffset + 'px)';
         tableHolder.style.height = 'calc(100% - ' + tableHolderOffset + 'px)';
         tableHolder.style.maxHeight = 'calc(100% - ' + tableHolderOffset + 'px)';
 
         return this.headerFilterStatus
+    }
+
+    private parseHeight(height: string) {
+        const parts = height.split('-')
+        if (!parts[1]) return 0;
+        const result = parseInt(parts[1].trim(), 10)
+        return isNaN(result) ? 0 : result;
     }
 
     public isHeaderFilterVisible() {
@@ -242,7 +261,7 @@ export class AdvancedHeaderFilterModule extends Module {
 AdvancedHeaderFilterModule.moduleName = 'advancedHeaderFilter';
 
 
-const defaultFilters: Record<string, IFilterFunction | undefined> = {
+const defaultFilters: Record<string, ITabulatorFilterFunc | undefined> = {
     //equal to
     '=': function (filterVal, rowVal) {
         return rowVal == filterVal;

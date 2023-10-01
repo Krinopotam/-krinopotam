@@ -1,4 +1,2 @@
 export {default} from './tabulatorBase'
-export type {ITabulator, ITabulatorRow, ITabulatorProps} from './tabulatorBase'
-
-export type {IFilterFunction} from './modules/advancedHeaderFilterModule'
+export type {ITabulator, ITabulatorRow, ITabulatorProps, ITabulatorFilterFunc, IRequestProps, IAjaxConfig, ITabulatorEvents, ITabulatorColumns} from './tabulatorBase'

@@ -3,7 +3,6 @@
 import React from 'react';
 import {ColumnDefinition} from 'tabulator-tables';
 import TabulatorGrid, {ITabulatorProps, IGridRowData} from '@src/tabulatorGrid';
-import {dateTimeFormatter} from "@src/tabulatorBase/formatters/dateTime";
 import {dateTimeSorter} from "@src/tabulatorBase/sorters/dateTime";
 
 const data: IGridRowData[] = [
