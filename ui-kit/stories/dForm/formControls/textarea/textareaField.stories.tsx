@@ -1,7 +1,7 @@
 // noinspection DuplicatedCode
 
 import type {Meta, StoryObj} from '@storybook/react';
-import TextAreaField from "./textAreaField";
+import TextAreaField from "./textareaField";
 
 export default {
     title: 'DForm/Controls/TextArea',

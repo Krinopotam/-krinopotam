@@ -1,12 +1,12 @@
 import React from 'react';
-import {EventCallBackMethods, TabulatorFull as Tabulator} from 'tabulator-tables';
-import {ITabulatorProps, ITabulator} from '../tabulatorBase';
+import {ColumnDefinition, EventCallBackMethods, TabulatorFull as Tabulator} from 'tabulator-tables';
+import {ITabulatorProps, ITabulator, ITabulatorColumn} from '../tabulatorBase';
 import {createRoot} from 'react-dom/client';
 import {ActiveSelectionModule} from '../modules/activeSelectionModule';
 import {AdvancedHeaderFilterModule} from '../modules/advancedHeaderFilterModule';
 import {collapseButton, expandButton} from '../parts/icons';
 import {setPatches} from '../patches/setPatches';
-import {FooterHOC} from "@src/tabulatorBase/parts/footerHOC";
+import {BaseHOC} from "@src/tabulatorBase/parts/baseHOC";
 
 export const useInit = ({
                             props,
@@ -58,15 +58,17 @@ const initTabulator = async ({
     onTableRef?.(tableRef as React.MutableRefObject<ITabulator>);
 };
 
-const syncRender = async (component: React.JSX.Element, container: HTMLElement): Promise<HTMLElement> => {
+const syncRender = async (component: React.ReactNode, container: HTMLElement): Promise<HTMLElement> => {
     return new Promise((resolve) => {
         const root = createRoot(container);
-        root.render(<FooterHOC onEffect={() => {resolve(container)}}>{component}</FooterHOC>);
+        root.render(<BaseHOC onEffect={() => {resolve(container)}}>{component}</BaseHOC>);
     });
 }
 
 const propsToOptions = async (props: ITabulatorProps) => {
     const output = {...props} as ITabulator['options'];
+
+    output.columns = await columnPropsToOptions(props) as ColumnDefinition[];
 
     if (typeof props.footerElement === 'object') {
         // convert from JSX to HTML string (tabulator's footerElement accepts string)
@@ -92,6 +94,21 @@ const propsToOptions = async (props: ITabulatorProps) => {
     };
     return output;
 };
+
+const columnPropsToOptions = async (props: ITabulatorProps)=>{
+    if (!props.columns) return undefined;
+    const columns: ITabulatorColumn[] = [];
+    for (const column of props.columns) {
+        if (React.isValidElement(column.headerPopup)) {
+            // convert from JSX to HTML string (tabulator's element accepts string)
+            const el = await syncRender(column.headerPopup, document.createElement('div'));
+            column.headerPopup = el.innerHTML;
+        }
+
+        columns.push(column)
+    }
+    return columns;
+}
 
 const initTabulatorClass = async ($container: HTMLDivElement, options: ITabulator['options'], props: ITabulatorProps, events?: Partial<EventCallBackMethods>): Promise<ITabulator> => {
     Tabulator.registerModule(ActiveSelectionModule);

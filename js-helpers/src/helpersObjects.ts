@@ -157,4 +157,21 @@ export const HelpersObjects = {
         else if (mode === 'detailed') return detailedDiff(obj1, obj2);
         else return diff(obj1, obj2);
     },
+
+    /** Check if an object is React Class Component */
+    isReactClassComponent: <T>(obj: T) => {
+        return (typeof obj === 'function' && !!obj.prototype.isReactComponent)
+    },
+
+    /** Check if an object is React Component */
+    isReactComponent: <T>(obj: T) => {
+        if (typeof obj === 'object') {
+            const _obj = obj as { $$typeof?: symbol }
+            if (_obj['$$typeof'] && _obj['$$typeof'].toString() === 'Symbol(react.element)') return true;
+        } else if (typeof obj === 'function') {
+            if (String(obj).includes('return React.createElement') || !!obj.prototype?.isReactComponent) return true;
+        }
+
+        return false
+    }
 };

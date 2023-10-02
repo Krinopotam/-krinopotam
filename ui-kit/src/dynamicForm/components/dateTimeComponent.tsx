@@ -9,11 +9,11 @@
 import React, {useCallback, useEffect} from 'react';
 import dayjs, {Dayjs} from 'dayjs';
 
-import {DatePicker, IDatePickerProps} from '@src/datePicker';
 import {IDFormComponentProps, IDFormFieldProps} from './baseComponent';
-import {GetDatePickerFormat} from "@src/datePicker/datePicker";
 import {IDFormApi} from "@src/dynamicForm";
 import {PanelMode} from "rc-picker/lib/interface";
+import {DatePicker, IDatePickerProps} from "@src/datePicker";
+import {GetDatePickerFormat} from "@src/datePicker/datePicker";
 
 export {default as dayjs, Dayjs} from 'dayjs';
 

@@ -12,14 +12,15 @@ const commonCfg: UserConfig = {
     },
     build: {
         target: 'modules',
+        emptyOutDir:true,
         //minify: 'terser',
     },
 }
 
-const devExamplesCfg: UserConfig = {
+const devDemoCfg: UserConfig = {
     ...commonCfg,
     plugins: [
-        react(),
+        ...commonCfg.plugins,
         watch({
             pattern: ['demo/components/**/*.*'],
             command: "node ./demo/generateDemo.js",
@@ -30,11 +31,24 @@ const devExamplesCfg: UserConfig = {
     }
 }
 
+const buildDemoCfg: UserConfig = {
+    ...commonCfg,
+    plugins: [
+        ...commonCfg.plugins,
+        watch({
+            pattern: ['demo/components/**/*.*'],
+            command: "node ./demo/generateDemo.js",
+        }),
+    ],
+    build: {
+        ...commonCfg.build,
+        outDir:'demo-dist',
+    }
+}
+
 // noinspection JSUnusedGlobalSymbols
 export default defineConfig(({command, mode}) => {
-    if (command === 'serve') {
-        if (mode === 'demo') return devExamplesCfg
-    }
-
+    console.log('----------------',command, mode)
+    if (mode === 'demo') return command === 'serve' ? devDemoCfg : buildDemoCfg
     return commonCfg
 })

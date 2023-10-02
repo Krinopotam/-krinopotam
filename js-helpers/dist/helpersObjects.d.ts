@@ -13,4 +13,6 @@ export declare const HelpersObjects: {
     isObjectHasOwnProperty: (obj: Record<string, unknown>, propName: string) => boolean;
     splitObject: <TObject_3>(obj: TObject_3, propNames: (keyof TObject_3)[]) => [TObject_3, TObject_3];
     objectDiffs: (obj1: object, obj2: object, mode?: 'added' | 'deleted' | 'updated' | 'detailed') => object;
+    isReactClassComponent: <T>(obj: T) => boolean;
+    isReactComponent: <T_1>(obj: T_1) => boolean;
 };

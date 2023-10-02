@@ -93,7 +93,7 @@ export interface IDFormFieldTabulatorGridProps extends Omit<IDFormFieldProps, 'w
     rowHeight?: ITabulatorProps['rowHeight'];
 
     /** Is the user can resize rows */
-    resizableRows?: ITabulatorProps['resizableRows'];
+    //resizableRows?: ITabulatorProps['resizableRows'];
 
     /** is columns movable */
     movableColumns?: ITabulatorProps['movableColumns'];
@@ -240,7 +240,7 @@ export const TabulatorGridComponent = ({formApi, fieldName, fieldProps}: IDFormT
                 multiSelect={fieldProps.multiSelect}
                 resizableColumnFit={fieldProps.resizableColumnFit}
                 rowHeight={fieldProps.rowHeight}
-                resizableRows={fieldProps.resizableRows}
+                //resizableRows={fieldProps.resizableRows}
                 movableColumns={fieldProps.movableColumns}
                 movableRows={fieldProps.movableRows}
                 groupBy={fieldProps.groupBy}

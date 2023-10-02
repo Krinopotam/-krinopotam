@@ -14,6 +14,7 @@ import {InputComponentConfig} from @krinopotam/ui-kit/dynamicForm/configBuilder/
 import {TreeSelectComponentConfig} from @krinopotam/ui-kit/dynamicForm/configBuilder/treeSelectComponentConfig';
 import {NumberComponentConfig} from @krinopotam/ui-kit/dynamicForm/configBuilder/numberComponentConfig';
 import TabulatorGrid, {ITabulatorProps, IGridRowData} from @krinopotam/ui-kit/tabulatorGrid';
+import {dateTimeFormatter} from @krinopotam/ui-kit/tabulatorBase/formatters/dateTime";
 import {dateTimeSorter} from @krinopotam/ui-kit/tabulatorBase/sorters/dateTime";
 const columnDefaults: ITabulatorProps['columnDefaults'] = {
     resizable: 'header',
@@ -24,7 +25,7 @@ const columns: ITabulatorProps['columns'] = [
     {title: 'Name', field: 'name'},
     {title: 'Age', field: 'age', hozAlign: 'left', formatter: 'progress'},
     {title: 'Favourite Color', field: 'col'},
-    {title: 'Date Of Birth', field: 'dob', hozAlign: 'center', formatter: 'datetime', formatterParams: {inputFormat: 'DD/MM/YYYY', outputFormat: 'DD.MM.YYYY'}, sorter: dateTimeSorter, sorterParams: {format: 'DD/MM/YYYY'}},
+    {title: 'Date Of Birth', field: 'dob', hozAlign: 'center', formatter: dateTimeFormatter, formatterParams: {inputFormat: 'DD/MM/YYYY', outputFormat: 'DD.MM.YYYY'}, sorter: dateTimeSorter, sorterParams: {format: 'DD/MM/YYYY'}},
     {title: 'Rating', field: 'rating', hozAlign: 'center', formatter: 'star', headerFilterFunc: '='},
     {title: 'Passed?', field: 'passed', hozAlign: 'center', formatter: 'tickCross', headerFilterFunc: '='},
 ];

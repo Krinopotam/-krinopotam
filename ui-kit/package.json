@@ -8,10 +8,9 @@
 	"main": "index.js",
 	"scripts": {
 		"dist": "tsc -p tsconfig.json",
-		"build": "tsc && vite build",
-		"preview": "vite preview",
-		"dev": "vite --mode demo",
-		"playground": "vite --mode playground",
+		"demo": "vite --mode demo",
+		"build-demo": "tsc --noEmit && vite build --mode demo",
+		"preview-demo": "vite preview",
 		"storybook": "storybook dev -p 6007",
 		"build-storybook": "storybook build",
 		"init-msw": "msw init public/"
@@ -59,7 +58,7 @@
 	},
 	"dependencies": {
 		"@krinopotam/common-hooks": "^1.0.1",
-		"@krinopotam/js-helpers": "^1.0.17",
+		"@krinopotam/js-helpers": "^1.0.23",
 		"@krinopotam/service-types": "^1.0.5",
 		"@tanstack/react-table": "^8.10.3",
 		"@tanstack/table-core": "^8.10.3",

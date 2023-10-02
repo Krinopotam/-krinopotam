@@ -1,1 +1,1 @@
-call c:\nginx\www\@krinopotam\build-tools\update-and-publish.bat
+call d:\projects\@krinopotam\build-tools\update-and-publish.bat

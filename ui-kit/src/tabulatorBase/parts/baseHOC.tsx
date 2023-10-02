@@ -1,11 +1,11 @@
 import React, {useEffect} from "react";
 
-export interface IFooterHocProps {
+export interface IBaseHocProps {
     children: React.ReactNode
     onEffect?: () => void
 }
 
-export const FooterHOC = (props: IFooterHocProps): React.JSX.Element | null => {
+export const BaseHOC = (props: IBaseHocProps): React.JSX.Element | null => {
     useEffect(() => {
         props.onEffect?.();
     }, [props])

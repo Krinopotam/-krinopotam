@@ -1,7 +1,7 @@
 // noinspection DuplicatedCode
 
 import type {Meta, StoryObj} from '@storybook/react'
-import InputField from "./inputField";
+import InputField from "./InputField";
 
 export default {
     title: 'DForm/Controls/Input',

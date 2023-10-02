@@ -1,10 +1,10 @@
 // noinspection DuplicatedCode
 
 import type {Meta, StoryObj} from '@storybook/react'
-import Tabulator, {ITabulatorColumns} from "@src/tabulatorBase";
+import Tabulator, {ITabulatorColumn} from "@src/tabulatorBase";
 import React from "react";
-import {dateTimeSorter} from "@src/tabulatorBase/sorters/dateTime";
-import {dateTimeFormatter} from "@src/tabulatorBase/formatters/dateTime";
+import {dateTimeSorter} from "@src/tabulatorBase";
+import {dateTimeFormatter} from "@src/tabulatorBase";
 
 export default {
     title: 'Controls/Tabulator',
@@ -92,7 +92,7 @@ const _dataSet = [
     {id: '20', name: 'Margret Marmajuke4', age: '16', col: 'yellow', dob: '20/01/1999', rating: 4, passed: true},
 ];
 
-const columns: ITabulatorColumns = [
+const columns: ITabulatorColumn[] = [
     {title: 'Name', field: 'name', headerFilter: true, headerFilterFunc: 'like', frozen: true},
     {title: 'Age', field: 'age', hozAlign: 'left', formatter: 'progress', bottomCalc: "avg", bottomCalcParams: {precision: 3}, topCalc: 'sum'},
     {title: 'Favourite Color', field: 'col', headerFilter: true, headerFilterFunc: 'like'},
@@ -135,7 +135,7 @@ export const Simple: Story = {
 export const WithoutHeaderFilter: Story = {
     args: {
         ...baseArgs,
-        headerFilterHidden:true,
+        headerFilterHidden: true,
         footerElement: <div>My Footer</div>
     },
 }
@@ -152,6 +152,7 @@ export const WithFooter: Story = {
         footerElement: <div>My Footer</div>
     },
 }
+
 
 export const PaginationLocal: Story = {
     args: {

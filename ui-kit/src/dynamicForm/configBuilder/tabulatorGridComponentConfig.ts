@@ -305,12 +305,6 @@ export class TabulatorGridComponentConfig<T>  extends BaseComponentConfig<T> {
         return this;
     }
 
-    /** Is the user can resize rows */
-    resizableRows(value: IDFormFieldTabulatorGridProps['resizableRows']) {
-        this._config.resizableRows = value;
-        return this;
-    }
-
     /** is columns movable */
     movableColumns(value: IDFormFieldTabulatorGridProps['movableColumns']) {
         this._config.movableColumns = value;

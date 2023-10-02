@@ -1,6 +1,6 @@
 import 'tabulator-tables/dist/css/tabulator_simple.css';
-import {ColumnDefinition, ColumnLookup, EventCallBackMethods, RowComponent, TabulatorFull as Tabulator} from 'tabulator-tables';
-import React from 'react';
+import {ColumnComponent, ColumnDefinition, ColumnLookup, EmptyCallback, EventCallBackMethods, RowComponent, TabulatorFull as Tabulator} from 'tabulator-tables';
+import React, {MouseEvent} from 'react';
 import {useInit} from './hooks/init';
 import {
     IActiveSelectionModuleRow,
@@ -15,7 +15,7 @@ import {AnyType} from "@krinopotam/service-types";
 type _ITabulator = IAdvancedHeaderFilterTabulator & IActiveSelectionTabulator & Tabulator
 
 //region Tabulator types corrections
-export type ITabulatorFilterFunc  = (headerValue: AnyType, rowValue: AnyType, rowData: Record<string, unknown>, filterParams: Record<string, unknown>) => boolean;
+export type ITabulatorFilterFunc = (headerValue: AnyType, rowValue: AnyType, rowData: Record<string, unknown>, filterParams: Record<string, unknown>) => boolean;
 
 export interface IRequestProps extends Record<string, unknown> {
     page: number,
@@ -46,12 +46,14 @@ export interface ITabulator extends _ITabulator {
     /**  Tabulator property type correction */
     updateColumnDefinition: (column: ColumnLookup, definition: Partial<ColumnDefinition>) => Promise<void>
 
-    ajaxRequestFunc?: ((url: string, config: IAjaxConfig, params: IRequestProps) => Promise<{ data: Record<string, unknown>[], last_page: number }>) | undefined;
+    ajaxRequestFunc?: (url: string, config: IAjaxConfig, params: IRequestProps) => Promise<{ data: Record<string, unknown>[], last_page: number }>;
+}
+
+export interface ITabulatorColumn extends Omit<ColumnDefinition, 'headerPopup'> {
+    headerPopup?: ((e: MouseEvent, column: ColumnComponent, onRendered: EmptyCallback) => HTMLElement) | string | React.ReactNode;
 }
 
 //endregion
-
-export type ITabulatorColumns = ITabulator['options']['columns'];
 
 export type ITabulatorRow = RowComponent & IActiveSelectionModuleRow;
 
@@ -61,15 +63,18 @@ export type ITabulatorEvents = Partial<EventCallBackMethods> & IActiveSelectionM
  * resizableRows works unstable. There are problems with scrolling due to the rearrangement of virtual lines of different sizes
  */
 
-export interface ITabulatorProps extends Omit<ITabulator['options'], 'footerElement' | 'resizableRows'> {
+export interface ITabulatorProps extends Omit<ITabulator['options'], 'footerElement' | 'resizableRows' | 'columns'> {
     /** On the tableRef ready callback */
     onTableRef?: (ref: React.MutableRefObject<ITabulator>) => void;
 
     /** Grid ID*/
     gridId?: string;
 
+    /** Grid columns */
+    columns: ITabulatorColumn[],
+
     /** Grid footer element*/
-    footerElement?: React.JSX.Element;
+    footerElement?: React.ReactNode;
 
     /** Grid events*/
     events?: Partial<EventCallBackMethods> & IActiveSelectionModuleTableEvents;

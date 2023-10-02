@@ -16,7 +16,7 @@ export interface IPopConfirmProps extends Omit<PopconfirmProps, 'okType' | 'okBu
 export const PopConfirm = ({content, ...props}: IPopConfirmProps): React.JSX.Element => {
     const [formId] = useState(HelpersStrings.getUuid);
 
-    useInitFormDispatcher(formId, props.open || false);
+    useInitFormDispatcher(formId, !!props.open);
 
     const buttons = useInitButtons(props);
 
@@ -27,7 +27,7 @@ export const PopConfirm = ({content, ...props}: IPopConfirmProps): React.JSX.Ele
     }, [props.open]);
     const _content = (
         <>
-            {content ? content : null}
+            {content ?? null}
             <div ref={buttonsRowRef} tabIndex={-1}>
                 <ButtonsRow formId={formId} buttons={buttons} />
             </div>
@@ -51,7 +51,7 @@ const useInitButtons = ({okText, cancelText, onConfirm, onCancel, okButtonProps,
             ok: {
                 position: 'right',
                 active: true,
-                title: okText || 'ОК',
+                title: okText ?? 'ОК',
                 hotKeys: [{key: 'enter', ctrl: true}],
                 onClick: () => {
                     onConfirm?.();
@@ -60,7 +60,7 @@ const useInitButtons = ({okText, cancelText, onConfirm, onCancel, okButtonProps,
             },
             cancel: {
                 position: 'right',
-                title: cancelText || 'Отмена',
+                title: cancelText ?? 'Отмена',
                 hotKeys: [{key: 'escape'}],
                 onClick: () => {
                     onCancel?.();
