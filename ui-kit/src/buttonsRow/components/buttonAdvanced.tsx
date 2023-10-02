@@ -105,8 +105,8 @@ const DropDownButton = ({id, button, context}: { id: string, button: IFormButton
     return (
         <>
             <Dropdown menu={menuProps}>
-                <Button>
-                    {button.title}{button.icon ?? <DownOutlined/>}
+                <Button icon={button.icon ?? <DownOutlined/>}>
+                    {button.title}
                 </Button>
             </Dropdown>
         </>

@@ -3,7 +3,7 @@
 import type {Meta, StoryObj} from '@storybook/react'
 import {ButtonsRow, ButtonsRowWrapper} from "@src/buttonsRow";
 import React from "react";
-import {UserOutlined} from "@ant-design/icons";
+import {MenuOutlined} from "@ant-design/icons";
 
 
 export default {
@@ -136,7 +136,7 @@ export const DropdownButtonCustomIcon: Story = {
     args: {
         buttons: {
             button1: {
-                title: '', position: 'left', icon:<UserOutlined/>,
+                title: '', position: 'left', icon:<MenuOutlined />,
                 children: {
                     subButton1: {
                         title: 'SubButton1',
