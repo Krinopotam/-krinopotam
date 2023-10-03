@@ -8,12 +8,12 @@
 
 import {Button as AntButton, ButtonProps as AntButtonProps} from 'antd';
 
-import React from 'react';
+import React, {Ref} from 'react';
 import classNames from 'classnames';
 
 export type IButtonProps = AntButtonProps; // & {};
 
-export const Button = ({...props}: IButtonProps): React.JSX.Element => {
-    return <AntButton {...props} className={classNames(props.className)}/>;
-};
-
+export const Button = React.forwardRef(({...props}:IButtonProps, ref:Ref<HTMLElement> | undefined)=>
+    <AntButton {...props} ref={ref} className={classNames(props.className)} />
+);
+Button.displayName='Button'

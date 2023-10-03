@@ -5,6 +5,7 @@ import React, {useEffect, useRef, useState} from 'react';
 import {IFormType} from '../modal';
 import {HelpersStrings, HelpersObjects} from '@krinopotam/js-helpers';
 import {useInitFormDispatcher} from '../modal/hooks/useInitFormDispatcher';
+import {ButtonsRowWrapper} from "@src/buttonsRow";
 
 export interface IPopConfirmProps extends Omit<PopconfirmProps, 'okType' | 'okButtonProps' | 'cancelButtonProps'> {
     content?: React.ReactNode;
@@ -25,18 +26,21 @@ export const PopConfirm = ({content, ...props}: IPopConfirmProps): React.JSX.Ele
     useEffect(() => {
         if (props.open) buttonsRowRef.current?.focus();
     }, [props.open]);
+
     const _content = (
         <>
             {content ?? null}
             <div ref={buttonsRowRef} tabIndex={-1}>
-                <ButtonsRow formId={formId} buttons={buttons} />
+                <ButtonsRow formId={formId} buttons={buttons}/>
             </div>
         </>
     );
 
     return (
-        <Popover {...props} content={_content} title={props.title} overlayClassName="managed-dynamic-buttons-row">
-            {props.children}
+        <Popover {...props} content={_content} title={props.title}>
+            <ButtonsRowWrapper>
+                {props.children}
+            </ButtonsRowWrapper>
         </Popover>
     );
 };

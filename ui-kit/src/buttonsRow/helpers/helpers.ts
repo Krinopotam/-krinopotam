@@ -86,25 +86,26 @@ export const setActiveButton = (buttons: IFormButtons, name: string, active?: bo
     return _buttons;
 };
 
-export const keyDownHandler = (e: KeyboardEvent, props: React.MutableRefObject<IButtonRowProps>, api: IButtonsRowApi) => {
-    if (props.current.formId && !dispatcher?.isActive(props.current.formId)) return;
+export const keyDownHandler = (e: KeyboardEvent, props: React.MutableRefObject<IButtonRowProps>, api: IButtonsRowApi, wrapperId: string) => {
+    console.log('keyDownHandler')
+    //if (props.current.formId && !dispatcher?.isActive(props.current.formId)) return;
 
     if (!e.key) return;
 
     const key = e.key.toLowerCase();
     if (key === 'f5' || (e.ctrlKey && e.shiftKey && key === 'r')) return; //F5 or ctrl+shift+r pressed - When user press the page refresh buttons, we simply exit
 
-    processArrowKeys(e, props, api);
+    processArrowKeys(e, props, api, wrapperId);
     processHotKeys(e, api);
 };
 
-const processArrowKeys = (e: KeyboardEvent, props: React.MutableRefObject<IButtonRowProps>, api: IButtonsRowApi) => {
+const processArrowKeys = (e: KeyboardEvent, props: React.MutableRefObject<IButtonRowProps>, api: IButtonsRowApi, wrapperId: string) => {
     const target = e.target as HTMLElement;
     if (props.current.arrowsSelection === false) return;
 
 
     if (
-        !target?.closest('.managed-dynamic-buttons-row') || //TODO: think about how to get rid of this class
+        !target?.closest('.buttons-row-wrapper-' + wrapperId) ||
         target.tagName.toLowerCase() === 'input' ||
         target.tagName.toLowerCase() === 'textarea' ||
         (target.tagName.toLowerCase() === 'button' && target.getAttribute('role')?.toLowerCase() === 'switch')
@@ -114,12 +115,15 @@ const processArrowKeys = (e: KeyboardEvent, props: React.MutableRefObject<IButto
 
     const key = e.key.toLowerCase();
     if (key === 'enter') {
+        e.preventDefault();
         e.stopPropagation();
         api.activeTriggerClick();
     } else if (key === 'arrowleft') {
+        e.preventDefault();
         e.stopPropagation();
         api.setNextActive('backward');
     } else if (key === 'arrowright') {
+        e.preventDefault();
         e.stopPropagation();
         api.setNextActive('forward');
     }

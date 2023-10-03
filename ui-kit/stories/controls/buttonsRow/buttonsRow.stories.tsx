@@ -1,7 +1,7 @@
 // noinspection DuplicatedCode
 
 import type {Meta, StoryObj} from '@storybook/react'
-import {ButtonsRow, ButtonsRowWrapper} from "@src/buttonsRow";
+import {ButtonsRow, ButtonsRowWrapper, IFormButton} from "@src/buttonsRow";
 import React from "react";
 import {MenuOutlined} from "@ant-design/icons";
 
@@ -19,6 +19,8 @@ export default {
 } satisfies Meta<typeof ButtonsRow>
 
 type Story = StoryObj<typeof ButtonsRow>;
+
+const onClickHandler: IFormButton['onClick'] = (id, button) => alert(button.title + ' has clicked');
 export const ButtonsLeft: Story = {
     args: {
         buttons: {
@@ -93,16 +95,35 @@ export const ButtonsError: Story = {
         formType: 'error'
     },
 }
-
 export const ButtonsArrowKeys: Story = {
     args: {
         buttons: {
-            button1: {title: 'Button1', position: 'left', active: true},
-            button4: {title: 'Button4', position: 'left', disabled: true},
-            button5: {title: 'Button5', position: 'left', loading: true},
-            button6: {title: 'Button6', position: 'left'},
+            button1: {title: 'Button1', position: 'left', active: true, onClick: onClickHandler},
+            button2: {title: 'Button2', position: 'left', disabled: true, onClick: onClickHandler},
+            button3: {title: 'Button3', position: 'left', loading: true, onClick: onClickHandler},
+            button4: {title: 'Button4', position: 'left', onClick: onClickHandler},
         },
         arrowsSelection: true
+    },
+
+    render: (args) => {
+        return <ButtonsRowWrapper style={{padding: 30, border: 'solid 1px'}}>
+            <p>Set focus here and press left/right arrows</p>
+            <ButtonsRow {...args} />
+        </ButtonsRowWrapper>
+    }
+}
+
+export const ButtonsArrowKeysActivePrimary: Story = {
+    args: {
+        buttons: {
+            button1: {title: 'Button1', position: 'left', active: true, onClick: onClickHandler},
+            button2: {title: 'Button2', position: 'left', disabled: true, onClick: onClickHandler},
+            button3: {title: 'Button3', position: 'left', loading: true, onClick: onClickHandler},
+            button4: {title: 'Button4', position: 'left', onClick: onClickHandler},
+        },
+        arrowsSelection: true,
+        makeActivePrimary:true,
     },
 
     render: (args) => {
@@ -121,11 +142,11 @@ export const DropdownButton: Story = {
                     subButton1: {
                         title: 'SubButton1',
                         children: {
-                            subButton1_1: {title: 'SubButton1_1', onClick: () => alert('SubButton1_1 was pressed')},
-                            subButton1_2: {title: 'SubButton1_2', onClick: () => alert('SubButton1_2 was pressed')}
+                            subButton1_1: {title: 'SubButton1_1', onClick: onClickHandler},
+                            subButton1_2: {title: 'SubButton1_2', onClick: onClickHandler}
                         }
                     },
-                    subButton2: {title: 'SubButton2', onClick: () => alert('SubButton2 was pressed')}
+                    subButton2: {title: 'SubButton2', onClick: onClickHandler}
                 }
             },
         },
@@ -136,16 +157,16 @@ export const DropdownButtonCustomIcon: Story = {
     args: {
         buttons: {
             button1: {
-                title: '', position: 'left', icon:<MenuOutlined />,
+                title: '', position: 'left', icon: <MenuOutlined/>,
                 children: {
                     subButton1: {
                         title: 'SubButton1',
                         children: {
-                            subButton1_1: {title: 'SubButton1_1', onClick: () => alert('SubButton1_1 was pressed')},
-                            subButton1_2: {title: 'SubButton1_2', onClick: () => alert('SubButton1_2 was pressed')}
+                            subButton1_1: {title: 'SubButton1_1', onClick: onClickHandler},
+                            subButton1_2: {title: 'SubButton1_2', onClick: onClickHandler}
                         }
                     },
-                    subButton2: {title: 'SubButton2', onClick: () => alert('SubButton2 was pressed')}
+                    subButton2: {title: 'SubButton2', onClick: onClickHandler}
                 }
             },
         },
@@ -161,11 +182,11 @@ export const DropdownButtonClickable: Story = {
                     subButton1: {
                         title: 'SubButton1',
                         children: {
-                            subButton1_1: {title: 'SubButton1_1', onClick: () => alert('SubButton1_1 was pressed')},
-                            subButton1_2: {title: 'SubButton1_2', onClick: () => alert('SubButton1_2 was pressed')}
+                            subButton1_1: {title: 'SubButton1_1', onClick: onClickHandler},
+                            subButton1_2: {title: 'SubButton1_2', onClick: onClickHandler}
                         }
                     },
-                    subButton2: {title: 'SubButton2', onClick: () => alert('SubButton2 was pressed')}
+                    subButton2: {title: 'SubButton2', onClick: onClickHandler}
                 }
             },
         },

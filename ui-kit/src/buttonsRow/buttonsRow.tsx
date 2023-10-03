@@ -1,9 +1,11 @@
 import { IButtonProps,} from '@src/button';
 import {Col, Row,} from 'antd';
-import React, { useEffect,  useRef, useState} from 'react';
+import React, {useContext, useEffect, useRef, useState} from 'react';
 import ButtonsGroup from "@src/buttonsRow/components/buttonsGroup";
 import {useApi} from "@src/buttonsRow/hooks/api";
 import {keyDownHandler, prepareButtons} from "@src/buttonsRow/helpers/helpers";
+import {ButtonRowWrapperContext} from "@src/buttonsRow/components/buttonsRowWrapper";
+import {HelpersStrings} from "@krinopotam/js-helpers";
 
 //region Types
 
@@ -18,9 +20,9 @@ interface IHotKey {
 }
 
 export interface IFormButton {
-    title: React.ReactNode;
+    title?: React.ReactNode;
     //TODO implement info, danger, warning buttons type
-    type?: 'default' | 'dashed' | 'link' | 'text' | 'element'; // YAR Kostyl - add type as ReactNode in title
+    type?: 'default' | 'dashed' | 'link' | 'text' | 'element';
     active?: boolean;
     danger?: boolean;
     disabled?: boolean;
@@ -68,6 +70,9 @@ export interface IButtonRowProps {
 
     /** allow select buttons using arrows keys */
     arrowsSelection?: boolean;
+
+    /** When button arrowSelection mode the active button will be of type Primary. Otherwise, the active button will have focus */
+    makeActivePrimary? :boolean;
 }
 
 export interface IButtonsRowApi {
@@ -84,6 +89,9 @@ export interface IButtonsRowApi {
 //endregion
 
 export const ButtonsRow = (props: IButtonRowProps): React.JSX.Element => {
+
+    const [id] = useState(HelpersStrings.getUuid());
+
     const [curButtons, setCurButtons] = usePrepareButtons(props);
 
     const api = useApi(props, curButtons, setCurButtons);
@@ -96,13 +104,13 @@ export const ButtonsRow = (props: IButtonRowProps): React.JSX.Element => {
         <div style={{display: 'block', ...props.style}} className={'controls-buttons-dynamic-row ' + props.className}>
             <Row wrap={false}>
                 <Col flex="auto" style={{textAlign: 'left'}}>
-                    <ButtonsGroup key="leftButtons" buttons={curButtons} position='left' context={props.context} />
+                    <ButtonsGroup key="leftButtons" buttons={curButtons} position='left' context={props.context} componentProps={props} />
                 </Col>
                 <Col flex="auto" style={{textAlign: 'center'}}>
-                    <ButtonsGroup key="centerButtons" buttons={curButtons} position='center' context={props.context} />
+                    <ButtonsGroup key="centerButtons" buttons={curButtons} position='center' context={props.context} componentProps={props} />
                 </Col>
                 <Col flex="auto" style={{textAlign: 'right'}}>
-                    <ButtonsGroup key="rightButtons" buttons={curButtons} position="right" context={props.context} />
+                    <ButtonsGroup key="rightButtons" buttons={curButtons} position="right" context={props.context} componentProps={props} />
                 </Col>
             </Row>
         </div>
@@ -116,10 +124,19 @@ const useSubscribeToKeyDownEvent = (props: IButtonRowProps, api: IButtonsRowApi)
     const propsRef = useRef(props);
     propsRef.current = props;
 
+    const wrapperContext = useContext(ButtonRowWrapperContext)
+
     useEffect(() => {
-        const onKeyDown = (e: KeyboardEvent) => keyDownHandler(e, propsRef, api);
-        document.addEventListener('keydown', onKeyDown);
-        return () => document.removeEventListener('keydown', onKeyDown);
+        if (!wrapperContext.wrapperRef?.current) return;
+        const wrapperElement = wrapperContext.wrapperRef.current;
+
+        const onKeyDown = (e: KeyboardEvent) => keyDownHandler(e, propsRef, api, wrapperContext.wrapperId);
+        wrapperElement.addEventListener('keydown', onKeyDown);
+        return () => wrapperElement.removeEventListener('keydown', onKeyDown);
+
+        //document.addEventListener('keydown', onKeyDown);
+        //return () => document.removeEventListener('keydown', onKeyDown);
+
         // eslint-disable-next-line
     }, []);
 };

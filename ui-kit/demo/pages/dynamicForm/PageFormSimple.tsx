@@ -21,7 +21,7 @@ const formProps = new DFormConfig<IFields>('Test form')
     .confirmChanges(true)
     .addFields(
         new InputComponentConfig<IFields>('login').label('Логин'),
-        new PasswordComponentConfig<IFields>('password').label('Пароль')
+        new PasswordComponentConfig<IFields>('password').label('Пароль').autoFocus(true)
     )
     .buttons({ok: {position: 'right'}})
     .getConfig();

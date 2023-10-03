@@ -192,11 +192,17 @@ class MessageBox {
         const formId = HelpersStrings.getUuid();
         const config = {...props, type: formType, formId: formId};
 
+        const prevFocused = document.activeElement;
+        config.afterClose = ()=>{
+            (prevFocused as HTMLElement)?.focus();
+            props.afterClose?.()
+        }
+
         let modal: ModalType = Modal;
         if (this._themedModalInstance && Object.keys(this._themedModalInstance).length > 0) modal = this._themedModalInstance;
         const modalInst = modal[formType](this.generateModalConfig(config));
 
-        const messageBoxApi = new MessageBoxApi(formId, modalInst, config, this.generateModalConfig);
+        const messageBoxApi = new MessageBoxApi(formId, modalInst, config, this.generateModalConfig, document.activeElement);
 
         dispatcher.pushToStack(messageBoxApi.id);
         return messageBoxApi;
@@ -251,9 +257,7 @@ class MessageBox {
             closable: closable,
             keyboard: false,
             maskClosable: maskClosable,
-            wrapClassName: 'managed-dynamic-buttons-row',
             onCancel: onClose,
-
             modalRender: ModalRender,
             afterClose: () => afterClose?.(),
         };

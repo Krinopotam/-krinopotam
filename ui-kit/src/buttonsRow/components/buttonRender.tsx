@@ -1,18 +1,20 @@
-import React, {useCallback} from "react";
-import {Dropdown, MenuProps, Space, Tooltip} from "antd";
+import React, {useCallback, useEffect, useRef} from "react";
+import {Dropdown, MenuProps, Tooltip} from "antd";
 import {Button, ButtonType} from "@src/button";
-import {IFormButton} from "@src/buttonsRow";
+import {IButtonRowProps, IFormButton} from "@src/buttonsRow";
 import {DownOutlined} from "@ant-design/icons";
 import {ItemType} from "antd/es/menu/hooks/useItems";
 
-export const ButtonAdvanced = ({
-                                   id,
-                                   button,
-                                   context,
-                               }: {
+export const ButtonRender = ({
+                                 id,
+                                 button,
+                                 context,
+                                 componentProps,
+                             }: {
     id: string;
     button: IFormButton;
     context?: unknown;
+    componentProps: IButtonRowProps;
 }): React.JSX.Element | null => {
     if (!button || button.hidden) return null;
 
@@ -22,16 +24,16 @@ export const ButtonAdvanced = ({
     }
 
     if (button.children) {
-        return <DropDownButton id={id} button={button} context={context}/>
+        return <DropDownButton id={id} button={button} context={context} componentProps={componentProps}/>
     }
 
-    if (!button.tooltip) return <SimpleButton id={id} button={button} context={context}/>;
+    if (!button.tooltip) return <SimpleButton id={id} button={button} context={context} componentProps={componentProps}/>;
 
     return (
         <Tooltip title={button.tooltip}>
             <>
                 {/*Popover and tooltip has a bug: they are not displayed for custom components if they are not in a frame (<></>) */}
-                <SimpleButton id={id} button={button} context={context}/>
+                <SimpleButton id={id} button={button} context={context} componentProps={componentProps}/>
             </>
         </Tooltip>
     );
@@ -39,13 +41,22 @@ export const ButtonAdvanced = ({
 };
 
 
-const SimpleButton = ({id, button, context}: { id: string, button: IFormButton, context: unknown }) => {
+const SimpleButton = ({id, button, context, componentProps}: { id: string, button: IFormButton, context: unknown, componentProps: IButtonRowProps }) => {
     const onClick = useCallback(() => {
         if (button.onClick) button.onClick(id, button, context);
     }, [button, context, id]);
 
+    const btnRef = useRef<HTMLElement>(null)
+    useEffect(() => {
+        if (button.active) {
+            if (!componentProps.makeActivePrimary) btnRef.current?.focus();
+        }
+    }, [button.active, componentProps.makeActivePrimary])
+
     return <Button
-        type={(button.active ? 'primary' : button.type) as ButtonType}
+        ref={btnRef}
+        type={(componentProps.makeActivePrimary && button.active ? 'primary' : button.type) as ButtonType}
+        //type={button.type as ButtonType}
         disabled={button.disabled}
         ghost={button.ghost}
         loading={button.loading}
@@ -85,7 +96,7 @@ const prepareDropdownItems = (buttons: IFormButton['children'], parentId: string
     return result;
 }
 
-const DropDownButton = ({id, button, context}: { id: string, button: IFormButton, context: unknown }) => {
+const DropDownButton = ({id, button, context, componentProps,}: { id: string, button: IFormButton, context: unknown, componentProps: IButtonRowProps }) => {
     const items: MenuProps['items'] = prepareDropdownItems(button.children, id, context)
 
     const menuProps: MenuProps = {
@@ -95,7 +106,7 @@ const DropDownButton = ({id, button, context}: { id: string, button: IFormButton
     /** Clickable dropdown button */
     if (button.onClick) {
         return (
-            <Dropdown.Button menu={menuProps} onClick={()=>button.onClick?.(id, button, context)}>
+            <Dropdown.Button menu={menuProps} onClick={() => button.onClick?.(id, button, context)}>
                 {button.title}
             </Dropdown.Button>
         )

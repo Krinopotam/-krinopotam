@@ -6,24 +6,27 @@ import {ModalFuncProps} from 'antd';
 import {HelpersObjects} from '@krinopotam/js-helpers';
 
 export class MessageBoxApi {
-    private _modal: {destroy: () => void; update: (configUpdate: ModalFuncProps) => void};
+    private _modal: { destroy: () => void; update: (configUpdate: ModalFuncProps) => void };
 
     private readonly _modalConfigGenerator;
     private _currentConfig: IModalBaseConfig;
     private readonly _formsDispatcher: FormsDispatcher | undefined;
     private readonly _id: string;
+    private readonly _prevFocusedElement: Element | null;
 
     constructor(
         id: string,
-        modal: {destroy: () => void; update: (configUpdate: ModalFuncProps) => void},
+        modal: { destroy: () => void; update: (configUpdate: ModalFuncProps) => void },
         config: IModalBaseConfig,
-        modalConfigGenerator: (config: IModalBaseConfig) => ModalFuncProps
+        modalConfigGenerator: (config: IModalBaseConfig) => ModalFuncProps,
+        prevFocusedElement: Element | null
     ) {
         this._modal = modal;
         this._currentConfig = config;
         this._formsDispatcher = dispatcher;
         this._modalConfigGenerator = modalConfigGenerator;
         this._id = id;
+        this._prevFocusedElement = prevFocusedElement
     }
 
     public get id() {

@@ -9,7 +9,7 @@
 import './css/modal.css';
 
 import {Modal as AntModal, ModalProps as AntModalProps} from 'antd';
-import React, {useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 
 import {FooterRender} from './renders/footerRender';
 import {HeaderRender} from './renders/headerRender';
@@ -17,6 +17,7 @@ import {ModalRender} from './renders/modalRender';
 import classNames from 'classnames';
 import {useInitFormDispatcher} from './hooks/useInitFormDispatcher';
 import {useResize} from './hooks/useResize';
+import {IButtonRowWrapperRemoteCallbacks} from "@src/buttonsRow/components/buttonsRowWrapper";
 
 export type IFormType = 'primary' | 'confirm' | 'info' | 'success' | 'error' | 'warning';
 
@@ -35,7 +36,7 @@ export type IModalProps = AntModalProps & {
 
     /** The form initial width */
     width?: number;
-    
+
     /** The form min width */
     minWidth?: number;
 
@@ -49,11 +50,25 @@ export type IModalProps = AntModalProps & {
     resizable?: boolean;
 
     /** Footer content */
-    footer?:React.ReactNode
+    footer?: React.ReactNode
 };
 
 export const Modal = ({resizable = true, ...props}: IModalProps): React.JSX.Element => {
     useInitFormDispatcher(props.dispatcherFormId, !!props.open);
+
+    const wrapperRemoteCallbacksRef = useRef<IButtonRowWrapperRemoteCallbacks>({});
+
+    const prevFocusedRef = useRef<Element | null>()
+
+    useEffect(() => {
+        if (props.open) prevFocusedRef.current = document.activeElement
+    }, [props.open])
+
+    const onAfterOpenChange = useCallback((open: boolean) => {
+        if (open) wrapperRemoteCallbacksRef.current?.onParentComponentRendered?.();
+        else (prevFocusedRef.current as HTMLElement)?.focus();
+        props.afterOpenChange?.(open)
+    }, [props])
 
     const [formSize, setFormSize] = useState({width: props.width ?? 0, bodyHeight: props.bodyHeight ?? 0});
     const onMouseResize = useResize(
@@ -83,9 +98,11 @@ export const Modal = ({resizable = true, ...props}: IModalProps): React.JSX.Elem
             // no override section
             bodyStyle={bodyStyleVal}
             className={classNames('custom-antd-modal', props.className)}
-            modalRender={ModalRender}
+            modalRender={(node) => {
+                return ModalRender(node, wrapperRemoteCallbacksRef)
+            }}
             //transitionName="zoom"
-            title={<HeaderRender title={props.title} style={{paddingLeft: paddingLeft, paddingRight: paddingRight, paddingTop: 5, paddingBottom: 5}} />}
+            title={<HeaderRender title={props.title} style={{paddingLeft: paddingLeft, paddingRight: paddingRight, paddingTop: 5, paddingBottom: 5}}/>}
             footer={
                 <FooterRender
                     onMouseResize={onMouseResize}
@@ -95,17 +112,20 @@ export const Modal = ({resizable = true, ...props}: IModalProps): React.JSX.Elem
                     {props.footer}
                 </FooterRender>
             }
+
+            afterOpenChange={onAfterOpenChange}
+
         />
     );
 };
 
 const useGetBodyStyle = ({
-    bodyStyle,
-    bodyHeight,
-    bodyMaxHeight,
-    bodyMinHeight,
-    notScrollable,
-}: {
+                             bodyStyle,
+                             bodyHeight,
+                             bodyMaxHeight,
+                             bodyMinHeight,
+                             notScrollable,
+                         }: {
     bodyStyle?: React.CSSProperties;
     bodyHeight?: number;
     bodyMaxHeight?: number;

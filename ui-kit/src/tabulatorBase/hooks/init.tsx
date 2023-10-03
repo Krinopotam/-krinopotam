@@ -76,6 +76,8 @@ const propsToOptions = async (props: ITabulatorProps) => {
         output.footerElement = el.innerHTML;
     }
 
+    output.columnDefaults = props.columnDefaults ?? {};
+
     if (!props.dataTreeChildField) output.dataTreeChildField = 'children'
     if (!props.dataTreeParentField) output.dataTreeParentField = 'parent'
     if (!props.dataTreeChildIndent) output.dataTreeChildIndent = 22

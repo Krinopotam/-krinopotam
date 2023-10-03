@@ -6,7 +6,7 @@
  * @license MIT
  */
 
-import {IFormButtons} from '@src/buttonsRow';
+import {ButtonsRowWrapper, IFormButtons} from '@src/buttonsRow';
 import React, {useEffect, useSyncExternalStore} from 'react';
 
 import {ButtonsRender} from '@src/modal';
@@ -42,36 +42,38 @@ export const FormRender = ({formProps, formApi, formButtons}: IFormRenderProps):
     const wrapperCol = {span: (formProps.layout === 'horizontal' ? 16 : 24), ...formProps.wrapperCol};
 
     return (
-        <div className={'managed-dynamic-buttons-row ' + (formProps.containerClassName ?? '')}>
+        <div className={formProps.containerClassName ?? ''}>
             <LoadingContainer
                 isLoading={formApi.model.isFormFetching() || (formApi.model.isFormSubmitting() && !formProps.confirmChanges)}
                 notHideContent={true}
             >
-                <Form
-                    colon={false}
-                    className={formProps.className}
-                    name={formApi.getFormId()}
-                    labelCol={labelCol}
-                    wrapperCol={wrapperCol}
-                    //onFinish={formApi.model.submit}
-                    autoComplete="off"
-                    labelAlign={formProps.labelAlign}
-                    layout={formProps.layout === 'horizontal' ? 'horizontal' : 'vertical'}
-                    requiredMark={formProps.requiredMark}
-                >
-                    <FormInit formApi={formApi}/>
+                <ButtonsRowWrapper>
+                    <Form
+                        colon={false}
+                        className={formProps.className}
+                        name={formApi.getFormId()}
+                        labelCol={labelCol}
+                        wrapperCol={wrapperCol}
+                        //onFinish={formApi.model.submit}
+                        autoComplete="off"
+                        labelAlign={formProps.labelAlign}
+                        layout={formProps.layout === 'horizontal' ? 'horizontal' : 'vertical'}
+                        requiredMark={formProps.requiredMark}
+                    >
+                        <FormInit formApi={formApi}/>
 
-                    <FormBodyRender formProps={formProps} formApi={formApi}/>
+                        <FormBodyRender formProps={formProps} formApi={formApi}/>
 
-                    <ButtonsRender
-                        formId={formApi.getFormId()}
-                        buttons={formButtons}
-                        formType={formProps.formType}
-                        buttonsApi={formApi.buttonsApi}
-                        arrowsSelection={false}
-                        context={formApi}
-                    />
-                </Form>
+                        <ButtonsRender
+                            formId={formApi.getFormId()}
+                            buttons={formButtons}
+                            formType={formProps.formType}
+                            buttonsApi={formApi.buttonsApi}
+                            arrowsSelection={false}
+                            context={formApi}
+                        />
+                    </Form>
+                </ButtonsRowWrapper>
             </LoadingContainer>
         </div>
     );
