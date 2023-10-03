@@ -118,6 +118,7 @@ export const DFormModal = (props: IDFormModalProps): React.JSX.Element => {
 const useSeparateProps = (props: IDFormModalProps) => {
     return useMemo((): [IDFormProps] => {
         const result = HelpersObjects.splitObject(props, [
+            //--- IDFormModalProps -----
             'notScrollable',
             'title',
             'minWidth',
@@ -136,6 +137,7 @@ const useSeparateProps = (props: IDFormModalProps) => {
             'apiRef',
             'buttons',
             'callbacks',
+            'arrowsButtonsSelection'
         ]);
 
         //const modalProps = result[0] as IDFormModalBaseProps;

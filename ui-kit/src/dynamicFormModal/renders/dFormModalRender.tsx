@@ -55,7 +55,7 @@ export const DFormModalRender = ({formId, buttons, buttonsApi, callbacks, formAp
                     buttons={buttons}
                     formType={modalFormProps.formType}
                     buttonsApi={buttonsApi}
-                    arrowsSelection={false}
+                    arrowsSelection={modalFormProps.arrowsButtonsSelection}
                     context={formApi}
                 />
             }

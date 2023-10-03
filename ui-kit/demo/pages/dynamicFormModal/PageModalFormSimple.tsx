@@ -20,6 +20,7 @@ const formApi = {} as IDFormModalApi;
 const formProps = new DFormModalConfig<IFields>('Test form')
     .apiRef(formApi)
     .confirmChanges(true)
+    .arrowsButtonsSelection(true)
     .addFields(
         new InputComponentConfig<IFields>('login').label('Логин'),
         new PasswordComponentConfig<IFields>('password').label('Пароль'))

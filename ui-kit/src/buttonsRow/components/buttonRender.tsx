@@ -49,13 +49,13 @@ const SimpleButton = ({id, button, context, componentProps}: { id: string, butto
     const btnRef = useRef<HTMLElement>(null)
     useEffect(() => {
         if (button.active) {
-            if (!componentProps.makeActivePrimary) btnRef.current?.focus();
+            if (componentProps.makeActivePrimary===false) btnRef.current?.focus();
         }
     }, [button.active, componentProps.makeActivePrimary])
 
     return <Button
         ref={btnRef}
-        type={(componentProps.makeActivePrimary && button.active ? 'primary' : button.type) as ButtonType}
+        type={(componentProps.makeActivePrimary !== false && button.active ? 'primary' : button.type) as ButtonType}
         //type={button.type as ButtonType}
         disabled={button.disabled}
         ghost={button.ghost}

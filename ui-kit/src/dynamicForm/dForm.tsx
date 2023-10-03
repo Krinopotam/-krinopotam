@@ -86,7 +86,7 @@ export interface IDFormProps {
     noAutoHideDependedFields?: boolean;
 
     /** Tabs panes height (default 40)*/
-    tabsHeight?:number
+    tabsHeight?: number
 
     /** Form parent item data */
     // formParentData?: IFormDataSet;
@@ -105,6 +105,9 @@ export interface IDFormProps {
 
     /** Required mark style. Can use required mark or optional mark. You can not config to single Form.Item since this is a Form level config */
     requiredMark?: RequiredMark;
+
+    /** allow select buttons using arrows keys */
+    arrowsButtonsSelection?: boolean;
 
     // /** Close dirty controls confirm message. If null or empty string - no confirm */
     // closeFormConfirmMessage?: string | null;

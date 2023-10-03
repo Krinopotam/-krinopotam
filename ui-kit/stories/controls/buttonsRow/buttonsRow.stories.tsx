@@ -103,7 +103,8 @@ export const ButtonsArrowKeys: Story = {
             button3: {title: 'Button3', position: 'left', loading: true, onClick: onClickHandler},
             button4: {title: 'Button4', position: 'left', onClick: onClickHandler},
         },
-        arrowsSelection: true
+        arrowsSelection: true,
+        makeActivePrimary:false,
     },
 
     render: (args) => {
@@ -123,7 +124,6 @@ export const ButtonsArrowKeysActivePrimary: Story = {
             button4: {title: 'Button4', position: 'left', onClick: onClickHandler},
         },
         arrowsSelection: true,
-        makeActivePrimary:true,
     },
 
     render: (args) => {

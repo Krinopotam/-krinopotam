@@ -149,6 +149,12 @@ export class DFormModalConfig<T>  extends DFormConfig<T> {
         return this;
     }
 
+    /** allow select buttons using arrows keys */
+    arrowsButtonsSelection(value: IDFormProps['arrowsButtonsSelection']) {
+        this._config.arrowsButtonsSelection = value;
+        return this;
+    }
+
     /** Confirm message before the form closing, if form is dirty */
     closeFormConfirmMessage(value: IDModalProps['closeFormConfirmMessage']) {
         this._config.closeFormConfirmMessage = value;

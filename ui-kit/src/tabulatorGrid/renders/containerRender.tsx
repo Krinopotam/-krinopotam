@@ -7,8 +7,9 @@ import {MenuRow} from './menuRow';
 import {GridRender} from "./gridRender";
 import {IGridProps} from "../tabulatorGrid";
 import {ITabulator} from "@src/tabulatorBase";
+import {ButtonsRowWrapper} from "@src/buttonsRow";
 
-export const ContainerRender = ({tableRef, gridApi, gridProps}: {tableRef: React.MutableRefObject<ITabulator | undefined>; gridApi: IGridApi; gridProps:IGridProps}): React.JSX.Element => {
+export const ContainerRender = ({tableRef, gridApi, gridProps}: { tableRef: React.MutableRefObject<ITabulator | undefined>; gridApi: IGridApi; gridProps: IGridProps }): React.JSX.Element => {
     const editFormProps = usePrepareEditFormProps(gridApi);
 
     // Even though gridProps can be obtained from gridApi, we still separately pass gridProps to GridRender
@@ -16,10 +17,12 @@ export const ContainerRender = ({tableRef, gridApi, gridProps}: {tableRef: React
     return (
         <>
             <LoadingContainer isLoading={gridApi.getIsLoading()} notHideContent={true}>
-                <MenuRow gridApi={gridApi} />
-                <GridRender tableRef={tableRef} gridApi={gridApi} gridProps={gridProps} />
+                <ButtonsRowWrapper>
+                    <MenuRow gridApi={gridApi}/>
+                    <GridRender tableRef={tableRef} gridApi={gridApi} gridProps={gridProps}/>
+                </ButtonsRowWrapper>
             </LoadingContainer>
-            {editFormProps ? <DFormModal {...editFormProps} apiRef={gridApi.editFormApi} /> : null}
+            {editFormProps ? <DFormModal {...editFormProps} apiRef={gridApi.editFormApi}/> : null}
         </>
     );
 };

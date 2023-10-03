@@ -5,7 +5,6 @@ import ButtonsGroup from "@src/buttonsRow/components/buttonsGroup";
 import {useApi} from "@src/buttonsRow/hooks/api";
 import {keyDownHandler, prepareButtons} from "@src/buttonsRow/helpers/helpers";
 import {ButtonRowWrapperContext} from "@src/buttonsRow/components/buttonsRowWrapper";
-import {HelpersStrings} from "@krinopotam/js-helpers";
 
 //region Types
 
@@ -89,9 +88,6 @@ export interface IButtonsRowApi {
 //endregion
 
 export const ButtonsRow = (props: IButtonRowProps): React.JSX.Element => {
-
-    const [id] = useState(HelpersStrings.getUuid());
-
     const [curButtons, setCurButtons] = usePrepareButtons(props);
 
     const api = useApi(props, curButtons, setCurButtons);

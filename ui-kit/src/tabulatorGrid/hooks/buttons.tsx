@@ -54,12 +54,13 @@ const useGetViewButton = (gridApi: IGridApi, activeRow: IGridRowData | undefined
             position: 'right',
             size: 'small',
             disabled: !activeRow || selectedRows.length !== 1,
+            hotKeys: [{key: 'Enter'}],
             onClick: () => {
                 if (!gridApi.getActiveRow()) return;
                 const dataSet = getRowDataSet(gridApi, true);
                 editFormApi.open('view', dataSet);
             },
-        };
+        } satisfies IFormButton;
     }, [activeRow, gridApi, selectedRows.length]);
 };
 
@@ -75,11 +76,12 @@ const useGetCreateButton = (gridApi: IGridApi): IFormButton | undefined => {
             icon: <PlusOutlined/>,
             position: 'right',
             size: 'small',
+            hotKeys: [{key: 'Insert'}],
             onClick: () => {
                 const dataSet = getRowDataSet(gridApi, false, true);
                 editFormApi.open('create', dataSet);
             },
-        };
+        } satisfies IFormButton;
     }, [gridApi]);
 };
 
@@ -96,12 +98,13 @@ const useGetCloneButton = (gridApi: IGridApi, activeRow: IGridRowData | undefine
             position: 'right',
             size: 'small',
             disabled: !activeRow || selectedRows.length !== 1,
+            hotKeys: [{key: 'F9'}],
             onClick: () => {
                 if (!gridApi.getActiveRow()) return;
                 const dataSet = getRowDataSet(gridApi, true);
                 editFormApi.open('clone', dataSet);
             },
-        };
+        } satisfies IFormButton;
     }, [activeRow, gridApi, selectedRows.length]);
 };
 
@@ -118,12 +121,13 @@ const useGetUpdateButton = (gridApi: IGridApi, activeRow: IGridRowData | undefin
             position: 'right',
             size: 'small',
             disabled: !activeRow || selectedRows.length !== 1,
+            hotKeys: [{key: 'Enter'}, {key: 'F2'}],
             onClick: () => {
                 if (!gridApi.getActiveRow()) return;
                 const dataSet = getRowDataSet(gridApi, true);
                 editFormApi.open('update', dataSet);
             },
-        };
+        } satisfies IFormButton;
     }, [activeRow, gridApi, selectedRows.length]);
 };
 
@@ -140,10 +144,11 @@ const useGetDeleteButton = (gridApi: IGridApi, selectedRows: IGridRowData[]): IF
             danger: true,
             size: 'small',
             disabled: !selectedRows || selectedRows.length === 0,
+            hotKeys: [{key: 'Delete', ctrl: true}],
             onClick: () => {
                 deleteHandler(gridApi);
             },
-        };
+        } satisfies IFormButton;
     }, [gridApi, selectedRows]);
 };
 
@@ -189,7 +194,7 @@ const deleteHandler = (gridApi: IGridApi) => {
 };
 
 /** Get update button props */
-const useGetFilterToggleButton = (gridApi: IGridApi, tableApi: ITabulator|undefined): IFormButton | undefined => {
+const useGetFilterToggleButton = (gridApi: IGridApi, tableApi: ITabulator | undefined): IFormButton | undefined => {
     return useMemo(() => {
         const gridProps = gridApi.gridProps;
         if (gridProps.buttons?.filterToggle === null) return undefined;

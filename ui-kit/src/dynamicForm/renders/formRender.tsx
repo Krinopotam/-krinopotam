@@ -69,7 +69,7 @@ export const FormRender = ({formProps, formApi, formButtons}: IFormRenderProps):
                             buttons={formButtons}
                             formType={formProps.formType}
                             buttonsApi={formApi.buttonsApi}
-                            arrowsSelection={false}
+                            arrowsSelection={formProps.arrowsButtonsSelection}
                             context={formApi}
                         />
                     </Form>

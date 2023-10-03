@@ -150,6 +150,12 @@ export class DFormConfig<T>  {
         return this;
     }
 
+    /** allow select buttons using arrows keys */
+    arrowsButtonsSelection(value: IDFormProps['arrowsButtonsSelection']) {
+        this._config.arrowsButtonsSelection = value;
+        return this;
+    }
+
 
     /** Add fields or fields inline groups */
     addFields(...args: BaseComponentConfig<T>[]) {

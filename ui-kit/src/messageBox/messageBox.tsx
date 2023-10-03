@@ -249,6 +249,7 @@ class MessageBox {
                     formId={formId}
                     buttons={buttons}
                     formType={type}
+                    arrowsSelection={true}
                     containerStyle={{marginTop: '32px', marginLeft: paddingLeft, marginRight: paddingRight, marginBottom: paddingBottom}}
                 />
             ),
