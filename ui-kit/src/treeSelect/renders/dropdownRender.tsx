@@ -1,5 +1,5 @@
 import React from 'react';
-import {DropdownStatus} from './dropdownStatus';
+import {DropdownStatus} from '@src/treeSelect/renders/dropdownStatus';
 
 export const DropdownRender = ({
     menu,

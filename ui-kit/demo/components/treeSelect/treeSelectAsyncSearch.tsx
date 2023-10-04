@@ -4,7 +4,7 @@ import React from 'react';
 import {DForm} from '@src/dynamicForm';
 import {DFormConfig} from '@src/dynamicForm/configBuilder/dFormConfig';
 import {TreeSelectComponentConfig} from '@src/dynamicForm/configBuilder/treeSelectComponentConfig';
-import {ITreeSelectSourcePromise} from '@src/treeselect'
+import {ITreeSelectSourcePromise} from '@src/treeSelect'
 import {HelpersObjects} from "@krinopotam/js-helpers";
 
 

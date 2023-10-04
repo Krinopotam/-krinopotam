@@ -1,12 +1,12 @@
-import {ITreeSelectNode, ITreeSelectPlainValue, ITreeSelectProps, ITreeSelectValue} from '../treeSelect';
+import {ITreeSelectNode, ITreeSelectPlainValue, ITreeSelectProps, ITreeSelectValue} from '@src/treeSelect';
 import React, {useCallback, useState} from 'react';
-import {useDataSet} from './dataSet';
 import  {useIsMountedRef} from '@krinopotam/common-hooks';
-import {useDataFetcher} from './dataFetcher';
+import {useDataFetcher} from '@src/treeSelect/hooks/dataFetcher';
 import runDebounce from 'lodash.debounce';
-import {ITreeSelectInternalValue, usePlainValuesToNodes, useValueConvertor} from './valueConvertor';
+import {ITreeSelectInternalValue, usePlainValuesToNodes, useValueConvertor} from '@src/treeSelect/hooks/valueConvertor';
 import {IButtonsRowApi} from '@src/buttonsRow';
 import {HelpersStrings, HelpersObjects} from "@krinopotam/js-helpers";
+import {useDataSet} from "@src/treeSelect/hooks/dataSet";
 
 export interface ITreeSelectApi {
     /** Get the TreeSelect id */

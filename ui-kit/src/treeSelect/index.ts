@@ -1,4 +1,5 @@
-export {TreeSelect} from "./treeSelect";
+export {TreeSelect} from '@src/treeSelect/treeSelect';
+
 export type {
     ITreeSelectNode,
     ITreeSelectPlainValue,
@@ -7,8 +8,6 @@ export type {
     IAntTreeSelectProps,
     ITreeSelectDeletePromise,
     ITreeSelectSourcePromise
-} from './treeSelect';
+} from '@src/treeSelect/treeSelect';
 
-export type {ITreeSelectApi} from "./hooks/api";
-
-
+export type {ITreeSelectApi} from "@src/treeSelect/hooks/api";

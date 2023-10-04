@@ -2,13 +2,13 @@ import {Col, Row, TreeSelect as AntdTreeSelect} from 'antd';
 import {DFormModal, IDFormModalProps} from '@src/dynamicFormModal';
 import React, {ComponentProps, useEffect, useState} from 'react';
 import {HelpersStrings} from "@krinopotam/js-helpers";
-import {TreeSelectRender} from './renders/treeSelectRender';
-import {useEditableInit} from './hooks/useEditForm';
-import {ITreeSelectApi, useInitApi} from './hooks/api';
+import {TreeSelectRender} from '@src/treeSelect/renders/treeSelectRender';
+import {useEditableInit} from '@src/treeSelect/hooks/useEditForm';
+import {ITreeSelectApi, useInitApi} from '@src/treeSelect/hooks/api';
 import {useGetActualProps} from '@krinopotam/common-hooks';
 import {TPromise} from '@krinopotam/service-types';
 import {ButtonsRow, IButtonsRowApi, IFormButtons} from '@src/buttonsRow/buttonsRow';
-import {useInitButtons} from './hooks/buttons';
+import {useInitButtons} from '@src/treeSelect/hooks/buttons';
 
 //region Types
 export interface ITreeSelectNode extends Record<string, unknown> {

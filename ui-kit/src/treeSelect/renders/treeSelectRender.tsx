@@ -1,11 +1,11 @@
 import {TreeSelect as AntdTreeSelect} from 'antd';
 import React, {useMemo} from 'react';
-import {ITreeSelectProps, IAntTreeSelectProps, ITreeSelectPlainValue} from '../treeSelect';
-import {useDropdownStyle} from '../hooks/dropdownStyle';
-import {NotFound} from './notFound';
-import {useDefaultDropdownRender} from '../hooks/defaultDropdownRender';
-import {ITreeSelectApi} from '../hooks/api';
-import {useDefaultFilter} from "../hooks/filter";
+import {ITreeSelectProps, IAntTreeSelectProps, ITreeSelectPlainValue} from '@src/treeSelect';
+import {useDropdownStyle} from '@src/treeSelect/hooks/dropdownStyle';
+import {NotFound} from '@src/treeSelect/renders/notFound';
+import {useDefaultDropdownRender} from '@src/treeSelect/hooks/defaultDropdownRender';
+import {ITreeSelectApi} from '@src/treeSelect';
+import {useDefaultFilter} from "@src/treeSelect/hooks/filter";
 import {HelpersObjects} from "@krinopotam/js-helpers";
 
 // For clarity. Antd has labels for a node(1) and for the selected value(2). fieldNames.label property sets the node label(1) and treeNodeLabelProp sets the selected value label(2)

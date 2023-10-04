@@ -57,6 +57,7 @@ export const ButtonsRowWrapper = (props: IButtonRowWrapperProps): React.JSX.Elem
     </div>
 }
 
+// noinspection JSUnusedGlobalSymbols
 export default ButtonsRowWrapper;
 
 const isDescendant = (parent: HTMLElement, child: Element | null) => {

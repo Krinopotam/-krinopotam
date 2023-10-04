@@ -1,7 +1,7 @@
 // noinspection DuplicatedCode
 
 import type {Meta, StoryObj} from '@storybook/react'
-import {ITreeSelectNode, TreeSelect} from "@src/treeselect";
+import {ITreeSelectNode, TreeSelect} from "@src/treeSelect";
 import {UserOutlined} from "@ant-design/icons"
 import React from "react";
 import {HelpersObjects} from "@krinopotam/js-helpers";

@@ -1,7 +1,7 @@
 import {IDFormFieldProps} from '@src/dynamicForm/components/baseComponent';
 import {BaseComponentConfig} from './baseComponentConfig';
 import {IDFormFieldTreeSelectProps, TreeSelectComponent} from '@src/dynamicForm/components/treeSelectComponent';
-import {ITreeSelectProps} from '@src/treeselect';
+import {ITreeSelectProps} from '@src/treeSelect';
 
 
 export class TreeSelectComponentConfig<T>  extends BaseComponentConfig<T> {

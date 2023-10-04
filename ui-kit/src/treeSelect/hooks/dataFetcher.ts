@@ -1,6 +1,5 @@
-import {ITreeSelectApi} from './api';
+import {ITreeSelectApi, ITreeSelectNode} from '@src/treeSelect';
 import {useCallback} from 'react';
-import {ITreeSelectNode} from "../treeSelect";
 
 export const useDataFetcher = (api: ITreeSelectApi) => {
     return useCallback(

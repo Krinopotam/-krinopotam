@@ -7,12 +7,12 @@
  */
 
 import {IDFormComponentProps, IDFormFieldProps} from './baseComponent';
-import {ITreeSelectProps, ITreeSelectValue, TreeSelect} from '@src/treeselect';
+import {ITreeSelectProps, ITreeSelectValue, TreeSelect} from '@src/treeSelect';
 import React, {CSSProperties, useCallback, useEffect, useMemo} from 'react';
 import {HelpersObjects} from '@krinopotam/js-helpers';
 import {DModel} from "@src/dynamicForm";
 
-export type {ITreeSelectValue, ITreeSelectNode, ITreeSelectPlainValue, ITreeSelectDeletePromise, ITreeSelectSourcePromise} from '@src/treeselect';
+export type {ITreeSelectValue, ITreeSelectNode, ITreeSelectPlainValue, ITreeSelectDeletePromise, ITreeSelectSourcePromise} from '@src/treeSelect';
 
 //region Types
 type IDFormFieldTreeSelectProps_ = ITreeSelectProps & IDFormFieldProps;
