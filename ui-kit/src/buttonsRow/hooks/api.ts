@@ -1,7 +1,7 @@
 import  {useMemo, useState} from "react";
 import {HelpersObjects} from "@krinopotam/js-helpers";
 import {IButtonRowProps, IButtonsRowApi, IFormButtons} from "@src/buttonsRow";
-import {changeActiveButton, prepareButtons, setActiveButton} from "@src/buttonsRow/helpers/helpers";
+import {changeActiveButton, prepareButtons, setActiveButton} from "@src/buttonsRow/helpers/buttonMethods";
 
 export const useApi = (props: IButtonRowProps, curButtons: IFormButtons, setCurButtons: (buttons: IFormButtons) => void): IButtonsRowApi => {
     const [api] = useState((props.apiRef ?? {}) as IButtonsRowApi);

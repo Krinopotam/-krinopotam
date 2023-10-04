@@ -51,7 +51,6 @@ export const DFormModalRender = ({formId, buttons, buttonsApi, callbacks, formAp
             destroyOnClose={true}
             footer={
                 <ButtonsRender
-                    formId={formId}
                     buttons={buttons}
                     formType={modalFormProps.formType}
                     buttonsApi={buttonsApi}

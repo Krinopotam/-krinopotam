@@ -183,7 +183,7 @@ export class BaseValidator {
     }
 
     private validateRowObject(val: {id: string} | [{id: string}], rule: IRuleObject) {
-        if (rule.rule === 'null') return val === null || typeof val === undefined;
+        if (rule.rule === 'null') return val === null || typeof val === 'undefined';
         if (!val) return false;
 
         const ruleParameter = typeof rule.parameter === 'function' ? rule.parameter(val) : rule.parameter;

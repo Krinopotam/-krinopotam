@@ -213,7 +213,6 @@ class MessageBox {
     }
 
     private generateModalConfig({
-        formId,
         title,
         content,
         afterClose,
@@ -246,7 +245,6 @@ class MessageBox {
 
             footer: (
                 <ButtonsRender
-                    formId={formId}
                     buttons={buttons}
                     formType={type}
                     arrowsSelection={true}

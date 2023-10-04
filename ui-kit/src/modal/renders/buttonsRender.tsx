@@ -12,9 +12,6 @@ import {IFormType} from '../modal';
 import React from 'react';
 
 interface IFormButtonsRenderProps {
-    /** form ID */
-    formId: string;
-
     /** form buttons collection */
     buttons?: IFormButtons;
 
@@ -35,7 +32,6 @@ interface IFormButtonsRenderProps {
 }
 
 export const ButtonsRender = ({
-    formId,
     formType,
     buttons,
     buttonsApi,
@@ -47,7 +43,7 @@ export const ButtonsRender = ({
 
     return (
         <div style={containerStyle}>
-            <ButtonsRow formId={formId} buttons={buttons} apiRef={buttonsApi} formType={formType} arrowsSelection={arrowsSelection} context={context} />
+            <ButtonsRow buttons={buttons} apiRef={buttonsApi} formType={formType} arrowsSelection={arrowsSelection} context={context} />
         </div>
     );
 };

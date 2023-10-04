@@ -3,8 +3,9 @@ import {Col, Row,} from 'antd';
 import React, {useContext, useEffect, useRef, useState} from 'react';
 import ButtonsGroup from "@src/buttonsRow/components/buttonsGroup";
 import {useApi} from "@src/buttonsRow/hooks/api";
-import {keyDownHandler, prepareButtons} from "@src/buttonsRow/helpers/helpers";
+import {prepareButtons} from "@src/buttonsRow/helpers/buttonMethods";
 import {ButtonRowWrapperContext} from "@src/buttonsRow/components/buttonsRowWrapper";
+import {keyDownHandler} from "@src/buttonsRow/helpers/keypressProcessing";
 
 //region Types
 
@@ -46,9 +47,6 @@ export interface IFormButton {
 export type IFormButtons = Record<string, IFormButton | null>;
 
 export interface IButtonRowProps {
-    /** Container form ID */
-    formId: string;
-
     /** Buttons props */
     buttons?: IFormButtons;
 
@@ -116,7 +114,7 @@ export const ButtonsRow = (props: IButtonRowProps): React.JSX.Element => {
 export default ButtonsRow;
 
 const useSubscribeToKeyDownEvent = (props: IButtonRowProps, api: IButtonsRowApi) => {
-    //We use refs, since the subscription for the event occurs only 1 time, and Props can change api is ref already
+    //We use refs, since the subscription for the event occurs only 1 time, and Props can change
     const propsRef = useRef(props);
     propsRef.current = props;
 
@@ -129,9 +127,6 @@ const useSubscribeToKeyDownEvent = (props: IButtonRowProps, api: IButtonsRowApi)
         const onKeyDown = (e: KeyboardEvent) => keyDownHandler(e, propsRef, api, wrapperContext.wrapperId);
         wrapperElement.addEventListener('keydown', onKeyDown);
         return () => wrapperElement.removeEventListener('keydown', onKeyDown);
-
-        //document.addEventListener('keydown', onKeyDown);
-        //return () => document.removeEventListener('keydown', onKeyDown);
 
         // eslint-disable-next-line
     }, []);

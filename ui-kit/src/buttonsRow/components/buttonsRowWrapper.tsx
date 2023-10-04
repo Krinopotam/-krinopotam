@@ -17,7 +17,6 @@ export interface IButtonRowWrapperProps extends React.HTMLAttributes<HTMLDivElem
     remoteCallbacksRef?: React.RefObject<IButtonRowWrapperRemoteCallbacks>;
 }
 
-
 export const ButtonsRowWrapper = (props: IButtonRowWrapperProps): React.JSX.Element => {
     const [wrapperId] = useState(HelpersStrings.getUuid());
 
@@ -25,17 +24,18 @@ export const ButtonsRowWrapper = (props: IButtonRowWrapperProps): React.JSX.Elem
         outline: 'none',
         height: '100%',
 
+        /** for debug  */
         borderStyle: "solid",
         borderColor: 'red',
         borderWidth: 3
     }
 
     if (props.remoteCallbacksRef?.current && typeof props.remoteCallbacksRef?.current === 'object') {
-        props.remoteCallbacksRef.current.onParentComponentRendered = () => wrapperRef.current?.focus();
+        props.remoteCallbacksRef.current.onParentComponentRendered = () => ensureWrapperFocus(wrapperRef.current);
     }
 
     setTimeout(() => { //WORKAROUND: MessageBox cannot tell when it is open. But when opening the MessageBox we need to set focus to the Wrapper for the arrow controls to work
-        wrapperRef.current?.focus();
+        ensureWrapperFocus(wrapperRef.current);
     }, 0)
 
     const wrapperRef = useRef<HTMLDivElement>(null)
@@ -58,3 +58,19 @@ export const ButtonsRowWrapper = (props: IButtonRowWrapperProps): React.JSX.Elem
 }
 
 export default ButtonsRowWrapper;
+
+const isDescendant = (parent: HTMLElement, child: Element | null) => {
+    if (!child) return false;
+    let node = child.parentNode;
+    while (node != null) {
+        if (node == parent) return true;
+        node = node.parentNode;
+    }
+    return false;
+}
+
+const ensureWrapperFocus = (wrapper: HTMLElement | null) => {
+    if (!wrapper) return;
+    if (isDescendant(wrapper, document.activeElement)) return;
+    wrapper.focus();
+}

@@ -31,7 +31,7 @@ export const PopConfirm = ({content, ...props}: IPopConfirmProps): React.JSX.Ele
         <>
             {content ?? null}
             <div ref={buttonsRowRef} tabIndex={-1}>
-                <ButtonsRow formId={formId} buttons={buttons}/>
+                <ButtonsRow buttons={buttons}/>
             </div>
         </>
     );

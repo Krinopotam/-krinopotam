@@ -198,7 +198,7 @@ export const TreeSelect = (props: ITreeSelectProps): React.JSX.Element => {
             {/*<Col flex="auto">{treeSelect}</Col> */}
             <TreeSelectRender api={api} treeSelectProps={props}/>
             <Col>
-                <ButtonsRow formId={componentId} buttons={buttons} apiRef={buttonsApi} context={api} arrowsSelection={false}/>
+                <ButtonsRow buttons={buttons} apiRef={buttonsApi} context={api}/>
             </Col>
             <DFormModal {...editFormProps} />
         </Row>
