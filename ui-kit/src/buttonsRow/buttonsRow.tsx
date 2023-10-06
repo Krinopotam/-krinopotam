@@ -26,7 +26,6 @@ export interface IFormButton {
     active?: boolean;
     danger?: boolean;
     ghost?: boolean;
-    dashed?: boolean;
     disabled?: boolean;
     loading?: boolean;
     hidden?: boolean;

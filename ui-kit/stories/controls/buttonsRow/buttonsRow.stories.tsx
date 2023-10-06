@@ -73,14 +73,14 @@ export const ButtonTooltips: Story = {
 export const ManyButtons: Story = {
     args: {
         buttons: {
-            button1: {title: 'Button1', position: 'left', active: true},
-            button2: {title: 'Button2', position: 'left', ghost: true},
-            button3: {title: 'Button3', position: 'center', danger: true},
-            button4: {title: 'Button4', position: 'center', disabled: true},
-            button5: {title: 'Button5', position: 'right', loading: true},
-            button6: {title: 'Button6', position: 'right'},
+            button1: {title: 'Button1', position: 'left', active: true, onClick: onClickHandler},
+            button2: {title: 'Button2', position: 'left', ghost: true, onClick: onClickHandler},
+            button3: {title: 'Button3', position: 'center', danger: true, onClick: onClickHandler},
+            button4: {title: 'Button4', position: 'center', disabled: true, onClick: onClickHandler},
+            button5: {title: 'Button5', position: 'right', loading: true, onClick: onClickHandler},
+            button6: {title: 'Button6', position: 'right', onClick: onClickHandler},
             link1: {title: 'Link1', position: 'left', type:'link', href:'https://www.ya.ru', target:'_blank'},
-            text1: {title: 'Text1', position: 'left', type:'text'},
+            text1: {title: 'Text1', position: 'left', type:'text', onClick: onClickHandler},
         },
 
     },
@@ -89,10 +89,10 @@ export const ManyButtons: Story = {
 export const ButtonsError: Story = {
     args: {
         buttons: {
-            button1: {title: 'Button1', position: 'left', active: true},
-            button2: {title: 'Button2', position: 'left', disabled: true},
-            button3: {title: 'Button3', position: 'left', loading: true},
-            button4: {title: 'Button4', position: 'left'},
+            button1: {title: 'Button1', position: 'left', active: true, onClick: onClickHandler},
+            button2: {title: 'Button2', position: 'left', disabled: true, onClick: onClickHandler},
+            button3: {title: 'Button3', position: 'left', loading: true, onClick: onClickHandler},
+            button4: {title: 'Button4', position: 'left', onClick: onClickHandler},
             link1: {title: 'Link1', position: 'left', type:'link', href:'https://www.ya.ru', target:'_blank'},
             text1: {title: 'Text1', position: 'left', type:'text'},
         },
@@ -169,6 +169,7 @@ export const DropdownButtonCustomIcon: Story = {
             button1: {
                 title: '', position: 'left', icon: <MenuOutlined/>,
                 children: {
+                    group1: {title: 'Group1', type:'group'},
                     subButton1: {
                         title: 'SubButton1',
                         children: {
@@ -176,7 +177,11 @@ export const DropdownButtonCustomIcon: Story = {
                             subButton1_2: {title: 'SubButton1_2', onClick: onClickHandler}
                         }
                     },
-                    subButton2: {title: 'SubButton2', onClick: onClickHandler}
+                    subButton2: {title: 'SubButton2', onClick: onClickHandler},
+                    divider1: {type: 'divider'},
+                    group2: {title: 'Group2', type:'group'},
+                    subButton3: {title: 'SubButton3', onClick: onClickHandler},
+                    subButton4: {title: 'SubButton4', onClick: onClickHandler},
                 }
             },
         },
@@ -189,6 +194,7 @@ export const DropdownButtonClickable: Story = {
                 title: 'Button1', position: 'left',
                 onClick: () => alert('Button1 was pressed'),
                 children: {
+                    group1: {title: 'Group1', type:'group'},
                     subButton1: {
                         title: 'SubButton1',
                         children: {
@@ -196,7 +202,11 @@ export const DropdownButtonClickable: Story = {
                             subButton1_2: {title: 'SubButton1_2', onClick: onClickHandler}
                         }
                     },
-                    subButton2: {title: 'SubButton2', onClick: onClickHandler}
+                    subButton2: {title: 'SubButton2', onClick: onClickHandler},
+                    divider1: {type: 'divider'},
+                    group2: {title: 'Group2', type:'group'},
+                    subButton3: {title: 'SubButton3', onClick: onClickHandler},
+                    subButton4: {title: 'SubButton4', onClick: onClickHandler}
                 }
             },
         },
@@ -214,27 +224,6 @@ export const ButtonsDivider: Story = {
             text1: {title: 'Text1', position: 'left', type:'text'},
             divider2: {position: 'left', type: 'divider'},
             button4: {title: 'Button4', position: 'left'},
-        },
-    },
-}
-
-export const DropdownWithDividers: Story = {
-    args: {
-        buttons: {
-            button1: {
-                title: 'Button1', position: 'left', type:'link', children: {
-                    subButton1: {
-                        title: 'SubButton1',
-                        children: {
-                            subButton1_1: {title: 'SubButton1_1', onClick: onClickHandler},
-                            divider1: {type: 'divider'},
-                            subButton1_2: {title: 'SubButton1_2', onClick: onClickHandler}
-                        }
-                    },
-                    divider2: { type: 'divider'},
-                    subButton2: {title: 'SubButton2', onClick: onClickHandler}
-                }
-            },
         },
     },
 }

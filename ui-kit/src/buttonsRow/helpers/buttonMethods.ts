@@ -41,9 +41,8 @@ export const getNextButtonName = (currentName: string, buttons: IFormButtons, di
 
 const isButtonCanBeActive = (button: IFormButton | undefined | null) => {
     return button
-        && !button.disabled
-        && !button.hidden
-        && (!button.type || button.type === 'button' || button.type === 'link')
+        && !button.disabled && !button.hidden
+        && (!button.type || button.type === 'button' || button.type === 'link' || button.type === 'text')
 }
 
 export const changeActiveButton = (buttons: IFormButtons, direction: 'backward' | 'forward') => {
