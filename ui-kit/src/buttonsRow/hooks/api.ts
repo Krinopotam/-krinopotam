@@ -1,4 +1,4 @@
-import  {useMemo, useState} from "react";
+import {useMemo, useState} from "react";
 import {HelpersObjects} from "@krinopotam/js-helpers";
 import {IButtonRowProps, IButtonsRowApi, IFormButtons} from "@src/buttonsRow";
 import {changeActiveButton, prepareButtons, setActiveButton} from "@src/buttonsRow/helpers/buttonMethods";
@@ -72,8 +72,10 @@ export const useApi = (props: IButtonRowProps, curButtons: IFormButtons, setCurB
 
         api.triggerClick = (name: string) => {
             const button = curButtons[name];
-            if (!button) return;
-            if (button.onClick && !button.disabled && !button.loading && !button.hidden) button.onClick(name, button, props.context);
+            if (!button || button.disabled || button.loading || button.hidden) return;
+
+            if (button.type === 'link' && button.href) window.open(button.href, button.target ?? '_blank');
+            else if ((!button.type || button.type === 'button') && button.onClick) button.onClick(name, button, props.context);
         };
 
         api.activeTriggerClick = () => {

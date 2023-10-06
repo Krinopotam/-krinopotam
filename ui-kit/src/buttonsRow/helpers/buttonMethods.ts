@@ -1,4 +1,4 @@
-import {IFormButtons} from "@src/buttonsRow";
+import {IFormButton, IFormButtons} from "@src/buttonsRow";
 import {IFormType} from "@src/buttonsRow/buttonsRow";
 
 export const prepareButtons = (buttons: IFormButtons | undefined, formType?: IFormType) => {
@@ -9,7 +9,7 @@ export const prepareButtons = (buttons: IFormButtons | undefined, formType?: IFo
     for (const key in clonedButtons) {
         const button = clonedButtons[key];
         if (!button) continue;
-        if (!button.type) button.type = 'default';
+        if (!button.type) button.type = 'button';
         if (!button.position) button.position = 'right';
         if (typeof button.danger === 'undefined' && formType === 'error') button.danger = true;
         if (button.position === 'left') leftButtons[key] = button;
@@ -21,31 +21,30 @@ export const prepareButtons = (buttons: IFormButtons | undefined, formType?: IFo
 };
 
 
-export const getNextButtonName = (currentName: string, buttons: IFormButtons, direction: 'forward' | 'backward', onlyVisible: boolean) => {
+export const getNextButtonName = (currentName: string, buttons: IFormButtons, direction: 'forward' | 'backward') => {
     const keys = Object.keys(buttons);
 
     const currentIndex = keys.findIndex(name => name === currentName);
 
     if (direction === 'forward') {
         if (currentIndex >= keys.length) return currentName;
-        for (let i = currentIndex + 1; i < keys.length; i++) {
-            const name = keys[i];
-            const button = buttons[name];
-            if (!button) continue;
-            if (!button.disabled && (!onlyVisible || !button.hidden)) return keys[i];
-        }
+        for (let i = currentIndex + 1; i < keys.length; i++) if (isButtonCanBeActive(buttons[keys[i]])) return keys[i];
+
+        return currentName;
     } else {
         if (currentIndex <= 0) return currentName;
-        for (let i = currentIndex - 1; i >= 0; i--) {
-            const name = keys[i];
-            const button = buttons[name];
-            if (!button) continue;
-            if (!button.disabled && (!onlyVisible || !button.hidden)) return keys[i];
-        }
+        for (let i = currentIndex - 1; i >= 0; i--) if (isButtonCanBeActive(buttons[keys[i]])) return keys[i];
     }
 
     return currentName;
 };
+
+const isButtonCanBeActive = (button: IFormButton | undefined | null) => {
+    return button
+        && !button.disabled
+        && !button.hidden
+        && (!button.type || button.type === 'button' || button.type === 'link')
+}
 
 export const changeActiveButton = (buttons: IFormButtons, direction: 'backward' | 'forward') => {
     const _buttons = {...buttons};
@@ -62,7 +61,7 @@ export const changeActiveButton = (buttons: IFormButtons, direction: 'backward' 
     const currentButton = _buttons[currentName];
     if (currentButton) currentButton.active = false;
 
-    const nextName = getNextButtonName(currentName, buttons, direction, true);
+    const nextName = getNextButtonName(currentName, buttons, direction);
     const nextButton = _buttons[nextName];
     if (nextButton) nextButton.active = true;
 

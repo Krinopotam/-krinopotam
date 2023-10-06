@@ -1,6 +1,6 @@
-import { IButtonProps,} from '@src/button';
+import {IButtonProps,} from '@src/button';
 import {Col, Row,} from 'antd';
-import React, {useContext, useEffect, useRef, useState} from 'react';
+import React, {HTMLAttributeAnchorTarget, useContext, useEffect, useRef, useState} from 'react';
 import ButtonsGroup from "@src/buttonsRow/components/buttonsGroup";
 import {useApi} from "@src/buttonsRow/hooks/api";
 import {prepareButtons} from "@src/buttonsRow/helpers/buttonMethods";
@@ -22,11 +22,12 @@ interface IHotKey {
 export interface IFormButton {
     title?: React.ReactNode;
     //TODO implement info, danger, warning buttons type
-    type?: 'default' | 'dashed' | 'link' | 'text' | 'element';
+    type?: 'button' | 'link' | 'dashed' | 'text' | 'divider' | 'group' | 'element';
     active?: boolean;
     danger?: boolean;
-    disabled?: boolean;
     ghost?: boolean;
+    dashed?: boolean;
+    disabled?: boolean;
     loading?: boolean;
     hidden?: boolean;
     position?: 'center' | 'left' | 'right';
@@ -39,8 +40,8 @@ export interface IFormButton {
     /** Button tooltip */
     tooltip?: string;
 
-    //TODO: to implement href and multi -level buttons
     href?: string;
+    target?: HTMLAttributeAnchorTarget
     children?: IFormButtons;
 }
 
@@ -69,7 +70,7 @@ export interface IButtonRowProps {
     arrowsSelection?: boolean;
 
     /** When button arrowSelection mode the active button will be of type Primary. Otherwise, the active button will have focus */
-    makeActivePrimary? :boolean;
+    makeActivePrimary?: boolean;
 }
 
 export interface IButtonsRowApi {
@@ -83,6 +84,7 @@ export interface IButtonsRowApi {
     triggerClick: (name: string) => void;
     activeTriggerClick: () => void;
 }
+
 //endregion
 
 export const ButtonsRow = (props: IButtonRowProps): React.JSX.Element => {
@@ -98,13 +100,13 @@ export const ButtonsRow = (props: IButtonRowProps): React.JSX.Element => {
         <div style={{display: 'block', ...props.style}} className={'controls-buttons-dynamic-row ' + props.className}>
             <Row wrap={false}>
                 <Col flex="auto" style={{textAlign: 'left'}}>
-                    <ButtonsGroup key="leftButtons" buttons={curButtons} position='left' context={props.context} componentProps={props} />
+                    <ButtonsGroup key="leftButtons" buttons={curButtons} position='left' context={props.context} componentProps={props}/>
                 </Col>
                 <Col flex="auto" style={{textAlign: 'center'}}>
-                    <ButtonsGroup key="centerButtons" buttons={curButtons} position='center' context={props.context} componentProps={props} />
+                    <ButtonsGroup key="centerButtons" buttons={curButtons} position='center' context={props.context} componentProps={props}/>
                 </Col>
                 <Col flex="auto" style={{textAlign: 'right'}}>
-                    <ButtonsGroup key="rightButtons" buttons={curButtons} position="right" context={props.context} componentProps={props} />
+                    <ButtonsGroup key="rightButtons" buttons={curButtons} position="right" context={props.context} componentProps={props}/>
                 </Col>
             </Row>
         </div>

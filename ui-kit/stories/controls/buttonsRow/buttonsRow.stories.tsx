@@ -79,6 +79,8 @@ export const ManyButtons: Story = {
             button4: {title: 'Button4', position: 'center', disabled: true},
             button5: {title: 'Button5', position: 'right', loading: true},
             button6: {title: 'Button6', position: 'right'},
+            link1: {title: 'Link1', position: 'left', type:'link', href:'https://www.ya.ru', target:'_blank'},
+            text1: {title: 'Text1', position: 'left', type:'text'},
         },
 
     },
@@ -88,9 +90,11 @@ export const ButtonsError: Story = {
     args: {
         buttons: {
             button1: {title: 'Button1', position: 'left', active: true},
-            button4: {title: 'Button4', position: 'left', disabled: true},
-            button5: {title: 'Button5', position: 'left', loading: true},
-            button6: {title: 'Button6', position: 'left'},
+            button2: {title: 'Button2', position: 'left', disabled: true},
+            button3: {title: 'Button3', position: 'left', loading: true},
+            button4: {title: 'Button4', position: 'left'},
+            link1: {title: 'Link1', position: 'left', type:'link', href:'https://www.ya.ru', target:'_blank'},
+            text1: {title: 'Text1', position: 'left', type:'text'},
         },
         formType: 'error'
     },
@@ -100,11 +104,14 @@ export const ButtonsArrowKeys: Story = {
         buttons: {
             button1: {title: 'Button1', position: 'left', active: true, onClick: onClickHandler},
             button2: {title: 'Button2', position: 'left', disabled: true, onClick: onClickHandler},
+            divider1: {type:'divider', position: 'left'},
+            link1: {title: 'Link1', position: 'left', type:'link', href:'https://www.ya.ru', target:'_blank'},
+            text1: {title: 'Text1', position: 'left', type:'text'},
             button3: {title: 'Button3', position: 'left', loading: true, onClick: onClickHandler},
             button4: {title: 'Button4', position: 'left', onClick: onClickHandler},
         },
         arrowsSelection: true,
-        makeActivePrimary:false,
+        makeActivePrimary: false,
     },
 
     render: (args) => {
@@ -120,6 +127,9 @@ export const ButtonsArrowKeysActivePrimary: Story = {
         buttons: {
             button1: {title: 'Button1', position: 'left', active: true, onClick: onClickHandler},
             button2: {title: 'Button2', position: 'left', disabled: true, onClick: onClickHandler},
+            divider1: {type:'divider', position: 'left'},
+            link1: {title: 'Link1', position: 'left', type:'link', href:'https://www.ya.ru', target:'_blank'},
+            text1: {title: 'Text1', position: 'left', type:'text'},
             button3: {title: 'Button3', position: 'left', loading: true, onClick: onClickHandler},
             button4: {title: 'Button4', position: 'left', onClick: onClickHandler},
         },
@@ -193,4 +203,38 @@ export const DropdownButtonClickable: Story = {
     },
 }
 
+export const ButtonsDivider: Story = {
+    args: {
+        buttons: {
+            button1: {title: 'Button1', position: 'left', active: true},
+            button2: {title: 'Button2', position: 'left'},
+            divider1: {position: 'left', type: 'divider'},
+            button5: {title: 'Button3', position: 'left'},
+            link1: {title: 'Link1', position: 'left', type:'link', href:'https://www.ya.ru', target:'_blank'},
+            text1: {title: 'Text1', position: 'left', type:'text'},
+            divider2: {position: 'left', type: 'divider'},
+            button4: {title: 'Button4', position: 'left'},
+        },
+    },
+}
 
+export const DropdownWithDividers: Story = {
+    args: {
+        buttons: {
+            button1: {
+                title: 'Button1', position: 'left', type:'link', children: {
+                    subButton1: {
+                        title: 'SubButton1',
+                        children: {
+                            subButton1_1: {title: 'SubButton1_1', onClick: onClickHandler},
+                            divider1: {type: 'divider'},
+                            subButton1_2: {title: 'SubButton1_2', onClick: onClickHandler}
+                        }
+                    },
+                    divider2: { type: 'divider'},
+                    subButton2: {title: 'SubButton2', onClick: onClickHandler}
+                }
+            },
+        },
+    },
+}

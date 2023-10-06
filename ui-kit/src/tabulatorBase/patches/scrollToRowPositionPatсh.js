@@ -12,7 +12,7 @@ const elOffset = function (el) {
 };
 
 const scrollToRowPosition = function (row, position, ifVisible) {
-    var rowIndex = this.rows().indexOf(row),
+    let rowIndex = this.rows().indexOf(row),
         rowEl = row.getElement(),
         offset = 0;
     const _this = this;

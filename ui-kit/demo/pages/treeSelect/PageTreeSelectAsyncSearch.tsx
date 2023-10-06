@@ -12,7 +12,7 @@ import React from 'react';
 import {DForm} from @krinopotam/ui-kit/dynamicForm';
 import {DFormConfig} from @krinopotam/ui-kit/dynamicForm/configBuilder/dFormConfig';
 import {TreeSelectComponentConfig} from @krinopotam/ui-kit/dynamicForm/configBuilder/treeSelectComponentConfig';
-import {ITreeSelectSourcePromise} from @krinopotam/ui-kit/treeselect'
+import {ITreeSelectSourcePromise} from @krinopotam/ui-kit/treeSelect'
 import {HelpersObjects} from "@krinopotam/js-helpers";
 const formProps = new DFormConfig<IFields>('Test form')
     .confirmChanges(true)
