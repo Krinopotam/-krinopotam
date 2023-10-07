@@ -62,7 +62,7 @@ export interface IDFormProps {
     /** Fields properties */
     fieldsProps?: IDFormFieldsProps;
 
-    /** Form type */
+    /** Form color type */
     colorType?: IColorType;
 
     /** label column parameters, for example span:'8' */

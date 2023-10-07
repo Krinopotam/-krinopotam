@@ -203,11 +203,12 @@ class MessageBox {
             props.onAfterClose?.();
         };
 
+        const draggableId = 'draggable-' + HelpersStrings.getUuid();
         let modal: ModalType = Modal;
         if (this._themedModalInstance && Object.keys(this._themedModalInstance).length > 0) modal = this._themedModalInstance;
-        const modalInst = modal.info(this.generateModalConfig(config));
+        const modalInst = modal.info(this.generateModalConfig(config, draggableId));
 
-        const messageBoxApi = new MessageBoxApi(formId, modalInst, config, this.generateModalConfig, document.activeElement);
+        const messageBoxApi = new MessageBoxApi(formId, draggableId, modalInst, config, this.generateModalConfig, document.activeElement);
 
         dispatcher.pushToStack(messageBoxApi.id);
         return messageBoxApi;
@@ -217,7 +218,7 @@ class MessageBox {
         if (button?.onClick && !button.disabled && !button.hidden) button.onClick(buttonName, button);
     }
 
-    private generateModalConfig({title, icon, content, onAfterClose, buttons, centered = true, closable = true, maskClosable = true, colorType, onCrossClose}: IModalBaseConfig): ModalFuncProps {
+    private generateModalConfig({title, icon, content, onAfterClose, buttons, centered = true, closable = true, maskClosable = true, colorType, onCrossClose}: IModalBaseConfig, draggableId:string): ModalFuncProps {
         const paddingBottom = 20;
         const paddingLeft = 24;
         const paddingRight = 24;
@@ -225,7 +226,7 @@ class MessageBox {
             className: 'custom-antd-message-box',
 
             icon: null,
-            title: <HeaderRender icon={icon} title={title ?? 'Внимание'} colorType={colorType} style={{paddingLeft: 24, paddingRight: paddingRight, paddingTop: 3, paddingBottom: 3}} />,
+            title: <HeaderRender draggableId={draggableId} icon={icon} title={title ?? 'Внимание'} colorType={colorType} style={{paddingLeft: 24, paddingRight: paddingRight, paddingTop: 3, paddingBottom: 3}} />,
             content: (
                 <ContentRender paddingLeft={paddingLeft} paddingRight={paddingRight}>
                     {content}
@@ -246,7 +247,7 @@ class MessageBox {
             keyboard: false, //close by keyboard
             maskClosable: maskClosable, //the form will close when you click on the mask layout
             onCancel: () => onCrossClose, // fires when you click on the cross to close the form
-            modalRender: ModalRender,
+            modalRender: (node)=>{return ModalRender(node, draggableId)},
             afterClose: () => onAfterClose?.(),
         };
     }

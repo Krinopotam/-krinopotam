@@ -8,7 +8,7 @@
 
 import {IDFormCallbacks, IDFormDataSet, IDFormProps} from '@src/dynamicForm';
 import {IDFormModalApi, useInitModalFormApi} from './hooks/api';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, {CSSProperties, useEffect, useMemo, useState} from 'react';
 
 import {DFormModalRender} from './renders/dFormModalRender';
 import {IButtonsRowApi} from '@src/buttonsRow/buttonsRow';
@@ -59,6 +59,15 @@ export interface IDModalProps {
 
     /** Is controls visible (for open for without api) */
     isOpened?: boolean;
+
+    /** Form header style */
+    headerStyle?: CSSProperties;
+
+    /**Form header icon */
+    headerIcon?: React.ReactNode;
+
+    /** Form footer style */
+    footerStyle?: CSSProperties;
 }
 
 export type IDFormModalProps  = IDModalProps & IDFormProps
@@ -133,6 +142,9 @@ const useSeparateProps = (props: IDFormModalProps) => {
             'closeFormConfirmMessage',
             'formId',
             'colorType',
+            'headerIcon',
+            'headerStyle',
+            'footerStyle',
             
             //---Common props ------
             'apiRef',

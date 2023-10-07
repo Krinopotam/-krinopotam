@@ -8,6 +8,7 @@
 
 /** Check is element visible */
 export const HelpersDom = {
+    /** check if element visible */
     isElementVisible: (elem: Element | null) => {
         if (!elem) return false;
         const recursiveCheck = (target: Element | null): boolean => {
@@ -19,6 +20,20 @@ export const HelpersDom = {
         };
 
         return recursiveCheck(elem);
+    },
+
+    /** Returns true if child is descendant of parent on any level */
+    isDescendant: (parent: HTMLElement | null, child: Element | null, includeSelf?: boolean) => {
+        if (!parent || !child) return false;
+
+        if (includeSelf && parent === child) return true;
+
+        let node = child.parentNode;
+        while (node != null) {
+            if (node == parent) return true;
+            node = node.parentNode;
+        }
+        return false;
     },
 
     /** Check is element is overlapped by another element */

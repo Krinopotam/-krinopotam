@@ -1,5 +1,5 @@
 import React, {CSSProperties, useMemo, useRef, useState} from "react";
-import {HelpersStrings} from "@krinopotam/js-helpers";
+import {HelpersDom, HelpersStrings} from "@krinopotam/js-helpers";
 
 export interface IButtonRowWrapperContext {
     wrapperId: string,
@@ -62,18 +62,8 @@ export const ButtonsRowWrapper = (props: IButtonRowWrapperProps): React.JSX.Elem
 // noinspection JSUnusedGlobalSymbols
 export default ButtonsRowWrapper;
 
-const isDescendant = (parent: HTMLElement, child: Element | null) => {
-    if (!child) return false;
-    let node = child.parentNode;
-    while (node != null) {
-        if (node == parent) return true;
-        node = node.parentNode;
-    }
-    return false;
-}
-
 const ensureWrapperFocus = (wrapper: HTMLElement | null) => {
     if (!wrapper) return;
-    if (isDescendant(wrapper, document.activeElement)) return;
+    if (HelpersDom.isDescendant(wrapper, document.activeElement)) return;
     wrapper.focus();
 }

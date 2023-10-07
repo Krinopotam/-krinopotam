@@ -6,15 +6,18 @@
  * @license MIT
  */
 
-import React, {useState} from 'react';
+import React, {useCallback, useRef, useState} from 'react';
 import Draggable, {DraggableData} from 'react-draggable';
+import {HelpersDom} from '@krinopotam/js-helpers';
 
-export const DraggableRender = ({node, targetClass, onStartCallback}: {node: React.ReactNode; targetClass?: string; onStartCallback?: () => void}) => {
+export const DraggableRender = ({node, targetId, onStartCallback}: {node: React.ReactNode; targetId?: string; onStartCallback?: () => void}) => {
     const draggableFieldRef = React.createRef<HTMLDivElement>();
 
     const [dragDisabled, setDragDisabled] = useState(false);
     const [draggableStyle, setDraggableStyle] = useState({cursor: 'default'});
     const [bounds, setBounds] = useState({left: 0, top: 0, bottom: 0, right: 0});
+
+    const getTargetElement = useGetTargetElement(targetId);
 
     const onStart = (uiData: DraggableData) => {
         const {clientWidth, clientHeight} = window.document.documentElement;
@@ -44,19 +47,27 @@ export const DraggableRender = ({node, targetClass, onStartCallback}: {node: Rea
             <div
                 ref={draggableFieldRef}
                 style={draggableStyle}
-                onMouseOver={(e) => {
+                onMouseOver={e => {
                     e.stopPropagation();
-                    if (!(e.target instanceof HTMLElement) || (targetClass && e.target['className'] !== targetClass)) {
-                        setDragDisabled(true);
-                        setDraggableStyle({cursor: 'default'});
+
+                    if (!targetId) {
+                        setDragDisabled(false);
+                        setDraggableStyle({cursor: 'move'});
                         return;
                     }
 
-                    if (dragDisabled) setDragDisabled(false);
+                    const targetElement = getTargetElement();
 
-                    setDraggableStyle({cursor: 'move'});
+                    if (HelpersDom.isDescendant(targetElement, e.target as Element, true)) {
+                        setDragDisabled(false);
+                        setDraggableStyle({cursor: 'move'});
+                        return;
+                    }
+
+                    setDragDisabled(true);
+                    setDraggableStyle({cursor: 'default'});
                 }}
-                onMouseOut={(e) => {
+                onMouseOut={e => {
                     e.stopPropagation();
                     setDragDisabled(true);
                     setDraggableStyle({cursor: 'default'});
@@ -66,4 +77,14 @@ export const DraggableRender = ({node, targetClass, onStartCallback}: {node: Rea
             </div>
         </Draggable>
     );
+};
+
+const useGetTargetElement = (elementId: string | undefined) => {
+    const targetElement = useRef<{element: HTMLElement | null; id?: string}>({element: null, id: elementId});
+
+    return useCallback(() => {
+        if (!elementId) return null;
+        if (targetElement.current.id !== elementId || !targetElement.current.element) targetElement.current.element = document.getElementById(elementId);
+        return targetElement.current.element;
+    }, [elementId]);
 };

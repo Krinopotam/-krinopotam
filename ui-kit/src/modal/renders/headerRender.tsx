@@ -9,12 +9,13 @@
 import {StopOutlined, ExclamationCircleOutlined, InfoCircleOutlined, CheckCircleOutlined} from '@ant-design/icons';
 
 import React from 'react';
-import {theme} from 'antd';
+import {Space, theme} from 'antd';
 import {IColorType} from '@src/button/button';
 
 const {useToken} = theme;
 
 interface IHeaderRenderProps {
+    draggableId: string;
     title: string | React.ReactNode;
     colorType?: IColorType;
     style?: React.CSSProperties;
@@ -60,12 +61,11 @@ export const HeaderRender = (props: IHeaderRenderProps): React.JSX.Element => {
     const style = {...defaultStyle, ...props.style};
 
     return (
-        <span className="custom-antd-modal-header" style={style}>
-            <Icon>{icon}</Icon> {props.title}
-        </span>
+        <div id={props.draggableId} style={style}>
+            <Space>
+                {icon}
+                {props.title}
+            </Space>
+        </div>
     );
-};
-
-const Icon = ({children}: {children?: React.ReactNode}): React.JSX.Element | null => {
-    return children ? <span style={{marginRight: 5}}>{children}</span> : null;
 };

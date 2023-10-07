@@ -13,6 +13,19 @@ export const HelpersDom = {
         };
         return recursiveCheck(elem);
     },
+    isDescendant: (parent, child, includeSelf) => {
+        if (!parent || !child)
+            return false;
+        if (includeSelf && parent === child)
+            return true;
+        let node = child.parentNode;
+        while (node != null) {
+            if (node == parent)
+                return true;
+            node = node.parentNode;
+        }
+        return false;
+    },
     isElementOverlapped: (elem) => {
         const isOverlap = (elem1, elem2) => {
             const rect1 = elem1.getBoundingClientRect();

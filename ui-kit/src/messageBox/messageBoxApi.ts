@@ -6,8 +6,9 @@ import {ModalFuncProps} from 'antd';
 import {HelpersObjects} from '@krinopotam/js-helpers';
 
 export class MessageBoxApi {
-    private _modal: { destroy: () => void; update: (configUpdate: ModalFuncProps) => void };
+    private _modal: {destroy: () => void; update: (configUpdate: ModalFuncProps) => void};
 
+    private readonly _draggableId;
     private readonly _modalConfigGenerator;
     private _currentConfig: IModalBaseConfig;
     private readonly _formsDispatcher: FormsDispatcher | undefined;
@@ -16,9 +17,10 @@ export class MessageBoxApi {
 
     constructor(
         id: string,
-        modal: { destroy: () => void; update: (configUpdate: ModalFuncProps) => void },
+        draggableId: string,
+        modal: {destroy: () => void; update: (configUpdate: ModalFuncProps) => void},
         config: IModalBaseConfig,
-        modalConfigGenerator: (config: IModalBaseConfig) => ModalFuncProps,
+        modalConfigGenerator: (config: IModalBaseConfig, draggableClass: string) => ModalFuncProps,
         prevFocusedElement: Element | null
     ) {
         this._modal = modal;
@@ -26,7 +28,8 @@ export class MessageBoxApi {
         this._formsDispatcher = dispatcher;
         this._modalConfigGenerator = modalConfigGenerator;
         this._id = id;
-        this._prevFocusedElement = prevFocusedElement
+        this._draggableId = draggableId;
+        this._prevFocusedElement = prevFocusedElement;
     }
 
     public get id() {
@@ -40,7 +43,7 @@ export class MessageBoxApi {
 
     public update(newConfig: Omit<IAnyModalConfig, 'formId'>) {
         const resultConfig = HelpersObjects.mergeObjects(this._currentConfig, newConfig) || {};
-        const generatedConfig = this._modalConfigGenerator(resultConfig);
+        const generatedConfig = this._modalConfigGenerator(resultConfig, this._draggableId);
         this._modal.update(generatedConfig);
         this._currentConfig = resultConfig;
     }

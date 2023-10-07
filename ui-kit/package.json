@@ -58,7 +58,7 @@
 	},
 	"dependencies": {
 		"@krinopotam/common-hooks": "^1.0.1",
-		"@krinopotam/js-helpers": "^1.0.25",
+		"@krinopotam/js-helpers": "^1.0.27",
 		"@krinopotam/service-types": "^1.0.5",
 		"@tanstack/react-table": "^8.10.3",
 		"@tanstack/table-core": "^8.10.3",

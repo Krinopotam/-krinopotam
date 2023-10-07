@@ -4,12 +4,12 @@ interface IFooterRenderProps {
     onMouseResize: React.MouseEventHandler<HTMLDivElement> | undefined;
     resizable?: boolean;
     children?: React.ReactNode;
-    containerStyle?: React.CSSProperties;
+    style?: React.CSSProperties;
 }
-export const FooterRender = ({onMouseResize, resizable, children, containerStyle}: IFooterRenderProps): React.JSX.Element => {
+export const FooterRender = ({onMouseResize, resizable, children, style}: IFooterRenderProps): React.JSX.Element => {
     return (
         <div>
-            <div style={containerStyle}>{children}</div>
+            <div style={style}>{children}</div>
             {resizable ? <ResizeHandle onMouseDown={onMouseResize} /> : null}
         </div>
     );

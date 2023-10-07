@@ -59,6 +59,7 @@ export const DFormModalRender = ({formId, buttons, buttonsApi, callbacks, formAp
                     context={formApi}
                 />
             }
+            footerStyle={modalFormProps.footerStyle}
             maskClosable={false}
             keyboard={false}
             bodyHeight={modalFormProps.bodyHeight}
@@ -70,6 +71,8 @@ export const DFormModalRender = ({formId, buttons, buttonsApi, callbacks, formAp
             notScrollable={modalFormProps.notScrollable}
             resizable={modalFormProps.resizable !== false}
             title={modalTitle}
+            headerIcon={modalFormProps.headerIcon}
+            headerStyle={modalFormProps.headerStyle}
             colorType={modalFormProps.colorType}
         >
             {modalFormProps.isOpened ? <DForm callbacks={callbacks} apiRef={formApi} {...formProps} /> : null}
