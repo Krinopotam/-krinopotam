@@ -4,4 +4,5 @@ export type TPromise<T, F = unknown> = {
     catch<TResult = never>(onrejected?: ((reason: F) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;
 } & Promise<T>;
 
+/** Any type */
 export type AnyType = any
