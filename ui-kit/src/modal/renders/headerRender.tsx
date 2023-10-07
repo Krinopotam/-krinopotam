@@ -54,7 +54,7 @@ export const HeaderRender = (props: IHeaderRenderProps): React.JSX.Element => {
         color: color,
         borderTopLeftRadius: token.borderRadius,
         borderTopRightRadius: token.borderRadius,
-        minHeight: 24,
+        minHeight: 27,
     };
 
     const style = {...defaultStyle, ...props.style};

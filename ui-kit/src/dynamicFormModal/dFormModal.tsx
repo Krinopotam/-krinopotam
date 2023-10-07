@@ -132,6 +132,7 @@ const useSeparateProps = (props: IDFormModalProps) => {
             'isOpened',
             'closeFormConfirmMessage',
             'formId',
+            'colorType',
             
             //---Common props ------
             'apiRef',

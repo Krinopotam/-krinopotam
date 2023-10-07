@@ -49,6 +49,7 @@ export const DFormModalRender = ({formId, buttons, buttonsApi, callbacks, formAp
             onCancel={formApi.close}
             centered
             destroyOnClose={true}
+
             footer={
                 <ButtonsRender
                     buttons={buttons}
@@ -69,6 +70,7 @@ export const DFormModalRender = ({formId, buttons, buttonsApi, callbacks, formAp
             notScrollable={modalFormProps.notScrollable}
             resizable={modalFormProps.resizable !== false}
             title={modalTitle}
+            colorType={modalFormProps.colorType}
         >
             {modalFormProps.isOpened ? <DForm callbacks={callbacks} apiRef={formApi} {...formProps} /> : null}
         </Modal>

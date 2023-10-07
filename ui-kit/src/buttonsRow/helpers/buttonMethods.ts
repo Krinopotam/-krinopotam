@@ -11,7 +11,7 @@ export const prepareButtons = (buttons: IFormButtons | undefined, rowColorType?:
         if (!button) continue;
         if (!button.type) button.type = 'button';
         if (!button.position) button.position = 'right';
-        if (!button.colorType) button.colorType = rowColorType;
+        if (rowColorType) button.colorType = rowColorType;
 
         if (button.position === 'left') leftButtons[key] = button;
         else if (button.position === 'center') centerButtons[key] = button;

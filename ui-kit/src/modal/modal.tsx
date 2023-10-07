@@ -18,6 +18,7 @@ import classNames from 'classnames';
 import {useInitFormDispatcher} from './hooks/useInitFormDispatcher';
 import {useResize} from './hooks/useResize';
 import {IButtonRowWrapperRemoteCallbacks} from "@src/buttonsRow/components/buttonsRowWrapper";
+import {IColorType} from "@src/button/button";
 
 export type IModalProps = AntModalProps & {
     /** the form ID for form dispatcher (important property) */
@@ -46,6 +47,12 @@ export type IModalProps = AntModalProps & {
 
     /** Is the for can be resized (show the resize handler). Default: true */
     resizable?: boolean;
+
+    /** Form color type */
+    colorType?: IColorType
+
+    /**Form header icon */
+    headerIcon?:React.ReactNode
 
     /** Footer content */
     footer?: React.ReactNode
@@ -100,7 +107,7 @@ export const Modal = ({resizable = true, ...props}: IModalProps): React.JSX.Elem
                 return ModalRender(node, wrapperRemoteCallbacksRef)
             }}
             //transitionName="zoom"
-            title={<HeaderRender title={props.title} style={{paddingLeft: paddingLeft, paddingRight: paddingRight, paddingTop: 5, paddingBottom: 5}}/>}
+            title={<HeaderRender icon={props.headerIcon} title={props.title} colorType={props.colorType} style={{paddingLeft: paddingLeft, paddingRight: paddingRight, paddingTop: 5, paddingBottom: 5}}/>}
             footer={
                 <FooterRender
                     onMouseResize={onMouseResize}
@@ -130,13 +137,14 @@ const useGetBodyStyle = ({
     bodyMinHeight?: number;
     notScrollable?: boolean;
 }) => {
-    const newStyle: React.CSSProperties = bodyStyle ?? {};
-    newStyle.padding = '0 24px 0 24px';
+    const newStyle: React.CSSProperties = {...bodyStyle,
+        padding: '0 24px 0 24px',
+        overflowY:notScrollable ? 'hidden' : 'auto',
+    };
+
     if (bodyHeight) newStyle.height = bodyHeight;
     if (bodyMaxHeight) newStyle.maxHeight = bodyMaxHeight;
     if (bodyMinHeight) newStyle.minHeight = bodyMinHeight;
-    if (!notScrollable) newStyle.overflowY = 'auto';
-    else newStyle.overflowY = 'hidden';
 
     return newStyle;
 };

@@ -40,7 +40,6 @@ export const ButtonsRender = ({
     context,
 }: IFormButtonsRenderProps): React.JSX.Element | null => {
     if (!buttons || Object.keys(buttons).length === 0) return null;
-
     return (
         <div style={containerStyle}>
             <ButtonsRow buttons={buttons} apiRef={buttonsApi} colorType={colorType} arrowsSelection={arrowsSelection} context={context} />
