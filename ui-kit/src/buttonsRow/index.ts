@@ -1,5 +1,5 @@
 export {ButtonsRow} from "./buttonsRow";
-export {ButtonsGroup} from "./components/buttonsGroup";
-export {ButtonRender} from "./components/buttonRender";
+export {RenderButtonGroup} from "./components/renderButtonGroup";
+export {RenderButton} from "./components/renderButton";
 export {ButtonsRowWrapper} from "./components/buttonsRowWrapper";
 export type {IButtonsRowApi, IFormButton, IFormButtons, IButtonRowProps} from "./buttonsRow";

@@ -1,11 +1,11 @@
-import {IButtonProps,} from '@src/button';
-import {Col, Row,} from 'antd';
-import React, {HTMLAttributeAnchorTarget, useContext, useEffect, useRef, useState} from 'react';
-import ButtonsGroup from "@src/buttonsRow/components/buttonsGroup";
-import {useApi} from "@src/buttonsRow/hooks/api";
-import {prepareButtons} from "@src/buttonsRow/helpers/buttonMethods";
-import {ButtonRowWrapperContext} from "@src/buttonsRow/components/buttonsRowWrapper";
-import {keyDownHandler} from "@src/buttonsRow/helpers/keypressProcessing";
+import {IButtonProps} from '@src/button';
+import {Col, Row} from 'antd';
+import React, {CSSProperties, FocusEventHandler, HTMLAttributeAnchorTarget, MouseEventHandler, useContext, useEffect, useRef, useState} from 'react';
+import RenderButtonGroup from '@src/buttonsRow/components/renderButtonGroup';
+import {useApi} from '@src/buttonsRow/hooks/api';
+import {prepareButtons} from '@src/buttonsRow/helpers/buttonMethods';
+import {ButtonRowWrapperContext} from '@src/buttonsRow/components/buttonsRowWrapper';
+import {keyDownHandler} from '@src/buttonsRow/helpers/keypressProcessing';
 
 //region Types
 
@@ -20,28 +20,73 @@ interface IHotKey {
 }
 
 export interface IFormButton {
+    //TODO: implement info, danger, warning buttons type
+
+    /** Button title */
     title?: React.ReactNode;
-    //TODO implement info, danger, warning buttons type
-    type?: 'button' | 'link' | 'dashed' | 'text' | 'divider' | 'group' | 'element';
+
+    type?: 'button' | 'link' | 'text' | 'divider' | 'group' | 'element';
+
+    /** Is button active (set primary style) */
     active?: boolean;
+
+    /** Is button danger has style */
     danger?: boolean;
+
+    /** Is button has ghost (outline) style */
     ghost?: boolean;
+
+    /** is button or divider dashed */
+    dashed?: boolean;
+
+    /** Is button disabled */
     disabled?: boolean;
+
+    /** Is button in loading mode */
     loading?: boolean;
+
+    /** Is button hidden (not displayed) */
     hidden?: boolean;
+
+    /** Button position */
     position?: 'center' | 'left' | 'right';
-    onClick?: (buttonName: string, button: IFormButton, context?: unknown) => void;
-    props?: IButtonProps;
+
+    /** Button icon */
     icon?: string | React.ReactNode;
+
+    /** Icon for expand DropDown menu (right side icon)/ Default: <DownOutlined />*/
+    expandIcon?: React.ReactNode;
+
+    /** Button size*/
     size?: 'large' | 'middle' | 'small';
+
+    /** Button hotkeys */
     hotKeys?: IHotKey[];
 
     /** Button tooltip */
     tooltip?: string;
 
+    /** Href for link button type */
     href?: string;
-    target?: HTMLAttributeAnchorTarget
+
+    /** Targets for link button type */
+    target?: HTMLAttributeAnchorTarget;
+
+    /** Rel for link button type */
+    rel?: string;
+
+    /** Button dropDown children*/
     children?: IFormButtons;
+
+    /** Button style*/
+    style?: CSSProperties;
+
+    /** Button class name*/
+    className?: string;
+
+    /************* Callbacks *************/
+    /**Button onClick callback */
+    onClick?: (buttonName: string, button: IFormButton, context?: unknown) => void;
 }
 
 export type IFormButtons = Record<string, IFormButton | null>;
@@ -99,13 +144,13 @@ export const ButtonsRow = (props: IButtonRowProps): React.JSX.Element => {
         <div style={{display: 'block', ...props.style}} className={'controls-buttons-dynamic-row ' + props.className}>
             <Row wrap={false}>
                 <Col flex="auto" style={{textAlign: 'left'}}>
-                    <ButtonsGroup key="leftButtons" buttons={curButtons} position='left' context={props.context} componentProps={props}/>
+                    <RenderButtonGroup key="leftButtons" buttons={curButtons} position="left" context={props.context} componentProps={props} />
                 </Col>
                 <Col flex="auto" style={{textAlign: 'center'}}>
-                    <ButtonsGroup key="centerButtons" buttons={curButtons} position='center' context={props.context} componentProps={props}/>
+                    <RenderButtonGroup key="centerButtons" buttons={curButtons} position="center" context={props.context} componentProps={props} />
                 </Col>
                 <Col flex="auto" style={{textAlign: 'right'}}>
-                    <ButtonsGroup key="rightButtons" buttons={curButtons} position="right" context={props.context} componentProps={props}/>
+                    <RenderButtonGroup key="rightButtons" buttons={curButtons} position="right" context={props.context} componentProps={props} />
                 </Col>
             </Row>
         </div>
@@ -119,7 +164,7 @@ const useSubscribeToKeyDownEvent = (props: IButtonRowProps, api: IButtonsRowApi)
     const propsRef = useRef(props);
     propsRef.current = props;
 
-    const wrapperContext = useContext(ButtonRowWrapperContext)
+    const wrapperContext = useContext(ButtonRowWrapperContext);
 
     useEffect(() => {
         if (!wrapperContext.wrapperRef?.current) return;

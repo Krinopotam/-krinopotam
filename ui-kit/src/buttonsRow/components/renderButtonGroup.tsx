@@ -1,9 +1,9 @@
 import React from "react";
 import {Space} from "antd";
 import {IButtonRowProps, IFormButtons} from "@src/buttonsRow";
-import {ButtonRender} from "@src/buttonsRow/components/buttonRender";
+import {RenderButton} from "@src/buttonsRow/components/renderButton";
 
-export const ButtonsGroup = ({
+export const RenderButtonGroup = ({
                                  buttons,
                                  position,
                                  context,
@@ -21,10 +21,10 @@ export const ButtonsGroup = ({
             {Object.keys(buttons).map((id) => {
                 const button = buttons?.[id];
                 if (!button || (position && button.position !== position)) return null;
-                return <ButtonRender key={id} id={id} button={button} context={context} componentProps={componentProps}/>;
+                return <RenderButton key={id} id={id} button={button} context={context} componentProps={componentProps}/>;
             })}
         </Space>
     );
 };
 
-export default ButtonsGroup
+export default RenderButtonGroup
