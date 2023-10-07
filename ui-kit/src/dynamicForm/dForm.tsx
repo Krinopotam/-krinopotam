@@ -24,6 +24,7 @@ import {useGetActualProps} from '@krinopotam/common-hooks';
 import {ColProps} from "antd";
 import {FormLabelAlign} from "antd/es/form/interface";
 import {RequiredMark} from "antd/es/form/Form";
+import {IColorType} from "@src/button/button";
 
 //import './dynamicForm.css';
 
@@ -62,7 +63,7 @@ export interface IDFormProps {
     fieldsProps?: IDFormFieldsProps;
 
     /** Form type */
-    formType?: IFormType;
+    colorType?: IColorType;
 
     /** label column parameters, for example span:'8' */
     labelCol?: ColProps;
@@ -112,8 +113,6 @@ export interface IDFormProps {
     // /** Close dirty controls confirm message. If null or empty string - no confirm */
     // closeFormConfirmMessage?: string | null;
 }
-
-export type IFormType = 'primary' | 'confirm' | 'info' | 'success' | 'error' | 'warning';
 
 export type IDFormMode = 'view' | 'create' | 'update' | 'clone' | 'delete';
 

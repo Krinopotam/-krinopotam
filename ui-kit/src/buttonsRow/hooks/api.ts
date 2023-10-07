@@ -1,24 +1,24 @@
-import {useMemo, useState} from "react";
-import {HelpersObjects} from "@krinopotam/js-helpers";
-import {IButtonRowProps, IButtonsRowApi, IFormButtons} from "@src/buttonsRow";
-import {changeActiveButton, prepareButtons, setActiveButton} from "@src/buttonsRow/helpers/buttonMethods";
+import {useMemo, useState} from 'react';
+import {HelpersObjects} from '@krinopotam/js-helpers';
+import {IButtonRowProps, IButtonsRowApi, IFormButtons} from '@src/buttonsRow';
+import {changeActiveButton, prepareButtons, setActiveButton} from '@src/buttonsRow/helpers/buttonMethods';
 
 export const useApi = (props: IButtonRowProps, curButtons: IFormButtons, setCurButtons: (buttons: IFormButtons) => void): IButtonsRowApi => {
     const [api] = useState((props.apiRef ?? {}) as IButtonsRowApi);
     return useMemo(() => {
-        api.buttons = (buttons) => {
+        api.buttons = buttons => {
             if (typeof buttons === 'undefined') return curButtons;
-            setCurButtons(prepareButtons(buttons, props.formType));
+            setCurButtons(prepareButtons(buttons, props.colorType));
             return buttons;
         };
 
-        api.updateButtons = (buttons) => {
-            const updatedButtons = prepareButtons(HelpersObjects.mergeObjects(curButtons, buttons));
+        api.updateButtons = buttons => {
+            const updatedButtons = prepareButtons(HelpersObjects.mergeObjects(curButtons, buttons), props.colorType);
             setCurButtons(updatedButtons);
             return updatedButtons;
         };
 
-        api.setNextActive = (direction) => {
+        api.setNextActive = direction => {
             const changedButtons = changeActiveButton(curButtons, direction);
             setCurButtons(changedButtons);
         };
@@ -80,7 +80,7 @@ export const useApi = (props: IButtonRowProps, curButtons: IFormButtons, setCurB
 
         api.activeTriggerClick = () => {
             const activeButtonName =
-                Object.keys(curButtons).find((name) => {
+                Object.keys(curButtons).find(name => {
                     const button = curButtons[name];
                     if (button?.active) return name;
                 }) ?? '';
@@ -88,6 +88,6 @@ export const useApi = (props: IButtonRowProps, curButtons: IFormButtons, setCurB
         };
 
         return api;
-    }, [api, curButtons, setCurButtons, props.formType, props.context]);
+    }, [api, curButtons, setCurButtons, props.colorType, props.context]);
 };
 

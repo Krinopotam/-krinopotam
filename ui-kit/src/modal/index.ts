@@ -4,4 +4,4 @@ export {FooterRender} from "./renders/footerRender";
 export {DraggableRender} from "./renders/draggableRender";
 export {HeaderRender} from "./renders/headerRender";
 export {ModalRender} from "./renders/modalRender";
-export type {IModalProps, IFormType} from "./modal";
+export type {IModalProps} from "./modal";

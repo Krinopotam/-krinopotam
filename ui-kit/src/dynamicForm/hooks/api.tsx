@@ -104,7 +104,7 @@ export const useApiValidateForm = (formApi: IDFormApi) => {
                 </span>
             );
 
-            MessageBox.alert({content: messageContent, type: 'error'});
+            MessageBox.alert({content: messageContent, colorType: 'danger'});
 
             return errors;
         },

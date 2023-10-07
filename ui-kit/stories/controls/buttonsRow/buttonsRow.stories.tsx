@@ -66,15 +66,20 @@ export const ButtonTooltips: Story = {
 
 const allTypesButtons: IFormButtons = {
     button1: {title: 'Button1', position: 'left', active: true, onClick: onClickHandler},
-    button2: {title: 'Button2', position: 'left', ghost: true, onClick: onClickHandler},
+    button2: {title: 'Button2', position: 'left', active: true, colorType:'warning', onClick: onClickHandler},
+    button3: {title: 'Button3', position: 'left', active: true, colorType:'success', onClick: onClickHandler},
+    button4: {title: 'Button4', position: 'left', active: true, colorType:'danger', onClick: onClickHandler},
+    button5: {title: 'Button5', position: 'left', ghost: true, onClick: onClickHandler},
     divider2: {position: 'left', type: 'divider'},
     link1: {title: 'Link1', position: 'left', type: 'link', href: 'https://www.ya.ru', target: '_blank'},
     text1: {title: 'Text1', position: 'left', type: 'text', onClick: onClickHandler},
-    button3: {title: 'Button3', position: 'center', danger: true, onClick: onClickHandler},
-    button4: {title: 'Button3', position: 'center', dashed: true, onClick: onClickHandler},
-    button5: {title: 'Button4', position: 'center', disabled: true, onClick: onClickHandler},
-    button6: {title: 'Button5', position: 'right', loading: true, onClick: onClickHandler},
-    button7: {title: 'Button6', position: 'right', onClick: onClickHandler},
+    button6: {title: 'Button6', position: 'left', colorType:'warning', onClick: onClickHandler},
+    button7: {title: 'Button7', position: 'left', colorType:'success', onClick: onClickHandler},
+    button8: {title: 'Button8', position: 'left', colorType:'danger', onClick: onClickHandler},
+    button9: {title: 'Button9', position: 'center', dashed: true, onClick: onClickHandler},
+    button10: {title: 'Button10', position: 'center', disabled: true, onClick: onClickHandler},
+    button11: {title: 'Button11', position: 'right', loading: true, onClick: onClickHandler},
+    button12: {title: 'Button12', position: 'right', onClick: onClickHandler},
     custom: {
         title: (
             <div style={{border:"1px solid green", padding:4}}>
@@ -116,7 +121,7 @@ export const ManyButtons: Story = {
 export const ButtonsError: Story = {
     args: {
         buttons: allTypesButtons,
-        formType: 'error',
+        colorType: 'danger',
     },
 };
 export const ButtonsArrowKeys: Story = {

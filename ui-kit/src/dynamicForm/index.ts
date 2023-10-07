@@ -1,6 +1,6 @@
 export {DForm} from "./dForm";
 export type {
-    IFormType, IDFormCallbacks, IDFormProps, IDFormDataSet, IDFormDataSourcePromise, IDFormMode, IDFormFieldValidationRules
+    IDFormCallbacks, IDFormProps, IDFormDataSet, IDFormDataSourcePromise, IDFormMode, IDFormFieldValidationRules
 } from './dForm';
 
 export type {IDFormApi} from './hooks/api';

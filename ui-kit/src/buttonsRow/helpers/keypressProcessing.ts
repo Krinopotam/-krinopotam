@@ -1,15 +1,11 @@
-import React from "react";
-import {IButtonRowProps, IButtonsRowApi} from "@src/buttonsRow";
+import React from 'react';
+import {IButtonRowProps, IButtonsRowApi} from '@src/buttonsRow';
 
 export const keyDownHandler = (e: KeyboardEvent, propsRef: React.MutableRefObject<IButtonRowProps>, api: IButtonsRowApi, wrapperId: string) => {
-    console.log('keyDownHandler') //DEBUG: -----
-
     const target = e.target as HTMLElement;
-
-    target.style.borderColor = getRandomColor() //DEBUG: -----
+    //target.style.borderColor = getRandomColor() //DEBUG: -----
 
     if (!e.key || !target?.closest('.buttons-row-wrapper-' + wrapperId)) return;
-
 
     const key = e.key.toLowerCase();
     if (key === 'f5' || (e.ctrlKey && e.shiftKey && key === 'r')) return; //F5 or ctrl+shift+r pressed - When user press the page refresh buttons, we simply exit
@@ -25,7 +21,8 @@ const processArrowKeys = (e: KeyboardEvent, api: IButtonsRowApi) => {
         target.tagName.toLowerCase() === 'input' ||
         target.tagName.toLowerCase() === 'textarea' ||
         (target.tagName.toLowerCase() === 'button' && target.getAttribute('role')?.toLowerCase() === 'switch')
-    ) return;
+    )
+        return;
 
     if (e.ctrlKey || e.altKey || e.shiftKey || e.metaKey) return; //no control/alt keys
 
@@ -43,7 +40,7 @@ const processArrowKeys = (e: KeyboardEvent, api: IButtonsRowApi) => {
         e.stopPropagation();
         api.setNextActive('forward');
     }
-}
+};
 
 const processHotKeys = (e: KeyboardEvent, api: IButtonsRowApi) => {
     if (!e.key) return;
@@ -57,13 +54,7 @@ const processHotKeys = (e: KeyboardEvent, api: IButtonsRowApi) => {
         if (!button?.hotKeys || button.disabled || button.hidden) continue;
 
         for (const hotKey of button.hotKeys) {
-            if (
-                !!hotKey.ctrl === e.ctrlKey &&
-                !!hotKey.alt === e.altKey &&
-                !!hotKey.shift === e.shiftKey &&
-                !!hotKey.meta === e.metaKey &&
-                hotKey.key.toLowerCase() === key
-            ) {
+            if (!!hotKey.ctrl === e.ctrlKey && !!hotKey.alt === e.altKey && !!hotKey.shift === e.shiftKey && !!hotKey.meta === e.metaKey && hotKey.key.toLowerCase() === key) {
                 e.stopPropagation();
                 e.preventDefault();
                 //api.setActive(name);
@@ -71,14 +62,6 @@ const processHotKeys = (e: KeyboardEvent, api: IButtonsRowApi) => {
             }
         }
     }
-}
+};
 
 
-function getRandomColor() {
-    const letters = '0123456789ABCDEF';
-    let color = '#';
-    for (let i = 0; i < 6; i++) {
-        color += letters[Math.floor(Math.random() * 16)];
-    }
-    return color;
-}

@@ -32,7 +32,7 @@ export const ButtonDropdownClickable = ({
             href={button.href}
             disabled={button.disabled}
             loading={button.loading}
-            danger={button.danger}
+            danger={button.colorType==='danger'}
             onClick={onClick}
             size={button.size}
             style={button.style}

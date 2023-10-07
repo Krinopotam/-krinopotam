@@ -67,7 +67,7 @@ const prepareDropdownItems = (buttons: IFormButton['children'], parentId: string
                 icon: button.icon,
                 children: children,
                 disabled: button.disabled,
-                danger: button.danger,
+                danger: button.colorType==='danger',
                 expandIcon: button.expandIcon,
                 style: button.type !== 'link' ? button.style : undefined,
                 className: button.className,

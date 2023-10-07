@@ -19,8 +19,6 @@ import {useInitFormDispatcher} from './hooks/useInitFormDispatcher';
 import {useResize} from './hooks/useResize';
 import {IButtonRowWrapperRemoteCallbacks} from "@src/buttonsRow/components/buttonsRowWrapper";
 
-export type IFormType = 'primary' | 'confirm' | 'info' | 'success' | 'error' | 'warning';
-
 export type IModalProps = AntModalProps & {
     /** the form ID for form dispatcher (important property) */
     dispatcherFormId: string;

@@ -2,14 +2,14 @@ import {ButtonsRow, IFormButton, IFormButtons} from '@src/buttonsRow/buttonsRow'
 import {PopconfirmProps, Popover} from 'antd';
 import React, {useEffect, useRef, useState} from 'react';
 
-import {IFormType} from '../modal';
 import {HelpersStrings, HelpersObjects} from '@krinopotam/js-helpers';
 import {useInitFormDispatcher} from '../modal/hooks/useInitFormDispatcher';
 import {ButtonsRowWrapper} from "@src/buttonsRow";
+import {IColorType} from "@src/button/button";
 
 export interface IPopConfirmProps extends Omit<PopconfirmProps, 'okType' | 'okButtonProps' | 'cancelButtonProps'> {
     content?: React.ReactNode;
-    formType?: IFormType;
+    colorType?: IColorType;
     okButtonProps?: IFormButton;
     cancelButtonProps?: IFormButton;
 }

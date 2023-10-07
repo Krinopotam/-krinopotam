@@ -25,9 +25,11 @@ export const ButtonsRowWrapper = (props: IButtonRowWrapperProps): React.JSX.Elem
         height: '100%',
 
         /** for debug  */
+        /*
         borderStyle: "solid",
         borderColor: 'red',
         borderWidth: 3
+        */
     }
 
     if (props.remoteCallbacksRef?.current && typeof props.remoteCallbacksRef?.current === 'object') {

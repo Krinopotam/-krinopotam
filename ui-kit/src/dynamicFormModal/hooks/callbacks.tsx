@@ -131,7 +131,7 @@ export const useCallbacks = (formModalApi: IDFormModalApi, modalFormProps: IDFor
                             <p>{'Попробовать снова?'}</p>
                         </>
                     ),
-                    type: 'error',
+                    colorType: 'danger',
                     buttons: {
                         ok: {
                             onClick: () => {

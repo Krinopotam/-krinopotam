@@ -6,47 +6,47 @@
  * @license MIT
  */
 
-import {CloseCircleOutlined, ExclamationCircleOutlined} from '@ant-design/icons';
+import {StopOutlined, ExclamationCircleOutlined, InfoCircleOutlined, CheckCircleOutlined} from '@ant-design/icons';
 
-import {IFormType} from '../modal';
 import React from 'react';
-import {HelpersObjects} from '@krinopotam/js-helpers';
 import {theme} from 'antd';
+import {IColorType} from '@src/button/button';
 
 const {useToken} = theme;
 
 interface IHeaderRenderProps {
     title: string | React.ReactNode;
-    type?: IFormType;
+    colorType?: IColorType;
     style?: React.CSSProperties;
     icon?: React.ReactNode;
 }
 
-export const HeaderRender = ({title, type, style, icon}: IHeaderRenderProps): React.JSX.Element => {
+export const HeaderRender = (props: IHeaderRenderProps): React.JSX.Element => {
     const {token} = useToken();
 
-    let backgroundColor = token.colorPrimary;
-    let color = token.colorPrimaryBg;
+    let backgroundColor = token.colorFillSecondary;
+    let color = token.colorText;
 
-    let finalIcon: React.ReactNode = icon ?? <ExclamationCircleOutlined />;
-    if (type === 'info') {
-        backgroundColor = token.colorInfo;
-        color = token.colorInfoBg;
-    } else if (type === 'success') {
-        backgroundColor = token.colorSuccess;
-        color = token.colorSuccessBg;
-    } else if (type === 'warning') {
-        backgroundColor = token.colorWarning;
-        color = token.colorWarningBg;
-    } else if (type === 'error') {
-        backgroundColor = token.colorError;
-        color = token.colorErrorBg;
-        finalIcon = icon ?? <CloseCircleOutlined />;
+    let icon: React.ReactNode;
+    if (props.colorType === 'info') {
+        backgroundColor = token.colorInfoHover;
+        color = token.colorWhite;
+        icon = props.icon ?? <InfoCircleOutlined />;
+    } else if (props.colorType === 'success') {
+        backgroundColor = token.colorSuccessHover;
+        color = token.colorWhite;
+        icon = props.icon ?? <CheckCircleOutlined />;
+    } else if (props.colorType === 'warning') {
+        backgroundColor = token.colorWarningHover;
+        color = token.colorWhite;
+        icon = props.icon ?? <ExclamationCircleOutlined />;
+    } else if (props.colorType === 'danger') {
+        backgroundColor = token.colorErrorHover;
+        color = token.colorWhite;
+        icon = props.icon ?? <StopOutlined />;
     } else {
-        finalIcon = icon ?? undefined;
+        icon = props.icon ?? undefined;
     }
-
-    if (icon === null) finalIcon = undefined;
 
     const defaultStyle: React.CSSProperties = {
         display: 'block',
@@ -57,11 +57,11 @@ export const HeaderRender = ({title, type, style, icon}: IHeaderRenderProps): Re
         minHeight: 24,
     };
 
-    const finalStyle = HelpersObjects.mergeObjects(defaultStyle, style);
+    const style = {...defaultStyle, ...props.style};
 
     return (
-        <span className="custom-antd-modal-header" style={finalStyle}>
-            <Icon>{finalIcon}</Icon> {title}
+        <span className="custom-antd-modal-header" style={style}>
+            <Icon>{icon}</Icon> {props.title}
         </span>
     );
 };

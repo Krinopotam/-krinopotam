@@ -137,7 +137,7 @@ export const useCallbacks = (formProps: IDFormProps, formApi: IDFormApi) => {
                             <p>{'Попробовать снова?'}</p>
                         </>
                     ),
-                    type: 'error',
+                    colorType: 'danger',
                     buttons: {
                         ok: {
                             onClick: () => {
@@ -174,7 +174,7 @@ export const useCallbacks = (formProps: IDFormProps, formApi: IDFormApi) => {
             /** fires on submit error */
             onSubmitError: (values: Record<string, unknown>, message: string, code: number) => {
                 if (formProps.callbacks?.onSubmitError?.(values, message, code, formApi) === false) return;
-                MessageBox.alert({content: message, type: 'error'});
+                MessageBox.alert({content: message, colorType: 'danger'});
             },
 
             /** fires after the completion of sending the form, regardless of the result */

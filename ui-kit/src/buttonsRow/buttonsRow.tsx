@@ -1,15 +1,13 @@
-import {IButtonProps} from '@src/button';
 import {Col, Row} from 'antd';
-import React, {CSSProperties, FocusEventHandler, HTMLAttributeAnchorTarget, MouseEventHandler, useContext, useEffect, useRef, useState} from 'react';
+import React, {CSSProperties, HTMLAttributeAnchorTarget, useContext, useEffect, useRef, useState} from 'react';
 import RenderButtonGroup from '@src/buttonsRow/components/renderButtonGroup';
 import {useApi} from '@src/buttonsRow/hooks/api';
 import {prepareButtons} from '@src/buttonsRow/helpers/buttonMethods';
 import {ButtonRowWrapperContext} from '@src/buttonsRow/components/buttonsRowWrapper';
 import {keyDownHandler} from '@src/buttonsRow/helpers/keypressProcessing';
+import {IButtonProps} from '@src/button';
 
 //region Types
-
-export type IFormType = 'primary' | 'confirm' | 'info' | 'success' | 'error' | 'warning';
 
 interface IHotKey {
     ctrl?: boolean;
@@ -20,18 +18,15 @@ interface IHotKey {
 }
 
 export interface IFormButton {
-    //TODO: implement info, danger, warning buttons type
-
     /** Button title */
     title?: React.ReactNode;
 
     type?: 'button' | 'link' | 'text' | 'divider' | 'group' | 'element';
 
+    colorType?: IButtonProps['colorType'];
+
     /** Is button active (set primary style) */
     active?: boolean;
-
-    /** Is button danger has style */
-    danger?: boolean;
 
     /** Is button has ghost (outline) style */
     ghost?: boolean;
@@ -84,6 +79,9 @@ export interface IFormButton {
     /** Button class name*/
     className?: string;
 
+    /** Button shape */
+    shape?: IButtonProps['shape'];
+
     /************* Callbacks *************/
     /**Button onClick callback */
     onClick?: (buttonName: string, button: IFormButton, context?: unknown) => void;
@@ -102,7 +100,7 @@ export interface IButtonRowProps {
     style?: React.CSSProperties;
 
     /** Form type */
-    formType?: IFormType;
+    colorType?: IButtonProps['colorType'];
 
     /** A mutable object to merge with these controls api */
     apiRef?: IButtonsRowApi;
@@ -144,13 +142,13 @@ export const ButtonsRow = (props: IButtonRowProps): React.JSX.Element => {
         <div style={{display: 'block', ...props.style}} className={'controls-buttons-dynamic-row ' + props.className}>
             <Row wrap={false}>
                 <Col flex="auto" style={{textAlign: 'left'}}>
-                    <RenderButtonGroup key="leftButtons" buttons={curButtons} position="left" context={props.context} componentProps={props} />
+                    <RenderButtonGroup key="leftButtons" buttons={curButtons} position="left" context={props.context} componentProps={props}/>
                 </Col>
                 <Col flex="auto" style={{textAlign: 'center'}}>
-                    <RenderButtonGroup key="centerButtons" buttons={curButtons} position="center" context={props.context} componentProps={props} />
+                    <RenderButtonGroup key="centerButtons" buttons={curButtons} position="center" context={props.context} componentProps={props}/>
                 </Col>
                 <Col flex="auto" style={{textAlign: 'right'}}>
-                    <RenderButtonGroup key="rightButtons" buttons={curButtons} position="right" context={props.context} componentProps={props} />
+                    <RenderButtonGroup key="rightButtons" buttons={curButtons} position="right" context={props.context} componentProps={props}/>
                 </Col>
             </Row>
         </div>
@@ -178,7 +176,7 @@ const useSubscribeToKeyDownEvent = (props: IButtonRowProps, api: IButtonsRowApi)
     }, []);
 };
 const usePrepareButtons = (props: IButtonRowProps): [IFormButtons, (buttons: IFormButtons) => void] => {
-    const [curButtons, setCurButtons] = useState(prepareButtons(props.buttons, props.formType));
+    const [curButtons, setCurButtons] = useState(prepareButtons(props.buttons, props.colorType));
 
     const setTimeoutCurButtons = (buttons: IFormButtons) => {
         setTimeout(() => {
@@ -189,9 +187,9 @@ const usePrepareButtons = (props: IButtonRowProps): [IFormButtons, (buttons: IFo
 
     //useUpdateButtonProps(setCurButtons)
     useEffect(() => {
-        const _buttons = prepareButtons(props.buttons, props.formType);
+        const _buttons = prepareButtons(props.buttons, props.colorType);
         setCurButtons(_buttons);
-    }, [props.buttons, props.formType]);
+    }, [props.buttons, props.colorType]);
 
     return [curButtons, setTimeoutCurButtons];
 };

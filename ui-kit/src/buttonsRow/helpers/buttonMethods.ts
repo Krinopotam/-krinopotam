@@ -1,7 +1,7 @@
-import {IFormButton, IFormButtons} from "@src/buttonsRow";
-import {IFormType} from "@src/buttonsRow/buttonsRow";
+import {IFormButton, IFormButtons} from '@src/buttonsRow';
+import {IColorType} from '@src/button/button';
 
-export const prepareButtons = (buttons: IFormButtons | undefined, formType?: IFormType) => {
+export const prepareButtons = (buttons: IFormButtons | undefined, rowColorType?: IColorType) => {
     const clonedButtons = buttons ? {...buttons} : {};
     const leftButtons: IFormButtons = {};
     const centerButtons: IFormButtons = {};
@@ -11,7 +11,8 @@ export const prepareButtons = (buttons: IFormButtons | undefined, formType?: IFo
         if (!button) continue;
         if (!button.type) button.type = 'button';
         if (!button.position) button.position = 'right';
-        if (typeof button.danger === 'undefined' && formType === 'error') button.danger = true;
+        if (!button.colorType) button.colorType = rowColorType;
+
         if (button.position === 'left') leftButtons[key] = button;
         else if (button.position === 'center') centerButtons[key] = button;
         else rightButtons[key] = button;
@@ -19,7 +20,6 @@ export const prepareButtons = (buttons: IFormButtons | undefined, formType?: IFo
 
     return {...leftButtons, ...centerButtons, ...rightButtons};
 };
-
 
 export const getNextButtonName = (currentName: string, buttons: IFormButtons, direction: 'forward' | 'backward') => {
     const keys = Object.keys(buttons);
@@ -40,16 +40,14 @@ export const getNextButtonName = (currentName: string, buttons: IFormButtons, di
 };
 
 const isButtonCanBeActive = (button: IFormButton | undefined | null) => {
-    return button
-        && !button.disabled && !button.hidden
-        && (!button.type || button.type === 'button' || button.type === 'link' || button.type === 'text')
-}
+    return button && !button.disabled && !button.hidden && (!button.type || button.type === 'button' || button.type === 'link' || button.type === 'text');
+};
 
 export const changeActiveButton = (buttons: IFormButtons, direction: 'backward' | 'forward') => {
     const _buttons = {...buttons};
     const keys = Object.keys(_buttons);
 
-    let activeIndex = keys.findIndex((name) => {
+    let activeIndex = keys.findIndex(name => {
         const button = _buttons[name];
         if (button?.active) return true;
     });

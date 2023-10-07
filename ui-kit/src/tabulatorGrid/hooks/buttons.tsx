@@ -141,7 +141,7 @@ const useGetDeleteButton = (gridApi: IGridApi, selectedRows: IGridRowData[]): IF
             title: 'Удалить',
             icon: <DeleteOutlined/>,
             position: 'right',
-            danger: true,
+            colorType:'danger',
             size: 'small',
             disabled: !selectedRows || selectedRows.length === 0,
             hotKeys: [{key: 'Delete', ctrl: true}],
@@ -174,7 +174,7 @@ const deleteHandler = (gridApi: IGridApi) => {
                     if (!gridApi.getIsMounted()) return;
                     if (!gridProps.confirmDelete) gridApi.setIsLoading(false);
                     else if (messageBox) messageBox.destroy();
-                    MessageBox.alert({content: error.message, type: 'error'});
+                    MessageBox.alert({content: error.message, colorType: 'danger'});
                 });
             return;
         }

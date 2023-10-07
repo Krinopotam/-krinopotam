@@ -564,7 +564,7 @@ const useApiFetchData = (gridApi: IGridApi): IGridApi['fetchData'] => {
                                 <p>{'Попробовать снова?'}</p>
                             </>
                         ),
-                        type: 'error',
+                        colorType: 'danger',
                         buttons: {
                             ok: {
                                 onClick: () => {

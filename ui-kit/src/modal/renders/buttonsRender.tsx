@@ -8,8 +8,8 @@
 
 import {ButtonsRow, IButtonsRowApi, IFormButtons} from '@src/buttonsRow/buttonsRow';
 
-import {IFormType} from '../modal';
 import React from 'react';
+import {IColorType} from "@src/button/button";
 
 interface IFormButtonsRenderProps {
     /** form buttons collection */
@@ -19,7 +19,7 @@ interface IFormButtonsRenderProps {
     buttonsApi?: IButtonsRowApi;
 
     /** form type */
-    formType?: IFormType;
+    colorType?: IColorType;
 
     /** buttons container style */
     containerStyle?: React.CSSProperties;
@@ -32,7 +32,7 @@ interface IFormButtonsRenderProps {
 }
 
 export const ButtonsRender = ({
-    formType,
+    colorType,
     buttons,
     buttonsApi,
     containerStyle,
@@ -43,7 +43,7 @@ export const ButtonsRender = ({
 
     return (
         <div style={containerStyle}>
-            <ButtonsRow buttons={buttons} apiRef={buttonsApi} formType={formType} arrowsSelection={arrowsSelection} context={context} />
+            <ButtonsRow buttons={buttons} apiRef={buttonsApi} colorType={colorType} arrowsSelection={arrowsSelection} context={context} />
         </div>
     );
 };

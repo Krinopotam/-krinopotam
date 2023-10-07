@@ -9,7 +9,7 @@ const MainDecorator = ({mode, children}: { mode: 'dark' | 'light', children: Rea
             locale={ruRU}
             theme={{
                 token: {
-                    colorPrimary: '#0d6efd',
+                    //colorPrimary: 'green',
                     borderRadius: 4,
                 },
                 components: {Modal: {paddingContentHorizontal: 0}},

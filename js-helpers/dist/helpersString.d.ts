@@ -4,4 +4,5 @@ export declare const HelpersStrings: {
     lowerFirstLetter: (val: string) => string;
     camelCaseSplit: (str: string, splitter?: string) => string;
     trimFileExtension: (fileName: string) => string;
+    getRandomColor: () => string;
 };

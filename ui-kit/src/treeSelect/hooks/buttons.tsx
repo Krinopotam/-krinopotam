@@ -80,7 +80,7 @@ const deleteHandler = (api: ITreeSelectApi) => {
                         api.buttonsApi.disabled('add', false);
                         api.buttonsApi.disabled('edit', false);
                     } else messageBox?.destroy();
-                    MessageBox.alert({content: error.message, type: 'error'});
+                    MessageBox.alert({content: error.message, colorType: 'danger'});
                 });
             return;
         }

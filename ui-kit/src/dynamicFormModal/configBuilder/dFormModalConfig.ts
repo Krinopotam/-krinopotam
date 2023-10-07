@@ -66,7 +66,7 @@ export class DFormModalConfig<T>  extends DFormConfig<T> {
     }
 
     /** Form type */
-    formType(value: IDFormProps['formType']) {
+    formType(value: IDFormProps['colorType']) {
         this._config.formType = value;
         return this;
     }

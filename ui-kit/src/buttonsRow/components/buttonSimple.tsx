@@ -1,5 +1,5 @@
 import {IButtonRowProps, IFormButton} from '@src/buttonsRow';
-import React, {CSSProperties, useCallback, useEffect, useRef} from 'react';
+import React, {useCallback, useEffect, useRef} from 'react';
 import {Button, ButtonType} from '@src/button';
 
 export const ButtonSimple = ({
@@ -16,7 +16,7 @@ export const ButtonSimple = ({
     children?: React.ReactNode;
 }) => {
     const onClick = useCallback(() => {
-        if (button.onClick) button.onClick(id, button, context);
+        button.onClick?.(id, button, context);
     }, [button, context, id]);
 
     const btnRef = useRef<HTMLElement>(null);
@@ -28,16 +28,13 @@ export const ButtonSimple = ({
     if (componentProps.makeActivePrimary !== false && button.active) type = 'primary';
     else if (button.type === 'text') type = 'text';
     else if (button.type === 'link') type = 'link';
-    else if (button.dashed) type= 'dashed'
+    else if (button.dashed) type = 'dashed';
 
-    const iconOnlyStyle: CSSProperties =
-        !button.title && !children
-            ? {
-                  paddingLeft: 10,
-                  paddingRight: 10,
-              }
-            : {};
-    const style = {...iconOnlyStyle, ...button.style};
+    const style = {
+        paddingLeft: 10,
+        paddingRight: 10,
+        ...button.style,
+    };
 
     return (
         <Button
@@ -48,13 +45,14 @@ export const ButtonSimple = ({
             disabled={button.disabled}
             ghost={button.ghost}
             loading={button.loading}
-            danger={button.danger}
+            colorType={button.colorType}
             onClick={onClick}
             size={button.size}
             rel={button.rel}
             style={style}
             className={button.className}
             icon={button.icon}
+            shape={button.shape}
         >
             {children ?? button.title}
         </Button>
