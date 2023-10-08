@@ -7,7 +7,7 @@ import {IColorType} from '@src/button/button';
 
 type IComponent = IModalAlertConfig;
 
-/** DynamicForm Custom component */
+/** MessageBox Alert component */
 export const AlertMessageBoxComponent = (props: IComponent): React.JSX.Element => {
     useUpdateMessageBoxTheme(); //set current theme to messageBox
 

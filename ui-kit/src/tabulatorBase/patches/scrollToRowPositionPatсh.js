@@ -15,6 +15,7 @@ const scrollToRowPosition = function (row, position, ifVisible) {
     let rowIndex = this.rows().indexOf(row),
         rowEl = row.getElement(),
         offset = 0;
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
     const _this = this;
     return new Promise((resolve, reject) => {
         if (rowIndex > -1) {

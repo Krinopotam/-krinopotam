@@ -1,6 +1,7 @@
 //опредление для возможности импорта svg
 declare module '*.svg' {
-  const content: any;
+  import {AnyType} from "@krinopotam/service-types";
+  const content: AnyType;
   export default content;
 }
 declare module "*.png";

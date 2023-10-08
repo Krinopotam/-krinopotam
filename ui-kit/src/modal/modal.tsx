@@ -19,9 +19,9 @@ import {useInitFormDispatcher} from './hooks/useInitFormDispatcher';
 import {useResize} from './hooks/useResize';
 import {IButtonRowWrapperRemoteCallbacks} from '@src/buttonsRow/components/buttonsRowWrapper';
 import {IColorType} from '@src/button/button';
-import {HelpersStrings} from "@krinopotam/js-helpers";
+import {HelpersStrings} from '@krinopotam/js-helpers';
 
-export type IModalProps = AntModalProps & {
+export interface IModalProps extends Omit<AntModalProps, 'afterOpenChange' | 'okButtonProps' | 'okType' | 'okText' | 'onOk' | 'cancelText' | 'cancelButtonProps'> {
     /** the form ID for form dispatcher (important property) */
     dispatcherFormId: string;
 
@@ -63,7 +63,12 @@ export type IModalProps = AntModalProps & {
 
     /** Form footer style */
     footerStyle?: CSSProperties;
-};
+
+    /********** Callbacks *********/
+
+    /** Callback when the animation ends when Modal is turned on and off */
+    onAfterOpenChange?: (open: boolean) => void;
+}
 
 export const Modal = ({resizable = true, headerStyle, footerStyle, ...props}: IModalProps): React.JSX.Element => {
     useInitFormDispatcher(props.dispatcherFormId, !!props.open);
@@ -80,7 +85,7 @@ export const Modal = ({resizable = true, headerStyle, footerStyle, ...props}: IM
         (open: boolean) => {
             if (open) wrapperRemoteCallbacksRef.current?.onParentComponentRendered?.();
             else (prevFocusedRef.current as HTMLElement)?.focus();
-            props.afterOpenChange?.(open);
+            props.onAfterOpenChange?.(open);
         },
         [props]
     );

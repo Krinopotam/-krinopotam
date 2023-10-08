@@ -1,10 +1,10 @@
 // noinspection DuplicatedCode
 import type {Meta, StoryObj} from '@storybook/react';
-import AlertMessageBoxComponent from "./alertMessageBox";
+import ConfirmWaiterMessageBoxComponent from "./confirmWaiterMessageBox";
 
 export default {
-    title: 'Controls/MessageBox/Alert',
-    component: AlertMessageBoxComponent,
+    title: 'Controls/MessageBox/ConfirmWaiter',
+    component: ConfirmWaiterMessageBoxComponent,
     tags: ['autodocs'],
     parameters: {
         docs: {
@@ -16,51 +16,61 @@ export default {
                 code: `
                     import React, {useCallback} from 'react';
                     import {Button} from @krinopotam/ui-kit/button';
-                    import {IModalAlertConfig, MessageBox, useUpdateMessageBoxTheme} from @krinopotam/ui-kit/messageBox';
+                    import {IModalConfirmConfig, MessageBox, useUpdateMessageBoxTheme} from @krinopotam/ui-kit/messageBox';
                     import {Space} from 'antd';
                     import {IColorType} from @krinopotam/ui-kit/button/button';
-                    type IComponent = IModalAlertConfig;
-                    /** MessageBox Alert component */
-                    export const AlertMessageBoxComponent = (props: IComponent): React.JSX.Element => {
+                    type IComponent = IModalConfirmConfig;
+                    /** MessageBox Confirm Wait component */
+                    export const ConfirmWaiterMessageBoxComponent = (props: IComponent): React.JSX.Element => {
                         useUpdateMessageBoxTheme(); //set current theme to messageBox
                         const onClick = useCallback(
                             (colorType?: IColorType) => {
-                                MessageBox.alert({...props, colorType: colorType});
+                                MessageBox.confirmWaiter({
+                                    ...props,
+                                    title: 'Please confirm',
+                                    content: 'Are you sure?',
+                                    waitContent: 'Please wait',
+                                    waitTitle: 'Processing',
+                                    colorType: colorType,
+                                    onOk: messageBox => {
+                                        setTimeout(() => {
+                                            messageBox.destroy();
+                                        }, 3000);
+                                    },
+                                });
                             },
                             [props]
                         );
                         return (
                             <Space>
-                                <Button onClick={() => onClick()}>
-                                    Open alert
-                                </Button>
+                                <Button onClick={() => onClick()}>Open confirm waiter</Button>
                                 <Button type={'primary'} colorType="info" onClick={() => onClick('info')}>
-                                    Open alert
+                                    Open confirm waiter
                                 </Button>
                                 <Button type={'primary'} colorType="warning" onClick={() => onClick('warning')}>
-                                    Open alert
+                                    Open confirm waiter
                                 </Button>
                                 <Button type={'primary'} colorType="success" onClick={() => onClick('success')}>
-                                    Open alert
+                                    Open confirm waiter
                                 </Button>
                                 <Button type={'primary'} colorType="danger" onClick={() => onClick('danger')}>
-                                    Open alert
+                                    Open confirm waiter
                                 </Button>
                             </Space>
                         );
                     };
-                    export default AlertMessageBoxComponent;
+                    export default ConfirmWaiterMessageBoxComponent;
                 `
             }
             /* AUTO-SOURCE-INJECT-END */
         },
     },
-} satisfies Meta<typeof AlertMessageBoxComponent>;
+} satisfies Meta<typeof ConfirmWaiterMessageBoxComponent>;
 
-type Story = StoryObj<typeof AlertMessageBoxComponent>;
+type Story = StoryObj<typeof ConfirmWaiterMessageBoxComponent>;
 
 
-export const Alert: Story = {
+export const ConfirmWaiter: Story = {
     args: {
         content:'Info'
     },

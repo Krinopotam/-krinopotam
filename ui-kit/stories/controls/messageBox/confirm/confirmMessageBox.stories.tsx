@@ -16,16 +16,43 @@ export default {
                 code: `
                     import React, {useCallback} from 'react';
                     import {Button} from @krinopotam/ui-kit/button';
-                    import {IModalAlertConfig, MessageBox} from @krinopotam/ui-kit/messageBox';
-                    type IComponent = IModalAlertConfig;
-                    /** DynamicForm Custom component */
-                    export const AlertMessageBoxComponent = (props: IComponent): React.JSX.Element => {
-                        const onClick = useCallback(() => {
-                            MessageBox.alert(props);
-                        }, [props]);
-                        return <Button onClick={onClick}>Open alert</Button>;
+                    import {IModalConfirmConfig, MessageBox, useUpdateMessageBoxTheme} from @krinopotam/ui-kit/messageBox';
+                    import {Space} from 'antd';
+                    import {IColorType} from @krinopotam/ui-kit/button/button';
+                    type IComponent = IModalConfirmConfig;
+                    /** MessageBox Confirm component */
+                    export const ConfirmMessageBoxComponent = (props: IComponent): React.JSX.Element => {
+                        useUpdateMessageBoxTheme(); //set current theme to messageBox
+                        const onClick = useCallback(
+                            (colorType?: IColorType) => {
+                                MessageBox.confirm({
+                                    ...props,
+                                    title: 'Please confirm',
+                                    content: 'Are you sure?',
+                                    colorType: colorType,
+                                });
+                            },
+                            [props]
+                        );
+                        return (
+                            <Space>
+                                <Button onClick={() => onClick()}>Open confirm</Button>
+                                <Button type={'primary'} colorType="info" onClick={() => onClick('info')}>
+                                    Open confirm
+                                </Button>
+                                <Button type={'primary'} colorType="warning" onClick={() => onClick('warning')}>
+                                    Open confirm
+                                </Button>
+                                <Button type={'primary'} colorType="success" onClick={() => onClick('success')}>
+                                    Open confirm
+                                </Button>
+                                <Button type={'primary'} colorType="danger" onClick={() => onClick('danger')}>
+                                    Open confirm
+                                </Button>
+                            </Space>
+                        );
                     };
-                    export default AlertMessageBoxComponent;
+                    export default ConfirmMessageBoxComponent;
                 `
             }
             /* AUTO-SOURCE-INJECT-END */
@@ -36,8 +63,8 @@ export default {
 type Story = StoryObj<typeof ConfirmMessageBoxComponent>;
 
 
-export const Alert: Story = {
+export const Confirm: Story = {
     args: {
-        content:'Info'
+        content:'Are you sure?'
     },
 };

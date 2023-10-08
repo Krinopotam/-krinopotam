@@ -31,7 +31,7 @@ export const SimpleForm = (props?: IDFormModalProps): React.JSX.Element => {
     return (
         <>
             <Space>
-                <Button type="primary" onClick={() => onClick()}>
+                <Button onClick={() => onClick()}>
                     Open form
                 </Button>
                 <Button type="primary" onClick={() => onClick('info')} colorType="info">

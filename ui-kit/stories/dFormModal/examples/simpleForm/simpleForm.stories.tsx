@@ -13,35 +13,61 @@ export default {
                 format: true,
                 // language=text
                 code: `
-                    import React from 'react';
-                    import {DForm, IDFormProps} from @krinopotam/ui-kit/dynamicForm';
-                    import {DFormConfig} from @krinopotam/ui-kit/dynamicForm/configBuilder/dFormConfig';
-                    import {InputComponentConfig} from @krinopotam/ui-kit/dynamicForm/configBuilder/inputComponentConfig';
-                    import {PasswordComponentConfig} from @krinopotam/ui-kit/dynamicForm/configBuilder/passwordComponentConfig';
-                    interface IFields {
-                        login: string;
-                        password: string;
-                    }
-                    const formProps = new DFormConfig<IFields>('Test form')
-                        .confirmChanges(true)
-                        .addFields(
-                            new InputComponentConfig<IFields>('login').label('Логин').tooltip('Ввод логина'),
-                            new PasswordComponentConfig<IFields>('password').label('Пароль')
-                        )
-                        .buttons({ok: {position: 'right'}})
-                        .getConfig();
+                    import React, {useCallback, useState} from 'react';
+                    import {DFormModal, IDFormModalProps} from @krinopotam/ui-kit/dynamicFormModal';
+                    import {IDFormFieldInputProps, InputComponent} from @krinopotam/ui-kit/dynamicForm/components/inputComponent';
+                    import {IDFormFieldPasswordProps, PasswordComponent} from @krinopotam/ui-kit/dynamicForm/components/passwordComponent';
+                    import {Button} from @krinopotam/ui-kit/button';
+                    import {Space} from 'antd';
+                    import {IColorType} from @krinopotam/ui-kit/button/button';
                     /** Simple Dynamic form example */
-                    export const SimpleForm = (props?: IDFormProps): React.JSX.Element => {
-                        const compProps = {...formProps, ...props}
+                    export const SimpleForm = (props?: IDFormModalProps): React.JSX.Element => {
+                        const [open, setOpen] = useState(false);
+                        const [colorType, setColorType] = useState<IColorType | undefined>(undefined);
+                        const formProps: IDFormModalProps = {
+                            fieldsProps: {
+                                field1: {component: InputComponent, label: 'login', tooltip: 'Login input'} as IDFormFieldInputProps,
+                                field2: {component: PasswordComponent, label: 'password', tooltip: 'Password input'} as IDFormFieldPasswordProps,
+                            },
+                            colorType: colorType,
+                        };
+                        const compProps = {...formProps, ...props};
+                        const onClick = useCallback((colorType?: IColorType) => {
+                            setOpen(true);
+                            setColorType(colorType);
+                        }, []);
                         return (
                             <>
-                                <div style={{maxWidth: 500}}>
-                                    <DForm {...compProps} />
-                                </div>
+                                <Space>
+                                    <Button onClick={() => onClick()}>
+                                        Open form
+                                    </Button>
+                                    <Button type="primary" onClick={() => onClick('info')} colorType="info">
+                                        Open form
+                                    </Button>
+                                    <Button type="primary" onClick={() => onClick('success')} colorType="success">
+                                        Open form
+                                    </Button>
+                                    <Button type="primary" onClick={() => onClick('warning')} colorType="warning">
+                                        Open form
+                                    </Button>
+                                    <Button type="primary" onClick={() => onClick('danger')} colorType="danger">
+                                        Open form
+                                    </Button>
+                                </Space>
+                                <DFormModal
+                                    {...compProps}
+                                    isOpened={open}
+                                    callbacks={{
+                                        onClosed: () => {
+                                            setOpen(false);
+                                        },
+                                    }}
+                                />
                             </>
                         );
                     };
-                    export default SimpleForm
+                    export default SimpleForm;
                 `
             }
             /* AUTO-SOURCE-INJECT-END */

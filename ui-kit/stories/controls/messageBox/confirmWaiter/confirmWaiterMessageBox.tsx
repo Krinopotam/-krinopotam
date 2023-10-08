@@ -7,17 +7,24 @@ import {IColorType} from '@src/button/button';
 
 type IComponent = IModalConfirmConfig;
 
-/** MessageBox Confirm component */
-export const ConfirmMessageBoxComponent = (props: IComponent): React.JSX.Element => {
+/** MessageBox Confirm Wait component */
+export const ConfirmWaiterMessageBoxComponent = (props: IComponent): React.JSX.Element => {
     useUpdateMessageBoxTheme(); //set current theme to messageBox
 
     const onClick = useCallback(
         (colorType?: IColorType) => {
-            MessageBox.confirm({
+            MessageBox.confirmWaiter({
                 ...props,
                 title: 'Please confirm',
                 content: 'Are you sure?',
+                waitContent: 'Please wait',
+                waitTitle: 'Processing',
                 colorType: colorType,
+                onOk: messageBox => {
+                    setTimeout(() => {
+                        messageBox.destroy();
+                    }, 3000);
+                },
             });
         },
         [props]
@@ -25,21 +32,21 @@ export const ConfirmMessageBoxComponent = (props: IComponent): React.JSX.Element
 
     return (
         <Space>
-            <Button onClick={() => onClick()}>Open confirm</Button>
+            <Button onClick={() => onClick()}>Open confirm waiter</Button>
             <Button type={'primary'} colorType="info" onClick={() => onClick('info')}>
-                Open confirm
+                Open confirm waiter
             </Button>
             <Button type={'primary'} colorType="warning" onClick={() => onClick('warning')}>
-                Open confirm
+                Open confirm waiter
             </Button>
             <Button type={'primary'} colorType="success" onClick={() => onClick('success')}>
-                Open confirm
+                Open confirm waiter
             </Button>
             <Button type={'primary'} colorType="danger" onClick={() => onClick('danger')}>
-                Open confirm
+                Open confirm waiter
             </Button>
         </Space>
     );
 };
 
-export default ConfirmMessageBoxComponent;
+export default ConfirmWaiterMessageBoxComponent;
