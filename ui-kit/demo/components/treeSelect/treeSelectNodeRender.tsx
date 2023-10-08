@@ -1,16 +1,10 @@
 // noinspection DuplicatedCode
 
 import React from 'react';
-import {DForm} from '@src/dynamicForm';
-import {DFormConfig} from '@src/dynamicForm/configBuilder/dFormConfig';
-import {TreeSelectComponentConfig} from '@src/dynamicForm/configBuilder/treeSelectComponentConfig';
-import {ITreeSelectNode, IDFormFieldTreeSelectProps} from "@src/dynamicForm/components/treeSelectComponent";
+import {DForm, IDFormProps} from '@src/dynamicForm';
+import {ITreeSelectNode, IDFormFieldTreeSelectProps, TreeSelectComponent} from '@src/dynamicForm/components/treeSelectComponent';
 
-interface IFields {
-    department: {id: string; title: string};
-}
-
-const dataSet:ITreeSelectNode[] = [
+const dataSet: ITreeSelectNode[] = [
     {
         id: '01',
         title: 'Департамент аналитики данных',
@@ -124,7 +118,7 @@ const titleRender: IDFormFieldTreeSelectProps['titleRender'] = (treeNode: ITreeS
         <>
             {treeNode.title}
             <br />
-            <small style={{color: '#808080'}}>{treeNode.head ? '(' + treeNode.head+')' : ''}</small>
+            <small style={{color: '#808080'}}>{treeNode.head ? '(' + treeNode.head + ')' : ''}</small>
         </>
     );
 };
@@ -132,7 +126,7 @@ const titleRender: IDFormFieldTreeSelectProps['titleRender'] = (treeNode: ITreeS
 const labelRender: IDFormFieldTreeSelectProps['labelRender'] = (treeNode: ITreeSelectNode) => {
     return (
         <>
-            {treeNode.title} <small style={{color: '#808080'}}>{treeNode.head ? '(' + treeNode.head+')' : ''}</small>
+            {treeNode.title} <small style={{color: '#808080'}}>{treeNode.head ? '(' + treeNode.head + ')' : ''}</small>
         </>
     );
 };
@@ -142,18 +136,21 @@ const filterTreeNode: IDFormFieldTreeSelectProps['filterTreeNode'] = (inputValue
     return nodeString.indexOf(inputValue.toLowerCase()) >= 0;
 };
 
-const formProps = new DFormConfig<IFields>('Test form')
-    .confirmChanges(true)
-    .addFields(
-        new TreeSelectComponentConfig<IFields>('department')
-            .label('Подразделения')
-            .dataSet(dataSet)
-            .titleRender(titleRender) //node title render
-            .labelRender(labelRender) //selected value render
-            .filterTreeNode(filterTreeNode) //custom filter
-    )
-    .buttons(null)
-    .getConfig();
+const formProps: IDFormProps = {
+    formId: 'Test form',
+    confirmChanges: true,
+    fieldsProps: {
+        departments: {
+            component: TreeSelectComponent,
+            label: 'Подразделения',
+            dataSet: dataSet,
+            titleRender: titleRender, //node title render
+            labelRender: labelRender, //selected value render
+            filterTreeNode: filterTreeNode, //custom filter
+        } as IDFormFieldTreeSelectProps,
+    },
+    buttons: null,
+};
 
 export const TreeSelectNodeRender = (): React.JSX.Element => {
     return (

@@ -1,13 +1,8 @@
 // noinspection DuplicatedCode
 
 import React from 'react';
-import {DForm} from '@src/dynamicForm';
-import {DFormConfig} from '@src/dynamicForm/configBuilder/dFormConfig';
-import {TreeSelectComponentConfig} from '@src/dynamicForm/configBuilder/treeSelectComponentConfig';
-
-interface IFields {
-    departments: {id: string; title: string};
-}
+import {DForm, IDFormProps} from '@src/dynamicForm';
+import {IDFormFieldTreeSelectProps, TreeSelectComponent} from '@src/dynamicForm/components/treeSelectComponent';
 
 const dataSet = [
     {
@@ -110,11 +105,15 @@ const dataSet = [
         ],
     },
 ];
-const formProps = new DFormConfig<IFields>('Test form')
-    .confirmChanges(true)
-    .addFields(new TreeSelectComponentConfig<IFields>('departments').label('Подразделения').dataSet(dataSet))
-    .buttons(null)
-    .getConfig();
+
+const formProps: IDFormProps = {
+    formId: 'Test form',
+    confirmChanges: true,
+    fieldsProps: {
+        departments: {component: TreeSelectComponent, label: 'Подразделения', dataSet: dataSet} as IDFormFieldTreeSelectProps,
+    },
+    buttons: null,
+};
 
 export const TreeSelectBasic = (): React.JSX.Element => {
     return (

@@ -3,26 +3,11 @@
 import React, {useCallback} from 'react';
 
 import {Button} from '@src/button';
-import {DFormModal, IDFormModalApi} from '@src/dynamicFormModal';
-import {DFormModalConfig} from '@src/dynamicFormModal/configBuilder';
-import {InputComponentConfig} from '@src/dynamicForm/configBuilder/inputComponentConfig';
-import {NumberComponentConfig} from '@src/dynamicForm/configBuilder/numberComponentConfig';
-import {ITabulatorProps, IGridRowData} from "@src/tabulatorGrid";
-import {TabulatorGridComponentConfig} from '@src/dynamicForm/configBuilder/tabulatorGridComponentConfig';
-
-/** Tabulator grid edit form type */
-type IPerson = {
-    id: string;
-    name: string;
-    age: number;
-    col: string;
-    dob: string;
-};
-
-/** Main modal form type */
-interface IUsers {
-    users: Record<string, unknown>[];
-}
+import {DFormModal, IDFormModalApi, IDFormModalProps} from '@src/dynamicFormModal';
+import {ITabulatorProps, IGridRowData, IGridDataSourcePromise} from '@src/tabulatorGrid';
+import {IDFormFieldInputProps, InputComponent} from '@src/dynamicForm/components/inputComponent';
+import {TabulatorGridComponent} from '@src/dynamicForm/components/tabulatorGridComponent';
+import {IDFormFieldNumberProps, NumberComponent} from "@src/dynamicForm/components/numberComponent";
 
 const columns: ITabulatorProps['columns'] = [
     {title: 'Name', field: 'name'},
@@ -59,40 +44,44 @@ const gridDefaultData: IGridRowData[] = [
 const formApi = {} as IDFormModalApi;
 
 /** Tabulator edit form props */
-const editFormProps = new DFormModalConfig<IPerson>('formWithGrid')
-    .layout('horizontal')
-    .addFields(
-        new InputComponentConfig<IPerson>('name').label('Name'),
-        new NumberComponentConfig<IPerson>('age').label('Age'),
-        new InputComponentConfig<IPerson>('col').label('Favourite Color'),
-        new InputComponentConfig<IPerson>('dob').label('Day of Birth')
-    )
-    .confirmChanges(true)
-    .getConfig();
+const editFormProps: IDFormModalProps = {
+    formId: 'formWithGrid',
+    layout: 'horizontal',
+    fieldsProps: {
+        name: {component: InputComponent, label: 'Name'} as IDFormFieldInputProps,
+        age: {component: NumberComponent, label: 'Age'} as IDFormFieldNumberProps,
+        col: {component: InputComponent, label: 'Favourite Color'} as IDFormFieldInputProps,
+        dob: {component: InputComponent, label: 'Day of Birth'} as IDFormFieldInputProps,
+    },
+    confirmChanges: true,
+};
 
 /** main modal form props */
-const formProps = new DFormModalConfig<IUsers>('Test form')
-    .apiRef(formApi)
-    .confirmChanges(true)
-    .addFields(
-        new TabulatorGridComponentConfig<IUsers>('users')
-            .label('Пользователи')
-            .columns(columns)
-            .layout('fitColumns')
-            .height(300)
-            .editFormProps(editFormProps)
-            .confirmDelete(true)
-            .onDataFetch(() => {
+const formProps: IDFormModalProps = {
+    formId: 'Test form',
+    apiRef: formApi,
+    confirmChanges: true,
+    fieldsProps: {
+        users: {
+            component: TabulatorGridComponent,
+            label: 'Пользователи',
+            columns: columns,
+            layout: 'fitColumns',
+            height: 300,
+            editFormProps: editFormProps,
+            confirmDelete: true,
+            onDataFetch: () => {
                 return new Promise((resolve, reject) => {
                     setTimeout(() => {
                         if (Math.random() < 0.5) reject({message: 'Ошибка загрузки данных', code: 400});
-                        else resolve({data: gridDefaultData});
+                        else resolve({data: gridDefaultData}) ;
                     }, 1000);
-                });
-            })
-    )
-    .width(900)
-    .getConfig();
+                }) as IGridDataSourcePromise;
+            },
+        },
+    },
+    width: 900,
+};
 
 export const ModalFormWithAsyncGrid = (): React.JSX.Element => {
     const onClick = useCallback(() => {

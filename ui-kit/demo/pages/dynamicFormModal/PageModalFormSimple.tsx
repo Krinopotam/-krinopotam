@@ -10,21 +10,20 @@
     const source = `
 import React, {useCallback} from 'react';
 import {Button} from @krinopotam/ui-kit/button';
-import {IDFormModalApi, DFormModal} from @krinopotam/ui-kit/dynamicFormModal';
-import {DFormModalConfig, InputComponentConfig, PasswordComponentConfig} from @krinopotam/ui-kit/dynamicFormModal/configBuilder';
-interface IFields {
-    login: string;
-    password: string;
-}
+import {IDFormModalApi, DFormModal, IDFormModalProps} from @krinopotam/ui-kit/dynamicFormModal';
+import {IDFormFieldInputProps, InputComponent} from @krinopotam/ui-kit/dynamicForm/components/inputComponent";
+import {IDFormFieldPasswordProps, PasswordComponent} from @krinopotam/ui-kit/dynamicForm/components/passwordComponent";
 const formApi = {} as IDFormModalApi;
-const formProps = new DFormModalConfig<IFields>('Test form')
-    .apiRef(formApi)
-    .confirmChanges(true)
-    .arrowsButtonsSelection(true)
-    .addFields(
-        new InputComponentConfig<IFields>('login').label('Логин'),
-        new PasswordComponentConfig<IFields>('password').label('Пароль'))
-    .getConfig();
+const formProps: IDFormModalProps = {
+    formId: 'Test form',
+    apiRef: formApi,
+    confirmChanges: true,
+    arrowsButtonsSelection: true,
+    fieldsProps: {
+        login: {component: InputComponent, label: 'Login'} as IDFormFieldInputProps,
+        password: {component: PasswordComponent, label: 'Password'} as IDFormFieldPasswordProps
+    }
+}
 export const ModalFormSimple = (): React.JSX.Element => {
     const onClick = useCallback(() => {
         formApi.open('create');

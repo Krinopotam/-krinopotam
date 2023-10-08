@@ -10,25 +10,21 @@
     const source = `
 import React, {useCallback} from 'react';
 import {Button} from @krinopotam/ui-kit/button';
-import {IDFormModalApi, DFormModal} from @krinopotam/ui-kit/dynamicFormModal';
-import {DFormModalConfig, DateTimeComponentConfig, InputComponentConfig} from @krinopotam/ui-kit/dynamicFormModal/configBuilder';
-interface IFields {
-    nameIn: string;
-    dateIn: string;
-    nameOut: string;
-    dateOut: string;
-}
+import {IDFormModalApi, DFormModal, IDFormModalProps} from @krinopotam/ui-kit/dynamicFormModal';
+import {IDFormFieldInputProps, InputComponent} from @krinopotam/ui-kit/dynamicForm/components/inputComponent";
+import {DateTimeComponent, IDFormFieldDateTimeProps} from @krinopotam/ui-kit/dynamicForm/components/dateTimeComponent";
 const formApi = {} as IDFormModalApi;
-const formProps = new DFormModalConfig<IFields>('Test form')
-    .apiRef(formApi)
-    .confirmChanges(true)
-    .addFields(
-        new InputComponentConfig<IFields>('nameIn').label('Имя входящего').inlineGroup('row1'),
-        new DateTimeComponentConfig<IFields>('dateIn').label('Дата входа').width(150).inlineGroup('row1'),
-        new InputComponentConfig<IFields>('nameOut').label('Имя выходящего').inlineGroup('row2'),
-        new DateTimeComponentConfig<IFields>('dateOut').label('Дата выхода').width(150).inlineGroup('row2')
-    )
-    .getConfig();
+const formProps: IDFormModalProps = {
+    formId: 'Test form',
+    apiRef: formApi,
+    confirmChanges: true,
+    fieldsProps: {
+        nameIn: {component: InputComponent, label: 'Имя входящего', inlineGroup: 'row1'} as IDFormFieldInputProps,
+        dateIn: {component: DateTimeComponent, label: 'Дата входа', inlineGroup: 'row1', width: 150} as IDFormFieldDateTimeProps,
+        nameOut: {component: InputComponent, label: 'Имя выходящего', inlineGroup: 'row1'} as IDFormFieldInputProps,
+        dateOut: {component: DateTimeComponent, label: 'Дата выхода', inlineGroup: 'row1', width: 150} as IDFormFieldDateTimeProps,
+    },
+}
 export const ModalFormWithGroups = (): React.JSX.Element => {
     const onClick = useCallback(() => {
         formApi.open('create');

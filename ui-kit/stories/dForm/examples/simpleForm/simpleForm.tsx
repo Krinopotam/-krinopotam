@@ -2,27 +2,23 @@
 
 import React from 'react';
 import {DForm, IDFormProps} from '@src/dynamicForm';
-import {DFormConfig} from '@src/dynamicForm/configBuilder/dFormConfig';
-import {InputComponentConfig} from '@src/dynamicForm/configBuilder/inputComponentConfig';
-import {PasswordComponentConfig} from '@src/dynamicForm/configBuilder/passwordComponentConfig';
+import {IDFormFieldInputProps, InputComponent} from '@src/dynamicForm/components/inputComponent';
+import {IDFormFieldPasswordProps, PasswordComponent} from '@src/dynamicForm/components/passwordComponent';
 
-interface IFields {
-    login: string;
-    password: string;
-}
+const formProps: IDFormProps = {
+    formId: 'Test form',
+    confirmChanges: true,
+    fieldsProps: {
+        login: {component: InputComponent, label: 'Логин', tooltip: 'Ввод логина'} as IDFormFieldInputProps,
+        password: {component: PasswordComponent, label: 'Пароль', tooltip: 'Ввод пвароль'} as IDFormFieldPasswordProps,
+    },
 
-const formProps = new DFormConfig<IFields>('Test form')
-    .confirmChanges(true)
-    .addFields(
-        new InputComponentConfig<IFields>('login').label('Логин').tooltip('Ввод логина'),
-        new PasswordComponentConfig<IFields>('password').label('Пароль')
-    )
-    .buttons({ok: {position: 'right'}})
-    .getConfig();
+    buttons: {ok: {position: 'right'}},
+};
 
 /** Simple Dynamic form example */
 export const SimpleForm = (props?: IDFormProps): React.JSX.Element => {
-    const compProps = {...formProps, ...props}
+    const compProps = {...formProps, ...props};
     return (
         <>
             <div style={{maxWidth: 500}}>
@@ -32,4 +28,4 @@ export const SimpleForm = (props?: IDFormProps): React.JSX.Element => {
     );
 };
 
-export default SimpleForm
+export default SimpleForm;

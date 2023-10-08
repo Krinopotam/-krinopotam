@@ -9,10 +9,10 @@
     // language=text
     const source = `
 import React from 'react';
-import {DForm} from @krinopotam/ui-kit/dynamicForm';
-import {DFormConfig} from @krinopotam/ui-kit/dynamicForm/configBuilder/dFormConfig';
-import {TreeSelectComponentConfig} from @krinopotam/ui-kit/dynamicForm/configBuilder/treeSelectComponentConfig';
-import {InputComponentConfig, DFormModalConfig} from @krinopotam/ui-kit/dynamicFormModal/configBuilder';
+import {DForm, IDFormProps} from @krinopotam/ui-kit/dynamicForm';
+import {IDFormFieldTreeSelectProps, TreeSelectComponent} from @krinopotam/ui-kit/dynamicForm/components/treeSelectComponent';
+import {InputComponent} from @krinopotam/ui-kit/dynamicForm/components/inputComponent';
+import {IDFormModalProps} from @krinopotam/ui-kit/dynamicFormModal";
 const dataSet = [
     {
         id: '01',
@@ -114,22 +114,22 @@ const dataSet = [
         ],
     },
 ];
-interface IEditFormFields {
-    title: string;
-}
-const editForm = new DFormModalConfig<IEditFormFields>('EditForm')
-    .confirmChanges(true)
-    .bodyHeight(100)
-    .addFields(new InputComponentConfig<IEditFormFields>('title').label('Подразделение'))
-    .getConfig();
-interface IFields {
-    departments: {id: string; title: string};
-}
-const formProps = new DFormConfig<IFields>('Test form')
-    .confirmChanges(true)
-    .addFields(new TreeSelectComponentConfig<IFields>('departments').label('Подразделения').editFormProps(editForm).confirmDelete(true).dataSet(dataSet))
-    .buttons(null)
-    .getConfig();
+const editForm: IDFormModalProps = {
+    formId: 'EditForm',
+    confirmChanges: true,
+    bodyHeight: 100,
+    fieldsProps: {
+        title: {component: InputComponent, label: 'Подразделение'},
+    },
+};
+const formProps: IDFormProps = {
+    formId: 'Test form',
+    confirmChanges: true,
+    fieldsProps: {
+        departments: {component: TreeSelectComponent, label: 'Подразделения', editFormProps: editForm, confirmDelete: true, dataSet: dataSet} as IDFormFieldTreeSelectProps,
+    },
+    buttons: null,
+};
 export const TreeSelectWithForm = (): React.JSX.Element => {
     return (
         <>

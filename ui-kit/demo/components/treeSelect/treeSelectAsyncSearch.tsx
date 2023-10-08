@@ -1,18 +1,13 @@
 // noinspection DuplicatedCode
 
 import React from 'react';
-import {DForm} from '@src/dynamicForm';
-import {DFormConfig} from '@src/dynamicForm/configBuilder/dFormConfig';
-import {TreeSelectComponentConfig} from '@src/dynamicForm/configBuilder/treeSelectComponentConfig';
+import {DForm, IDFormProps} from '@src/dynamicForm';
 import {ITreeSelectSourcePromise} from '@src/treeSelect'
 import {HelpersObjects} from "@krinopotam/js-helpers";
+import {IDFormFieldTreeSelectProps, TreeSelectComponent} from "@src/dynamicForm/components/treeSelectComponent";
 
 
 /*Description Start*/
-interface IFields {
-    departments: { id: string; title: string };
-}
-
 interface IDataRow {
     id: string;
     title: string;
@@ -154,20 +149,19 @@ const asyncFetch = (search: string) => {
 
 /*Description End*/
 
-const formProps = new DFormConfig<IFields>('Test form')
-    .confirmChanges(true)
-    .addFields(
-        new TreeSelectComponentConfig<IFields>('departments')
-            .label('Подразделения')
-            .fetchMode('onUse')
-            .noCacheFetchedData(true)
-            .minSearchLength(1)
-            .onDataFetch((search: string) => {
+const formProps: IDFormProps = {
+    formId: 'Test form',
+    confirmChanges: true,
+    fieldsProps: {
+        departments: {
+            component: TreeSelectComponent, label: 'Подразделения', fetchMode: 'onUse', noCacheFetchedData: true, minSearchLength: 1, onDataFetch: (search:string) => {
                 return asyncFetch(search) as ITreeSelectSourcePromise;
-            })
-    )
-    .buttons(null)
-    .getConfig();
+            }
+        } as unknown as IDFormFieldTreeSelectProps,
+    },
+    buttons: null,
+};
+
 
 export const TreeSelectAsyncSearch = (): React.JSX.Element => {
     return (

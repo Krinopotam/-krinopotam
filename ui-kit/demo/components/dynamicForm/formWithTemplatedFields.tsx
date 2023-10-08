@@ -1,33 +1,28 @@
 // noinspection DuplicatedCode
 
 import React from 'react';
-import {DForm} from '@src/dynamicForm';
-import {DFormConfig} from '@src/dynamicForm/configBuilder/dFormConfig';
-import {InputComponentConfig} from '@src/dynamicForm/configBuilder/inputComponentConfig';
-import {PasswordComponentConfig} from '@src/dynamicForm/configBuilder/passwordComponentConfig';
+import {DForm, IDFormProps} from '@src/dynamicForm';
+import {IDFormFieldInputProps, InputComponent} from '@src/dynamicForm/components/inputComponent';
+import {IDFormFieldPasswordProps, PasswordComponent} from '@src/dynamicForm/components/passwordComponent';
 
-interface IFields {
-    name: string;
-    login: string;
-    cnt: number;
-}
-
-const login = <T,>() => {
-    return new InputComponentConfig<T>('login1' as keyof T).label('Логин');
+const login = () => {
+    return {component: InputComponent, label: 'Логин', autoFocus: true} as IDFormFieldInputProps;
 };
 
-const password = <T,>() => {
-    return new PasswordComponentConfig<T>('password' as keyof T).label('Пароль');
+const password = () => {
+    return {component: PasswordComponent, label: 'Пароль'} as IDFormFieldPasswordProps;
 };
 
-const formProps = new DFormConfig<IFields>('Test form')
-    .confirmChanges(true)
-    .addFields(
-        login().label('Имя пользователя'),
-        password()
-    )
-    .buttons({ok: {position: 'right'}})
-    .getConfig();
+const formProps: IDFormProps = {
+    formId: 'Test form',
+    confirmChanges: true,
+    fieldsProps: {
+        login: login(),
+        password: password(),
+    },
+
+    buttons: {ok: {position: 'right'}},
+};
 
 export const FormWithTemplatedFields = (): React.JSX.Element => {
     return (

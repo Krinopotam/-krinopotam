@@ -9,13 +9,13 @@
     // language=text
     const source = `
 import React from 'react';
-import {DFormModalConfig} from @krinopotam/ui-kit/dynamicFormModal/configBuilder';
-import {InputComponentConfig} from @krinopotam/ui-kit/dynamicForm/configBuilder/inputComponentConfig';
-import {TreeSelectComponentConfig} from @krinopotam/ui-kit/dynamicForm/configBuilder/treeSelectComponentConfig';
-import {NumberComponentConfig} from @krinopotam/ui-kit/dynamicForm/configBuilder/numberComponentConfig';
 import TabulatorGrid, {ITabulatorProps, IGridRowData} from @krinopotam/ui-kit/tabulatorGrid';
 import {dateTimeFormatter} from @krinopotam/ui-kit/tabulatorBase/formatters/dateTime";
 import {dateTimeSorter} from @krinopotam/ui-kit/tabulatorBase/sorters/dateTime";
+import {IDFormModalProps} from @krinopotam/ui-kit/dynamicFormModal";
+import {IDFormFieldInputProps, InputComponent} from @krinopotam/ui-kit/dynamicForm/components/inputComponent";
+import {IDFormFieldNumberProps, NumberComponent} from @krinopotam/ui-kit/dynamicForm/components/numberComponent";
+import {IDFormFieldTreeSelectProps, TreeSelectComponent} from @krinopotam/ui-kit/dynamicForm/components/treeSelectComponent";
 const columnDefaults: ITabulatorProps['columnDefaults'] = {
     resizable: 'header',
     headerFilter: true,
@@ -98,24 +98,17 @@ const data: IGridRowData[] = [
     {id: '20', name: 'Margret Marmajuke4', age: '16', col: 'yellow', dob: '31/01/1999'},
 ];
 const treeSelectDataSet = [...data];
-type IPerson = {
-    id: string;
-    parent: {id: string | number; name: string};
-    name: string;
-    age: number;
-    col: string;
-    dob: string;
+const editFormConfig: IDFormModalProps = {
+    formId: 'gridEditForm',
+    fieldsProps: {
+        parent: {component: TreeSelectComponent, label: 'Родитель', dataSet: treeSelectDataSet, fieldNames: {title: 'name'}} as IDFormFieldTreeSelectProps,
+        name: {component: InputComponent, label: 'Name'} as IDFormFieldInputProps,
+        age: {component: NumberComponent, label: 'Age'} as IDFormFieldNumberProps,
+        col: {component: InputComponent, label: 'Favourite Color'} as IDFormFieldInputProps,
+        dob: {component: InputComponent, label: 'Day of Birth'} as IDFormFieldInputProps,
+    },
+    confirmChanges: true,
 };
-const editFormConfig = new DFormModalConfig<IPerson>('gridEditForm')
-    .addFields(
-        new TreeSelectComponentConfig('parent').label('Родитель').dataSet(treeSelectDataSet).fieldNames({title:'name'}),
-        new InputComponentConfig('name').label('Name'),
-        new NumberComponentConfig('age').label('Age'),
-        new InputComponentConfig('col').label('Favourite Color'),
-        new InputComponentConfig('dob').label('Day of Birth')
-    )
-    .confirmChanges(true)
-    .getConfig();
 export const TabulatorGridTreeWithForm = (): React.JSX.Element => {
     return (
         <>

@@ -1,18 +1,12 @@
 // noinspection DuplicatedCode
 
 import React from 'react';
-import {DFormModalConfig, NumberComponentConfig, InputComponentConfig} from '@src/dynamicFormModal/configBuilder';
 import TabulatorGrid, {ITabulatorProps, IGridRowData} from '@src/tabulatorGrid';
 import {dateTimeFormatter} from "@src/tabulatorBase/formatters/dateTime";
 import {dateTimeSorter} from "@src/tabulatorBase/sorters/dateTime";
-
-type IPerson = {
-    id: string;
-    name: string;
-    age: number;
-    col: string;
-    dob: string;
-};
+import {IDFormModalProps} from "@src/dynamicFormModal";
+import {IDFormFieldInputProps, InputComponent} from "@src/dynamicForm/components/inputComponent";
+import {IDFormFieldNumberProps, NumberComponent} from "@src/dynamicForm/components/numberComponent";
 
 const columnDefaults: ITabulatorProps['columnDefaults'] = {
     resizable: 'header',
@@ -52,14 +46,17 @@ const dataSet: IGridRowData[] = [
     {id: '20', name: 'Margret Marmajuke4', age: '16', col: 'yellow', dob: '31/01/1999', rating: 1, passed: false},
 ];
 
-const editFormConfig = new DFormModalConfig<IPerson>('gridEditForm').layout('horizontal')
-    .addFields(
-        new InputComponentConfig<IPerson>('name').label('Name'),
-        new NumberComponentConfig<IPerson>('age').label('Age'),
-        new InputComponentConfig<IPerson>('col').label('Favourite Color'),
-        new InputComponentConfig<IPerson>('dob').label('Day of Birth'),
-    ).confirmChanges(true)
-    .getConfig();
+const editFormConfig: IDFormModalProps = {
+    formId: 'gridEditForm',
+    layout: 'horizontal',
+    fieldsProps: {
+        name: {component: InputComponent, label: 'Name'} as IDFormFieldInputProps,
+        age: {component: NumberComponent, label: 'Age'} as IDFormFieldNumberProps,
+        col: {component: InputComponent, label: 'Favourite Color'} as IDFormFieldInputProps,
+        dob: {component: InputComponent, label: 'Day of Birth'} as IDFormFieldInputProps,
+    },
+    confirmChanges: true,
+};
 
 export const TabulatorGridWithForm = (): React.JSX.Element => {
     return (

@@ -1,29 +1,22 @@
 // noinspection DuplicatedCode
 
 import React from 'react';
-import {DForm} from '@src/dynamicForm';
-import {DFormConfig} from '@src/dynamicForm/configBuilder/dFormConfig';
-import {InputComponentConfig} from '@src/dynamicForm/configBuilder/inputComponentConfig';
+import {DForm, IDFormProps} from '@src/dynamicForm';
+import {IDFormFieldInputProps, InputComponent} from '@src/dynamicForm/components/inputComponent';
 
-interface IFields {
-    field1: string;
-    field2: string;
-}
-
-const formProps = new DFormConfig<IFields>('Test form')
-    .confirmChanges(true)
-    .addFields(
-        new InputComponentConfig<IFields>('field1')
-            .label('Поле 1')
-            .placeholder('Я не должно быть пустым')
-            .validationRules({type: 'string', rule: 'not-empty', message: 'Поле не должно быть пустым'}),
-        new InputComponentConfig<IFields>('field2')
-            .label('Поле 2')
-            .placeholder('Я должно быть числом')
-            .validationRules({type: 'number', rule: 'not-empty', message: 'Поле должно быть числом'})
-    )
-    .buttons({ok: {position: 'right'}})
-    .getConfig();
+const formProps: IDFormProps = {
+    formId: 'Test form',
+    confirmChanges: true,
+    fieldsProps: {
+        field1: {component: InputComponent, label: 'Поле 1', placeholder: 'Я не должно быть пустым'} as IDFormFieldInputProps,
+        field2: {component: InputComponent, label: 'Поле 2', placeholder: 'Я должно быть числом'} as IDFormFieldInputProps,
+    },
+    validationRules: {
+        field1: [{type: 'string', rule: 'not-empty', message: 'Поле не должно быть пустым'}],
+        field2: [{type: 'number', rule: 'not-empty', message: 'Поле должно быть числом'}],
+    },
+    buttons: {ok: {position: 'right'}},
+};
 
 export const FormValidation = (): React.JSX.Element => {
     return (

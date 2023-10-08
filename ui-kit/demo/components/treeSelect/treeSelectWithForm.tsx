@@ -1,10 +1,10 @@
 // noinspection DuplicatedCode
 
 import React from 'react';
-import {DForm} from '@src/dynamicForm';
-import {DFormConfig} from '@src/dynamicForm/configBuilder/dFormConfig';
-import {TreeSelectComponentConfig} from '@src/dynamicForm/configBuilder/treeSelectComponentConfig';
-import {InputComponentConfig, DFormModalConfig} from '@src/dynamicFormModal/configBuilder';
+import {DForm, IDFormProps} from '@src/dynamicForm';
+import {IDFormFieldTreeSelectProps, TreeSelectComponent} from '@src/dynamicForm/components/treeSelectComponent';
+import {InputComponent} from '@src/dynamicForm/components/inputComponent';
+import {IDFormModalProps} from "@src/dynamicFormModal";
 
 const dataSet = [
     {
@@ -108,24 +108,23 @@ const dataSet = [
     },
 ];
 
-interface IEditFormFields {
-    title: string;
-}
-const editForm = new DFormModalConfig<IEditFormFields>('EditForm')
-    .confirmChanges(true)
-    .bodyHeight(100)
-    .addFields(new InputComponentConfig<IEditFormFields>('title').label('Подразделение'))
-    .getConfig();
+const editForm: IDFormModalProps = {
+    formId: 'EditForm',
+    confirmChanges: true,
+    bodyHeight: 100,
+    fieldsProps: {
+        title: {component: InputComponent, label: 'Подразделение'},
+    },
+};
 
-interface IFields {
-    departments: {id: string; title: string};
-}
-
-const formProps = new DFormConfig<IFields>('Test form')
-    .confirmChanges(true)
-    .addFields(new TreeSelectComponentConfig<IFields>('departments').label('Подразделения').editFormProps(editForm).confirmDelete(true).dataSet(dataSet))
-    .buttons(null)
-    .getConfig();
+const formProps: IDFormProps = {
+    formId: 'Test form',
+    confirmChanges: true,
+    fieldsProps: {
+        departments: {component: TreeSelectComponent, label: 'Подразделения', editFormProps: editForm, confirmDelete: true, dataSet: dataSet} as IDFormFieldTreeSelectProps,
+    },
+    buttons: null,
+};
 
 export const TreeSelectWithForm = (): React.JSX.Element => {
     return (

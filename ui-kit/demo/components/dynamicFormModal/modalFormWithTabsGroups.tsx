@@ -2,41 +2,29 @@
 
 import React, {useCallback} from 'react';
 import {Button} from '@src/button';
-import {IDFormModalApi, DFormModal} from '@src/dynamicFormModal';
-import {DFormModalConfig, DateTimeComponentConfig, InputComponentConfig} from '@src/dynamicFormModal/configBuilder';
-
-interface IFields {
-    object: number;
-    nameIn: string;
-    dateIn: string;
-    nameOut: string;
-    dateOut: string;
-    vehicle: string;
-    number: string;
-}
+import {IDFormModalApi, DFormModal, IDFormModalProps} from '@src/dynamicFormModal';
+import {IDFormFieldInputProps, InputComponent} from '@src/dynamicForm/components/inputComponent';
+import {DateTimeComponent, IDFormFieldDateTimeProps} from '@src/dynamicForm/components/dateTimeComponent';
 
 const formApi = {} as IDFormModalApi;
 
-const formProps = new DFormModalConfig<IFields>('Test form')
-    .apiRef(formApi)
-    .confirmChanges(true)
-    .addTab(
-        'Посетитель',
-        new InputComponentConfig<IFields>('object').label('Объект'),
-
-        new InputComponentConfig<IFields>('nameIn').label('Имя входящего').inlineGroup('row1'),
-        new DateTimeComponentConfig<IFields>('dateIn').label('Дата входа').width(150).inlineGroup('row1'),
-
-        new InputComponentConfig<IFields>('nameOut').label('Имя выходящего').inlineGroup('row2'),
-        new DateTimeComponentConfig<IFields>('dateOut').label('Дата выхода').width(150).inlineGroup('row2')
-    )
-    .addTab(
-        'Транспорт',
-        new InputComponentConfig<IFields>('vehicle').label('Автомобиль'),
-        new InputComponentConfig<IFields>('number').label('Номер')
-    )
-    .bodyHeight(330)
-    .getConfig();
+const formProps: IDFormModalProps = {
+    formId: 'Test form',
+    apiRef: formApi,
+    confirmChanges: true,
+    fieldsProps: {
+        /** Посетитель */
+        object: {component: InputComponent, tab: 'Посетитель', label: 'Объект'} as IDFormFieldInputProps,
+        nameIn: {component: InputComponent, tab: 'Посетитель', label: 'Имя входящего', inlineGroup: 'row1'} as IDFormFieldInputProps,
+        dateIn: {component: DateTimeComponent, tab: 'Посетитель', label: 'Дата входа', inlineGroup: 'row1', width: 150} as IDFormFieldDateTimeProps,
+        nameOut: {component: InputComponent, tab: 'Посетитель', label: 'Имя выходящего', inlineGroup: 'row1'} as IDFormFieldInputProps,
+        dateOut: {component: DateTimeComponent, tab: 'Посетитель', label: 'Дата выхода', inlineGroup: 'row1', width: 150} as IDFormFieldDateTimeProps,
+        /** Транспорт */
+        vehicle: {component: InputComponent, tab: 'Посетитель', label: 'number'} as IDFormFieldInputProps,
+        number: {component: InputComponent, tab: 'Посетитель', label: 'Номер'} as IDFormFieldInputProps,
+    },
+    bodyHeight: 330,
+};
 
 export const ModalFormWithTabsGroups = (): React.JSX.Element => {
     const onClick = useCallback(() => {

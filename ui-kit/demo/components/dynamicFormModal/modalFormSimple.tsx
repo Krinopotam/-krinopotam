@@ -3,24 +3,22 @@
 import React, {useCallback} from 'react';
 
 import {Button} from '@src/button';
-import {IDFormModalApi, DFormModal} from '@src/dynamicFormModal';
-import {DFormModalConfig, InputComponentConfig, PasswordComponentConfig} from '@src/dynamicFormModal/configBuilder';
-
-interface IFields {
-    login: string;
-    password: string;
-}
+import {IDFormModalApi, DFormModal, IDFormModalProps} from '@src/dynamicFormModal';
+import {IDFormFieldInputProps, InputComponent} from "@src/dynamicForm/components/inputComponent";
+import {IDFormFieldPasswordProps, PasswordComponent} from "@src/dynamicForm/components/passwordComponent";
 
 const formApi = {} as IDFormModalApi;
 
-const formProps = new DFormModalConfig<IFields>('Test form')
-    .apiRef(formApi)
-    .confirmChanges(true)
-    .arrowsButtonsSelection(true)
-    .addFields(
-        new InputComponentConfig<IFields>('login').label('Логин'),
-        new PasswordComponentConfig<IFields>('password').label('Пароль'))
-    .getConfig();
+const formProps: IDFormModalProps = {
+    formId: 'Test form',
+    apiRef: formApi,
+    confirmChanges: true,
+    arrowsButtonsSelection: true,
+    fieldsProps: {
+        login: {component: InputComponent, label: 'Login'} as IDFormFieldInputProps,
+        password: {component: PasswordComponent, label: 'Password'} as IDFormFieldPasswordProps
+    }
+}
 
 export const ModalFormSimple = (): React.JSX.Element => {
     const onClick = useCallback(() => {

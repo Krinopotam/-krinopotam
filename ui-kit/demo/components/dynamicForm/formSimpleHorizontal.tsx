@@ -1,25 +1,21 @@
 // noinspection DuplicatedCode
 
 import React from 'react';
-import {DForm} from '@src/dynamicForm';
-import {DFormConfig} from '@src/dynamicForm/configBuilder/dFormConfig';
-import {InputComponentConfig} from '@src/dynamicForm/configBuilder/inputComponentConfig';
-import {PasswordComponentConfig} from '@src/dynamicForm/configBuilder/passwordComponentConfig';
+import {DForm, IDFormProps} from '@src/dynamicForm';
+import {IDFormFieldInputProps, InputComponent} from '@src/dynamicForm/components/inputComponent';
+import {IDFormFieldPasswordProps, PasswordComponent} from '@src/dynamicForm/components/passwordComponent';
 
-interface IFields {
-    login: string;
-    password: string;
-}
+const formProps: IDFormProps = {
+    formId: 'Test form',
+    confirmChanges: true,
+    layout: 'horizontal',
+    fieldsProps: {
+        login: {component: InputComponent, label: 'Логин', autoFocus: true} as IDFormFieldInputProps,
+        password: {component: PasswordComponent, label: 'Пароль'} as IDFormFieldPasswordProps,
+    },
 
-const formProps = new DFormConfig<IFields>('Test form')
-    .confirmChanges(true)
-    .addFields(
-        new InputComponentConfig<IFields>('login').label('Логин'),
-        new PasswordComponentConfig<IFields>('password').label('Пароль')
-    )
-    .layout('horizontal')
-    .buttons({ok: {position: 'right'}})
-    .getConfig();
+    buttons: {ok: {position: 'right'}},
+};
 
 export const FormSimpleHorizontal = (): React.JSX.Element => {
     return (

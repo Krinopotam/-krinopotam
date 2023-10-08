@@ -1,13 +1,8 @@
 // noinspection DuplicatedCode
 
 import React from 'react';
-import {DForm} from '@src/dynamicForm';
-import {DFormConfig} from '@src/dynamicForm/configBuilder/dFormConfig';
-import {TreeSelectComponentConfig} from '@src/dynamicForm/configBuilder/treeSelectComponentConfig';
-
-interface IFields {
-    departments: { id: string; title: string };
-}
+import {DForm, IDFormProps} from '@src/dynamicForm';
+import {IDFormFieldTreeSelectProps, TreeSelectComponent} from "@src/dynamicForm/components/treeSelectComponent";
 
 const dataSet = [
     {
@@ -110,24 +105,24 @@ const dataSet = [
         ],
     },
 ];
-const formProps = new DFormConfig<IFields>('Test form')
-    .confirmChanges(true)
-    .addFields(
-        new TreeSelectComponentConfig<IFields>('departments')
-            .label('Подразделения')
-            .fetchMode('onUse')
-            .noCacheFetchedData(true)
-            .onDataFetch(() => {
+
+const formProps: IDFormProps = {
+    formId: 'Test form',
+    confirmChanges: true,
+    fieldsProps: {
+        departments: {
+            component: TreeSelectComponent, label: 'Подразделения', fetchMode: 'onUse', noCacheFetchedData: true, onDataFetch: () => {
                 return new Promise((resolve, reject) => {
                     setTimeout(() => {
                         if (Math.random() < 0.0) reject({message: 'Ошибка загрузки данных', code: 400});
                         else resolve({data: dataSet});
                     }, 2000);
                 });
-            })
-    )
-    .buttons(null)
-    .getConfig();
+            }
+        } as unknown as IDFormFieldTreeSelectProps,
+    },
+    buttons: null,
+};
 
 export const TreeSelectAsync = (): React.JSX.Element => {
     return (
