@@ -43,7 +43,12 @@ export const ModalComponent = (props?: IModalProps): React.JSX.Element => {
                 </Button>
             </Space>
 
-            <Modal {...compProps} open={open} onCancel={() => setOpen(false)} footer={<ButtonsRow buttons={{close: {title: 'Close', active: true, onClick: () => setOpen(false)}}} />}>
+            <Modal
+                {...compProps}
+                open={open}
+                onCancel={() => setOpen(false)}
+                footer={<ButtonsRow colorType={compProps.colorType} buttons={{close: {title: 'Close', active: true, onClick: () => setOpen(false)}}} />}
+            >
                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas rutrum mattis tempor. Nam a vulputate sem, et hendrerit lectus. Duis nec dictum ipsum, at luctus dui.</p>
                 <p>
                     Cras sollicitudin justo magna, eu tincidunt elit aliquet vel. Praesent et dolor et felis auctor rhoncus ut porttitor nisi. Cras ligula nisi, ornare in convallis eu, posuere ut

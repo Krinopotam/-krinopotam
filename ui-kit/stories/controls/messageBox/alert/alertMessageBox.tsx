@@ -1,7 +1,7 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useRef} from 'react';
 
 import {Button} from '@src/button';
-import {IModalAlertConfig, MessageBox, useUpdateMessageBoxTheme} from '@src/messageBox';
+import {IModalAlertConfig, MessageBox, MessageBoxApi, useUpdateMessageBoxTheme} from '@src/messageBox';
 import {Space} from 'antd';
 import {IColorType} from '@src/button/button';
 
@@ -11,9 +11,12 @@ type IComponent = IModalAlertConfig;
 export const AlertMessageBoxComponent = (props: IComponent): React.JSX.Element => {
     useUpdateMessageBoxTheme(); //set current theme to messageBox
 
+    const curMessageBox = useRef<MessageBoxApi|null>(null);
+    if (curMessageBox.current) curMessageBox.current?.update(props)
+
     const onClick = useCallback(
         (colorType?: IColorType) => {
-            MessageBox.alert({...props, colorType: colorType});
+            curMessageBox.current = MessageBox.alert({...props, colorType: colorType});
         },
         [props]
     );

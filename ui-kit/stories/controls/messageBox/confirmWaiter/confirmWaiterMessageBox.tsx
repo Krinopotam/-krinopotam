@@ -1,7 +1,7 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useRef} from 'react';
 
 import {Button} from '@src/button';
-import {IModalConfirmConfig, MessageBox, useUpdateMessageBoxTheme} from '@src/messageBox';
+import {IModalConfirmConfig, MessageBox, MessageBoxApi, useUpdateMessageBoxTheme} from '@src/messageBox';
 import {Space} from 'antd';
 import {IColorType} from '@src/button/button';
 
@@ -11,9 +11,12 @@ type IComponent = IModalConfirmConfig;
 export const ConfirmWaiterMessageBoxComponent = (props: IComponent): React.JSX.Element => {
     useUpdateMessageBoxTheme(); //set current theme to messageBox
 
+    const curMessageBox = useRef<MessageBoxApi | null>(null);
+    if (curMessageBox.current) curMessageBox.current?.update(props);
+
     const onClick = useCallback(
         (colorType?: IColorType) => {
-            MessageBox.confirmWaiter({
+            curMessageBox.current = MessageBox.confirmWaiter({
                 ...props,
                 title: 'Please confirm',
                 content: 'Are you sure?',
