@@ -9,25 +9,22 @@
     // language=text
     const source = `
 import React from 'react';
-import {DForm} from @krinopotam/ui-kit/dynamicForm';
-import {DFormConfig} from @krinopotam/ui-kit/dynamicForm/configBuilder/dFormConfig';
-import {TreeSelectComponentConfig} from @krinopotam/ui-kit/dynamicForm/configBuilder/treeSelectComponentConfig';
+import {DForm, IDFormProps} from @krinopotam/ui-kit/dynamicForm';
 import {ITreeSelectSourcePromise} from @krinopotam/ui-kit/treeSelect'
 import {HelpersObjects} from "@krinopotam/js-helpers";
-const formProps = new DFormConfig<IFields>('Test form')
-    .confirmChanges(true)
-    .addFields(
-        new TreeSelectComponentConfig<IFields>('departments')
-            .label('Подразделения')
-            .fetchMode('onUse')
-            .noCacheFetchedData(true)
-            .minSearchLength(1)
-            .onDataFetch((search: string) => {
+import {IDFormFieldTreeSelectProps, TreeSelectComponent} from @krinopotam/ui-kit/dynamicForm/components/treeSelectComponent";
+const formProps: IDFormProps = {
+    formId: 'Test form',
+    confirmChanges: true,
+    fieldsProps: {
+        departments: {
+            component: TreeSelectComponent, label: 'Подразделения', fetchMode: 'onUse', noCacheFetchedData: true, minSearchLength: 1, onDataFetch: (search:string) => {
                 return asyncFetch(search) as ITreeSelectSourcePromise;
-            })
-    )
-    .buttons(null)
-    .getConfig();
+            }
+        } as unknown as IDFormFieldTreeSelectProps,
+    },
+    buttons: null,
+};
 export const TreeSelectAsyncSearch = (): React.JSX.Element => {
     return (
         <>

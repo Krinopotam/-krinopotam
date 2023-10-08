@@ -9,23 +9,19 @@
     // language=text
     const source = `
 import React from 'react';
-import {DForm} from @krinopotam/ui-kit/dynamicForm';
-import {DFormConfig} from @krinopotam/ui-kit/dynamicForm/configBuilder/dFormConfig';
-import {InputComponentConfig} from @krinopotam/ui-kit/dynamicForm/configBuilder/inputComponentConfig';
-import {PasswordComponentConfig} from @krinopotam/ui-kit/dynamicForm/configBuilder/passwordComponentConfig';
-interface IFields {
-    login: string;
-    password: string;
-}
-const formProps = new DFormConfig<IFields>('Test form')
-    .confirmChanges(true)
-    .addFields(
-        new InputComponentConfig<IFields>('login').label('Логин'),
-        new PasswordComponentConfig<IFields>('password').label('Пароль')
-    )
-    .layout('horizontal')
-    .buttons({ok: {position: 'right'}})
-    .getConfig();
+import {DForm, IDFormProps} from @krinopotam/ui-kit/dynamicForm';
+import {IDFormFieldInputProps, InputComponent} from @krinopotam/ui-kit/dynamicForm/components/inputComponent';
+import {IDFormFieldPasswordProps, PasswordComponent} from @krinopotam/ui-kit/dynamicForm/components/passwordComponent';
+const formProps: IDFormProps = {
+    formId: 'Test form',
+    confirmChanges: true,
+    layout: 'horizontal',
+    fieldsProps: {
+        login: {component: InputComponent, label: 'Логин', autoFocus: true} as IDFormFieldInputProps,
+        password: {component: PasswordComponent, label: 'Пароль'} as IDFormFieldPasswordProps,
+    },
+    buttons: {ok: {position: 'right'}},
+};
 export const FormSimpleHorizontal = (): React.JSX.Element => {
     return (
         <>

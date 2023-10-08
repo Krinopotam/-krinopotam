@@ -9,12 +9,8 @@
     // language=text
     const source = `
 import React from 'react';
-import {DForm} from @krinopotam/ui-kit/dynamicForm';
-import {DFormConfig} from @krinopotam/ui-kit/dynamicForm/configBuilder/dFormConfig';
-import {TreeSelectComponentConfig} from @krinopotam/ui-kit/dynamicForm/configBuilder/treeSelectComponentConfig';
-interface IFields {
-    department: {id: string; title: string};
-}
+import {DForm, IDFormProps} from @krinopotam/ui-kit/dynamicForm';
+import {IDFormFieldTreeSelectProps, TreeSelectComponent} from @krinopotam/ui-kit/dynamicForm/components/treeSelectComponent';
 const dataSet = [
     {
         id: '01',
@@ -116,12 +112,15 @@ const dataSet = [
         ],
     },
 ];
-const formProps = new DFormConfig<IFields>('Test form')
-    .confirmChanges(true)
-    .addFields(new TreeSelectComponentConfig<IFields>('department').dataSet(dataSet).value('03-03-01').label('Подразделения'))
-    .buttons(null)
-    .formMode('create')
-    .getConfig();
+const formProps: IDFormProps = {
+    formId: 'Test form',
+    confirmChanges: true,
+    fieldsProps: {
+        departments: {component: TreeSelectComponent, label: 'Подразделения', dataSet: dataSet, value: '03-03-01'} as IDFormFieldTreeSelectProps,
+    },
+    formMode: 'create',
+    buttons: null,
+};
 export const TreeSelectDefaultValue = (): React.JSX.Element => {
     return (
         <>
