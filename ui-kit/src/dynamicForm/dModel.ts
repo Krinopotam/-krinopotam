@@ -14,101 +14,103 @@ import {TPromise} from '@krinopotam/service-types';
 import {BaseValidator} from './validators/baseValidator';
 import React from 'react';
 
-export interface IDFormModelCallbacks {
+export interface IDFormBaseCallbacks<T> {
     // Fields callbacks
 
     /** fires when the value of a field changed */
-    onFieldValueChanged?: (fieldName: string, value: unknown, prevValue: unknown, model: DModel) => void;
+    onFieldValueChanged?: (fieldName: string, value: unknown, prevValue: unknown, api: T) => void;
 
     /** fires when the touched state of a field changed */
-    onFieldTouchedStateChanged?: (fieldName: string, state: boolean, model: DModel) => void;
+    onFieldTouchedStateChanged?: (fieldName: string, state: boolean, api: T) => void;
 
     /** fires when the dirty state of a field changed */
-    onFieldDirtyStateChanged?: (fieldName: string, state: boolean, model: DModel) => void;
+    onFieldDirtyStateChanged?: (fieldName: string, state: boolean, api: T) => void;
 
     /** fires when the error of a field changed */
-    onFieldErrorChanged?: (fieldName: string, error: string, model: DModel) => void;
+    onFieldErrorChanged?: (fieldName: string, error: string, api: T) => void;
 
     /** fires when the hidden state of a field changed */
-    onFieldHiddenStateChanged?: (fieldName: string, state: boolean, model: DModel) => void;
+    onFieldHiddenStateChanged?: (fieldName: string, state: boolean, api: T) => void;
 
     /** fires when read only state of a field changed */
-    onFieldReadOnlyStateChanged?: (fieldName: string, state: boolean, model: DModel) => void;
-
-    /** fires when label of a field changed */
-    onFieldLabelChanged?: (fieldName: string, label: React.ReactNode, prevLabel: React.ReactNode, model: DModel) => void;
+    onFieldReadOnlyStateChanged?: (fieldName: string, state: boolean, api: T) => void;
 
     /** fires when the disable state of a field changes  */
-    onFieldDisabledStateChanged?: (fieldName: string, state: boolean, model: DModel) => void;
+    onFieldDisabledStateChanged?: (fieldName: string, state: boolean, api: T) => void;
+
+    /** fires when label of a field changed */
+    onFieldLabelChanged?: (fieldName: string, label: React.ReactNode, prevLabel: React.ReactNode, api: T) => void;
 
     /** fires when a field is completely initialized, its data is loaded */
-    onFieldReady?: (fieldName: string, model: DModel) => void;
+    onFieldReady?: (fieldName: string, model: T) => void;
 
     /** fires when a field validated */
-    onFieldValidated?: (fieldName: string, value: unknown, error: string, isSubmit: boolean, model: DModel) => void;
+    onFieldValidated?: (fieldName: string, value: unknown, error: string, isSubmit: boolean, api: T) => void;
 
     // Tabs callbacks
     /** fires when the hidden state of a tab changed */
-    onTabHiddenStateChanged?: (tabName: string, state: boolean, model: DModel) => void;
+    onTabHiddenStateChanged?: (tabName: string, state: boolean, api: T) => void;
 
     /** fires when read only state of a tab changed */
-    onTabReadOnlyStateChanged?: (tabName: string, state: boolean, model: DModel) => void;
+    onTabReadOnlyStateChanged?: (tabName: string, state: boolean, api: T) => void;
 
     /** fires when the disable state of a tab changes  */
-    onTabDisabledStateChanged?: (tabName: string, state: boolean, model: DModel) => void;
+    onTabDisabledStateChanged?: (tabName: string, state: boolean, api: T) => void;
 
     // The form callbacks
     /** fires when the dirty state of the form changed */
-    onFormDirtyStateChanged?: (state: boolean, model: DModel) => void;
+    onFormDirtyStateChanged?: (state: boolean, api: T) => void;
 
     /** fires when the read only state of the form changed */
-    onFormReadOnlyStateChanged?: (state: boolean, model: DModel) => void;
+    onFormReadOnlyStateChanged?: (state: boolean, api: T) => void;
 
     /** fires when the form began initialization (renders for the first time) */
-    onFormInit?: (model: DModel) => void;
+    onFormInit?: (model: T) => void;
 
     /** fires when the form ready status changed (form ready means form is rendered, initialized and all fields data are loaded) */
-    onFormReadyStateChanged?: (state: boolean, model: DModel) => void;
+    onFormReadyStateChanged?: (state: boolean, api: T) => boolean | void;
 
     /** fires when the form validated */
-    onFormValidated?: (values: Record<string, unknown>, errors: Record<string, string>, isSubmit: boolean, model: DModel) => void;
+    onFormValidated?: (values: Record<string, unknown>, errors: Record<string, string>, isSubmit: boolean, api: T) => void;
 
     /** fires when the form has errors */
-    onFormHasErrors?: (values: Record<string, unknown>, errors: Record<string, unknown>, model: DModel) => void;
+    onFormHasErrors?: (values: Record<string, unknown>, errors: Record<string, unknown>, api: T) => void;
 
     /** fires when the form has no errors */
-    onFormHasNoErrors?: (values: Record<string, unknown>, model: DModel) => void;
+    onFormHasNoErrors?: (values: Record<string, unknown>, api: T) => boolean | void;
 
     /** fires when the form trying to fetch data */
-    onDataFetch?: (model: DModel) => IDFormDataSourcePromise | undefined;
+    onDataFetch?: (api: T) => IDFormDataSourcePromise | undefined;
 
     /** fires when the form fetch success */
-    onDataFetchSuccess?: (result: {data: Record<string, unknown>}, model: DModel) => void;
+    onDataFetchSuccess?: (result: {data: Record<string, unknown>}, api: T) => boolean | void;
 
     /** fires when the form fetch failed */
-    onDataFetchError?: (message: string, code: number, model: DModel) => void;
+    onDataFetchError?: (message: string, code: number, api: T) => boolean | void;
 
     /** fires after the completion of fetching the data, regardless of the result */
-    onDataFetchComplete?: (model: DModel) => void;
+    onDataFetchComplete?: (api: T) => void;
 
     /** Fires on submitting the form. Can returns Promise, Object, Boolean or Void */
-    onSubmit?: (values: Record<string, unknown>, model: DModel) => IDFormSubmitResultPromise | IDFormSubmitResultObject | boolean | void;
+    onSubmit?: (values: Record<string, unknown>, api: T) => IDFormSubmitResultPromise | IDFormSubmitResultObject | boolean | void;
 
     /** fires on submit validation */
-    onSubmitValidation?: (values: Record<string, unknown>, errors: Record<string, string | undefined>, model: DModel) => void;
+    onSubmitValidation?: (values: Record<string, unknown>, errors: Record<string, string | undefined>, api: T) => void;
 
     /** fires on submit failed */
-    onSubmitSuccess?: (values: Record<string, unknown>, resultValues: Record<string, unknown> | undefined, model: DModel) => void;
+    onSubmitSuccess?: (values: Record<string, unknown>, resultValues: Record<string, unknown> | undefined, api: T) => boolean | void;
 
     /** fires on submit error */
-    onSubmitError?: (values: Record<string, unknown>, message: string, code: number, model: DModel) => void;
+    onSubmitError?: (values: Record<string, unknown>, message: string, code: number, api: T) => boolean | void;
 
     /** fires, when the submitting finishes, whether in failure or success. */
-    onSubmitComplete?: (values: Record<string, unknown>, errors: Record<string, string | undefined>, model: DModel) => void;
+    onSubmitComplete?: (values: Record<string, unknown>, errors: Record<string, string | undefined>, api: T) => boolean | void;
 
     /** fires, when the dataSet change */
-    onDataSetChange?: (dataSet: IDFormDataSet | undefined, model: DModel) => IDFormDataSet | undefined;
+    onDataSetChange?: (dataSet: IDFormDataSet | undefined, api: T) => IDFormDataSet | undefined;
 }
+
+export type IDFormModelCallbacks = IDFormBaseCallbacks<DModel>;
 
 export type IDFormSubmitResultPromise = TPromise<{data: Record<string, unknown>}, {message: string; code: number}>;
 export type IDFormSubmitResultObject = {data?: Record<string, unknown>; error?: {message: string; code: number}};
@@ -119,10 +121,10 @@ export class DModel {
     private readonly _formId: string;
 
     /** form properties (immutable clone) */
-    private _formProps: IDFormProps={};
+    private _formProps: IDFormProps = {};
 
     /** fields properties */
-    private _fieldsProps: IDFormFieldsProps={};
+    private _fieldsProps: IDFormFieldsProps = {};
 
     /** tabs and inline groups properties (fields properties grouped by tabs and inline groups) */
     private _tabsProps: Record<string, Record<string, IDFormFieldsProps>> = {};
@@ -182,7 +184,7 @@ export class DModel {
     private _isFormMounted = false;
 
     /** the current form mode  */
-    private _formMode: IDFormMode = "create";
+    private _formMode: IDFormMode = 'create';
 
     /** the number of attempts to submit */
     private _submitCount = 0;
@@ -250,11 +252,7 @@ export class DModel {
             this._fieldsProps = formProps.fieldsProps ?? {};
             this._tabsProps = this.preparePropsCollection(this._fieldsProps);
 
-            [this._labels, this._values, this._hidden, this._readOnly, this._disabled] = this.initFieldsParameters(
-                oldFieldsProps,
-                formProps.fieldsProps,
-                formProps.formMode ?? 'create'
-            );
+            [this._labels, this._values, this._hidden, this._readOnly, this._disabled] = this.initFieldsParameters(oldFieldsProps, formProps.fieldsProps, formProps.formMode ?? 'create');
         }
 
         const oldDataSet = this.getFormDataSet();
@@ -296,7 +294,7 @@ export class DModel {
         const disabled: Record<string, boolean> = {};
         const labels: Record<string, React.ReactNode> = {};
 
-        if (!fieldsProps) return  [labels, values, hidden, readOnly, disabled];
+        if (!fieldsProps) return [labels, values, hidden, readOnly, disabled];
         for (const fieldName in fieldsProps) {
             const oldField = oldFieldsProps?.[fieldName];
             const field = fieldsProps[fieldName];
@@ -625,9 +623,7 @@ export class DModel {
      */
     public validateField(fieldName: string, noEvents?: boolean): string {
         //hidden fields shouldn't be validated
-        const error = !this.isFieldHidden(fieldName)
-            ? this._validator.validateValue(this.getFieldValue(fieldName), this._validationRules[fieldName], this.getFormValues())
-            : '';
+        const error = !this.isFieldHidden(fieldName) ? this._validator.validateValue(this.getFieldValue(fieldName), this._validationRules[fieldName], this.getFormValues()) : '';
 
         this.setFieldError(fieldName, error, noEvents);
 
@@ -668,6 +664,7 @@ export class DModel {
         if (!curProps) return;
         this.setFieldProps(fieldName, {...curProps, ...updatedProps});
     }
+
     //endregion
 
     //region Groups
@@ -1044,6 +1041,7 @@ export class DModel {
     public getFormMode() {
         return this._formMode;
     }
+
     //endregion
 
     //region Fetch
@@ -1052,7 +1050,7 @@ export class DModel {
         if (!dataSource) return;
 
         dataSource.then(
-            (result: { data: Record<string, unknown> }) => {
+            (result: {data: Record<string, unknown>}) => {
                 if (!this.isFormMounted()) return;
                 this.setFormFetching(false);
                 this.setFormFetchingFailed(false);
@@ -1064,7 +1062,7 @@ export class DModel {
 
                 this.setFormReady(true);
             },
-            (error:{message: string; code: number}) => {
+            (error: {message: string; code: number}) => {
                 if (!this.isFormMounted()) return;
                 this.setFormFetching(false);
                 this.setFormFetchingFailed(true);
@@ -1087,6 +1085,7 @@ export class DModel {
     public getFormProps() {
         return this._formProps;
     }
+
     //endregion
 
     //region Submit
@@ -1132,7 +1131,7 @@ export class DModel {
         if (HelpersObjects.isPromise(result)) {
             const promiseResult = result as IDFormSubmitResultPromise;
             promiseResult
-                .then((promiseResult) => {
+                .then(promiseResult => {
                     if (!this.isFormMounted()) return;
                     this.setFormSubmitting(false);
                     onSubmitSuccess?.(values, promiseResult.data || values, this);
@@ -1140,7 +1139,7 @@ export class DModel {
                     this._callbacks?.onSubmitSuccess?.(values, promiseResult.data || values, this);
                     this._callbacks?.onSubmitComplete?.(values, errors, this);
                 })
-                .catch((error) => {
+                .catch(error => {
                     if (!this.isFormMounted()) return;
                     this.setFormSubmitting(false);
                     onSubmitError?.(values, error.message, error.code, this);
@@ -1238,12 +1237,7 @@ export class DModel {
      * @param hiddenFields
      * @returns true, if field must be hidden
      */
-    private isFieldMustBeHidden(
-        fieldName: string,
-        fieldsProps: IDFormFieldsProps,
-        values: Record<string, unknown> | undefined,
-        hiddenFields: Record<string, boolean | undefined>
-    ) {
+    private isFieldMustBeHidden(fieldName: string, fieldsProps: IDFormFieldsProps, values: Record<string, unknown> | undefined, hiddenFields: Record<string, boolean | undefined>) {
         const field = fieldsProps[fieldName];
         if (!field) return true;
 
@@ -1276,7 +1270,7 @@ export class DModel {
 
             this._fieldRenderListeners[fieldName] = [...this._fieldRenderListeners[fieldName], listener];
             return () => {
-                this._fieldRenderListeners[fieldName] = this._fieldRenderListeners[fieldName].filter((l) => l !== listener);
+                this._fieldRenderListeners[fieldName] = this._fieldRenderListeners[fieldName].filter(l => l !== listener);
             };
         };
     }
@@ -1301,15 +1295,14 @@ export class DModel {
 
             this._groupRenderListeners[tabName][groupName] = [...this._groupRenderListeners[tabName][groupName], listener];
             return () => {
-                this._groupRenderListeners[tabName][groupName] = this._groupRenderListeners[tabName][groupName].filter((l) => l !== listener);
+                this._groupRenderListeners[tabName][groupName] = this._groupRenderListeners[tabName][groupName].filter(l => l !== listener);
             };
         };
     }
 
     private emitGroupRender(tabName: string, groupName: string) {
         if (!this._groupRenderSnapshots[tabName]) this._groupRenderSnapshots[tabName] = {};
-        const result =
-            this._groupRenderSnapshots[tabName]?.[groupName] ? this._groupRenderSnapshots[tabName][groupName]() + 1 : 0;
+        const result = this._groupRenderSnapshots[tabName]?.[groupName] ? this._groupRenderSnapshots[tabName][groupName]() + 1 : 0;
         this._groupRenderSnapshots[tabName][groupName] = () => result;
 
         if (!this._groupRenderListeners?.[tabName]?.[groupName]) return;
@@ -1327,7 +1320,7 @@ export class DModel {
 
             this._tabRenderListeners[tabName] = [...this._tabRenderListeners[tabName], listener];
             return () => {
-                this._tabRenderListeners[tabName] = this._tabRenderListeners[tabName].filter((l) => l !== listener);
+                this._tabRenderListeners[tabName] = this._tabRenderListeners[tabName].filter(l => l !== listener);
             };
         };
     }
@@ -1351,7 +1344,7 @@ export class DModel {
 
             this._formRenderListeners = [...this._formRenderListeners, listener];
             return () => {
-                this._formRenderListeners = this._formRenderListeners.filter((l) => l !== listener);
+                this._formRenderListeners = this._formRenderListeners.filter(l => l !== listener);
             };
         };
     }

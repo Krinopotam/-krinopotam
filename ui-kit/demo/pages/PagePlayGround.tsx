@@ -12,17 +12,14 @@ import 'dayjs/locale/ru';
 import React, {useCallback} from 'react';
 import dayjs from 'dayjs';
 import {Button} from @krinopotam/ui-kit/button';
-import {IDFormModalApi, DFormModal} from @krinopotam/ui-kit/dynamicFormModal';
-import {
-    DFormModalConfig,
-    DateTimeComponentConfig,
-    TreeSelectComponentConfig,
-    InputComponentConfig,
-    SwitchComponentConfig,
-    TabulatorGridComponentConfig,
-    PasswordComponentConfig
-} from @krinopotam/ui-kit/dynamicFormModal/configBuilder';
+import {IDFormModalApi, DFormModal, IDFormModalProps} from @krinopotam/ui-kit/dynamicFormModal';
 import {IRuleType} from @krinopotam/ui-kit/dynamicForm/validators/baseValidator';
+import {IDFormFieldInputProps, InputComponent} from @krinopotam/ui-kit/dynamicForm/components/inputComponent';
+import {DateTimeComponent, IDFormFieldDateTimeProps} from @krinopotam/ui-kit/dynamicForm/components/dateTimeComponent';
+import {IDFormFieldTreeSelectProps, ITreeSelectNode, TreeSelectComponent} from @krinopotam/ui-kit/dynamicForm/components/treeSelectComponent';
+import {IDFormFieldPasswordProps, PasswordComponent} from @krinopotam/ui-kit/dynamicForm/components/passwordComponent';
+import {IDFormFieldSwitchProps, SwitchComponent} from @krinopotam/ui-kit/dynamicForm/components/switchComponent';
+import {IDFormFieldTabulatorGridProps, TabulatorGridComponent} from @krinopotam/ui-kit/dynamicForm/components/tabulatorGridComponent';
 dayjs.locale('ru');
 const validationRules: Record<string, [IRuleType]> = {
     //password: [{type: 'string', rule: 'not-empty', message: 'Поле не должно быть пустым'}],
@@ -43,129 +40,115 @@ const formData = {
     departmentName: 'Департамент главных',
     neverField: 'neverData',
 };
-interface IFields {
-    profess: string;
-    specialty: string;
-    assignDate: string;
-    name: string;
-    role: string;
-    title:string;
-    login: string;
-    departments: string;
-    password: string;
-    isLocked: string;
-    permissions: string;
-    newGrid: string;
-}
+const treeDataSet:ITreeSelectNode[] =  [
+    {
+        id: '0-0',
+        title: 'Node1',
+        label: 'Label из данных',
+        children: [
+            {id: '0-0-1', title: 'Child Node1', other: 'OK'},
+            {id: '0-0-2', title: 'Child Node2', disabled: true},
+            {id: '0-0-3', title: 'Child Node3'},
+        ],
+    },
+    {title: 'Node2', id: '0-1'},
+]
 const formModalApi: IDFormModalApi = {} as IDFormModalApi;
-const formProps = new DFormModalConfig<IFields>('TestFormModalConfig')
-    .apiRef(formModalApi)
-    .formType('info')
-    .title('Форма редактирования')
-    .formMode('update')
-    .validationRules(validationRules)
-    .layout('vertical')
-    .contentIndent(12)
-    .confirmChanges(true)
-    .bodyHeight(600)
-    .bodyMaxHeight(500)
-    .bodyMinHeight(200)
-    .width(500)
-    .minWidth(200)
-    .maxWidth(1000)
-    .callbacks({
-        /*onDataFetch: () => {
-            return new Promise((resolve, reject) => {
-                setTimeout(() => {
-                    if (Math.random() < 0.5) reject({message: 'Ошибка загрузки данных', code: 400});
-                    else resolve({data: {profess: 'Загружено Профессия', specialty: 'Загружено специализация'}});
-                }, 3000);
-            });
-        },*/
-        onSubmit: () => {
-            return new Promise((resolve, reject) => {
-                setTimeout(() => {
-                    if (Math.random() < 0.5) reject({message: 'Ошибка сохранения', code: 400});
-                    else resolve({data: {result: 'OK'}});
-                }, 3000);
-            });
-        },
-    })
-    .addTab(
-        'Tab1',
-        new InputComponentConfig<IFields>('profess').label('Профессия').showCount(true).maxLength(50).inlineGroup('row1'),
-        new InputComponentConfig<IFields>('specialty').label('Специализация').value('дефолтная специализация').dependsOn(['profess']).inlineGroup('row1'),
-        new DateTimeComponentConfig<IFields>('assignDate').label('Дата назначения'),
-        new InputComponentConfig<IFields>('name').label('Имя пользователя').value('дефолтное имя пользователя').dependsOn(['profess']).inlineGroup('row2'),
-        new InputComponentConfig<IFields>('login').label('Логин').value('дефолтный логин').dependsOn(['name', 'specialty']).inlineGroup('row2'),
-        new TreeSelectComponentConfig<IFields>('departments')
-            .label('Подразделение')
-            .fetchMode('onUse')
-            .noCacheFetchedData(false)
-            .debounce(300)
-            // .minSearchLength(1)
-            // .value({label: 'default value', id: 'id-01'})
-            // .multiple(true)
-            // .treeCheckable(true)
-            // .dataSource(GetApiAppUsersSelect('', {search: '', limit: 0}))
-            // .dataSource({
+const formProps: IDFormModalProps = {
+    formId: 'TestFormModalConfig',
+    apiRef: formModalApi,
+    colorType: 'info',
+    title: 'Форма редактирования',
+    formMode: 'update',
+    validationRules: validationRules,
+    layout: 'vertical',
+    contentIndent: 12,
+    confirmChanges: true,
+    bodyHeight: 600,
+    bodyMaxHeight: 500,
+    bodyMinHeight: 200,
+    width: 500,
+    minWidth: 200,
+    maxWidth: 1000,
+    /*onDataFetch: () => {
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                if (Math.random() < 0.5) reject({message: 'Ошибка загрузки данных', code: 400});
+                else resolve({data: {profess: 'Загружено Профессия', specialty: 'Загружено специализация'}});
+            }, 3000);
+        });
+    },*/
+    onSubmit: () => {
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                if (Math.random() < 0.5) reject({message: 'Ошибка сохранения', code: 400});
+                else resolve({data: {result: 'OK'}});
+            }, 3000);
+        });
+    },
+    fieldsProps: {
+        /** Tab1 */
+        profess: {component: InputComponent, tab: 'Tab1', label: 'Профессия', showCount: true, maxLength: 50, inlineGroup: 'row1'} as IDFormFieldInputProps,
+        specialty: {component: InputComponent, tab: 'Tab1', label: 'Специализация', value: 'дефолтная специализация', dependsOn: ['profess'], inlineGroup: 'row1'} as IDFormFieldInputProps,
+        assignDate: {component: DateTimeComponent, tab: 'Tab1', label: 'Дата назначения'} as IDFormFieldDateTimeProps,
+        name: {component: InputComponent, tab: 'Tab1', label: 'Имя пользователя', value: 'дефолтное имя пользователя', dependsOn: ['profess'], inlineGroup: 'row2'} as IDFormFieldInputProps,
+        login: {component: InputComponent, tab: 'Tab1', label: 'Логин', value: 'дефолтный логин', dependsOn: ['name', 'specialty'], inlineGroup: 'row2'} as IDFormFieldInputProps,
+        departments: {
+            component: TreeSelectComponent,
+            tab: 'Tab1',
+            label: 'Подразделение',
+            fetchMode: 'onUse',
+            noCacheFetchedData: false,
+            debounce: 300,
+            // minSearchLength: 1,
+            // value: {label: 'default value', id: 'id-01'},
+            // multiple: true,
+            // treeCheckable: true,
+            // dataSource: GetApiAppUsersSelect('', {search: '', limit: 0}),
+            // dataSource: {
             //     url: 'http://127.0.0.1:8081/api/do',
             //     parameters: {action: 'app/users', method: 'List', data: {limit: 100}},
-            // })
-            .dataSet([
-                {
-                    id: '0-0',
-                    title: 'Node1',
-                    label: 'Label из данных',
-                    children: [
-                        {id: '0-0-1', title: 'Child Node1', other: 'OK'},
-                        {id: '0-0-2', title: 'Child Node2', disabled: true},
-                        {id: '0-0-3', title: 'Child Node3'},
-                    ],
+            // },
+            dataSet: treeDataSet,
+            editFormProps: {formId: 'treeViewEditForm', fieldsProps: {title: {component: InputComponent, label: 'title'} as IDFormFieldInputProps}},
+            // titleRender: (treeNode: IApiJUser) => {
+            //     return (
+            //         <>
+            //             {treeNode.fio}
+            //             <br /> {treeNode.email}
+            //         </>
+            //     );
+            // },
+            // labelRender: (treeNode: IApiJUser) => {
+            //     return (
+            //         <>
+            //             {treeNode.fio}
+            //             <br /> {treeNode.email}
+            //         </>
+            //     );
+            // },
+            // filterTreeNode: (inputValue, treeNode: IApiJUser) => {
+            //     return (treeNode.fio + ' ' + treeNode.email).toLowerCase().indexOf(inputValue.toLowerCase()) >= 0;
+            // }
+        } as unknown as IDFormFieldTreeSelectProps,
+        /** Tab2 */
+        password: {component: PasswordComponent, tab: 'Таб 2', label: 'Пароль'} as IDFormFieldPasswordProps,
+        isLocked: {component: SwitchComponent, tab: 'Tab 2', label: 'Заблокировано', checkedChildren: 'Вкл', unCheckedChildren: 'Выкл'} as IDFormFieldSwitchProps,
+        /** Tab3 */
+        permissions: {
+            component: TabulatorGridComponent,
+            tab: 'Таб 3',
+            label: 'Полномочия',
+            confirmDelete: true,
+            height: 300,
+            editFormProps: {
+                formId: 'grid_edit_form',
+                fieldsProps: {
+                    name: {component: InputComponent, label: 'Имя'} as IDFormFieldInputProps,
+                    role: {component: InputComponent, label: 'Роль'} as IDFormFieldInputProps,
                 },
-                {title: 'Node2', id: '0-1'},
-            ])
-            .editFormProps(new DFormModalConfig<Record<string, unknown>>('treeViewEditForm').addFields(new InputComponentConfig<IFields>('title').label('title')).getConfig())
-        // .titleRender((treeNode: IApiJUser) => {
-        //     return (
-        //         <>
-        //             {treeNode.fio}
-        //             <br /> {treeNode.email}
-        //         </>
-        //     );
-        // })
-        // .labelRender((treeNode: IApiJUser) => {
-        //     return (
-        //         <>
-        //             {treeNode.fio}
-        //             <br /> {treeNode.email}
-        //         </>
-        //     );
-        // })
-        // .filterTreeNode((inputValue, treeNode: IApiJUser) => {
-        //     return (treeNode.fio + ' ' + treeNode.email).toLowerCase().indexOf(inputValue.toLowerCase()) >= 0;
-        // })
-    )
-    .addTab(
-        'Таб 2',
-        new PasswordComponentConfig<IFields>('password').label('Пароль'),
-        new SwitchComponentConfig<IFields>('isLocked').label('Заблокировано').checkedChildren('Вкл').unCheckedChildren('Выкл')
-    )
-    .addTab(
-        'Tab 3',
-        new TabulatorGridComponentConfig<IFields>('permissions')
-            .label('Полномочия')
-            .confirmDelete(true)
-            .height(300)
-            .editFormProps(
-                new DFormModalConfig<Record<string, unknown>>('grid_edit_form')
-                    .addFields(
-                        new InputComponentConfig<IFields>('name').label('Имя'),
-                        new InputComponentConfig<IFields>('role').label('Роль')
-                    )
-                    .getConfig()
-            )
-            .columns([
+            },
+            columns: [
                 {
                     title: 'Name',
                     field: 'name',
@@ -178,9 +161,10 @@ const formProps = new DFormModalConfig<IFields>('TestFormModalConfig')
                     title: 'Address',
                     field: 'address',
                 },
-            ])
-    )
-    .getConfig();
+            ],
+        } as IDFormFieldTabulatorGridProps,
+    },
+};
 export const PlayGround = (): React.JSX.Element => {
     const showModal = useCallback(() => {
         formModalApi.open('update', formData);

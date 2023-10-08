@@ -30,13 +30,7 @@ export const ButtonSimple = ({
     else if (button.type === 'link') type = 'link';
     else if (button.dashed) type = 'dashed';
 
-    const style = {
-        paddingLeft: 10,
-        paddingRight: 10,
-        ...button.style,
-    };
-
-    return (
+     return (
         <Button
             ref={btnRef}
             type={type}
@@ -49,7 +43,7 @@ export const ButtonSimple = ({
             onClick={onClick}
             size={button.size}
             rel={button.rel}
-            style={style}
+            style={button.style}
             className={button.className}
             icon={button.icon}
             shape={button.shape}

@@ -22,8 +22,8 @@ import {IColorType} from '@src/button/button';
 import {HelpersStrings} from '@krinopotam/js-helpers';
 
 export interface IModalProps extends Omit<AntModalProps, 'afterOpenChange' | 'okButtonProps' | 'okType' | 'okText' | 'onOk' | 'cancelText' | 'cancelButtonProps'> {
-    /** the form ID for form dispatcher (important property) */
-    dispatcherFormId: string;
+    /** the modal ID for form dispatcher */
+    modalId?: string;
 
     /** The form body initial height */
     bodyHeight?: number;
@@ -71,7 +71,8 @@ export interface IModalProps extends Omit<AntModalProps, 'afterOpenChange' | 'ok
 }
 
 export const Modal = ({resizable = true, headerStyle, footerStyle, ...props}: IModalProps): React.JSX.Element => {
-    useInitFormDispatcher(props.dispatcherFormId, !!props.open);
+    const [modalId] = useState(props.modalId ?? 'modal-' + HelpersStrings.getUuid());
+    useInitFormDispatcher(modalId, !!props.open);
 
     const wrapperRemoteCallbacksRef = useRef<IButtonRowWrapperRemoteCallbacks>({});
 

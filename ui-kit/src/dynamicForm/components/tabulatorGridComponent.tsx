@@ -37,7 +37,7 @@ export interface IDFormFieldTabulatorGridProps extends Omit<IDFormFieldProps, 'w
     dataTreeChildIndent?: number;
 
     /** Grid columns */
-    columns: ITabulatorProps['columns'];
+    columns?: ITabulatorProps['columns'];
 
     /** Grid class name */
     className?: string;
@@ -219,7 +219,7 @@ export const TabulatorGridComponent = ({formApi, fieldName, fieldProps}: IDFormT
                 dataTreeChildField={fieldProps.dataTreeChildField}
                 dataTreeParentField={fieldProps.dataTreeParentField}
                 dataTreeChildIndent={fieldProps.dataTreeChildIndent}
-                columns={fieldProps.columns}
+                columns={fieldProps.columns ?? []}
                 dataSet={curDataSet}
                 className={fieldProps.className}
                 buttons={fieldProps.buttons}

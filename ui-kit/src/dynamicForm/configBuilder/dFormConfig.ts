@@ -24,12 +24,6 @@ export class DFormConfig<T>  {
         return this;
     }
 
-    /** Form callbacks */
-    callbacks(value: IDFormProps['callbacks']) {
-        this._config.callbacks = value;
-        return this;
-    }
-
     /** Form CSS class */
     className(value: IDFormProps['className']) {
         this._config.className = value;

@@ -74,7 +74,7 @@ const useApiFormOpen = (formApi: IDFormModalApi) => {
             const newDataSet = dataSet ?? formApi.getFormProps().dataSet;
             const clonedDataSet = newDataSet ? HelpersObjects.cloneObject(newDataSet) : undefined;
             const modalFormProps = formApi.getFormProps();
-            if (modalFormProps?.callbacks?.onOpen?.(formApi, clonedDataSet) === false) return;
+            if (modalFormProps.onOpen?.(formApi, clonedDataSet) === false) return;
 
             formApi.setFormProps({
                 isOpened: true,
@@ -82,7 +82,7 @@ const useApiFormOpen = (formApi: IDFormModalApi) => {
                 dataSet: clonedDataSet,
             });
 
-            modalFormProps?.callbacks?.onOpened?.(formApi, clonedDataSet);
+            modalFormProps.onOpened?.(formApi, clonedDataSet);
         },
         [formApi]
     );
@@ -93,10 +93,10 @@ const useApiFormForceClose = (formApi: IDFormModalApi) => {
     return useCallback(() => {
         const modalFormProps = formApi.getFormProps();
 
-        if (modalFormProps.callbacks?.onClosing?.(formApi) === false) return false;
+        if (modalFormProps.onClosing?.(formApi) === false) return false;
 
         formApi.setFormProps({isOpened: false});
-        modalFormProps.callbacks?.onClosed?.(formApi);
+        modalFormProps.onClosed?.(formApi);
     }, [formApi]);
 };
 
@@ -104,7 +104,7 @@ const useApiFormForceClose = (formApi: IDFormModalApi) => {
 const useApiTryToCloseForm = (formApi: IDFormModalApi) => {
     return useCallback(() => {
         const modalFormProps = formApi.getFormProps();
-        if (modalFormProps?.callbacks?.onClosing?.(formApi) === false) return;
+        if (modalFormProps.onClosing?.(formApi) === false) return;
 
         if (formApi.model.isFormDirty() && modalFormProps.confirmChanges) {
             MessageBox.confirm({

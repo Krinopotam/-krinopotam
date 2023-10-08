@@ -23,11 +23,6 @@ export class DFormModalConfig<T>  extends DFormConfig<T> {
         return this;
     }
 
-    /** Modal controls callbacks */
-    callbacks(value: IDModalProps['callbacks']) {
-        this._config.callbacks = value;
-        return this;
-    }
 
     /** Form CSS class */
     className(value: IDFormProps['className']) {

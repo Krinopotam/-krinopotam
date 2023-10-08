@@ -31,9 +31,7 @@ export const SimpleForm = (props?: IDFormModalProps): React.JSX.Element => {
     return (
         <>
             <Space>
-                <Button onClick={() => onClick()}>
-                    Open form
-                </Button>
+                <Button onClick={() => onClick()}>Open form</Button>
                 <Button type="primary" onClick={() => onClick('info')} colorType="info">
                     Open form
                 </Button>
@@ -51,10 +49,8 @@ export const SimpleForm = (props?: IDFormModalProps): React.JSX.Element => {
             <DFormModal
                 {...compProps}
                 isOpened={open}
-                callbacks={{
-                    onClosed: () => {
-                        setOpen(false);
-                    },
+                onClosed={() => {
+                    setOpen(false);
                 }}
             />
         </>

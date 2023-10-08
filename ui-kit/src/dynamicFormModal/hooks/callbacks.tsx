@@ -1,6 +1,6 @@
 import React, {useMemo} from 'react';
 
-import {IDFormCallbacks, IDFormDataSet} from '@src/dynamicForm'
+import {IDFormCallbacks, IDFormDataSet} from '@src/dynamicForm';
 import {IDFormModalApi} from './api';
 import {IDFormModalProps} from '../dFormModal';
 import {MessageBox} from '@src/messageBox';
@@ -10,119 +10,81 @@ import {MessageBox} from '@src/messageBox';
  * @param formModalApi
  * @param modalFormProps
  */
-export const useCallbacks = (formModalApi: IDFormModalApi, modalFormProps: IDFormModalProps) => {
+export const useFormCallbacks = (formModalApi: IDFormModalApi, modalFormProps: IDFormModalProps) => {
     return useMemo((): IDFormCallbacks => {
         return {
             // Fields callbacks
             /** fires when the value of a field changed */
-            onFieldValueChanged: (fieldName: string, value: unknown, prevValue: unknown) => {
-                return modalFormProps.callbacks?.onFieldValueChanged?.(fieldName, value, prevValue, formModalApi);
-            },
+            onFieldValueChanged: (fieldName: string, value: unknown, prevValue: unknown) => modalFormProps?.onFieldValueChanged?.(fieldName, value, prevValue, formModalApi),
 
             /** fires when the touched state of a field changed */
-            onFieldTouchedStateChanged: (fieldName: string, state: boolean) => {
-                return modalFormProps.callbacks?.onFieldTouchedStateChanged?.(fieldName, state, formModalApi);
-            },
+            onFieldTouchedStateChanged: (fieldName: string, state: boolean) => modalFormProps?.onFieldTouchedStateChanged?.(fieldName, state, formModalApi),
 
             /** fires when the dirty state of a field changed */
-            onFieldDirtyStateChanged: (fieldName: string, state: boolean) => {
-                return modalFormProps.callbacks?.onFieldDirtyStateChanged?.(fieldName, state, formModalApi);
-            },
+            onFieldDirtyStateChanged: (fieldName: string, state: boolean) => modalFormProps?.onFieldDirtyStateChanged?.(fieldName, state, formModalApi),
 
             /** fires when the error of a field changed */
-            onFieldErrorChanged: (fieldName: string, error: string) => {
-                return modalFormProps.callbacks?.onFieldErrorChanged?.(fieldName, error, formModalApi);
-            },
+            onFieldErrorChanged: (fieldName: string, error: string) => modalFormProps?.onFieldErrorChanged?.(fieldName, error, formModalApi),
 
             /** fires when the hidden state of a field changed */
-            onFieldHiddenStateChanged: (fieldName: string, state: boolean) => {
-                return modalFormProps.callbacks?.onFieldHiddenStateChanged?.(fieldName, state, formModalApi);
-            },
+            onFieldHiddenStateChanged: (fieldName: string, state: boolean) => modalFormProps?.onFieldHiddenStateChanged?.(fieldName, state, formModalApi),
 
             /** fires when read only state of a field changed */
-            onFieldReadOnlyStateChanged: (fieldName: string, state: boolean) => {
-                return modalFormProps.callbacks?.onFieldReadOnlyStateChanged?.(fieldName, state, formModalApi);
-            },
+            onFieldReadOnlyStateChanged: (fieldName: string, state: boolean) => modalFormProps?.onFieldReadOnlyStateChanged?.(fieldName, state, formModalApi),
 
             /** fires when the disable state of a field changes  */
-            onFieldDisabledStateChanged: (fieldName: string, state: boolean) => {
-                return modalFormProps.callbacks?.onFieldDisabledStateChanged?.(fieldName, state, formModalApi);
-            },
+            onFieldDisabledStateChanged: (fieldName: string, state: boolean) => modalFormProps?.onFieldDisabledStateChanged?.(fieldName, state, formModalApi),
+
+            /** fires when label of a field changed */
+            onFieldLabelChanged: (fieldName: string, label: React.ReactNode, prevLabel: React.ReactNode) => modalFormProps?.onFieldLabelChanged?.(fieldName, label, prevLabel, formModalApi),
 
             /** fires when a field is completely initialized, its data is loaded */
-            onFieldReady: (fieldName: string) => {
-                return modalFormProps.callbacks?.onFieldReady?.(fieldName, formModalApi);
-            },
+            onFieldReady: (fieldName: string) => modalFormProps?.onFieldReady?.(fieldName, formModalApi),
 
             // Tabs callbacks
             /** fires when the hidden state of a tab changed */
-            onTabHiddenStateChanged: (tabName: string, state: boolean) => {
-                return modalFormProps.callbacks?.onFieldHiddenStateChanged?.(tabName, state, formModalApi);
-            },
+            onTabHiddenStateChanged: (tabName: string, state: boolean) => modalFormProps?.onFieldHiddenStateChanged?.(tabName, state, formModalApi),
+
             /** fires when read only state of a tab changed */
-            onTabReadOnlyStateChanged: (tabName: string, state: boolean) => {
-                return modalFormProps.callbacks?.onTabReadOnlyStateChanged?.(tabName, state, formModalApi);
-            },
+            onTabReadOnlyStateChanged: (tabName: string, state: boolean) => modalFormProps?.onTabReadOnlyStateChanged?.(tabName, state, formModalApi),
 
             /** fires when the disable state of a tab changes  */
-            onTabDisabledStateChanged: (tabName: string, state: boolean) => {
-                return modalFormProps.callbacks?.onTabDisabledStateChanged?.(tabName, state, formModalApi);
-            },
+            onTabDisabledStateChanged: (tabName: string, state: boolean) => modalFormProps?.onTabDisabledStateChanged?.(tabName, state, formModalApi),
 
             // Form callbacks
             /** fires when the dirty state of the form changed */
-            onFormDirtyStateChanged: (state: boolean) => {
-                return modalFormProps.callbacks?.onFormDirtyStateChanged?.(state, formModalApi);
-            },
+            onFormDirtyStateChanged: (state: boolean) => modalFormProps?.onFormDirtyStateChanged?.(state, formModalApi),
 
             /** fires when the read only state of the form changed */
-            onFormReadOnlyStateChanged: (state: boolean) => {
-                return modalFormProps.callbacks?.onFormReadOnlyStateChanged?.(state, formModalApi);
-            },
+            onFormReadOnlyStateChanged: (state: boolean) => modalFormProps?.onFormReadOnlyStateChanged?.(state, formModalApi),
 
             /** fires when the form began initialization (renders for the first time) */
-            onFormInit: () => {
-                return modalFormProps.callbacks?.onFormInit?.(formModalApi);
-            },
+            onFormInit: () => modalFormProps?.onFormInit?.(formModalApi),
 
             /** fires when a form ready state changed */
-            onFormReadyStateChanged: (state: boolean) => {
-                return modalFormProps.callbacks?.onFormReadyStateChanged?.(state, formModalApi);
-            },
+            onFormReadyStateChanged: (state: boolean) => modalFormProps?.onFormReadyStateChanged?.(state, formModalApi),
 
             /** fires when a field validated */
-            onFieldValidated: (fieldName: string, value: unknown, error: string, isSubmit: boolean) => {
-                return modalFormProps.callbacks?.onFieldValidated?.(fieldName, value, error, isSubmit, formModalApi);
-            },
+            onFieldValidated: (fieldName: string, value: unknown, error: string, isSubmit: boolean) => modalFormProps?.onFieldValidated?.(fieldName, value, error, isSubmit, formModalApi),
 
             /** fires when the form validated */
-            onFormValidated: (values: Record<string, unknown>, errors: Record<string, string>, isSubmit: boolean) => {
-                return modalFormProps.callbacks?.onFormValidated?.(values, errors, isSubmit, formModalApi);
-            },
+            onFormValidated: (values: Record<string, unknown>, errors: Record<string, string>, isSubmit: boolean) => modalFormProps?.onFormValidated?.(values, errors, isSubmit, formModalApi),
 
             /** fires when the form has errors */
-            onFormHasErrors: (values: Record<string, unknown>, errors: Record<string, unknown>) => {
-                return modalFormProps.callbacks?.onFormHasErrors?.(values, errors, formModalApi);
-            },
+            onFormHasErrors: (values: Record<string, unknown>, errors: Record<string, unknown>) => modalFormProps?.onFormHasErrors?.(values, errors, formModalApi),
 
             /** fires when the form has no errors */
-            onFormHasNoErrors: (values: Record<string, unknown>) => {
-                return modalFormProps.callbacks?.onFormHasNoErrors?.(values, formModalApi);
-            },
+            onFormHasNoErrors: (values: Record<string, unknown>) => modalFormProps?.onFormHasNoErrors?.(values, formModalApi),
 
             /** fires when the form trying to fetch data */
-            onDataFetch: () => {
-                return modalFormProps.callbacks?.onDataFetch?.(formModalApi);
-            },
+            onDataFetch: () => modalFormProps?.onDataFetch?.(formModalApi),
 
             /** fires when the form fetch success */
-            onDataFetchSuccess: (result: {data: Record<string, unknown>}) => {
-                return modalFormProps.callbacks?.onDataFetchSuccess?.(result, formModalApi);
-            },
+            onDataFetchSuccess: (result: {data: Record<string, unknown>}) => modalFormProps?.onDataFetchSuccess?.(result, formModalApi),
 
             /** fires when the form fetch failed */
             onDataFetchError: (message: string, code: number) => {
-                if (modalFormProps.callbacks?.onDataFetchError?.(message, code, formModalApi) === false) return false;
+                if (modalFormProps?.onDataFetchError?.(message, code, formModalApi) === false) return false;
 
                 const box = MessageBox.confirm({
                     content: (
@@ -152,45 +114,37 @@ export const useCallbacks = (formModalApi: IDFormModalApi, modalFormProps: IDFor
             },
 
             /** fires after the completion of fetching the data, regardless of the result */
-            onDataFetchComplete: () => {
-                return modalFormProps.callbacks?.onDataFetchComplete?.(formModalApi);
-            },
+            onDataFetchComplete: () => modalFormProps?.onDataFetchComplete?.(formModalApi),
 
             /** fires on submit validation */
-            onSubmitValidation: (values: Record<string, unknown>, errors: Record<string, string | undefined>) => {
-                return modalFormProps.callbacks?.onSubmitValidation?.(values, errors, formModalApi);
-            },
+            onSubmitValidation: (values: Record<string, unknown>, errors: Record<string, string | undefined>) => modalFormProps?.onSubmitValidation?.(values, errors, formModalApi),
 
             /** fires on submitting the form */
             onSubmit: (values: Record<string, unknown>) => {
                 formModalApi.buttonsApi.disabled?.('ok', true);
                 formModalApi.buttonsApi.disabled?.('cancel', true);
                 if (!modalFormProps.confirmChanges) formModalApi.buttonsApi.loading?.('ok', true);
-                return modalFormProps.callbacks?.onSubmit?.(values, formModalApi);
+                return modalFormProps?.onSubmit?.(values, formModalApi);
             },
 
             /** fires on submit success */
             onSubmitSuccess: (values: Record<string, unknown>, resultValues: Record<string, unknown> | undefined) => {
-                if (modalFormProps.callbacks?.onSubmitSuccess?.(values, resultValues, formModalApi) === false) return false;
+                if (modalFormProps?.onSubmitSuccess?.(values, resultValues, formModalApi) === false) return false;
                 formModalApi.forceClose();
             },
 
             /** fires on submit error */
-            onSubmitError: (values: Record<string, unknown>, message: string, code: number) => {
-                return modalFormProps.callbacks?.onSubmitError?.(values, message, code, formModalApi);
-            },
+            onSubmitError: (values: Record<string, unknown>, message: string, code: number) => modalFormProps?.onSubmitError?.(values, message, code, formModalApi),
 
             /** fires after the completion of sending the form, regardless of the result */
             onSubmitComplete: (values: Record<string, unknown>, errors: Record<string, string | undefined>) => {
-                if (modalFormProps.callbacks?.onSubmitComplete?.(values, errors, formModalApi) === false) return false;
+                if (modalFormProps?.onSubmitComplete?.(values, errors, formModalApi) === false) return false;
                 formModalApi.buttonsApi.disabled?.('ok', false);
                 formModalApi.buttonsApi.disabled?.('cancel', false);
                 formModalApi.buttonsApi.loading?.('ok', false);
             },
             /** fires, when the dataSet change */
-            onDataSetChange: (dataSet: IDFormDataSet | undefined) => {
-                return modalFormProps.callbacks?.onDataSetChange?.(dataSet, formModalApi);
-            },
+            onDataSetChange: (dataSet: IDFormDataSet | undefined) => modalFormProps?.onDataSetChange?.(dataSet, formModalApi),
         } as IDFormCallbacks;
-    }, [formModalApi, modalFormProps.callbacks, modalFormProps.confirmChanges]);
+    }, [formModalApi, modalFormProps]);
 };

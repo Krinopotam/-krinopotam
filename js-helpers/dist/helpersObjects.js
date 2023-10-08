@@ -92,12 +92,8 @@ export const HelpersObjects = {
     splitObject: function (obj, propNames) {
         const obj1 = {};
         const obj2 = {};
-        const propsObj = {};
-        const keysLength = propNames.length;
-        for (let i = 0; i < keysLength; i++)
-            propsObj[propNames[i]] = true;
         for (const key in obj) {
-            if (this.isObjectHasOwnProperty(propsObj, key))
+            if (propNames[key])
                 obj1[key] = obj[key];
             else
                 obj2[key] = obj[key];

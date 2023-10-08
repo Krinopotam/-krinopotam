@@ -9,31 +9,26 @@
     // language=text
     const source = `
 import React from 'react';
-import {DForm} from @krinopotam/ui-kit/dynamicForm';
-import {DFormConfig} from @krinopotam/ui-kit/dynamicForm/configBuilder/dFormConfig';
-import {InputComponentConfig} from @krinopotam/ui-kit/dynamicForm/configBuilder/inputComponentConfig';
-interface IFields {
-    position: string;
-    department: string;
-}
-const formProps = new DFormConfig<IFields>('Test form')
-    .formMode('update')
-    .confirmChanges(true)
-    .addFields(
-        new InputComponentConfig<IFields>('position').label('Должность'),
-        new InputComponentConfig<IFields>('department').label('Подразделение'))
-    .callbacks({
-        onDataFetch: () => {
-            return new Promise((resolve, reject) => {
-                setTimeout(() => {
-                    if (Math.random() < 0.5) reject({message: 'Ошибка загрузки данных', code: 400});
-                    else resolve({data: {position: 'Директор', department: 'Главная дирекция'}});
-                }, 3000);
-            });
-        },
-    })
-    .buttons({ok: {position: 'right'}})
-    .getConfig();
+import {DForm, IDFormProps} from @krinopotam/ui-kit/dynamicForm';
+import {IDFormFieldInputProps, InputComponent} from @krinopotam/ui-kit/dynamicForm/components/inputComponent';
+const formProps: IDFormProps = {
+    formId: 'Test form',
+    formMode: 'update',
+    confirmChanges: true,
+    fieldsProps: {
+        position: {component: InputComponent, label: 'Должность'} as IDFormFieldInputProps,
+        department: {component: InputComponent, label: 'Подразделение'} as IDFormFieldInputProps,
+    },
+    onDataFetch: () => {
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                if (Math.random() < 0.5) reject({message: 'Ошибка загрузки данных', code: 400});
+                else resolve({data: {position: 'Директор', department: 'Главная дирекция'}});
+            }, 3000);
+        });
+    },
+    buttons: {ok: {position: 'right'}},
+};
 export const FormFetching = (): React.JSX.Element => {
     return (
         <>

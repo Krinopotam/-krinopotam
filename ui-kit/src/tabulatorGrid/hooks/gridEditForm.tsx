@@ -11,10 +11,9 @@ export const usePrepareEditFormProps = (gridApi: IGridApi) => {
 
         const formProps = {...editFormProps};
 
-        const prevOnSubmitSuccess = editFormProps?.callbacks?.onSubmitSuccess;
-        if (!formProps.callbacks) formProps.callbacks = {};
+        const prevOnSubmitSuccess = editFormProps?.onSubmitSuccess;
 
-        formProps.callbacks.onSubmitSuccess = (values: Record<string, unknown>, resultValues: Record<string, unknown> | undefined, formApi: IDFormApi) => {
+        formProps.onSubmitSuccess = (values: Record<string, unknown>, resultValues: Record<string, unknown> | undefined, formApi: IDFormApi) => {
             if (prevOnSubmitSuccess && prevOnSubmitSuccess(values, resultValues, formApi) === false) return false;
             const updatedRow = {...formApi.model.getFormDataSet(), ...resultValues} as IGridRowData;
 

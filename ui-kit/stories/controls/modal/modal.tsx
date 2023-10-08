@@ -13,7 +13,7 @@ export const ModalComponent = (props?: IModalProps): React.JSX.Element => {
     const [colorType, setColorType] = useState<IColorType | undefined>(undefined);
 
     const defProps: IModalProps = {
-        dispatcherFormId: 'testForm',
+        modalId: 'testForm',
 
         colorType: colorType,
     };

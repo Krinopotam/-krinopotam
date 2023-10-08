@@ -1,7 +1,7 @@
 import {Col, Row, TreeSelect as AntdTreeSelect} from 'antd';
 import {DFormModal, IDFormModalProps} from '@src/dynamicFormModal';
-import React, {ComponentProps, useEffect, useState} from 'react';
-import {HelpersStrings} from "@krinopotam/js-helpers";
+import React, {ComponentProps, useEffect, useMemo, useState} from 'react';
+import {HelpersObjects, HelpersStrings} from '@krinopotam/js-helpers';
 import {TreeSelectRender} from '@src/treeSelect/renders/treeSelectRender';
 import {useEditableInit} from '@src/treeSelect/hooks/useEditForm';
 import {ITreeSelectApi, useInitApi} from '@src/treeSelect/hooks/api';
@@ -50,7 +50,7 @@ interface ITeeSelectFieldNames {
 //export type IAntTreeSelectProps = Omit<TreeSelectProps, 'treeNodeLabelProp' | 'treeData' | 'onClear' | 'onChange'>;
 export type IAntTreeSelectProps = Omit<ComponentProps<typeof AntdTreeSelect>, 'treeNodeLabelProp' | 'treeData' | 'loadData' | 'onClear' | 'onChange'>;
 
-export interface ITreeSelectProps extends IAntTreeSelectProps {
+export interface ITreeSelectBaseProps {
     /** A mutable object to merge with these controls api */
     apiRef?: ITreeSelectApi;
 
@@ -106,7 +106,7 @@ export interface ITreeSelectProps extends IAntTreeSelectProps {
     confirmDelete?: boolean;
 
     /** Edit buttons*/
-    editButtons?: IFormButtons
+    editButtons?: IFormButtons;
 
     /** --- Callbacks --------------- */
 
@@ -123,7 +123,7 @@ export interface ITreeSelectProps extends IAntTreeSelectProps {
     onDataFetch?: (search: string, api: ITreeSelectApi) => ITreeSelectSourcePromise | undefined;
 
     /** fires when the TreeSelect fetch success */
-    onDataFetchSuccess?: (result: { data: ITreeSelectNode[] }, api: ITreeSelectApi) => boolean | void;
+    onDataFetchSuccess?: (result: {data: ITreeSelectNode[]}, api: ITreeSelectApi) => boolean | void;
 
     /** fires when the TreeSelect fetch failed */
     onDataFetchError?: (message: string, code: number, api: ITreeSelectApi) => boolean | void;
@@ -135,8 +135,10 @@ export interface ITreeSelectProps extends IAntTreeSelectProps {
     onDelete?: (selectedNodes: ITreeSelectNode[], api: ITreeSelectApi) => ITreeSelectDeletePromise | void | undefined;
 }
 
-export type ITreeSelectSourcePromise = TPromise<{ data: ITreeSelectNode[] }, { message: string; code: number }>;
-export type ITreeSelectDeletePromise = TPromise<{ data: Record<string, unknown> }, { message: string; code: number }>;
+export type ITreeSelectProps = ITreeSelectBaseProps & IAntTreeSelectProps;
+
+export type ITreeSelectSourcePromise = TPromise<{data: ITreeSelectNode[]}, {message: string; code: number}>;
+export type ITreeSelectDeletePromise = TPromise<{data: Record<string, unknown>}, {message: string; code: number}>;
 
 export type ITreeSelectPlainValue = string | number;
 
@@ -150,6 +152,8 @@ export const TreeSelect = (props: ITreeSelectProps): React.JSX.Element => {
     useInitApi({api, componentId, treeProps, updateProps, buttonsApi});
     const [editFormProps, formApi] = useEditableInit(api);
     const buttons = useInitButtons(api, formApi); //init buttons
+
+    const antdTreeSelectProps = useSplitAntTreeSelectProps(props);
 
     useEffect(() => {
         api.setIsAllFetched(false);
@@ -191,18 +195,53 @@ export const TreeSelect = (props: ITreeSelectProps): React.JSX.Element => {
 
     */
 
-    if (!editFormProps || treeProps.readOnly || treeProps.disabled) return <TreeSelectRender api={api} treeSelectProps={props}/>;
+    if (!editFormProps || treeProps.readOnly || treeProps.disabled) return <TreeSelectRender api={api} treeSelectProps={props} antdTreeSelectProps={antdTreeSelectProps} />;
 
     return (
         <Row wrap={false}>
             {/*<Col flex="auto">{treeSelect}</Col> */}
-            <TreeSelectRender api={api} treeSelectProps={props}/>
+            <TreeSelectRender api={api} treeSelectProps={props} antdTreeSelectProps={antdTreeSelectProps} />
             <Col>
-                <ButtonsRow buttons={buttons} apiRef={buttonsApi} context={api}/>
+                <ButtonsRow buttons={buttons} apiRef={buttonsApi} context={api} />
             </Col>
             <DFormModal {...editFormProps} />
         </Row>
     );
 };
 
-/** Clears Props from ITreeSelectProps and returns IAntTreeSelectProps */
+const useSplitAntTreeSelectProps = (props: ITreeSelectProps) => {
+    return useMemo((): IAntTreeSelectProps => {
+        const result = HelpersObjects.splitObject<ITreeSelectBaseProps, IAntTreeSelectProps>(props, {
+            apiRef: true,
+            treeSelectId: true,
+            readOnly: true,
+            value: true,
+            defaultValueCallback: true,
+            titleRender: true,
+            labelRender: true,
+            filterTreeNode: true,
+            dataSet: true,
+            fetchMode: true,
+            noCacheFetchedData: true,
+            minSearchLength: true,
+            debounce: true,
+            selectedLabelProp: true,
+            fieldNames: true,
+            editFormProps: true,
+            nodeDeleteMessage: true,
+            confirmDelete: true,
+            editButtons: true,
+            onReady: true,
+            onChange: true,
+            onClear: true,
+            onDataFetch: true,
+            onDataFetchSuccess: true,
+            onDataFetchError: true,
+            onDataFetchComplete: true,
+            onDelete: true,
+        });
+
+        return result[1];
+    }, [props]);
+};
+

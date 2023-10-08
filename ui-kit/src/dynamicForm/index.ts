@@ -6,4 +6,4 @@ export type {
 export type {IDFormApi} from './hooks/api';
 
 export {DModel} from "./dModel";
-export type {IDFormModelCallbacks, IDFormSubmitResultObject, IDFormSubmitResultPromise} from "./dModel";
+export type {IDFormBaseCallbacks, IDFormModelCallbacks, IDFormSubmitResultObject, IDFormSubmitResultPromise} from "./dModel";

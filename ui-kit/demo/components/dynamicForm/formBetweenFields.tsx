@@ -1,15 +1,9 @@
 // noinspection DuplicatedCode
 
-import {DForm} from '@src/dynamicForm';
-import {DFormConfig} from '@src/dynamicForm/configBuilder/dFormConfig';
+import {DForm, IDFormProps} from '@src/dynamicForm';
 import React from 'react';
-import {TreeSelectComponentConfig} from '@src/dynamicForm/configBuilder/treeSelectComponentConfig';
-import {IDFormFieldTreeSelectProps} from '@src/dynamicForm/components/treeSelectComponent';
+import {IDFormFieldTreeSelectProps, TreeSelectComponent} from '@src/dynamicForm/components/treeSelectComponent';
 
-interface IFields {
-    tip: string;
-    process: string;
-}
 
 const dataSet1 = [
     {
@@ -48,29 +42,29 @@ const dataSet2_2 = [
     },
 ];
 
-const formProps = new DFormConfig<IFields>('Test form')
-    .confirmChanges(true)
-    .addFields(
-        new TreeSelectComponentConfig<IFields>('tip').label('Тип процесса').fetchMode('onUse').dataSet(dataSet1),
-        new TreeSelectComponentConfig<IFields>('process').label('Процессы').fetchMode('onUse').dataSet([{}])
-    )
-    .callbacks({
-        onFieldValueChanged: (fieldName, _value, _prevValue, formApi) => {
-            if (fieldName !== 'tip') return;
-            const tipValue = formApi.model.getFieldValue('tip') as Record<'id', unknown>;
-            let newDataSet: IDFormFieldTreeSelectProps['dataSet'];
+const formProps: IDFormProps = {
+    formId:'TestForm',
+    confirmChanges: true,
+    fieldsProps: {
+        tip: {component: TreeSelectComponent, label: 'Тип процесса', fetchMode: 'onUse', dataSet: dataSet1} as IDFormFieldTreeSelectProps,
+        process: {component: TreeSelectComponent, label: 'Процессы', fetchMode: 'onUse', dataSet: [{}]} as IDFormFieldTreeSelectProps
+    },
+    onFieldValueChanged: (fieldName, _value, _prevValue, formApi) => {
+        if (fieldName !== 'tip') return;
+        const tipValue = formApi.model.getFieldValue('tip') as Record<'id', unknown>;
+        let newDataSet: IDFormFieldTreeSelectProps['dataSet'];
 
-            if (!tipValue) newDataSet = [];
-            else if (tipValue.id === '1') newDataSet = dataSet2_1;
-            else if (tipValue.id === '2') newDataSet = dataSet2_2;
-            else newDataSet = [];
+        if (!tipValue) newDataSet = [];
+        else if (tipValue.id === '1') newDataSet = dataSet2_1;
+        else if (tipValue.id === '2') newDataSet = dataSet2_2;
+        else newDataSet = [];
 
-            if (!newDataSet) return;
-            formApi.model.updateFieldProps('process', {dataSet: newDataSet});
-        },
-    })
-    .buttons({ok: {position: 'right'}})
-    .getConfig();
+        if (!newDataSet) return;
+        formApi.model.updateFieldProps('process', {dataSet: newDataSet});
+    },
+    buttons: {ok: {position: 'right'}}
+}
+
 
 export const FormBetweenFields = (): React.JSX.Element => {
     return (

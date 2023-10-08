@@ -9,15 +9,9 @@
     // language=text
     const source = `
 import React from 'react';
-import {DForm} from @krinopotam/ui-kit/dynamicForm';
+import {DForm, IDFormProps} from @krinopotam/ui-kit/dynamicForm';
 import {IDFormModalApi} from @krinopotam/ui-kit/dynamicFormModal';
-import {DFormConfig} from @krinopotam/ui-kit/dynamicForm/configBuilder/dFormConfig';
-import {TreeSelectComponentConfig} from @krinopotam/ui-kit/dynamicForm/configBuilder/treeSelectComponentConfig';
-import {IDFormFieldTreeSelectProps} from @krinopotam/ui-kit/dynamicForm/components/treeSelectComponent";
-interface IFields {
-    department: { id: string; title: string };
-    division: { id: string; title: string };
-}
+import {IDFormFieldTreeSelectProps, TreeSelectComponent} from @krinopotam/ui-kit/dynamicForm/components/treeSelectComponent";
 const departments = [
     {
         id: '01',
@@ -120,27 +114,23 @@ const divisions3 = [
     },
 ];
 const formApi = {} as IDFormModalApi;
-const formProps = new DFormConfig<IFields>('Test form')
-    .apiRef(formApi)
-    .confirmChanges(true)
-    .addFields(
-        new TreeSelectComponentConfig<IFields>('department')
-            .label('Департамент')
-            .fetchMode('onUse')
-            .onDataFetch(() => {
+const formProps: IDFormProps = {
+    formId: 'Test form',
+    apiRef: formApi,
+    confirmChanges: true,
+    fieldsProps: {
+        department: {
+            component: TreeSelectComponent, label: 'Департамент', fetchMode: 'onUse', onDataFetch: () => {
                 return new Promise((resolve, reject) => {
                     setTimeout(() => {
                         if (Math.random() < 0.0) reject({message: 'Ошибка загрузки данных', code: 400});
                         else resolve({data: departments});
                     }, 2000);
-                });
-            }),
-        new TreeSelectComponentConfig<IFields>('division')
-            .label('Управления')
-            .dependsOn(['department'])
-            .fetchMode('onUse')
-            .noCacheFetchedData(true)
-            .onDataFetch(() => {
+                })
+            }
+        } as unknown as IDFormFieldTreeSelectProps,
+        division: {
+            component: TreeSelectComponent, label: 'Управления', fetchMode: 'onUse', dependsOn: ['department'], noCacheFetchedData: true, onDataFetch: () => {
                 return new Promise((resolve) => {
                     setTimeout(() => {
                         const departmentValue = formApi.model.getFieldValue('department') as Record<'id', unknown>; //we can get the current department value and use it for server request
@@ -154,16 +144,15 @@ const formProps = new DFormConfig<IFields>('Test form')
                         resolve({data: newDataSet});
                     }, 2000);
                 });
-            })
-    )
-    .callbacks({
-        onFieldValueChanged: (fieldName, _value, _prevValue, formApi) => {
-            //clear selected division if department changed
-            if (fieldName === 'department') formApi.model.setFieldValue('division', null);
-        },
-    })
-    .buttons(null)
-    .getConfig();
+            }
+        } as unknown as IDFormFieldTreeSelectProps,
+    },
+    onFieldValueChanged: (fieldName, _value, _prevValue, formApi) => {
+        //clear selected division if department changed
+        if (fieldName === 'department') formApi.model.setFieldValue('division', null);
+    },
+    buttons: null
+}
 export const TreeSelectDependedAsync = (): React.JSX.Element => {
     return (
         <>

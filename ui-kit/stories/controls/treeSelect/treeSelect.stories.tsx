@@ -287,15 +287,14 @@ export const EditableAsync: Story = {
         editFormProps: {
             confirmChanges: true,
             bodyHeight: 100,
-            callbacks: {
-                onSubmit: (values: Record<string, unknown>) => {
-                    return new Promise((resolve, reject) => {
-                        setTimeout(() => {
-                            if (Math.random() < 0.3) reject({message: 'Ошибка сохранения', code: 400});
-                            else resolve({data: values});
-                        }, 3000);
-                    });
-                },
+
+            onSubmit: (values: Record<string, unknown>) => {
+                return new Promise((resolve, reject) => {
+                    setTimeout(() => {
+                        if (Math.random() < 0.3) reject({message: 'Ошибка сохранения', code: 400});
+                        else resolve({data: values});
+                    }, 3000);
+                });
             },
             fieldsProps: {
                 title: {component: InputComponent, label: 'Department'}

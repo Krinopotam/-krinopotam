@@ -21,10 +21,8 @@ export const useEditableInit = (api: ITreeSelectApi): [typeof formProps, typeof 
 
         const props:IDFormModalProps = {...defaultProps, ...treeFormProps, ...{apiRef: formApi, formId: formId}};
 
-        if (!props.callbacks) props.callbacks = {};
-
-        const userOnSubmitSuccess =  props.callbacks?.onSubmitSuccess
-        props.callbacks.onSubmitSuccess = (values, resultVal, formApi) => {
+        const userOnSubmitSuccess =  props?.onSubmitSuccess
+        props.onSubmitSuccess = (values, resultVal, formApi) => {
             if (!resultVal || userOnSubmitSuccess?.(values, resultVal, formApi) === false) return;
 
             const resultNode = {...(formApi.model.getFormDataSet() ?? {}), ...resultVal};

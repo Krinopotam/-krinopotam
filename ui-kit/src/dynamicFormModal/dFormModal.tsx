@@ -6,26 +6,23 @@
  * @license MIT
  */
 
-import {IDFormCallbacks, IDFormDataSet, IDFormProps} from '@src/dynamicForm';
+import {IDFormBaseCallbacks, IDFormCallbacks, IDFormDataSet, IDFormProps} from '@src/dynamicForm';
 import {IDFormModalApi, useInitModalFormApi} from './hooks/api';
 import React, {CSSProperties, useEffect, useMemo, useState} from 'react';
 
 import {DFormModalRender} from './renders/dFormModalRender';
 import {IButtonsRowApi} from '@src/buttonsRow/buttonsRow';
 import {HelpersStrings, HelpersObjects} from "@krinopotam/js-helpers";
-import {useCallbacks} from './hooks/callbacks';
+import {useFormCallbacks} from './hooks/callbacks';
 import {useInitButtons} from './hooks/buttons';
 import {useUpdateMessageBoxTheme} from '@src/messageBox';
-import  {useGetActualProps} from '@krinopotam/common-hooks';
+import {useGetActualProps} from '@krinopotam/common-hooks';
 
 //region Types
 // !used in configGenerator parsing. Don't use multi rows comments!
 export interface IDModalProps {
     /** Modal controls callbacks */
-    callbacks?: IDFormModalCallbacks;
-
-    /** Confirm message before the form closing, if form is dirty */
-    closeFormConfirmMessage?: React.ReactNode;
+    //callbacks?: IDFormModalCallbacks;
 
     /** Modal controls title */
     title?: string;
@@ -68,11 +65,12 @@ export interface IDModalProps {
 
     /** Form footer style */
     footerStyle?: CSSProperties;
+
+    /** Confirm message before the form closing, if form is dirty */
+    closeFormConfirmMessage?: React.ReactNode;
 }
 
-export type IDFormModalProps  = IDModalProps & IDFormProps
-
-export interface IDFormModalCallbacks extends IDFormCallbacks {
+export interface IDFormModalCallbacks extends IDFormBaseCallbacks<IDFormModalApi> {
     onOpen?: (
         formApi: IDFormModalApi,
         dataSet: IDFormDataSet | undefined,
@@ -82,6 +80,8 @@ export interface IDFormModalCallbacks extends IDFormCallbacks {
     onClosed?: (formApi: IDFormModalApi) => void;
 }
 
+export type IDFormModalProps = IDModalProps & IDFormModalCallbacks & Exclude<IDFormProps, keyof IDFormCallbacks>
+
 //endregion
 
 export const DFormModal = (props: IDFormModalProps): React.JSX.Element => {
@@ -90,17 +90,15 @@ export const DFormModal = (props: IDFormModalProps): React.JSX.Element => {
     const [formId] = useState(props.formId ?? 'dFormModal-' + HelpersStrings.getUuid());
     const [modalFormProps, updateModalFormProps] = useGetActualProps(props); //props can be set both by parent component and via api
 
-    const [formProps] = useSeparateProps(modalFormProps); // separates form props from modal props
-
     //region Init api
     const [formApi, setFormApi] = useState((modalFormProps.apiRef || {}) as IDFormModalApi);
     const [buttonsApi] = useState({} as IButtonsRowApi);
     const buttons = useInitButtons(formApi, modalFormProps);
     useInitModalFormApi(formId, formApi, modalFormProps, buttonsApi, updateModalFormProps);
-
     //endregion
 
-    const formCallbacks = useCallbacks(formApi, modalFormProps);
+    const formCallbacks = useFormCallbacks(formApi, modalFormProps);
+    const [, formProps] = useSeparateProps(modalFormProps, formCallbacks); // separates form props from modal props
 
     //region Destructor
     useEffect(() => {
@@ -119,45 +117,45 @@ export const DFormModal = (props: IDFormModalProps): React.JSX.Element => {
             formProps={formProps}
             buttons={buttons}
             buttonsApi={buttonsApi}
-            callbacks={formCallbacks}
         />
     );
 };
 
-const useSeparateProps = (props: IDFormModalProps) => {
-    return useMemo((): [IDFormProps] => {
-        const result = HelpersObjects.splitObject(props, [
-            //--- IDFormModalProps -----
-            'notScrollable',
-            'title',
-            'minWidth',
-            'maxWidth',
-            'title',
-            'bodyHeight',
-            'bodyMinHeight',
-            'bodyMaxHeight',
-            'bodyStyle',
-            'resizable',
-            'isOpened',
-            'closeFormConfirmMessage',
-            'formId',
-            'colorType',
-            'headerIcon',
-            'headerStyle',
-            'footerStyle',
-            
-            //---Common props ------
-            'apiRef',
-            'buttons',
-            'callbacks',
-            'arrowsButtonsSelection'
-        ]);
 
-        //const modalProps = result[0] as IDFormModalBaseProps;
-        const formProps = result[1] as IDFormProps;
+const useSeparateProps = (formModalProps: IDFormModalProps, formCallbacks: IDFormCallbacks) => {
+
+    return useMemo((): [IDModalProps, IDFormProps] => {
+        const [modalProps, formProps] = HelpersObjects.splitObject<IDModalProps, IDFormProps>(formModalProps, {
+            //--- IDFormModalProps -----
+            title: true,
+            width: true,
+            minWidth: true,
+            maxWidth: true,
+            bodyHeight: true,
+            bodyMinHeight: true,
+            bodyMaxHeight: true,
+            bodyStyle: true,
+            notScrollable: true,
+            resizable: true,
+            isOpened: true,
+            headerStyle: true,
+            headerIcon: true,
+            footerStyle: true,
+            closeFormConfirmMessage: true,
+
+
+            //---Common props ------
+            //----apiRef:true,
+            //----buttons:true,
+            //arrowsButtonsSelection:true,
+
+            //formId:true,
+            //-----colorType:true,
+        });
+
         formProps.buttons = null; //clear form buttons because the modal form has it own buttons
 
-        return [formProps];
-    }, [props]);
+        return [modalProps, {...formProps, ...formCallbacks}];
+    }, [formCallbacks, formModalProps]);
 };
 

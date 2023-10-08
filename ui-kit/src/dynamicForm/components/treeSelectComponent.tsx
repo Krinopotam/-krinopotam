@@ -10,7 +10,7 @@ import {IDFormComponentProps, IDFormFieldProps} from './baseComponent';
 import {ITreeSelectProps, ITreeSelectValue, TreeSelect} from '@src/treeSelect';
 import React, {CSSProperties, useCallback, useEffect, useMemo} from 'react';
 import {HelpersObjects} from '@krinopotam/js-helpers';
-import {DModel} from "@src/dynamicForm";
+import {DModel} from '@src/dynamicForm';
 
 export type {ITreeSelectValue, ITreeSelectNode, ITreeSelectPlainValue, ITreeSelectDeletePromise, ITreeSelectSourcePromise} from '@src/treeSelect';
 
@@ -28,11 +28,11 @@ export interface IDFormFieldTreeSelectProps extends Omit<IDFormFieldTreeSelectPr
 //endregion
 
 interface IDFormTreeSelectComponentProps extends IDFormComponentProps {
-    fieldProps: IDFormFieldTreeSelectProps
+    fieldProps: IDFormFieldTreeSelectProps;
 }
 
 export const TreeSelectComponent = ({formApi, fieldName, fieldProps}: IDFormTreeSelectComponentProps): React.JSX.Element => {
-    const treeProps = useGetTreeSelectProps(fieldProps);
+    const treeProps = useSplitTreeSelectProps(fieldProps);
     const value = formApi.model.getFieldValue(fieldName) as ITreeSelectValue | string;
 
     const onChange = useCallback(
@@ -58,7 +58,7 @@ export const TreeSelectComponent = ({formApi, fieldName, fieldProps}: IDFormTree
         formApi.model.setFieldReady(fieldName, true);
     }, [fieldName, formApi.model]);
 
-    const style: CSSProperties = {width: '100%', ...fieldProps.style}
+    const style: CSSProperties = {width: '100%', ...fieldProps.style};
 
     return (
         <TreeSelect
@@ -71,7 +71,6 @@ export const TreeSelectComponent = ({formApi, fieldName, fieldProps}: IDFormTree
             value={value}
             placeholder={fieldProps.placeholder ?? 'Выберите из списка'}
             allowClear={fieldProps.allowClear !== false}
-
             /** --- Callbacks --------------- */
             onChange={onChange}
             onClear={onClear}
@@ -97,26 +96,41 @@ export const TreeSelectComponent = ({formApi, fieldName, fieldProps}: IDFormTree
             onPopupScroll={fieldProps.onPopupScroll}
             onSearch={fieldProps.onSearch}
             onTreeLoad={fieldProps.onTreeLoad}
-
         />
     );
 };
 
-const useGetTreeSelectProps = (props: IDFormFieldTreeSelectProps) => {
+const useSplitTreeSelectProps = (props: IDFormFieldTreeSelectProps) => {
     return useMemo((): ITreeSelectProps => {
-        const result = HelpersObjects.splitObject(props, [
-            'component',
-            'helpClass',
-            'label',
-            'placeholder',
-            'tab',
-            'inlineGroup',
-            'value',
-            'hidden',
-            'dependsOn',
-            'width',
-            'autoFocus',
-        ]);
+        const result = HelpersObjects.splitObject<IDFormFieldProps, ITreeSelectProps>(props, {
+            component: true,
+            helpClass: true,
+            label: true,
+            placeholder: true,
+            tab: true,
+            inlineGroup: true,
+            value: true,
+            hidden: true,
+            dependsOn: true,
+            width: true,
+            autoFocus: true,
+            style: true,
+            tooltip: true,
+            disabled: true,
+            requiredMark: true,
+            readOnly: true,
+            rowStyle: true,
+            onDirtyStateChanged: true,
+            onReady: true,
+            onDisabledStateChanged: true,
+            onErrorChanged: true,
+            onHiddenStateChanged: true,
+            onLabelChanged: true,
+            onReadOnlyStateChanged: true,
+            onTouchedStateChanged: true,
+            onValidated: true,
+            onValueChanged: true,
+        });
 
         return result[1] as ITreeSelectProps;
     }, [props]);

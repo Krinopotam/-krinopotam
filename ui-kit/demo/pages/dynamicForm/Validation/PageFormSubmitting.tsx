@@ -9,32 +9,26 @@
     // language=text
     const source = `
 import React from 'react';
-import {DForm} from @krinopotam/ui-kit/dynamicForm';
-import {DFormConfig} from @krinopotam/ui-kit/dynamicForm/configBuilder/dFormConfig';
-import {InputComponentConfig} from @krinopotam/ui-kit/dynamicForm/configBuilder/inputComponentConfig';
-import {PasswordComponentConfig} from @krinopotam/ui-kit/dynamicForm/configBuilder/passwordComponentConfig';
-interface IFields {
-    login: string;
-    password: string;
-}
-const formProps = new DFormConfig<IFields>('Test form')
-    .confirmChanges(true)
-    .addFields(
-        new InputComponentConfig<IFields>('login').label('Логин'),
-        new PasswordComponentConfig<IFields>('password').label('Пароль')
-    )
-    .callbacks({
-        onSubmit: () => {
-            return new Promise((resolve, reject) => {
-                setTimeout(() => {
-                    if (Math.random() < 0.5) reject({message: 'Ошибка сохранения', code: 400});
-                    else resolve({data: {login: 'new login', password: 'new password'}});
-                }, 3000);
-            });
-        },
-    })
-    .buttons({ok: {position: 'right'}})
-    .getConfig();
+import {DForm, IDFormProps} from @krinopotam/ui-kit/dynamicForm';
+import {IDFormFieldInputProps, InputComponent} from @krinopotam/ui-kit/dynamicForm/components/inputComponent';
+import {IDFormFieldPasswordProps, PasswordComponent} from @krinopotam/ui-kit/dynamicForm/components/passwordComponent';
+const formProps: IDFormProps = {
+    formId: 'Test form',
+    confirmChanges: true,
+    fieldsProps: {
+        login: {component: InputComponent, label: 'Логин'} as IDFormFieldInputProps,
+        password: {component: PasswordComponent, label: 'Пароль'} as IDFormFieldPasswordProps,
+    },
+    onSubmit: () => {
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                if (Math.random() < 0.5) reject({message: 'Ошибка сохранения', code: 400});
+                else resolve({data: {login: 'new login', password: 'new password'}});
+            }, 3000);
+        });
+    },
+    buttons: {ok: {position: 'right'}},
+};
 export const FormSubmitting = (): React.JSX.Element => {
     return (
         <>

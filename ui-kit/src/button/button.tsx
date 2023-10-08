@@ -17,7 +17,7 @@ export interface IButtonProps extends Omit<AntButtonProps, 'danger'> {
     colorType?: IColorType;
 }
 
-export const Button = React.forwardRef(({colorType, ...props}: IButtonProps, ref: Ref<HTMLElement> | undefined) => {
+export const Button = React.forwardRef(({colorType, children, ...props}: IButtonProps, ref: Ref<HTMLElement> | undefined) => {
     const {token} = useToken();
 
     let colorPrimary = token.colorPrimary;
@@ -26,9 +26,17 @@ export const Button = React.forwardRef(({colorType, ...props}: IButtonProps, ref
     else if (colorType === 'warning') colorPrimary = token.colorWarning;
     else if (colorType === 'danger') colorPrimary = token.colorError;
 
+    const style = !children
+        ? props.style
+        : {
+              paddingLeft: 10,
+              paddingRight: 10,
+              ...props.style,
+          };
+
     return (
         <ConfigProvider theme={{token: {colorPrimary: colorPrimary}}}>
-            <AntButton {...props} ref={ref} />
+            <AntButton {...props} style={style} ref={ref} >{children}</AntButton>
         </ConfigProvider>
     );
 });

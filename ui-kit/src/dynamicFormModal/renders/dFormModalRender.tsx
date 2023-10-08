@@ -1,23 +1,21 @@
-import {DForm, IDFormCallbacks, IDFormMode, IDFormProps} from '@src/dynamicForm';
+import {DForm, IDFormMode, IDFormProps} from '@src/dynamicForm';
 import {IButtonsRowApi, IFormButtons} from '@src/buttonsRow/buttonsRow';
 
 import {ButtonsRender, Modal} from '@src/modal';
 import {IDFormModalApi} from '../hooks/api';
 import {IDFormModalProps} from '../dFormModal';
-import React from 'react';
+import React, {useState} from 'react';
+import {HelpersStrings} from '@krinopotam/js-helpers';
 
 interface IDFormModalRenderProps {
-    /** the form ID (important property) */
-    formId: string;
+    /** the form ID */
+    formId?: string;
 
     /** form buttons collection */
     buttons?: IFormButtons;
 
     /** Form buttons api */
     buttonsApi?: IButtonsRowApi;
-
-    /** Form callbacks */
-    callbacks?: IDFormCallbacks;
 
     /** Is the form open centered */
     centered?: boolean;
@@ -37,28 +35,21 @@ interface IDFormModalRenderProps {
     /** On cancel button click callback */
     onCancel?: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
-export const DFormModalRender = ({formId, buttons, buttonsApi, callbacks, formApi, formProps, modalFormProps}: IDFormModalRenderProps): React.JSX.Element => {
-    const formMode = modalFormProps.formMode ?? 'create'; //form model does not initialize yet
+
+export const DFormModalRender = ({formId, buttons, buttonsApi, formApi, formProps, modalFormProps}: IDFormModalRenderProps): React.JSX.Element => {
+    const [formIdVal] = useState(formId ?? 'dFormModal-' + HelpersStrings.getUuid());
+    const formMode = modalFormProps.formMode ?? 'create'; //The form model has not yet been initialized
     const modalTitle = useFormTitle(formMode, modalFormProps.title);
 
     return (
         <Modal
-            dispatcherFormId={formId}
+            modalId={formIdVal}
             open={modalFormProps.isOpened}
             //onOk={formApi.submitForm} // Not required, as separate parameters for buttons are used
             onCancel={formApi.close}
             centered
             destroyOnClose={true}
-
-            footer={
-                <ButtonsRender
-                    buttons={buttons}
-                    colorType={modalFormProps.colorType}
-                    buttonsApi={buttonsApi}
-                    arrowsSelection={modalFormProps.arrowsButtonsSelection}
-                    context={formApi}
-                />
-            }
+            footer={<ButtonsRender buttons={buttons} colorType={modalFormProps.colorType} buttonsApi={buttonsApi} arrowsSelection={modalFormProps.arrowsButtonsSelection} context={formApi} />}
             footerStyle={modalFormProps.footerStyle}
             maskClosable={false}
             keyboard={false}
@@ -73,9 +64,9 @@ export const DFormModalRender = ({formId, buttons, buttonsApi, callbacks, formAp
             title={modalTitle}
             headerIcon={modalFormProps.headerIcon}
             headerStyle={modalFormProps.headerStyle}
-            colorType={modalFormProps.colorType}
+            colorType={formProps.colorType}
         >
-            {modalFormProps.isOpened ? <DForm callbacks={callbacks} apiRef={formApi} {...formProps} /> : null}
+            {modalFormProps.isOpened ? <DForm apiRef={formApi} {...formProps} /> : null}
         </Modal>
     );
 };

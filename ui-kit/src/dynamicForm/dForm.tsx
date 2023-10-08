@@ -8,7 +8,7 @@
 
 import './css/antdAnimation.css';
 
-import {DModel, IDFormModelCallbacks, IDFormSubmitResultObject, IDFormSubmitResultPromise} from './dModel';
+import {DModel, IDFormBaseCallbacks, IDFormModelCallbacks} from './dModel';
 import {IButtonsRowApi, IFormButtons} from 'src/buttonsRow';
 import {IDFormApi, useInitFormApi} from './hooks/api';
 import React, {useEffect, useRef, useState} from 'react';
@@ -17,7 +17,7 @@ import {FormRender} from './renders/formRender';
 import {IDFormFieldsProps} from './components/baseComponent';
 import {IRuleType} from './validators/baseValidator';
 import {HelpersStrings} from '@krinopotam/js-helpers';
-import {useCallbacks} from './hooks/callbacks';
+import {useModelCallbacks} from './hooks/callbacks';
 import {useGetButtons} from './hooks/buttons';
 import {useUpdateMessageBoxTheme} from '@src/messageBox';
 import {useGetActualProps} from '@krinopotam/common-hooks';
@@ -31,7 +31,7 @@ import {IColorType} from "@src/button/button";
 //region Types
 /** Form properties*/
 // !used in configGenerator parsing. Don't use multi rows comments!
-export interface IDFormProps {
+export interface IDFormProps extends IDFormCallbacks {
     /** A mutable object to merge with these controls api */
     apiRef?: unknown;
 
@@ -42,7 +42,7 @@ export interface IDFormProps {
     buttons?: IFormButtons | null;
 
     /** Form callbacks */
-    callbacks?: IDFormCallbacks;
+    //callbacks?: IDFormCallbacks;
 
     /** Form CSS class */
     className?: string;
@@ -112,7 +112,11 @@ export interface IDFormProps {
 
     // /** Close dirty controls confirm message. If null or empty string - no confirm */
     // closeFormConfirmMessage?: string | null;
+
+    /********** Callbacks *************/
 }
+
+export type IDFormCallbacks = IDFormBaseCallbacks<IDFormApi>
 
 export type IDFormMode = 'view' | 'create' | 'update' | 'clone' | 'delete';
 
@@ -125,94 +129,6 @@ export type IDFormDataSourcePromise = TPromise<{ data: Record<string, unknown> }
 
 export type IDFormFieldValidationRules = Record<string, IRuleType[]>;
 
-export interface IDFormCallbacks {
-    /** fires when the value of a field changed */
-    onFieldValueChanged?: (fieldName: string, value: unknown, prevValue: unknown, formApi: IDFormApi) => boolean | void;
-
-    /** fires when the touched state of a field changed */
-    onFieldTouchedStateChanged?: (fieldName: string, state: boolean, formApi: IDFormApi) => boolean | void;
-
-    /** fires when the dirty state of a field changed */
-    onFieldDirtyStateChanged?: (fieldName: string, state: boolean, formApi: IDFormApi) => boolean | void;
-
-    /** fires when the error of a field changed */
-    onFieldErrorChanged?: (fieldName: string, error: string, formApi: IDFormApi) => boolean | void;
-
-    /** fires when the hidden state of a field changed */
-    onFieldHiddenStateChanged?: (fieldName: string, state: boolean, formApi: IDFormApi) => boolean | void;
-
-    /** fires when the hidden state of a tab changed */
-    onTabHiddenStateChanged?: (tabName: string, state: boolean, formApi: IDFormApi) => boolean | void;
-
-    /** fires when read only state of a field changed */
-    onFieldReadOnlyStateChanged?: (fieldName: string, state: boolean, formApi: IDFormApi) => boolean | void;
-
-    /** fires when read only state of a tab changed */
-    onTabReadOnlyStateChanged?: (tabName: string, state: boolean, formApi: IDFormApi) => boolean | void;
-
-    /** fires when the disable state of a field changes  */
-    onFieldDisabledStateChanged?: (fieldName: string, state: boolean, formApi: IDFormApi) => boolean | void;
-
-    /** fires when the disable state of a tab changes  */
-    onTabDisabledStateChanged?: (tabName: string, state: boolean, formApi: IDFormApi) => boolean | void;
-
-    /** fires when a field is completely initialized, its data is loaded */
-    onFieldReady?: (fieldName: string, formApi: IDFormApi) => boolean | void;
-
-    /** fires when the dirty state of the form changed */
-    onFormDirtyStateChanged?: (state: boolean, formApi: IDFormApi) => boolean | void;
-
-    /** fires when the read only state of the form changed */
-    onFormReadOnlyStateChanged?: (state: boolean, formApi: IDFormApi) => boolean | void;
-
-    /** fires when the form began initialization (renders for the first time) */
-    onFormInit?: (formApi: IDFormApi) => boolean | void;
-
-    /** fires when the form initialized and all fields have fully loaded all the data */
-    onFormReadyStateChanged?: (state: boolean, formApi: IDFormApi) => boolean | void;
-
-    /** fires when a field validated */
-    onFieldValidated?: (fieldName: string, value: unknown, error: string, isSubmit: boolean, formApi: IDFormApi) => boolean | void;
-
-    /** fires when the form validated */
-    onFormValidated?: (values: Record<string, unknown>, errors: Record<string, string>, isSubmit: boolean, formApi: IDFormApi) => boolean | void;
-
-    /** fires when the form has errors */
-    onFormHasErrors?: (values: Record<string, unknown>, errors: Record<string, unknown>, formApi: IDFormApi) => boolean | void;
-
-    /** fires when the form has no errors */
-    onFormHasNoErrors?: (values: Record<string, unknown>, formApi: IDFormApi) => boolean | void;
-
-    /** fires when the form trying to fetch data */
-    onDataFetch?: (formApi: IDFormApi) => IDFormDataSourcePromise | undefined;
-
-    /** fires when the form fetch success */
-    onDataFetchSuccess?: (result: { data: Record<string, unknown> }, formApi: IDFormApi) => boolean | void;
-
-    /** fires when the form fetch failed */
-    onDataFetchError?: (message: string, code: number, formApi: IDFormApi) => boolean | void;
-
-    /** fires after the completion of fetching the data, regardless of the result */
-    onDataFetchComplete?: (formApi: IDFormApi) => boolean | void;
-
-    /** fires on submitting validation */
-    onSubmitValidation?: (values: Record<string, unknown>, errors: Record<string, string | undefined>, formApi: IDFormApi) => void | boolean;
-
-    /** Fires on submitting the form. Can returns Promise, Object, Boolean or Void */
-    onSubmit?: (values: Record<string, unknown>, formApi: IDFormApi) => IDFormSubmitResultPromise | IDFormSubmitResultObject | boolean | void;
-
-    /** fires on submit success */
-    onSubmitSuccess?: (values: Record<string, unknown>, resultValues: Record<string, unknown> | undefined, formApi: IDFormApi) => boolean | void;
-
-    /** fires on submit error */
-    onSubmitError?: (values: Record<string, unknown>, message: string, code: number, formApi: IDFormApi) => boolean | void;
-
-    /** fires after the completion of sending the form, regardless of the result */
-    onSubmitComplete?: (values: Record<string, unknown>, errors: Record<string, string | undefined>, formApi: IDFormApi) => boolean | void;
-
-    /** fires, when the dataSet change */
-    onDataSetChange?: (dataSet: IDFormDataSet | undefined, FormApi: IDFormApi) => IDFormDataSet | undefined;
-}
 
 //endregion
 
@@ -228,8 +144,8 @@ export const DForm = (props: IDFormProps): React.JSX.Element => {
     const formButtons = useGetButtons(formProps, formApi); //init buttons
     //endregion
 
-    const callbacks = useCallbacks(formProps, formApi);
-    const formModel = useFormModel(formId, formProps, callbacks);
+    const modelCallbacks = useModelCallbacks(formProps, formApi);
+    const formModel = useFormModel(formId, formProps, modelCallbacks);
     useInitFormApi(formId, formApi, formModel, formProps, buttonsApi, updateFormProps);
 
     useInitialFetchData(formApi);
