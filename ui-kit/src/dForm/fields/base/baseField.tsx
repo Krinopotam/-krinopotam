@@ -10,16 +10,15 @@
 
 import React from 'react';
 
-import {AnyType} from '@krinopotam/service-types'
-import {LabelTooltipType} from "antd/es/form/FormItemLabel";
-import {IDFormComponentProps} from "@src/dynamicForm/components/baseComponent";
-import {BaseFieldRender} from "./baseFieldRender";
-import {DModel, IDFormProps} from "@src/dForm";
-import {IRuleType} from "@src/dForm/validators/baseValidator";
+import {AnyType} from '@krinopotam/service-types';
+import {LabelTooltipType} from 'antd/es/form/FormItemLabel';
+import {BaseFieldRender} from './baseFieldRender';
+import {DModel} from '@src/dForm';
+import {IRuleType} from '@src/dForm/validators/baseValidator';
 
-export interface IDFormFieldPropsOnly extends Record<string, unknown> {
+export interface IDFormBaseFieldProps<TField> extends Record<string, unknown> {
     /** Field React component */
-    component: React.FC<IDFormComponentProps>;
+    component: new (fieldName: string, model: DModel) => TField;
 
     /** Help class */
     helpClass?: string;
@@ -58,22 +57,21 @@ export interface IDFormFieldPropsOnly extends Record<string, unknown> {
     autoFocus?: boolean;
 
     /** Mark Field Label as Required */
-    requiredMark?: boolean
+    requiredMark?: boolean;
 
     /** Config tooltip info */
     tooltip?: LabelTooltipType;
 
     /** Field CSS style */
-    style?: React.CSSProperties
+    style?: React.CSSProperties;
 
     /** Row field container CSS style */
-    rowStyle?: React.CSSProperties
+    rowStyle?: React.CSSProperties;
 
     /** Field validation rules */
-    rules?: IRuleType[]
-}
+    rules?: IRuleType[];
 
-export interface IDFormFieldCallbacks<TField> extends Record<string, unknown> {
+    /*************** Callbacks **************/
     /** fires when the value of a field changed */
     onValueChanged?: (value: unknown, prevValue: unknown, field: TField) => void;
 
@@ -105,54 +103,22 @@ export interface IDFormFieldCallbacks<TField> extends Record<string, unknown> {
     onValidated?: (value: unknown, error: string, isSubmit: boolean, field: TField) => void;
 }
 
-export type IDFormBaseFieldCallbacks = IDFormFieldCallbacks<BaseField<IDFormFieldPropsOnly>>
-
-export type  IDFormFieldProps = IDFormFieldPropsOnly & IDFormBaseFieldCallbacks
-
+export type IDFormFieldProps = IDFormBaseFieldProps<BaseField<AnyType>>
 
 /** Fields properties collection */
-export type IDFormFieldsProps = Record<string, IDFormFieldProps>;
+export type IDFormFieldsProps = Record<string, IDFormBaseFieldProps<BaseField<AnyType>>>;
 
-
-export class BaseField<TFieldProps extends IDFormFieldPropsOnly> {
-    /** form properties */
-    protected readonly formProps: IDFormProps
+export class BaseField<TFieldProps extends IDFormBaseFieldProps<AnyType>> {
     /** form model */
-    protected readonly model: DModel
-    /** field name properties */
-    protected readonly fieldName: string
-    /** field initial properties */
-    protected readonly fieldProps: TFieldProps & IDFormFieldCallbacks<typeof this>
-    /** field validation rules */
-    protected readonly rules: IRuleType[]
+    protected readonly model: DModel;
+    /** field name */
+    protected readonly fieldName: string;
 
-    //region Field states
-    /** field label */
-    private _label?: React.ReactNode
-    /** field value */
-    private _value?: unknown;
-    /** field touched status */
-    private _touched?: boolean;
-    /** field dirty status */
-    private _dirty?: boolean;
-    /** field read only status */
-    private _readOnly?: boolean;
-    /** field disabled status */
-    private _disabled?: boolean;
-    /** field hidden status */
-    private _hidden?: boolean;
-    /** field ready status */
-    private _ready?: boolean
-    /** field error status */
-    private _error?: string
+    /** Children fields (if this field is container) */
+    //protected childrenFields?: Record<string, BaseField<AnyType>>;
 
-    //endregion
-
-    constructor(formProps: IDFormProps, model: DModel, fieldProps: TFieldProps & IDFormFieldCallbacks<typeof this>, fieldName: string) {
-        this.formProps = formProps;
+    constructor(fieldName: string, model: DModel) {
         this.fieldName = fieldName;
-        this.fieldProps = fieldProps;
-        this.rules = fieldProps.rules ?? [];
         this.model = model;
     }
 
@@ -161,19 +127,17 @@ export class BaseField<TFieldProps extends IDFormFieldPropsOnly> {
     }
 
     protected renderFieldWrapper(field: React.ReactNode) {
-        return <BaseFieldRender field={this}>
-            {field}
-        </BaseFieldRender>
+        return <BaseFieldRender field={this}>{field}</BaseFieldRender>;
     }
 
     emitFieldRender() {
-        //TODO: implement field rerender
+        this.model.emitFieldRender(this.fieldName);
     }
 
     //region Fields methods
     /** @returns field initial properties  */
     public getProps() {
-        return this.fieldProps;
+        return this.model.getFieldProps(this.fieldName) as TFieldProps;
     }
 
     /** @returns field name  */
@@ -188,7 +152,7 @@ export class BaseField<TFieldProps extends IDFormFieldPropsOnly> {
 
     /** @returns field label */
     public getLabel() {
-        return this._label;
+        return this.model.getFieldLabel(this.fieldName);
     }
 
     /**
@@ -198,18 +162,12 @@ export class BaseField<TFieldProps extends IDFormFieldPropsOnly> {
      * @param noRerender - do not emit re-rendering
      */
     public setLabel(value: React.ReactNode | undefined, noEvents?: boolean, noRerender?: boolean) {
-        const prevValue = this.getLabel();
-        if (prevValue === value) return;
-
-        this._label = value;
-        if (!noEvents) this.fieldProps.onLabelChanged?.(value, prevValue, this);
-        if (!noRerender) this.emitFieldRender();
+        return this.model.setFieldLabel(this.fieldName, noEvents, noRerender);
     }
-
 
     /** @returns field value */
     public getValue(): unknown {
-        return this._value;
+        return this.model.getFieldValue(this.fieldName);
     }
 
     /**
@@ -220,26 +178,12 @@ export class BaseField<TFieldProps extends IDFormFieldPropsOnly> {
      * @param noRerender - do not emit re-rendering
      */
     public setValue(value: unknown, noEvents?: boolean, noRerender?: boolean) {
-        const prevValue = this.getValue();
-        if (prevValue === value) return;
-
-        this._value = value;
-
-        if (!noEvents) {
-            this.fieldProps?.onValueChanged?.(value, prevValue, this);
-            this.validate(noEvents, noRerender);
-        }
-
-        if (!noRerender) {
-            this.emitFieldRender();
-            if (!this.formProps.noAutoHideDependedFields) this.model.hideDependedFields(this);
-        }
+        this.model.setFieldValue(this.fieldName, value, noEvents, noRerender);
     }
-
 
     /** @returns the field touched status (a user has set focus to the field) */
     public isTouched(): boolean {
-        return !!this._touched;
+        return this.model.isFieldTouched(this.fieldName);
     }
 
     /**
@@ -248,16 +192,12 @@ export class BaseField<TFieldProps extends IDFormFieldPropsOnly> {
      * @param noEvents - do not emit onTouchedStateChanged callback
      */
     public setTouched(value: boolean, noEvents?: boolean) {
-        const prevValue = this._touched;
-        if (prevValue === value) return;
-
-        this._touched = value;
-        if (!noEvents) this.fieldProps?.onTouchedStateChanged?.(value, this);
+        return this.model.setFieldTouched(this.fieldName, value, noEvents);
     }
 
     /** @returns field dirty status */
     public isDirty(): boolean {
-        return !!this._dirty;
+        return this.model.isFieldDirty(this.fieldName);
     }
 
     /**
@@ -266,19 +206,12 @@ export class BaseField<TFieldProps extends IDFormFieldPropsOnly> {
      * @param noEvents - do not emit onDirtyStateChanged and onFormDirtyStateChanged callbacks
      */
     public setDirty(value: boolean, noEvents?: boolean) {
-        const prevValue = this._dirty;
-        if (prevValue === value) return;
-
-        this._dirty = value;
-
-        if (!noEvents) this.fieldProps.onDirtyStateChanged?.(value, this);
-
-        this.model.setFormDirty(value, noEvents);
+        this.model.setFieldDirty(this.fieldName, value, noEvents);
     }
 
     /** @returns field disable status */
     public isDisabled(): boolean {
-        return !!this._disabled;
+        return this.model.isFieldDisabled(this.fieldName);
     }
 
     /**
@@ -288,18 +221,12 @@ export class BaseField<TFieldProps extends IDFormFieldPropsOnly> {
      * @param noRerender - do not emit re-rendering
      */
     public setDisabled(value: boolean, noEvents?: boolean, noRerender?: boolean) {
-        const prevValue = this._disabled;
-        if (prevValue === value) return;
-
-        this._disabled = value;
-
-        if (!noEvents) this.fieldProps.onDisabledStateChanged?.(value, this);
-        if (!noRerender) this.emitFieldRender();
+        this.model.setFieldDisabled(this.fieldName, value, noEvents, noRerender);
     }
 
     /** @returns field read only status  */
     public isReadOnly(): boolean {
-        return !!this._readOnly || this.model.getFormMode() === 'view';
+        return this.model.isFieldReadOnly(this.fieldName);
     }
 
     /**
@@ -309,18 +236,12 @@ export class BaseField<TFieldProps extends IDFormFieldPropsOnly> {
      * @param noRerender - do not emit re-rendering
      */
     public setReadOnly(value: boolean, noEvents?: boolean, noRerender?: boolean) {
-        const prevValue = this._readOnly;
-        if (prevValue === value) return;
-
-        this._readOnly = value;
-
-        if (!noEvents) this.fieldProps?.onReadOnlyStateChanged?.(value, this);
-        if (!noRerender) this.emitFieldRender();
+        this.model.setFieldReadOnly(this.fieldName, value, noEvents, noRerender);
     }
 
     /** @returns field hidden status  */
     public isHidden(): boolean {
-        return !!this._hidden
+        return this.model.isFieldHidden(this.fieldName);
     }
 
     /**
@@ -330,25 +251,12 @@ export class BaseField<TFieldProps extends IDFormFieldPropsOnly> {
      * @param noRerender - do not emit re-rendering
      */
     public setHidden(value: boolean, noEvents?: boolean, noRerender?: boolean) {
-        const prevValue = this._hidden;
-        this._hidden = value;
-
-        if (prevValue === value) return;
-
-        if (value) this.setReady(false, true); //the hidden fields are not ready because they are not rendered, but form ready status not changed
-
-        if (!noEvents) this.fieldProps?.onHiddenStateChanged?.(value, this);
-        if (!noRerender) {
-            this.emitFieldRender();
-            if (!this.formProps.noAutoHideDependedFields) this.model.hideDependedFields(this);
-        }
-
-        //TODO: implements group/tab hiddden
+        this.model.setFieldHidden(this.fieldName, value, noEvents, noRerender);
     }
 
     /** @returns field ready status  */
     public isReady(): boolean {
-        return !!this._ready;
+        return this.model.isFieldReady(this.fieldName);
     }
 
     /**
@@ -357,37 +265,22 @@ export class BaseField<TFieldProps extends IDFormFieldPropsOnly> {
      * @param noEvents - do not emit onReady callback
      */
     public setReady(value: boolean, noEvents?: boolean) {
-        const prevValue = this._ready;
-        if (prevValue === value) return;
-
-        this._ready = value;
-
-        if (!noEvents) {
-            this.fieldProps.onReadyStateChanged?.(value, this);
-            this.model.setFormReady(this, noEvents);
-        }
+        this.model.setFieldReady(this.fieldName, value, noEvents);
     }
 
     /** @returns the error text of the field  */
     public getError(): string {
-        return this._error || '';
+        return this.model.getFieldError(this.fieldName);
     }
 
     /**
      * Sets an error to the field
      * @param value - error text
-     * @param noEvents - do not emit onErrorChanged callback
+     * @param noEvents - do not emit onErrorChanged & onFormHasErrors callbacks
      * @param noRerender - do not emit re-rendering
      */
     public setError(value: string, noEvents?: boolean, noRerender?: boolean) {
-        const prevValue = this._error;
-        if (prevValue === value) return;
-
-        this._error = value;
-
-        if (!noEvents) this.fieldProps.onErrorChanged?.(value, this);
-        if (!noRerender) this.emitFieldRender();
-        //TODO: implement onFormHasError callback
+        this.model.setFieldError(this.fieldName, value, noEvents, noRerender);
     }
 
     /**
@@ -397,18 +290,12 @@ export class BaseField<TFieldProps extends IDFormFieldPropsOnly> {
      * @returns error text
      */
     public validate(noEvents?: boolean, noRerender?: boolean): string {
-        //hidden fields shouldn't be validated
-        const error = !this._hidden ? this.model.validateValue(this.getValue(), this.rules) : '';
-
-        this.setError(error, noEvents, noRerender);
-
-        if (!noEvents && !this._hidden) this.fieldProps.onValidated?.(this.getValue(), error, this.model.isFormSubmitting(), this);
-
-        if (!noRerender) this.emitFieldRender();
-
-        return error;
+        return this.model.validateField(this.fieldName, noEvents, noRerender);
     }
 
     //endregion
 
+    initChildrenFields(): Record<string, BaseField<AnyType>> {
+        return {};
+    }
 }

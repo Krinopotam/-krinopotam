@@ -14,7 +14,6 @@ import {IDFormApi, useInitFormApi} from './hooks/api';
 import React, {useEffect, useRef, useState} from 'react';
 import {TPromise} from '@krinopotam/service-types';
 import {FormRender} from './renders/formRender';
-import {IDFormFieldsProps} from './components/baseComponent';
 import {IRuleType} from './validators/baseValidator';
 import {HelpersStrings} from '@krinopotam/js-helpers';
 import {useModelCallbacks} from './hooks/callbacks';
@@ -25,6 +24,7 @@ import {ColProps} from "antd";
 import {FormLabelAlign} from "antd/es/form/interface";
 import {RequiredMark} from "antd/es/form/Form";
 import {IColorType} from "@src/button/button";
+import {IDFormFieldsProps} from "@src/dForm/fields/base/baseField";
 
 //import './dynamicForm.css';
 
