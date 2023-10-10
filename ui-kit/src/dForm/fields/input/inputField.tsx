@@ -14,7 +14,7 @@ export interface IDFormInputFieldProps extends IDFormBaseFieldProps<InputField> 
 }
 
 export class InputField extends BaseField<IDFormInputFieldProps> {
-    protected renderField() {
+    protected render() {
         return <InputFieldRender field={this} />
     }
 }

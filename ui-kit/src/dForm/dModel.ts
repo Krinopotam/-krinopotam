@@ -14,7 +14,8 @@ import {AnyType, TPromise} from '@krinopotam/service-types';
 
 import {BaseValidator} from './validators/baseValidator';
 import React from 'react';
-import {BaseField, IDFormFieldProps, IDFormFieldsProps} from '@src/dForm/fields/base/baseField';
+import {BaseField, IDFormFieldProps} from '@src/dForm/fields/base/baseField';
+import {IDFormFieldsProps} from "@src/dForm/index";
 
 export interface IDFormBaseCallbacks<T> {
     // Tabs callbacks
@@ -251,13 +252,13 @@ export class DModel {
         const plainFields: DModel['_plainFields'] = {};
         for (const fieldName in fieldsProps) {
             const fieldProps = fieldsProps[fieldName];
-            if (plainFields[fieldName]) console.warn('Duplicate form field names used!');
+            if (plainFields[fieldName]) console.warn('The form contains duplicate field names!');
             const field = new fieldProps.component(fieldName, this);
             rootFields[fieldName] = field;
             plainFields[fieldName] = field;
             const childrenFields = field.initChildrenFields();
             for (const childName in childrenFields) {
-                if (plainFields[childName]) console.warn('Duplicate form field names used!');
+                if (plainFields[childName]) console.warn('The form contains duplicate field names!');
                 plainFields[fieldName] = childrenFields[childName];
             }
         }
@@ -624,8 +625,10 @@ export class DModel {
      */
     public validateField(fieldName: string, noEvents?: boolean, noRerender?: boolean): string {
         //hidden fields shouldn't be validated
+        const rules = this.getFieldProps(fieldName).rules ?? [];
+        const formRules = this._validationRules[fieldName] ?? [];
         const error = !this.isFieldHidden(fieldName)
-            ? this._validator.validateValue(this.getFieldValue(fieldName), this, this._validationRules[fieldName])
+            ? this._validator.validateValue(this.getFieldValue(fieldName), this, rules.concat(formRules))
             : '';
 
         this.setFieldError(fieldName, error, noEvents);
@@ -1274,6 +1277,16 @@ export class DModel {
     //endregion
 
     //region Components rerender implementation
+    public renderFields ():React.ReactNode {
+        const fieldsList:React.ReactNode[] = []
+        for (const fieldName in this._rootFields) {
+            const field =  this._rootFields[fieldName]
+            fieldsList.push(field.renderField());
+        }
+
+        return React.createElement(React.Fragment, {}, fieldsList);
+    }
+
     // field rerender
     public subscribeRenderField(fieldName: string) {
         return (listener: () => void) => {

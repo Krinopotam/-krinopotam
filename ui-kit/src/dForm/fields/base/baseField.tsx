@@ -16,7 +16,7 @@ import {BaseFieldRender} from './baseFieldRender';
 import {DModel} from '@src/dForm';
 import {IRuleType} from '@src/dForm/validators/baseValidator';
 
-export interface IDFormBaseFieldProps<TField> extends Record<string, unknown> {
+export interface IDFormBaseFieldProps<TField extends  BaseField<AnyType>> extends Record<string, unknown> {
     /** Field React component */
     component: new (fieldName: string, model: DModel) => TField;
 
@@ -105,9 +105,6 @@ export interface IDFormBaseFieldProps<TField> extends Record<string, unknown> {
 
 export type IDFormFieldProps = IDFormBaseFieldProps<BaseField<AnyType>>
 
-/** Fields properties collection */
-export type IDFormFieldsProps = Record<string, IDFormBaseFieldProps<BaseField<AnyType>>>;
-
 export class BaseField<TFieldProps extends IDFormBaseFieldProps<AnyType>> {
     /** form model */
     protected readonly model: DModel;
@@ -122,12 +119,16 @@ export class BaseField<TFieldProps extends IDFormBaseFieldProps<AnyType>> {
         this.model = model;
     }
 
-    protected renderField() {
-        this.renderFieldWrapper(null);
+    protected render():React.ReactNode {
+        return null
+    }
+
+    public renderField():React.ReactNode {
+        return this.renderFieldWrapper(this.render());
     }
 
     protected renderFieldWrapper(field: React.ReactNode) {
-        return <BaseFieldRender field={this}>{field}</BaseFieldRender>;
+        return <BaseFieldRender key={this.getName()} field={this}>{field}</BaseFieldRender>;
     }
 
     emitFieldRender() {

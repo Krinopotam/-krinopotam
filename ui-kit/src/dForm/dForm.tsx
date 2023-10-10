@@ -24,7 +24,7 @@ import {ColProps} from "antd";
 import {FormLabelAlign} from "antd/es/form/interface";
 import {RequiredMark} from "antd/es/form/Form";
 import {IColorType} from "@src/button/button";
-import {IDFormFieldsProps} from "@src/dForm/fields/base/baseField";
+import {IDFormFieldsProps} from "@src/dForm/index";
 
 //import './dynamicForm.css';
 
@@ -40,9 +40,6 @@ export interface IDFormProps extends IDFormCallbacks {
 
     /** Buttons properties */
     buttons?: IFormButtons | null;
-
-    /** Form callbacks */
-    //callbacks?: IDFormCallbacks;
 
     /** Form CSS class */
     className?: string;
@@ -109,11 +106,6 @@ export interface IDFormProps extends IDFormCallbacks {
 
     /** allow select buttons using arrows keys */
     arrowsButtonsSelection?: boolean;
-
-    // /** Close dirty controls confirm message. If null or empty string - no confirm */
-    // closeFormConfirmMessage?: string | null;
-
-    /********** Callbacks *************/
 }
 
 export type IDFormCallbacks = IDFormBaseCallbacks<IDFormApi>
@@ -145,8 +137,8 @@ export const DForm = (props: IDFormProps): React.JSX.Element => {
     //endregion
 
     const modelCallbacks = useModelCallbacks(formProps, formApi);
-    const formModel = useFormModel(formId, formProps, modelCallbacks);
-    useInitFormApi(formId, formApi, formModel, formProps, buttonsApi, updateFormProps);
+    const model = useFormModel(formId, formProps, modelCallbacks);
+    useInitFormApi(formId, formApi, model, formProps, buttonsApi, updateFormProps);
 
     useInitialFetchData(formApi);
 

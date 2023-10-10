@@ -3,6 +3,8 @@
     import {Route, Routes} from 'react-router-dom';
     import {DemoLayout} from './demoLayout';
     import {Home} from './home';
+    const PageNewFormSimple = lazy(() => import('./pages/dForm/PageNewFormSimple'))
+
     const PageFormSubmitting = lazy(() => import('./pages/dynamicForm/validation/PageFormSubmitting'))
     const PageFormValidation = lazy(() => import('./pages/dynamicForm/validation/PageFormValidation'))
 
@@ -50,6 +52,8 @@ export const DemoRoutes = (props: {darkMode: boolean; setDarkMode: (mode:boolean
         <Routes>
             <Route path="/" element={<DemoLayout setDarkMode={props.setDarkMode} />}>
                 <Route index element={<Home />} />
+                <Route path="NewFormSimple" element={<PageNewFormSimple darkMode={props.darkMode} />} />;
+
                 <Route path="FormSubmitting" element={<PageFormSubmitting darkMode={props.darkMode} />} />;
                 <Route path="FormValidation" element={<PageFormValidation darkMode={props.darkMode} />} />;
 

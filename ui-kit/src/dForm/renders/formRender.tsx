@@ -62,7 +62,7 @@ export const FormRender = ({formProps, formApi, formButtons}: IFormRenderProps):
                     >
                         <FormInit formApi={formApi}/>
 
-                        <FormBodyRender formProps={formProps} formApi={formApi}/>
+                        {formApi.model.renderFields()}
 
                         <ButtonsRender
                             buttons={formButtons}
