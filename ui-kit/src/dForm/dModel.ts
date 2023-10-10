@@ -16,6 +16,7 @@ import React from 'react';
 import {IBaseFieldAny, IDFormFieldProps} from '@src/dForm/fields/base/baseField';
 import {IDFormFieldsProps} from '@src/dForm/index';
 import {TPromise} from '@krinopotam/service-types';
+import {FieldsGroupRender} from '@src/dForm/renders/fieldsGroupRender';
 
 export interface IDFormBaseCallbacks<T> {
     // Tabs callbacks
@@ -98,17 +99,18 @@ export class DModel {
     private _fieldsProps: IDFormFieldsProps = {};
 
     //region Fields maps
-    /** field collection (only root fields, without children) */
-    private _rootFields: Record<string, IBaseFieldAny> = {};
-
     /** full fields collection (plain list) */
     private _fieldsMap: Record<string, IBaseFieldAny> = {};
+
+    /** fields collection, grouped by row groups (if now field rowGroup, group will contain only one field with synthetic key) */
+    private _groupsMap: Record<string, Record<string, IBaseFieldAny>> = {};
+
+    /** field collection (only root fields, without children) */
+    private _rootFields: Record<string, IBaseFieldAny> = {};
 
     /** field collection (hierarchical form, grouped by containers) */
     private _treeFields: Record<string, IBaseFieldAny | Record<string, IBaseFieldAny>> = {};
 
-    /** fields collection, grouped by row groups (if now field rowGroup, group will contain only one field with synthetic key) */
-    private _groupsMap: Record<string, Record<string, IBaseFieldAny>> = {};
     //endregion
 
     /** tabs and inline groups properties (fields properties grouped by tabs and inline groups) */
@@ -258,6 +260,7 @@ export class DModel {
     ): [DModel['_fieldsMap'], DModel['_groupsMap'], DModel['_rootFields'], DModel['_treeFields']] {
         const fieldsMap: DModel['_fieldsMap'] = {};
         const groupsMap: DModel['_groupsMap'] = {};
+
         const rootFields: DModel['_rootFields'] = {};
         const treeFields: DModel['_treeFields'] = {};
         let i = 0;
@@ -274,7 +277,7 @@ export class DModel {
             if (!groupsMap[groupName]) groupsMap[groupName] = {};
             groupsMap[groupName][fieldName] = field;
 
-            const [plainChildren, treeChildren] = field.initChildrenFields();
+            const [plainChildren, , , treeChildren] = field.initChildrenFields();
             if (Object.keys(treeChildren).length > 0) treeFields[fieldName] = treeChildren;
 
             for (const childName in plainChildren) {
@@ -1280,23 +1283,43 @@ export class DModel {
     //endregion
 
     //region Components rerender implementation
-    public renderFields(): React.ReactNode {
+    public renderAllFields(): React.ReactNode {
+        return this.renderFields(this._groupsMap);
+    }
+
+    public renderFields(groupsMap: DModel['_groupsMap']): React.ReactNode {
         const fieldsList: React.ReactNode[] = [];
-        for (const groupName in this._groupsMap) {
+        for (const groupName in groupsMap) {
             const group = this._groupsMap[groupName];
-            if (Object.keys(group).length ===0) continue;
-            if (Object.keys(group).length===1) {
+            if (Object.keys(group).length === 0) continue;
+            if (Object.keys(group).length === 1) {
                 const fieldName = Object.keys(group)[0];
                 const field = group[fieldName];
                 fieldsList.push(field.renderField());
-            }
-            else {
-
+            } else {
+                fieldsList.push(React.createElement(FieldsGroupRender, {groupName: groupName, fields: group, formProps: this.getFormProps(), model: this}));
             }
         }
 
         return React.createElement(React.Fragment, {}, fieldsList);
     }
+
+    /*    public renderFields(): React.ReactNode {
+            const fieldsList: React.ReactNode[] = [];
+            for (const groupName in this._groupsMap) {
+                const group = this._groupsMap[groupName];
+                if (Object.keys(group).length === 0) continue;
+                if (Object.keys(group).length === 1) {
+                    const fieldName = Object.keys(group)[0];
+                    const field = group[fieldName];
+                    fieldsList.push(field.renderField());
+                } else {
+                    fieldsList.push(React.createElement(FieldsGroupRender, {groupName: groupName, fields: group, formProps: this.getFormProps(), model: this}));
+                }
+            }
+    
+            return React.createElement(React.Fragment, {}, fieldsList);
+        }*/
 
     // field rerender
     public subscribeRenderField(fieldName: string) {

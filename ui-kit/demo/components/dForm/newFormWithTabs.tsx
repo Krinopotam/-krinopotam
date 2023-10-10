@@ -16,8 +16,8 @@ const formProps: IDFormProps = {
             label: 'Field2',
             tabs: {
                 'Tab 1': {
-                    field2_1_1: {component: InputField, label: 'Field3', showCount: true},
-                    field2_1_2: {component: InputField, label: 'Field4'},
+                    field2_1_1: {component: InputField, label: 'Field3', inlineGroup:'row1', showCount: true},
+                    field2_1_2: {component: InputField, label: 'Field4', inlineGroup: 'row1'},
                 },
                 'Tab 2': {
                     field2_2_1: {component: InputField, label: 'Field5', showCount: true},

@@ -352,7 +352,7 @@ export class BaseField<TFieldProps extends IDFormBaseFieldProps<AnyType>> {
     //endregion
 
 
-    initChildrenFields(): [DModel['_fieldsMap'], DModel['_rootFields'], DModel['_treeFields']] {
-        return [{}, {}, {}];
+    initChildrenFields(): [DModel['_fieldsMap'], DModel['_groupsMap'], DModel['_rootFields'], DModel['_treeFields']] {
+        return [{}, {}, {}, {}];
     }
 }

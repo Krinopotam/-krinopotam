@@ -4,6 +4,7 @@ import {TabsField} from "@src/dForm/fields/tabs/tabsField";
 import {IBaseFieldAny} from "@src/dForm/fields/base/baseField";
 
 export const TabsFieldRender = ({field}:{field:TabsField}):React.JSX.Element =>{
+    const model = field.getFormModel()
     const tabsFields = field.getTabsFields();
 
     //there is no sense to use memo (rendering is not very often)
@@ -13,7 +14,7 @@ export const TabsFieldRender = ({field}:{field:TabsField}):React.JSX.Element =>{
             key: tabName,
             label: tabName,
             forceRender: true,
-            children: renderFields(tabsFields[tabName]),
+            children: model.renderFields(tabsFields[tabName]),
         });
     }
 

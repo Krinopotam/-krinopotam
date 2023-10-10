@@ -9,9 +9,7 @@
 import React, {useSyncExternalStore} from 'react';
 
 import Animate from 'rc-animate';
-import {BaseComponent} from '../components/baseComponent';
 import {Form} from 'antd';
-import {IDFormApi} from '../hooks/api';
 import {IDFormProps} from "../dForm";
 import {DModel} from "@src/dForm";
 import {IBaseFieldAny} from "@src/dForm/fields/base/baseField";
@@ -57,7 +55,7 @@ export const FieldsGroupRender = ({groupName, fields, formProps, model}: IFieldG
                             const field = fields[fieldName];
                             const noLabel = formProps.layout === 'horizontal' && !!groupLabel && isFirst;
                             isFirst = false;
-                            return <BaseComponent key={fieldName} formApi={formApi} fieldName={fieldName} fieldProps={fieldProps} noLabel={noLabel}/>;
+                            return field.renderField(noLabel);
                         })}
                     </div>
                 </Form.Item>
