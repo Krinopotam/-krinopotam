@@ -16,9 +16,9 @@ import {BaseFieldRender} from './baseFieldRender';
 import {DModel} from '@src/dForm';
 import {IRuleType} from '@src/dForm/validators/baseValidator';
 
-export interface IDFormBaseFieldProps<TField extends  BaseField<AnyType>> extends Record<string, unknown> {
+export interface IDFormBaseFieldProps<TField extends IBaseFieldAny> extends Record<string, unknown> {
     /** Field React component */
-    component: new (fieldName: string, model: DModel) => TField;
+    component: new (fieldName: string, fieldProps: AnyType, model: DModel) => TField;
 
     /** Help class */
     helpClass?: string;
@@ -103,32 +103,41 @@ export interface IDFormBaseFieldProps<TField extends  BaseField<AnyType>> extend
     onValidated?: (value: unknown, error: string, isSubmit: boolean, field: TField) => void;
 }
 
-export type IDFormFieldProps = IDFormBaseFieldProps<BaseField<AnyType>>
+export type IDFormFieldProps = IDFormBaseFieldProps<AnyType>;
+
+export type IBaseFieldAny = BaseField<AnyType>;
 
 export class BaseField<TFieldProps extends IDFormBaseFieldProps<AnyType>> {
-    /** form model */
-    protected readonly model: DModel;
+    /** form field props */
+    protected readonly fieldProps: TFieldProps;
     /** field name */
     protected readonly fieldName: string;
+    /** form model */
+    protected readonly model: DModel;
 
     /** Children fields (if this field is container) */
-    //protected childrenFields?: Record<string, BaseField<AnyType>>;
+    //protected childrenFields?: Record<string, IBaseFieldAny>;
 
-    constructor(fieldName: string, model: DModel) {
+    constructor(fieldName: string, fieldProps: TFieldProps, model: DModel) {
         this.fieldName = fieldName;
+        this.fieldProps = fieldProps;
         this.model = model;
     }
 
-    protected render():React.ReactNode {
-        return null
+    protected render(): React.ReactNode {
+        return null;
     }
 
-    public renderField():React.ReactNode {
+    public renderField(): React.ReactNode {
         return this.renderFieldWrapper(this.render());
     }
 
     protected renderFieldWrapper(field: React.ReactNode) {
-        return <BaseFieldRender key={this.getName()} field={this}>{field}</BaseFieldRender>;
+        return (
+            <BaseFieldRender key={this.getName()} field={this}>
+                {field}
+            </BaseFieldRender>
+        );
     }
 
     emitFieldRender() {
@@ -138,7 +147,7 @@ export class BaseField<TFieldProps extends IDFormBaseFieldProps<AnyType>> {
     //region Fields methods
     /** @returns field initial properties  */
     public getProps() {
-        return this.model.getFieldProps(this.fieldName) as TFieldProps;
+        return this.fieldProps;
     }
 
     /** @returns field name  */
@@ -296,7 +305,7 @@ export class BaseField<TFieldProps extends IDFormBaseFieldProps<AnyType>> {
 
     //endregion
 
-    initChildrenFields(): Record<string, BaseField<AnyType>> {
-        return {};
+    initChildrenFields(): [DModel['_plainFields'], DModel['_rootFields'], DModel['_treeFields']] {
+        return [{}, {}, {}];
     }
 }

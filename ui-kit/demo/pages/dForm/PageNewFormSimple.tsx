@@ -10,12 +10,12 @@
     const source = `
 import React from 'react';
 import {DForm, IDFormProps} from @krinopotam/ui-kit/dForm";
-import {InputField} from @krinopotam/ui-kit/dForm/fields/input/inputField";
+import {IDFormInputFieldProps, InputField} from @krinopotam/ui-kit/dForm/fields/input/inputField";
 const formProps: IDFormProps = {
     formId: 'Test form',
     confirmChanges: true,
     fieldsProps: {
-        field1: {component: InputField, label: 'Field1', rules: [{type: 'string', rule: 'not-empty', message: 'Поле не должно быть пустым'}]},
+        field1: {component: InputField, label: 'Field1', rules: [{type: 'string', rule: 'not-empty', message: 'Поле не должно быть пустым'}]} ,
         field2: {component: InputField, label: 'Field2'},
     },
     buttons: {ok: {position: 'right'}},

@@ -3,11 +3,10 @@
 import React, {useSyncExternalStore} from "react";
 import Animate from "rc-animate";
 import {Form} from "antd";
-import {BaseField} from "./baseField";
+import {IBaseFieldAny} from "./baseField";
 import {DModel} from "@src/dForm";
-import {AnyType} from "@krinopotam/service-types";
 
-export const BaseFieldRender = ({field, children}: { field: BaseField<AnyType>, children?: React.ReactNode }): React.JSX.Element => {
+export const BaseFieldRender = ({field, children}: { field: IBaseFieldAny, children?: React.ReactNode }): React.JSX.Element => {
     const fieldName = field.getName();
     const fieldProps = field.getProps();
     const formModel = field.getFormModel()
