@@ -7,7 +7,7 @@ import {TabsField} from '@src/dForm/fields/tabs/tabsField';
 
 const formProps: IDFormProps = {
     formId: 'Test form',
-    layout:'horizontal',
+    //layout:'horizontal',
     confirmChanges: true,
     fieldsProps: {
         field1: {component: InputField, label: 'Field1', rules: [{type: 'string', rule: 'not-empty', message: 'Поле не должно быть пустым'}]},
@@ -31,6 +31,7 @@ const formProps: IDFormProps = {
                                 field2_2_2_2: {component: InputField, label: 'Field6'},
                             },
                         }},
+                    field2_2_3: {component: InputField, label: 'Field4'},
                 },
             },
         },

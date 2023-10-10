@@ -8,26 +8,17 @@
 
 import React, {useSyncExternalStore} from 'react';
 
-import {BaseComponent} from '../components/baseComponent';
-import {FieldsGroupRender} from './fieldsGroupRender';
-import {IDFormApi} from "../hooks/api";
-import {IDFormProps} from "../dForm";
+import {DModel} from "@src/dForm";
 
 interface IFieldsRenderProps {
-    /** Form props*/
-    formProps:IDFormProps
-
     /** Tab name */
     tabName: string;
-
-    /** form api instance */
-    formApi: IDFormApi;
 }
 
-export const TabContentRender = ({formProps, tabName, formApi}: IFieldsRenderProps): React.JSX.Element => {
-    useExternalRenderCall(formApi, tabName);
+export const TabsFieldRenderTab = ({tabName, model}: {tabName:string, model:DModel}): React.JSX.Element => {
+    useExternalRenderCall(model, tabName);
 
-    const groupsProp = formApi.model.getGroupsProps(tabName);
+    const groupsProp = model.getGroupsProps(tabName);
 
     return (
         <>
@@ -35,7 +26,7 @@ export const TabContentRender = ({formProps, tabName, formApi}: IFieldsRenderPro
                 if (Object.keys(groupsProp[groupName]).length === 0) return null;
 
                 if (Object.keys(groupsProp[groupName]).length > 1) {
-                    return <FieldsGroupRender key={groupName} formProps={formProps} formApi={formApi} tabName={tabName} groupName={groupName}/>;
+                    return <FieldGroupRender key={groupName} formProps={formProps} formApi={formApi} tabName={tabName} groupName={groupName}/>;
                 } else {
                     const fieldName = Object.keys(groupsProp[groupName])[0];
                     const fieldProps = formProps?.fieldsProps?.[fieldName]
@@ -47,11 +38,11 @@ export const TabContentRender = ({formProps, tabName, formApi}: IFieldsRenderPro
     );
 };
 
-const useExternalRenderCall = (formApi: IDFormApi, tabName: string) => {
-    const subscribe = formApi.model.subscribeRenderTab(tabName);
+const useExternalRenderCall = (model: DModel, tabName: string) => {
+    const subscribe = model.subscribeRenderTab(tabName);
 
     const getSnapshot = () => {
-        const snaps = formApi.model.getTabRenderSnapshots();
+        const snaps = model.getTabRenderSnapshots();
         if (!snaps[tabName]) return undefined;
         return snaps[tabName];
     };

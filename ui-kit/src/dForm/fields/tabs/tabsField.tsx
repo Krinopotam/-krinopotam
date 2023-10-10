@@ -12,7 +12,7 @@ export class TabsField extends BaseField<IDFormTabsFieldProps> {
     private _tabsFields: Record<string, Record<string, IBaseFieldAny>> = {};
 
     /** field collection (plain list) */
-    private _plainFields: DModel['_plainFields'] = {};
+    private _fieldsMap: DModel['_fieldsMap'] = {};
 
     /** field collection (only root fields, without children) */
     private _rootFields: DModel['_rootFields'] = {};
@@ -20,18 +20,18 @@ export class TabsField extends BaseField<IDFormTabsFieldProps> {
     /** field collection (hierarchical form, grouped by containers) */
     private _treeFields: DModel['_treeFields'] = {};
 
-    public initChildrenFields(): [DModel['_plainFields'], DModel['_rootFields'], DModel['_treeFields']] {
+    public initChildrenFields(): [DModel['_fieldsMap'], DModel['_rootFields'], DModel['_treeFields']] {
         const tabsProps = this.getProps();
         if (!tabsProps.tabs) return [{}, {}, {}];
 
         this._tabsFields = {};
         for (const tabName in tabsProps.tabs) {
             const fieldsProps = tabsProps.tabs[tabName];
-            [this._plainFields, this._rootFields, this._treeFields] = this.getFormModel().prepareFieldCollection(fieldsProps);
+            [this._fieldsMap, this._rootFields, this._treeFields] = this.getFormModel().prepareFieldCollection(fieldsProps, this);
             this._tabsFields[tabName] = this._rootFields;
         }
 
-        return [this._plainFields, this._rootFields, this._treeFields];
+        return [this._fieldsMap, this._rootFields, this._treeFields];
     }
 
     protected render() {

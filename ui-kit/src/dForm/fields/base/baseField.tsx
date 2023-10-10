@@ -18,7 +18,7 @@ import {IRuleType} from '@src/dForm/validators/baseValidator';
 
 export interface IDFormBaseFieldProps<TField extends IBaseFieldAny> extends Record<string, unknown> {
     /** Field React component */
-    component: new (fieldName: string, fieldProps: AnyType, model: DModel) => TField;
+    component: new (fieldName: string, fieldProps: AnyType, model: DModel, parent?: IBaseFieldAny) => TField;
 
     /** Help class */
     helpClass?: string;
@@ -109,59 +109,83 @@ export type IBaseFieldAny = BaseField<AnyType>;
 
 export class BaseField<TFieldProps extends IDFormBaseFieldProps<AnyType>> {
     /** form field props */
-    protected readonly fieldProps: TFieldProps;
+    protected fieldProps: TFieldProps;
     /** field name */
     protected readonly fieldName: string;
     /** form model */
     protected readonly model: DModel;
 
+    protected readonly parent?: IBaseFieldAny;
+
+    /** React component sync(re-render) listener */
+    protected _listeners: (() => void)[] = [];
+    /** react component sync(re-render) snapshot */
+    protected renderSnapshot: number = 0;
+
     /** Children fields (if this field is container) */
     //protected childrenFields?: Record<string, IBaseFieldAny>;
 
-    constructor(fieldName: string, fieldProps: TFieldProps, model: DModel) {
+    constructor(fieldName: string, fieldProps: TFieldProps, model: DModel, parent?: IBaseFieldAny) {
         this.fieldName = fieldName;
         this.fieldProps = fieldProps;
         this.model = model;
+        this.parent = parent;
     }
 
+
+
+    //region Component render implementation
     protected render(): React.ReactNode {
         return null;
     }
 
-    public renderField(): React.ReactNode {
-        return this.renderFieldWrapper(this.render());
+    renderField(noLabel?: boolean): React.ReactNode {
+        return this.renderFieldWrapper(this.render(), noLabel);
     }
 
-    protected renderFieldWrapper(field: React.ReactNode) {
+    protected renderFieldWrapper(field: React.ReactNode, noLabel?: boolean) {
         return (
-            <BaseFieldRender key={this.getName()} field={this}>
+            <BaseFieldRender key={this.getName()} field={this} noLabel={noLabel}>
                 {field}
             </BaseFieldRender>
         );
     }
+    //endregion
 
-    emitFieldRender() {
-        this.model.emitFieldRender(this.fieldName);
-    }
 
     //region Fields methods
-    /** @returns field initial properties  */
-    public getProps() {
+    /** @returns get current field properties  */
+    getProps() {
         return this.fieldProps;
     }
 
+    /**
+     * Set current field properties
+     * @param fieldProps - field new properties
+     * @param noRerender - do not emit re-rendering
+     */
+    setProps(fieldProps: TFieldProps, noRerender?: boolean) {
+        this.fieldProps = fieldProps;
+        if (!noRerender) this.model.emitFieldRender(this.getName());
+    }
+
     /** @returns field name  */
-    public getName() {
+    getName() {
         return this.fieldName;
     }
 
+    /** Get form properties */
+    getFormProps() {
+        return this.model.getFormProps();
+    }
+
     /** @returns form model  */
-    public getFormModel() {
+    getFormModel() {
         return this.model;
     }
 
     /** @returns field label */
-    public getLabel() {
+    getLabel() {
         return this.model.getFieldLabel(this.fieldName);
     }
 
@@ -171,12 +195,12 @@ export class BaseField<TFieldProps extends IDFormBaseFieldProps<AnyType>> {
      * @param noEvents - do not emit onLabelChanged callback
      * @param noRerender - do not emit re-rendering
      */
-    public setLabel(value: React.ReactNode | undefined, noEvents?: boolean, noRerender?: boolean) {
+    setLabel(value: React.ReactNode | undefined, noEvents?: boolean, noRerender?: boolean) {
         return this.model.setFieldLabel(this.fieldName, noEvents, noRerender);
     }
 
     /** @returns field value */
-    public getValue(): unknown {
+    getValue(): unknown {
         return this.model.getFieldValue(this.fieldName);
     }
 
@@ -187,12 +211,12 @@ export class BaseField<TFieldProps extends IDFormBaseFieldProps<AnyType>> {
      * @param noEvents - do not emit onValueChanged callback
      * @param noRerender - do not emit re-rendering
      */
-    public setValue(value: unknown, noEvents?: boolean, noRerender?: boolean) {
+    setValue(value: unknown, noEvents?: boolean, noRerender?: boolean) {
         this.model.setFieldValue(this.fieldName, value, noEvents, noRerender);
     }
 
     /** @returns the field touched status (a user has set focus to the field) */
-    public isTouched(): boolean {
+    isTouched(): boolean {
         return this.model.isFieldTouched(this.fieldName);
     }
 
@@ -201,12 +225,12 @@ export class BaseField<TFieldProps extends IDFormBaseFieldProps<AnyType>> {
      * @param value - touched status
      * @param noEvents - do not emit onTouchedStateChanged callback
      */
-    public setTouched(value: boolean, noEvents?: boolean) {
+    setTouched(value: boolean, noEvents?: boolean) {
         return this.model.setFieldTouched(this.fieldName, value, noEvents);
     }
 
     /** @returns field dirty status */
-    public isDirty(): boolean {
+    isDirty(): boolean {
         return this.model.isFieldDirty(this.fieldName);
     }
 
@@ -215,12 +239,12 @@ export class BaseField<TFieldProps extends IDFormBaseFieldProps<AnyType>> {
      * @param value - dirty status
      * @param noEvents - do not emit onDirtyStateChanged and onFormDirtyStateChanged callbacks
      */
-    public setDirty(value: boolean, noEvents?: boolean) {
+    setDirty(value: boolean, noEvents?: boolean) {
         this.model.setFieldDirty(this.fieldName, value, noEvents);
     }
 
     /** @returns field disable status */
-    public isDisabled(): boolean {
+    isDisabled(): boolean {
         return this.model.isFieldDisabled(this.fieldName);
     }
 
@@ -230,12 +254,12 @@ export class BaseField<TFieldProps extends IDFormBaseFieldProps<AnyType>> {
      * @param noEvents - do not emit onDisabledStateChanged callback
      * @param noRerender - do not emit re-rendering
      */
-    public setDisabled(value: boolean, noEvents?: boolean, noRerender?: boolean) {
+    setDisabled(value: boolean, noEvents?: boolean, noRerender?: boolean) {
         this.model.setFieldDisabled(this.fieldName, value, noEvents, noRerender);
     }
 
     /** @returns field read only status  */
-    public isReadOnly(): boolean {
+    isReadOnly(): boolean {
         return this.model.isFieldReadOnly(this.fieldName);
     }
 
@@ -245,12 +269,12 @@ export class BaseField<TFieldProps extends IDFormBaseFieldProps<AnyType>> {
      * @param noEvents - do not emit onReadOnlyStateChanged callback
      * @param noRerender - do not emit re-rendering
      */
-    public setReadOnly(value: boolean, noEvents?: boolean, noRerender?: boolean) {
+    setReadOnly(value: boolean, noEvents?: boolean, noRerender?: boolean) {
         this.model.setFieldReadOnly(this.fieldName, value, noEvents, noRerender);
     }
 
     /** @returns field hidden status  */
-    public isHidden(): boolean {
+    isHidden(): boolean {
         return this.model.isFieldHidden(this.fieldName);
     }
 
@@ -260,12 +284,12 @@ export class BaseField<TFieldProps extends IDFormBaseFieldProps<AnyType>> {
      * @param noEvents - do not emit onHiddenStateChanged callback
      * @param noRerender - do not emit re-rendering
      */
-    public setHidden(value: boolean, noEvents?: boolean, noRerender?: boolean) {
+    setHidden(value: boolean, noEvents?: boolean, noRerender?: boolean) {
         this.model.setFieldHidden(this.fieldName, value, noEvents, noRerender);
     }
 
     /** @returns field ready status  */
-    public isReady(): boolean {
+    isReady(): boolean {
         return this.model.isFieldReady(this.fieldName);
     }
 
@@ -274,12 +298,12 @@ export class BaseField<TFieldProps extends IDFormBaseFieldProps<AnyType>> {
      * @param value - ready status
      * @param noEvents - do not emit onReady callback
      */
-    public setReady(value: boolean, noEvents?: boolean) {
+    setReady(value: boolean, noEvents?: boolean) {
         this.model.setFieldReady(this.fieldName, value, noEvents);
     }
 
     /** @returns the error text of the field  */
-    public getError(): string {
+    getError(): string {
         return this.model.getFieldError(this.fieldName);
     }
 
@@ -289,7 +313,7 @@ export class BaseField<TFieldProps extends IDFormBaseFieldProps<AnyType>> {
      * @param noEvents - do not emit onErrorChanged & onFormHasErrors callbacks
      * @param noRerender - do not emit re-rendering
      */
-    public setError(value: string, noEvents?: boolean, noRerender?: boolean) {
+    setError(value: string, noEvents?: boolean, noRerender?: boolean) {
         this.model.setFieldError(this.fieldName, value, noEvents, noRerender);
     }
 
@@ -299,13 +323,36 @@ export class BaseField<TFieldProps extends IDFormBaseFieldProps<AnyType>> {
      * @param noRerender - do not emit re-rendering
      * @returns error text
      */
-    public validate(noEvents?: boolean, noRerender?: boolean): string {
+    validate(noEvents?: boolean, noRerender?: boolean): string {
         return this.model.validateField(this.fieldName, noEvents, noRerender);
     }
 
     //endregion
 
-    initChildrenFields(): [DModel['_plainFields'], DModel['_rootFields'], DModel['_treeFields']] {
+
+    //region Field rerender implementation
+    /** returns React component sync(re-render) listener */
+    subscribe(listener: () => void) {
+        this._listeners = [...this._listeners, listener];
+        return () => {
+            this._listeners = this._listeners.filter(l => l !== listener);
+        };
+    }
+
+    /** return React component sync(re-render) snapshot */
+    public getSnapshot() {
+        return this.renderSnapshot;
+    }
+
+    /** Emit field React component re-render */
+    emitRender() {
+        this.renderSnapshot++;
+        for (const listener of this._listeners) listener();
+    }
+    //endregion
+
+
+    initChildrenFields(): [DModel['_fieldsMap'], DModel['_rootFields'], DModel['_treeFields']] {
         return [{}, {}, {}];
     }
 }

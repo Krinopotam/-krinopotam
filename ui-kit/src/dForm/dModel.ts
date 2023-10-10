@@ -14,8 +14,8 @@ import {HelpersObjects} from '@krinopotam/js-helpers';
 import {BaseValidator} from './validators/baseValidator';
 import React from 'react';
 import {IBaseFieldAny, IDFormFieldProps} from '@src/dForm/fields/base/baseField';
-import {IDFormFieldsProps} from "@src/dForm/index";
-import {TPromise} from "@krinopotam/service-types";
+import {IDFormFieldsProps} from '@src/dForm/index';
+import {TPromise} from '@krinopotam/service-types';
 
 export interface IDFormBaseCallbacks<T> {
     // Tabs callbacks
@@ -54,7 +54,7 @@ export interface IDFormBaseCallbacks<T> {
     onDataFetch?: (api: T) => IDFormDataSourcePromise | undefined;
 
     /** fires when the form fetch success */
-    onDataFetchSuccess?: (result: { data: Record<string, unknown> }, api: T) => boolean | void;
+    onDataFetchSuccess?: (result: {data: Record<string, unknown>}, api: T) => boolean | void;
 
     /** fires when the form fetch failed */
     onDataFetchError?: (message: string, code: number, api: T) => boolean | void;
@@ -83,8 +83,8 @@ export interface IDFormBaseCallbacks<T> {
 
 export type IDFormModelCallbacks = IDFormBaseCallbacks<DModel>;
 
-export type IDFormSubmitResultPromise = TPromise<{ data: Record<string, unknown> }, { message: string; code: number }>;
-export type IDFormSubmitResultObject = { data?: Record<string, unknown>; error?: { message: string; code: number } };
+export type IDFormSubmitResultPromise = TPromise<{data: Record<string, unknown>}, {message: string; code: number}>;
+export type IDFormSubmitResultObject = {data?: Record<string, unknown>; error?: {message: string; code: number}};
 
 export class DModel {
     //region Private properties
@@ -97,14 +97,19 @@ export class DModel {
     /** fields properties */
     private _fieldsProps: IDFormFieldsProps = {};
 
+    //region Fields maps
     /** field collection (only root fields, without children) */
     private _rootFields: Record<string, IBaseFieldAny> = {};
 
-    /** field collection (plain list) */
-    private _plainFields: Record<string, IBaseFieldAny> = {};
+    /** full fields collection (plain list) */
+    private _fieldsMap: Record<string, IBaseFieldAny> = {};
 
     /** field collection (hierarchical form, grouped by containers) */
-    private _treeFields: Record<string, IBaseFieldAny | (Record<string, IBaseFieldAny>)> = {};
+    private _treeFields: Record<string, IBaseFieldAny | Record<string, IBaseFieldAny>> = {};
+
+    /** fields collection, grouped by row groups (if now field rowGroup, group will contain only one field with synthetic key) */
+    private _groupsMap: Record<string, Record<string, IBaseFieldAny>> = {};
+    //endregion
 
     /** tabs and inline groups properties (fields properties grouped by tabs and inline groups) */
     private _tabsProps: Record<string, Record<string, IDFormFieldsProps>> = {};
@@ -226,7 +231,7 @@ export class DModel {
         this._formReadOnly = !!formProps.readOnly;
         this._validationRules = formProps.validationRules ?? ({} as IDFormFieldValidationRules);
 
-        [this._plainFields, this._rootFields, this._treeFields] = this.prepareFieldCollection(formProps.fieldsProps);
+        [this._fieldsMap, this._groupsMap, this._rootFields, this._treeFields] = this.prepareFieldCollection(formProps.fieldsProps);
 
         const oldFieldsProps = this.getFieldsProps();
         if (oldFieldsProps !== formProps.fieldsProps) {
@@ -247,27 +252,37 @@ export class DModel {
         if (!formProps.noAutoHideDependedFields) this._hidden = this.calculateHiddenFields(this.getFieldsProps(), this.getFormValues(), this._hidden);
     }
 
-    public prepareFieldCollection(fieldsProps: IDFormFieldsProps | undefined):[DModel['_plainFields'],DModel['_rootFields'],DModel['_treeFields']] {
-        const plainFields: DModel['_plainFields'] = {};
-        const rootFields: DModel['_plainFields'] = {};
+    public prepareFieldCollection(
+        fieldsProps: IDFormFieldsProps | undefined,
+        parent?: IBaseFieldAny
+    ): [DModel['_fieldsMap'], DModel['_groupsMap'], DModel['_rootFields'], DModel['_treeFields']] {
+        const fieldsMap: DModel['_fieldsMap'] = {};
+        const groupsMap: DModel['_groupsMap'] = {};
+        const rootFields: DModel['_rootFields'] = {};
         const treeFields: DModel['_treeFields'] = {};
+        let i = 0;
         for (const fieldName in fieldsProps) {
             const fieldProps = fieldsProps[fieldName];
-            if (plainFields[fieldName]) console.warn(`The form contains duplicate field names  "${fieldName}"!`);
-            const field = new fieldProps.component(fieldName, fieldProps, this) as IBaseFieldAny;
-            plainFields[fieldName] = field;
+            if (fieldsMap[fieldName]) console.warn(`The form contains duplicate field names  "${fieldName}"!`);
+            const field = new fieldProps.component(fieldName, fieldProps, this, parent) as IBaseFieldAny;
+
+            const groupName = field.getProps().inlineGroup ?? '[__group__]' + i++;
+
+            fieldsMap[fieldName] = field;
             rootFields[fieldName] = field;
             treeFields[fieldName] = field;
+            if (!groupsMap[groupName]) groupsMap[groupName] = {};
+            groupsMap[groupName][fieldName] = field;
 
             const [plainChildren, treeChildren] = field.initChildrenFields();
             if (Object.keys(treeChildren).length > 0) treeFields[fieldName] = treeChildren;
 
             for (const childName in plainChildren) {
-                if (plainFields[childName]) console.warn(`The form contains duplicate field names  "${childName}"!`);
-                plainFields[childName] = plainChildren[childName];
+                if (fieldsMap[childName]) console.warn(`The form contains duplicate field names  "${childName}"!`);
+                fieldsMap[childName] = plainChildren[childName];
             }
         }
-        return [plainFields, rootFields, treeFields];
+        return [fieldsMap, groupsMap, rootFields, treeFields];
     }
 
     /**
@@ -375,7 +390,7 @@ export class DModel {
         if (prevValue === value) return;
         this._labels[fieldName] = value;
 
-        if (!noEvents) this.getFieldProps(fieldName)?.onLabelChanged?.(value, prevValue, this._plainFields[fieldName]!);
+        if (!noEvents) this.getFieldProps(fieldName)?.onLabelChanged?.(value, prevValue, this._fieldsMap[fieldName]!);
         if (!noRerender) this.emitFieldRender(fieldName);
     }
 
@@ -402,7 +417,7 @@ export class DModel {
         this._values[fieldName] = value;
 
         if (!noEvents) {
-            this.getFieldProps(fieldName)?.onValueChanged?.(value, prevValue, this._plainFields[fieldName]!);
+            this.getFieldProps(fieldName)?.onValueChanged?.(value, prevValue, this._fieldsMap[fieldName]!);
             this.validateField(fieldName);
         }
 
@@ -432,7 +447,7 @@ export class DModel {
 
         this._touched[fieldName] = value;
 
-        if (!noEvents) this.getFieldProps(fieldName)?.onTouchedStateChanged?.(value, this._plainFields[fieldName]!);
+        if (!noEvents) this.getFieldProps(fieldName)?.onTouchedStateChanged?.(value, this._fieldsMap[fieldName]!);
     }
 
     /**
@@ -455,7 +470,7 @@ export class DModel {
 
         this._dirty[fieldName] = value;
 
-        if (!noEvents) this.getFieldProps(fieldName)?.onDirtyStateChanged?.(value, this._plainFields[fieldName]!);
+        if (!noEvents) this.getFieldProps(fieldName)?.onDirtyStateChanged?.(value, this._fieldsMap[fieldName]!);
 
         let formDirty = value;
         if (!value) {
@@ -490,7 +505,7 @@ export class DModel {
         if (prevValue === value) return;
         this._disabled[fieldName] = value;
 
-        if (!noEvents) this.getFieldProps(fieldName)?.onDisabledStateChanged?.(value, this._plainFields[fieldName]!);
+        if (!noEvents) this.getFieldProps(fieldName)?.onDisabledStateChanged?.(value, this._fieldsMap[fieldName]!);
         if (!noRerender) this.emitFieldRender(fieldName);
     }
 
@@ -516,7 +531,7 @@ export class DModel {
 
         this._readOnly[fieldName] = value;
 
-        if (!noEvents) this.getFieldProps(fieldName)?.onReadOnlyStateChanged?.(value, this._plainFields[fieldName]!);
+        if (!noEvents) this.getFieldProps(fieldName)?.onReadOnlyStateChanged?.(value, this._fieldsMap[fieldName]!);
         if (!noRerender) this.emitFieldRender(fieldName);
     }
 
@@ -548,7 +563,7 @@ export class DModel {
         const fieldProps = this.getFieldProps(fieldName);
         if (fieldProps?.tab && fieldProps.inlineGroup) prevGroupValue = this.isGroupHidden(fieldProps.tab, fieldProps.inlineGroup);
 
-        if (!noEvents) fieldProps?.onHiddenStateChanged?.(value, this._plainFields[fieldName]!);
+        if (!noEvents) fieldProps?.onHiddenStateChanged?.(value, this._fieldsMap[fieldName]!);
 
         if (noRerender) return;
 
@@ -579,7 +594,7 @@ export class DModel {
 
         this._ready[fieldName] = value;
 
-        if (!noEvents) this.getFieldProps(fieldName)?.onReadyStateChanged?.(value, this._plainFields[fieldName]!);
+        if (!noEvents) this.getFieldProps(fieldName)?.onReadyStateChanged?.(value, this._fieldsMap[fieldName]!);
         this.setFormReady(value, noEvents);
     }
 
@@ -609,7 +624,7 @@ export class DModel {
         else errors[fieldName] = value;
 
         if (!noEvents) {
-            this.getFieldProps(fieldName)?.onErrorChanged?.(value, this._plainFields[fieldName]!);
+            this.getFieldProps(fieldName)?.onErrorChanged?.(value, this._fieldsMap[fieldName]!);
 
             if (value) this._callbacks?.onFormHasErrors?.(this.getFormValues(), errors, this);
             else {
@@ -632,14 +647,12 @@ export class DModel {
         //hidden fields shouldn't be validated
         const rules = this.getFieldProps(fieldName).rules ?? [];
         const formRules = this._validationRules[fieldName] ?? [];
-        const error = !this.isFieldHidden(fieldName)
-            ? this._validator.validateValue(this.getFieldValue(fieldName), this, rules.concat(formRules))
-            : '';
+        const error = !this.isFieldHidden(fieldName) ? this._validator.validateValue(this.getFieldValue(fieldName), this, rules.concat(formRules)) : '';
 
         this.setFieldError(fieldName, error, noEvents);
 
         if (!noEvents && !this.isFieldHidden(fieldName))
-            this.getFieldProps(fieldName)?.onValidated?.(this.getFieldValue(fieldName), error, this.isFormSubmitting(), this._plainFields[fieldName]!);
+            this.getFieldProps(fieldName)?.onValidated?.(this.getFieldValue(fieldName), error, this.isFormSubmitting(), this._fieldsMap[fieldName]!);
 
         if (!noRerender) this.emitFieldRender(fieldName);
         return error;
@@ -650,20 +663,19 @@ export class DModel {
      * @param fieldName
      */
     public getFieldProps(fieldName: string) {
-        const field = this._plainFields[fieldName];
+        const field = this._fieldsMap[fieldName];
         return field?.getProps();
     }
 
     /**
      * Set field props
-     * @param fieldName
-     * @param fieldProps
+     * @param fieldName - field name
+     * @param fieldProps - new field properties
+     * @param noRerender - do not emit re-rendering
      */
-    public setFieldProps(fieldName: string, fieldProps: IDFormFieldProps) {
-        //TODO incorrect, needs to rework
-        if (!this.getFieldProps(fieldName)) return;
-        this._fieldsProps[fieldName] = fieldProps;
-        this.emitFormRender();
+    public setFieldProps(fieldName: string, fieldProps: IDFormFieldProps, noRerender?: boolean) {
+        const field = this._fieldsMap[fieldName];
+        field?.setProps(fieldProps, noRerender);
     }
 
     /**
@@ -711,22 +723,6 @@ export class DModel {
 
         if (prevValue === value) return;
         this.emitGroupRender(tabName, groupName);
-    }
-
-    /**
-     *
-     * @param tabName
-     * @param groupName
-     * @returns returns a first visible field in the inline group
-     */
-    public getFirstVisibleFieldInGroup(tabName: string, groupName: string): IDFormFieldProps | undefined {
-        if (!this._tabsProps?.[tabName]?.[groupName]) return undefined;
-
-        for (const fieldName in this._tabsProps[tabName][groupName]) {
-            if (!this.isFieldHidden(fieldName)) return this.getFieldsProps()[fieldName];
-        }
-
-        return undefined;
     }
 
     //endregion
@@ -1063,7 +1059,7 @@ export class DModel {
         if (!dataSource) return;
 
         dataSource.then(
-            (result: { data: Record<string, unknown> }) => {
+            (result: {data: Record<string, unknown>}) => {
                 if (!this.isFormMounted()) return;
                 this.setFormFetching(false);
                 this.setFormFetchingFailed(false);
@@ -1075,7 +1071,7 @@ export class DModel {
 
                 this.setFormReady(true);
             },
-            (error: { message: string; code: number }) => {
+            (error: {message: string; code: number}) => {
                 if (!this.isFormMounted()) return;
                 this.setFormFetching(false);
                 this.setFormFetchingFailed(true);
@@ -1285,10 +1281,18 @@ export class DModel {
 
     //region Components rerender implementation
     public renderFields(): React.ReactNode {
-        const fieldsList: React.ReactNode[] = []
-        for (const fieldName in this._rootFields) {
-            const field = this._rootFields[fieldName]
-            fieldsList.push(field.renderField());
+        const fieldsList: React.ReactNode[] = [];
+        for (const groupName in this._groupsMap) {
+            const group = this._groupsMap[groupName];
+            if (Object.keys(group).length ===0) continue;
+            if (Object.keys(group).length===1) {
+                const fieldName = Object.keys(group)[0];
+                const field = group[fieldName];
+                fieldsList.push(field.renderField());
+            }
+            else {
+
+            }
         }
 
         return React.createElement(React.Fragment, {}, fieldsList);
@@ -1307,11 +1311,8 @@ export class DModel {
     }
 
     public emitFieldRender(fieldName: string) {
-        const result = this._fieldRenderSnapshots[fieldName] ? this._fieldRenderSnapshots[fieldName]() + 1 : 0;
-        this._fieldRenderSnapshots[fieldName] = () => result;
-
-        if (!this._fieldRenderListeners[fieldName]) return;
-        for (const listener of this._fieldRenderListeners[fieldName]) listener();
+        const field = this._fieldsMap[fieldName];
+        field.emitRender();
     }
 
     public getFieldRenderSnapshots() {
