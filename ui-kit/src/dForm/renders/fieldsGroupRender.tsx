@@ -10,30 +10,27 @@ import React, {useSyncExternalStore} from 'react';
 
 import Animate from 'rc-animate';
 import {Form} from 'antd';
-import {IDFormProps} from "../dForm";
-import {DModel} from "@src/dForm";
-import {IBaseFieldAny} from "@src/dForm/fields/base/baseField";
+import {DModel} from '@src/dForm';
+import {IBaseFieldAny} from '@src/dForm/fields/base/baseField';
 
 interface IFieldGroupRenderProps {
     /** fields inline group name */
     groupName: string;
 
     /** Fields to render */
-    fields: Record<string, IBaseFieldAny>
+    fields: Record<string, IBaseFieldAny>;
 
-    /** Form props*/
-    formProps: IDFormProps
-
-    /** form model instance */
+    /** form model */
     model: DModel;
 }
 
-export const FieldsGroupRender = ({groupName, fields, formProps, model}: IFieldGroupRenderProps): React.JSX.Element | null => {
+export const FieldsGroupRender = ({groupName, fields, model}: IFieldGroupRenderProps): React.JSX.Element | null => {
+    const formProps = model.getFormProps();
     useExternalRenderCall(model, groupName);
 
     let firstField: IBaseFieldAny | undefined;
     for (const fieldName in fields) {
-        const field = fields[fieldName]
+        const field = fields[fieldName];
         if (!field.isHidden()) {
             firstField = field;
         }
@@ -50,8 +47,7 @@ export const FieldsGroupRender = ({groupName, fields, formProps, model}: IFieldG
             {!groupHidden ? (
                 <Form.Item label={groupLabel} style={{margin: 0}}>
                     <div style={{display: 'inline-flex', gap: '24px', alignItems: 'center', width: '100%'}}>
-
-                        {Object.keys(fields).map((fieldName) => {
+                        {Object.keys(fields).map(fieldName => {
                             const field = fields[fieldName];
                             const noLabel = formProps.layout === 'horizontal' && !!groupLabel && isFirst;
                             isFirst = false;

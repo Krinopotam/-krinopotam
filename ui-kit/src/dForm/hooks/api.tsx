@@ -8,9 +8,6 @@ import {MessageBox} from '@src/messageBox';
 
 /** Form api */
 export interface IDFormApi {
-    /** Get the current form props */
-    getFormId: () => string;
-
     /** Form model instance */
     model: DModel;
 
@@ -34,7 +31,6 @@ export interface IDFormApi {
 }
 
 export const useInitFormApi = (
-    formId: string,
     formApi: IDFormApi,
     model: DModel,
     formProps: IDFormProps,
@@ -42,24 +38,15 @@ export const useInitFormApi = (
     updateFormProps: (props: IDFormProps) => void
 ) => {
     formApi.model = model;
-    const apiGetFormId = useApiGetFormId(formId);
     const apiGetFormProps = useApiGetFormProps(formProps);
     const apiSetFormProps = useApiSetFormProps(formProps, updateFormProps);
     const apiValidateForm = useApiValidateForm(formApi);
     const apiSubmitForm = useApiSubmitForm(formApi);
     if (!formApi.buttonsApi) formApi.buttonsApi = buttonsApi; //The parent can already have this API.Do not reload
-    if (!formApi.getFormId) formApi.getFormId = apiGetFormId;
     if (!formApi.getFormProps) formApi.getFormProps = apiGetFormProps;
     if (!formApi.setFormProps) formApi.setFormProps = apiSetFormProps;
     if (!formApi.validateForm) formApi.validateForm = apiValidateForm;
     if (!formApi.submitForm) formApi.submitForm = apiSubmitForm;
-};
-
-/** Get the current form ID */
-export const useApiGetFormId = (formId: string) => {
-    return useCallback(() => {
-        return formId;
-    }, [formId]);
 };
 
 /** Get the current form props */
@@ -119,7 +106,7 @@ const useApiSubmitForm = (formApi: IDFormApi) => {
         const errors = formApi.validateForm(true);
         if (Object.keys(errors).length > 0) return;
 
-        const formProps = formApi.getFormProps();
+        const formProps = formApi.model.getFormProps();
 
         if (!formProps.confirmChanges) {
             formApi.buttonsApi.loading('ok', true);

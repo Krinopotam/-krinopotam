@@ -1,4 +1,4 @@
-// noinspection DuplicatedCode,JSUnusedGlobalSymbols
+// noinspection DuplicatedCode
 
 /**
  * @DynamicFormModel
@@ -16,7 +16,6 @@ import React from 'react';
 import {IBaseFieldAny, IDFormFieldProps} from '@src/dForm/fields/base/baseField';
 import {IDFormFieldsProps} from '@src/dForm/index';
 import {TPromise} from '@krinopotam/service-types';
-import {FieldsGroupRender} from '@src/dForm/renders/fieldsGroupRender';
 
 export interface IDFormBaseCallbacks<T> {
     // Tabs callbacks
@@ -98,19 +97,18 @@ export class DModel {
     /** fields properties */
     private _fieldsProps: IDFormFieldsProps = {};
 
-    //region Fields maps
-    /** full fields collection (plain list) */
+    //region Fields collections
+    /** field collection (plain list of all fields in all component tabs, including child fields) */
     private _fieldsMap: Record<string, IBaseFieldAny> = {};
 
-    /** fields collection, grouped by row groups (if now field rowGroup, group will contain only one field with synthetic key) */
+    /** Root fields collection, grouped by inline row groups (if no field rowGroup, group will contain only one field with synthetic key) */
     private _groupsMap: Record<string, Record<string, IBaseFieldAny>> = {};
 
-    /** field collection (only root fields, without children) */
+    /** root fields collection (only root fields, without children) */
     private _rootFields: Record<string, IBaseFieldAny> = {};
 
-    /** field collection (hierarchical form, grouped by containers) */
-    private _treeFields: Record<string, IBaseFieldAny | Record<string, IBaseFieldAny>> = {};
-
+    /** Field collection tree (all fields in all component tabs, including child fields of other containers grouped by containers) */
+    private _fieldsTree: Record<string, IBaseFieldAny | Record<string, IBaseFieldAny>> = {};
     //endregion
 
     /** tabs and inline groups properties (fields properties grouped by tabs and inline groups) */
@@ -233,7 +231,7 @@ export class DModel {
         this._formReadOnly = !!formProps.readOnly;
         this._validationRules = formProps.validationRules ?? ({} as IDFormFieldValidationRules);
 
-        [this._fieldsMap, this._groupsMap, this._rootFields, this._treeFields] = this.prepareFieldCollection(formProps.fieldsProps);
+        [this._fieldsMap, this._groupsMap, this._rootFields, this._fieldsTree] = this.prepareFieldCollection(formProps.fieldsProps);
 
         const oldFieldsProps = this.getFieldsProps();
         if (oldFieldsProps !== formProps.fieldsProps) {
@@ -257,12 +255,12 @@ export class DModel {
     public prepareFieldCollection(
         fieldsProps: IDFormFieldsProps | undefined,
         parent?: IBaseFieldAny
-    ): [DModel['_fieldsMap'], DModel['_groupsMap'], DModel['_rootFields'], DModel['_treeFields']] {
+    ): [DModel['_fieldsMap'], DModel['_groupsMap'], DModel['_rootFields'], DModel['_fieldsTree']] {
         const fieldsMap: DModel['_fieldsMap'] = {};
         const groupsMap: DModel['_groupsMap'] = {};
 
         const rootFields: DModel['_rootFields'] = {};
-        const treeFields: DModel['_treeFields'] = {};
+        const treeFields: DModel['_fieldsTree'] = {};
         let i = 0;
         for (const fieldName in fieldsProps) {
             const fieldProps = fieldsProps[fieldName];
@@ -355,6 +353,33 @@ export class DModel {
         return result;
     }
 
+    //endregion
+
+    /**
+     * @return fields collection, grouped by row groups (if now field rowGroup, group will contain only one field with synthetic key)
+     */
+
+
+    //region Fields collection getters
+    /** return@ field collection (plain list of all fields in all component tabs, including child fields) */
+    public getFieldsMap() {
+        return this._fieldsMap;
+    }
+
+    /** @return root fields collection, grouped by inline row groups (if no field rowGroup, group will contain only one field with synthetic key) */
+    public getGroupsMap() {
+        return this._groupsMap;
+    }
+
+    /** @return root fields collection (only root fields, without children) */
+    public getRootFields() {
+        return this._rootFields;
+    }
+
+    /** @return field collection tree (all fields in all component tabs, including child fields of other containers grouped by containers) */
+    public getFieldsTree() {
+        return this._fieldsTree;
+    }
     //endregion
 
     /**
@@ -1283,44 +1308,6 @@ export class DModel {
     //endregion
 
     //region Components rerender implementation
-    public renderAllFields(): React.ReactNode {
-        return this.renderFields(this._groupsMap);
-    }
-
-    public renderFields(groupsMap: DModel['_groupsMap']): React.ReactNode {
-        const fieldsList: React.ReactNode[] = [];
-        for (const groupName in groupsMap) {
-            const group = this._groupsMap[groupName];
-            if (Object.keys(group).length === 0) continue;
-            if (Object.keys(group).length === 1) {
-                const fieldName = Object.keys(group)[0];
-                const field = group[fieldName];
-                fieldsList.push(field.renderField());
-            } else {
-                fieldsList.push(React.createElement(FieldsGroupRender, {groupName: groupName, fields: group, formProps: this.getFormProps(), model: this}));
-            }
-        }
-
-        return React.createElement(React.Fragment, {}, fieldsList);
-    }
-
-    /*    public renderFields(): React.ReactNode {
-            const fieldsList: React.ReactNode[] = [];
-            for (const groupName in this._groupsMap) {
-                const group = this._groupsMap[groupName];
-                if (Object.keys(group).length === 0) continue;
-                if (Object.keys(group).length === 1) {
-                    const fieldName = Object.keys(group)[0];
-                    const field = group[fieldName];
-                    fieldsList.push(field.renderField());
-                } else {
-                    fieldsList.push(React.createElement(FieldsGroupRender, {groupName: groupName, fields: group, formProps: this.getFormProps(), model: this}));
-                }
-            }
-    
-            return React.createElement(React.Fragment, {}, fieldsList);
-        }*/
-
     // field rerender
     public subscribeRenderField(fieldName: string) {
         return (listener: () => void) => {

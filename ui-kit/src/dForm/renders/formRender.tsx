@@ -11,10 +11,10 @@ import React, {useEffect, useSyncExternalStore} from 'react';
 
 import {ButtonsRender} from '@src/modal';
 import {Form} from 'antd';
-import {FormBodyRender} from './formBodyRender';
-import {IDFormApi} from '../hooks/api';
+import {FieldsRender} from './fieldsRender';
+import {DModel, IDFormApi} from '@src/dForm';
 import {LoadingContainer} from '@src/loadingContainer';
-import {IDFormProps} from "../dForm";
+import {IDFormProps} from "@src/dForm";
 
 interface IFormRenderProps {
     /** Form props*/
@@ -34,7 +34,8 @@ interface IFormRenderProps {
 }
 
 export const FormRender = ({formProps, formApi, formButtons}: IFormRenderProps): React.JSX.Element => {
-    useExternalRenderCall(formApi);
+    const model = formApi.model;
+    useExternalRenderCall(model);
 
     const labelCol = {span: (formProps.layout === 'horizontal' ? 8 : 24), ...formProps.labelCol};
     labelCol.style = {paddingBottom: 2, ...formProps.labelCol?.style}
@@ -44,25 +45,25 @@ export const FormRender = ({formProps, formApi, formButtons}: IFormRenderProps):
     return (
         <div className={formProps.containerClassName ?? ''}>
             <LoadingContainer
-                isLoading={formApi.model.isFormFetching() || (formApi.model.isFormSubmitting() && !formProps.confirmChanges)}
+                isLoading={model.isFormFetching() || (model.isFormSubmitting() && !formProps.confirmChanges)}
                 notHideContent={true}
             >
                 <ButtonsRowWrapper>
                     <Form
                         colon={false}
                         className={formProps.className}
-                        name={formApi.getFormId()}
+                        name={model.getFormId()}
                         labelCol={labelCol}
                         wrapperCol={wrapperCol}
-                        //onFinish={formApi.model.submit}
+                        //onFinish={model.submit}
                         autoComplete="off"
                         labelAlign={formProps.labelAlign}
                         layout={formProps.layout === 'horizontal' ? 'horizontal' : 'vertical'}
                         requiredMark={formProps.requiredMark}
                     >
-                        <FormInit formApi={formApi}/>
+                        <FormInit model={model}/>
 
-                        {formApi.model.renderAllFields()}
+                        <FieldsRender model={model} groupsMap={model.getGroupsMap()}/>
 
                         <ButtonsRender
                             buttons={formButtons}
@@ -78,21 +79,21 @@ export const FormRender = ({formProps, formApi, formButtons}: IFormRenderProps):
     );
 };
 
-const useExternalRenderCall = (formApi: IDFormApi) => {
-    const subscribe = formApi.model.subscribeRenderForm();
+const useExternalRenderCall = (model: DModel) => {
+    const subscribe = model.subscribeRenderForm();
 
     const getSnapshot = () => {
-        return formApi.model.getFormRenderSnapshot();
+        return model.getFormRenderSnapshot();
     };
 
     return useSyncExternalStore(subscribe, getSnapshot);
 };
 
 /** Special component to fire onFormInit event before another events*/
-const FormInit = ({formApi}: { formApi: IDFormApi }): React.JSX.Element | null => {
+const FormInit = ({model}: { model: DModel }): React.JSX.Element | null => {
     useEffect(() => {
-        formApi.model.setFormInit();
-    }, [formApi.model]);
+        model.setFormInit();
+    }, [model]);
 
     return null;
 };

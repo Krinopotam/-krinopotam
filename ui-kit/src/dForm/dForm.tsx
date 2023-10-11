@@ -138,7 +138,7 @@ export const DForm = (props: IDFormProps): React.JSX.Element => {
 
     const modelCallbacks = useModelCallbacks(formProps, formApi);
     const model = useFormModel(formId, formProps, modelCallbacks);
-    useInitFormApi(formId, formApi, model, formProps, buttonsApi, updateFormProps);
+    useInitFormApi(formApi, model, formProps, buttonsApi, updateFormProps);
 
     useInitialFetchData(formApi);
 
