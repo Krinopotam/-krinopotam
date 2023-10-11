@@ -26,6 +26,12 @@ export interface IDFormTabsFieldProps extends IDFormBaseFieldProps<TabsField> {
     /** Fires when the disable state of a tab changes  */
     onTabDisabledStateChanged?: (tabName: string, value: boolean, field: TabsField) => void;
 
+    /** Fires when the read only state of a tab changes  */
+    onTabReadOnlyStateChanged?: (tabName: string, value: boolean, field: TabsField) => void;
+
+    /** Fires when the hidden state of a tab changes  */
+    onTabHiddenStateChanged?: (tabName: string, value: boolean, field: TabsField) => void;
+
     /** Fires when the active tab changes  */
     onActiveTabChanged?: (tabName: string, field: TabsField) => void;
 }
@@ -59,11 +65,20 @@ export class TabsField extends BaseField<IDFormTabsFieldProps> {
     private _tabsFieldsTree: Record<string, TabsField['_fieldsTree']> = {};
     //endregion
 
+    //region Tabs properties
     /** Current active tab */
     private _activeTab: string = '';
 
     /** disabled tabs statuses */
     private _disabledTabs: Record<string, boolean | undefined> = {};
+
+    /** hidden tabs statuses */
+    private _hiddenTabs: Record<string, boolean | undefined> = {};
+
+    /** read only tabs statuses */
+    private _readOnlyTabs: Record<string, boolean | undefined> = {};
+
+    //endregion
 
     initChildrenFields(): [TabsField['_fieldsMap'], TabsField['_groupsMap'], TabsField['_rootFields'], TabsField['_fieldsTree']] {
         const tabsProps = this.getProps();
@@ -148,24 +163,91 @@ export class TabsField extends BaseField<IDFormTabsFieldProps> {
      * Sets a disabled status to the tab and to the all tab fields
      * @param tabName
      * @param value - disabled status
-     * @param noEvents - do not emit onTabDisabledStateChanged and fields onDisabledStateChanged callback
+     * @param noEvents - do not emit onTabDisabledStateChanged and fields onDisabledStateChanged callbacks
      * @param noRerender - do not emit re-rendering
      */
     setTabDisabled(tabName: string, value: boolean, noEvents?: boolean, noRerender?: boolean) {
-        const fields = this._tabsRootFields[tabName];
-        if (!fields) return;
-
         const prevValue = this.isTabDisabled(tabName);
         if (prevValue === value) return;
+
+        const fields = this._tabsRootFields[tabName];
+        if (!fields) return;
 
         this._disabledTabs[tabName] = value;
 
         for (const fieldName in fields) {
             const field = fields[fieldName];
-            field.setDisabled(value, noEvents, noRerender);
+            field.setDisabled(value, noEvents, true);
         }
 
         if (!noEvents) this.getProps().onTabDisabledStateChanged?.(tabName, value, this);
+        if (!noRerender) this.emitRender();
+    }
+
+    /**
+     * Gets the current read only status of the tab
+     * @returns Tab read only status
+     */
+    isTabReadOnly(tabName: string): boolean {
+        return !!this._readOnlyTabs[tabName] || this.model.getFormMode() === 'view';
+    }
+
+    /**
+     * Sets a read only status to the tab and to the all tab fields
+     * *this function doesn't call onFieldReadOnlyStateChanged callbacks of the fields
+     * @param tabName
+     * @param value - read only status
+     * @param noEvents - do not emit onTabReadOnlyStateChanged and fields onReadOnlyStateChanged callbacks
+     * @param noRerender - do not emit re-rendering
+     */
+    setTabReadOnly(tabName: string, value: boolean, noEvents?: boolean, noRerender?: boolean) {
+        const prevValue = this.isTabReadOnly(tabName);
+        if (prevValue === value) return;
+
+        const fields = this._tabsRootFields[tabName];
+        if (!fields) return;
+
+        this._readOnlyTabs[tabName] = value;
+
+        for (const fieldName in fields) {
+            const field = fields[fieldName];
+            field.setReadOnly(value, noEvents, noRerender);
+        }
+
+        if (!noEvents) this.getProps().onTabReadOnlyStateChanged?.(tabName, value, this);
+        if (!noRerender) this.emitRender();
+    }
+
+    /**
+     * Gets the current hidden status of the tab
+     * @returns Tab hidden status
+     */
+    isTabHidden(tabName: string): boolean {
+        return !!this._hiddenTabs[tabName];
+    }
+
+    /**
+     * Sets a hidden status to the tab
+     * @param tabName
+     * @param value - hidden status
+     * @param noEvents - do not emit onTabHiddenStateChanged and fields onHiddenStateChanged callbacks
+     * @param noRerender - do not emit re-rendering
+     */
+    setTabHidden(tabName: string, value: boolean, noEvents?: boolean, noRerender?: boolean) {
+        const prevValue = this.isTabHidden(tabName);
+        if (prevValue === value) return;
+
+        const fields = this._tabsRootFields[tabName];
+        if (!fields) return;
+
+        this._hiddenTabs[tabName] = value;
+
+        for (const fieldName in fields) {
+            const field = fields[fieldName];
+            field.setHidden(value, noEvents, noRerender);
+        }
+
+        if (!noEvents) this.getProps().onTabHiddenStateChanged?.(tabName, value, this);
 
         if (!noRerender) this.emitRender();
     }
@@ -186,8 +268,59 @@ export class TabsField extends BaseField<IDFormTabsFieldProps> {
         this._activeTab = tabName;
 
         if (!noEvents) this.getProps().onActiveTabChanged?.(tabName, this);
-
         if (!noRerender) this.emitRender();
+    }
+
+    //endregion
+
+    //region Field methods
+    /**
+     * Handling an erroneous TabField value get
+     */
+    getValue() {
+        console.warn("TabField can't have values");
+        return undefined;
+    }
+
+    /**
+     * Handling an erroneous TabField value setting
+     */
+    setValue() {
+        console.error("TabField can't have values");
+    }
+
+    /**
+     * Sets a disabled status to the field
+     * @param value - disabled status
+     * @param noEvents - do not emit onDisabledStateChanged and onTabDisabledStateChanged callbacks
+     * @param noRerender - do not emit re-rendering
+     */
+    setDisabled(value: boolean, noEvents?: boolean, noRerender?: boolean) {
+        const prevValue = this.isDisabled();
+        if (prevValue === value) return;
+
+        for (const tabName in this._tabsFieldsMap) {
+            this.setTabDisabled(tabName, value, noEvents, true);
+        }
+
+        super.setDisabled(value, noEvents, noRerender);
+    }
+
+    /**
+     * Sets a read only status to the field
+     * @param value - read only status
+     * @param noEvents - do not emit onReadOnlyStateChanged callback
+     * @param noRerender - do not emit re-rendering
+     */
+    setReadOnly(value: boolean, noEvents?: boolean, noRerender?: boolean) {
+        const prevValue = this.isReadOnly();
+        if (prevValue === value) return;
+
+        for (const tabName in this._tabsFieldsMap) {
+            this.setTabReadOnly(tabName, value, noEvents, true);
+        }
+
+        super.setReadOnly(value, noEvents, noRerender);
     }
 
     //endregion

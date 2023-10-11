@@ -8,12 +8,12 @@
  * @license MIT
  */
 
-import {IDFormDataSet, IDFormDataSourcePromise, IDFormFieldValidationRules, IDFormMode, IDFormProps} from './dForm';
+import {IDFormDataSet, IDFormDataSourcePromise, IDFormMode, IDFormProps} from './dForm';
 import {HelpersObjects} from '@krinopotam/js-helpers';
 
 import {BaseValidator} from './validators/baseValidator';
 import React from 'react';
-import {IBaseFieldAny, IDFormFieldProps} from '@src/dForm/fields/base/baseField';
+import {IBaseFieldAny} from '@src/dForm/fields/base/baseField';
 import {IDFormFieldsProps} from '@src/dForm/index';
 import {TPromise} from '@krinopotam/service-types';
 
@@ -34,6 +34,9 @@ export interface IDFormBaseCallbacks<T> {
 
     /** fires when the read only state of the form changed */
     onFormReadOnlyStateChanged?: (state: boolean, api: T) => void;
+
+    /** fires when the disabled state of the form changed */
+    onFormDisabledStateChanged?: (state: boolean, api: T) => void;
 
     /** fires when the form began initialization (renders for the first time) */
     onFormInit?: (model: T) => void;
@@ -114,17 +117,15 @@ export class DModel {
     /** tabs and inline groups properties (fields properties grouped by tabs and inline groups) */
     private _tabsProps: Record<string, Record<string, IDFormFieldsProps>> = {};
 
-    /** validation rules */
-    private _validationRules: IDFormFieldValidationRules = {};
-
     /** the form data set instance */
     private _dataSet: IDFormDataSet | undefined = undefined;
 
+    //region Fields properties
     /** FOR INTERNAL USE ONLY - field labels */
     public _labels: Record<string, React.ReactNode | undefined> = {};
 
-    /** FOR INTERNAL USE ONLY - field values */
-    public _values: Record<string, unknown> = {};
+    /** Field values */
+    private _values: Record<string, unknown> = {};
 
     /** FOR INTERNAL USE ONLY - touched field statuses */
     public _touched: Record<string, boolean | undefined> = {};
@@ -138,14 +139,8 @@ export class DModel {
     /** FOR INTERNAL USE ONLY - hidden field statuses */
     public _hidden: Record<string, boolean | undefined> = {};
 
-    /** hidden tabs statuses */
-    private _hiddenTabs: Record<string, boolean | undefined> = {};
-
     /** FOR INTERNAL USE ONLY - read only field statuses */
     public _readOnly: Record<string, boolean | undefined> = {};
-
-    /** read only tabs statuses */
-    private _readOnlyTabs: Record<string, boolean | undefined> = {};
 
     /** FOR INTERNAL USE ONLY - disabled field statuses */
     public _disabled: Record<string, boolean | undefined> = {};
@@ -155,6 +150,11 @@ export class DModel {
 
     /** FOR INTERNAL USE ONLY - readiness field statuses (the field is completely initialized, its data is loaded) */
     public _ready: Record<string, boolean | undefined> = {};
+    //endregion
+
+    //region Form properties
+    /** the form disabled status */
+    private _formDisabled = false;
 
     /** the form read only status */
     private _formReadOnly = false;
@@ -170,6 +170,7 @@ export class DModel {
 
     /** the current form mode  */
     private _formMode: IDFormMode = 'create';
+    //endregion
 
     /** the number of attempts to submit */
     private _submitCount = 0;
@@ -187,7 +188,7 @@ export class DModel {
     private _callbacks: IDFormModelCallbacks = {};
 
     /** validator instance */
-    private _validator: BaseValidator;
+    private readonly _validator: BaseValidator;
 
     /** field rerender listeners */
     private _fieldRenderListeners: Record<string, (() => unknown)[]> | Record<string, never> = {};
@@ -229,7 +230,6 @@ export class DModel {
         this._formProps = formProps;
         this._formMode = formProps.formMode ?? 'create';
         this._formReadOnly = !!formProps.readOnly;
-        this._validationRules = formProps.validationRules ?? ({} as IDFormFieldValidationRules);
 
         [this._fieldsMap, this._groupsMap, this._rootFields, this._fieldsTree] = this.prepareFieldCollection(formProps.fieldsProps);
 
@@ -249,7 +249,7 @@ export class DModel {
         const oldDataSet = this.getFormDataSet();
         if (oldDataSet !== formProps.dataSet) this.setFormValues(formProps.dataSet, true);
 
-        if (!formProps.noAutoHideDependedFields) this._hidden = this.calculateHiddenFields(this.getFieldsProps(), this.getFormValues(), this._hidden);
+        if (!formProps.noAutoHideDependedFields) this._hidden = this.calculateHiddenFields();
     }
 
     prepareFieldCollection(
@@ -340,16 +340,12 @@ export class DModel {
 
     /**
      * Calculates the statuses of the visibility of fields on the basis of their dependence on each other
-     * @param fieldsProps
-     * @param values
-     * @param hiddenFields
-     * @param values
-     * @param hiddenFields
      * @returns Returns an array with new hidden field statuses
      */
-    private calculateHiddenFields(fieldsProps: IDFormFieldsProps, values: Record<string, unknown>, hiddenFields: Record<string, boolean | undefined>) {
+    private calculateHiddenFields() {
+        const fieldsProps = this.getFieldsProps();
         const result: Record<string, boolean> = {};
-        for (const fieldName in fieldsProps) result[fieldName] = this.isFieldMustBeHidden(fieldName, fieldsProps, values, hiddenFields);
+        for (const fieldName in fieldsProps) result[fieldName] = this.isFieldMustBeHidden(fieldName);
         return result;
     }
 
@@ -375,436 +371,11 @@ export class DModel {
     getFieldsTree() {
         return this._fieldsTree;
     }
-    //endregion
 
-    /** @return field */
-    getField(fieldName:string) {
-        return this._fieldsMap[fieldName]
+    /** @return field by name from fields map */
+    getField(fieldName: string) {
+        return this._fieldsMap[fieldName];
     }
-
-    //region Fields methods
-    /**
-     * @param fieldName - field name
-     * @returns field label
-     */
-    getFieldLabel(fieldName: string) {
-        return this._labels[fieldName];
-    }
-
-    /**
-     * Sets the field label
-     * @param fieldName - field name
-     * @param value - new label value
-     * @param noEvents - do not emit onLabelChanged callback
-     * @param noRerender - do not emit re-rendering
-     */
-    setFieldLabel(fieldName: string, value: React.ReactNode | undefined, noEvents?: boolean, noRerender?: boolean) {
-        const prevValue = this.getFieldLabel(fieldName);
-        if (prevValue === value) return;
-        this._labels[fieldName] = value;
-
-        if (!noEvents) this.getFieldProps(fieldName)?.onLabelChanged?.(value, prevValue, this._fieldsMap[fieldName]!);
-        if (!noRerender) this.emitFieldRender(fieldName);
-    }
-
-    /**
-     * @param fieldName - field name
-     * @returns field value
-     */
-    getFieldValue(fieldName: string): unknown {
-        return this._values[fieldName];
-    }
-
-    /**
-     * Sets a new field value, cause the field to rerender
-     * *this function doesn't change the field touch and dirty statuses. You should handle it in the field component!
-     * @param fieldName - field name
-     * @param value - new value
-     * @param noEvents - do not emit onValueChanged callback
-     * @param noRerender - do not emit re-rendering
-     */
-    setFieldValue(fieldName: string, value: unknown, noEvents?: boolean, noRerender?: boolean) {
-        const prevValue = this.getFieldValue(fieldName);
-        if (prevValue === value) return;
-
-        this._values[fieldName] = value;
-
-        if (!noEvents) {
-            this.getFieldProps(fieldName)?.onValueChanged?.(value, prevValue, this._fieldsMap[fieldName]!);
-            this.validateField(fieldName);
-        }
-
-        if (!noRerender) {
-            this.emitFieldRender(fieldName);
-            if (!this.getFormProps().noAutoHideDependedFields) this.hideDependedFields(fieldName);
-        }
-    }
-
-    /**
-     * @param fieldName - field name
-     * @returns the field touched status (a user has set focus to the field)
-     */
-    isFieldTouched(fieldName: string): boolean {
-        return !!this._touched[fieldName];
-    }
-
-    /**
-     * Sets a touched status to the field (a user has set focus to the field)
-     * @param fieldName - field name
-     * @param value - touched status
-     * @param noEvents - do not emit onTouchedStateChanged callback
-     */
-    setFieldTouched(fieldName: string, value: boolean, noEvents?: boolean) {
-        const prevValue = this.isFieldTouched(fieldName);
-        if (prevValue === value) return;
-
-        this._touched[fieldName] = value;
-
-        if (!noEvents) this.getFieldProps(fieldName)?.onTouchedStateChanged?.(value, this._fieldsMap[fieldName]!);
-    }
-
-    /**
-     * @param fieldName - field name
-     * @returns field dirty status (a user has changed field value)
-     */
-    isFieldDirty(fieldName: string): boolean {
-        return !!this._dirty[fieldName];
-    }
-
-    /**
-     * Sets a dirty status to the field (a user has changed field value)
-     * @param fieldName - field name
-     * @param value - dirty status
-     * @param noEvents - do not emit onDirtyStateChanged and onFormDirtyStateChanged callbacks
-     */
-    setFieldDirty(fieldName: string, value: boolean, noEvents?: boolean) {
-        const prevValue = this.isFieldDirty(fieldName);
-        if (prevValue !== value) return;
-
-        this._dirty[fieldName] = value;
-
-        if (!noEvents) this.getFieldProps(fieldName)?.onDirtyStateChanged?.(value, this._fieldsMap[fieldName]!);
-
-        let formDirty = value;
-        if (!value) {
-            for (const key in this._dirty) {
-                if (this.isFieldDirty(key)) {
-                    formDirty = true;
-                    break;
-                }
-            }
-        }
-
-        this.setFormDirty(formDirty, noEvents);
-    }
-
-    /**
-     * @param fieldName - field name
-     * @returns field disable status
-     */
-    isFieldDisabled(fieldName: string): boolean {
-        return !!this._disabled[fieldName];
-    }
-
-    /**
-     * Sets a disabled status to the field
-     * @param fieldName - field name
-     * @param value - disabled status
-     * @param noEvents - do not emit onDisabledStateChanged callback
-     * @param noRerender - do not emit re-rendering
-     */
-    setFieldDisabled(fieldName: string, value: boolean, noEvents?: boolean, noRerender?: boolean) {
-        const prevValue = this.isFieldDisabled(fieldName);
-        if (prevValue === value) return;
-        this._disabled[fieldName] = value;
-
-        if (!noEvents) this.getFieldProps(fieldName)?.onDisabledStateChanged?.(value, this._fieldsMap[fieldName]!);
-        if (!noRerender) this.emitFieldRender(fieldName);
-    }
-
-    /**
-     * @param fieldName - field name
-     * @returns field read only status
-     */
-    isFieldReadOnly(fieldName: string): boolean {
-        return !!this._readOnly[fieldName] || this._formMode === 'view';
-    }
-
-    /**
-     * Sets a read only status to the field
-     * @param fieldName - field name
-     * @param value - read only status
-     * @param noEvents - do not emit onReadOnlyStateChanged callback
-     * @param noRerender - do not emit re-rendering
-     */
-    setFieldReadOnly(fieldName: string, value: boolean, noEvents?: boolean, noRerender?: boolean) {
-        const prevValue = this.isFieldReadOnly(fieldName);
-
-        if (prevValue === value) return;
-
-        this._readOnly[fieldName] = value;
-
-        if (!noEvents) this.getFieldProps(fieldName)?.onReadOnlyStateChanged?.(value, this._fieldsMap[fieldName]!);
-        if (!noRerender) this.emitFieldRender(fieldName);
-    }
-
-    /**
-     * @param fieldName - field name
-     * @returns field hidden status
-     */
-    isFieldHidden(fieldName: string): boolean {
-        return !!this._hidden[fieldName];
-    }
-
-    /**
-     * Sets a hidden status to the field
-     * @param fieldName - field name
-     * @param value - hidden status
-     * @param noEvents - do not emit onHiddenStateChanged callback
-     * @param noRerender - do not emit re-rendering
-     */
-    setFieldHidden(fieldName: string, value: boolean, noEvents?: boolean, noRerender?: boolean) {
-        const prevValue = this.isFieldHidden(fieldName);
-        if (prevValue === value) return;
-
-        this._hidden[fieldName] = value;
-        if (!this.getFormProps().noAutoHideDependedFields) this.hideDependedFields(fieldName, noEvents, noRerender);
-
-        if (value) this.setFieldReady(fieldName, false, true); //the hidden fields are not ready because they are not rendered, but form ready status not changed
-
-        let prevGroupValue = false;
-        const fieldProps = this.getFieldProps(fieldName);
-        if (fieldProps?.tab && fieldProps.inlineGroup) prevGroupValue = this.isGroupHidden(fieldProps.tab, fieldProps.inlineGroup);
-
-        if (!noEvents) fieldProps?.onHiddenStateChanged?.(value, this._fieldsMap[fieldName]!);
-
-        if (noRerender) return;
-
-        this.emitFieldRender(fieldName);
-
-        if (!fieldProps?.tab || !fieldProps.inlineGroup) return;
-        const curGroupValue = this.isGroupHidden(fieldProps.tab, fieldProps.inlineGroup);
-        if (prevGroupValue !== curGroupValue) this.emitGroupRender(fieldProps.tab, fieldProps.inlineGroup);
-    }
-
-    /**
-     * @param fieldName - field name
-     * @returns field ready status (the field is completely initialized, its data is loaded)
-     */
-    isFieldReady(fieldName: string): boolean {
-        return !!this._ready[fieldName];
-    }
-
-    /**
-     * Sets a ready status to the field (the field is completely initialized, its data is loaded)
-     * @param fieldName - field name
-     * @param value - ready status
-     * @param noEvents - do not emit onReady callback
-     */
-    setFieldReady(fieldName: string, value: boolean, noEvents?: boolean) {
-        const prevValue = this.isFieldReady(fieldName);
-        if (prevValue === value) return;
-
-        this._ready[fieldName] = value;
-
-        if (!noEvents) this.getFieldProps(fieldName)?.onReadyStateChanged?.(value, this._fieldsMap[fieldName]!);
-        this.setFormReady(value, noEvents);
-    }
-
-    /**
-     * @param fieldName - field name
-     * @returns the error text of the field
-     */
-    getFieldError(fieldName: string): string {
-        const errors = this.getFormErrors();
-        return errors[fieldName] ?? '';
-    }
-
-    /**
-     * Sets an error to the field
-     * @param fieldName - field name
-     * @param value - error text
-     * @param noEvents - do not emit onErrorChanged & onFormHasErrors callbacks
-     * @param noRerender - do not emit re-rendering
-     */
-    setFieldError(fieldName: string, value: string, noEvents?: boolean, noRerender?: boolean) {
-        const prevValue = this.getFieldError(fieldName);
-        if (prevValue === value) return;
-
-        const errors = this.getFormErrors();
-
-        if (!value) delete errors[fieldName];
-        else errors[fieldName] = value;
-
-        if (!noEvents) {
-            this.getFieldProps(fieldName)?.onErrorChanged?.(value, this._fieldsMap[fieldName]!);
-
-            if (value) this._callbacks?.onFormHasErrors?.(this.getFormValues(), errors, this);
-            else {
-                if (this.isFormHasError()) this._callbacks?.onFormHasErrors?.(this.getFormValues(), errors, this);
-                else this._callbacks?.onFormHasNoErrors?.(this.getFormValues(), this);
-            }
-        }
-
-        if (!noRerender) this.emitFieldRender(fieldName);
-    }
-
-    /**
-     * Validate field
-     * @param fieldName
-     * @param noEvents - do not emit onValidated callback
-     * @param noRerender - do not emit re-rendering
-     * @returns error text
-     */
-    validateField(fieldName: string, noEvents?: boolean, noRerender?: boolean): string {
-        //hidden fields shouldn't be validated
-        const rules = this.getFieldProps(fieldName).rules ?? [];
-        const formRules = this._validationRules[fieldName] ?? [];
-        const error = !this.isFieldHidden(fieldName) ? this._validator.validateValue(this.getFieldValue(fieldName), this, rules.concat(formRules)) : '';
-
-        this.setFieldError(fieldName, error, noEvents);
-
-        if (!noEvents && !this.isFieldHidden(fieldName))
-            this.getFieldProps(fieldName)?.onValidated?.(this.getFieldValue(fieldName), error, this.isFormSubmitting(), this._fieldsMap[fieldName]!);
-
-        if (!noRerender) this.emitFieldRender(fieldName);
-        return error;
-    }
-
-    /**
-     * Get field props
-     * @param fieldName
-     */
-    getFieldProps(fieldName: string) {
-        const field = this._fieldsMap[fieldName];
-        return field?.getProps();
-    }
-
-    /**
-     * Set field props
-     * @param fieldName - field name
-     * @param fieldProps - new field properties
-     * @param noRerender - do not emit re-rendering
-     */
-    setFieldProps(fieldName: string, fieldProps: IDFormFieldProps, noRerender?: boolean) {
-        const field = this._fieldsMap[fieldName];
-        field?.setProps(fieldProps, noRerender);
-    }
-
-    /**
-     * partial update field props
-     * @param fieldName
-     * @param updatedProps
-     */
-    updateFieldProps(fieldName: string, updatedProps: Record<string, unknown>) {
-        const curProps = this.getFieldProps(fieldName);
-        if (!curProps) return;
-        this.setFieldProps(fieldName, {...curProps, ...updatedProps});
-    }
-
-    //endregion
-
-    //region Groups
-    /**
-     * Gets the current hidden status of the inline group
-     * @returns inline group hidden status
-     */
-    isGroupHidden(tabName: string, groupName: string): boolean {
-        if (!this._tabsProps?.[tabName]?.[groupName]) return true;
-
-        for (const fieldName in this._tabsProps[tabName][groupName]) {
-            if (!this.isFieldHidden(fieldName)) return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * Sets a hidden status to the inline group
-     * @param tabName
-     * @param groupName
-     * @param value - hidden status
-     */
-    setGroupHidden(tabName: string, groupName: string, value: boolean) {
-        if (!this._tabsProps?.[tabName]?.[groupName]) return;
-
-        let prevValue = this.isGroupHidden(tabName, groupName);
-        for (const fieldName in this._tabsProps[tabName][groupName]) {
-            if (!this.isFieldHidden(fieldName)) prevValue = false;
-            this.setFieldHidden(fieldName, value);
-        }
-
-        if (prevValue === value) return;
-        this.emitGroupRender(tabName, groupName);
-    }
-
-    //endregion
-
-    //region Tabs
-
-    // hidden
-    /**
-     * Gets the current hidden status of the tab
-     * @returns Tab hidden status
-     */
-    isTabHidden(tabName: string): boolean {
-        return !!this._hiddenTabs[tabName];
-    }
-
-    /**
-     * Sets a hidden status to the tab
-     * @param tabName
-     * @param value - hidden status
-     */
-    setTabHidden(tabName: string, value: boolean) {
-        const tab = this._tabsProps[tabName];
-        if (!tab) return;
-
-        const prevValue = this.isTabHidden(tabName);
-        this._hiddenTabs[tabName] = value;
-
-        for (const groupName in tab) {
-            const group = tab[groupName];
-            for (const fieldName in group) this.setFieldHidden(fieldName, value, true);
-        }
-
-        if (prevValue !== value) this._callbacks?.onTabHiddenStateChanged?.(tabName, value, this);
-
-        this.emitTabRender(tabName);
-    }
-
-    // readOnly
-    /**
-     * Gets the current read only status of the tab
-     * @returns Tab read only status
-     */
-    isTabReadOnly(tabName: string): boolean {
-        return !!this._readOnlyTabs[tabName] || this._formMode === 'view';
-    }
-
-    /**
-     * Sets a read only status to the tab and to the all tab fields
-     * *this function doesn't call onFieldReadOnlyStateChanged callbacks of the fields
-     * @param tabName
-     * @param value - read only status
-     */
-    setTabReadOnly(tabName: string, value: boolean) {
-        const tab = this._tabsProps[tabName];
-        if (!tab) return;
-
-        const prevValue = this.isTabReadOnly(tabName);
-        this._readOnlyTabs[tabName] = value;
-
-        for (const groupName in tab) {
-            const group = tab[groupName];
-            for (const fieldName in group) this.setFieldReadOnly(fieldName, value, true);
-        }
-
-        if (prevValue !== value) this._callbacks?.onTabReadOnlyStateChanged?.(tabName, value, this);
-
-        this.emitTabRender(tabName);
-    }
-
     //endregion
 
     //region Form methods
@@ -821,21 +392,38 @@ export class DModel {
 
     /** Update form values
      * @param dataSet - new data set
-     * @param noEvents- does not raise events/callbacks and the field rerender
+     * @param noEvents - do not emit onValueChanged callback
+     * @param noRerender - do not emit re-rendering
      */
-    setFormValues(dataSet: IDFormDataSet | undefined, noEvents?: boolean) {
+    setFormValues(dataSet: IDFormDataSet | undefined, noEvents?: boolean, noRerender?: boolean) {
         const newDataSet = noEvents ? dataSet : this._callbacks.onDataSetChange?.(dataSet, this) ?? dataSet;
 
         this._dataSet = newDataSet;
-        const fieldsProps = this.getFieldsProps();
-        for (const fieldName in fieldsProps) {
-            this.setFieldValue(fieldName, newDataSet?.[fieldName], noEvents);
+
+        for (const fieldName in this._fieldsMap) {
+            const field = this._fieldsMap[fieldName];
+            field.setValue(newDataSet?.[fieldName], noEvents, noRerender);
         }
     }
 
     /** Get form data set (Not to be confused with form values. This is the dataset that was passed to the form) */
     getFormDataSet() {
         return this._dataSet;
+    }
+
+    /** @return fields whole map **/
+    getFields() {
+        return this._fieldsMap;
+    }
+
+    /** @return model validator instance */
+    getValidator() {
+        return this._validator;
+    }
+
+    /**@return model callbacks collection */
+    getModelCallbacks() {
+        return this._callbacks;
     }
 
     // Dirty
@@ -852,14 +440,43 @@ export class DModel {
      * @param value - dirty status
      * @param noEvents - does not raise events/callbacks
      */
-    private setFormDirty(value: boolean, noEvents?: boolean) {
+    public setFormDirty(value: boolean, noEvents?: boolean) {
         const prevValue = this.isFormDirty();
         this._formDirty = value;
 
         if (!noEvents && prevValue !== value) this._callbacks?.onFormDirtyStateChanged?.(value, this);
     }
 
-    // ReadOnly
+    /**
+     * Gets the current read only status of the form
+     * @returns Form read only status
+     */
+    isFormDisabled(): boolean {
+        return this._formDisabled;
+    }
+
+    /**
+     * Sets a read only status to the form
+     * @param value - read only status
+     * @param noEvents - do not emit onDisabledStateChanged and onFormDisabledStateChanged callbacks
+     * @param noRerender - do not emit re-rendering
+     */
+    setFormDisabled(value: boolean, noEvents?: boolean, noRerender?: boolean) {
+        const prevValue = this.isFormDisabled();
+        this._formDisabled = value;
+
+        if (prevValue === value) return;
+
+        const fields = this.getFieldsMap();
+        for (const fieldName in fields) {
+            const field = fields[fieldName];
+            field.setDisabled(value, noEvents, true);
+        }
+
+        if (!noEvents) this.getModelCallbacks()?.onFormDisabledStateChanged?.(value, this);
+        if (!noRerender) this.emitFormRender();
+    }
+
     /**
      * Gets the current read only status of the form
      * @returns Form read only status
@@ -870,22 +487,24 @@ export class DModel {
 
     /**
      * Sets a read only status to the form
-     * *this function doesn't call onFieldReadOnlyStateChanged callbacks of the fields
      * @param value - read only status
+     * @param noEvents - do not emit onFormReadOnlyStateChanged and onReadOnlyStateChanged callback
+     * @param noRerender - do not emit re-rendering
      */
-    setFormReadOnly(value: boolean) {
+    setFormReadOnly(value: boolean, noEvents?: boolean, noRerender?: boolean) {
         const prevValue = this.isFormReadOnly();
         this._formReadOnly = value;
 
-        const fieldsProps = this.getFieldsProps();
-        for (const fieldName in fieldsProps) {
-            this._readOnly[fieldName] = value;
+        if (prevValue === value) return;
+
+        const fields = this.getFieldsMap();
+        for (const fieldName in fields) {
+            const field = fields[fieldName];
+            field.setReadOnly(value, noEvents, true);
         }
 
-        if (prevValue !== value) {
-            this._callbacks?.onFormReadOnlyStateChanged?.(value, this);
-            this.emitFormRender();
-        }
+        if (!noEvents) this.getModelCallbacks()?.onFormReadOnlyStateChanged?.(value, this);
+        if (!noRerender) this.emitFormRender();
     }
 
     // Initialization
@@ -926,11 +545,11 @@ export class DModel {
                 return;
             }
 
-            const fieldsProps = this.getFieldsProps();
             //set form ready status only if every visible field from fieldsProps has set ready status
-            for (const fieldName in fieldsProps) {
-                if (this.isFieldHidden(fieldName)) continue;
-                if (!this.isFieldReady(fieldName)) {
+            for (const fieldName in this._fieldsMap) {
+                const field = this._fieldsMap[fieldName];
+                if (field.isHidden()) continue;
+                if (!field.isReady()) {
                     value = false;
                     break;
                 }
@@ -945,14 +564,14 @@ export class DModel {
     // Validation
     /**
      * Validate form
-     * @param noEvents - does not raise the field validation
+     * @param noEvents - do not emit onValidated callback
+     * @param noRerender - do not emit re-rendering
      * @returns a collection of errors of only those visible fields for which there are errors (hidden fields have no errors)
      */
-    validateForm(noEvents?: boolean) {
-        const fieldsProps = this.getFieldsProps();
-        for (const fieldName in fieldsProps) {
-            this.validateField(fieldName, noEvents);
-            if (!noEvents) this.emitFieldRender(fieldName);
+    validateForm(noEvents?: boolean, noRerender?: boolean) {
+        for (const fieldName in this._fieldsMap) {
+            const field = this._fieldsMap[fieldName];
+            field.validate(noEvents, noRerender);
         }
 
         this.emitFormRender();
@@ -1004,7 +623,7 @@ export class DModel {
     isFormHasError() {
         const errors = this.getFormErrors();
         for (const fieldName in errors) {
-            if (this.getFieldError(fieldName)) return true;
+            if (errors[fieldName]) return true;
         }
 
         return false;
@@ -1208,51 +827,39 @@ export class DModel {
         const fieldProps = fieldsProps[fieldName];
         if (!fieldProps) return;
 
-        for (const childName in fieldsProps) {
-            const childProps = fieldsProps[childName];
+        for (const childName in this._fieldsMap) {
+            const childField = this._fieldsMap[childName];
+            const childProps = childField.getProps();
             if (!childProps?.dependsOn || childProps.dependsOn.indexOf(fieldName) < 0) continue;
-            const mustHidden = this.isFieldMustBeHidden(childName, fieldsProps, this.getFormValues(), this._hidden);
-            this.setFieldHidden(childName, mustHidden, noEvents, noRerender);
+            const mustHidden = this.isFieldMustBeHidden(childName);
+            childField.setHidden(mustHidden, noEvents, noRerender);
         }
     }
 
     /**
      * Check if field must be hidden. Field must be hidden if a field on which it depends on has no value or hidden
      * @param fieldName
-     * @param fieldsProps
-     * @param values
-     * @param hiddenFields
-     * @param fieldsProps
-     * @param values
-     * @param hiddenFields
-     * @param fieldsProps
-     * @param values
-     * @param hiddenFields
      * @returns true, if field must be hidden
      */
-    private isFieldMustBeHidden(
-        fieldName: string,
-        fieldsProps: IDFormFieldsProps,
-        values: Record<string, unknown> | undefined,
-        hiddenFields: Record<string, boolean | undefined>
-    ) {
-        const field = fieldsProps[fieldName];
-        if (!field) return true;
+    private isFieldMustBeHidden(fieldName: string) {
+        const fieldsProps = this.getFieldsProps();
+        const fieldProps = fieldsProps[fieldName];
+        if (!fieldProps) return true;
 
-        if (field.hidden) return true;
-        if (!field.dependsOn) return false;
+        if (fieldProps.hidden) return true;
+        if (!fieldProps.dependsOn) return false;
 
-        for (const parentName of field.dependsOn) {
-            const parentField = fieldsProps[parentName];
-            if (!parentField) continue;
+        for (const parentName of fieldProps.dependsOn) {
+            const parentFieldProps = fieldsProps[parentName];
+            if (!parentFieldProps) continue;
 
-            if (parentField.hidden) return true;
+            if (parentFieldProps.hidden) return true;
 
-            const parentHasNoValue = !values?.[parentName];
-            const parentIsHidden = hiddenFields[parentName] && !field.dependsOn; //You can take current hidden status only for the root fields. Others must be updated despite the current hidden status
+            const parentHasNoValue = !this._values?.[parentName];
+            const parentIsHidden = this._hidden[parentName] && !fieldProps.dependsOn; //You can take current hidden status only for the root fields. Others must be updated despite the current hidden status
             if (parentHasNoValue || parentIsHidden) return true;
 
-            if (this.isFieldMustBeHidden(parentName, fieldsProps, values, hiddenFields)) return true;
+            if (this.isFieldMustBeHidden(parentName)) return true;
         }
 
         return false;
@@ -1261,27 +868,6 @@ export class DModel {
     //endregion
 
     //region Components rerender implementation
-    // field rerender
-    subscribeRenderField(fieldName: string) {
-        return (listener: () => void) => {
-            if (!this._fieldRenderListeners[fieldName]) this._fieldRenderListeners[fieldName] = [];
-
-            this._fieldRenderListeners[fieldName] = [...this._fieldRenderListeners[fieldName], listener];
-            return () => {
-                this._fieldRenderListeners[fieldName] = this._fieldRenderListeners[fieldName].filter(l => l !== listener);
-            };
-        };
-    }
-
-    emitFieldRender(fieldName: string) {
-        const field = this._fieldsMap[fieldName];
-        field.emitRender();
-    }
-
-    getFieldRenderSnapshots() {
-        return this._fieldRenderSnapshots;
-    }
-
     // inline group rerender
     subscribeRenderGroup(tabName: string, groupName: string) {
         return (listener: () => void) => {
