@@ -24,7 +24,7 @@ export const TabsFieldRender = ({field}: {field: TabsField}): React.JSX.Element 
             forceRender: true,
             disabled: field.isDisabled(),
             style: fieldProps.tabsStyle,
-            children: <FieldsRender model={model} groupsMap={groupsMap} />,
+            children: <FieldsRender model={model} groupsMap={groupsMap} subscribe={field.tabSubscribe(tabName)} getSnapshot={field.getTabSnapshot(tabName)} />,
             active: activeTab === tabName,
         });
     }

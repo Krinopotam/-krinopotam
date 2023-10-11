@@ -190,12 +190,6 @@ export class DModel {
     /** validator instance */
     private readonly _validator: BaseValidator;
 
-    /** field rerender listeners */
-    private _fieldRenderListeners: Record<string, (() => unknown)[]> | Record<string, never> = {};
-
-    /** field rerender keys snapshots */
-    private _fieldRenderSnapshots: Record<string, () => number> | Record<string, never> = {};
-
     /** inline group rerender listeners */
     private _groupRenderListeners: Record<string, Record<string, (() => unknown)[]>> | Record<string, never> = {};
 

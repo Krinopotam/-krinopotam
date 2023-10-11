@@ -120,7 +120,7 @@ export class BaseField<TFieldProps extends IDFormBaseFieldProps<AnyType>> {
     /** React component sync(re-render) listener */
     protected _listeners: (() => void)[] = [];
     /** react component sync(re-render) snapshot */
-    protected renderSnapshot: number = 0;
+    protected renderSnapshot: Record<never, never> = {};
 
     /** Children fields (if this field is container) */
     //protected childrenFields?: Record<string, IBaseFieldAny>;
@@ -453,13 +453,13 @@ export class BaseField<TFieldProps extends IDFormBaseFieldProps<AnyType>> {
     }
 
     /** return React component sync(re-render) snapshot */
-    public getSnapshot() {
+    getSnapshot() {
         return this.renderSnapshot;
     }
 
     /** Emit field React component re-render */
     emitRender() {
-        this.renderSnapshot++;
+        this.renderSnapshot = {};
         for (const listener of this._listeners) listener();
     }
 

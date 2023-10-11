@@ -80,6 +80,12 @@ export class TabsField extends BaseField<IDFormTabsFieldProps> {
 
     //endregion
 
+    /** tab rerender listeners */
+    private _tabRenderListeners: Record<string, (() => unknown)[]> = {};
+
+    /** tab rerender keys snapshots */
+    private _tabRenderSnapshots: Record<string, Record<never, never>> = {};
+
     initChildrenFields(): [TabsField['_fieldsMap'], TabsField['_groupsMap'], TabsField['_rootFields'], TabsField['_fieldsTree']] {
         const tabsProps = this.getProps();
         if (!tabsProps.tabs) return [{}, {}, {}, {}];
@@ -95,6 +101,8 @@ export class TabsField extends BaseField<IDFormTabsFieldProps> {
             this._tabsFieldsMap[tabName] = this._fieldsMap;
             this._tabsGroupsMap[tabName] = this._groupsMap;
             this._tabsFieldsTree[tabName] = this._fieldsTree;
+            this._tabRenderSnapshots[tabName] = {};
+            this._tabRenderListeners[tabName] = [];
         }
 
         return [this._fieldsMap, this._groupsMap, this._rootFields, this._fieldsTree];
@@ -324,4 +332,27 @@ export class TabsField extends BaseField<IDFormTabsFieldProps> {
     }
 
     //endregion
+
+    /** @return React useSyncExternalStore subscribe function */
+    tabSubscribe(tabName: string) {
+        return (listener: () => void) => {
+            this._tabRenderListeners[tabName] = [...this._tabRenderListeners[tabName], listener];
+            return () => {
+                this._tabRenderListeners[tabName] = this._tabRenderListeners[tabName].filter(l => l !== listener);
+            };
+        };
+    }
+
+    /** @return React useSyncExternalStore get snapshot function */
+    getTabSnapshot(tabName: string) {
+        return () => {
+            return this._tabRenderSnapshots[tabName];
+        };
+    }
+
+    /** Emit field React component re-render */
+    emitTabRender(tabName: string) {
+        this._tabRenderSnapshots[tabName] = {}; //new value
+        for (const listener of this._tabRenderListeners[tabName]) listener();
+    }
 }
