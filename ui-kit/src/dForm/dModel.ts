@@ -383,13 +383,6 @@ export class DModel {
     //endregion
 
     /**
-     * @returns tabs properties (fields properties grouped by tabs)
-     */
-    public getTabsProps() {
-        return this._tabsProps;
-    }
-
-    /**
      * @param tabName
      * @returns fields properties grouped by tabs and inline groups
      */
