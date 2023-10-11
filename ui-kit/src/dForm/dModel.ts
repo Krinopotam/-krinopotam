@@ -196,12 +196,6 @@ export class DModel {
     /** inline group rerender keys snapshots */
     private _groupRenderSnapshots: Record<string, Record<string, () => number>> | Record<string, never> = {};
 
-    /** tab rerender listeners */
-    private _tabRenderListeners: Record<string, (() => unknown)[]> | Record<string, never> = {};
-
-    /** tab rerender keys snapshots */
-    private _tabRenderSnapshots: Record<string, () => number> | Record<string, never> = {};
-
     /** form rerender listeners */
     private _formRenderListeners: (() => unknown)[] = [];
 
@@ -886,30 +880,6 @@ export class DModel {
 
     getGroupRenderSnapshots() {
         return this._groupRenderSnapshots;
-    }
-
-    // tab rerender
-    subscribeRenderTab(tabName: string) {
-        return (listener: () => void) => {
-            if (!this._tabRenderListeners[tabName]) this._tabRenderListeners[tabName] = [];
-
-            this._tabRenderListeners[tabName] = [...this._tabRenderListeners[tabName], listener];
-            return () => {
-                this._tabRenderListeners[tabName] = this._tabRenderListeners[tabName].filter(l => l !== listener);
-            };
-        };
-    }
-
-    private emitTabRender(tabName: string) {
-        const result = this._tabRenderSnapshots[tabName] ? this._tabRenderSnapshots[tabName]() + 1 : 0;
-        this._tabRenderSnapshots[tabName] = () => result;
-
-        if (!this._tabRenderListeners[tabName]) return;
-        for (const listener of this._tabRenderListeners[tabName]) listener();
-    }
-
-    getTabRenderSnapshots() {
-        return this._tabRenderSnapshots;
     }
 
     // form rerender

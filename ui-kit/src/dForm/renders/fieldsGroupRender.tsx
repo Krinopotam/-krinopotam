@@ -26,7 +26,6 @@ interface IFieldGroupRenderProps {
 
 export const FieldsGroupRender = ({groupName, fields, model}: IFieldGroupRenderProps): React.JSX.Element | null => {
     const formProps = model.getFormProps();
-    useExternalRenderCall(model, groupName);
 
     let firstField: IBaseFieldAny | undefined;
     for (const fieldName in fields) {
@@ -58,16 +57,4 @@ export const FieldsGroupRender = ({groupName, fields, model}: IFieldGroupRenderP
             ) : null}
         </Animate>
     );
-};
-
-const useExternalRenderCall = (model: DModel, tabName: string) => {
-    const subscribe = model.subscribeRenderTab(tabName);
-
-    const getSnapshot = () => {
-        const snaps = model.getTabRenderSnapshots();
-        if (!snaps[tabName]) return undefined;
-        return snaps[tabName];
-    };
-
-    return useSyncExternalStore(subscribe, getSnapshot);
 };

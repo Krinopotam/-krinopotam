@@ -80,11 +80,13 @@ export class TabsField extends BaseField<IDFormTabsFieldProps> {
 
     //endregion
 
+    //region Tab re-render
     /** tab rerender listeners */
     private _tabRenderListeners: Record<string, (() => unknown)[]> = {};
 
     /** tab rerender keys snapshots */
     private _tabRenderSnapshots: Record<string, Record<never, never>> = {};
+    //endregion
 
     initChildrenFields(): [TabsField['_fieldsMap'], TabsField['_groupsMap'], TabsField['_rootFields'], TabsField['_fieldsTree']] {
         const tabsProps = this.getProps();
@@ -333,6 +335,7 @@ export class TabsField extends BaseField<IDFormTabsFieldProps> {
 
     //endregion
 
+    //region Emit tab re-render implementation
     /** @return React useSyncExternalStore subscribe function */
     tabSubscribe(tabName: string) {
         return (listener: () => void) => {
@@ -355,4 +358,5 @@ export class TabsField extends BaseField<IDFormTabsFieldProps> {
         this._tabRenderSnapshots[tabName] = {}; //new value
         for (const listener of this._tabRenderListeners[tabName]) listener();
     }
+    //endregion
 }
