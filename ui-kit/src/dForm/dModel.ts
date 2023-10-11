@@ -120,41 +120,41 @@ export class DModel {
     /** the form data set instance */
     private _dataSet: IDFormDataSet | undefined = undefined;
 
-    /** field labels */
-    private _labels: Record<string, React.ReactNode | undefined> = {};
+    /** FOR INTERNAL USE ONLY - field labels */
+    public _labels: Record<string, React.ReactNode | undefined> = {};
 
-    /** field values */
-    private _values: Record<string, unknown> = {};
+    /** FOR INTERNAL USE ONLY - field values */
+    public _values: Record<string, unknown> = {};
 
-    /** touched field statuses */
-    private _touched: Record<string, boolean | undefined> = {};
+    /** FOR INTERNAL USE ONLY - touched field statuses */
+    public _touched: Record<string, boolean | undefined> = {};
 
-    /** dirty field statuses */
-    private _dirty: Record<string, boolean | undefined> = {};
+    /** FOR INTERNAL USE ONLY - dirty field statuses */
+    public _dirty: Record<string, boolean | undefined> = {};
 
-    /** error field statuses */
-    private _errors: Record<string, string> = {};
+    /** FOR INTERNAL USE ONLY - error field statuses */
+    public _errors: Record<string, string> = {};
 
-    /** hidden field statuses */
-    private _hidden: Record<string, boolean | undefined> = {};
+    /** FOR INTERNAL USE ONLY - hidden field statuses */
+    public _hidden: Record<string, boolean | undefined> = {};
 
     /** hidden tabs statuses */
     private _hiddenTabs: Record<string, boolean | undefined> = {};
 
-    /** read only field statuses */
-    private _readOnly: Record<string, boolean | undefined> = {};
+    /** FOR INTERNAL USE ONLY - read only field statuses */
+    public _readOnly: Record<string, boolean | undefined> = {};
 
     /** read only tabs statuses */
     private _readOnlyTabs: Record<string, boolean | undefined> = {};
 
-    /** disabled field statuses */
-    private _disabled: Record<string, boolean | undefined> = {};
+    /** FOR INTERNAL USE ONLY - disabled field statuses */
+    public _disabled: Record<string, boolean | undefined> = {};
 
     /** disabled tabs statuses */
     private _disabledTabs: Record<string, boolean | undefined> = {};
 
-    /** readiness field statuses (the field is completely initialized, its data is loaded) */
-    private _ready: Record<string, boolean | undefined> = {};
+    /** FOR INTERNAL USE ONLY - readiness field statuses (the field is completely initialized, its data is loaded) */
+    public _ready: Record<string, boolean | undefined> = {};
 
     /** the form read only status */
     private _formReadOnly = false;
@@ -220,7 +220,7 @@ export class DModel {
         this._validator = new BaseValidator();
     }
 
-    public reinitModel(formProps: IDFormProps, callbacks: IDFormModelCallbacks) {
+    reinitModel(formProps: IDFormProps, callbacks: IDFormModelCallbacks) {
         this._callbacks = callbacks;
 
         if (this._formProps === formProps) return;
@@ -252,7 +252,7 @@ export class DModel {
         if (!formProps.noAutoHideDependedFields) this._hidden = this.calculateHiddenFields(this.getFieldsProps(), this.getFormValues(), this._hidden);
     }
 
-    public prepareFieldCollection(
+    prepareFieldCollection(
         fieldsProps: IDFormFieldsProps | undefined,
         parent?: IBaseFieldAny
     ): [DModel['_fieldsMap'], DModel['_groupsMap'], DModel['_rootFields'], DModel['_fieldsTree']] {
@@ -260,30 +260,30 @@ export class DModel {
         const groupsMap: DModel['_groupsMap'] = {};
 
         const rootFields: DModel['_rootFields'] = {};
-        const treeFields: DModel['_fieldsTree'] = {};
+        const fieldsTree: DModel['_fieldsTree'] = {};
         let i = 0;
         for (const fieldName in fieldsProps) {
             const fieldProps = fieldsProps[fieldName];
-            if (fieldsMap[fieldName]) console.warn(`The form contains duplicate field names  "${fieldName}"!`);
+            if (fieldsMap[fieldName]) console.error(`The form contains duplicate field names  "${fieldName}"!`);
             const field = new fieldProps.component(fieldName, fieldProps, this, parent) as IBaseFieldAny;
 
             const groupName = field.getProps().inlineGroup ?? '[__group__]' + i++;
 
             fieldsMap[fieldName] = field;
             rootFields[fieldName] = field;
-            treeFields[fieldName] = field;
+            fieldsTree[fieldName] = field;
             if (!groupsMap[groupName]) groupsMap[groupName] = {};
             groupsMap[groupName][fieldName] = field;
 
-            const [plainChildren, , , treeChildren] = field.initChildrenFields();
-            if (Object.keys(treeChildren).length > 0) treeFields[fieldName] = treeChildren;
+            const [plainChildren, , , childrenTree] = field.initChildrenFields();
+            if (Object.keys(childrenTree).length > 0) fieldsTree[fieldName] = childrenTree[fieldName];
 
             for (const childName in plainChildren) {
-                if (fieldsMap[childName]) console.warn(`The form contains duplicate field names  "${childName}"!`);
+                if (fieldsMap[childName]) console.error(`The form contains duplicate field names  "${childName}"!`);
                 fieldsMap[childName] = plainChildren[childName];
             }
         }
-        return [fieldsMap, groupsMap, rootFields, treeFields];
+        return [fieldsMap, groupsMap, rootFields, fieldsTree];
     }
 
     /**
@@ -355,39 +355,31 @@ export class DModel {
 
     //endregion
 
-    /**
-     * @return fields collection, grouped by row groups (if now field rowGroup, group will contain only one field with synthetic key)
-     */
-
-
     //region Fields collection getters
     /** return@ field collection (plain list of all fields in all component tabs, including child fields) */
-    public getFieldsMap() {
+    getFieldsMap() {
         return this._fieldsMap;
     }
 
     /** @return root fields collection, grouped by inline row groups (if no field rowGroup, group will contain only one field with synthetic key) */
-    public getGroupsMap() {
+    getGroupsMap() {
         return this._groupsMap;
     }
 
     /** @return root fields collection (only root fields, without children) */
-    public getRootFields() {
+    getRootFields() {
         return this._rootFields;
     }
 
     /** @return field collection tree (all fields in all component tabs, including child fields of other containers grouped by containers) */
-    public getFieldsTree() {
+    getFieldsTree() {
         return this._fieldsTree;
     }
     //endregion
 
-    /**
-     * @param tabName
-     * @returns fields properties grouped by tabs and inline groups
-     */
-    public getGroupsProps(tabName: string) {
-        return this._tabsProps[tabName];
+    /** @return field */
+    getField(fieldName:string) {
+        return this._fieldsMap[fieldName]
     }
 
     //region Fields methods
@@ -395,7 +387,7 @@ export class DModel {
      * @param fieldName - field name
      * @returns field label
      */
-    public getFieldLabel(fieldName: string) {
+    getFieldLabel(fieldName: string) {
         return this._labels[fieldName];
     }
 
@@ -406,7 +398,7 @@ export class DModel {
      * @param noEvents - do not emit onLabelChanged callback
      * @param noRerender - do not emit re-rendering
      */
-    public setFieldLabel(fieldName: string, value: React.ReactNode | undefined, noEvents?: boolean, noRerender?: boolean) {
+    setFieldLabel(fieldName: string, value: React.ReactNode | undefined, noEvents?: boolean, noRerender?: boolean) {
         const prevValue = this.getFieldLabel(fieldName);
         if (prevValue === value) return;
         this._labels[fieldName] = value;
@@ -419,7 +411,7 @@ export class DModel {
      * @param fieldName - field name
      * @returns field value
      */
-    public getFieldValue(fieldName: string): unknown {
+    getFieldValue(fieldName: string): unknown {
         return this._values[fieldName];
     }
 
@@ -431,7 +423,7 @@ export class DModel {
      * @param noEvents - do not emit onValueChanged callback
      * @param noRerender - do not emit re-rendering
      */
-    public setFieldValue(fieldName: string, value: unknown, noEvents?: boolean, noRerender?: boolean) {
+    setFieldValue(fieldName: string, value: unknown, noEvents?: boolean, noRerender?: boolean) {
         const prevValue = this.getFieldValue(fieldName);
         if (prevValue === value) return;
 
@@ -452,7 +444,7 @@ export class DModel {
      * @param fieldName - field name
      * @returns the field touched status (a user has set focus to the field)
      */
-    public isFieldTouched(fieldName: string): boolean {
+    isFieldTouched(fieldName: string): boolean {
         return !!this._touched[fieldName];
     }
 
@@ -462,7 +454,7 @@ export class DModel {
      * @param value - touched status
      * @param noEvents - do not emit onTouchedStateChanged callback
      */
-    public setFieldTouched(fieldName: string, value: boolean, noEvents?: boolean) {
+    setFieldTouched(fieldName: string, value: boolean, noEvents?: boolean) {
         const prevValue = this.isFieldTouched(fieldName);
         if (prevValue === value) return;
 
@@ -475,7 +467,7 @@ export class DModel {
      * @param fieldName - field name
      * @returns field dirty status (a user has changed field value)
      */
-    public isFieldDirty(fieldName: string): boolean {
+    isFieldDirty(fieldName: string): boolean {
         return !!this._dirty[fieldName];
     }
 
@@ -485,7 +477,7 @@ export class DModel {
      * @param value - dirty status
      * @param noEvents - do not emit onDirtyStateChanged and onFormDirtyStateChanged callbacks
      */
-    public setFieldDirty(fieldName: string, value: boolean, noEvents?: boolean) {
+    setFieldDirty(fieldName: string, value: boolean, noEvents?: boolean) {
         const prevValue = this.isFieldDirty(fieldName);
         if (prevValue !== value) return;
 
@@ -510,7 +502,7 @@ export class DModel {
      * @param fieldName - field name
      * @returns field disable status
      */
-    public isFieldDisabled(fieldName: string): boolean {
+    isFieldDisabled(fieldName: string): boolean {
         return !!this._disabled[fieldName];
     }
 
@@ -521,7 +513,7 @@ export class DModel {
      * @param noEvents - do not emit onDisabledStateChanged callback
      * @param noRerender - do not emit re-rendering
      */
-    public setFieldDisabled(fieldName: string, value: boolean, noEvents?: boolean, noRerender?: boolean) {
+    setFieldDisabled(fieldName: string, value: boolean, noEvents?: boolean, noRerender?: boolean) {
         const prevValue = this.isFieldDisabled(fieldName);
         if (prevValue === value) return;
         this._disabled[fieldName] = value;
@@ -534,7 +526,7 @@ export class DModel {
      * @param fieldName - field name
      * @returns field read only status
      */
-    public isFieldReadOnly(fieldName: string): boolean {
+    isFieldReadOnly(fieldName: string): boolean {
         return !!this._readOnly[fieldName] || this._formMode === 'view';
     }
 
@@ -545,7 +537,7 @@ export class DModel {
      * @param noEvents - do not emit onReadOnlyStateChanged callback
      * @param noRerender - do not emit re-rendering
      */
-    public setFieldReadOnly(fieldName: string, value: boolean, noEvents?: boolean, noRerender?: boolean) {
+    setFieldReadOnly(fieldName: string, value: boolean, noEvents?: boolean, noRerender?: boolean) {
         const prevValue = this.isFieldReadOnly(fieldName);
 
         if (prevValue === value) return;
@@ -560,7 +552,7 @@ export class DModel {
      * @param fieldName - field name
      * @returns field hidden status
      */
-    public isFieldHidden(fieldName: string): boolean {
+    isFieldHidden(fieldName: string): boolean {
         return !!this._hidden[fieldName];
     }
 
@@ -571,7 +563,7 @@ export class DModel {
      * @param noEvents - do not emit onHiddenStateChanged callback
      * @param noRerender - do not emit re-rendering
      */
-    public setFieldHidden(fieldName: string, value: boolean, noEvents?: boolean, noRerender?: boolean) {
+    setFieldHidden(fieldName: string, value: boolean, noEvents?: boolean, noRerender?: boolean) {
         const prevValue = this.isFieldHidden(fieldName);
         if (prevValue === value) return;
 
@@ -599,7 +591,7 @@ export class DModel {
      * @param fieldName - field name
      * @returns field ready status (the field is completely initialized, its data is loaded)
      */
-    public isFieldReady(fieldName: string): boolean {
+    isFieldReady(fieldName: string): boolean {
         return !!this._ready[fieldName];
     }
 
@@ -609,7 +601,7 @@ export class DModel {
      * @param value - ready status
      * @param noEvents - do not emit onReady callback
      */
-    public setFieldReady(fieldName: string, value: boolean, noEvents?: boolean) {
+    setFieldReady(fieldName: string, value: boolean, noEvents?: boolean) {
         const prevValue = this.isFieldReady(fieldName);
         if (prevValue === value) return;
 
@@ -623,7 +615,7 @@ export class DModel {
      * @param fieldName - field name
      * @returns the error text of the field
      */
-    public getFieldError(fieldName: string): string {
+    getFieldError(fieldName: string): string {
         const errors = this.getFormErrors();
         return errors[fieldName] ?? '';
     }
@@ -635,7 +627,7 @@ export class DModel {
      * @param noEvents - do not emit onErrorChanged & onFormHasErrors callbacks
      * @param noRerender - do not emit re-rendering
      */
-    public setFieldError(fieldName: string, value: string, noEvents?: boolean, noRerender?: boolean) {
+    setFieldError(fieldName: string, value: string, noEvents?: boolean, noRerender?: boolean) {
         const prevValue = this.getFieldError(fieldName);
         if (prevValue === value) return;
 
@@ -664,7 +656,7 @@ export class DModel {
      * @param noRerender - do not emit re-rendering
      * @returns error text
      */
-    public validateField(fieldName: string, noEvents?: boolean, noRerender?: boolean): string {
+    validateField(fieldName: string, noEvents?: boolean, noRerender?: boolean): string {
         //hidden fields shouldn't be validated
         const rules = this.getFieldProps(fieldName).rules ?? [];
         const formRules = this._validationRules[fieldName] ?? [];
@@ -683,7 +675,7 @@ export class DModel {
      * Get field props
      * @param fieldName
      */
-    public getFieldProps(fieldName: string) {
+    getFieldProps(fieldName: string) {
         const field = this._fieldsMap[fieldName];
         return field?.getProps();
     }
@@ -694,7 +686,7 @@ export class DModel {
      * @param fieldProps - new field properties
      * @param noRerender - do not emit re-rendering
      */
-    public setFieldProps(fieldName: string, fieldProps: IDFormFieldProps, noRerender?: boolean) {
+    setFieldProps(fieldName: string, fieldProps: IDFormFieldProps, noRerender?: boolean) {
         const field = this._fieldsMap[fieldName];
         field?.setProps(fieldProps, noRerender);
     }
@@ -704,7 +696,7 @@ export class DModel {
      * @param fieldName
      * @param updatedProps
      */
-    public updateFieldProps(fieldName: string, updatedProps: Record<string, unknown>) {
+    updateFieldProps(fieldName: string, updatedProps: Record<string, unknown>) {
         const curProps = this.getFieldProps(fieldName);
         if (!curProps) return;
         this.setFieldProps(fieldName, {...curProps, ...updatedProps});
@@ -717,7 +709,7 @@ export class DModel {
      * Gets the current hidden status of the inline group
      * @returns inline group hidden status
      */
-    public isGroupHidden(tabName: string, groupName: string): boolean {
+    isGroupHidden(tabName: string, groupName: string): boolean {
         if (!this._tabsProps?.[tabName]?.[groupName]) return true;
 
         for (const fieldName in this._tabsProps[tabName][groupName]) {
@@ -733,7 +725,7 @@ export class DModel {
      * @param groupName
      * @param value - hidden status
      */
-    public setGroupHidden(tabName: string, groupName: string, value: boolean) {
+    setGroupHidden(tabName: string, groupName: string, value: boolean) {
         if (!this._tabsProps?.[tabName]?.[groupName]) return;
 
         let prevValue = this.isGroupHidden(tabName, groupName);
@@ -755,7 +747,7 @@ export class DModel {
      * Gets the current hidden status of the tab
      * @returns Tab hidden status
      */
-    public isTabHidden(tabName: string): boolean {
+    isTabHidden(tabName: string): boolean {
         return !!this._hiddenTabs[tabName];
     }
 
@@ -764,7 +756,7 @@ export class DModel {
      * @param tabName
      * @param value - hidden status
      */
-    public setTabHidden(tabName: string, value: boolean) {
+    setTabHidden(tabName: string, value: boolean) {
         const tab = this._tabsProps[tabName];
         if (!tab) return;
 
@@ -786,7 +778,7 @@ export class DModel {
      * Gets the current read only status of the tab
      * @returns Tab read only status
      */
-    public isTabReadOnly(tabName: string): boolean {
+    isTabReadOnly(tabName: string): boolean {
         return !!this._readOnlyTabs[tabName] || this._formMode === 'view';
     }
 
@@ -796,7 +788,7 @@ export class DModel {
      * @param tabName
      * @param value - read only status
      */
-    public setTabReadOnly(tabName: string, value: boolean) {
+    setTabReadOnly(tabName: string, value: boolean) {
         const tab = this._tabsProps[tabName];
         if (!tab) return;
 
@@ -813,49 +805,17 @@ export class DModel {
         this.emitTabRender(tabName);
     }
 
-    // disables
-    /**
-     * Gets the current disabled status of the tab
-     * @returns Tab disabled status
-     */
-    public isTabDisabled(tabName: string): boolean {
-        return !!this._disabledTabs[tabName];
-    }
-
-    /**
-     * Sets a disabled status to the tab and to the all tab fields
-     * *this function doesn't call onFieldDisabledStateChanged callbacks of the fields
-     * @param tabName
-     * @param value - disabled status
-     */
-    public setTabDisabled(tabName: string, value: boolean) {
-        const tab = this._tabsProps[tabName];
-        if (!tab) return;
-
-        const prevValue = this.isTabDisabled(tabName);
-        this._disabledTabs[tabName] = value;
-
-        for (const groupName in tab) {
-            const group = tab[groupName];
-            for (const fieldName in group) this.setFieldDisabled(fieldName, value, true);
-        }
-
-        if (prevValue !== value) this._callbacks?.onTabDisabledStateChanged?.(tabName, value, this);
-
-        this.emitTabRender(tabName);
-    }
-
     //endregion
 
     //region Form methods
     /** Get form ID */
-    public getFormId() {
+    getFormId() {
         return this._formId;
     }
 
     // Values
     /** Get form values */
-    public getFormValues() {
+    getFormValues() {
         return this._values;
     }
 
@@ -863,7 +823,7 @@ export class DModel {
      * @param dataSet - new data set
      * @param noEvents- does not raise events/callbacks and the field rerender
      */
-    public setFormValues(dataSet: IDFormDataSet | undefined, noEvents?: boolean) {
+    setFormValues(dataSet: IDFormDataSet | undefined, noEvents?: boolean) {
         const newDataSet = noEvents ? dataSet : this._callbacks.onDataSetChange?.(dataSet, this) ?? dataSet;
 
         this._dataSet = newDataSet;
@@ -874,7 +834,7 @@ export class DModel {
     }
 
     /** Get form data set (Not to be confused with form values. This is the dataset that was passed to the form) */
-    public getFormDataSet() {
+    getFormDataSet() {
         return this._dataSet;
     }
 
@@ -883,7 +843,7 @@ export class DModel {
      * Gets the current dirty status of the form (a user has changed any field values on the form)
      * @returns Form dirty status
      */
-    public isFormDirty(): boolean {
+    isFormDirty(): boolean {
         return this._formDirty;
     }
 
@@ -904,7 +864,7 @@ export class DModel {
      * Gets the current read only status of the form
      * @returns Form read only status
      */
-    public isFormReadOnly(): boolean {
+    isFormReadOnly(): boolean {
         return this.getFormMode() === 'view' || this._formReadOnly;
     }
 
@@ -913,7 +873,7 @@ export class DModel {
      * *this function doesn't call onFieldReadOnlyStateChanged callbacks of the fields
      * @param value - read only status
      */
-    public setFormReadOnly(value: boolean) {
+    setFormReadOnly(value: boolean) {
         const prevValue = this.isFormReadOnly();
         this._formReadOnly = value;
 
@@ -933,7 +893,7 @@ export class DModel {
     /**
      * The form began initialization (renders for the first time)
      */
-    public setFormInit() {
+    setFormInit() {
         this.setFormReady(false); //At the time of initialization, the form is not yet ready
         this._callbacks?.onFormInit?.(this);
     }
@@ -943,7 +903,7 @@ export class DModel {
      * Gets the current ready status of the form (all fields are completely initialized, data are loaded)
      * @returns Form ready status
      */
-    public isFormReady(): boolean | undefined {
+    isFormReady(): boolean | undefined {
         return this._formReady;
     }
 
@@ -954,7 +914,7 @@ export class DModel {
      * @param value - ready status
      * @param noEvents - do not emit onReady callback
      */
-    public setFormReady(value: boolean, noEvents?: boolean) {
+    setFormReady(value: boolean, noEvents?: boolean) {
         setTimeout(() => {
             const prevValue = this.isFormReady();
 
@@ -988,7 +948,7 @@ export class DModel {
      * @param noEvents - does not raise the field validation
      * @returns a collection of errors of only those visible fields for which there are errors (hidden fields have no errors)
      */
-    public validateForm(noEvents?: boolean) {
+    validateForm(noEvents?: boolean) {
         const fieldsProps = this.getFieldsProps();
         for (const fieldName in fieldsProps) {
             this.validateField(fieldName, noEvents);
@@ -1003,7 +963,7 @@ export class DModel {
     /**
      * @returns the form submitting status
      */
-    public isFormSubmitting() {
+    isFormSubmitting() {
         return this._isSubmitting;
     }
 
@@ -1017,7 +977,7 @@ export class DModel {
     /**
      * @returns the form fetching status
      */
-    public isFormFetching() {
+    isFormFetching() {
         return this._isFetching;
     }
 
@@ -1029,19 +989,19 @@ export class DModel {
     }
 
     /** Set form fetching failed status */
-    public setFormFetchingFailed(value: boolean) {
+    setFormFetchingFailed(value: boolean) {
         this._isFetchingFailed = value;
     }
 
     /** Returns the status that means that the form tried to load the data, but it failed */
-    public isFormFetchingFailed() {
+    isFormFetchingFailed() {
         return this._isFetchingFailed;
     }
 
     /**
      * @returns is the form has error
      */
-    public isFormHasError() {
+    isFormHasError() {
         const errors = this.getFormErrors();
         for (const fieldName in errors) {
             if (this.getFieldError(fieldName)) return true;
@@ -1053,29 +1013,29 @@ export class DModel {
     /**
      * @returns a collection of errors of only those visible fields for which there are errors (hidden fields have no errors)
      */
-    public getFormErrors() {
+    getFormErrors() {
         return this._errors;
     }
 
     /** Get the form component mounted status */
-    public isFormMounted() {
+    isFormMounted() {
         return this._isFormMounted;
     }
 
     /** Set the form component mounted status */
-    public setFormMounted(value: boolean) {
+    setFormMounted(value: boolean) {
         this._isFormMounted = value;
     }
 
     /** Get current form mode */
-    public getFormMode() {
+    getFormMode() {
         return this._formMode;
     }
 
     //endregion
 
     //region Fetch
-    public fetchData() {
+    fetchData() {
         const dataSource = this._callbacks.onDataFetch?.(this);
         if (!dataSource) return;
 
@@ -1107,12 +1067,12 @@ export class DModel {
     }
 
     /** Return fields properties collection */
-    public getFieldsProps() {
+    getFieldsProps() {
         return this._fieldsProps;
     }
 
     /** Return form properties collection */
-    public getFormProps() {
+    getFormProps() {
         return this._formProps;
     }
 
@@ -1122,7 +1082,7 @@ export class DModel {
     /**
      * Submit form
      */
-    public submit(
+    submit(
         onSubmitSuccess?: (values: Record<string, unknown>, result: Record<string, unknown> | undefined, model: DModel) => void,
         onSubmitError?: (values: Record<string, unknown>, message: string, code: number, model: DModel) => void,
         onSubmitComplete?: (values: Record<string, unknown>, errors: Record<string, string | undefined>, model: DModel) => void
@@ -1224,12 +1184,12 @@ export class DModel {
     /**
      * @returns Get the number of submit attempts
      */
-    public getSubmitCount() {
+    getSubmitCount() {
         return this._submitCount;
     }
 
     /** Increment the number of submit attempts  */
-    public incrementSubmitCount() {
+    incrementSubmitCount() {
         this._submitCount++;
     }
 
@@ -1243,7 +1203,7 @@ export class DModel {
      * @param noRerender - do not emit re-rendering
      * @returns
      */
-    public hideDependedFields(fieldName: string, noEvents?: boolean, noRerender?: boolean) {
+    hideDependedFields(fieldName: string, noEvents?: boolean, noRerender?: boolean) {
         const fieldsProps = this.getFieldsProps();
         const fieldProps = fieldsProps[fieldName];
         if (!fieldProps) return;
@@ -1302,7 +1262,7 @@ export class DModel {
 
     //region Components rerender implementation
     // field rerender
-    public subscribeRenderField(fieldName: string) {
+    subscribeRenderField(fieldName: string) {
         return (listener: () => void) => {
             if (!this._fieldRenderListeners[fieldName]) this._fieldRenderListeners[fieldName] = [];
 
@@ -1313,17 +1273,17 @@ export class DModel {
         };
     }
 
-    public emitFieldRender(fieldName: string) {
+    emitFieldRender(fieldName: string) {
         const field = this._fieldsMap[fieldName];
         field.emitRender();
     }
 
-    public getFieldRenderSnapshots() {
+    getFieldRenderSnapshots() {
         return this._fieldRenderSnapshots;
     }
 
     // inline group rerender
-    public subscribeRenderGroup(tabName: string, groupName: string) {
+    subscribeRenderGroup(tabName: string, groupName: string) {
         return (listener: () => void) => {
             if (!this._groupRenderListeners[tabName]) this._groupRenderListeners[tabName] = {};
             if (!this._groupRenderListeners[tabName][groupName]) this._groupRenderListeners[tabName][groupName] = [];
@@ -1344,12 +1304,12 @@ export class DModel {
         for (const listener of this._groupRenderListeners[tabName][groupName]) listener();
     }
 
-    public getGroupRenderSnapshots() {
+    getGroupRenderSnapshots() {
         return this._groupRenderSnapshots;
     }
 
     // tab rerender
-    public subscribeRenderTab(tabName: string) {
+    subscribeRenderTab(tabName: string) {
         return (listener: () => void) => {
             if (!this._tabRenderListeners[tabName]) this._tabRenderListeners[tabName] = [];
 
@@ -1368,12 +1328,12 @@ export class DModel {
         for (const listener of this._tabRenderListeners[tabName]) listener();
     }
 
-    public getTabRenderSnapshots() {
+    getTabRenderSnapshots() {
         return this._tabRenderSnapshots;
     }
 
     // form rerender
-    public subscribeRenderForm() {
+    subscribeRenderForm() {
         return (listener: () => void) => {
             if (!this._formRenderListeners) this._formRenderListeners = [];
 
@@ -1392,7 +1352,7 @@ export class DModel {
         for (const listener of this._formRenderListeners) listener();
     }
 
-    public getFormRenderSnapshot() {
+    getFormRenderSnapshot() {
         return this._formRenderSnapshot;
     }
 

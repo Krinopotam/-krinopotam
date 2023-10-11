@@ -132,8 +132,6 @@ export class BaseField<TFieldProps extends IDFormBaseFieldProps<AnyType>> {
         this.parent = parent;
     }
 
-
-
     //region Component render implementation
     protected render(): React.ReactNode {
         return null;
@@ -150,8 +148,8 @@ export class BaseField<TFieldProps extends IDFormBaseFieldProps<AnyType>> {
             </BaseFieldRender>
         );
     }
-    //endregion
 
+    //endregion
 
     //region Fields methods
     /** @returns get current field properties  */
@@ -186,7 +184,7 @@ export class BaseField<TFieldProps extends IDFormBaseFieldProps<AnyType>> {
 
     /** @returns field label */
     getLabel() {
-        return this.model.getFieldLabel(this.fieldName);
+        return this.model._labels[this.fieldName];
     }
 
     /**
@@ -329,7 +327,6 @@ export class BaseField<TFieldProps extends IDFormBaseFieldProps<AnyType>> {
 
     //endregion
 
-
     //region Field rerender implementation
     /** returns React component sync(re-render) listener */
     subscribe(listener: () => void) {
@@ -349,10 +346,15 @@ export class BaseField<TFieldProps extends IDFormBaseFieldProps<AnyType>> {
         this.renderSnapshot++;
         for (const listener of this._listeners) listener();
     }
+
     //endregion
 
-
-    initChildrenFields(): [DModel['_fieldsMap'], DModel['_groupsMap'], DModel['_rootFields'], DModel['_treeFields']] {
+    initChildrenFields(): [
+        Record<string, IBaseFieldAny>,
+        Record<string, Record<string, IBaseFieldAny>>,
+        Record<string, IBaseFieldAny>,
+        Record<string, IBaseFieldAny | Record<string, IBaseFieldAny>>,
+    ] {
         return [{}, {}, {}, {}];
     }
 }
