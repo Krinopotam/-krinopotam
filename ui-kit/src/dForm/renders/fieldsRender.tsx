@@ -7,18 +7,15 @@
  */
 
 import React, {useSyncExternalStore} from 'react';
-import {FieldsGroupRender} from '@src/dForm/renders/fieldsGroupRender';
-import {DModel} from '@src/dForm';
+import {IBaseFieldAny} from '@src/dForm/fields/base/baseField';
 
 /** Render form body */
 export const FieldsRender = ({
-    model,
-    groupsMap,
+    fields,
     subscribe,
     getSnapshot,
 }: {
-    model: DModel;
-    groupsMap: DModel['_groupsMap'];
+    fields: Record<string, IBaseFieldAny>;
     subscribe?: (listener: () => void) => () => void;
     getSnapshot?: () => Record<never, never>;
 }): React.JSX.Element | null => {
@@ -28,17 +25,13 @@ export const FieldsRender = ({
     useSyncExternalStore(subscribe, getSnapshot);
     return (
         <>
-            {Object.keys(groupsMap).map(groupName => {
-                const group = groupsMap[groupName];
-                if (!group || Object.keys(group).length === 0) return null;
-
-                if (Object.keys(group).length > 1) {
-                    return <FieldsGroupRender key={groupName} groupName={groupName} fields={group} model={model} />;
-                } else {
-                    const firstField = Object.keys(group)[0];
-                    const field = group[firstField];
-                    return field.renderField();
-                }
+            {Object.keys(fields).map(fieldName => {
+                const field = fields[fieldName];
+                return (
+                    <div key={'field_' + field.getName()} style={{width: '100%'}}>
+                        {field.renderField()}{' '}
+                    </div>
+                );
             })}
         </>
     );

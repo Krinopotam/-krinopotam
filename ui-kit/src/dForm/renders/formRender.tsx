@@ -12,9 +12,8 @@ import React, {useEffect, useSyncExternalStore} from 'react';
 import {ButtonsRender} from '@src/modal';
 import {Form} from 'antd';
 import {FieldsRender} from './fieldsRender';
-import {DModel, IDFormApi} from '@src/dForm';
+import {DModel, IDFormApi, IDFormProps} from '@src/dForm';
 import {LoadingContainer} from '@src/loadingContainer';
-import {IDFormProps} from "@src/dForm";
 
 interface IFormRenderProps {
     /** Form props*/
@@ -35,7 +34,7 @@ interface IFormRenderProps {
 
 export const FormRender = ({formProps, formApi, formButtons}: IFormRenderProps): React.JSX.Element => {
     const model = formApi.model;
-    useExternalRenderCall(model);
+    useSyncExternalStore(model.subscribeRenderForm.bind(model), model.getFormRenderSnapshot.bind(model));
 
     const labelCol = {span: (formProps.layout === 'horizontal' ? 8 : 24), ...formProps.labelCol};
     labelCol.style = {paddingBottom: 2, ...formProps.labelCol?.style}
@@ -63,7 +62,7 @@ export const FormRender = ({formProps, formApi, formButtons}: IFormRenderProps):
                     >
                         <FormInit model={model}/>
 
-                        <FieldsRender model={model} groupsMap={model.getGroupsMap()}/>
+                        <FieldsRender fields={model.getRootFields()}/>
 
                         <ButtonsRender
                             buttons={formButtons}
@@ -77,16 +76,6 @@ export const FormRender = ({formProps, formApi, formButtons}: IFormRenderProps):
             </LoadingContainer>
         </div>
     );
-};
-
-const useExternalRenderCall = (model: DModel) => {
-    const subscribe = model.subscribeRenderForm();
-
-    const getSnapshot = () => {
-        return model.getFormRenderSnapshot();
-    };
-
-    return useSyncExternalStore(subscribe, getSnapshot);
 };
 
 /** Special component to fire onFormInit event before another events*/

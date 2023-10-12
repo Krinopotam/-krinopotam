@@ -104,14 +104,8 @@ export class DModel {
     /** field collection (plain list of all fields in all component tabs, including child fields) */
     private _fieldsMap: Record<string, IBaseFieldAny> = {};
 
-    /** Root fields collection, grouped by inline row groups (if no field rowGroup, group will contain only one field with synthetic key) */
-    private _groupsMap: Record<string, Record<string, IBaseFieldAny>> = {};
-
     /** root fields collection (only root fields, without children) */
     private _rootFields: Record<string, IBaseFieldAny> = {};
-
-    /** Field collection tree (all fields in all component tabs, including child fields of other containers grouped by containers) */
-    private _fieldsTree: Record<string, IBaseFieldAny | Record<string, IBaseFieldAny>> = {};
     //endregion
 
     /** tabs and inline groups properties (fields properties grouped by tabs and inline groups) */
@@ -200,7 +194,7 @@ export class DModel {
     private _formRenderListeners: (() => unknown)[] = [];
 
     /** form rerender key snapshot */
-    private _formRenderSnapshot: () => number = () => 0;
+    private _formRenderSnapshot: Record<never, never> = {};
     //endregion
 
     //region Init class
@@ -214,91 +208,54 @@ export class DModel {
 
         if (this._formProps === formProps) return;
 
-        //the form props have changed
         this._formProps = formProps;
         this._formMode = formProps.formMode ?? 'create';
         this._formReadOnly = !!formProps.readOnly;
 
-        [this._fieldsMap, this._groupsMap, this._rootFields, this._fieldsTree] = this.prepareFieldCollection(formProps.fieldsProps);
+        const prevFieldsMap = this._fieldsMap;
+        [this._fieldsMap, this._rootFields] = this.prepareFieldCollection(formProps.fieldsProps);
 
-        const oldFieldsProps = this.getFieldsProps();
-        if (oldFieldsProps !== formProps.fieldsProps) {
-            // the fields props have changed
-            this._fieldsProps = formProps.fieldsProps ?? {};
-            this._tabsProps = this.preparePropsCollection(this._fieldsProps);
+        [this._labels, this._values, this._hidden, this._readOnly, this._disabled] = this.initFieldsParameters(
+            this._fieldsMap,
+            prevFieldsMap,
+            formProps.formMode ?? 'create'
+        );
 
-            [this._labels, this._values, this._hidden, this._readOnly, this._disabled] = this.initFieldsParameters(
-                oldFieldsProps,
-                formProps.fieldsProps,
-                formProps.formMode ?? 'create'
-            );
-        }
+        console.log('model', this._fieldsMap, this._rootFields);
 
         const oldDataSet = this.getFormDataSet();
-        if (oldDataSet !== formProps.dataSet) this.setFormValues(formProps.dataSet, true);
+        if (oldDataSet !== formProps.dataSet) this.setFormValues(formProps.dataSet, true, true);
 
         if (!formProps.noAutoHideDependedFields) this._hidden = this.calculateHiddenFields();
     }
 
-    prepareFieldCollection(
-        fieldsProps: IDFormFieldsProps | undefined,
-        parent?: IBaseFieldAny
-    ): [DModel['_fieldsMap'], DModel['_groupsMap'], DModel['_rootFields'], DModel['_fieldsTree']] {
+    prepareFieldCollection(fieldsProps: IDFormFieldsProps | undefined, parent?: IBaseFieldAny): [DModel['_fieldsMap'], DModel['_rootFields']] {
         const fieldsMap: DModel['_fieldsMap'] = {};
-        const groupsMap: DModel['_groupsMap'] = {};
-
         const rootFields: DModel['_rootFields'] = {};
-        const fieldsTree: DModel['_fieldsTree'] = {};
-        let i = 0;
+
+        
+
         for (const fieldName in fieldsProps) {
             const fieldProps = fieldsProps[fieldName];
             if (fieldsMap[fieldName]) console.error(`The form contains duplicate field names  "${fieldName}"!`);
             const field = new fieldProps.component(fieldName, fieldProps, this, parent) as IBaseFieldAny;
 
-            const groupName = field.getProps().inlineGroup ?? '[__group__]' + i++;
-
             fieldsMap[fieldName] = field;
             rootFields[fieldName] = field;
-            fieldsTree[fieldName] = field;
-            if (!groupsMap[groupName]) groupsMap[groupName] = {};
-            groupsMap[groupName][fieldName] = field;
 
-            const [plainChildren, , , childrenTree] = field.initChildrenFields();
-            if (Object.keys(childrenTree).length > 0) fieldsTree[fieldName] = childrenTree[fieldName];
+            const [plainChildren] = field.initChildrenFields();
 
             for (const childName in plainChildren) {
                 if (fieldsMap[childName]) console.error(`The form contains duplicate field names  "${childName}"!`);
                 fieldsMap[childName] = plainChildren[childName];
             }
         }
-        return [fieldsMap, groupsMap, rootFields, fieldsTree];
-    }
-
-    /**
-     * Grouping parameters of fields in tabs and inline groups
-     * @param fieldsProps
-     */
-    private preparePropsCollection(fieldsProps: IDFormFieldsProps) {
-        const tabsProps: Record<string, Record<string, IDFormFieldsProps>> = {};
-        if (!fieldsProps) return tabsProps;
-        let i = 1;
-        for (const fieldName in fieldsProps) {
-            const field = fieldsProps[fieldName];
-
-            const tabName = field.tab ?? '[__default__]';
-            const groupName = field.inlineGroup ?? '[__group__]' + i++;
-
-            if (!tabsProps[tabName]) tabsProps[tabName] = {};
-            if (!tabsProps[tabName][groupName]) tabsProps[tabName][groupName] = {};
-            tabsProps[tabName][groupName][fieldName] = field;
-        }
-
-        return tabsProps;
+        return [fieldsMap, rootFields];
     }
 
     private initFieldsParameters(
-        oldFieldsProps: IDFormFieldsProps | undefined,
-        fieldsProps: IDFormFieldsProps | undefined,
+        fieldsMap: DModel['_fieldsMap'],
+        prevFieldsMap: DModel['_fieldsMap'],
         mode: IDFormMode
     ): [Record<string, React.ReactNode | undefined>, Record<string, unknown>, Record<string, boolean>, Record<string, boolean>, Record<string, boolean>] {
         const values: Record<string, unknown> = {};
@@ -307,20 +264,22 @@ export class DModel {
         const disabled: Record<string, boolean> = {};
         const labels: Record<string, React.ReactNode> = {};
 
-        if (!fieldsProps) return [labels, values, hidden, readOnly, disabled];
-        for (const fieldName in fieldsProps) {
-            const oldField = oldFieldsProps?.[fieldName];
-            const field = fieldsProps[fieldName];
+        for (const fieldName in fieldsMap) {
+            const field = fieldsMap[fieldName];
+            const oldField = prevFieldsMap[fieldName];
+
+            const fieldProps = field.getProps();
+
+            labels[fieldName] = fieldProps.label;
+            hidden[fieldName] = !!fieldProps.hidden;
+            readOnly[fieldName] = !!fieldProps.readOnly || mode === 'view';
+            disabled[fieldName] = !!fieldProps.disabled;
+
+            if (oldField && field.constructor === oldField.constructor) continue; //if the field type has not changed, then keep values
 
             let fieldValue: unknown = undefined;
-            if (oldField === field) fieldValue = this._values[fieldName]; // keep the user entered value if the field props have not changed
-            if (mode === 'create' && field.value && !fieldValue) fieldValue = field.value;
-
-            labels[fieldName] = field.label;
+            if (mode === 'create' && fieldProps.value) fieldValue = fieldProps.value;
             values[fieldName] = fieldValue;
-            hidden[fieldName] = !!field.hidden;
-            readOnly[fieldName] = !!field.readOnly || mode === 'view';
-            disabled[fieldName] = !!field.disabled;
         }
 
         return [labels, values, hidden, readOnly, disabled];
@@ -345,25 +304,16 @@ export class DModel {
         return this._fieldsMap;
     }
 
-    /** @return root fields collection, grouped by inline row groups (if no field rowGroup, group will contain only one field with synthetic key) */
-    getGroupsMap() {
-        return this._groupsMap;
-    }
-
     /** @return root fields collection (only root fields, without children) */
     getRootFields() {
         return this._rootFields;
-    }
-
-    /** @return field collection tree (all fields in all component tabs, including child fields of other containers grouped by containers) */
-    getFieldsTree() {
-        return this._fieldsTree;
     }
 
     /** @return field by name from fields map */
     getField(fieldName: string) {
         return this._fieldsMap[fieldName];
     }
+
     //endregion
 
     //region Form methods
@@ -397,11 +347,6 @@ export class DModel {
     /** Get form data set (Not to be confused with form values. This is the dataset that was passed to the form) */
     getFormDataSet() {
         return this._dataSet;
-    }
-
-    /** @return fields whole map **/
-    getFields() {
-        return this._fieldsMap;
     }
 
     /** @return model validator instance */
@@ -855,48 +800,16 @@ export class DModel {
 
     //endregion
 
-    //region Components rerender implementation
-    // inline group rerender
-    subscribeRenderGroup(tabName: string, groupName: string) {
-        return (listener: () => void) => {
-            if (!this._groupRenderListeners[tabName]) this._groupRenderListeners[tabName] = {};
-            if (!this._groupRenderListeners[tabName][groupName]) this._groupRenderListeners[tabName][groupName] = [];
-
-            this._groupRenderListeners[tabName][groupName] = [...this._groupRenderListeners[tabName][groupName], listener];
-            return () => {
-                this._groupRenderListeners[tabName][groupName] = this._groupRenderListeners[tabName][groupName].filter(l => l !== listener);
-            };
+    //region Form rerender implementation
+    subscribeRenderForm(listener: () => void) {
+        this._formRenderListeners = [...this._formRenderListeners, listener];
+        return () => {
+            this._formRenderListeners = this._formRenderListeners.filter(l => l !== listener);
         };
     }
 
-    private emitGroupRender(tabName: string, groupName: string) {
-        if (!this._groupRenderSnapshots[tabName]) this._groupRenderSnapshots[tabName] = {};
-        const result = this._groupRenderSnapshots[tabName]?.[groupName] ? this._groupRenderSnapshots[tabName][groupName]() + 1 : 0;
-        this._groupRenderSnapshots[tabName][groupName] = () => result;
-
-        if (!this._groupRenderListeners?.[tabName]?.[groupName]) return;
-        for (const listener of this._groupRenderListeners[tabName][groupName]) listener();
-    }
-
-    getGroupRenderSnapshots() {
-        return this._groupRenderSnapshots;
-    }
-
-    // form rerender
-    subscribeRenderForm() {
-        return (listener: () => void) => {
-            if (!this._formRenderListeners) this._formRenderListeners = [];
-
-            this._formRenderListeners = [...this._formRenderListeners, listener];
-            return () => {
-                this._formRenderListeners = this._formRenderListeners.filter(l => l !== listener);
-            };
-        };
-    }
-
-    private emitFormRender() {
-        const result = this._formRenderSnapshot ? this._formRenderSnapshot() + 1 : 0;
-        this._formRenderSnapshot = () => result;
+    emitFormRender() {
+        this._formRenderSnapshot = {};
 
         if (!this._formRenderListeners) return;
         for (const listener of this._formRenderListeners) listener();

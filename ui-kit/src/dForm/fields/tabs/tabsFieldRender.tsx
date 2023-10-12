@@ -1,22 +1,24 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useSyncExternalStore} from 'react';
 import {Tabs, TabsProps} from 'antd';
 import {TabsField} from '@src/dForm/fields/tabs/tabsField';
 import {FieldsRender} from '@src/dForm/renders/fieldsRender';
 
 export const TabsFieldRender = ({field}: {field: TabsField}): React.JSX.Element => {
     const fieldProps = field.getProps();
-    const model = field.getFormModel();
-    const tabsGroupsMap = field.getTabsGroupsMap();
+    const tabsRootFields = field.getTabsRootFields();
+
+    useSyncExternalStore(field.subscribe.bind(field), field.getSnapshot.bind(field));
+
     let activeTab = field.getActiveTab();
 
     const onChange = useOnChange(field);
 
     //there is no sense to use memo (rendering is not very often)
     const items: TabsProps['items'] = [];
-    for (const tabName in tabsGroupsMap) {
+    for (const tabName in tabsRootFields) {
         if (!activeTab) activeTab = tabName;
 
-        const groupsMap = tabsGroupsMap[tabName];
+        const childrenFields = tabsRootFields[tabName];
         items.push({
             key: tabName,
             tabKey: tabName,
@@ -24,7 +26,7 @@ export const TabsFieldRender = ({field}: {field: TabsField}): React.JSX.Element 
             forceRender: true,
             disabled: field.isDisabled(),
             style: fieldProps.tabsStyle,
-            children: <FieldsRender model={model} groupsMap={groupsMap} subscribe={field.tabSubscribe(tabName)} getSnapshot={field.getTabSnapshot(tabName)} />,
+            children: <FieldsRender fields={childrenFields} subscribe={field.tabSubscribe(tabName)} getSnapshot={field.getTabSnapshot(tabName)} />,
             active: activeTab === tabName,
         });
     }

@@ -5,11 +5,11 @@ import {DForm, IDFormApi, IDFormProps} from '@src/dForm';
 import {InputField} from '@src/dForm/fields/input/inputField';
 import {TabsField} from '@src/dForm/fields/tabs/tabsField';
 
-const api = {} as IDFormApi
+const api = {} as IDFormApi;
 const formProps: IDFormProps = {
     apiRef: api,
     formId: 'Test form',
-    //layout:'horizontal',
+    layout:'horizontal',
     confirmChanges: true,
     fieldsProps: {
         field1: {component: InputField, label: 'Field1', rules: [{type: 'string', rule: 'not-empty', message: 'Поле не должно быть пустым'}]},
@@ -45,10 +45,29 @@ const formProps: IDFormProps = {
         },
     },
 
-    buttons: {ok: {position: 'right'}, test:{position:'left', onClick:()=>{
-                const tabField = api.model.getField('field2') as TabsField
+    buttons: {
+        ok: {position: 'right'},
+        rerenderTab1: {
+            position: 'left',
+            onClick: () => {
+                const tabField = api.model.getField('field2') as TabsField;
                 tabField.emitTabRender('Tab 1')
-            }}},
+            },
+        },
+        rerenderTabField: {
+            position: 'left',
+            onClick: () => {
+                const tabField = api.model.getField('field2') as TabsField;
+                tabField.emitRender();
+            },
+        },
+        rerenderForm: {
+            position: 'left',
+            onClick: () => {
+                api.model.emitFormRender();
+            },
+        },
+    },
 };
 
 export const NewFormWithTabs = (): React.JSX.Element => {

@@ -5,16 +5,13 @@ import Animate from 'rc-animate';
 import {Form} from 'antd';
 import {IBaseFieldAny} from './baseField';
 
-export const BaseFieldRender = ({field, noLabel, children}: {field: IBaseFieldAny; noLabel?: boolean; children?: React.ReactNode}): React.JSX.Element => {
-    const fieldName = field.getName();
+export const BaseFieldRender = ({field, altLabel, children}: {field: IBaseFieldAny; altLabel?: React.ReactNode; children?: React.ReactNode}): React.JSX.Element => {
     const fieldProps = field.getProps();
 
     useSyncExternalStore(field.subscribe.bind(field), field.getSnapshot.bind(field));
 
     const error = field.getError();
     const fieldHidden = field.isHidden();
-
-    //const Component = fieldProps.component;
 
     const style: React.CSSProperties = {
         //marginBottom: formProps.layout !== 'horizontal' ? 0 : undefined,
@@ -26,11 +23,13 @@ export const BaseFieldRender = ({field, noLabel, children}: {field: IBaseFieldAn
         ...fieldProps.rowStyle,
     };
 
+    const label = typeof altLabel !== 'undefined' ? altLabel : fieldProps.label
+
     return (
-        <Animate key={'item_' + fieldName} component="" transitionName="zoom">
+        <Animate component="" transitionName="zoom">
             {!fieldHidden ? (
                 <Form.Item
-                    label={!noLabel ? fieldProps.label : undefined}
+                    label={label}
                     //name={fieldName} //!Do not specify "name". Components inside Form.Item with "name" property will turn into controlled mode, which makes "defaultValue" and "value" not work anymore
                     help={error || undefined}
                     validateStatus={error ? 'error' : undefined}

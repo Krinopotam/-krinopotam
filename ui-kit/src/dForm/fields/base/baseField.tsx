@@ -137,13 +137,13 @@ export class BaseField<TFieldProps extends IDFormBaseFieldProps<AnyType>> {
         return null;
     }
 
-    renderField(noLabel?: boolean): React.ReactNode {
-        return this.renderFieldWrapper(this.render(), noLabel);
+    renderField(altLabel?: React.ReactNode): React.ReactNode {
+        return this.renderFieldWrapper(this.render(), altLabel);
     }
 
-    protected renderFieldWrapper(field: React.ReactNode, noLabel?: boolean) {
+    protected renderFieldWrapper(field: React.ReactNode, altLabel?: React.ReactNode) {
         return (
-            <BaseFieldRender key={this.getName()} field={this} noLabel={noLabel}>
+            <BaseFieldRender key={this.getName()} field={this} altLabel={altLabel}>
                 {field}
             </BaseFieldRender>
         );
@@ -467,10 +467,8 @@ export class BaseField<TFieldProps extends IDFormBaseFieldProps<AnyType>> {
 
     initChildrenFields(): [
         Record<string, IBaseFieldAny>,
-        Record<string, Record<string, IBaseFieldAny>>,
         Record<string, IBaseFieldAny>,
-        Record<string, IBaseFieldAny | Record<string, IBaseFieldAny>>,
     ] {
-        return [{}, {}, {}, {}];
+        return [{}, {}];
     }
 }
