@@ -13,9 +13,10 @@ import {HelpersObjects} from '@krinopotam/js-helpers';
 
 import {BaseValidator} from './validators/baseValidator';
 import React from 'react';
-import {IBaseFieldAny} from '@src/dForm/fields/base/baseField';
+import {IBaseFieldAny, IDFormFieldProps} from '@src/dForm/fields/base/baseField';
 import {IDFormFieldsProps} from '@src/dForm/index';
 import {TPromise} from '@krinopotam/service-types';
+import {InlineGroupField} from '@src/dForm/fields/inlineGroup/inlineGroupField';
 
 export interface IDFormBaseCallbacks<T> {
     // Tabs callbacks
@@ -233,10 +234,40 @@ export class DModel {
         const fieldsMap: DModel['_fieldsMap'] = {};
         const rootFields: DModel['_rootFields'] = {};
 
-        
-
+        const fieldGroups: Record<string, Record<string, IDFormFieldsProps>> = {};
+        let i = 0;
         for (const fieldName in fieldsProps) {
+            i++;
             const fieldProps = fieldsProps[fieldName];
+            const groupName = fieldProps.inlineGroup ? fieldProps.inlineGroup : '[__group__]-' + i;
+            if (!fieldGroups[groupName]) fieldGroups[groupName] = {};
+            fieldGroups[groupName][fieldName] = fieldsProps[fieldName];
+        }
+
+        console.log(fieldGroups);
+
+        for (const groupName in fieldGroups) {
+            const groups = fieldGroups[groupName];
+            let fieldProps: IDFormFieldProps;
+            let fieldName: string;
+            if (Object.keys(groups).length > 1) {
+                const newProps ={}
+                for (const n in  groups)
+                {
+                    newProps[n] = {...groups[n]}
+                    newProps[n].inlineGroup=undefined
+                }
+                fieldProps = {
+                    component: InlineGroupField,
+                    fieldsProps: newProps,
+                };
+                fieldName = groupName;
+            } else {
+                fieldName = Object.keys(groups)[0];
+                fieldProps = groups[fieldName];
+            }
+
+            //const fieldProps = fieldsProps[fieldName];
             if (fieldsMap[fieldName]) console.error(`The form contains duplicate field names  "${fieldName}"!`);
             const field = new fieldProps.component(fieldName, fieldProps, this, parent) as IBaseFieldAny;
 

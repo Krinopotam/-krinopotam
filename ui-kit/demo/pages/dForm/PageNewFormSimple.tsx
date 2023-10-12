@@ -17,14 +17,16 @@ const formProps: IDFormProps = {
     confirmChanges: true,
     //layout:'horizontal',
     fieldsProps: {
-        field3: {component: InputField, label: 'Field3',inlineGroup:'row1'},
-        group1: {
+        field1: {component: InputField, label: 'Field1' ,inlineGroup:'row1', rules: [{type: 'string', rule: 'not-empty', message: 'Поле не должно быть пустым'}]} ,
+        field2: {component: InputField, label: 'Field2',inlineGroup:'row1'},
+        field3: {component: InputField, label: 'Field3'},
+/*        group1: {
             component:InlineGroupField, fieldsProps: {
                 field1: {component: InputField, label: 'Field1' ,inlineGroup:'row1', rules: [{type: 'string', rule: 'not-empty', message: 'Поле не должно быть пустым'}]} ,
                 field2: {component: InputField, label: 'Field2',inlineGroup:'row1'},
             },//label:'group1'
-        },
-        field4: {component: InputField, label: 'Field4',inlineGroup:'row1'},
+        },*/
+        field4: {component: InputField, label: 'Field4'},
     },
     buttons: {ok: {position: 'right'}},
 };
