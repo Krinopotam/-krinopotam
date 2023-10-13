@@ -356,7 +356,7 @@ export class BaseField<TFieldProps extends IDFormBaseFieldProps<AnyType>> {
         if (prevValue === value) return;
 
         this.model._hidden[this.fieldName] = value;
-        if (!this.getFormProps().noAutoHideDependedFields) this.model.hideDependedFields(this.fieldName, noEvents, noRerender);
+        if (!this.getFormProps().noAutoHideDependedFields) this.model.hideDependedFields(this, noEvents, noRerender);
 
         if (value) this.setReady(false, true); //the hidden fields are not ready because they are not rendered, but form ready status not changed
 

@@ -803,20 +803,16 @@ export class DModel {
     //region Service methods
     /**
      * Hides all depended fields, if root field has no value or hidden
-     * @param fieldName
+     * @param field
      * @param noEvents - do not emit onHiddenStateChanged callback
      * @param noRerender - do not emit re-rendering
      * @returns
      */
-    hideDependedFields(fieldName: string, noEvents?: boolean, noRerender?: boolean) {
-        const fieldsProps = this.getFieldsProps();
-        const fieldProps = fieldsProps[fieldName];
-        if (!fieldProps) return;
-
+    hideDependedFields(field: IBaseField, noEvents?: boolean, noRerender?: boolean) {
         for (const childName in this._fieldsMap) {
             const childField = this._fieldsMap[childName];
             const childProps = childField.getProps();
-            if (!childProps?.dependsOn || childProps.dependsOn.indexOf(fieldName) < 0) continue;
+            if (!childProps?.dependsOn || childProps.dependsOn.indexOf(field.getName()) < 0) continue;
             const mustHidden = this.isFieldMustBeHidden(childField);
             childField.setHidden(mustHidden, noEvents, noRerender);
         }
