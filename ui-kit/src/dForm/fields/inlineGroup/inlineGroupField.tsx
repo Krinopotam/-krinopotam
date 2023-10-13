@@ -1,4 +1,4 @@
-import {BaseField, IBaseFieldAny, IDFormBaseFieldProps} from '@src/dForm/fields/base/baseField';
+import {BaseField, IBaseField, IDFormBaseFieldProps} from '@src/dForm/fields/base/baseField';
 import React from 'react';
 import {IDFormFieldsProps} from '@src/dForm';
 import {InlineGroupRender} from "@src/dForm/fields/inlineGroup/inlineGroupRender";
@@ -11,10 +11,10 @@ export interface IDFormInlineGroupProps extends IDFormBaseFieldProps<InlineGroup
 export class InlineGroupField extends BaseField<IDFormInlineGroupProps> {
     //region Fields collections
     /** field collection (plain list of all fields in all component tabs, including child fields) */
-    private _fieldsMap: Record<string, IBaseFieldAny> = {};
+    private _fieldsMap: Record<string, IBaseField> = {};
 
     /** root fields collection (only root fields, without children) */
-    private _rootFields: Record<string, IBaseFieldAny> = {};
+    private _rootFields: Record<string, IBaseField> = {};
     //endregion
 
     initChildrenFields(): [InlineGroupField['_fieldsMap'], InlineGroupField['_rootFields']] {

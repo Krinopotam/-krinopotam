@@ -3,9 +3,9 @@
 import React, {useSyncExternalStore} from 'react';
 import Animate from 'rc-animate';
 import {Form} from 'antd';
-import {IBaseFieldAny} from './baseField';
+import {IBaseField} from './baseField';
 
-export const BaseFieldRender = ({field, altLabel, children}: {field: IBaseFieldAny; altLabel?: React.ReactNode; children?: React.ReactNode}): React.JSX.Element => {
+export const BaseFieldRender = ({field, altLabel, children}: {field: IBaseField; altLabel?: React.ReactNode; children?: React.ReactNode}): React.JSX.Element => {
     const fieldProps = field.getProps();
 
     useSyncExternalStore(field.subscribe.bind(field), field.getSnapshot.bind(field));

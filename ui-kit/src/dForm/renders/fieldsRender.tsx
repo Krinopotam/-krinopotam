@@ -7,7 +7,7 @@
  */
 
 import React, {useSyncExternalStore} from 'react';
-import {IBaseFieldAny} from '@src/dForm/fields/base/baseField';
+import {IBaseField} from '@src/dForm/fields/base/baseField';
 
 /** Render form body */
 export const FieldsRender = ({
@@ -15,7 +15,7 @@ export const FieldsRender = ({
     subscribe,
     getSnapshot,
 }: {
-    fields: Record<string, IBaseFieldAny>;
+    fields: Record<string, IBaseField>;
     subscribe?: (listener: () => void) => () => void;
     getSnapshot?: () => Record<never, never>;
 }): React.JSX.Element | null => {

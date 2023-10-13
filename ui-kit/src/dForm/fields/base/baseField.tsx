@@ -16,9 +16,9 @@ import {BaseFieldRender} from './baseFieldRender';
 import {DModel} from '@src/dForm';
 import {IRuleType} from '@src/dForm/validators/baseValidator';
 
-export interface IDFormBaseFieldProps<TField extends IBaseFieldAny> extends Record<string, unknown> {
+export interface IDFormBaseFieldProps<TField extends IBaseField> extends Record<string, unknown> {
     /** Field React component */
-    component: new (fieldName: string, fieldProps: AnyType, model: DModel, parent?: IBaseFieldAny) => TField;
+    component: new (fieldName: string, fieldProps: AnyType, model: DModel, parent?: IBaseField) => TField;
 
     /** Help class */
     helpClass?: string;
@@ -103,9 +103,9 @@ export interface IDFormBaseFieldProps<TField extends IBaseFieldAny> extends Reco
     onValidated?: (value: unknown, error: string, isSubmit: boolean, field: TField) => void;
 }
 
-export type IDFormFieldProps = IDFormBaseFieldProps<AnyType>;
+export type IDFormAnyFieldProps = IDFormBaseFieldProps<AnyType>;
 
-export type IBaseFieldAny = BaseField<AnyType>;
+export type IBaseField = BaseField<AnyType>;
 
 export class BaseField<TFieldProps extends IDFormBaseFieldProps<AnyType>> {
     /** form field props */
@@ -115,7 +115,7 @@ export class BaseField<TFieldProps extends IDFormBaseFieldProps<AnyType>> {
     /** form model */
     protected readonly model: DModel;
 
-    protected readonly parent?: IBaseFieldAny;
+    protected readonly parent?: IBaseField;
 
     /** React component sync(re-render) listener */
     protected _listeners: (() => void)[] = [];
@@ -123,9 +123,9 @@ export class BaseField<TFieldProps extends IDFormBaseFieldProps<AnyType>> {
     protected renderSnapshot: Record<never, never> = {};
 
     /** Children fields (if this field is container) */
-    //protected childrenFields?: Record<string, IBaseFieldAny>;
+    //protected childrenFields?: Record<string, IBaseField>;
 
-    constructor(fieldName: string, fieldProps: TFieldProps, model: DModel, parent?: IBaseFieldAny) {
+    constructor(fieldName: string, fieldProps: TFieldProps, model: DModel, parent?: IBaseField) {
         this.fieldName = fieldName;
         this.fieldProps = fieldProps;
         this.model = model;
@@ -466,8 +466,8 @@ export class BaseField<TFieldProps extends IDFormBaseFieldProps<AnyType>> {
     //endregion
 
     initChildrenFields(): [
-        Record<string, IBaseFieldAny>,
-        Record<string, IBaseFieldAny>,
+        Record<string, IBaseField>,
+        Record<string, IBaseField>,
     ] {
         return [{}, {}];
     }

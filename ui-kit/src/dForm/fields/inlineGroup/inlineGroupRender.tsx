@@ -1,7 +1,7 @@
 import React from 'react';
 import {Form} from 'antd';
 import {InlineGroupField} from '@src/dForm/fields/inlineGroup/inlineGroupField';
-import {IBaseFieldAny} from '@src/dForm/fields/base/baseField';
+import {IBaseField} from '@src/dForm/fields/base/baseField';
 import Animate from 'rc-animate';
 
 export const InlineGroupRender = ({field}: {field: InlineGroupField}): React.JSX.Element => {
@@ -10,7 +10,7 @@ export const InlineGroupRender = ({field}: {field: InlineGroupField}): React.JSX
 
     const childrenFields = field.getRootFields();
 
-    let firstField: IBaseFieldAny | undefined;
+    let firstField: IBaseField | undefined;
     for (const fieldName in childrenFields) {
         const childrenField = childrenFields[fieldName];
         if (!childrenField.isHidden()) {

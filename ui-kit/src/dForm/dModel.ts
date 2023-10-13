@@ -13,7 +13,7 @@ import {HelpersObjects} from '@krinopotam/js-helpers';
 
 import {BaseValidator} from './validators/baseValidator';
 import React from 'react';
-import {IBaseFieldAny, IDFormFieldProps} from '@src/dForm/fields/base/baseField';
+import {IBaseField, IDFormAnyFieldProps} from '@src/dForm/fields/base/baseField';
 import {IDFormFieldsProps} from '@src/dForm/index';
 import {TPromise} from '@krinopotam/service-types';
 import {InlineGroupField} from '@src/dForm/fields/inlineGroup/inlineGroupField';
@@ -103,14 +103,11 @@ export class DModel {
 
     //region Fields collections
     /** field collection (plain list of all fields in all component tabs, including child fields) */
-    private _fieldsMap: Record<string, IBaseFieldAny> = {};
+    private _fieldsMap: Record<string, IBaseField> = {};
 
     /** root fields collection (only root fields, without children) */
-    private _rootFields: Record<string, IBaseFieldAny> = {};
+    private _rootFields: Record<string, IBaseField> = {};
     //endregion
-
-    /** tabs and inline groups properties (fields properties grouped by tabs and inline groups) */
-    private _tabsProps: Record<string, Record<string, IDFormFieldsProps>> = {};
 
     /** the form data set instance */
     private _dataSet: IDFormDataSet | undefined = undefined;
@@ -139,9 +136,6 @@ export class DModel {
 
     /** FOR INTERNAL USE ONLY - disabled field statuses */
     public _disabled: Record<string, boolean | undefined> = {};
-
-    /** disabled tabs statuses */
-    private _disabledTabs: Record<string, boolean | undefined> = {};
 
     /** FOR INTERNAL USE ONLY - readiness field statuses (the field is completely initialized, its data is loaded) */
     public _ready: Record<string, boolean | undefined> = {};
@@ -185,14 +179,8 @@ export class DModel {
     /** validator instance */
     private readonly _validator: BaseValidator;
 
-    /** inline group rerender listeners */
-    private _groupRenderListeners: Record<string, Record<string, (() => unknown)[]>> | Record<string, never> = {};
-
-    /** inline group rerender keys snapshots */
-    private _groupRenderSnapshots: Record<string, Record<string, () => number>> | Record<string, never> = {};
-
     /** form rerender listeners */
-    private _formRenderListeners: (() => unknown)[] = [];
+    private _formRenderListeners: (() => void)[] = [];
 
     /** form rerender key snapshot */
     private _formRenderSnapshot: Record<never, never> = {};
@@ -230,46 +218,19 @@ export class DModel {
         if (!formProps.noAutoHideDependedFields) this._hidden = this.calculateHiddenFields();
     }
 
-    prepareFieldCollection(fieldsProps: IDFormFieldsProps | undefined, parent?: IBaseFieldAny): [DModel['_fieldsMap'], DModel['_rootFields']] {
+    /** Instantiate fields classes and prepare fields collections */
+    prepareFieldCollection(fieldsProps: IDFormFieldsProps | undefined, parent?: IBaseField): [DModel['_fieldsMap'], DModel['_rootFields']] {
         const fieldsMap: DModel['_fieldsMap'] = {};
         const rootFields: DModel['_rootFields'] = {};
+        if (!fieldsProps) return [fieldsMap, rootFields];
 
-        const fieldGroups: Record<string, Record<string, IDFormFieldsProps>> = {};
-        let i = 0;
-        for (const fieldName in fieldsProps) {
-            i++;
-            const fieldProps = fieldsProps[fieldName];
-            const groupName = fieldProps.inlineGroup ? fieldProps.inlineGroup : '[__group__]-' + i;
-            if (!fieldGroups[groupName]) fieldGroups[groupName] = {};
-            fieldGroups[groupName][fieldName] = fieldsProps[fieldName];
-        }
+        const _fieldsProps = this.modifyFieldsProps(fieldsProps);
+        console.log(_fieldsProps);
 
-        console.log(fieldGroups);
-
-        for (const groupName in fieldGroups) {
-            const groups = fieldGroups[groupName];
-            let fieldProps: IDFormFieldProps;
-            let fieldName: string;
-            if (Object.keys(groups).length > 1) {
-                const newProps ={}
-                for (const n in  groups)
-                {
-                    newProps[n] = {...groups[n]}
-                    newProps[n].inlineGroup=undefined
-                }
-                fieldProps = {
-                    component: InlineGroupField,
-                    fieldsProps: newProps,
-                };
-                fieldName = groupName;
-            } else {
-                fieldName = Object.keys(groups)[0];
-                fieldProps = groups[fieldName];
-            }
-
-            //const fieldProps = fieldsProps[fieldName];
+        for (const fieldName in _fieldsProps) {
+            const fieldProps = _fieldsProps[fieldName];
             if (fieldsMap[fieldName]) console.error(`The form contains duplicate field names  "${fieldName}"!`);
-            const field = new fieldProps.component(fieldName, fieldProps, this, parent) as IBaseFieldAny;
+            const field = new fieldProps.component(fieldName, fieldProps, this, parent) as IBaseField;
 
             fieldsMap[fieldName] = field;
             rootFields[fieldName] = field;
@@ -284,6 +245,43 @@ export class DModel {
         return [fieldsMap, rootFields];
     }
 
+    /** Transforming field properties.
+     * If the field properties contain the short entry inlineGroup, then create additional parameters to transform to InlineGroupField  */
+    modifyFieldsProps(fieldsProps: IDFormFieldsProps) {
+        const fieldsPropsGroups: Record<string, Record<string, IDFormAnyFieldProps>> = {};
+        let i = 0;
+        for (const fieldName in fieldsProps) {
+            i++;
+            const fieldProps = {...fieldsProps[fieldName]};
+            let groupName = '';
+            if (fieldProps.inlineGroup) {
+                groupName = fieldProps.inlineGroup;
+                fieldProps.inlineGroup = undefined;
+            } else groupName = '[__group__]-' + i;
+
+            if (!fieldsPropsGroups[groupName]) fieldsPropsGroups[groupName] = {};
+            fieldsPropsGroups[groupName][fieldName] = fieldProps;
+        }
+
+        const result: IDFormFieldsProps = {};
+        for (const groupName in fieldsPropsGroups) {
+            const group = fieldsPropsGroups[groupName];
+
+            if (Object.keys(group).length > 1) {
+                result[groupName] = {
+                    component: InlineGroupField,
+                    fieldsProps: group,
+                };
+            } else {
+                const fieldName = Object.keys(group)[0];
+                result[fieldName] = group[fieldName];
+            }
+        }
+
+        return result;
+    }
+
+    /** Init fields parameters (keep fields values if field components still the same) */
     private initFieldsParameters(
         fieldsMap: DModel['_fieldsMap'],
         prevFieldsMap: DModel['_fieldsMap'],

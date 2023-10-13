@@ -1,4 +1,4 @@
-import {BaseField, IBaseFieldAny, IDFormBaseFieldProps} from '@src/dForm/fields/base/baseField';
+import {BaseField, IBaseField, IDFormBaseFieldProps} from '@src/dForm/fields/base/baseField';
 import {TabsFieldRender} from '@src/dForm/fields/tabs/tabsFieldRender';
 import React from 'react';
 import {IDFormFieldsProps} from '@src/dForm';
@@ -39,10 +39,10 @@ export interface IDFormTabsFieldProps extends IDFormBaseFieldProps<TabsField> {
 export class TabsField extends BaseField<IDFormTabsFieldProps> {
     //region Fields collections
     /** field collection (plain list of all fields in all component tabs, including child fields) */
-    private _fieldsMap: Record<string, IBaseFieldAny> = {};
+    private _fieldsMap: Record<string, IBaseField> = {};
 
     /** root fields collection (only root fields, without children) */
-    private _rootFields: Record<string, IBaseFieldAny> = {};
+    private _rootFields: Record<string, IBaseField> = {};
     //endregion
 
     //region Tabs grouped fields collections

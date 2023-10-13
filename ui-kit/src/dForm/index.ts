@@ -1,4 +1,4 @@
-import {IDFormFieldProps} from '@src/dForm/fields/base/baseField';
+import {IDFormAnyFieldProps} from '@src/dForm/fields/base/baseField';
 import {IDFormInputFieldProps} from '@src/dForm/fields/input/inputField';
 import {IDFormTabsFieldProps} from '@src/dForm/fields/tabs/tabsField';
 import {IDFormInlineGroupProps} from '@src/dForm/fields/inlineGroup/inlineGroupField';
@@ -11,5 +11,7 @@ export type {IDFormApi} from './hooks/api';
 export {DModel} from './dModel';
 export type {IDFormBaseCallbacks, IDFormModelCallbacks, IDFormSubmitResultObject, IDFormSubmitResultPromise} from './dModel';
 
+export type IDFormFieldProps = IDFormAnyFieldProps | IDFormInlineGroupProps | IDFormTabsFieldProps | IDFormInputFieldProps
+
 /** Fields properties collection */
-export type IDFormFieldsProps = Record<string, IDFormFieldProps | IDFormInlineGroupProps | IDFormTabsFieldProps | IDFormInputFieldProps>;
+export type IDFormFieldsProps = Record<string, IDFormFieldProps>;
