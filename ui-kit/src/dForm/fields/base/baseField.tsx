@@ -240,10 +240,12 @@ export class BaseField<TFieldProps extends IDFormBaseFieldProps<AnyType>> {
         if (!noRerender) {
             this.emitRender();
 
+            /*
             for (const field of this.getDependents()) {
                 field.setHidden(!value);
-            }
-            //if (!this.getFormProps().noAutoHideDependedFields) this.model.hideDependedFields(this.fieldName);
+            }*/
+            
+            if (!this.getFormProps().noAutoHideDependedFields) this.model.hideDependedFields(this);
         }
     }
 
