@@ -9,7 +9,7 @@ const api = {} as IDFormApi;
 const formProps: IDFormProps = {
     apiRef: api,
     formId: 'Test form',
-    layout:'horizontal',
+    layout: 'horizontal',
     confirmChanges: true,
     fieldsProps: {
         field1: {component: InputField, label: 'Field1', rules: [{type: 'string', rule: 'not-empty', message: 'Поле не должно быть пустым'}]},
@@ -39,7 +39,7 @@ const formProps: IDFormProps = {
                             },
                         },
                     },
-                    field2_2_3: {component: InputField, label: 'Field4'},
+                    //field2_2_3: {component: InputField, label: 'Field4'},
                 },
             },
         },
@@ -51,7 +51,7 @@ const formProps: IDFormProps = {
             position: 'left',
             onClick: () => {
                 const tabField = api.model.getField('field2') as TabsField;
-                tabField.emitTabRender('Tab 1')
+                tabField.emitTabRender('Tab 1');
             },
         },
         rerenderTabField: {

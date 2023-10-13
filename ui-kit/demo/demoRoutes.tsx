@@ -3,6 +3,7 @@
     import {Route, Routes} from 'react-router-dom';
     import {DemoLayout} from './demoLayout';
     import {Home} from './home';
+    const PageDependedFields = lazy(() => import('./pages/dForm/PageDependedFields'))
     const PageNewFormSimple = lazy(() => import('./pages/dForm/PageNewFormSimple'))
     const PageNewFormWithTabs = lazy(() => import('./pages/dForm/PageNewFormWithTabs'))
 
@@ -53,6 +54,7 @@ export const DemoRoutes = (props: {darkMode: boolean; setDarkMode: (mode:boolean
         <Routes>
             <Route path="/" element={<DemoLayout setDarkMode={props.setDarkMode} />}>
                 <Route index element={<Home />} />
+                <Route path="DependedFields" element={<PageDependedFields darkMode={props.darkMode} />} />;
                 <Route path="NewFormSimple" element={<PageNewFormSimple darkMode={props.darkMode} />} />;
                 <Route path="NewFormWithTabs" element={<PageNewFormWithTabs darkMode={props.darkMode} />} />;
 

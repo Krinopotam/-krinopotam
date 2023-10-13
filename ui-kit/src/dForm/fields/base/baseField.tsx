@@ -105,7 +105,7 @@ export interface IDFormBaseFieldProps<TField extends IBaseField> extends Record<
 
 export type IDFormAnyFieldProps = IDFormBaseFieldProps<AnyType>;
 
-export type IBaseField = BaseField<AnyType>;
+export type IBaseField = BaseField<IDFormAnyFieldProps>;
 
 export class BaseField<TFieldProps extends IDFormBaseFieldProps<AnyType>> {
     /** form field props */
@@ -114,11 +114,11 @@ export class BaseField<TFieldProps extends IDFormBaseFieldProps<AnyType>> {
     protected readonly fieldName: string;
     /** form model */
     protected readonly model: DModel;
-
+    /** parent field */
     protected readonly parent?: IBaseField;
 
     /** React component sync(re-render) listener */
-    protected _listeners: (() => void)[] = [];
+    protected listeners: (() => void)[] = [];
     /** react component sync(re-render) snapshot */
     protected renderSnapshot: Record<never, never> = {};
 
@@ -239,7 +239,11 @@ export class BaseField<TFieldProps extends IDFormBaseFieldProps<AnyType>> {
 
         if (!noRerender) {
             this.emitRender();
-            if (!this.getFormProps().noAutoHideDependedFields) this.model.hideDependedFields(this.fieldName);
+
+            for (const field of this.getDependents()) {
+                field.setHidden(!value);
+            }
+            //if (!this.getFormProps().noAutoHideDependedFields) this.model.hideDependedFields(this.fieldName);
         }
     }
 
@@ -361,7 +365,7 @@ export class BaseField<TFieldProps extends IDFormBaseFieldProps<AnyType>> {
         //if (fieldProps?.tab && fieldProps.inlineGroup) prevGroupValue = this.isGroupHidden(fieldProps.tab, fieldProps.inlineGroup);
 
         if (!noEvents) this.getProps()?.onHiddenStateChanged?.(value, this);
-        if (noRerender) this.emitRender();
+        if (!noRerender) this.emitRender();
 
         //if (!fieldProps?.tab || !fieldProps.inlineGroup) return;
         //const curGroupValue = this.isGroupHidden(fieldProps.tab, fieldProps.inlineGroup);
@@ -441,14 +445,26 @@ export class BaseField<TFieldProps extends IDFormBaseFieldProps<AnyType>> {
         return error;
     }
 
+    /** @return dependent fields list */
+    getDependents(): IBaseField[] {
+        const map = this.model.getDependenceMap();
+        return map[this.fieldName] ?? [];
+    }
+
+    /** @return true if the passed field depends on the given field */
+    isDepended(field: IBaseField) {
+        const dependentsList = this.getDependents();
+        return dependentsList.indexOf(field) > -1;
+    }
+
     //endregion
 
     //region Field rerender implementation
     /** returns React component sync(re-render) listener */
     subscribe(listener: () => void) {
-        this._listeners = [...this._listeners, listener];
+        this.listeners = [...this.listeners, listener];
         return () => {
-            this._listeners = this._listeners.filter(l => l !== listener);
+            this.listeners = this.listeners.filter(l => l !== listener);
         };
     }
 
@@ -460,15 +476,12 @@ export class BaseField<TFieldProps extends IDFormBaseFieldProps<AnyType>> {
     /** Emit field React component re-render */
     emitRender() {
         this.renderSnapshot = {};
-        for (const listener of this._listeners) listener();
+        for (const listener of this.listeners) listener();
     }
 
     //endregion
 
-    initChildrenFields(): [
-        Record<string, IBaseField>,
-        Record<string, IBaseField>,
-    ] {
+    initChildrenFields(): [Record<string, IBaseField>, Record<string, IBaseField>] {
         return [{}, {}];
     }
 }

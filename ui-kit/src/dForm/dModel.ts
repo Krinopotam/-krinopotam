@@ -107,6 +107,9 @@ export class DModel {
 
     /** root fields collection (only root fields, without children) */
     private _rootFields: Record<string, IBaseField> = {};
+
+    /** fields dependencies map */
+    private _dependenceMap: Record<string, IBaseField[]> = {};
     //endregion
 
     /** the form data set instance */
@@ -192,7 +195,7 @@ export class DModel {
         this._validator = new BaseValidator();
     }
 
-    reinitModel(formProps: IDFormProps, callbacks: IDFormModelCallbacks) {
+    initModel(formProps: IDFormProps, callbacks: IDFormModelCallbacks) {
         this._callbacks = callbacks;
 
         if (this._formProps === formProps) return;
@@ -210,7 +213,7 @@ export class DModel {
             formProps.formMode ?? 'create'
         );
 
-        console.log('model', this._fieldsMap, this._rootFields);
+        this._dependenceMap = this.prepareDependenceMap();
 
         const oldDataSet = this.getFormDataSet();
         if (oldDataSet !== formProps.dataSet) this.setFormValues(formProps.dataSet, true, true);
@@ -225,7 +228,6 @@ export class DModel {
         if (!fieldsProps) return [fieldsMap, rootFields];
 
         const _fieldsProps = this.modifyFieldsProps(fieldsProps);
-        console.log(_fieldsProps);
 
         for (const fieldName in _fieldsProps) {
             const fieldProps = _fieldsProps[fieldName];
@@ -314,14 +316,31 @@ export class DModel {
         return [labels, values, hidden, readOnly, disabled];
     }
 
+    /** Generate fields dependency map*/
+    prepareDependenceMap() {
+        const result: Record<string, IBaseField[]> = {};
+        for (const fieldName in this._fieldsMap) {
+            result[fieldName] = []
+            const field = this._fieldsMap[fieldName];
+            const props = field.getProps();
+            if (!props.dependsOn) continue;
+
+            for (const depName of props.dependsOn) {
+                //const depField = this._fieldsMap[depName];
+                result[depName].push(field);
+            }
+        }
+
+        return result;
+    }
+
     /**
      * Calculates the statuses of the visibility of fields on the basis of their dependence on each other
      * @returns Returns an array with new hidden field statuses
      */
     private calculateHiddenFields() {
-        const fieldsProps = this.getFieldsProps();
         const result: Record<string, boolean> = {};
-        for (const fieldName in fieldsProps) result[fieldName] = this.isFieldMustBeHidden(fieldName);
+        for (const fieldName in this._fieldsMap) result[fieldName] = this.isFieldMustBeHidden(this._fieldsMap[fieldName]);
         return result;
     }
 
@@ -336,6 +355,11 @@ export class DModel {
     /** @return root fields collection (only root fields, without children) */
     getRootFields() {
         return this._rootFields;
+    }
+
+    /** return@ fields dependencies map */
+    getDependenceMap() {
+        return this._dependenceMap;
     }
 
     /** @return field by name from fields map */
@@ -793,38 +817,45 @@ export class DModel {
             const childField = this._fieldsMap[childName];
             const childProps = childField.getProps();
             if (!childProps?.dependsOn || childProps.dependsOn.indexOf(fieldName) < 0) continue;
-            const mustHidden = this.isFieldMustBeHidden(childName);
+            const mustHidden = this.isFieldMustBeHidden(childField);
             childField.setHidden(mustHidden, noEvents, noRerender);
         }
     }
 
     /**
      * Check if field must be hidden. Field must be hidden if a field on which it depends on has no value or hidden
-     * @param fieldName
      * @returns true, if field must be hidden
+     * @param field
      */
-    private isFieldMustBeHidden(fieldName: string) {
-        const fieldsProps = this.getFieldsProps();
-        const fieldProps = fieldsProps[fieldName];
-        if (!fieldProps) return true;
+    private isFieldMustBeHidden(field: IBaseField) {
+        const fieldProps = field.getProps();
 
-        if (fieldProps.hidden) return true;
+        if (fieldProps.hidden || field.isHidden()) return true;
         if (!fieldProps.dependsOn) return false;
 
         for (const parentName of fieldProps.dependsOn) {
-            const parentFieldProps = fieldsProps[parentName];
-            if (!parentFieldProps) continue;
+            const parentField = this._fieldsMap[parentName];
+            if (!parentField) continue;
 
-            if (parentFieldProps.hidden) return true;
+            const parentFieldProps = parentField.getProps();
 
-            const parentHasNoValue = !this._values?.[parentName];
-            const parentIsHidden = this._hidden[parentName] && !fieldProps.dependsOn; //You can take current hidden status only for the root fields. Others must be updated despite the current hidden status
-            if (parentHasNoValue || parentIsHidden) return true;
+            if (
+                parentFieldProps.hidden || //the field must be hidden because parent field must be hidden according field props
+                this.isValueEmpty(parentField.getValue()) || //the field must be hidden because parent field value is empty
+                (parentField.isHidden() && !parentFieldProps.dependsOn) // the field must be hidden, because parent field is root field and is hidden
+            )
+                return true;
 
-            if (this.isFieldMustBeHidden(parentName)) return true;
+            if (this.isFieldMustBeHidden(parentField)) return true;
         }
 
         return false;
+    }
+
+    private isValueEmpty(val: unknown) {
+        if (HelpersObjects.isArray(val) && (val as unknown[]).length === 0) return true;
+        if (typeof val === 'object' && Object.keys(val as Record<string, unknown>).length === 0) return true;
+        return !val;
     }
 
     //endregion
