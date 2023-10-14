@@ -182,7 +182,7 @@ export class BaseField<TFieldProps extends IDFormBaseFieldProps<AnyType>> {
 
     /** @returns field label */
     getLabel() {
-        return this.model._labels[this.fieldName];
+        return this.model.getFormLabels()[this.fieldName];
     }
 
     /**
@@ -194,7 +194,7 @@ export class BaseField<TFieldProps extends IDFormBaseFieldProps<AnyType>> {
     setLabel(value: React.ReactNode | undefined, noEvents?: boolean, noRerender?: boolean) {
         const prevValue = this.getLabel();
         if (prevValue === value) return;
-        this.model._labels[this.fieldName] = value;
+        this.model.getFormLabels()[this.fieldName] = value;
 
         if (!noEvents) this.getProps()?.onLabelChanged?.(value, prevValue, this);
         if (!noRerender) this.emitRender();
@@ -241,7 +241,7 @@ export class BaseField<TFieldProps extends IDFormBaseFieldProps<AnyType>> {
 
     /** @returns the field touched status (a user has set focus to the field) */
     isTouched(): boolean {
-        return this.model._touched[this.fieldName] ?? false;
+        return this.model.getFormTouchedFields()[this.fieldName] ?? false;
     }
 
     /**
@@ -253,14 +253,14 @@ export class BaseField<TFieldProps extends IDFormBaseFieldProps<AnyType>> {
         const prevValue = this.isTouched();
         if (prevValue === value) return;
 
-        this.model._touched[this.fieldName] = value;
+        this.model.getFormTouchedFields()[this.fieldName] = value;
 
         if (!noEvents) this.getProps()?.onTouchedStateChanged?.(value, this);
     }
 
     /** @returns field dirty status */
     isDirty(): boolean {
-        return this.model._dirty[this.fieldName] ?? false;
+        return this.model.getFormDirtyFields()[this.fieldName] ?? false;
     }
 
     /**
@@ -272,14 +272,14 @@ export class BaseField<TFieldProps extends IDFormBaseFieldProps<AnyType>> {
         const prevValue = this.isDirty();
         if (prevValue !== value) return;
 
-        this.model._dirty[this.fieldName] = value;
+        this.model.getFormDirtyFields()[this.fieldName] = value;
 
         if (!noEvents) this.getProps()?.onDirtyStateChanged?.(value, this);
 
         let formDirty = value;
         if (!value) {
-            for (const key in this.model._dirty) {
-                const dirty = this.model._dirty[key];
+            for (const key in this.model.getFormDirtyFields()) {
+                const dirty = this.model.getFormDirtyFields()[key];
                 if (dirty) {
                     formDirty = true;
                     break;
@@ -292,7 +292,7 @@ export class BaseField<TFieldProps extends IDFormBaseFieldProps<AnyType>> {
 
     /** @returns field disable status */
     isDisabled(): boolean {
-        return this.model._disabled[this.fieldName] ?? false;
+        return this.model.getFormDisabledFields()[this.fieldName] ?? false;
     }
 
     /**
@@ -304,7 +304,7 @@ export class BaseField<TFieldProps extends IDFormBaseFieldProps<AnyType>> {
     setDisabled(value: boolean, noEvents?: boolean, noRerender?: boolean) {
         const prevValue = this.isDisabled();
         if (prevValue === value) return;
-        this.model._disabled[this.fieldName] = value;
+        this.model.getFormDisabledFields()[this.fieldName] = value;
 
         if (!noEvents) this.getProps()?.onDisabledStateChanged?.(value, this);
         if (!noRerender) this.model.emitFormRender(); //it is necessary to re-render the entire form, since disabled fields may change the behavior of containers
@@ -312,7 +312,7 @@ export class BaseField<TFieldProps extends IDFormBaseFieldProps<AnyType>> {
 
     /** @returns field read only status  */
     isReadOnly(): boolean {
-        return this.model._readOnly[this.fieldName] ?? false;
+        return this.model.getFormReadOnlyFields()[this.fieldName] ?? false;
     }
 
     /**
@@ -326,7 +326,7 @@ export class BaseField<TFieldProps extends IDFormBaseFieldProps<AnyType>> {
 
         if (prevValue === value) return;
 
-        this.model._readOnly[this.fieldName] = value;
+        this.model.getFormReadOnlyFields()[this.fieldName] = value;
 
         if (!noEvents) this.getProps()?.onReadOnlyStateChanged?.(value, this);
         if (!noRerender) this.emitRender();
@@ -334,7 +334,7 @@ export class BaseField<TFieldProps extends IDFormBaseFieldProps<AnyType>> {
 
     /** @returns field hidden status  */
     isHidden(): boolean {
-        return this.model._hidden[this.fieldName] ?? false;
+        return this.model.getFormHiddenFields()[this.fieldName] ?? false;
     }
 
     /**
@@ -347,7 +347,7 @@ export class BaseField<TFieldProps extends IDFormBaseFieldProps<AnyType>> {
         const prevValue = this.isHidden();
         if (prevValue === value) return;
 
-        this.model._hidden[this.fieldName] = value;
+        this.model.getFormHiddenFields()[this.fieldName] = value;
         this.model.lockDependedFields(this, noEvents, noRerender);
 
         if (value) this.setReady(false, true); //the hidden fields are not ready because they are not rendered, but form ready status not changed
@@ -366,7 +366,7 @@ export class BaseField<TFieldProps extends IDFormBaseFieldProps<AnyType>> {
 
     /** @returns field ready status  */
     isReady(): boolean {
-        return this.model._ready[this.fieldName] ?? false;
+        return this.model.getFormReadyFields()[this.fieldName] ?? false;
     }
 
     /**
@@ -378,7 +378,7 @@ export class BaseField<TFieldProps extends IDFormBaseFieldProps<AnyType>> {
         const prevValue = this.isReady();
         if (prevValue === value) return;
 
-        this.model._ready[this.fieldName] = value;
+        this.model.getFormReadyFields()[this.fieldName] = value;
 
         if (!noEvents) this.getProps()?.onReadyStateChanged?.(value, this);
         this.model.setFormReady(value, noEvents);
@@ -386,7 +386,7 @@ export class BaseField<TFieldProps extends IDFormBaseFieldProps<AnyType>> {
 
     /** @returns the error text of the field  */
     getError(): string {
-        return this.model._errors[this.fieldName] ?? '';
+        return this.model.getFormErrors()[this.fieldName] ?? '';
     }
 
     /**
@@ -448,6 +448,21 @@ export class BaseField<TFieldProps extends IDFormBaseFieldProps<AnyType>> {
     /** @return root fields collection (only root fields, without children) */
     getRootFields() {
         return this.rootFields;
+    }
+
+    /** @return true if field contains another fields */
+    isContainer() {
+        return Object.keys(this.rootFields).length > 0;
+    }
+
+    /** @return true if field contains visible fields */
+    hasVisibleChildren() {
+        for (const fieldName in this.rootFields) {
+            const field = this.rootFields[fieldName];
+            if ((!field.isContainer() && !field.isHidden()) || field.hasVisibleChildren()) return true;
+        }
+
+        return false;
     }
 
     //endregion

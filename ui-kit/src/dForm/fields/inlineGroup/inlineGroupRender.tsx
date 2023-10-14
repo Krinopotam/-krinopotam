@@ -6,6 +6,7 @@ import Animate from 'rc-animate';
 
 export const InlineGroupRender = ({field}: {field: InlineGroupField}): React.JSX.Element => {
     useSyncExternalStore(field.subscribe.bind(field), field.getSnapshot.bind(field));
+    if (!field.hasVisibleChildren()) return <> </>;
 
     const model = field.getFormModel();
     const formProps = model.getFormProps();

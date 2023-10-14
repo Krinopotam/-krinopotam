@@ -13,12 +13,16 @@ export const TabsFieldRender = ({field}: {field: TabsField}): React.JSX.Element 
 
     const onChange = useOnChange(field);
 
+    if (!field.hasVisibleChildren()) return <> </>;
+
     //there is no sense to use memo (rendering is not very often)
     const items: TabsProps['items'] = [];
     for (const tabName in tabsRootFields) {
         if (!activeTab) activeTab = tabName;
 
+        if (!field.tabHasVisibleChildren(tabName)) continue;
         const childrenFields = tabsRootFields[tabName];
+
         items.push({
             key: tabName,
             tabKey: tabName,

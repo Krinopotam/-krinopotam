@@ -11,9 +11,11 @@
 import React from 'react';
 import {DForm, IDFormProps} from @krinopotam/ui-kit/dForm';
 import {InputField} from @krinopotam/ui-kit/dForm/fields/input/inputField';
+import {TabsField} from @krinopotam/ui-kit/dForm/fields/tabs/tabsField";
 const formProps: IDFormProps = {
     formId: 'Test form',
     confirmChanges: true,
+    //disableDepended:true,
     //layout:'horizontal',
     fieldsProps: {
         //field1: {component: InputField, label: 'Field1'},
@@ -21,6 +23,20 @@ const formProps: IDFormProps = {
         field3: {component: InputField, label: 'Field3'},
         field4: {component: InputField, label: 'Field4', inlineGroup:'row1', dependsOn:['field3']},
         field5: {component: InputField, label: 'Field5', inlineGroup:'row1', dependsOn:['field4']},
+        tabs: {
+            component: TabsField,
+            tabs: {
+                'Tab 1': {
+                    field1_1: {component: InputField, label: 'Field3', dependsOn:['field3']},
+                    field1_2: {component: InputField, label: 'Field4', dependsOn:['field3']},
+                    field1_3: {component: InputField, label: 'Field4', inlineGroup:'row2', dependsOn:['field1_1', 'field1_2']},
+                },
+                'Tab 2': {
+                    field2_1: {component: InputField, label: 'Field5', showCount: true},
+                    field2_2: {component: InputField, label: 'Field6'},
+                },
+            },
+        },
         /*        group1: {
                     component:InlineGroupField, fieldsProps: {
                         field1: {component: InputField, label: 'Field1' ,inlineGroup:'row1', rules: [{type: 'string', rule: 'not-empty', message: 'Поле не должно быть пустым'}]} ,

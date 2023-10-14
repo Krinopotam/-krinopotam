@@ -113,32 +113,32 @@ export class DModel {
     private _dataSet: IDFormDataSet | undefined = undefined;
 
     //region Fields properties
-    /** FOR INTERNAL USE ONLY - field labels */
-    public _labels: Record<string, React.ReactNode | undefined> = {};
+    /** Field labels */
+    private _labels: Record<string, React.ReactNode | undefined> = {};
 
     /** Field values */
     private _values: Record<string, unknown> = {};
 
-    /** FOR INTERNAL USE ONLY - touched field statuses */
-    public _touched: Record<string, boolean | undefined> = {};
+    /** Touched field statuses */
+    private _touched: Record<string, boolean | undefined> = {};
 
-    /** FOR INTERNAL USE ONLY - dirty field statuses */
-    public _dirty: Record<string, boolean | undefined> = {};
+    /** Dirty field statuses */
+    private _dirty: Record<string, boolean | undefined> = {};
 
-    /** FOR INTERNAL USE ONLY - error field statuses */
-    public _errors: Record<string, string> = {};
+    /** Error field statuses */
+    private _errors: Record<string, string> = {};
 
-    /** FOR INTERNAL USE ONLY - hidden field statuses */
-    public _hidden: Record<string, boolean | undefined> = {};
+    /** Hidden field statuses */
+    private _hidden: Record<string, boolean | undefined> = {};
 
-    /** FOR INTERNAL USE ONLY - read only field statuses */
-    public _readOnly: Record<string, boolean | undefined> = {};
+    /** Read only field statuses */
+    private _readOnly: Record<string, boolean | undefined> = {};
 
-    /** FOR INTERNAL USE ONLY - disabled field statuses */
-    public _disabled: Record<string, boolean | undefined> = {};
+    /** Disabled field statuses */
+    private _disabled: Record<string, boolean | undefined> = {};
 
-    /** FOR INTERNAL USE ONLY - readiness field statuses (the field is completely initialized, its data is loaded) */
-    public _ready: Record<string, boolean | undefined> = {};
+    /** Readiness field statuses (the field is completely initialized, its data is loaded) */
+    private _ready: Record<string, boolean | undefined> = {};
     //endregion
 
     //region Form properties
@@ -216,8 +216,8 @@ export class DModel {
         const oldDataSet = this.getFormDataSet();
         if (oldDataSet !== formProps.dataSet) this.setFormValues(formProps.dataSet, true, true);
 
-        if (!formProps.disableDepended) this._hidden = this.calculateUnavailableFields();
-        else this._disabled = this.calculateUnavailableFields();
+        if (!formProps.disableDepended) this._hidden = this.calculateLockedFields();
+        else this._disabled = this.calculateLockedFields();
 
         const endTime = new Date().getTime();
         console.log(`dModel init: ${endTime - startTime}ms`);
@@ -327,27 +327,27 @@ export class DModel {
      * Calculates the statuses of the fields visibility on the basis of their dependence on each other
      * @returns Returns an array with new hidden field statuses
      */
-    private calculateUnavailableFields() {
+    private calculateLockedFields() {
         const result: Record<string, boolean> = {};
-        for (const fieldName in this._fieldsMap) result[fieldName] = this.isFieldMustBeUnavailable(this._fieldsMap[fieldName]);
+        for (const fieldName in this._fieldsMap) result[fieldName] = this.isFieldMustBeLocked(this._fieldsMap[fieldName]);
         return result;
     }
 
     /**
-     * Hides/disable all depended fields, if root field has no value or hidden
+     * Hides/disable all depended on fields, if root field has no value or hidden
      * @param field
      * @param noEvents - do not emit onHiddenStateChanged/onDisableStateChanged callback
      * @param noRerender - do not emit re-rendering
      * @returns
      */
     lockDependedFields(field: IBaseField, noEvents?: boolean, noRerender?: boolean) {
-        const disableDepended = this._formProps.disableDepended
+        const disableDepended = this._formProps.disableDepended;
         const fieldName = field.getName();
         for (const childName in this._fieldsMap) {
             const childField = this._fieldsMap[childName];
             const childProps = childField.getProps();
             if (!childProps?.dependsOn || childProps.dependsOn.indexOf(fieldName) < 0) continue;
-            const isLocked = this.isFieldMustBeUnavailable(childField);
+            const isLocked = this.isFieldMustBeLocked(childField);
             if (disableDepended) childField.setDisabled(isLocked, noEvents, noRerender);
             else childField.setHidden(isLocked, noEvents, noRerender);
         }
@@ -358,7 +358,7 @@ export class DModel {
      * @returns true, if field must be unavailable
      * @param field
      */
-    private isFieldMustBeUnavailable(field: IBaseField) {
+    private isFieldMustBeLocked(field: IBaseField) {
         const fieldProps = field.getProps();
         if (!fieldProps.dependsOn?.length) return !!fieldProps.hidden;
 
@@ -375,11 +375,12 @@ export class DModel {
             )
                 return true;
 
-            if (this.isFieldMustBeUnavailable(parentField)) return true;
+            if (this.isFieldMustBeLocked(parentField)) return true;
         }
 
         return false;
     }
+
     //endregion
 
     //region Fields collection getters
@@ -406,8 +407,17 @@ export class DModel {
         return this._formId;
     }
 
-    // Values
-    /** Get form values */
+    /** @return form properties collection */
+    getFormProps() {
+        return this._formProps;
+    }
+
+    /** @return form labels collection */
+    getFormLabels() {
+        return this._labels;
+    }
+
+    /** @return form values collection */
     getFormValues() {
         return this._values;
     }
@@ -426,6 +436,41 @@ export class DModel {
             const field = this._fieldsMap[fieldName];
             field.setValue(newDataSet?.[fieldName], noEvents, noRerender);
         }
+    }
+
+    /** @return form touched fields collection */
+    getFormTouchedFields() {
+        return this._touched;
+    }
+
+    /** @return form dirty fields collection */
+    getFormDirtyFields() {
+        return this._dirty;
+    }
+
+    /** @return form disabled fields collection */
+    getFormDisabledFields() {
+        return this._disabled;
+    }
+
+    /** @return form read only fields collection */
+    getFormReadOnlyFields() {
+        return this._readOnly;
+    }
+
+    /** @return form hidden fields collection */
+    getFormHiddenFields() {
+        return this._hidden;
+    }
+
+    /** @return form ready fields collection (the field is completely initialized, its data is loaded) */
+    getFormReadyFields() {
+        return this._ready;
+    }
+
+    /** @returns a collection of errors of only those visible fields for which there are errors (hidden fields have no errors) */
+    getFormErrors() {
+        return this._errors;
     }
 
     /** Get form data set (Not to be confused with form values. This is the dataset that was passed to the form) */
@@ -646,13 +691,6 @@ export class DModel {
         return false;
     }
 
-    /**
-     * @returns a collection of errors of only those visible fields for which there are errors (hidden fields have no errors)
-     */
-    getFormErrors() {
-        return this._errors;
-    }
-
     /** Get the form component mounted status */
     isFormMounted() {
         return this._isFormMounted;
@@ -701,17 +739,6 @@ export class DModel {
         this.setFormFetching(true);
         this.setFormFetchingFailed(false);
     }
-
-    /** Return fields properties collection */
-    getFieldsProps() {
-        return this._fieldsProps;
-    }
-
-    /** Return form properties collection */
-    getFormProps() {
-        return this._formProps;
-    }
-
     //endregion
 
     //region Submit

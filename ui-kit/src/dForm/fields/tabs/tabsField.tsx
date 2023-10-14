@@ -99,18 +99,6 @@ export class TabsField extends BaseField<IDFormTabsFieldProps> {
         return this.render();
     }
 
-    //region Fields collection getters
-    /** return@ field collection (plain list of all fields in all component tabs, including child fields) */
-    getFieldsMap() {
-        return this.fieldsMap;
-    }
-
-    /** @return root fields collection (only root fields, without children) */
-    getRootFields() {
-        return this.rootFields;
-    }
-    //endregion
-
     //region Tabs grouped fields collections getters
     /**@return tabs grouped fields collection maps (flat list of all fields in all component tabs, including child fields of other containers) */
     getTabsFieldsMap() {
@@ -242,6 +230,17 @@ export class TabsField extends BaseField<IDFormTabsFieldProps> {
 
         if (!noEvents) this.getProps().onActiveTabChanged?.(tabName, this);
         if (!noRerender) this.emitRender();
+    }
+
+    /** @return true if tab contains visible fields */
+    tabHasVisibleChildren(tabName:string) {
+        const fields = this._tabsRootFields[tabName]
+        for (const fieldName in fields) {
+            const field = this.rootFields[fieldName];
+            if ((!field.isContainer() && !field.isHidden()) || field.hasVisibleChildren()) return true;
+        }
+
+        return false;
     }
 
     //endregion

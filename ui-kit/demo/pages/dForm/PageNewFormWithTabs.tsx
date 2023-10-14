@@ -48,6 +48,24 @@ const formProps: IDFormProps = {
                     },
                     //field2_2_3: {component: InputField, label: 'Field4'},
                 },
+                'Tab 3': {
+                    field3_2_1: {component: InputField, label: 'Field5', showCount: true},
+                    field3_2_2: {
+                        component: TabsField,
+                        label: 'Field6',
+                        tabs: {
+                            'Tab 3_1': {
+                                field3_2_1_1: {component: InputField, label: 'Field3', showCount: true},
+                                field3_2_1_2: {component: InputField, label: 'Field4'},
+                            },
+                            'Tab 3_2': {
+                                field3_2_2_1: {component: InputField, label: 'Field5', showCount: true},
+                                field3_2_2_2: {component: InputField, label: 'Field6'},
+                            },
+                        },
+                    },
+                    //field2_2_3: {component: InputField, label: 'Field4'},
+                },
             },
         },
     },
