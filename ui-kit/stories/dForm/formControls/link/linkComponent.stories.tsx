@@ -1,11 +1,11 @@
 // noinspection DuplicatedCode
 
 import type {Meta, StoryObj} from '@storybook/react'
-import LinkField from "./linkField";
+import LinkComponent from "./linkComponent";
 
 export default {
-    title: 'DForm/Controls/Link',
-    component: LinkField,
+    title: 'DForm/Fields/Link',
+    component: LinkComponent,
     tags: ['autodocs'],
     parameters: {
         docs: {
@@ -32,9 +32,9 @@ export default {
             /* AUTO-SOURCE-INJECT-END */
         }
     },
-} satisfies Meta<typeof LinkField>
+} satisfies Meta<typeof LinkComponent>
 
-type Story = StoryObj<typeof LinkField>;
+type Story = StoryObj<typeof LinkComponent>;
 export const Playground: Story = {
     args: {
         label: 'Link field',

@@ -4,7 +4,7 @@ import type {Meta, StoryObj} from '@storybook/react'
 import InputComponent from "./InputComponent";
 
 export default {
-    title: 'DForm/Controls/Input',
+    title: 'DForm/Fields/Input',
     component: InputComponent,
     tags: ['autodocs'],
     parameters: {

@@ -1,11 +1,11 @@
 // noinspection DuplicatedCode
 
 import type {Meta, StoryObj} from '@storybook/react';
-import TextAreaField from "./textareaField";
+import TextAreaComponent from "./textAreaComponent";
 
 export default {
-    title: 'DForm/Controls/TextArea',
-    component: TextAreaField,
+    title: 'DForm/Fields/TextArea',
+    component: TextAreaComponent,
     tags: ['autodocs'],
     parameters: {
         docs: {
@@ -32,9 +32,9 @@ export default {
             /* AUTO-SOURCE-INJECT-END */
         },
     },
-} satisfies Meta<typeof TextAreaField>;
+} satisfies Meta<typeof TextAreaComponent>;
 
-type Story = StoryObj<typeof TextAreaField>;
+type Story = StoryObj<typeof TextAreaComponent>;
 
 export const Playground: Story = {
     args: {

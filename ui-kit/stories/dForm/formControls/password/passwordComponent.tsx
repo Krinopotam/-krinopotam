@@ -5,7 +5,7 @@ import {PasswordField} from "@src/dForm/fields/password/passwordField";
 
 type IComponent = IDFormFieldProps
 
-/** DynamicForm Password component */
+/** DForm Password component */
 export const PasswordComponent = (props: IComponent): React.JSX.Element => <DForm
     buttons={null}
     fieldsProps={

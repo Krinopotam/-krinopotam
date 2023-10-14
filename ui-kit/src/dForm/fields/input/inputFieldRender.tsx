@@ -29,12 +29,12 @@ export const InputFieldRender = ({field}:{field:InputField}):React.JSX.Element =
         <Input
             autoFocus={fieldProps.autoFocus}
             disabled={field.isDisabled()}
+            readOnly={field.isReadOnly()}
             maxLength={fieldProps.maxLength}
             name={fieldName}
             onBlur={onBlur}
             onChange={onChange}
             placeholder={fieldProps.placeholder}
-            readOnly={field.isReadOnly()}
             showCount={fieldProps.showCount}
             value={value}
             style={fieldProps.style}

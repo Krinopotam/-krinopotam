@@ -4,7 +4,7 @@ import type {Meta, StoryObj} from '@storybook/react'
 import CheckboxComponent from "./checkboxComponent";
 
 export default {
-    title: 'DForm/Controls/Checkbox',
+    title: 'DForm/Fields/Checkbox',
     component: CheckboxComponent,
     tags: ['autodocs'],
     parameters: {

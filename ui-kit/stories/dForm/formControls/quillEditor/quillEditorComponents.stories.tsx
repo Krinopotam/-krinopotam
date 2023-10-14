@@ -1,11 +1,11 @@
 // noinspection DuplicatedCode
 
 import type {Meta, StoryObj} from '@storybook/react';
-import QuillEditorField from "./quillEditorField";
+import QuillEditorComponent from "./quillEditorComponent";
 
 export default {
-    title: 'DForm/Controls/QuillEditor',
-    component: QuillEditorField,
+    title: 'DForm/Fields/QuillEditor',
+    component: QuillEditorComponent,
     tags: ['autodocs'],
     parameters: {
         docs: {
@@ -32,9 +32,9 @@ export default {
             /* AUTO-SOURCE-INJECT-END */
         },
     },
-} satisfies Meta<typeof QuillEditorField>;
+} satisfies Meta<typeof QuillEditorComponent>;
 
-type Story = StoryObj<typeof QuillEditorField>;
+type Story = StoryObj<typeof QuillEditorComponent>;
 
 export const Playground: Story = {
     args: {

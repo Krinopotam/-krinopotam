@@ -4,7 +4,7 @@ import type {Meta, StoryObj} from '@storybook/react'
 import PasswordComponent from "./passwordComponent";
 
 export default {
-    title: 'DForm/Controls/Password',
+    title: 'DForm/Fields/Password',
     component: PasswordComponent,
     tags: ['autodocs'],
     parameters: {

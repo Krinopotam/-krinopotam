@@ -4,7 +4,7 @@ import type {Meta, StoryObj} from '@storybook/react'
 import DividerComponent from "./dividerComponent";
 
 export default {
-    title: 'DForm/Controls/Divider',
+    title: 'DForm/Fields/Divider',
     component: DividerComponent,
     tags: ['autodocs'],
     parameters: {

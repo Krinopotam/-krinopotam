@@ -6,7 +6,7 @@ import React from "react";
 
 
 export default {
-    title: 'DForm/Controls/Custom',
+    title: 'DForm/Fields/Custom',
     component: CustomComponent,
     tags: ['autodocs'],
     parameters: {

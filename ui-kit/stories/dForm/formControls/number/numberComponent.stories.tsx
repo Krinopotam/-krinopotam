@@ -1,11 +1,11 @@
 // noinspection DuplicatedCode
 
 import type {Meta, StoryObj} from '@storybook/react'
-import NumberField from "./numberField";
+import NumberComponent from "./numberComponent";
 
 export default {
-    title: 'DForm/Controls/Number',
-    component: NumberField,
+    title: 'DForm/Fields/Number',
+    component: NumberComponent,
     tags: ['autodocs'],
     parameters: {
         docs: {
@@ -31,9 +31,9 @@ export default {
             /* AUTO-SOURCE-INJECT-END */
         }
     },
-} satisfies Meta<typeof NumberField>
+} satisfies Meta<typeof NumberComponent>
 
-type Story = StoryObj<typeof NumberField>;
+type Story = StoryObj<typeof NumberComponent>;
 
 export const Playground: Story = {
     args: {

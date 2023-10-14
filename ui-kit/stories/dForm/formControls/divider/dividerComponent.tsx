@@ -6,7 +6,7 @@ import {DividerField} from "@src/dForm/fields/divider/dividerField";
 
 type IComponent = IDFormFieldProps;
 
-/** DynamicForm Divider component */
+/** DForm Divider component */
 export const DividerComponent = (props: IComponent): React.JSX.Element => <DForm
     buttons={null}
     fieldsProps={

@@ -5,7 +5,7 @@ import DateTimeComponent from "./dateTimeComponent";
 
 
 export default {
-    title: 'DForm/Controls/DateTime',
+    title: 'DForm/Fields/DateTime',
     component: DateTimeComponent,
     tags: ['autodocs'],
     parameters: {
