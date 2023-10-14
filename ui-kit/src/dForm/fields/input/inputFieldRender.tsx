@@ -1,8 +1,10 @@
-import React, {useCallback, useEffect} from "react";
+import React, {useCallback, useEffect, useSyncExternalStore} from "react";
 import {Input} from "antd";
 import {InputField} from "@src/dForm/fields/input/inputField";
 
 export const InputFieldRender = ({field}:{field:InputField}):React.JSX.Element =>{
+    useSyncExternalStore(field.subscribe.bind(field), field.getSnapshot.bind(field));
+
     const fieldName = field.getName();
     const fieldProps = field.getProps();
 

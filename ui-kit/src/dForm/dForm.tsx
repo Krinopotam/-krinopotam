@@ -80,8 +80,8 @@ export interface IDFormProps extends IDFormCallbacks {
     /** The form is read only */
     readOnly?: boolean;
 
-    /** Disable automatic hiding the fields if they depend on the fields for which the values are not set */
-    noAutoHideDependedFields?: boolean;
+    /** Automatically disable fields if they depend on fields whose value is not set. Otherwise, such fields will be automatically hidden */
+    disableDepended?: boolean;
 
     /** Tabs panes height (default 40)*/
     tabsHeight?: number

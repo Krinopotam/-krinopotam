@@ -29,9 +29,6 @@ export interface IDFormBaseFieldProps<TField extends IBaseField> extends Record<
     /** Field placeholder*/
     placeholder?: string;
 
-    /** tab name */
-    tab?: string;
-
     /** inline group name */
     inlineGroup?: string;
 
@@ -122,8 +119,14 @@ export class BaseField<TFieldProps extends IDFormBaseFieldProps<AnyType>> {
     /** react component sync(re-render) snapshot */
     protected renderSnapshot: Record<never, never> = {};
 
-    /** Children fields (if this field is container) */
-    //protected childrenFields?: Record<string, IBaseField>;
+    //region Fields collections (if this the field is container)
+    /** field collection (plain list of all fields in all component tabs, including child fields) */
+    protected fieldsMap: Record<string, IBaseField> = {};
+
+    /** root fields collection (only root fields, without children) */
+    protected rootFields: Record<string, IBaseField> = {};
+
+    //endregion
 
     constructor(fieldName: string, fieldProps: TFieldProps, model: DModel, parent?: IBaseField) {
         this.fieldName = fieldName;
@@ -132,24 +135,9 @@ export class BaseField<TFieldProps extends IDFormBaseFieldProps<AnyType>> {
         this.parent = parent;
     }
 
-    //region Component render implementation
-    protected render(): React.ReactNode {
-        return null;
+    initChildrenFields(): [Record<string, IBaseField>, Record<string, IBaseField>] {
+        return [{}, {}];
     }
-
-    renderField(altLabel?: React.ReactNode): React.ReactNode {
-        return this.renderFieldWrapper(this.render(), altLabel);
-    }
-
-    protected renderFieldWrapper(field: React.ReactNode, altLabel?: React.ReactNode) {
-        return (
-            <BaseFieldRender key={this.getName()} field={this} altLabel={altLabel}>
-                {field}
-            </BaseFieldRender>
-        );
-    }
-
-    //endregion
 
     //region Fields methods
     /** @returns get current field properties  */
@@ -212,7 +200,7 @@ export class BaseField<TFieldProps extends IDFormBaseFieldProps<AnyType>> {
         if (!noRerender) this.emitRender();
     }
 
-    /** @returns field value */
+    /** @return field value */
     getValue(): unknown {
         const formValues = this.model.getFormValues();
         return formValues[this.fieldName];
@@ -237,16 +225,18 @@ export class BaseField<TFieldProps extends IDFormBaseFieldProps<AnyType>> {
             this.validate();
         }
 
-        if (!noRerender) {
-            this.emitRender();
+        if (!noRerender) this.emitRender();
 
-            /*
-            for (const field of this.getDependents()) {
-                field.setHidden(!value);
-            }*/
-            
-            if (!this.getFormProps().noAutoHideDependedFields) this.model.hideDependedFields(this);
-        }
+        this.model.lockDependedFields(this, noEvents, noRerender);
+    }
+
+    /** @return true if field value is empty array, object, string, undefined or null (if value=0 it is not empty) */
+    isEmptyValue() {
+        const val = this.getValue();
+        if (val === null) return true;
+        if (Array.isArray(val) && val.length === 0) return true;
+        if (typeof val === 'object' && Object.keys(val as Record<string, unknown>).length === 0) return true;
+        return val !== 0 && !val;
     }
 
     /** @returns the field touched status (a user has set focus to the field) */
@@ -317,7 +307,7 @@ export class BaseField<TFieldProps extends IDFormBaseFieldProps<AnyType>> {
         this.model._disabled[this.fieldName] = value;
 
         if (!noEvents) this.getProps()?.onDisabledStateChanged?.(value, this);
-        if (!noRerender) this.emitRender();
+        if (!noRerender) this.model.emitFormRender(); //it is necessary to re-render the entire form, since disabled fields may change the behavior of containers
     }
 
     /** @returns field read only status  */
@@ -358,7 +348,7 @@ export class BaseField<TFieldProps extends IDFormBaseFieldProps<AnyType>> {
         if (prevValue === value) return;
 
         this.model._hidden[this.fieldName] = value;
-        if (!this.getFormProps().noAutoHideDependedFields) this.model.hideDependedFields(this, noEvents, noRerender);
+        this.model.lockDependedFields(this, noEvents, noRerender);
 
         if (value) this.setReady(false, true); //the hidden fields are not ready because they are not rendered, but form ready status not changed
 
@@ -367,7 +357,7 @@ export class BaseField<TFieldProps extends IDFormBaseFieldProps<AnyType>> {
         //if (fieldProps?.tab && fieldProps.inlineGroup) prevGroupValue = this.isGroupHidden(fieldProps.tab, fieldProps.inlineGroup);
 
         if (!noEvents) this.getProps()?.onHiddenStateChanged?.(value, this);
-        if (!noRerender) this.emitRender();
+        if (!noRerender) this.model.emitFormRender(); //it is necessary to re-render the entire form, since hidden fields may change the behavior of containers
 
         //if (!fieldProps?.tab || !fieldProps.inlineGroup) return;
         //const curGroupValue = this.isGroupHidden(fieldProps.tab, fieldProps.inlineGroup);
@@ -447,16 +437,36 @@ export class BaseField<TFieldProps extends IDFormBaseFieldProps<AnyType>> {
         return error;
     }
 
-    /** @return dependent fields list */
-    getDependents(): IBaseField[] {
-        const map = this.model.getDependenceMap();
-        return map[this.fieldName] ?? [];
+    //endregion
+
+    //region Fields collection methods (if the field is container)
+    /** return@ field collection (plain list of all fields in all component tabs, including child fields) */
+    getFieldsMap() {
+        return this.fieldsMap;
     }
 
-    /** @return true if the passed field depends on the given field */
-    isDepended(field: IBaseField) {
-        const dependentsList = this.getDependents();
-        return dependentsList.indexOf(field) > -1;
+    /** @return root fields collection (only root fields, without children) */
+    getRootFields() {
+        return this.rootFields;
+    }
+
+    //endregion
+
+    //region Component render implementation
+    protected render(): React.ReactNode {
+        return null;
+    }
+
+    renderField(altLabel?: React.ReactNode): React.ReactNode {
+        return this.renderFieldWrapper(this.render(), altLabel);
+    }
+
+    protected renderFieldWrapper(field: React.ReactNode, altLabel?: React.ReactNode) {
+        return (
+            <BaseFieldRender key={this.getName()} field={this} altLabel={altLabel}>
+                {field}
+            </BaseFieldRender>
+        );
     }
 
     //endregion
@@ -482,8 +492,4 @@ export class BaseField<TFieldProps extends IDFormBaseFieldProps<AnyType>> {
     }
 
     //endregion
-
-    initChildrenFields(): [Record<string, IBaseField>, Record<string, IBaseField>] {
-        return [{}, {}];
-    }
 }

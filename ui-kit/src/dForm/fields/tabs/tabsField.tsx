@@ -1,4 +1,4 @@
-import {BaseField, IBaseField, IDFormBaseFieldProps} from '@src/dForm/fields/base/baseField';
+import {BaseField, IDFormBaseFieldProps} from '@src/dForm/fields/base/baseField';
 import {TabsFieldRender} from '@src/dForm/fields/tabs/tabsFieldRender';
 import React from 'react';
 import {IDFormFieldsProps} from '@src/dForm';
@@ -37,20 +37,12 @@ export interface IDFormTabsFieldProps extends IDFormBaseFieldProps<TabsField> {
 }
 
 export class TabsField extends BaseField<IDFormTabsFieldProps> {
-    //region Fields collections
-    /** field collection (plain list of all fields in all component tabs, including child fields) */
-    private _fieldsMap: Record<string, IBaseField> = {};
-
-    /** root fields collection (only root fields, without children) */
-    private _rootFields: Record<string, IBaseField> = {};
-    //endregion
-
     //region Tabs grouped fields collections
     /** Tabs grouped fields collection maps (flat list of all fields in all component tabs, including child fields of other containers) */
-    private _tabsFieldsMap: Record<string, TabsField['_fieldsMap']> = {};
+    private _tabsFieldsMap: Record<string, TabsField['fieldsMap']> = {};
 
     /** Tabs grouped root field collection (only fields placed directly on the tab, excluding child fields) */
-    private _tabsRootFields: Record<string, TabsField['_rootFields']> = {};
+    private _tabsRootFields: Record<string, TabsField['rootFields']> = {};
     //endregion
 
     //region Tabs properties
@@ -76,7 +68,7 @@ export class TabsField extends BaseField<IDFormTabsFieldProps> {
     private _tabRenderSnapshots: Record<string, Record<never, never>> = {};
     //endregion
 
-    initChildrenFields(): [TabsField['_fieldsMap'], TabsField['_rootFields']] {
+    initChildrenFields(): [TabsField['fieldsMap'], TabsField['rootFields']] {
         const tabsProps = this.getProps();
         if (!tabsProps.tabs) return [{}, {}];
 
@@ -91,11 +83,11 @@ export class TabsField extends BaseField<IDFormTabsFieldProps> {
             this._tabRenderSnapshots[tabName] = {};
             this._tabRenderListeners[tabName] = [];
 
-            this._fieldsMap = {...this._fieldsMap, ...fieldsMap}
-            this._rootFields = {...this._rootFields, ...rootFields}
+            this.fieldsMap = {...this.fieldsMap, ...fieldsMap}
+            this.rootFields = {...this.rootFields, ...rootFields}
         }
 
-        return [this._fieldsMap, this._rootFields];
+        return [this.fieldsMap, this.rootFields];
     }
 
     protected render() {
@@ -110,12 +102,12 @@ export class TabsField extends BaseField<IDFormTabsFieldProps> {
     //region Fields collection getters
     /** return@ field collection (plain list of all fields in all component tabs, including child fields) */
     getFieldsMap() {
-        return this._fieldsMap;
+        return this.fieldsMap;
     }
 
     /** @return root fields collection (only root fields, without children) */
     getRootFields() {
-        return this._rootFields;
+        return this.rootFields;
     }
     //endregion
 

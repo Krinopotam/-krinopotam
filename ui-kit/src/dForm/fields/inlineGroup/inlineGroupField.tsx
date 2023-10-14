@@ -1,4 +1,4 @@
-import {BaseField, IBaseField, IDFormBaseFieldProps} from '@src/dForm/fields/base/baseField';
+import {BaseField, IDFormBaseFieldProps} from '@src/dForm/fields/base/baseField';
 import React from 'react';
 import {IDFormFieldsProps} from '@src/dForm';
 import {InlineGroupRender} from "@src/dForm/fields/inlineGroup/inlineGroupRender";
@@ -6,24 +6,19 @@ import {InlineGroupRender} from "@src/dForm/fields/inlineGroup/inlineGroupRender
 export interface IDFormInlineGroupProps extends IDFormBaseFieldProps<InlineGroupField> {
     /** Inline fields properties */
     fieldsProps: IDFormFieldsProps;
+
+    /** Do not share the freed-up space of hidden fields between visible fields */
+    noShareSpace?:boolean
 }
 
 export class InlineGroupField extends BaseField<IDFormInlineGroupProps> {
-    //region Fields collections
-    /** field collection (plain list of all fields in all component tabs, including child fields) */
-    private _fieldsMap: Record<string, IBaseField> = {};
-
-    /** root fields collection (only root fields, without children) */
-    private _rootFields: Record<string, IBaseField> = {};
-    //endregion
-
-    initChildrenFields(): [InlineGroupField['_fieldsMap'], InlineGroupField['_rootFields']] {
+    initChildrenFields(): [InlineGroupField['fieldsMap'], InlineGroupField['rootFields']] {
         const groupProps = this.getProps();
         const fieldsProps = groupProps.fieldsProps;
         if (!groupProps.fieldsProps) return [{}, {}];
 
-        [this._fieldsMap, this._rootFields] = this.getFormModel().prepareFieldCollection(fieldsProps, this);
-        return [this._fieldsMap, this._rootFields];
+        [this.fieldsMap, this.rootFields] = this.getFormModel().prepareFieldCollection(fieldsProps, this);
+        return [this.fieldsMap, this.rootFields];
     }
 
     protected render() {
@@ -37,12 +32,12 @@ export class InlineGroupField extends BaseField<IDFormInlineGroupProps> {
     //region Fields collection getters
     /** return@ field collection (plain list of all fields in all component tabs, including child fields) */
     getFieldsMap() {
-        return this._fieldsMap;
+        return this.fieldsMap;
     }
 
     /** @return root fields collection (only root fields, without children) */
     getRootFields() {
-        return this._rootFields;
+        return this.rootFields;
     }
     //endregion
 
@@ -72,8 +67,8 @@ export class InlineGroupField extends BaseField<IDFormInlineGroupProps> {
         const prevValue = this.isDisabled();
         if (prevValue === value) return;
 
-        for (const fieldName in this._rootFields) {
-            const field = this._rootFields[fieldName]
+        for (const fieldName in this.rootFields) {
+            const field = this.rootFields[fieldName]
             field.setDisabled(value, noEvents, true) //current container will rerender, no field rerender need
         }
 
@@ -90,8 +85,8 @@ export class InlineGroupField extends BaseField<IDFormInlineGroupProps> {
         const prevValue = this.isReadOnly();
         if (prevValue === value) return;
 
-        for (const fieldName in this._rootFields) {
-            const field = this._rootFields[fieldName]
+        for (const fieldName in this.rootFields) {
+            const field = this.rootFields[fieldName]
             field.setReadOnly(value, noEvents, true) //current container will rerender, no field rerender need
         }
 

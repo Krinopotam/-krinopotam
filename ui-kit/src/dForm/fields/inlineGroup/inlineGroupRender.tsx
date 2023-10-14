@@ -1,10 +1,12 @@
-import React from 'react';
+import React, {useSyncExternalStore} from 'react';
 import {Form} from 'antd';
 import {InlineGroupField} from '@src/dForm/fields/inlineGroup/inlineGroupField';
 import {IBaseField} from '@src/dForm/fields/base/baseField';
 import Animate from 'rc-animate';
 
 export const InlineGroupRender = ({field}: {field: InlineGroupField}): React.JSX.Element => {
+    useSyncExternalStore(field.subscribe.bind(field), field.getSnapshot.bind(field));
+
     const model = field.getFormModel();
     const formProps = model.getFormProps();
 
@@ -19,7 +21,7 @@ export const InlineGroupRender = ({field}: {field: InlineGroupField}): React.JSX
         }
     }
 
-    const isHidden = !firstField;
+    const isHidden = field.isHidden() || !firstField;
 
     const groupName = field.getLabel();
 
@@ -33,8 +35,14 @@ export const InlineGroupRender = ({field}: {field: InlineGroupField}): React.JSX
                     <div style={{display: 'inline-flex', gap: '24px', alignItems: 'center', width: '100%'}}>
                         {Object.keys(childrenFields).map(fieldName => {
                             const field = childrenFields[fieldName];
+                            if (field.isHidden() && !field.getProps().noShareSpace) return null;
+
                             const altLabel = formProps.layout === 'horizontal' && field === firstField ? null : undefined;
-                            return <div key={'item_' + field.getName()} style={{width:'100%'}}>{field.renderField(altLabel)}</div>;
+                            return (
+                                <div key={'item_' + field.getName()} style={{width: '100%'}}>
+                                    {field.renderField(altLabel)}
+                                </div>
+                            );
                         })}
                     </div>
                 </Form.Item>

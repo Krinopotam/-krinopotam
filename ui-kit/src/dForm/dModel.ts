@@ -107,9 +107,6 @@ export class DModel {
 
     /** root fields collection (only root fields, without children) */
     private _rootFields: Record<string, IBaseField> = {};
-
-    /** fields dependencies map */
-    private _dependenceMap: Record<string, IBaseField[]> = {};
     //endregion
 
     /** the form data set instance */
@@ -196,6 +193,8 @@ export class DModel {
     }
 
     initModel(formProps: IDFormProps, callbacks: IDFormModelCallbacks) {
+        const startTime = new Date().getTime();
+
         this._callbacks = callbacks;
 
         if (this._formProps === formProps) return;
@@ -210,15 +209,18 @@ export class DModel {
         [this._labels, this._values, this._hidden, this._readOnly, this._disabled] = this.initFieldsParameters(
             this._fieldsMap,
             prevFieldsMap,
+            this._values,
             formProps.formMode ?? 'create'
         );
-
-        this._dependenceMap = this.prepareDependenceMap();
 
         const oldDataSet = this.getFormDataSet();
         if (oldDataSet !== formProps.dataSet) this.setFormValues(formProps.dataSet, true, true);
 
-        if (!formProps.noAutoHideDependedFields) this._hidden = this.calculateHiddenFields();
+        if (!formProps.disableDepended) this._hidden = this.calculateUnavailableFields();
+        else this._disabled = this.calculateUnavailableFields();
+
+        const endTime = new Date().getTime();
+        console.log(`dModel init: ${endTime - startTime}ms`);
     }
 
     /** Instantiate fields classes and prepare fields collections */
@@ -287,6 +289,7 @@ export class DModel {
     private initFieldsParameters(
         fieldsMap: DModel['_fieldsMap'],
         prevFieldsMap: DModel['_fieldsMap'],
+        curValues: DModel['_values'],
         mode: IDFormMode
     ): [Record<string, React.ReactNode | undefined>, Record<string, unknown>, Record<string, boolean>, Record<string, boolean>, Record<string, boolean>] {
         const values: Record<string, unknown> = {};
@@ -306,7 +309,11 @@ export class DModel {
             readOnly[fieldName] = !!fieldProps.readOnly || mode === 'view';
             disabled[fieldName] = !!fieldProps.disabled;
 
-            if (oldField && field.constructor === oldField.constructor) continue; //if the field type has not changed, then keep values
+            if (oldField && field.constructor.name === oldField.constructor.name) {
+                //if the field type has not changed, then keep values
+                values[fieldName] = curValues[fieldName];
+                continue;
+            }
 
             let fieldValue: unknown = undefined;
             if (mode === 'create' && fieldProps.value) fieldValue = fieldProps.value;
@@ -316,34 +323,63 @@ export class DModel {
         return [labels, values, hidden, readOnly, disabled];
     }
 
-    /** Generate fields dependency map*/
-    prepareDependenceMap() {
-        const result: Record<string, IBaseField[]> = {};
-        for (const fieldName in this._fieldsMap) {
-            result[fieldName] = []
-            const field = this._fieldsMap[fieldName];
-            const props = field.getProps();
-            if (!props.dependsOn) continue;
-
-            for (const depName of props.dependsOn) {
-                //const depField = this._fieldsMap[depName];
-                result[depName].push(field);
-            }
-        }
-
+    /**
+     * Calculates the statuses of the fields visibility on the basis of their dependence on each other
+     * @returns Returns an array with new hidden field statuses
+     */
+    private calculateUnavailableFields() {
+        const result: Record<string, boolean> = {};
+        for (const fieldName in this._fieldsMap) result[fieldName] = this.isFieldMustBeUnavailable(this._fieldsMap[fieldName]);
         return result;
     }
 
     /**
-     * Calculates the statuses of the visibility of fields on the basis of their dependence on each other
-     * @returns Returns an array with new hidden field statuses
+     * Hides/disable all depended fields, if root field has no value or hidden
+     * @param field
+     * @param noEvents - do not emit onHiddenStateChanged/onDisableStateChanged callback
+     * @param noRerender - do not emit re-rendering
+     * @returns
      */
-    private calculateHiddenFields() {
-        const result: Record<string, boolean> = {};
-        for (const fieldName in this._fieldsMap) result[fieldName] = this.isFieldMustBeHidden(this._fieldsMap[fieldName]);
-        return result;
+    lockDependedFields(field: IBaseField, noEvents?: boolean, noRerender?: boolean) {
+        const disableDepended = this._formProps.disableDepended
+        const fieldName = field.getName();
+        for (const childName in this._fieldsMap) {
+            const childField = this._fieldsMap[childName];
+            const childProps = childField.getProps();
+            if (!childProps?.dependsOn || childProps.dependsOn.indexOf(fieldName) < 0) continue;
+            const isLocked = this.isFieldMustBeUnavailable(childField);
+            if (disableDepended) childField.setDisabled(isLocked, noEvents, noRerender);
+            else childField.setHidden(isLocked, noEvents, noRerender);
+        }
     }
 
+    /**
+     * Check if field must be unavailable (if a field on which it depends on has no value or hidden)
+     * @returns true, if field must be unavailable
+     * @param field
+     */
+    private isFieldMustBeUnavailable(field: IBaseField) {
+        const fieldProps = field.getProps();
+        if (!fieldProps.dependsOn?.length) return !!fieldProps.hidden;
+
+        for (const parentName of fieldProps.dependsOn) {
+            const parentField = this._fieldsMap[parentName];
+            if (!parentField) continue;
+
+            const parentProps = parentField.getProps();
+
+            if (
+                parentProps.hidden || //the field must be hidden because parent field must be hidden according field props
+                parentField.isHidden() || // the field must be hidden, because parent field is hidden
+                parentField.isEmptyValue() //the field must be hidden because parent field value is empty
+            )
+                return true;
+
+            if (this.isFieldMustBeUnavailable(parentField)) return true;
+        }
+
+        return false;
+    }
     //endregion
 
     //region Fields collection getters
@@ -355,11 +391,6 @@ export class DModel {
     /** @return root fields collection (only root fields, without children) */
     getRootFields() {
         return this._rootFields;
-    }
-
-    /** return@ fields dependencies map */
-    getDependenceMap() {
-        return this._dependenceMap;
     }
 
     /** @return field by name from fields map */
@@ -796,62 +827,6 @@ export class DModel {
     /** Increment the number of submit attempts  */
     incrementSubmitCount() {
         this._submitCount++;
-    }
-
-    //endregion
-
-    //region Service methods
-    /**
-     * Hides all depended fields, if root field has no value or hidden
-     * @param field
-     * @param noEvents - do not emit onHiddenStateChanged callback
-     * @param noRerender - do not emit re-rendering
-     * @returns
-     */
-    hideDependedFields(field: IBaseField, noEvents?: boolean, noRerender?: boolean) {
-        for (const childName in this._fieldsMap) {
-            const childField = this._fieldsMap[childName];
-            const childProps = childField.getProps();
-            if (!childProps?.dependsOn || childProps.dependsOn.indexOf(field.getName()) < 0) continue;
-            const mustHidden = this.isFieldMustBeHidden(childField);
-            childField.setHidden(mustHidden, noEvents, noRerender);
-        }
-    }
-
-    /**
-     * Check if field must be hidden. Field must be hidden if a field on which it depends on has no value or hidden
-     * @returns true, if field must be hidden
-     * @param field
-     */
-    private isFieldMustBeHidden(field: IBaseField) {
-        const fieldProps = field.getProps();
-
-        if (fieldProps.hidden || field.isHidden()) return true;
-        if (!fieldProps.dependsOn) return false;
-
-        for (const parentName of fieldProps.dependsOn) {
-            const parentField = this._fieldsMap[parentName];
-            if (!parentField) continue;
-
-            const parentFieldProps = parentField.getProps();
-
-            if (
-                parentFieldProps.hidden || //the field must be hidden because parent field must be hidden according field props
-                this.isValueEmpty(parentField.getValue()) || //the field must be hidden because parent field value is empty
-                (parentField.isHidden() && !parentFieldProps.dependsOn) // the field must be hidden, because parent field is root field and is hidden
-            )
-                return true;
-
-            if (this.isFieldMustBeHidden(parentField)) return true;
-        }
-
-        return false;
-    }
-
-    private isValueEmpty(val: unknown) {
-        if (HelpersObjects.isArray(val) && (val as unknown[]).length === 0) return true;
-        if (typeof val === 'object' && Object.keys(val as Record<string, unknown>).length === 0) return true;
-        return !val;
     }
 
     //endregion
