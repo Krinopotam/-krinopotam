@@ -16,17 +16,18 @@ export default {
                 // language=text
                 code: `
                     import React from "react";
-                    import {DForm} from @krinopotam/ui-kit/dynamicForm";
-                    import {IDFormFieldQuillEditorProps, QuillEditorComponent} from @krinopotam/ui-kit/dynamicForm/components/quillEditorComponent";
-                    type IComponent = Omit<IDFormFieldQuillEditorProps, 'component'>
-                    /** DynamicForm QuillEditor component */
-                    export const QuillEditorField = (props: IComponent): React.JSX.Element => <DForm
+                    import {DForm} from @krinopotam/ui-kit/dForm";
+                    import {IDFormFieldProps} from @krinopotam/ui-kit/dForm";
+                    import {QuillEditorField} from @krinopotam/ui-kit/dForm/fields/quillEditor/quillEditorField";
+                    type IComponent = IDFormFieldProps;
+                    /** DForm QuillEditor component */
+                    export const QuillEditorComponent = (props: IComponent): React.JSX.Element => <DForm
                         buttons={null}
                         fieldsProps={
-                            {field1: {...props, component: QuillEditorComponent} satisfies IDFormFieldQuillEditorProps}
+                            {field1: {...props, component: QuillEditorField}}
                         }
                     />
-                    export  default QuillEditorField
+                    export  default QuillEditorComponent
                 `
             }
             /* AUTO-SOURCE-INJECT-END */

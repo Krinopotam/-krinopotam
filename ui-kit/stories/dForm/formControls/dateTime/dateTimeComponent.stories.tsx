@@ -17,17 +17,18 @@ export default {
                 // language=text
                 code: `
                     import React from "react";
-                    import {DForm} from @krinopotam/ui-kit/dynamicForm";
-                    import {IDFormFieldDateTimeProps, DateTimeComponent} from @krinopotam/ui-kit/dynamicForm/components/dateTimeComponent";
-                    type IComponent = Omit<IDFormFieldDateTimeProps, 'component'>
-                    /** DynamicForm DateTime component */
-                    export const DateTimeField = (props: IComponent): React.JSX.Element => <DForm
+                    import {DForm} from @krinopotam/ui-kit/dForm";
+                    import {IDFormFieldProps} from @krinopotam/ui-kit/dForm";
+                    import {DateTimeField} from @krinopotam/ui-kit/dForm/fields/dateTime/dateTimeField";
+                    type IComponent = IDFormFieldProps;
+                    /** DForm DateTime component */
+                    export const DateTimeComponent = (props: IComponent): React.JSX.Element => <DForm
                         buttons={null}
                         fieldsProps={
-                            {field1: {...props, component: DateTimeComponent} satisfies IDFormFieldDateTimeProps}
+                            {field1: {...props, component: DateTimeField}}
                         }
                     />
-                    export default DateTimeField
+                    export default DateTimeComponent
                 `
             }
             /* AUTO-SOURCE-INJECT-END */

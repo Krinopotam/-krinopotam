@@ -15,18 +15,14 @@ export default {
                 format: true,
                 // language=text
                 code: `
-                    import React from "react";
-                    import {DForm} from @krinopotam/ui-kit/dynamicForm";
-                    import {IDFormFieldLinkProps, LinkComponent} from @krinopotam/ui-kit/dynamicForm/components/linkComponent";
-                    type IComponent = Omit<IDFormFieldLinkProps, 'component'>
-                    /** DynamicForm Link component */
-                    export const LinkField = (props: IComponent): React.JSX.Element => <DForm
-                        buttons={null}
-                        fieldsProps={
-                            {field1: {...props, component: LinkComponent} satisfies IDFormFieldLinkProps}
-                        }
-                    />
-                    export default LinkField
+                    import React from 'react';
+                    import {DForm} from @krinopotam/ui-kit/dForm';
+                    import {IDFormFieldProps} from @krinopotam/ui-kit/dForm';
+                    import {LinkField} from @krinopotam/ui-kit/dForm/fields/link/linkField';
+                    type IComponent = IDFormFieldProps;
+                    /** DForm Link component */
+                    export const LinkComponent = (props: IComponent): React.JSX.Element => <DForm buttons={null} fieldsProps={{field1: {...props, component: LinkField}}} />;
+                    export default LinkComponent;
                 `
             }
             /* AUTO-SOURCE-INJECT-END */

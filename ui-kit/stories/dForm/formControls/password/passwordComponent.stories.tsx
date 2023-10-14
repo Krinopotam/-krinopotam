@@ -16,16 +16,17 @@ export default {
                 // language=text
                 code: `
                     import React from "react";
-                    import {DForm} from @krinopotam/ui-kit/dynamicForm";
-                    import {IDFormFieldPasswordProps, PasswordComponent} from @krinopotam/ui-kit/dynamicForm/components/passwordComponent";
-                    type IComponent = Omit<IDFormFieldPasswordProps, 'component'>
-                    /** DynamicForm Password component */
-                    export const PasswordField = (props: IComponent): React.JSX.Element => <DForm
+                    import {DForm} from @krinopotam/ui-kit/dForm";
+                    import {IDFormFieldProps} from @krinopotam/ui-kit/dForm";
+                    import {PasswordField} from @krinopotam/ui-kit/dForm/fields/password/passwordField";
+                    type IComponent = IDFormFieldProps
+                    /** DForm Password component */
+                    export const PasswordComponent = (props: IComponent): React.JSX.Element => <DForm
                         buttons={null}
                         fieldsProps={
-                            {field1: {...props, component: PasswordComponent}}
+                            {field1: {...props, component: PasswordField}}
                         }/>
-                    export default PasswordField
+                    export default PasswordComponent
                 `
             }
             /* AUTO-SOURCE-INJECT-END */

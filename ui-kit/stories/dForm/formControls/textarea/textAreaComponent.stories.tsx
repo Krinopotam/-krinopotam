@@ -16,17 +16,18 @@ export default {
                 // language=text
                 code: `
                     import React from "react";
-                    import {DForm} from @krinopotam/ui-kit/dynamicForm";
-                    import {IDFormFieldTextAreaProps, TextAreaComponent} from @krinopotam/ui-kit/dynamicForm/components/textAreaComponent";
-                    type IComponent = Omit<IDFormFieldTextAreaProps, 'component'>
-                    /** DynamicForm Textarea component */
-                    export const TextAreaField = (props: IComponent): React.JSX.Element => <DForm
+                    import {DForm} from @krinopotam/ui-kit/dForm";
+                    import {TextAreaField} from @krinopotam/ui-kit/dForm/fields/textArea/textAreaField";
+                    import {IDFormFieldProps} from @krinopotam/ui-kit/dForm";
+                    type IComponent = IDFormFieldProps
+                    /** DForm Textarea component */
+                    export const TextAreaComponent = (props: IComponent): React.JSX.Element => <DForm
                         buttons={null}
                         fieldsProps={
-                            {field1: {...props, component: TextAreaComponent} satisfies IDFormFieldTextAreaProps}
+                            {field1: {...props, component: TextAreaField}}
                         }
                     />
-                    export default TextAreaField
+                    export default TextAreaComponent
                 `
             }
             /* AUTO-SOURCE-INJECT-END */

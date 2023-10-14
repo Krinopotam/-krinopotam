@@ -16,16 +16,16 @@ export default {
                 // language=text
                 code: `
                     import React from "react";
-                    import {DForm} from @krinopotam/ui-kit/dynamicForm";
-                    import {IDFormFieldNumberProps, NumberComponent} from @krinopotam/ui-kit/dynamicForm/components/numberComponent";
-                    type IComponent = Omit<IDFormFieldNumberProps, 'component'>
-                    /** DynamicForm Number component */
-                    export const NumberField = (props: IComponent): React.JSX.Element => <DForm
+                    import {DForm, IDFormFieldProps} from @krinopotam/ui-kit/dForm";
+                    import {NumberField} from @krinopotam/ui-kit/dForm/fields/number/numberField";
+                    type IComponent = IDFormFieldProps;
+                    /** DForm Number component */
+                    export const NumberComponent = (props: IComponent): React.JSX.Element => <DForm
                         buttons={null}
                         fieldsProps={
-                            {field1: {...props, component: NumberComponent} satisfies IDFormFieldNumberProps }
+                            {field1: {...props, component: NumberField} }
                         }/>
-                    export default NumberField
+                    export default NumberComponent
                 `
             }
             /* AUTO-SOURCE-INJECT-END */

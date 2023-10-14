@@ -16,22 +16,23 @@ export default {
                 // language=text
                 code: `
                     import React from "react";
-                    import {DForm} from @krinopotam/ui-kit/dynamicForm";
-                    import {IDFormFieldDividerProps, DividerComponent} from @krinopotam/ui-kit/dynamicForm/components/dividerComponent";
-                    import {IDFormFieldInputProps, InputComponent} from @krinopotam/ui-kit/dynamicForm/components/inputComponent";
-                    type IComponent = Omit<IDFormFieldDividerProps, 'component'>
-                    /** DynamicForm Divider component */
-                    export const DividerField = (props: IComponent): React.JSX.Element => <DForm
+                    import {DForm} from @krinopotam/ui-kit/dForm";
+                    import {IDFormFieldProps} from @krinopotam/ui-kit/dForm";
+                    import {InputField} from @krinopotam/ui-kit/dForm/fields/input/inputField";
+                    import {DividerField} from @krinopotam/ui-kit/dForm/fields/divider/dividerField";
+                    type IComponent = IDFormFieldProps;
+                    /** DForm Divider component */
+                    export const DividerComponent = (props: IComponent): React.JSX.Element => <DForm
                         buttons={null}
                         fieldsProps={
                             {
-                                field1: {label: 'Field 1', component: InputComponent} satisfies IDFormFieldInputProps,
-                                divider: {...props, component: DividerComponent} satisfies IDFormFieldDividerProps,
-                                field2: {label: 'Field 2', component: InputComponent} satisfies IDFormFieldInputProps,
+                                field1: {label: 'Field 1', component: InputField},
+                                divider: {...props, component: DividerField},
+                                field2: {label: 'Field 2', component: InputField} ,
                             }
                         }
                     />
-                    export default DividerField
+                    export default DividerComponent
                 `
             }
             /* AUTO-SOURCE-INJECT-END */
