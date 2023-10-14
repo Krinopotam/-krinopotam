@@ -14,20 +14,20 @@ export default {
                 // language=text
                 code: `
                     import React, {useCallback, useState} from 'react';
-                    import {DFormModal, IDFormModalProps} from @krinopotam/ui-kit/dynamicFormModal';
-                    import {IDFormFieldInputProps, InputComponent} from @krinopotam/ui-kit/dynamicForm/components/inputComponent';
-                    import {IDFormFieldPasswordProps, PasswordComponent} from @krinopotam/ui-kit/dynamicForm/components/passwordComponent';
+                    import {DFormModal, IDFormModalProps} from @krinopotam/ui-kit/dFormModal';
                     import {Button} from @krinopotam/ui-kit/button';
                     import {Space} from 'antd';
                     import {IColorType} from @krinopotam/ui-kit/button/button';
+                    import {InputField} from @krinopotam/ui-kit/dForm/fields/input/inputField";
+                    import {PasswordField} from @krinopotam/ui-kit/dForm/fields/password/passwordField";
                     /** Simple Dynamic form example */
                     export const SimpleForm = (props?: IDFormModalProps): React.JSX.Element => {
                         const [open, setOpen] = useState(false);
                         const [colorType, setColorType] = useState<IColorType | undefined>(undefined);
                         const formProps: IDFormModalProps = {
                             fieldsProps: {
-                                field1: {component: InputComponent, label: 'login', tooltip: 'Login input'} as IDFormFieldInputProps,
-                                field2: {component: PasswordComponent, label: 'password', tooltip: 'Password input'} as IDFormFieldPasswordProps,
+                                field1: {component: InputField, label: 'login', tooltip: 'Login input'},
+                                field2: {component: PasswordField, label: 'password', tooltip: 'Password input'}
                             },
                             colorType: colorType,
                         };
@@ -39,9 +39,7 @@ export default {
                         return (
                             <>
                                 <Space>
-                                    <Button onClick={() => onClick()}>
-                                        Open form
-                                    </Button>
+                                    <Button onClick={() => onClick()}>Open form</Button>
                                     <Button type="primary" onClick={() => onClick('info')} colorType="info">
                                         Open form
                                     </Button>
@@ -58,10 +56,8 @@ export default {
                                 <DFormModal
                                     {...compProps}
                                     isOpened={open}
-                                    callbacks={{
-                                        onClosed: () => {
-                                            setOpen(false);
-                                        },
+                                    onClosed={() => {
+                                        setOpen(false);
                                     }}
                                 />
                             </>

@@ -14,18 +14,20 @@ export default {
                 format: true,
                 // language=text
                 code: `
-                    import React, {useCallback} from 'react';
+                    import React, {useCallback, useRef} from 'react';
                     import {Button} from @krinopotam/ui-kit/button';
-                    import {IModalAlertConfig, MessageBox, useUpdateMessageBoxTheme} from @krinopotam/ui-kit/messageBox';
+                    import {IModalAlertConfig, MessageBox, MessageBoxApi, useUpdateMessageBoxTheme} from @krinopotam/ui-kit/messageBox';
                     import {Space} from 'antd';
                     import {IColorType} from @krinopotam/ui-kit/button/button';
                     type IComponent = IModalAlertConfig;
                     /** MessageBox Alert component */
                     export const AlertMessageBoxComponent = (props: IComponent): React.JSX.Element => {
                         useUpdateMessageBoxTheme(); //set current theme to messageBox
+                        const curMessageBox = useRef<MessageBoxApi|null>(null);
+                        if (curMessageBox.current) curMessageBox.current?.update(props)
                         const onClick = useCallback(
                             (colorType?: IColorType) => {
-                                MessageBox.alert({...props, colorType: colorType});
+                                curMessageBox.current = MessageBox.alert({...props, colorType: colorType});
                             },
                             [props]
                         );

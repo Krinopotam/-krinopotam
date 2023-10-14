@@ -1,22 +1,25 @@
 import React from 'react';
-import {DForm} from '@src/dynamicForm';
-import {CustomComponent, IDFormFieldCustomProps} from '@src/dynamicForm/components/customComponent';
-import {IDFormFieldInputProps, InputComponent} from '@src/dynamicForm/components/inputComponent';
-import {IDFormFieldCheckBoxProps} from '@src/dynamicForm/components/checkboxComponent';
+import {DForm} from '@src/dForm';
+import {IDFormFieldProps} from '@src/dForm';
+import {IDFormInputFieldProps, InputField} from '@src/dForm/fields/input/inputField';
+import {CustomField} from '@src/dForm/fields/custom/customField';
 
-type IComponent = Omit<IDFormFieldCheckBoxProps, 'component' | 'callbacks'>;
+type IComponent = IDFormFieldProps;
 
 /** DynamicForm Custom component */
 export const AutoUpdateCustomField = (props: IComponent): React.JSX.Element => (
     <DForm
         buttons={null}
         fieldsProps={{
-            field1: {label: 'Enter value', component: InputComponent} satisfies IDFormFieldInputProps,
-            field2: {...props, component: CustomComponent, onRender: MyComponent} satisfies IDFormFieldCustomProps,
-        }}
-        onFieldValueChanged={(_fieldName, _value, _prevValue, formApi) => {
-            const inputValue = formApi.model.getFieldValue('field1') as string;
-            formApi.model.setFieldValue('field2', inputValue, true);
+            field1: {
+                label: 'Enter value',
+                component: InputField,
+                onValueChanged: (value, prevValue, field) => {
+                    const field2 = field.getModel().getField('field2')
+                    field2.setValue(value);
+                },
+            } satisfies  IDFormInputFieldProps,
+            field2: {...props, component: CustomField, onRender: MyComponent},
         }}
     />
 );

@@ -8,7 +8,7 @@ export const InlineGroupRender = ({field}: {field: InlineGroupField}): React.JSX
     useSyncExternalStore(field.subscribe.bind(field), field.getSnapshot.bind(field));
     if (!field.hasVisibleChildren()) return <> </>;
 
-    const model = field.getFormModel();
+    const model = field.getModel();
     const formProps = model.getFormProps();
 
     const childrenFields = field.getRootFields();

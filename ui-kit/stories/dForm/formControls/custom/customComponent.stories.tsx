@@ -1,13 +1,13 @@
 // noinspection DuplicatedCode
 
 import type {Meta, StoryObj} from '@storybook/react'
-import CustomField from "./customField";
+import CustomComponent from "./customComponent";
 import React from "react";
 
 
 export default {
     title: 'DForm/Controls/Custom',
-    component: CustomField,
+    component: CustomComponent,
     tags: ['autodocs'],
     parameters: {
         docs: {
@@ -34,9 +34,9 @@ export default {
             /* AUTO-SOURCE-INJECT-END */
         }
     },
-} satisfies Meta<typeof CustomField>
+} satisfies Meta<typeof CustomComponent>
 
-type Story = StoryObj<typeof CustomField>;
+type Story = StoryObj<typeof CustomComponent>;
 export const Playground: Story = {
     args: {
         label: 'Custom field',

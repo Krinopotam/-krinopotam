@@ -13,38 +13,9 @@ import {MessageBox} from '@src/messageBox';
 export const useModelCallbacks = (formProps: IDFormProps, formApi: IDFormApi) => {
     return useMemo((): IDFormModelCallbacks => {
         return {
-            // Fields callbacks
-
-            /** fires when the value of a field changed */
-            onFieldValueChanged: (fieldName: string, value: unknown, prevValue: unknown) => formProps?.onFieldValueChanged?.(fieldName, value, prevValue, formApi),
-
-            /** fires when the touched state of a field changed */
-            onFieldTouchedStateChanged: (fieldName: string, state: boolean) => formProps?.onFieldTouchedStateChanged?.(fieldName, state, formApi),
-
-            /** fires when the dirty state of a field changed */
-            onFieldDirtyStateChanged: (fieldName: string, state: boolean) => formProps?.onFieldDirtyStateChanged?.(fieldName, state, formApi),
-
-            /** fires when the error of a field changed */
-            onFieldErrorChanged: (fieldName: string, error: string) => formProps?.onFieldErrorChanged?.(fieldName, error, formApi),
-
-            /** fires when the hidden state of a field changed */
-            onFieldHiddenStateChanged: (fieldName: string, state: boolean) => formProps?.onFieldHiddenStateChanged?.(fieldName, state, formApi),
-
-            /** fires when read only state of a field changed */
-            onFieldReadOnlyStateChanged: (fieldName: string, state: boolean) => formProps?.onFieldReadOnlyStateChanged?.(fieldName, state, formApi),
-
-            /** fires when the disable state of a field changes  */
-            onFieldDisabledStateChanged: (fieldName: string, state: boolean) => formProps?.onFieldDisabledStateChanged?.(fieldName, state, formApi),
-
-            /** fires when label of a field changed */
-            onFieldLabelChanged: (fieldName: string, label: React.ReactNode, prevLabel: React.ReactNode) => formProps?.onFieldLabelChanged?.(fieldName, label, prevLabel, formApi),
-
-            /** fires when a field is completely initialized, its data is loaded */
-            onFieldReady: (fieldName: string) => formProps?.onFieldReady?.(fieldName, formApi),
-
             // Tabs callbacks
             /** fires when the hidden state of a tab changed */
-            onTabHiddenStateChanged: (tabName: string, state: boolean) => formProps?.onFieldHiddenStateChanged?.(tabName, state, formApi),
+            onTabHiddenStateChanged: (tabName: string, state: boolean) => formProps?.onTabHiddenStateChanged?.(tabName, state, formApi),
 
             /** fires when read only state of a tab changed */
             onTabReadOnlyStateChanged: (tabName: string, state: boolean) => formProps?.onTabReadOnlyStateChanged?.(tabName, state, formApi),
@@ -68,9 +39,6 @@ export const useModelCallbacks = (formProps: IDFormProps, formApi: IDFormApi) =>
                 if (state) formApi.buttonsApi.disabled?.('ok', false);
                 else formApi.buttonsApi.disabled?.('ok', true);
             },
-
-            /** fires when a field validated */
-            onFieldValidated: (fieldName: string, value: unknown, error: string, isSubmit: boolean) => formProps?.onFieldValidated?.(fieldName, value, error, isSubmit, formApi),
 
             /** fires when the form validated */
             onFormValidated: (values: Record<string, unknown>, errors: Record<string, string>, isSubmit: boolean) => formProps?.onFormValidated?.(values, errors, isSubmit, formApi),

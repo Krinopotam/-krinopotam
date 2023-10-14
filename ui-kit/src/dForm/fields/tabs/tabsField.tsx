@@ -76,7 +76,7 @@ export class TabsField extends BaseField<IDFormTabsFieldProps> {
 
         for (const tabName in tabsProps.tabs) {
             const fieldsProps = tabsProps.tabs[tabName];
-            const [fieldsMap, rootFields] = this.getFormModel().prepareFieldCollection(fieldsProps, this);
+            const [fieldsMap, rootFields] = this.getModel().prepareFieldCollection(fieldsProps, this);
 
             this._tabsRootFields[tabName] = rootFields;
             this._tabsFieldsMap[tabName] = fieldsMap;

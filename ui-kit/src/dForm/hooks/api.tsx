@@ -7,7 +7,7 @@ import {IDFormProps} from '../dForm';
 import {MessageBox} from '@src/messageBox';
 
 /** Form api */
-export interface IDFormApi {
+export interface IDFormApi extends Record<string,unknown>{
     /** Form model instance */
     model: DModel;
 

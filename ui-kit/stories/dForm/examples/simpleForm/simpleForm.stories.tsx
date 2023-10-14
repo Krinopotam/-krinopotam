@@ -16,24 +16,20 @@ export default {
                 code: `
                     import React from 'react';
                     import {DForm, IDFormProps} from @krinopotam/ui-kit/dynamicForm';
-                    import {DFormConfig} from @krinopotam/ui-kit/dynamicForm/configBuilder/dFormConfig';
-                    import {InputComponentConfig} from @krinopotam/ui-kit/dynamicForm/configBuilder/inputComponentConfig';
-                    import {PasswordComponentConfig} from @krinopotam/ui-kit/dynamicForm/configBuilder/passwordComponentConfig';
-                    interface IFields {
-                        login: string;
-                        password: string;
-                    }
-                    const formProps = new DFormConfig<IFields>('Test form')
-                        .confirmChanges(true)
-                        .addFields(
-                            new InputComponentConfig<IFields>('login').label('Логин').tooltip('Ввод логина'),
-                            new PasswordComponentConfig<IFields>('password').label('Пароль')
-                        )
-                        .buttons({ok: {position: 'right'}})
-                        .getConfig();
+                    import {IDFormFieldInputProps, InputComponent} from @krinopotam/ui-kit/dynamicForm/components/inputComponent';
+                    import {IDFormFieldPasswordProps, PasswordComponent} from @krinopotam/ui-kit/dynamicForm/components/passwordComponent';
+                    const formProps: IDFormProps = {
+                        formId: 'Test form',
+                        confirmChanges: true,
+                        fieldsProps: {
+                            login: {component: InputComponent, label: 'Логин', tooltip: 'Ввод логина'} as IDFormFieldInputProps,
+                            password: {component: PasswordComponent, label: 'Пароль', tooltip: 'Ввод пвароль'} as IDFormFieldPasswordProps,
+                        },
+                        buttons: {ok: {position: 'right'}},
+                    };
                     /** Simple Dynamic form example */
                     export const SimpleForm = (props?: IDFormProps): React.JSX.Element => {
-                        const compProps = {...formProps, ...props}
+                        const compProps = {...formProps, ...props};
                         return (
                             <>
                                 <div style={{maxWidth: 500}}>
@@ -42,7 +38,7 @@ export default {
                             </>
                         );
                     };
-                    export default SimpleForm
+                    export default SimpleForm;
                 `
             }
             /* AUTO-SOURCE-INJECT-END */

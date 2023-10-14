@@ -17,7 +17,7 @@ export class InlineGroupField extends BaseField<IDFormInlineGroupProps> {
         const fieldsProps = groupProps.fieldsProps;
         if (!groupProps.fieldsProps) return [{}, {}];
 
-        [this.fieldsMap, this.rootFields] = this.getFormModel().prepareFieldCollection(fieldsProps, this);
+        [this.fieldsMap, this.rootFields] = this.getModel().prepareFieldCollection(fieldsProps, this);
         return [this.fieldsMap, this.rootFields];
     }
 

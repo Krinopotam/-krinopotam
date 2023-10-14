@@ -40,7 +40,7 @@ export interface IDFormBaseCallbacks<T> {
     onFormDisabledStateChanged?: (state: boolean, api: T) => void;
 
     /** fires when the form began initialization (renders for the first time) */
-    onFormInit?: (model: T) => void;
+    onFormInit?: (api: T) => void;
 
     /** fires when the form ready status changed (form ready means form is rendered, initialized and all fields data are loaded) */
     onFormReadyStateChanged?: (state: boolean, api: T) => boolean | void;

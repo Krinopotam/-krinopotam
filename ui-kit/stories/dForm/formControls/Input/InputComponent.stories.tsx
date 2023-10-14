@@ -1,11 +1,11 @@
 // noinspection DuplicatedCode
 
 import type {Meta, StoryObj} from '@storybook/react'
-import InputField from "./InputField";
+import InputComponent from "./InputComponent";
 
 export default {
     title: 'DForm/Controls/Input',
-    component: InputField,
+    component: InputComponent,
     tags: ['autodocs'],
     parameters: {
         docs: {
@@ -16,25 +16,26 @@ export default {
                 // language=text
                 code: `
                     import React from "react";
-                    import {DForm} from @krinopotam/ui-kit/dynamicForm";
-                    import {IDFormFieldInputProps, InputComponent} from @krinopotam/ui-kit/dynamicForm/components/inputComponent";
-                    type IComponent = Omit<IDFormFieldInputProps, 'component'>
+                    import {DForm} from @krinopotam/ui-kit/dForm";
+                    import {IDFormFieldProps} from @krinopotam/ui-kit/dForm";
+                    import {InputField} from @krinopotam/ui-kit/dForm/fields/input/inputField";
+                    type IComponent = IDFormFieldProps
                     /** DynamicForm Input component */
-                    export const InputField = (props: IComponent): React.JSX.Element => <DForm
+                    export const InputComponent = (props: IComponent): React.JSX.Element => <DForm
                         buttons={null}
                         fieldsProps={
-                            {field1: {...props, component: InputComponent} satisfies IDFormFieldInputProps}
+                            {field1: {...props, component: InputField}}
                         }
                     />
-                    export default InputField
+                    export default InputComponent
                 `
             }
             /* AUTO-SOURCE-INJECT-END */
         }
     },
-} satisfies Meta<typeof InputField>
+} satisfies Meta<typeof InputComponent>
 
-type Story = StoryObj<typeof InputField>;
+type Story = StoryObj<typeof InputComponent>;
 export const Playground: Story = {
     args: {
         label: 'Input field',

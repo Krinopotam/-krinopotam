@@ -30,7 +30,6 @@ import {IDFormFieldsProps} from "@src/dForm/index";
 
 //region Types
 /** Form properties*/
-// !used in configGenerator parsing. Don't use multi rows comments!
 export interface IDFormProps extends IDFormCallbacks {
     /** A mutable object to merge with these controls api */
     apiRef?: unknown;

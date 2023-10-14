@@ -1,12 +1,12 @@
 // noinspection DuplicatedCode
 
 import React, {useCallback, useState} from 'react';
-import {DFormModal, IDFormModalProps} from '@src/dynamicFormModal';
-import {IDFormFieldInputProps, InputComponent} from '@src/dynamicForm/components/inputComponent';
-import {IDFormFieldPasswordProps, PasswordComponent} from '@src/dynamicForm/components/passwordComponent';
+import {DFormModal, IDFormModalProps} from '@src/dFormModal';
 import {Button} from '@src/button';
 import {Space} from 'antd';
 import {IColorType} from '@src/button/button';
+import {InputField} from "@src/dForm/fields/input/inputField";
+import {PasswordField} from "@src/dForm/fields/password/passwordField";
 
 /** Simple Dynamic form example */
 export const SimpleForm = (props?: IDFormModalProps): React.JSX.Element => {
@@ -15,8 +15,8 @@ export const SimpleForm = (props?: IDFormModalProps): React.JSX.Element => {
 
     const formProps: IDFormModalProps = {
         fieldsProps: {
-            field1: {component: InputComponent, label: 'login', tooltip: 'Login input'} as IDFormFieldInputProps,
-            field2: {component: PasswordComponent, label: 'password', tooltip: 'Password input'} as IDFormFieldPasswordProps,
+            field1: {component: InputField, label: 'login', tooltip: 'Login input'},
+            field2: {component: PasswordField, label: 'password', tooltip: 'Password input'}
         },
         colorType: colorType,
     };

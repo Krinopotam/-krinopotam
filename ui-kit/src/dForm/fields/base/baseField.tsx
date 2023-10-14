@@ -176,7 +176,7 @@ export class BaseField<TFieldProps extends IDFormBaseFieldProps<AnyType>> {
     }
 
     /** @returns form model  */
-    getFormModel() {
+    getModel() {
         return this.model;
     }
 
