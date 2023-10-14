@@ -12,12 +12,13 @@ import React from 'react';
 import {DForm, IDFormProps} from @krinopotam/ui-kit/dForm";
 import {InlineGroupField} from @krinopotam/ui-kit/dForm/fields/inlineGroup/inlineGroupField";
 import {InputField} from @krinopotam/ui-kit/dForm/fields/input/inputField";
+import {DateTimeField} from @krinopotam/ui-kit/dForm/fields/dateTime/dateTimeField";
 const formProps: IDFormProps = {
     formId: 'Test form',
     confirmChanges: true,
     //layout:'horizontal',
     fieldsProps: {
-        field1: {component: InputField, label: 'Field1' ,inlineGroup:'row1', rules: [{type: 'string', rule: 'not-empty', message: 'Поле не должно быть пустым'}]} ,
+        field1: {component: DateTimeField, label: 'Field1' ,inlineGroup:'row1', rules: [{type: 'string', rule: 'not-empty', message: 'Поле не должно быть пустым'}]} ,
         field2: {component: InputField, label: 'Field2',inlineGroup:'row1'},
         field3: {component: InputField, label: 'Field3'},
 /*        group1: {

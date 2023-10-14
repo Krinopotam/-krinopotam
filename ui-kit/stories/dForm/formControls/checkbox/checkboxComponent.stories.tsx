@@ -15,17 +15,16 @@ export default {
                 format: true,
                 // language=text
                 code: `
-                    import React from "react";
-                    import {DForm} from @krinopotam/ui-kit/dynamicForm";
-                    import {IDFormFieldCheckBoxProps, CheckboxComponent} from @krinopotam/ui-kit/dynamicForm/components/checkboxComponent";
-                    type IComponent = Omit<IDFormFieldCheckBoxProps, 'component'>
-                    /** DynamicForm Checkbox component */
-                    export const CheckboxField = (props: IComponent): React.JSX.Element => <DForm
-                        buttons={null}
-                        fieldsProps={
-                            {field1: {...props, component: CheckboxComponent} satisfies IDFormFieldCheckBoxProps}
-                        }/>
-                    export default CheckboxField
+                    import React from 'react';
+                    import {DForm} from @krinopotam/ui-kit/dForm';
+                    import {IDFormFieldProps} from @krinopotam/ui-kit/dForm';
+                    import {CheckboxField} from @krinopotam/ui-kit/dForm/fields/checkbox/checkboxField';
+                    type IComponent = IDFormFieldProps;
+                    /** DForm Checkbox component */
+                    export const CheckboxComponent = (props: IComponent): React.JSX.Element => (
+                        <DForm buttons={null} fieldsProps={{field1: {...props, component: CheckboxField}}} />
+                    );
+                    export default CheckboxComponent;
                 `
             }
             /* AUTO-SOURCE-INJECT-END */

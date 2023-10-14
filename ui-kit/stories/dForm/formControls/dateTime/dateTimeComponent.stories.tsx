@@ -1,12 +1,12 @@
 // noinspection DuplicatedCode
 
 import type {Meta, StoryObj} from '@storybook/react'
-import DateTimeField from "./dateTimeField";
+import DateTimeComponent from "./dateTimeComponent";
 
 
 export default {
     title: 'DForm/Controls/DateTime',
-    component: DateTimeField,
+    component: DateTimeComponent,
     tags: ['autodocs'],
     parameters: {
         docs: {
@@ -33,9 +33,9 @@ export default {
             /* AUTO-SOURCE-INJECT-END */
         }
     },
-} satisfies Meta<typeof DateTimeField>
+} satisfies Meta<typeof DateTimeComponent>
 
-type Story = StoryObj<typeof DateTimeField>;
+type Story = StoryObj<typeof DateTimeComponent>;
 export const Date_: Story = {
     args: {
         label: 'Date field',

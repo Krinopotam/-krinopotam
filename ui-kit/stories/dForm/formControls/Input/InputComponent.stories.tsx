@@ -20,7 +20,7 @@ export default {
                     import {IDFormFieldProps} from @krinopotam/ui-kit/dForm";
                     import {InputField} from @krinopotam/ui-kit/dForm/fields/input/inputField";
                     type IComponent = IDFormFieldProps
-                    /** DynamicForm Input component */
+                    /** DForm Input component */
                     export const InputComponent = (props: IComponent): React.JSX.Element => <DForm
                         buttons={null}
                         fieldsProps={

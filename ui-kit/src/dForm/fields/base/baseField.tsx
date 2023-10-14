@@ -104,7 +104,7 @@ export type IDFormAnyFieldProps = IDFormBaseFieldProps<AnyType>;
 
 export type IBaseField = BaseField<IDFormAnyFieldProps>;
 
-export class BaseField<TFieldProps extends IDFormBaseFieldProps<AnyType>> {
+export class BaseField<TFieldProps extends IDFormAnyFieldProps> {
     /** form field props */
     protected fieldProps: TFieldProps;
     /** field name */
@@ -270,7 +270,7 @@ export class BaseField<TFieldProps extends IDFormBaseFieldProps<AnyType>> {
      */
     setDirty(value: boolean, noEvents?: boolean) {
         const prevValue = this.isDirty();
-        if (prevValue !== value) return;
+        if (prevValue === value) return;
 
         this.model.getFormDirtyFields()[this.fieldName] = value;
 

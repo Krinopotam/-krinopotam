@@ -19,22 +19,25 @@ export default {
                 // language=text
                 code: `
                     import React from 'react';
-                    import {DForm} from @krinopotam/ui-kit/dynamicForm';
-                    import {CustomComponent, IDFormFieldCustomProps} from @krinopotam/ui-kit/dynamicForm/components/customComponent';
-                    import {IDFormFieldInputProps, InputComponent} from @krinopotam/ui-kit/dynamicForm/components/inputComponent';
-                    import {IDFormFieldCheckBoxProps} from @krinopotam/ui-kit/dynamicForm/components/checkboxComponent';
-                    type IComponent = Omit<IDFormFieldCheckBoxProps, 'component' | 'callbacks'>;
+                    import {DForm} from @krinopotam/ui-kit/dForm';
+                    import {IDFormFieldProps} from @krinopotam/ui-kit/dForm';
+                    import {IDFormInputFieldProps, InputField} from @krinopotam/ui-kit/dForm/fields/input/inputField';
+                    import {CustomField} from @krinopotam/ui-kit/dForm/fields/custom/customField';
+                    type IComponent = IDFormFieldProps;
                     /** DynamicForm Custom component */
                     export const AutoUpdateCustomField = (props: IComponent): React.JSX.Element => (
                         <DForm
                             buttons={null}
                             fieldsProps={{
-                                field1: {label: 'Enter value', component: InputComponent} satisfies IDFormFieldInputProps,
-                                field2: {...props, component: CustomComponent, onRender: MyComponent} satisfies IDFormFieldCustomProps,
-                            }}
-                            onFieldValueChanged={(_fieldName, _value, _prevValue, formApi) => {
-                                const inputValue = formApi.model.getFieldValue('field1') as string;
-                                formApi.model.setFieldValue('field2', inputValue, true);
+                                field1: {
+                                    label: 'Enter value',
+                                    component: InputField,
+                                    onValueChanged: (value, prevValue, field) => {
+                                        const field2 = field.getModel().getField('field2')
+                                        field2.setValue(value);
+                                    },
+                                } satisfies  IDFormInputFieldProps,
+                                field2: {...props, component: CustomField, onRender: MyComponent},
                             }}
                         />
                     );

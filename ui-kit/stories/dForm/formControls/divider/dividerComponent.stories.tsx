@@ -1,13 +1,11 @@
 // noinspection DuplicatedCode
 
 import type {Meta, StoryObj} from '@storybook/react'
-import DividerField from "./dividerField";
-import React from "react";
-
+import DividerComponent from "./dividerComponent";
 
 export default {
     title: 'DForm/Controls/Divider',
-    component: DividerField,
+    component: DividerComponent,
     tags: ['autodocs'],
     parameters: {
         docs: {
@@ -39,9 +37,9 @@ export default {
             /* AUTO-SOURCE-INJECT-END */
         }
     },
-} satisfies Meta<typeof DividerField>
+} satisfies Meta<typeof DividerComponent>
 
-type Story = StoryObj<typeof DividerField>;
+type Story = StoryObj<typeof DividerComponent>;
 export const WithTitle: Story = {
     args: {
         value: "Divider",
