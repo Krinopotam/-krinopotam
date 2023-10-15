@@ -1,8 +1,8 @@
 // noinspection DuplicatedCode
 
-import {DForm, IDFormProps} from '@src/dynamicForm';
+import {DForm, IDFormProps} from '@src/dForm';
 import React from 'react';
-import {IDFormFieldTreeSelectProps, TreeSelectComponent} from '@src/dynamicForm/components/treeSelectComponent';
+import {ITreeSelectFieldProps, TreeSelectField} from "@src/dForm/fields/treeSelect/treeSelectField";
 
 
 const dataSet1 = [
@@ -46,21 +46,20 @@ const formProps: IDFormProps = {
     formId:'TestForm',
     confirmChanges: true,
     fieldsProps: {
-        tip: {component: TreeSelectComponent, label: 'Тип процесса', fetchMode: 'onUse', dataSet: dataSet1} as IDFormFieldTreeSelectProps,
-        process: {component: TreeSelectComponent, label: 'Процессы', fetchMode: 'onUse', dataSet: [{}]} as IDFormFieldTreeSelectProps
-    },
-    onFieldValueChanged: (fieldName, _value, _prevValue, formApi) => {
-        if (fieldName !== 'tip') return;
-        const tipValue = formApi.model.getFieldValue('tip') as Record<'id', unknown>;
-        let newDataSet: IDFormFieldTreeSelectProps['dataSet'];
+        tip: {component: TreeSelectField, label: 'Тип процесса', fetchMode: 'onUse', dataSet: dataSet1, onValueChanged:(value, prevValue, field)=>{
+                const tipValue = field.getValue() as Record<'id', unknown>;
+                let newDataSet: ITreeSelectFieldProps['dataSet'];
 
-        if (!tipValue) newDataSet = [];
-        else if (tipValue.id === '1') newDataSet = dataSet2_1;
-        else if (tipValue.id === '2') newDataSet = dataSet2_2;
-        else newDataSet = [];
+                if (!tipValue) newDataSet = [];
+                else if (tipValue.id === '1') newDataSet = dataSet2_1;
+                else if (tipValue.id === '2') newDataSet = dataSet2_2;
+                else newDataSet = [];
 
-        if (!newDataSet) return;
-        formApi.model.updateFieldProps('process', {dataSet: newDataSet});
+                if (!newDataSet) return;
+                const process = field.getModel().getField('process')
+                process.updateProps({dataSet: newDataSet})
+            }}  as ITreeSelectFieldProps,
+        process: {component: TreeSelectField, label: 'Процессы', fetchMode: 'onUse', dataSet: [{}]}
     },
     buttons: {ok: {position: 'right'}}
 }

@@ -1,10 +1,10 @@
 // noinspection DuplicatedCode
 
 import React from 'react';
-import {DForm, IDFormProps} from '@src/dynamicForm';
-import {IDFormFieldTreeSelectProps, TreeSelectComponent} from '@src/dynamicForm/components/treeSelectComponent';
-import {InputComponent} from '@src/dynamicForm/components/inputComponent';
-import {IDFormModalProps} from "@src/dynamicFormModal";
+import {DForm, IDFormProps} from '@src/dForm';
+import {IDFormModalProps} from "@src/dFormModal";
+import {InputField} from "@src/dForm/fields/input/inputField";
+import {TreeSelectField} from "@src/dForm/fields/treeSelect/treeSelectField";
 
 const dataSet = [
     {
@@ -113,7 +113,7 @@ const editForm: IDFormModalProps = {
     confirmChanges: true,
     bodyHeight: 100,
     fieldsProps: {
-        title: {component: InputComponent, label: 'Подразделение'},
+        title: {component: InputField, label: 'Подразделение'},
     },
 };
 
@@ -121,7 +121,7 @@ const formProps: IDFormProps = {
     formId: 'Test form',
     confirmChanges: true,
     fieldsProps: {
-        departments: {component: TreeSelectComponent, label: 'Подразделения', editFormProps: editForm, confirmDelete: true, dataSet: dataSet} as IDFormFieldTreeSelectProps,
+        departments: {component: TreeSelectField, label: 'Подразделения', editFormProps: editForm, confirmDelete: true, dataSet: dataSet},
     },
     buttons: null,
 };

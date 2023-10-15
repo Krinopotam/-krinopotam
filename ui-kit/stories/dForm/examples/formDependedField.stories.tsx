@@ -1,6 +1,6 @@
-import {DForm, IDFormProps} from '@src/dynamicForm';
+import {DForm, IDFormProps} from '@src/dForm';
 import React from 'react';
-import {IDFormFieldInputProps, InputComponent} from '@src/dynamicForm/components/inputComponent';
+import {InputField} from "@src/dForm/fields/input/inputField";
 
 export default {
     title: 'Dform/Examples/FormDependedFields',
@@ -11,19 +11,19 @@ export const Default = () => {
         formId: 'Test form',
         confirmChanges: true,
         fieldsProps: {
-            field1: {component: InputComponent, label: 'Поле 1', placeholder: 'Введите что-нибудь'} as IDFormFieldInputProps,
+            field1: {component: InputField, label: 'Поле 1', placeholder: 'Введите что-нибудь'},
             field2: {
-                component: InputComponent,
+                component: InputField,
                 label: 'Поле 2 (зависит от Поля 1)',
                 placeholder: 'Меня не видно, если поле 1 пусто. Введите что-нибудь',
                 dependsOn: ['field1'],
-            } as IDFormFieldInputProps,
+            } ,
             field3: {
-                component: InputComponent,
+                component: InputField,
                 label: 'Поле 3 (зависит от Поля 1 и 2)',
                 placeholder: 'Меня не видно, если поля 1 или 2 пусты',
                 dependsOn: ['field1', 'field2'],
-            } as IDFormFieldInputProps,
+            } ,
         },
 
         buttons: {ok: {position: 'right'}},

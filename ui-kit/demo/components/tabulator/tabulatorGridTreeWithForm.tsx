@@ -2,24 +2,32 @@
 
 import React from 'react';
 import TabulatorGrid, {ITabulatorProps, IGridRowData} from '@src/tabulatorGrid';
-import {dateTimeFormatter} from "@src/tabulatorBase/formatters/dateTime";
-import {dateTimeSorter} from "@src/tabulatorBase/sorters/dateTime";
-import {IDFormModalProps} from "@src/dynamicFormModal";
-import {IDFormFieldInputProps, InputComponent} from "@src/dynamicForm/components/inputComponent";
-import {IDFormFieldNumberProps, NumberComponent} from "@src/dynamicForm/components/numberComponent";
-import {IDFormFieldTreeSelectProps, TreeSelectComponent} from "@src/dynamicForm/components/treeSelectComponent";
+import {dateTimeFormatter} from '@src/tabulatorBase/formatters/dateTime';
+import {dateTimeSorter} from '@src/tabulatorBase/sorters/dateTime';
+import {IDFormModalProps} from '@src/dFormModal';
+import {TreeSelectField} from '@src/dForm/fields/treeSelect/treeSelectField';
+import {InputField} from '@src/dForm/fields/input/inputField';
+import {NumberField} from '@src/dForm/fields/number/numberField';
 
 const columnDefaults: ITabulatorProps['columnDefaults'] = {
     resizable: 'header',
     headerFilter: true,
-    headerFilterFunc: 'like'
+    headerFilterFunc: 'like',
 };
 
 const columns: ITabulatorProps['columns'] = [
     {title: 'Name', field: 'name'},
     {title: 'Age', field: 'age', hozAlign: 'left', formatter: 'progress'},
     {title: 'Favourite Color', field: 'col'},
-    {title: 'Date Of Birth', field: 'dob', hozAlign: 'center', formatter: dateTimeFormatter, formatterParams: {inputFormat: 'DD/MM/YYYY', outputFormat: 'DD.MM.YYYY'}, sorter: dateTimeSorter, sorterParams: {format: 'DD/MM/YYYY'}},
+    {
+        title: 'Date Of Birth',
+        field: 'dob',
+        hozAlign: 'center',
+        formatter: dateTimeFormatter,
+        formatterParams: {inputFormat: 'DD/MM/YYYY', outputFormat: 'DD.MM.YYYY'},
+        sorter: dateTimeSorter,
+        sorterParams: {format: 'DD/MM/YYYY'},
+    },
     {title: 'Rating', field: 'rating', hozAlign: 'center', formatter: 'star', headerFilterFunc: '='},
     {title: 'Passed?', field: 'passed', hozAlign: 'center', formatter: 'tickCross', headerFilterFunc: '='},
 ];
@@ -98,11 +106,11 @@ const treeSelectDataSet = [...data];
 const editFormConfig: IDFormModalProps = {
     formId: 'gridEditForm',
     fieldsProps: {
-        parent: {component: TreeSelectComponent, label: 'Родитель', dataSet: treeSelectDataSet, fieldNames: {title: 'name'}} as IDFormFieldTreeSelectProps,
-        name: {component: InputComponent, label: 'Name'} as IDFormFieldInputProps,
-        age: {component: NumberComponent, label: 'Age'} as IDFormFieldNumberProps,
-        col: {component: InputComponent, label: 'Favourite Color'} as IDFormFieldInputProps,
-        dob: {component: InputComponent, label: 'Day of Birth'} as IDFormFieldInputProps,
+        parent: {component: TreeSelectField, label: 'Родитель', dataSet: treeSelectDataSet, fieldNames: {title: 'name'}},
+        name: {component: InputField, label: 'Name'},
+        age: {component: NumberField, label: 'Age'},
+        col: {component: InputField, label: 'Favourite Color'},
+        dob: {component: InputField, label: 'Day of Birth'},
     },
     confirmChanges: true,
 };

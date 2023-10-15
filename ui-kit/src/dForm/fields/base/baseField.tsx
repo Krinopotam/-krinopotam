@@ -160,7 +160,7 @@ export class BaseField<TFieldProps extends IAnyFieldProps> {
      * @param updatedProps - partial field properties to update
      * @param noRerender - do not emit re-rendering
      */
-    updateProps(updatedProps: TFieldProps, noRerender?: boolean) {
+    updateProps(updatedProps: Partial<TFieldProps>, noRerender?: boolean) {
         const curProps = this.getProps() ?? {};
         this.setProps({...curProps, ...updatedProps}, noRerender);
     }

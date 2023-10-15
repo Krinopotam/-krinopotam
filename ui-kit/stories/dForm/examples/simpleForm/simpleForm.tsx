@@ -1,16 +1,15 @@
 // noinspection DuplicatedCode
 
 import React from 'react';
-import {DForm, IDFormProps} from '@src/dynamicForm';
-import {IDFormFieldInputProps, InputComponent} from '@src/dynamicForm/components/inputComponent';
-import {IDFormFieldPasswordProps, PasswordComponent} from '@src/dynamicForm/components/passwordComponent';
+import {DForm, IDFormProps} from '@src/dForm';
+import {InputField} from "@src/dForm/fields/input/inputField";
 
 const formProps: IDFormProps = {
     formId: 'Test form',
     confirmChanges: true,
     fieldsProps: {
-        login: {component: InputComponent, label: 'Логин', tooltip: 'Ввод логина'} as IDFormFieldInputProps,
-        password: {component: PasswordComponent, label: 'Пароль', tooltip: 'Ввод пвароль'} as IDFormFieldPasswordProps,
+        login: {component: InputField, label: 'Логин', tooltip: 'Ввод логина'},
+        password: {component: InputField, label: 'Пароль', tooltip: 'Ввод пвароль'},
     },
 
     buttons: {ok: {position: 'right'}},

@@ -1,9 +1,9 @@
 // noinspection DuplicatedCode
 
 import React from 'react';
-import {DForm, IDFormProps} from '@src/dynamicForm';
-import {IDFormModalApi} from '@src/dynamicFormModal';
-import {IDFormFieldTreeSelectProps, TreeSelectComponent} from "@src/dynamicForm/components/treeSelectComponent";
+import {DForm, IDFormProps} from '@src/dForm';
+import {IDFormModalApi} from '@src/dFormModal';
+import {ITreeSelectFieldProps, TreeSelectField} from "@src/dForm/fields/treeSelect/treeSelectField";
 
 
 const departments = [
@@ -118,23 +118,28 @@ const formProps: IDFormProps = {
     confirmChanges: true,
     fieldsProps: {
         department: {
-            component: TreeSelectComponent, label: 'Департамент', fetchMode: 'onUse', onDataFetch: () => {
+            component: TreeSelectField, label: 'Департамент', fetchMode: 'onUse', onDataFetch: () => {
                 return new Promise((resolve, reject) => {
                     setTimeout(() => {
                         if (Math.random() < 0.0) reject({message: 'Ошибка загрузки данных', code: 400});
                         else resolve({data: departments});
                     }, 2000);
                 })
+            },
+            onValueChanged:(value, prevValue, field)=>{
+                const division = field.getModel().getField('division')
+                division.setValue(null)
+
             }
-        } as unknown as IDFormFieldTreeSelectProps,
+        } as ITreeSelectFieldProps,
         division: {
-            component: TreeSelectComponent, label: 'Управления', fetchMode: 'onUse', dependsOn: ['department'], noCacheFetchedData: true, onDataFetch: () => {
+            component: TreeSelectField, label: 'Управления', fetchMode: 'onUse', dependsOn: ['department'], noCacheFetchedData: true, onDataFetch: () => {
                 return new Promise((resolve) => {
                     setTimeout(() => {
-                        const departmentValue = formApi.model.getFieldValue('department') as Record<'id', unknown>; //we can get the current department value and use it for server request
+                        const departmentValue = formApi.model.getField('department').getValue() as Record<'id', unknown>; //we can get the current department value and use it for server request
 
                         /** the server request imitation */
-                        let newDataSet: IDFormFieldTreeSelectProps['dataSet'];
+                        let newDataSet: ITreeSelectFieldProps['dataSet'];
                         if (!departmentValue) newDataSet = [];
                         else if (departmentValue.id === '01') newDataSet = divisions1;
                         else if (departmentValue.id === '02') newDataSet = divisions2;
@@ -145,11 +150,7 @@ const formProps: IDFormProps = {
                     }, 2000);
                 });
             }
-        } as unknown as IDFormFieldTreeSelectProps,
-    },
-    onFieldValueChanged: (fieldName, _value, _prevValue, formApi) => {
-        //clear selected division if department changed
-        if (fieldName === 'department') formApi.model.setFieldValue('division', null);
+        } ,
     },
     buttons: null
 }

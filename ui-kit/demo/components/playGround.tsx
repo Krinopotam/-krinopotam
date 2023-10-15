@@ -7,18 +7,19 @@ import React, {useCallback} from 'react';
 import dayjs from 'dayjs';
 import {Button} from '@src/button';
 import {IDFormModalApi, DFormModal, IDFormModalProps} from '@src/dFormModal';
-import {IRuleType} from '@src/dynamicForm/validators/baseValidator';
-import {IDFormFieldInputProps, InputComponent} from '@src/dynamicForm/components/inputComponent';
-import {IDFormFieldTreeSelectProps, ITreeSelectNode, TreeSelectComponent} from '@src/dynamicForm/components/treeSelectComponent';
-import {IDFormFieldSwitchProps, SwitchComponent} from '@src/dynamicForm/components/switchComponent';
-import {InputField} from "@src/dForm/fields/input/inputField";
-import {DateTimeField} from "@src/dForm/fields/dateTime/dateTimeField";
-import {PasswordField} from "@src/dForm/fields/password/passwordField";
-import {TabulatorGridField} from "@src/dForm/fields/tabulatorGrid/tabulatorGridField";
+import {InputField} from '@src/dForm/fields/input/inputField';
+import {DateTimeField} from '@src/dForm/fields/dateTime/dateTimeField';
+import {PasswordField} from '@src/dForm/fields/password/passwordField';
+import {TabulatorGridField} from '@src/dForm/fields/tabulatorGrid/tabulatorGridField';
+import {TreeSelectField} from '@src/dForm/fields/treeSelect/treeSelectField';
+import {SwitchField} from '@src/dForm/fields/switch/switchField';
+import {ITreeSelectNode} from '@src/treeSelect';
+import {IDFormFieldValidationRules} from '@src/dForm';
+import {TabsField} from '@src/dForm/fields/tabs/tabsField';
 
 dayjs.locale('ru');
 
-const validationRules: Record<string, [IRuleType]> = {
+const validationRules: IDFormFieldValidationRules = {
     //password: [{type: 'string', rule: 'not-empty', message: 'Поле не должно быть пустым'}],
     profess: [{type: 'string', rule: 'not-empty', message: 'Поле не должно быть пустым'}],
     specialty: [{type: 'string', rule: 'not-empty', message: 'Поле не должно быть пустым'}],
@@ -39,7 +40,7 @@ const formData = {
     neverField: 'neverData',
 };
 
-const treeDataSet:ITreeSelectNode[] =  [
+const treeDataSet: ITreeSelectNode[] = [
     {
         id: '0-0',
         title: 'Node1',
@@ -51,7 +52,7 @@ const treeDataSet:ITreeSelectNode[] =  [
         ],
     },
     {title: 'Node2', id: '0-1'},
-]
+];
 
 const formModalApi: IDFormModalApi = {} as IDFormModalApi;
 const formProps: IDFormModalProps = {
@@ -88,86 +89,92 @@ const formProps: IDFormModalProps = {
     },
 
     fieldsProps: {
-        /** Tab1 */
-        profess: {component: InputField, tab: 'Tab1', label: 'Профессия', showCount: true, maxLength: 50, inlineGroup: 'row1'},
-        specialty: {component: InputField, tab: 'Tab1', label: 'Специализация', value: 'дефолтная специализация', dependsOn: ['profess'], inlineGroup: 'row1'},
-        assignDate: {component: DateTimeField, tab: 'Tab1', label: 'Дата назначения'},
-        name: {component: InputField, tab: 'Tab1', label: 'Имя пользователя', value: 'дефолтное имя пользователя', dependsOn: ['profess'], inlineGroup: 'row2'},
-        login: {component: InputField, tab: 'Tab1', label: 'Логин', value: 'дефолтный логин', dependsOn: ['name', 'specialty'], inlineGroup: 'row2'},
-        departments: {
-            component: TreeSelectComponent,
-            tab: 'Tab1',
-            label: 'Подразделение',
-            fetchMode: 'onUse',
-            noCacheFetchedData: false,
-            debounce: 300,
-            // minSearchLength: 1,
-            // value: {label: 'default value', id: 'id-01'},
-            // multiple: true,
-            // treeCheckable: true,
-            // dataSource: GetApiAppUsersSelect('', {search: '', limit: 0}),
-            // dataSource: {
-            //     url: 'http://127.0.0.1:8081/api/do',
-            //     parameters: {action: 'app/users', method: 'List', data: {limit: 100}},
-            // },
+        tabs: {
+            component: TabsField,
+            tabs: {
+                Tab1: {
+                    profess: {component: InputField, label: 'Профессия', showCount: true, maxLength: 50, inlineGroup: 'row1'},
+                    specialty: {component: InputField, label: 'Специализация', value: 'дефолтная специализация', dependsOn: ['profess'], inlineGroup: 'row1'},
+                    assignDate: {component: DateTimeField, label: 'Дата назначения'},
+                    name: {component: InputField, label: 'Имя пользователя', value: 'дефолтное имя пользователя', dependsOn: ['profess'], inlineGroup: 'row2'},
+                    login: {component: InputField, label: 'Логин', value: 'дефолтный логин', dependsOn: ['name', 'specialty'], inlineGroup: 'row2'},
+                    departments: {
+                        component: TreeSelectField,
+                        label: 'Подразделение',
+                        fetchMode: 'onUse',
+                        noCacheFetchedData: false,
+                        debounce: 300,
+                        // minSearchLength: 1,
+                        // value: {label: 'default value', id: 'id-01'},
+                        // multiple: true,
+                        // treeCheckable: true,
+                        // dataSource: GetApiAppUsersSelect('', {search: '', limit: 0}),
+                        // dataSource: {
+                        //     url: 'http://127.0.0.1:8081/api/do',
+                        //     parameters: {action: 'app/users', method: 'List', data: {limit: 100}},
+                        // },
 
-            dataSet: treeDataSet,
-            editFormProps: {formId: 'treeViewEditForm', fieldsProps: {title: {component: InputComponent, label: 'title'} as IDFormFieldInputProps}},
+                        dataSet: treeDataSet,
+                        editFormProps: {formId: 'treeViewEditForm', fieldsProps: {title: {component: InputField, label: 'title'}}},
 
-            // titleRender: (treeNode: IApiJUser) => {
-            //     return (
-            //         <>
-            //             {treeNode.fio}
-            //             <br /> {treeNode.email}
-            //         </>
-            //     );
-            // },
+                        // titleRender: (treeNode: IApiJUser) => {
+                        //     return (
+                        //         <>
+                        //             {treeNode.fio}
+                        //             <br /> {treeNode.email}
+                        //         </>
+                        //     );
+                        // },
 
-            // labelRender: (treeNode: IApiJUser) => {
-            //     return (
-            //         <>
-            //             {treeNode.fio}
-            //             <br /> {treeNode.email}
-            //         </>
-            //     );
-            // },
+                        // labelRender: (treeNode: IApiJUser) => {
+                        //     return (
+                        //         <>
+                        //             {treeNode.fio}
+                        //             <br /> {treeNode.email}
+                        //         </>
+                        //     );
+                        // },
 
-            // filterTreeNode: (inputValue, treeNode: IApiJUser) => {
-            //     return (treeNode.fio + ' ' + treeNode.email).toLowerCase().indexOf(inputValue.toLowerCase()) >= 0;
-            // }
-        } as unknown as IDFormFieldTreeSelectProps,
-        /** Tab2 */
-        password: {component: PasswordField, tab: 'Таб 2', label: 'Пароль'} ,
-        isLocked: {component: SwitchComponent, tab: 'Tab 2', label: 'Заблокировано', checkedChildren: 'Вкл', unCheckedChildren: 'Выкл'} as IDFormFieldSwitchProps,
-        /** Tab3 */
-        permissions: {
-            component: TabulatorGridField,
-            tab: 'Таб 3',
-            label: 'Полномочия',
-            confirmDelete: true,
-            height: 300,
-            editFormProps: {
-                formId: 'grid_edit_form',
-                fieldsProps: {
-                    name: {component: InputComponent, label: 'Имя'} as IDFormFieldInputProps,
-                    role: {component: InputComponent, label: 'Роль'} as IDFormFieldInputProps,
+                        // filterTreeNode: (inputValue, treeNode: IApiJUser) => {
+                        //     return (treeNode.fio + ' ' + treeNode.email).toLowerCase().indexOf(inputValue.toLowerCase()) >= 0;
+                        // }
+                    },
+                },
+                Tab2: {
+                    password: {component: PasswordField, label: 'Пароль'},
+                    isLocked: {component: SwitchField, label: 'Заблокировано', checkedChildren: 'Вкл', unCheckedChildren: 'Выкл'},
+                },
+                Tab3: {
+                    permissions: {
+                        component: TabulatorGridField,
+                        label: 'Полномочия',
+                        confirmDelete: true,
+                        height: 300,
+                        editFormProps: {
+                            formId: 'grid_edit_form',
+                            fieldsProps: {
+                                name: {component: InputField, label: 'Имя'},
+                                role: {component: InputField, label: 'Роль'},
+                            },
+                        },
+                        columns: [
+                            {
+                                title: 'Name',
+                                field: 'name',
+                            },
+                            {
+                                title: 'Age',
+                                field: 'age',
+                            },
+                            {
+                                title: 'Address',
+                                field: 'address',
+                            },
+                        ],
+                    },
                 },
             },
-            columns: [
-                {
-                    title: 'Name',
-                    field: 'name',
-                },
-                {
-                    title: 'Age',
-                    field: 'age',
-                },
-                {
-                    title: 'Address',
-                    field: 'address',
-                },
-            ],
-        } ,
+        },
     },
 };
 
