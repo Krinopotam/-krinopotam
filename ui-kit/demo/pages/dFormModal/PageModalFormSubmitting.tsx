@@ -1,6 +1,6 @@
 
     import React from 'react';
-    import {ModalFormSubmitting} from '../../components/dynamicFormModal/modalFormSubmitting';
+    import {ModalFormSubmitting} from '../../components/dFormModal/modalFormSubmitting';
     import { Divider, Collapse } from 'antd';
     import SyntaxHighlighter from 'react-syntax-highlighter';
     import {darcula, docco} from 'react-syntax-highlighter/dist/esm/styles/hljs';
@@ -10,17 +10,17 @@
     const source = `
 import React, {useCallback} from 'react';
 import {Button} from @krinopotam/ui-kit/button';
-import {IDFormModalApi, DFormModal, IDFormModalProps} from @krinopotam/ui-kit/dynamicFormModal';
-import {IDFormFieldInputProps, InputComponent} from @krinopotam/ui-kit/dynamicForm/components/inputComponent";
-import {IDFormFieldPasswordProps, PasswordComponent} from @krinopotam/ui-kit/dynamicForm/components/passwordComponent";
+import {IDFormModalApi, DFormModal, IDFormModalProps} from @krinopotam/ui-kit/dFormModal';
+import {InputField} from @krinopotam/ui-kit/dForm/fields/input/inputField";
+import {PasswordField} from @krinopotam/ui-kit/dForm/fields/password/passwordField";
 const formApi = {} as IDFormModalApi;
 const formProps: IDFormModalProps = {
     formId: 'Test form',
     apiRef: formApi,
     confirmChanges: true,
     fieldsProps: {
-        field1: {component: InputComponent, label: 'login', tooltip: 'Login input'} as IDFormFieldInputProps,
-        field2: {component: PasswordComponent, label: 'password', tooltip: 'Password input'} as IDFormFieldPasswordProps,
+        field1: {component: InputField, label: 'login', tooltip: 'Login input'},
+        field2: {component: PasswordField, label: 'password', tooltip: 'Password input'},
     },
     onSubmit: () => {
         return new Promise((resolve, reject) => {

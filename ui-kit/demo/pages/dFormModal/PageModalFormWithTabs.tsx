@@ -1,6 +1,6 @@
 
     import React from 'react';
-    import {ModalFormWithTabs} from '../../components/dynamicFormModal/modalFormWithTabs';
+    import {ModalFormWithTabs} from '../../components/dFormModal/modalFormWithTabs';
     import { Divider, Collapse } from 'antd';
     import SyntaxHighlighter from 'react-syntax-highlighter';
     import {darcula, docco} from 'react-syntax-highlighter/dist/esm/styles/hljs';
@@ -10,21 +10,29 @@
     const source = `
 import React, {useCallback} from 'react';
 import {Button} from @krinopotam/ui-kit/button';
-import {IDFormModalApi, DFormModal, IDFormModalProps} from @krinopotam/ui-kit/dynamicFormModal';
-import {IDFormFieldInputProps, InputComponent} from @krinopotam/ui-kit/dynamicForm/components/inputComponent";
-import {DateTimeComponent, IDFormFieldDateTimeProps} from @krinopotam/ui-kit/dynamicForm/components/dateTimeComponent";
+import {IDFormModalApi, DFormModal, IDFormModalProps} from @krinopotam/ui-kit/dFormModal';
+import {InputField} from @krinopotam/ui-kit/dForm/fields/input/inputField';
+import {DateTimeField} from @krinopotam/ui-kit/dForm/fields/dateTime/dateTimeField';
+import {TabsField} from @krinopotam/ui-kit/dForm/fields/tabs/tabsField';
 const formApi = {} as IDFormModalApi;
 const formProps: IDFormModalProps = {
     formId: 'Test form',
     apiRef: formApi,
     confirmChanges: true,
     fieldsProps: {
-        /** Входы */
-        nameIn: {component: InputComponent, tab: 'Входы', label: 'Имя входящего', inlineGroup: 'row1'} as IDFormFieldInputProps,
-        dateIn: {component: DateTimeComponent, tab: 'Входы', label: 'Дата входа', inlineGroup: 'row1', width: 150} as IDFormFieldDateTimeProps,
-        /** Выходы */
-        nameOut: {component: InputComponent, tab: 'Выходы', label: 'Имя выходящего', inlineGroup: 'row1'} as IDFormFieldInputProps,
-        dateOut: {component: DateTimeComponent, tab: 'Выходы', label: 'Дата выхода', inlineGroup: 'row1', width: 150} as IDFormFieldDateTimeProps,
+        tabs: {
+            component: TabsField,
+            tabs: {
+                ' Входы ': {
+                    nameIn: {component: InputField, label: 'Имя входящего', inlineGroup: 'row1'},
+                    dateIn: {component: DateTimeField, label: 'Дата входа', inlineGroup: 'row1', width: 150},
+                },
+                ' Выходы ': {
+                    nameOut: {component: InputField, label: 'Имя выходящего', inlineGroup: 'row2'},
+                    dateOut: {component: DateTimeField, label: 'Дата выхода', inlineGroup: 'row2', width: 150},
+                },
+            },
+        },
     },
     bodyHeight: 250,
 };

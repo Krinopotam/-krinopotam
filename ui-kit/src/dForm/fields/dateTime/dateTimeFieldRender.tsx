@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useSyncExternalStore} from 'react';
+import React, {CSSProperties, useCallback, useEffect, useSyncExternalStore} from 'react';
 import {DateTimeField} from '@src/dForm/fields/dateTime/dateTimeField';
 import {DatePicker, IDatePickerProps} from '@src/datePicker';
 import {GetDatePickerFormat} from '@src/datePicker/datePicker';
@@ -33,6 +33,10 @@ export const DateTimeFieldRender = ({field}: {field: DateTimeField}): React.JSX.
         field.setReady(true);
     }, [field]);
 
+    const defStyle:CSSProperties = {width: fieldProps.width ?? '100%'};
+
+    const style = {...defStyle, ...fieldProps.style};
+
     return (
         <DatePicker
             {...fieldProps}
@@ -41,7 +45,7 @@ export const DateTimeFieldRender = ({field}: {field: DateTimeField}): React.JSX.
             format={fieldFormat}
             name={fieldName}
             value={value}
-            style={{width: '100%'}}
+            style={style}
             /** --- Callbacks ---------- */
             onBlur={onBlur}
             onChange={onChange}

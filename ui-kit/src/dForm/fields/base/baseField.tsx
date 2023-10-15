@@ -180,6 +180,11 @@ export class BaseField<TFieldProps extends IAnyFieldProps> {
         return this.model;
     }
 
+    /** Return field parent container */
+    getParent() {
+        return this.parent;
+    }
+
     /** @returns field label */
     getLabel() {
         return this.model.getFormLabels()[this.fieldName];

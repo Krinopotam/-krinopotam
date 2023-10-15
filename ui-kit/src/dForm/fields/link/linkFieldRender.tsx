@@ -1,4 +1,4 @@
-import React, {MouseEvent, useCallback, useEffect, useSyncExternalStore} from 'react';
+import React, {CSSProperties, MouseEvent, useCallback, useEffect, useSyncExternalStore} from 'react';
 import {LinkField} from '@src/dForm/fields/link/linkField';
 
 export const LinkFieldRender = ({field}: {field: LinkField}): React.JSX.Element => {
@@ -20,11 +20,18 @@ export const LinkFieldRender = ({field}: {field: LinkField}): React.JSX.Element 
         field.setReady(true);
     }, [field]);
 
+    let defStyle: CSSProperties = {};
+    if (fieldProps.width) {
+        defStyle = {width: fieldProps.width};
+    }
+
+    const style = {...defStyle, ...fieldProps.style};
+
     return (
         <a
             href={fieldProps.href}
             target={fieldProps.target}
-            style={fieldProps.style}
+            style={style}
             onClick={e => onClick(e)}
             onContextMenu={e => fieldProps?.onContextMenu?.(e, field)}
             onDoubleClick={e => fieldProps?.onDoubleClick?.(e, field)}

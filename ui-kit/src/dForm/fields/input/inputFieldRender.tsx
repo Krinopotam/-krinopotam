@@ -38,6 +38,7 @@ export const InputFieldRender = ({field}:{field:InputField}):React.JSX.Element =
             showCount={fieldProps.showCount}
             value={value}
             style={fieldProps.style}
+            width={fieldProps.width}
         />
     );
 }

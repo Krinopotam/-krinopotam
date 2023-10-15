@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useSyncExternalStore} from 'react';
+import React, {CSSProperties, useCallback, useEffect, useSyncExternalStore} from 'react';
 import {Upload} from 'antd';
 import {UploadDraggerField} from '@src/dForm/fields/fileDrop/uploadDraggerField';
 import {UploadChangeParam, UploadFile} from 'antd/es/upload';
@@ -24,6 +24,13 @@ export const UploadDraggerFieldRender = ({field}: {field: UploadDraggerField}): 
         field.setReady(true);
     }, [field]);
 
+    let defStyle: CSSProperties = {};
+    if (fieldProps.width) {
+        defStyle = {width: fieldProps.width};
+    }
+
+    const style = {...defStyle, ...fieldProps.style};
+
     return (
         <Dragger
             accept={fieldProps.accept}
@@ -48,7 +55,7 @@ export const UploadDraggerFieldRender = ({field}: {field: UploadDraggerField}): 
             showUploadList={fieldProps.showUploadList}
             type={fieldProps.type}
             withCredentials={fieldProps.withCredentials}
-            style={fieldProps.style}
+            style={style}
             height={fieldProps.height}
             customRequest={fieldProps.customRequest}
             /******** Callbacks *******/

@@ -2,8 +2,8 @@
 
 import React, {useCallback} from 'react';
 import {Button} from '@src/button';
-import {IDFormModalApi, DFormModal, IDFormModalProps} from '@src/dynamicFormModal';
-import {IDFormFieldInputProps, InputComponent} from "@src/dynamicForm/components/inputComponent";
+import {IDFormModalApi, DFormModal, IDFormModalProps} from '@src/dFormModal';
+import {InputField} from "@src/dForm/fields/input/inputField";
 
 const formApi = {} as IDFormModalApi;
 
@@ -12,8 +12,8 @@ const formProps: IDFormModalProps = {
     apiRef: formApi,
     confirmChanges: true,
     fieldsProps: {
-        position: {component: InputComponent, label: 'Должность'} as IDFormFieldInputProps,
-        department: {component: InputComponent, label: 'Подразделение'} as IDFormFieldInputProps,
+        position: {component: InputField, label: 'Должность'},
+        department: {component: InputField, label: 'Подразделение'},
     },
     onDataFetch: () => {
         return new Promise((resolve, reject) => {

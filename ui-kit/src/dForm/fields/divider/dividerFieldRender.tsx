@@ -11,7 +11,12 @@ export const DividerFieldRender = ({field}: {field: DividerField}): React.JSX.El
         field.setReady(true);
     }, [field]);
 
-    const style: CSSProperties = {margin: 0, ...fieldProps.style};
+    let defStyle: CSSProperties = {};
+    if (fieldProps.width) {
+        defStyle = {width: fieldProps.width, margin: 0};
+    }
+
+    const style = {...defStyle, ...fieldProps.style};
 
     return (
         <Divider

@@ -5,8 +5,9 @@ import Animate from 'rc-animate';
 import {Form} from 'antd';
 import {IBaseField} from './baseField';
 
-export const BaseFieldRender = ({field, altLabel, children}: {field: IBaseField; altLabel?: React.ReactNode; children?: React.ReactNode}): React.JSX.Element => {
+export const BaseFieldRender = ({field, altLabel, children}: { field: IBaseField; altLabel?: React.ReactNode; children?: React.ReactNode }): React.JSX.Element => {
     const fieldProps = field.getProps();
+    const formProps = field.getFormProps();
 
     useSyncExternalStore(field.subscribe.bind(field), field.getSnapshot.bind(field));
 
@@ -15,15 +16,15 @@ export const BaseFieldRender = ({field, altLabel, children}: {field: IBaseField;
 
     const style: React.CSSProperties = {
         //marginBottom: formProps.layout !== 'horizontal' ? 0 : undefined,
-        width: fieldProps.width,
         flexGrow: fieldProps.width ? 0 : 1,
         flexShrink: fieldProps.width ? 0 : 1,
         flexBasis: fieldProps.width ? undefined : 0,
-        //marginBottom: Component.name === 'DividerComponent' || Component.name === 'CustomComponent' ? 0 : undefined, //WORKAROUND
         ...fieldProps.rowStyle,
     };
 
-    const label = typeof altLabel !== 'undefined' ? altLabel : fieldProps.label
+    let emptyLabel: string | undefined = undefined;
+    if (formProps.layout === 'horizontal') emptyLabel = ' '
+    const label = typeof altLabel !== 'undefined' ? altLabel : fieldProps.label ?? emptyLabel
 
     return (
         <Animate component="" transitionName="zoom">

@@ -56,6 +56,7 @@ export const NumberFieldRender = ({field}: {field: NumberField}): React.JSX.Elem
             style={style}
             upHandler={fieldProps.upHandler}
             value={value}
+            width={fieldProps.width}
         />
     );
 };

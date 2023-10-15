@@ -2,9 +2,9 @@
 
 import React, {useCallback} from 'react';
 import {Button} from '@src/button';
-import {IDFormModalApi, DFormModal, IDFormModalProps} from '@src/dynamicFormModal';
-import {IDFormFieldInputProps, InputComponent} from "@src/dynamicForm/components/inputComponent";
-import {IDFormFieldPasswordProps, PasswordComponent} from "@src/dynamicForm/components/passwordComponent";
+import {IDFormModalApi, DFormModal, IDFormModalProps} from '@src/dFormModal';
+import {InputField} from "@src/dForm/fields/input/inputField";
+import {PasswordField} from "@src/dForm/fields/password/passwordField";
 
 const formApi = {} as IDFormModalApi;
 
@@ -13,8 +13,8 @@ const formProps: IDFormModalProps = {
     apiRef: formApi,
     confirmChanges: true,
     fieldsProps: {
-        field1: {component: InputComponent, label: 'login', tooltip: 'Login input'} as IDFormFieldInputProps,
-        field2: {component: PasswordComponent, label: 'password', tooltip: 'Password input'} as IDFormFieldPasswordProps,
+        field1: {component: InputField, label: 'login', tooltip: 'Login input'},
+        field2: {component: PasswordField, label: 'password', tooltip: 'Password input'},
     },
     onSubmit: () => {
         return new Promise((resolve, reject) => {

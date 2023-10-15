@@ -3,9 +3,9 @@
 import React, {useCallback} from 'react';
 
 import {Button} from '@src/button';
-import {IDFormModalApi, DFormModal, IDFormModalProps} from '@src/dynamicFormModal';
-import {IDFormFieldInputProps, InputComponent} from "@src/dynamicForm/components/inputComponent";
-import {IDFormFieldPasswordProps, PasswordComponent} from "@src/dynamicForm/components/passwordComponent";
+import {IDFormModalApi, DFormModal, IDFormModalProps} from '@src/dFormModal';
+import {InputField} from "@src/dForm/fields/input/inputField";
+import {PasswordField} from "@src/dForm/fields/password/passwordField";
 
 const formApi = {} as IDFormModalApi;
 
@@ -15,8 +15,8 @@ const formProps: IDFormModalProps = {
     confirmChanges: true,
     arrowsButtonsSelection: true,
     fieldsProps: {
-        login: {component: InputComponent, label: 'Login'} as IDFormFieldInputProps,
-        password: {component: PasswordComponent, label: 'Password'} as IDFormFieldPasswordProps
+        login: {component: InputField, label: 'Login'},
+        password: {component: PasswordField, label: 'Password'}
     }
 }
 

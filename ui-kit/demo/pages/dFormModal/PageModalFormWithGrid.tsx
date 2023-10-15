@@ -1,6 +1,6 @@
 
     import React from 'react';
-    import {ModalFormWithGrid} from '../../components/dynamicFormModal/modalFormWithGrid';
+    import {ModalFormWithGrid} from '../../components/dFormModal/modalFormWithGrid';
     import { Divider, Collapse } from 'antd';
     import SyntaxHighlighter from 'react-syntax-highlighter';
     import {darcula, docco} from 'react-syntax-highlighter/dist/esm/styles/hljs';

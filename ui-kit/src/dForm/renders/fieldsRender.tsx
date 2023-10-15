@@ -27,11 +27,7 @@ export const FieldsRender = ({
         <>
             {Object.keys(fields).map(fieldName => {
                 const field = fields[fieldName];
-                return (
-                    <div key={'field_' + field.getName()} style={{width: '100%'}}>
-                        {field.renderField()}{' '}
-                    </div>
-                );
+                return <div key={'field_' + field.getName()}>{field.renderField()} </div>;
             })}
         </>
     );

@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useSyncExternalStore} from 'react';
+import React, {CSSProperties, useCallback, useEffect, useSyncExternalStore} from 'react';
 import {QuillEditorField} from '@src/dForm/fields/quillEditor/quillEditorField';
 import Quill, {Sources} from 'quill';
 import {DeltaStatic, QuillEditor} from '@src/quillEditor/quillEditor';
@@ -32,6 +32,13 @@ export const QuillEditorFieldRender = ({field}: {field: QuillEditorField}): Reac
         field.setReady(true);
     }, [field]);
 
+    let defStyle: CSSProperties = {};
+    if (fieldProps.width) {
+        defStyle = {width: fieldProps.width};
+    }
+
+    const style = {...defStyle, ...fieldProps.style};
+
     return (
         <QuillEditor
             theme={fieldProps.theme}
@@ -43,7 +50,7 @@ export const QuillEditorFieldRender = ({field}: {field: QuillEditorField}): Reac
             tabIndex={fieldProps.tabIndex}
             bounds={fieldProps.bounds}
             scrollingContainer={fieldProps.scrollingContainer}
-            style={fieldProps.style}
+            style={style}
             disabled={field.isDisabled()}
             readOnly={field.isReadOnly()}
             placeholder={fieldProps.placeholder}

@@ -6,9 +6,6 @@ import {InlineGroupRender} from "@src/dForm/fields/inlineGroup/inlineGroupRender
 export interface IInlineGroupProps extends IBaseFieldProps<InlineGroupField> {
     /** Inline fields properties */
     fieldsProps: IDFormFieldsProps;
-
-    /** Do not share the freed-up space of hidden fields between visible fields */
-    noShareSpace?:boolean
 }
 
 export class InlineGroupField extends BaseField<IInlineGroupProps> {

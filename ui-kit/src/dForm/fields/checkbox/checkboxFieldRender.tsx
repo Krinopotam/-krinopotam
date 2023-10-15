@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useSyncExternalStore} from "react";
+import React, {CSSProperties, useCallback, useEffect, useSyncExternalStore} from "react";
 import {Checkbox} from "antd";
 import {CheckboxChangeEvent} from "antd/es/checkbox";
 import {CheckboxField} from "@src/dForm/fields/checkbox/checkboxField";
@@ -24,6 +24,13 @@ export const CheckboxFieldRender = ({field}:{field:CheckboxField}):React.JSX.Ele
         field.setReady(true)
     }, [field, fieldName]);
 
+    let defStyle: CSSProperties = {};
+    if (fieldProps.width) {
+        defStyle = {width: fieldProps.width};
+    }
+
+    const style = {...defStyle, ...fieldProps.style};
+
     return (
         <Checkbox
             checked={value}
@@ -31,7 +38,7 @@ export const CheckboxFieldRender = ({field}:{field:CheckboxField}):React.JSX.Ele
             onChange={onChange}
             autoFocus={fieldProps.autoFocus}
             indeterminate={fieldProps.indeterminate}
-            style={fieldProps.style}
+            style={style}
         />
     );
 }

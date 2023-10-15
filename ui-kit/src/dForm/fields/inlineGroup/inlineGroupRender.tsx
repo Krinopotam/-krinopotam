@@ -1,4 +1,4 @@
-import React, {useSyncExternalStore} from 'react';
+import React, {CSSProperties, useSyncExternalStore} from 'react';
 import {Form} from 'antd';
 import {InlineGroupField} from '@src/dForm/fields/inlineGroup/inlineGroupField';
 import {IBaseField} from '@src/dForm/fields/base/baseField';
@@ -10,12 +10,13 @@ export const InlineGroupRender = ({field}: {field: InlineGroupField}): React.JSX
 
     const model = field.getModel();
     const formProps = model.getFormProps();
+    const fieldProps = field.getProps();
 
-    const childrenFields = field.getRootFields();
+    const childFields = field.getRootFields();
 
     let firstField: IBaseField | undefined;
-    for (const fieldName in childrenFields) {
-        const childrenField = childrenFields[fieldName];
+    for (const fieldName in childFields) {
+        const childrenField = childFields[fieldName];
         if (!childrenField.isHidden()) {
             firstField = childrenField;
             break;
@@ -29,19 +30,34 @@ export const InlineGroupRender = ({field}: {field: InlineGroupField}): React.JSX
     let groupLabel: React.ReactNode = '';
     if (formProps.layout === 'horizontal') groupLabel = groupName ?? firstField?.getLabel();
 
+    let defStyle: CSSProperties = {};
+    if (fieldProps.width) {
+        defStyle = {width: fieldProps.width, margin: 0};
+    }
+
+    const groupStyle = {...defStyle, ...fieldProps.style};
+
     return (
         <Animate component="" transitionName="zoom">
             {!isHidden ? (
-                <Form.Item label={groupLabel} style={{margin: 0}}>
+                <Form.Item label={groupLabel} style={groupStyle}>
                     <div style={{display: 'inline-flex', gap: '24px', alignItems: 'center', width: '100%'}}>
-                        {Object.keys(childrenFields).map(fieldName => {
-                            const field = childrenFields[fieldName];
-                            if (field.isHidden() && !field.getProps().noShareSpace) return null;
+                        {Object.keys(childFields).map(fieldName => {
+                            const childField = childFields[fieldName];
+                            const childProps = childField.getProps();
 
-                            const altLabel = formProps.layout === 'horizontal' && field === firstField ? null : undefined;
+                            if (childField.isHidden()) return null;
+
+                            const style: React.CSSProperties = {
+                                flexGrow: childProps.width ? 0 : 1,
+                                flexShrink: childProps.width ? 0 : 1,
+                                flexBasis: childProps.width ? undefined : 0,
+                            };
+
+                            const altLabel = formProps.layout === 'horizontal' && childField === firstField ? null : undefined;
                             return (
-                                <div key={'item_' + field.getName()} style={{width: '100%'}}>
-                                    {field.renderField(altLabel)}
+                                <div key={'item_' + childField.getName()} style={style}>
+                                    {childField.renderField(altLabel)}
                                 </div>
                             );
                         })}

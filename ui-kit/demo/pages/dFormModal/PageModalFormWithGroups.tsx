@@ -1,6 +1,6 @@
 
     import React from 'react';
-    import {ModalFormWithGroups} from '../../components/dynamicFormModal/modalFormWithGroups';
+    import {ModalFormWithGroups} from '../../components/dFormModal/modalFormWithGroups';
     import { Divider, Collapse } from 'antd';
     import SyntaxHighlighter from 'react-syntax-highlighter';
     import {darcula, docco} from 'react-syntax-highlighter/dist/esm/styles/hljs';
@@ -10,19 +10,20 @@
     const source = `
 import React, {useCallback} from 'react';
 import {Button} from @krinopotam/ui-kit/button';
-import {IDFormModalApi, DFormModal, IDFormModalProps} from @krinopotam/ui-kit/dynamicFormModal';
-import {IDFormFieldInputProps, InputComponent} from @krinopotam/ui-kit/dynamicForm/components/inputComponent";
-import {DateTimeComponent, IDFormFieldDateTimeProps} from @krinopotam/ui-kit/dynamicForm/components/dateTimeComponent";
+import {IDFormModalApi, DFormModal, IDFormModalProps} from @krinopotam/ui-kit/dFormModal';
+import {InputField} from @krinopotam/ui-kit/dForm/fields/input/inputField";
+import {DateTimeField} from @krinopotam/ui-kit/dForm/fields/dateTime/dateTimeField";
 const formApi = {} as IDFormModalApi;
 const formProps: IDFormModalProps = {
     formId: 'Test form',
     apiRef: formApi,
     confirmChanges: true,
+    layout:'horizontal',
     fieldsProps: {
-        nameIn: {component: InputComponent, label: 'Имя входящего', inlineGroup: 'row1'} as IDFormFieldInputProps,
-        dateIn: {component: DateTimeComponent, label: 'Дата входа', inlineGroup: 'row1', width: 150} as IDFormFieldDateTimeProps,
-        nameOut: {component: InputComponent, label: 'Имя выходящего', inlineGroup: 'row1'} as IDFormFieldInputProps,
-        dateOut: {component: DateTimeComponent, label: 'Дата выхода', inlineGroup: 'row1', width: 150} as IDFormFieldDateTimeProps,
+        nameIn: {component: InputField, label: 'Имя входящего', inlineGroup: 'row1'},
+        dateIn: {component: DateTimeField, label: 'Дата входа', inlineGroup: 'row1', width: 150},
+        nameOut: {component: InputField, label: 'Имя выходящего', inlineGroup: 'row2'},
+        dateOut: {component: DateTimeField, label: 'Дата выхода', inlineGroup: 'row2', width: 150},
     },
 }
 export const ModalFormWithGroups = (): React.JSX.Element => {

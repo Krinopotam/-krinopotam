@@ -1,32 +1,39 @@
 
     import React from 'react';
-    import {ModalFormSimple} from '../../components/dynamicFormModal/modalFormSimple';
+    import {ModalFormFetching} from '../../components/dFormModal/modalFormFetching';
     import { Divider, Collapse } from 'antd';
     import SyntaxHighlighter from 'react-syntax-highlighter';
     import {darcula, docco} from 'react-syntax-highlighter/dist/esm/styles/hljs';
 
-    export const PageModalFormSimple = (props: {darkMode: boolean}): React.JSX.Element => {
+    export const PageModalFormFetching = (props: {darkMode: boolean}): React.JSX.Element => {
     // language=text
     const source = `
 import React, {useCallback} from 'react';
 import {Button} from @krinopotam/ui-kit/button';
-import {IDFormModalApi, DFormModal, IDFormModalProps} from @krinopotam/ui-kit/dynamicFormModal';
-import {IDFormFieldInputProps, InputComponent} from @krinopotam/ui-kit/dynamicForm/components/inputComponent";
-import {IDFormFieldPasswordProps, PasswordComponent} from @krinopotam/ui-kit/dynamicForm/components/passwordComponent";
+import {IDFormModalApi, DFormModal, IDFormModalProps} from @krinopotam/ui-kit/dFormModal';
+import {InputField} from @krinopotam/ui-kit/dForm/fields/input/inputField";
 const formApi = {} as IDFormModalApi;
 const formProps: IDFormModalProps = {
     formId: 'Test form',
     apiRef: formApi,
     confirmChanges: true,
-    arrowsButtonsSelection: true,
     fieldsProps: {
-        login: {component: InputComponent, label: 'Login'} as IDFormFieldInputProps,
-        password: {component: PasswordComponent, label: 'Password'} as IDFormFieldPasswordProps
-    }
+        position: {component: InputField, label: 'Должность'},
+        department: {component: InputField, label: 'Подразделение'},
+    },
+    onDataFetch: () => {
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                if (Math.random() < 0.5) reject({message: 'Ошибка загрузки данных', code: 400});
+                else resolve({data: {position: 'Директор', department: 'Главная дирекция'}});
+            }, 3000);
+        });
+    },
+    buttons: {ok: {position: 'right'}}
 }
-export const ModalFormSimple = (): React.JSX.Element => {
+export const ModalFormFetching = (): React.JSX.Element => {
     const onClick = useCallback(() => {
-        formApi.open('create');
+        formApi.open('update');
     }, []);
     return (
         <>
@@ -41,7 +48,7 @@ export const ModalFormSimple = (): React.JSX.Element => {
     return (
         <>
             <div>
-                <ModalFormSimple />
+                <ModalFormFetching />
             </div>
             <Divider />
             <div>
@@ -53,4 +60,4 @@ export const ModalFormSimple = (): React.JSX.Element => {
     );
 };
 
-export default PageModalFormSimple;
+export default PageModalFormFetching;

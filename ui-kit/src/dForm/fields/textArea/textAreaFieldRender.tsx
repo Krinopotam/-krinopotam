@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect} from 'react';
+import React, {CSSProperties, useCallback, useEffect} from 'react';
 import {Input} from 'antd';
 import {TextAreaField} from '@src/dForm/fields/textArea/textAreaField';
 
@@ -25,6 +25,13 @@ export const TextAreaFieldRender = ({field}: {field: TextAreaField}): React.JSX.
         field.setReady(true);
     }, [field]);
 
+    let defStyle: CSSProperties = {};
+    if (fieldProps.width) {
+        defStyle = {width: fieldProps.width};
+    }
+
+    const style = {...defStyle, ...fieldProps.style};
+
     return (
         <TextArea
             autoFocus={fieldProps.autoFocus}
@@ -41,7 +48,7 @@ export const TextAreaFieldRender = ({field}: {field: TextAreaField}): React.JSX.
             showCount={fieldProps.showCount}
             value={value}
             wrap={fieldProps.wrap}
-            style={fieldProps.style}
+            style={style}
         />
     );
 };

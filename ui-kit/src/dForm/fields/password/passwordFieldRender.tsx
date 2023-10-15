@@ -39,6 +39,7 @@ export const PasswordFieldRender = ({field}:{field:PasswordField}):React.JSX.Ele
             showCount={fieldProps.showCount}
             value={value}
             style={fieldProps.style}
+            width={fieldProps.width}
         />
     );
 }

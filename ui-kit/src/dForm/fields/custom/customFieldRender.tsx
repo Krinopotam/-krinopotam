@@ -1,4 +1,4 @@
-import React, {useEffect, useSyncExternalStore} from 'react';
+import React, {CSSProperties, useEffect, useSyncExternalStore} from 'react';
 import {CustomField} from '@src/dForm/fields/custom/customField';
 
 export const CustomFieldRender = ({field}: {field: CustomField}): React.JSX.Element => {
@@ -13,5 +13,8 @@ export const CustomFieldRender = ({field}: {field: CustomField}): React.JSX.Elem
         field.setReady(true);
     }, [field]);
 
-    return <>{curValue}</>;
+    const defStyle: CSSProperties = {width: fieldProps.width ?? '100%'};
+    const style = {...defStyle, ...fieldProps.style};
+
+    return <div style={style}>{curValue}</div>;
 };

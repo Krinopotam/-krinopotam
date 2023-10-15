@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useSyncExternalStore} from 'react';
+import React, {CSSProperties, useCallback, useEffect, useSyncExternalStore} from 'react';
 import {SelectField} from '@src/dForm/fields/select/selectField';
 import {ISelectNode, ISelectValue, Select} from '@src/select';
 
@@ -14,7 +14,7 @@ export const SelectFieldRender = ({field}: {field: SelectField}): React.JSX.Elem
             field.setValue(fieldProps.fullItemValue ? options: value);
             field.setDirty(true);
         },
-        [field]
+        [field, fieldProps.fullItemValue]
     );
     const onBlur = useCallback(() => {
         field.setTouched(true);
@@ -23,6 +23,13 @@ export const SelectFieldRender = ({field}: {field: SelectField}): React.JSX.Elem
     useEffect(() => {
         field.setReady(true);
     }, [field]);
+
+    let defStyle: CSSProperties = {};
+    if (fieldProps.width) {
+        defStyle = {width: fieldProps.width};
+    }
+
+    const style = {...defStyle, ...fieldProps.style};
 
     return (
         <Select
@@ -58,7 +65,7 @@ export const SelectFieldRender = ({field}: {field: SelectField}): React.JSX.Elem
             tokenSeparators={fieldProps.tokenSeparators}
             value={value}
             virtual={fieldProps.virtual}
-            style={fieldProps.style}
+            style={style}
             /******** Callbacks *********/
             onBlur={onBlur}
             onChange={onChange}
