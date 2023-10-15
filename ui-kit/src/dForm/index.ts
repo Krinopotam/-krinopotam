@@ -11,6 +11,7 @@ import {ILinkFieldProps} from '@src/dForm/fields/link/linkField';
 import {INumberFieldProps} from '@src/dForm/fields/number/numberField';
 import {ICheckboxFieldProps} from '@src/dForm/fields/checkbox/checkboxField';
 import {IUploadDraggerFieldProps} from '@src/dForm/fields/fileDrop/uploadDraggerField';
+import {ISelectFieldProps} from '@src/dForm/fields/select/selectField';
 
 export {DForm} from './dForm';
 export type {IDFormCallbacks, IDFormProps, IDFormDataSet, IDFormDataSourcePromise, IDFormMode, IDFormFieldValidationRules} from './dForm';
@@ -33,6 +34,7 @@ export type IDFormFieldProps =
     | INumberFieldProps
     | IQuillEditorFieldProps
     | IUploadDraggerFieldProps
+    | ISelectFieldProps
     | IAnyFieldProps;
 
 /** Fields properties collection */

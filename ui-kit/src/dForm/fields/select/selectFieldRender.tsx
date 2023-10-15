@@ -26,6 +26,7 @@ export const SelectFieldRender = ({field}: {field: SelectField}): React.JSX.Elem
 
     return (
         <Select
+            dataSet={fieldProps.dataSet}
             allowClear={fieldProps.allowClear !== false}
             autoClearSearchValue={fieldProps.autoClearSearchValue}
             autoFocus={fieldProps.autoFocus}
