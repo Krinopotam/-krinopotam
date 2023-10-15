@@ -1,4 +1,4 @@
-import {BaseField, IDFormBaseFieldProps} from '@src/dForm/fields/base/baseField';
+import {BaseField, IBaseFieldProps} from '@src/dForm/fields/base/baseField';
 import React from 'react';
 import {QuillEditorFieldRender} from '@src/dForm/fields/quillEditor/quillEditorFieldRender';
 import {IQuillEditorProps} from '@src/quillEditor';
@@ -6,7 +6,7 @@ import {DeltaStatic} from '@src/quillEditor/quillEditor';
 import {Sources} from 'quill';
 import {Range, UnprivilegedEditor} from 'react-quill';
 
-export interface IDFormQuillEditorFieldProps extends IDFormBaseFieldProps<QuillEditorField> {
+export interface IQuillEditorFieldProps extends IBaseFieldProps<QuillEditorField> {
     bounds?: IQuillEditorProps['bounds'];
 
     /** Default value */
@@ -39,7 +39,7 @@ export interface IDFormQuillEditorFieldProps extends IDFormBaseFieldProps<QuillE
     onKeyUp?: (e: React.KeyboardEvent<HTMLElement>, field: QuillEditorField) => void;
 }
 
-export class QuillEditorField extends BaseField<IDFormQuillEditorFieldProps> {
+export class QuillEditorField extends BaseField<IQuillEditorFieldProps> {
     protected render() {
         return <QuillEditorFieldRender field={this} />;
     }

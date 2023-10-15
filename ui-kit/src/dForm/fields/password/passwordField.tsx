@@ -1,8 +1,8 @@
-import {BaseField, IDFormBaseFieldProps,} from "@src/dForm/fields/base/baseField";
+import {BaseField, IBaseFieldProps,} from "@src/dForm/fields/base/baseField";
 import React from "react";
 import {PasswordFieldRender} from "@src/dForm/fields/password/passwordFieldRender";
 
-export interface IDFormPasswordFieldProps extends IDFormBaseFieldProps<PasswordField> {
+export interface IPasswordFieldProps extends IBaseFieldProps<PasswordField> {
     /** Default value */
     value?: string | number;
 
@@ -16,7 +16,7 @@ export interface IDFormPasswordFieldProps extends IDFormBaseFieldProps<PasswordF
     iconRender?: (visible: boolean) => React.ReactNode;
 }
 
-export class PasswordField extends BaseField<IDFormPasswordFieldProps> {
+export class PasswordField extends BaseField<IPasswordFieldProps> {
     protected render() {
         return <PasswordFieldRender field={this} />
     }

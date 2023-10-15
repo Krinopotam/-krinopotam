@@ -1,15 +1,16 @@
-import {IDFormAnyFieldProps} from '@src/dForm/fields/base/baseField';
-import {IDFormInputFieldProps} from '@src/dForm/fields/input/inputField';
-import {IDFormTabsFieldProps} from '@src/dForm/fields/tabs/tabsField';
-import {IDFormInlineGroupProps} from '@src/dForm/fields/inlineGroup/inlineGroupField';
-import {IDFormPasswordFieldProps} from '@src/dForm/fields/password/passwordField';
-import {IDFormCustomFieldProps} from '@src/dForm/fields/custom/customField';
-import {IDFormDateTimeFieldProps} from '@src/dForm/fields/dateTime/dateTimeField';
-import {IDFormDividerFieldProps} from '@src/dForm/fields/divider/dividerField';
-import {IDFormQuillEditorFieldProps} from '@src/dForm/fields/quillEditor/quillEditorField';
-import {IDFormLinkFieldProps} from '@src/dForm/fields/link/linkField';
-import {IDFormNumberFieldProps} from '@src/dForm/fields/number/numberField';
-import {IDFormCheckboxFieldProps} from '@src/dForm/fields/checkbox/checkboxField';
+import {IAnyFieldProps} from '@src/dForm/fields/base/baseField';
+import {IInputFieldProps} from '@src/dForm/fields/input/inputField';
+import {ITabsFieldProps} from '@src/dForm/fields/tabs/tabsField';
+import {IInlineGroupProps} from '@src/dForm/fields/inlineGroup/inlineGroupField';
+import {IPasswordFieldProps} from '@src/dForm/fields/password/passwordField';
+import {ICustomFieldProps} from '@src/dForm/fields/custom/customField';
+import {IDateTimeFieldProps} from '@src/dForm/fields/dateTime/dateTimeField';
+import {IDividerFieldProps} from '@src/dForm/fields/divider/dividerField';
+import {IQuillEditorFieldProps} from '@src/dForm/fields/quillEditor/quillEditorField';
+import {ILinkFieldProps} from '@src/dForm/fields/link/linkField';
+import {INumberFieldProps} from '@src/dForm/fields/number/numberField';
+import {ICheckboxFieldProps} from '@src/dForm/fields/checkbox/checkboxField';
+import {IUploadDraggerFieldProps} from '@src/dForm/fields/fileDrop/uploadDraggerField';
 
 export {DForm} from './dForm';
 export type {IDFormCallbacks, IDFormProps, IDFormDataSet, IDFormDataSourcePromise, IDFormMode, IDFormFieldValidationRules} from './dForm';
@@ -20,18 +21,19 @@ export {DModel} from './dModel';
 export type {IDFormBaseCallbacks, IDFormModelCallbacks, IDFormSubmitResultObject, IDFormSubmitResultPromise} from './dModel';
 
 export type IDFormFieldProps =
-    | IDFormInlineGroupProps
-    | IDFormTabsFieldProps
-    | IDFormInputFieldProps
-    | IDFormPasswordFieldProps
-    | IDFormCustomFieldProps
-    | IDFormCheckboxFieldProps
-    | IDFormDateTimeFieldProps
-    | IDFormDividerFieldProps
-    | IDFormLinkFieldProps
-    | IDFormNumberFieldProps
-    | IDFormQuillEditorFieldProps
-    | IDFormAnyFieldProps;
+    | IInlineGroupProps
+    | ITabsFieldProps
+    | IInputFieldProps
+    | IPasswordFieldProps
+    | ICustomFieldProps
+    | ICheckboxFieldProps
+    | IDateTimeFieldProps
+    | IDividerFieldProps
+    | ILinkFieldProps
+    | INumberFieldProps
+    | IQuillEditorFieldProps
+    | IUploadDraggerFieldProps
+    | IAnyFieldProps;
 
 /** Fields properties collection */
 export type IDFormFieldsProps = Record<string, IDFormFieldProps>;

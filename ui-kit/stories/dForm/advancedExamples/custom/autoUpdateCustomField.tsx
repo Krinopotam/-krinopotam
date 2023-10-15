@@ -1,7 +1,7 @@
 import React from 'react';
 import {DForm} from '@src/dForm';
 import {IDFormFieldProps} from '@src/dForm';
-import {IDFormInputFieldProps, InputField} from '@src/dForm/fields/input/inputField';
+import {IInputFieldProps, InputField} from '@src/dForm/fields/input/inputField';
 import {CustomField} from '@src/dForm/fields/custom/customField';
 
 type IComponent = IDFormFieldProps;
@@ -18,7 +18,7 @@ export const AutoUpdateCustomField = (props: IComponent): React.JSX.Element => (
                     const field2 = field.getModel().getField('field2')
                     field2.setValue(value);
                 },
-            } satisfies  IDFormInputFieldProps,
+            } satisfies  IInputFieldProps,
             field2: {...props, component: CustomField, onRender: MyComponent},
         }}
     />

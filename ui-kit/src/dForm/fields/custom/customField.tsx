@@ -1,8 +1,8 @@
-import {BaseField, IDFormBaseFieldProps} from '@src/dForm/fields/base/baseField';
+import {BaseField, IBaseFieldProps} from '@src/dForm/fields/base/baseField';
 import React from 'react';
 import {CustomFieldRender} from '@src/dForm/fields/custom/customFieldRender';
 
-export interface IDFormCustomFieldProps extends IDFormBaseFieldProps<CustomField> {
+export interface ICustomFieldProps extends IBaseFieldProps<CustomField> {
     /** Default value */
     value?: string | React.ReactNode;
 
@@ -10,7 +10,7 @@ export interface IDFormCustomFieldProps extends IDFormBaseFieldProps<CustomField
     onRender?: (value: string | React.ReactNode, field: CustomField) => string | React.ReactNode;
 }
 
-export class CustomField extends BaseField<IDFormCustomFieldProps> {
+export class CustomField extends BaseField<ICustomFieldProps> {
     protected render() {
         return <CustomFieldRender field={this} />;
     }

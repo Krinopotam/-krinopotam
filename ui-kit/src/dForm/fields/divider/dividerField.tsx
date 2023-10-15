@@ -1,8 +1,8 @@
-import {BaseField, IDFormBaseFieldProps} from '@src/dForm/fields/base/baseField';
+import {BaseField, IBaseFieldProps} from '@src/dForm/fields/base/baseField';
 import React from 'react';
 import {DividerFieldRender} from "@src/dForm/fields/divider/dividerFieldRender";
 
-export interface IDFormDividerFieldProps extends IDFormBaseFieldProps<DividerField> {
+export interface IDividerFieldProps extends IBaseFieldProps<DividerField> {
     /** Divider title */
     value?: string | React.ReactNode,
 
@@ -19,7 +19,7 @@ export interface IDFormDividerFieldProps extends IDFormBaseFieldProps<DividerFie
     orientationMargin?: string | number
 }
 
-export class DividerField extends BaseField<IDFormDividerFieldProps> {
+export class DividerField extends BaseField<IDividerFieldProps> {
     protected render() {
         return <DividerFieldRender field={this} />;
     }

@@ -1,9 +1,9 @@
-import {BaseField, IDFormBaseFieldProps,} from "@src/dForm/fields/base/baseField";
+import {BaseField, IBaseFieldProps,} from "@src/dForm/fields/base/baseField";
 import React from "react";
 import {NumberFieldRender} from "@src/dForm/fields/number/numberFieldRender";
 import {InputNumberProps} from "antd/es/input-number";
 
-export interface IDFormNumberFieldProps extends IDFormBaseFieldProps<NumberField> {
+export interface INumberFieldProps extends IBaseFieldProps<NumberField> {
     /** The label text displayed after (on the right side of) the input field */
     addonAfter?: React.ReactNode;
 
@@ -61,7 +61,7 @@ export interface IDFormNumberFieldProps extends IDFormBaseFieldProps<NumberField
     prefixCls?: string;
 }
 
-export class NumberField extends BaseField<IDFormNumberFieldProps> {
+export class NumberField extends BaseField<INumberFieldProps> {
     protected render() {
         return <NumberFieldRender field={this} />
     }

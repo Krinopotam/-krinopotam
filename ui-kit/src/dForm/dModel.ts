@@ -13,7 +13,7 @@ import {HelpersObjects} from '@krinopotam/js-helpers';
 
 import {BaseValidator} from './validators/baseValidator';
 import React from 'react';
-import {IBaseField, IDFormAnyFieldProps} from '@src/dForm/fields/base/baseField';
+import {IBaseField, IAnyFieldProps} from '@src/dForm/fields/base/baseField';
 import {IDFormFieldsProps} from '@src/dForm/index';
 import {TPromise} from '@krinopotam/service-types';
 import {InlineGroupField} from '@src/dForm/fields/inlineGroup/inlineGroupField';
@@ -252,7 +252,7 @@ export class DModel {
     /** Transforming field properties.
      * If the field properties contain the short entry inlineGroup, then create additional parameters to transform to InlineGroupField  */
     modifyFieldsProps(fieldsProps: IDFormFieldsProps) {
-        const fieldsPropsGroups: Record<string, Record<string, IDFormAnyFieldProps>> = {};
+        const fieldsPropsGroups: Record<string, Record<string, IAnyFieldProps>> = {};
         let i = 0;
         for (const fieldName in fieldsProps) {
             i++;

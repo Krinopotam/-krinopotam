@@ -4,5 +4,8 @@ export type TPromise<T, F = unknown> = {
     catch<TResult = never>(onrejected?: ((reason: F) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;
 } & Promise<T>;
 
+/** Type of array element */
+export type ArrayElement<A> = A extends readonly (infer T)[] ? T : never
+
 /** Any type */
 export type AnyType = any

@@ -1,9 +1,9 @@
-import {BaseField, IDFormBaseFieldProps} from '@src/dForm/fields/base/baseField';
+import {BaseField, IBaseFieldProps} from '@src/dForm/fields/base/baseField';
 import {TabsFieldRender} from '@src/dForm/fields/tabs/tabsFieldRender';
 import React from 'react';
 import {IDFormFieldsProps} from '@src/dForm';
 
-export interface IDFormTabsFieldProps extends IDFormBaseFieldProps<TabsField> {
+export interface ITabsFieldProps extends IBaseFieldProps<TabsField> {
     /** Tabs fields properties */
     tabs: Record<string, IDFormFieldsProps>;
 
@@ -36,7 +36,7 @@ export interface IDFormTabsFieldProps extends IDFormBaseFieldProps<TabsField> {
     onActiveTabChanged?: (tabName: string, field: TabsField) => void;
 }
 
-export class TabsField extends BaseField<IDFormTabsFieldProps> {
+export class TabsField extends BaseField<ITabsFieldProps> {
     //region Tabs grouped fields collections
     /** Tabs grouped fields collection maps (flat list of all fields in all component tabs, including child fields of other containers) */
     private _tabsFieldsMap: Record<string, TabsField['fieldsMap']> = {};

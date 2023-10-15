@@ -1,8 +1,8 @@
-import {BaseField, IDFormBaseFieldProps} from '@src/dForm/fields/base/baseField';
+import {BaseField, IBaseFieldProps} from '@src/dForm/fields/base/baseField';
 import React, {DragEvent, MouseEvent} from 'react';
 import {LinkFieldRender} from '@src/dForm/fields/link/linkFieldRender';
 
-export interface IDFormLinkFieldProps extends IDFormBaseFieldProps<LinkField> {
+export interface ILinkFieldProps extends IBaseFieldProps<LinkField> {
     /** Anchor url */
     href?: string;
 
@@ -29,7 +29,7 @@ export interface IDFormLinkFieldProps extends IDFormBaseFieldProps<LinkField> {
     onMouseUp?: (event: MouseEvent, field: LinkField) => void;
 }
 
-export class LinkField extends BaseField<IDFormLinkFieldProps> {
+export class LinkField extends BaseField<ILinkFieldProps> {
     protected render() {
         return <LinkFieldRender field={this} />;
     }

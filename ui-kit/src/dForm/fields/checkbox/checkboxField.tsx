@@ -1,8 +1,8 @@
-import {BaseField, IDFormBaseFieldProps,} from "@src/dForm/fields/base/baseField";
+import {BaseField, IBaseFieldProps,} from "@src/dForm/fields/base/baseField";
 import React from "react";
 import {CheckboxFieldRender} from "@src/dForm/fields/checkbox/checkboxFieldRender";
 
-export interface IDFormCheckboxFieldProps extends IDFormBaseFieldProps<CheckboxField> {
+export interface ICheckboxFieldProps extends IBaseFieldProps<CheckboxField> {
     /** default value */
     value?: boolean;
 
@@ -10,7 +10,7 @@ export interface IDFormCheckboxFieldProps extends IDFormBaseFieldProps<CheckboxF
     indeterminate?: boolean;
 }
 
-export class CheckboxField extends BaseField<IDFormCheckboxFieldProps> {
+export class CheckboxField extends BaseField<ICheckboxFieldProps> {
     protected render() {
         return <CheckboxFieldRender field={this} />
     }

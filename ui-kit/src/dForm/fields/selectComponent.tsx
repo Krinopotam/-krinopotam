@@ -170,7 +170,7 @@ export const SelectComponent = ({formApi, fieldName, fieldProps}: IDFormSelectCo
     const defIdx = 0;
     for (let idx = 0; idx < fieldProps.dataSet.length; idx++) {
         const item = fieldProps.dataSet[idx];
-        const label = SelectComponentElementRenderTitle(item, false);
+        const label = SelectItemTitleRender(item, false);
         const option = (
             <Option value={item.id} disabled={item.disabled} key={'sel_key_' + idx}>
                 {label}
@@ -233,7 +233,7 @@ export const SelectComponent = ({formApi, fieldName, fieldProps}: IDFormSelectCo
  * Default render for select element
  * @constructor
  */
-export const SelectComponentElementRenderTitle = (fieldProps: ISelectComponentElement, setColorDisabled = true) => {
+export const SelectItemTitleRender = (fieldProps: ISelectComponentElement, setColorDisabled = true) => {
     const color = setColorDisabled && fieldProps.disabled ? 'grey' : undefined;
     return fieldProps.icon ? (
         <Space style={{color: color}}>

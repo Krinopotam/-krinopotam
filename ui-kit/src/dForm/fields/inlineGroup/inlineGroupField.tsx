@@ -1,9 +1,9 @@
-import {BaseField, IDFormBaseFieldProps} from '@src/dForm/fields/base/baseField';
+import {BaseField, IBaseFieldProps} from '@src/dForm/fields/base/baseField';
 import React from 'react';
 import {IDFormFieldsProps} from '@src/dForm';
 import {InlineGroupRender} from "@src/dForm/fields/inlineGroup/inlineGroupRender";
 
-export interface IDFormInlineGroupProps extends IDFormBaseFieldProps<InlineGroupField> {
+export interface IInlineGroupProps extends IBaseFieldProps<InlineGroupField> {
     /** Inline fields properties */
     fieldsProps: IDFormFieldsProps;
 
@@ -11,7 +11,7 @@ export interface IDFormInlineGroupProps extends IDFormBaseFieldProps<InlineGroup
     noShareSpace?:boolean
 }
 
-export class InlineGroupField extends BaseField<IDFormInlineGroupProps> {
+export class InlineGroupField extends BaseField<IInlineGroupProps> {
     initChildrenFields(): [InlineGroupField['fieldsMap'], InlineGroupField['rootFields']] {
         const groupProps = this.getProps();
         const fieldsProps = groupProps.fieldsProps;

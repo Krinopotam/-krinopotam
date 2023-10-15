@@ -1,11 +1,11 @@
-import {BaseField, IDFormBaseFieldProps,} from "@src/dForm/fields/base/baseField";
+import {BaseField, IBaseFieldProps,} from "@src/dForm/fields/base/baseField";
 import React from "react";
 import {DateTimeFieldRender} from "@src/dForm/fields/dateTime/dateTimeFieldRender";
 import {IDatePickerProps} from "@src/datePicker";
 import {PanelMode} from "rc-picker/lib/interface";
 import {Dayjs} from "dayjs";
 
-export interface IDFormDateTimeFieldProps extends IDFormBaseFieldProps<DateTimeField> {
+export interface IDateTimeFieldProps extends IBaseFieldProps<DateTimeField> {
     /** Whether to show clear button */
     allowClear?: IDatePickerProps['allowClear'];
 
@@ -95,7 +95,7 @@ export interface IDFormDateTimeFieldProps extends IDFormBaseFieldProps<DateTimeF
     onMouseDown?: (e: React.MouseEvent<HTMLDivElement>, field: DateTimeField) => void;
 }
 
-export class DateTimeField extends BaseField<IDFormDateTimeFieldProps> {
+export class DateTimeField extends BaseField<IDateTimeFieldProps> {
     protected render() {
         return <DateTimeFieldRender field={this} />
     }

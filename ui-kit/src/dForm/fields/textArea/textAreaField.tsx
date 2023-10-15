@@ -1,10 +1,10 @@
 import {BaseField} from '@src/dForm/fields/base/baseField';
 import React from 'react';
 import {TextAreaFieldRender} from '@src/dForm/fields/textArea/textAreaFieldRender';
-import {IDFormInputFieldProps} from '@src/dForm/fields/input/inputField';
+import {IInputFieldProps} from '@src/dForm/fields/input/inputField';
 import {TextAreaProps} from 'antd/es/input/TextArea';
 
-export interface IDFormTextAreaFieldProps extends IDFormInputFieldProps {
+export interface IDFormTextAreaFieldProps extends IInputFieldProps {
     /** Height auto size feature, can be set to true | false or an object ( minRows: 2, maxRows: 6 ) */
     autoSize?: TextAreaProps['autoSize'];
 

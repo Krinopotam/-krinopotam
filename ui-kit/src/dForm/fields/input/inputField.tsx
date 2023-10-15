@@ -1,8 +1,8 @@
-import {BaseField, IDFormBaseFieldProps,} from "@src/dForm/fields/base/baseField";
+import {BaseField, IBaseFieldProps,} from "@src/dForm/fields/base/baseField";
 import {InputFieldRender} from "@src/dForm/fields/input/inputFieldRender";
 import React from "react";
 
-export interface IDFormInputFieldProps extends IDFormBaseFieldProps<InputField> {
+export interface IInputFieldProps extends IBaseFieldProps<InputField> {
     /** Default value */
     value?: string | number ;
 
@@ -13,7 +13,7 @@ export interface IDFormInputFieldProps extends IDFormBaseFieldProps<InputField> 
     maxLength?: number;
 }
 
-export class InputField extends BaseField<IDFormInputFieldProps> {
+export class InputField extends BaseField<IInputFieldProps> {
     protected render() {
         return <InputFieldRender field={this} />
     }
