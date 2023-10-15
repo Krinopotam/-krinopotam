@@ -1,5 +1,5 @@
 import React from 'react';
-import {DFormModal} from '@src/dynamicFormModal';
+import {DFormModal} from '@src/dFormModal';
 import {LoadingContainer} from '@src/loadingContainer';
 import {IGridApi} from '../hooks/api';
 import {usePrepareEditFormProps} from '../hooks/gridEditForm';

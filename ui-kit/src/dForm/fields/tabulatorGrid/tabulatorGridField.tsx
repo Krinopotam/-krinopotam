@@ -1,23 +1,12 @@
-import React, {useRef, useState} from 'react';
-import {ITabulatorProps, ITabulator} from '@src/tabulatorBase';
-import {IButtonsRowApi, IFormButton, IFormButtons} from '@src/buttonsRow/buttonsRow';
-import {IDFormModalProps, IDFormModalApi} from '@src/dFormModal';
-import {TPromise} from '@krinopotam/service-types';
-import {IGridApi, useInitGridApi} from './hooks/api';
-import {useInitialFetchData} from './hooks/initialFetchRows';
-import {ContainerRender} from './renders/containerRender';
-import {ITabulatorEvents} from "@src/tabulatorBase/tabulatorBase";
+import {BaseField, IBaseFieldProps,} from "@src/dForm/fields/base/baseField";
+import React from "react";
+import {TabulatorGridFieldRender} from "@src/dForm/fields/tabulatorGrid/tabulatorGridFieldRender";
+import {ITabulatorProps} from "@src/tabulatorBase";
+import {IFormButton, IFormButtons} from "@src/buttonsRow";
+import {IDFormModalProps} from "@src/dynamicFormModal";
+import {IGridApi, IGridDataSourcePromise, IGridDeletePromise, IGridRowData} from "@src/tabulatorGrid";
 
-export interface IGridRowData extends Record<string, unknown> {
-    /** Row id */
-    id: string | number;
-    children?: IGridRowData[];
-}
-
-export interface IGridProps {
-    /** A mutable object to merge with these controls api */
-    apiRef?: unknown;
-
+export interface ITabulatorGridFieldProps extends IBaseFieldProps<TabulatorGridField> {
     /** Grid Id */
     id?: string;
 
@@ -27,28 +16,22 @@ export interface IGridProps {
     /** Tree view mode */
     dataTree?: boolean;
 
-    /** The dataTree children field name */
+    /** The children field name */
     dataTreeChildField?: string;
 
     /** The parent key field name */
     dataTreeParentField?: string;
 
-    /** The dataTree children indentation */
+    /** The tree data children indentation */
     dataTreeChildIndent?: number;
 
     /** Grid columns */
-    columns: ITabulatorProps['columns'];
-
-    /** Grid data set */
-    dataSet?: IGridRowData[];
+    columns?: ITabulatorProps['columns'];
 
     /** Grid class name */
     className?: string;
 
-    buttons?: Record<'view' | 'create' | 'clone' | 'update' | 'delete' | 'filterToggle', IFormButton | null> | IFormButtons;
-
-    /** Table can't be edited */
-    readOnly?: boolean;
+    buttons?: Record<'view' | 'create' | 'clone' | 'update' | 'delete', IFormButton | null> | IFormButtons;
 
     /** Edit modal controls parameters */
     editFormProps?: IDFormModalProps;
@@ -143,56 +126,38 @@ export interface IGridProps {
     /** Is the header should be visible */
     headerVisible?: ITabulatorProps['headerVisible'];
 
-    /** Hide HeaderFilter when grid is initialized */
-    headerFilterHidden?:ITabulatorProps['headerFilterHidden']
-
     /** Default column properties */
     columnDefaults?: ITabulatorProps['columnDefaults'];
-
-    /** Grid events*/
-    events?: ITabulatorEvents;
 
     // --- callbacks -----------------------------------------------------
 
     /** Fires when menu visibility status changed */
-    onMenuVisibilityChanged?: (isVisible: boolean, gridApi: IGridApi) => void;
+    onMenuVisibilityChanged?: (isVisible: boolean, gridApi: IGridApi, field: TabulatorGridField) => void;
 
     /** Fires, when the dataSet changed. User can modify the dataSet before dataSet will apply */
-    onDataSetChange?: (dataSet: IGridRowData[] | undefined, gridApi: IGridApi) => IGridRowData[] | void;
+    onDataSetChange?: (dataSet: IGridRowData[] | undefined, gridApi: IGridApi, field: TabulatorGridField) => IGridRowData[] | void;
 
     /** fires when the grid trying to fetch data */
-    onDataFetch?: (gridApi: IGridApi) => IGridDataSourcePromise | undefined | void;
+    onDataFetch?: (gridApi: IGridApi, field: TabulatorGridField) => IGridDataSourcePromise | undefined | void;
 
     /** fires when the grid data fetch success */
-    onDataFetchSuccess?: (dataSet: IGridRowData[] | undefined, gridApi: IGridApi) => void;
+    onDataFetchSuccess?: (dataSet: IGridRowData[] | undefined, gridApi: IGridApi, field: TabulatorGridField) => void;
 
     /** fires when the grid data fetch failed */
-    onDataFetchError?: (message: string, code: number, gridApi: IGridApi) => void;
+    onDataFetchError?: (message: string, code: number, gridApi: IGridApi, field: TabulatorGridField) => void;
 
     /** fires when the grid data fetch completed */
-    onDataFetchCompleted?: (gridApi: IGridApi) => void;
+    onDataFetchCompleted?: (gridApi: IGridApi, field: TabulatorGridField) => void;
 
     /** Callback executed when selected rows change */
-    onSelectionChange?: (keys: string[], selectedRows: IGridRowData[], gridApi: IGridApi) => void;
+    onSelectionChange?: (keys: string[], selectedRows: IGridRowData[], gridApi: IGridApi, field: TabulatorGridField) => void;
 
     /** Callback executed when selected rows delete */
-    onDelete?: (selectedRows: IGridRowData[], gridApi: IGridApi) => IGridDeletePromise | void | undefined;
+    onDelete?: (selectedRows: IGridRowData[], gridApi: IGridApi, field: TabulatorGridField) => IGridDeletePromise | void | undefined;
 }
 
-export type IGridDataSourcePromise = TPromise<{ data: Record<string, unknown>[] }, { message: string; code: number }>;
-export type IGridDeletePromise = TPromise<{ data: Record<string, unknown> }, { message: string; code: number }>;
-
-const TabulatorGrid = (props: IGridProps): React.JSX.Element => {
-    const tableRef = useRef<ITabulator>();
-    const [editFormApi] = useState<IDFormModalApi>({} as IDFormModalApi);
-    const [buttonsApi] = useState({} as IButtonsRowApi & { refreshButtons: () => void });
-    const [gridApi] = useState((props.apiRef || {}) as IGridApi);
-
-    useInitGridApi({gridApi, props, tableRef, editFormApi, buttonsApi});
-
-    useInitialFetchData(gridApi);
-
-    return <ContainerRender tableRef={tableRef} gridApi={gridApi} gridProps={props}/>
-};
-
-export default TabulatorGrid;
+export class TabulatorGridField extends BaseField<ITabulatorGridFieldProps> {
+    protected render() {
+        return <TabulatorGridFieldRender field={this} />
+    }
+}

@@ -1,5 +1,5 @@
 import {Col, Row, TreeSelect as AntdTreeSelect} from 'antd';
-import {DFormModal, IDFormModalProps} from '@src/dynamicFormModal';
+import {DFormModal, IDFormModalProps} from '@src/dFormModal';
 import React, {ComponentProps, useEffect, useMemo, useState} from 'react';
 import {HelpersObjects, HelpersStrings} from '@krinopotam/js-helpers';
 import {TreeSelectRender} from '@src/treeSelect/renders/treeSelectRender';

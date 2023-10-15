@@ -1,6 +1,6 @@
 import React, {MutableRefObject, useCallback, useRef, useState} from 'react';
 import {HelpersStrings, HelpersObjects} from '@krinopotam/js-helpers';
-import {IDFormModalApi} from '@src/dynamicFormModal';
+import {IDFormModalApi} from '@src/dFormModal';
 import {IButtonsRowApi} from '@src/buttonsRow/buttonsRow';
 import useUnmountedRef from 'ahooks/lib/useUnmountedRef';
 import {TPromise} from '@krinopotam/service-types';

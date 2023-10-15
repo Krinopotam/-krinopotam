@@ -1,5 +1,5 @@
 import {useMemo} from 'react';
-import {IDFormApi} from '@src/dynamicForm';
+import {IDFormApi} from '@src/dForm';
 import {HelpersStrings} from "@krinopotam/js-helpers";
 import {IGridApi} from "./api";
 import {IGridRowData} from "../tabulatorGrid";

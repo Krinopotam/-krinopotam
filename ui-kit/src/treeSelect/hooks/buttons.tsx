@@ -3,7 +3,7 @@ import {HelpersObjects} from "@krinopotam/js-helpers";
 import React, {useMemo} from 'react';
 import {ITreeSelectApi, ITreeSelectDeletePromise} from '@src/treeSelect';
 import {DeleteOutlined, EditOutlined, PlusOutlined} from '@ant-design/icons';
-import {IDFormModalApi} from '@src/dynamicFormModal';
+import {IDFormModalApi} from '@src/dFormModal';
 import {MessageBoxApi, MessageBox} from '@src/messageBox';
 
 /** Generate buttons */
