@@ -6,6 +6,10 @@ import {SelectProps} from 'rc-select/lib/Select';
 import {ISelectProps} from '@src/select';
 
 export interface ISelectFieldProps extends IBaseFieldProps<SelectField> {
+    /** if true, then the entire elements (full node) will be written into the values*/
+    fullItemValue?:boolean;
+
+    /** Select component options items */
     dataSet: ISelectProps['dataSet'];
 
     /** Allow clear and show clear button */

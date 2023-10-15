@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect, useSyncExternalStore} from 'react';
 import {SelectField} from '@src/dForm/fields/select/selectField';
-import {ISelectValue, Select} from '@src/select';
+import {ISelectNode, ISelectValue, Select} from '@src/select';
 
 export const SelectFieldRender = ({field}: {field: SelectField}): React.JSX.Element => {
     useSyncExternalStore(field.subscribe.bind(field), field.getSnapshot.bind(field));
@@ -10,8 +10,8 @@ export const SelectFieldRender = ({field}: {field: SelectField}): React.JSX.Elem
     const value = field.getValue() as ISelectValue | undefined;
 
     const onChange = useCallback(
-        (value: ISelectValue) => {
-            field.setValue(value);
+        (value: ISelectValue, options: ISelectNode | ISelectNode[]) => {
+            field.setValue(fieldProps.fullItemValue ? options: value);
             field.setDirty(true);
         },
         [field]
