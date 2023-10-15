@@ -1,9 +1,8 @@
 import React from "react";
 import {DForm} from "@src/dForm";
-import {IDFormFieldProps} from "@src/dForm";
-import {PasswordField} from "@src/dForm/fields/password/passwordField";
+import {IPasswordFieldProps, PasswordField} from "@src/dForm/fields/password/passwordField";
 
-type IComponent = IDFormFieldProps
+type IComponent = IPasswordFieldProps
 
 /** DForm Password component */
 export const PasswordComponent = (props: IComponent): React.JSX.Element => <DForm

@@ -1,10 +1,9 @@
 import React from "react";
 import {DForm} from "@src/dForm";
-import {IDFormFieldProps} from "@src/dForm";
-import {SelectField} from "@src/dForm/fields/select/selectField";
+import {ISelectFieldProps, SelectField} from "@src/dForm/fields/select/selectField";
 import {ISelectOptions} from "@src/select";
 
-type IComponent = IDFormFieldProps
+type IComponent = ISelectFieldProps
 
 const dataSet: ISelectOptions = [
     {

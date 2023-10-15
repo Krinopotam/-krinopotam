@@ -1,64 +1,40 @@
-/**
- * @TreeSelectComponent
- * @version 0.0.30.36
- * @link omegatester@gmail.com
- * @author Maksim Zaytsev
- * @license MIT
- */
+import React, {CSSProperties, useCallback, useEffect, useMemo, useSyncExternalStore} from "react";
+import {ITreeSelectFieldOnlyProps, TreeSelectField} from "@src/dForm/fields/treeSelect/treeSelectField";
+import {ITreeSelectProps, ITreeSelectValue, TreeSelect} from "@src/treeSelect";
+import {HelpersObjects} from "@krinopotam/js-helpers";
+import {IDFormFieldProps} from "@src/dForm";
 
-import {IDFormComponentProps, IDFormFieldProps} from './baseComponent';
-import {ITreeSelectProps, ITreeSelectValue, TreeSelect} from '@src/treeSelect';
-import React, {CSSProperties, useCallback, useEffect, useMemo} from 'react';
-import {HelpersObjects} from '@krinopotam/js-helpers';
-import {DModel} from '@src/dynamicForm';
+export const TreeSelectFieldRender = ({field}:{field:TreeSelectField}):React.JSX.Element =>{
+    useSyncExternalStore(field.subscribe.bind(field), field.getSnapshot.bind(field));
 
-export type {ITreeSelectValue, ITreeSelectNode, ITreeSelectPlainValue, ITreeSelectDeletePromise, ITreeSelectSourcePromise} from '@src/treeSelect';
+    const fieldProps = field.getProps();
 
-//region Types
-type IDFormFieldTreeSelectProps_ = ITreeSelectProps & IDFormFieldProps;
-
-// !used in configGenerator parsing. Don't use multi rows comments!
-export interface IDFormFieldTreeSelectProps extends Omit<IDFormFieldTreeSelectProps_, 'onReady'> {
-    /** Default value */
-    value?: ITreeSelectValue | string;
-
-    onReady?: (model: DModel) => void;
-}
-
-//endregion
-
-interface IDFormTreeSelectComponentProps extends IDFormComponentProps {
-    fieldProps: IDFormFieldTreeSelectProps;
-}
-
-export const TreeSelectComponent = ({formApi, fieldName, fieldProps}: IDFormTreeSelectComponentProps): React.JSX.Element => {
+    const value = field.getValue() as ITreeSelectValue | string;
     const treeProps = useSplitTreeSelectProps(fieldProps);
-    const value = formApi.model.getFieldValue(fieldName) as ITreeSelectValue | string;
-
+    
     const onChange = useCallback(
         (value: ITreeSelectValue) => {
-            formApi.model.setFieldValue(fieldName, value ?? null);
-            formApi.model.setFieldDirty(fieldName, true);
-
+            field.setValue( value ?? null)
+            field.setDirty(true)
             fieldProps.onChange?.(value);
         },
-        [fieldName, fieldProps, formApi.model]
+        [field, fieldProps]
     );
     const onBlur = useCallback(() => {
-        formApi.model.setFieldTouched(fieldName, true);
-    }, [fieldName, formApi.model]);
+        field.setTouched(true)
+    }, [field]);
 
     const onClear = useCallback(() => {
-        formApi.model.setFieldDirty(fieldName, true);
-        formApi.model.setFieldTouched(fieldName, true);
+        field.setDirty(true)
+        field.setTouched(true)
         fieldProps.onClear?.();
-    }, [fieldName, fieldProps, formApi.model]);
-
+    }, [field, fieldProps]);
+    
     useEffect(() => {
-        formApi.model.setFieldReady(fieldName, true);
-    }, [fieldName, formApi.model]);
+        field.setReady(true)
+    }, [field]);
 
-    const style: CSSProperties = {width: '100%', ...fieldProps.style};
+    const style: CSSProperties = {width: fieldProps.width ?? '100%', ...fieldProps.style};
 
     return (
         <TreeSelect
@@ -66,10 +42,10 @@ export const TreeSelectComponent = ({formApi, fieldName, fieldProps}: IDFormTree
             {...treeProps}
             autoFocus={fieldProps.autoFocus}
             defaultValueCallback={fieldProps.defaultValueCallback}
-            disabled={formApi.model.isFieldDisabled(fieldName)}
-            readOnly={formApi.model.isFieldReadOnly(fieldName)}
+            disabled={field.isDisabled()}
+            readOnly={field.isReadOnly()}
             value={value}
-            placeholder={fieldProps.placeholder ?? 'Выберите из списка'}
+            placeholder={fieldProps.placeholder ?? 'Choose'}
             allowClear={fieldProps.allowClear !== false}
             /** --- Callbacks --------------- */
             onChange={onChange}
@@ -80,7 +56,7 @@ export const TreeSelectComponent = ({formApi, fieldName, fieldProps}: IDFormTree
             onDataFetchError={fieldProps.onDataFetchError}
             onDataFetchSuccess={fieldProps.onDataFetchSuccess}
             onDelete={fieldProps.onDelete}
-            onReady={() => fieldProps.onReady?.(formApi.model)}
+            onReady={() => fieldProps.onReady?.(field)}
             onKeyUp={fieldProps.onKeyUp}
             onKeyDown={fieldProps.onKeyDown}
             onClick={fieldProps.onClick}
@@ -98,11 +74,11 @@ export const TreeSelectComponent = ({formApi, fieldName, fieldProps}: IDFormTree
             onTreeLoad={fieldProps.onTreeLoad}
         />
     );
-};
+}
 
-const useSplitTreeSelectProps = (props: IDFormFieldTreeSelectProps) => {
+const useSplitTreeSelectProps = (props: IDFormFieldProps) => {
     return useMemo((): ITreeSelectProps => {
-        const result = HelpersObjects.splitObject<IDFormFieldProps, ITreeSelectProps>(props, {
+        const result = HelpersObjects.splitObject<ITreeSelectFieldOnlyProps, ITreeSelectProps>(props, {
             component: true,
             helpClass: true,
             label: true,
@@ -130,8 +106,10 @@ const useSplitTreeSelectProps = (props: IDFormFieldTreeSelectProps) => {
             onTouchedStateChanged: true,
             onValidated: true,
             onValueChanged: true,
+            onReadyStateChanged: true,
+            rules: true,
         });
 
         return result[1] as ITreeSelectProps;
     }, [props]);
-};
+}

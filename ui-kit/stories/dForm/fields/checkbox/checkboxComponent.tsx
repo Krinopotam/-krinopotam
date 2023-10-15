@@ -1,9 +1,8 @@
 import React from 'react';
 import {DForm} from '@src/dForm';
-import {IDFormFieldProps} from '@src/dForm';
-import {CheckboxField} from '@src/dForm/fields/checkbox/checkboxField';
+import {CheckboxField, ICheckboxFieldProps} from '@src/dForm/fields/checkbox/checkboxField';
 
-type IComponent = IDFormFieldProps;
+type IComponent = ICheckboxFieldProps;
 
 /** DForm Checkbox component */
 export const CheckboxComponent = (props: IComponent): React.JSX.Element => (

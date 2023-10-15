@@ -1,9 +1,8 @@
 import React from "react";
 import {DForm} from "@src/dForm";
-import {TextAreaField} from "@src/dForm/fields/textArea/textAreaField";
-import {IDFormFieldProps} from "@src/dForm";
+import {ITextAreaFieldProps, TextAreaField} from "@src/dForm/fields/textArea/textAreaField";
 
-type IComponent = IDFormFieldProps
+type IComponent = ITextAreaFieldProps
 
 /** DForm Textarea component */
 export const TextAreaComponent = (props: IComponent): React.JSX.Element => <DForm

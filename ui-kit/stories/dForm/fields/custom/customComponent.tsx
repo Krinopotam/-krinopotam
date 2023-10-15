@@ -1,9 +1,8 @@
 import React from "react";
 import {DForm} from "@src/dForm";
-import {IDFormFieldProps} from "@src/dForm";
-import {CustomField} from "@src/dForm/fields/custom/customField";
+import {CustomField, ICustomFieldProps} from "@src/dForm/fields/custom/customField";
 
-type IComponent = IDFormFieldProps;
+type IComponent = ICustomFieldProps;
 
 /** DForm Custom component */
 export const CustomComponent = (props: IComponent): React.JSX.Element => <DForm

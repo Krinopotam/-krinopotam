@@ -1,8 +1,8 @@
 import React from "react";
-import {DForm, IDFormFieldProps} from "@src/dForm";
-import {NumberField} from "@src/dForm/fields/number/numberField";
+import {DForm} from "@src/dForm";
+import {INumberFieldProps, NumberField} from "@src/dForm/fields/number/numberField";
 
-type IComponent = IDFormFieldProps;
+type IComponent = INumberFieldProps;
 
 /** DForm Number component */
 export const NumberComponent = (props: IComponent): React.JSX.Element => <DForm

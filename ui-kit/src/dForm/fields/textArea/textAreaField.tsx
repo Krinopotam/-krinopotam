@@ -4,7 +4,7 @@ import {TextAreaFieldRender} from '@src/dForm/fields/textArea/textAreaFieldRende
 import {IInputFieldProps} from '@src/dForm/fields/input/inputField';
 import {TextAreaProps} from 'antd/es/input/TextArea';
 
-export interface IDFormTextAreaFieldProps extends IInputFieldProps {
+export interface ITextAreaFieldProps extends IInputFieldProps {
     /** Height auto size feature, can be set to true | false or an object ( minRows: 2, maxRows: 6 ) */
     autoSize?: TextAreaProps['autoSize'];
 
@@ -21,7 +21,7 @@ export interface IDFormTextAreaFieldProps extends IInputFieldProps {
     wrap?: 'soft | hard';
 }
 
-export class TextAreaField extends BaseField<IDFormTextAreaFieldProps> {
+export class TextAreaField extends BaseField<ITextAreaFieldProps> {
     protected render() {
         return <TextAreaFieldRender field={this} />;
     }

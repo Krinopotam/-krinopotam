@@ -13,6 +13,9 @@ import {ICheckboxFieldProps} from '@src/dForm/fields/checkbox/checkboxField';
 import {IUploadDraggerFieldProps} from '@src/dForm/fields/fileDrop/uploadDraggerField';
 import {ISelectFieldProps} from '@src/dForm/fields/select/selectField';
 import {ITabulatorGridFieldProps} from '@src/dForm/fields/tabulatorGrid/tabulatorGridField';
+import {ISwitchFieldProps} from '@src/dForm/fields/switch/switchField';
+import {ITextAreaFieldProps} from '@src/dForm/fields/textArea/textAreaField';
+import {ITreeSelectFieldProps} from '@src/dForm/fields/treeSelect/treeSelectField';
 
 export {DForm} from './dForm';
 export type {IDFormCallbacks, IDFormProps, IDFormDataSet, IDFormDataSourcePromise, IDFormMode, IDFormFieldValidationRules} from './dForm';
@@ -37,6 +40,9 @@ export type IDFormFieldProps =
     | IUploadDraggerFieldProps
     | ISelectFieldProps
     | ITabulatorGridFieldProps
+    | ITextAreaFieldProps
+    | ISwitchFieldProps
+    | ITreeSelectFieldProps
     | IAnyFieldProps;
 
 /** Fields properties collection */

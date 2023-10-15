@@ -3,7 +3,7 @@ import React from "react";
 import {TabulatorGridFieldRender} from "@src/dForm/fields/tabulatorGrid/tabulatorGridFieldRender";
 import {ITabulatorProps} from "@src/tabulatorBase";
 import {IFormButton, IFormButtons} from "@src/buttonsRow";
-import {IDFormModalProps} from "@src/dynamicFormModal";
+import {IDFormModalProps} from "@src/dFormModal";
 import {IGridApi, IGridDataSourcePromise, IGridDeletePromise, IGridRowData} from "@src/tabulatorGrid";
 
 export interface ITabulatorGridFieldProps extends IBaseFieldProps<TabulatorGridField> {

@@ -1,10 +1,9 @@
 import React from "react";
 import {DForm} from "@src/dForm";
-import {IDFormFieldProps} from "@src/dForm";
 import {InputField} from "@src/dForm/fields/input/inputField";
-import {DividerField} from "@src/dForm/fields/divider/dividerField";
+import {DividerField, IDividerFieldProps} from "@src/dForm/fields/divider/dividerField";
 
-type IComponent = IDFormFieldProps;
+type IComponent = IDividerFieldProps;
 
 /** DForm Divider component */
 export const DividerComponent = (props: IComponent): React.JSX.Element => <DForm

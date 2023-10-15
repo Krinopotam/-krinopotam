@@ -6,14 +6,15 @@ import React, {useCallback} from 'react';
 
 import dayjs from 'dayjs';
 import {Button} from '@src/button';
-import {IDFormModalApi, DFormModal, IDFormModalProps} from '@src/dynamicFormModal';
+import {IDFormModalApi, DFormModal, IDFormModalProps} from '@src/dFormModal';
 import {IRuleType} from '@src/dynamicForm/validators/baseValidator';
 import {IDFormFieldInputProps, InputComponent} from '@src/dynamicForm/components/inputComponent';
-import {DateTimeComponent, IDFormFieldDateTimeProps} from '@src/dynamicForm/components/dateTimeComponent';
 import {IDFormFieldTreeSelectProps, ITreeSelectNode, TreeSelectComponent} from '@src/dynamicForm/components/treeSelectComponent';
-import {IDFormFieldPasswordProps, PasswordComponent} from '@src/dynamicForm/components/passwordComponent';
 import {IDFormFieldSwitchProps, SwitchComponent} from '@src/dynamicForm/components/switchComponent';
-import {IDFormFieldTabulatorGridProps, TabulatorGridComponent} from '@src/dynamicForm/components/tabulatorGridComponent';
+import {InputField} from "@src/dForm/fields/input/inputField";
+import {DateTimeField} from "@src/dForm/fields/dateTime/dateTimeField";
+import {PasswordField} from "@src/dForm/fields/password/passwordField";
+import {TabulatorGridField} from "@src/dForm/fields/tabulatorGrid/tabulatorGridField";
 
 dayjs.locale('ru');
 
@@ -88,11 +89,11 @@ const formProps: IDFormModalProps = {
 
     fieldsProps: {
         /** Tab1 */
-        profess: {component: InputComponent, tab: 'Tab1', label: 'Профессия', showCount: true, maxLength: 50, inlineGroup: 'row1'} as IDFormFieldInputProps,
-        specialty: {component: InputComponent, tab: 'Tab1', label: 'Специализация', value: 'дефолтная специализация', dependsOn: ['profess'], inlineGroup: 'row1'} as IDFormFieldInputProps,
-        assignDate: {component: DateTimeComponent, tab: 'Tab1', label: 'Дата назначения'} as IDFormFieldDateTimeProps,
-        name: {component: InputComponent, tab: 'Tab1', label: 'Имя пользователя', value: 'дефолтное имя пользователя', dependsOn: ['profess'], inlineGroup: 'row2'} as IDFormFieldInputProps,
-        login: {component: InputComponent, tab: 'Tab1', label: 'Логин', value: 'дефолтный логин', dependsOn: ['name', 'specialty'], inlineGroup: 'row2'} as IDFormFieldInputProps,
+        profess: {component: InputField, tab: 'Tab1', label: 'Профессия', showCount: true, maxLength: 50, inlineGroup: 'row1'},
+        specialty: {component: InputField, tab: 'Tab1', label: 'Специализация', value: 'дефолтная специализация', dependsOn: ['profess'], inlineGroup: 'row1'},
+        assignDate: {component: DateTimeField, tab: 'Tab1', label: 'Дата назначения'},
+        name: {component: InputField, tab: 'Tab1', label: 'Имя пользователя', value: 'дефолтное имя пользователя', dependsOn: ['profess'], inlineGroup: 'row2'},
+        login: {component: InputField, tab: 'Tab1', label: 'Логин', value: 'дефолтный логин', dependsOn: ['name', 'specialty'], inlineGroup: 'row2'},
         departments: {
             component: TreeSelectComponent,
             tab: 'Tab1',
@@ -136,11 +137,11 @@ const formProps: IDFormModalProps = {
             // }
         } as unknown as IDFormFieldTreeSelectProps,
         /** Tab2 */
-        password: {component: PasswordComponent, tab: 'Таб 2', label: 'Пароль'} as IDFormFieldPasswordProps,
+        password: {component: PasswordField, tab: 'Таб 2', label: 'Пароль'} ,
         isLocked: {component: SwitchComponent, tab: 'Tab 2', label: 'Заблокировано', checkedChildren: 'Вкл', unCheckedChildren: 'Выкл'} as IDFormFieldSwitchProps,
         /** Tab3 */
         permissions: {
-            component: TabulatorGridComponent,
+            component: TabulatorGridField,
             tab: 'Таб 3',
             label: 'Полномочия',
             confirmDelete: true,
@@ -166,7 +167,7 @@ const formProps: IDFormModalProps = {
                     field: 'address',
                 },
             ],
-        } as IDFormFieldTabulatorGridProps,
+        } ,
     },
 };
 
