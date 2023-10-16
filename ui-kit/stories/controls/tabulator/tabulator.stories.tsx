@@ -6,7 +6,7 @@ import React from "react";
 import {TabulatorGridColumns, TabulatorTreeDataset} from "../../datasets/tabulator";
 
 export default {
-    title: 'Controls/Tabulator',
+    title: 'Controls/TabulatorBase',
     component: Tabulator,
     tags: ['autodocs'],
     parameters: {
