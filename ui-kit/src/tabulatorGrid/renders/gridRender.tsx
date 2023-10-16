@@ -35,10 +35,6 @@ const GridRender_ = ({
             {...tabulatorProps}
             onTableRef={onTableRef}
             gridId={gridApi.getGridId()}
-            dataTree={gridProps.dataTree}
-            dataTreeChildField={gridProps.dataTreeChildField}
-            dataTreeParentField={gridProps.dataTreeParentField}
-            dataTreeChildIndent={gridProps.dataTreeChildIndent}
             dataTreeFilter={true}
             data={gridApi.getDataSet()}
             containerClassName={gridProps.className}

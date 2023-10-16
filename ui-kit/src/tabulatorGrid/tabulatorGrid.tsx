@@ -24,18 +24,6 @@ export interface IGridProps_ {
     /** Grid mode: local or remote*/
     gridMode?: 'local' | 'remote';
 
-    /** Tree view mode */
-    dataTree?: boolean;
-
-    /** The dataTree children field name */
-    dataTreeChildField?: string;
-
-    /** The parent key field name */
-    dataTreeParentField?: string | number;
-
-    /** The dataTree children indentation */
-    dataTreeChildIndent?: number;
-
     /** Grid data set */
     dataSet?: IGridRowData[];
 
@@ -116,10 +104,6 @@ const useSplitTabulatorProps = (props: IGridProps) => {
             apiRef: true,
             id: true,
             gridMode: true,
-            dataTree: true,
-            dataTreeChildField: true,
-            dataTreeParentField: true,
-            dataTreeChildIndent: true,
             dataSet: true,
             className: true,
             buttons: true,
