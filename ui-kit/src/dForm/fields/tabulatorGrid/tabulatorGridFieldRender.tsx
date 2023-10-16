@@ -1,11 +1,13 @@
 import React, {useCallback, useMemo, useRef, useState, useSyncExternalStore} from 'react';
-import {TabulatorGridField} from '@src/dForm/fields/tabulatorGrid/tabulatorGridField';
-import TabulatorGrid, {IGridApi, IGridRowData} from '@src/tabulatorGrid';
+import {ITabulatorGridFieldOnlyProps, ITabulatorGridFieldProps, TabulatorGridField} from '@src/dForm/fields/tabulatorGrid/tabulatorGridField';
+import TabulatorGrid, {IGridApi, IGridRowData, ITabulatorProps} from '@src/tabulatorGrid';
+import {HelpersObjects} from '@krinopotam/js-helpers';
 
 export const TabulatorGridFieldRender = ({field}: {field: TabulatorGridField}): React.JSX.Element => {
     useSyncExternalStore(field.subscribe.bind(field), field.getSnapshot.bind(field));
 
     const fieldProps = field.getProps();
+    const tabulatorProps = useSplitTabulatorProps(fieldProps);
 
     const value = field.getValue() as IGridRowData[];
 
@@ -56,52 +58,12 @@ export const TabulatorGridFieldRender = ({field}: {field: TabulatorGridField}): 
     return useMemo(() => {
         return (
             <TabulatorGrid
-                id={fieldProps.id}
+                {...tabulatorProps}
                 apiRef={gridApi}
-                gridMode={fieldProps.gridMode}
-                dataTree={fieldProps.dataTree}
-                dataTreeChildField={fieldProps.dataTreeChildField}
-                dataTreeParentField={fieldProps.dataTreeParentField}
-                dataTreeChildIndent={fieldProps.dataTreeChildIndent}
-                columns={fieldProps.columns ?? []}
                 dataSet={curDataSet}
-                className={fieldProps.className}
-                buttons={fieldProps.buttons}
                 readOnly={fieldProps.readOnly}
-                editFormProps={fieldProps.editFormProps}
-                noHover={fieldProps.noHover}
-                rowDeleteMessage={fieldProps.rowDeleteMessage}
-                confirmDelete={fieldProps.confirmDelete}
                 placeholder={fieldProps.placeholder}
-                layout={fieldProps.layout}
-                layoutColumnsOnNewData={fieldProps.layoutColumnsOnNewData}
                 width={fieldProps.width}
-                maxWidth={fieldProps.maxWidth}
-                minWidth={fieldProps.minWidth}
-                height={fieldProps.height}
-                minHeight={fieldProps.minHeight}
-                maxHeight={fieldProps.maxHeight}
-                multiSelect={fieldProps.multiSelect}
-                resizableColumnFit={fieldProps.resizableColumnFit}
-                rowHeight={fieldProps.rowHeight}
-                //resizableRows={fieldProps.resizableRows}
-                movableColumns={fieldProps.movableColumns}
-                movableRows={fieldProps.movableRows}
-                groupBy={fieldProps.groupBy}
-                persistence={fieldProps.persistence}
-                persistenceID={fieldProps.persistenceID}
-                persistentLayout={fieldProps.persistentLayout}
-                persistentFilter={fieldProps.persistentFilter}
-                persistentSort={fieldProps.persistentSort}
-                frozenRows={fieldProps.frozenRows}
-                frozenRowsField={fieldProps.frozenRowsField}
-                initialFilter={fieldProps.initialFilter}
-                initialSort={fieldProps.initialSort}
-                initialHeaderFilter={fieldProps.initialHeaderFilter}
-                headerVisible={fieldProps.headerVisible}
-                columnDefaults={fieldProps.columnDefaults}
-                ajaxRequestFunc={fieldProps.ajaxRequestFunc}
-                updateColumnDefinition={fieldProps.updateColumnDefinition}
                 /** Callbacks*/
                 onMenuVisibilityChanged={(isVisible: boolean, gridApi: IGridApi) => fieldProps?.onMenuVisibilityChanged?.(isVisible, gridApi, field)}
                 onDataSetChange={(dataSet: IGridRowData[] | undefined, gridApi: IGridApi) => onDataSetChange?.(dataSet, gridApi, field)}
@@ -115,5 +77,49 @@ export const TabulatorGridFieldRender = ({field}: {field: TabulatorGridField}): 
                 onDelete={(selectedRows: IGridRowData[], gridApi: IGridApi) => fieldProps?.onDelete?.(selectedRows, gridApi, field)}
             />
         );
-    }, [fieldProps, gridApi, curDataSet, field, onDataSetChange, onDataFetch, onDataFetchSuccess]);
+    }, [tabulatorProps, gridApi, curDataSet, fieldProps, field, onDataSetChange, onDataFetch, onDataFetchSuccess]);
+};
+
+const useSplitTabulatorProps = (props: ITabulatorGridFieldProps) => {
+    return useMemo((): ITabulatorProps => {
+        const result = HelpersObjects.splitObject<ITabulatorGridFieldOnlyProps, ITabulatorProps>(props, {
+            value: true,
+            onMenuVisibilityChanged: true,
+            onDataSetChange: true,
+            onDataFetch: true,
+            onDataFetchSuccess: true,
+            onDataFetchError: true,
+            onDataFetchCompleted: true,
+            onSelectionChange: true,
+            onDelete: true,
+            readOnly: true,
+            onValueChanged: true,
+            width: true,
+            component: true,
+            rules: true,
+            onReadyStateChanged: true,
+            autoFocus: true,
+            dependsOn: true,
+            disabled: true,
+            helpClass: true,
+            hidden: true,
+            label: true,
+            inlineGroup: true,
+            onDirtyStateChanged: true,
+            onDisabledStateChanged: true,
+            onErrorChanged: true,
+            onHiddenStateChanged: true,
+            onLabelChanged: true,
+            onReadOnlyStateChanged: true,
+            placeholder: true,
+            onTouchedStateChanged: true,
+            onValidated: true,
+            requiredMark: true,
+            rowStyle: true,
+            style: true,
+            tooltip: true,
+        });
+
+        return result[1];
+    }, [props]);
 };
