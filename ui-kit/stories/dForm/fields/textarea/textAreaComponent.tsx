@@ -4,7 +4,7 @@ import {ITextAreaFieldProps, TextAreaField} from "@src/dForm/fields/textArea/tex
 
 type IComponent = ITextAreaFieldProps
 
-/** DForm Textarea component */
+/** DForm Textarea field */
 export const TextAreaComponent = (props: IComponent): React.JSX.Element => <DForm
     buttons={null}
     fieldsProps={

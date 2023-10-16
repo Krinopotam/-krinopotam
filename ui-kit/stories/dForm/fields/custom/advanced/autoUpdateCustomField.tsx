@@ -6,7 +6,7 @@ import {CustomField} from '@src/dForm/fields/custom/customField';
 
 type IComponent = IDFormFieldProps;
 
-/** DynamicForm Custom component */
+/** DForm Custom field auto-updating */
 export const AutoUpdateCustomField = (props: IComponent): React.JSX.Element => (
     <DForm
         buttons={null}

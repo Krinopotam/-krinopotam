@@ -4,6 +4,6 @@ import {ISwitchFieldProps, SwitchField} from '@src/dForm/fields/switch/switchFie
 
 type IComponent = ISwitchFieldProps;
 
-/** DForm Switch component */
+/** DForm Switch field */
 export const SwitchComponent = (props: IComponent): React.JSX.Element => <DForm buttons={null} fieldsProps={{field1: {...props, component: SwitchField}}} />;
 export default SwitchComponent;

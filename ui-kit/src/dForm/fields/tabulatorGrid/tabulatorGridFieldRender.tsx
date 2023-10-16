@@ -100,6 +100,9 @@ export const TabulatorGridFieldRender = ({field}: {field: TabulatorGridField}): 
                 initialHeaderFilter={fieldProps.initialHeaderFilter}
                 headerVisible={fieldProps.headerVisible}
                 columnDefaults={fieldProps.columnDefaults}
+                ajaxRequestFunc={fieldProps.ajaxRequestFunc}
+                updateColumnDefinition={fieldProps.updateColumnDefinition}
+                /** Callbacks*/
                 onMenuVisibilityChanged={(isVisible: boolean, gridApi: IGridApi) => fieldProps?.onMenuVisibilityChanged?.(isVisible, gridApi, field)}
                 onDataSetChange={(dataSet: IGridRowData[] | undefined, gridApi: IGridApi) => onDataSetChange?.(dataSet, gridApi, field)}
                 onDataFetch={(gridApi: IGridApi) => onDataFetch?.(gridApi, field)}

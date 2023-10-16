@@ -4,7 +4,7 @@ import {DateTimeField, IDateTimeFieldProps} from "@src/dForm/fields/dateTime/dat
 
 type IComponent = IDateTimeFieldProps;
 
-/** DForm DateTime component */
+/** DForm DateTime field */
 export const DateTimeComponent = (props: IComponent): React.JSX.Element => <DForm
     buttons={null}
     fieldsProps={

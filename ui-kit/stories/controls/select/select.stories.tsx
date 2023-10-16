@@ -1,10 +1,11 @@
 // noinspection DuplicatedCode
 
 import type {Meta, StoryObj} from '@storybook/react';
-import {ISelectOptions, Select} from '@src/select/select';
 import React from 'react';
 import type {CustomTagProps} from 'rc-select/lib/BaseSelect';
 import {Tag} from 'antd';
+import {SelectDataSet} from "../../datasets/select";
+import {Select} from "@src/select";
 
 export default {
     title: 'Controls/Select',
@@ -20,24 +21,8 @@ export default {
 
 type Story = StoryObj<typeof Select>;
 
-const dataSet: ISelectOptions = [
-    {
-        id: '01',
-        label: 'Аналитика',
-    },
-
-    {
-        id: '02',
-        label: 'Продажи',
-    },
-    {
-        id: '03',
-        label: 'Закупки',
-    },
-];
-
 const commonArgs: Story['args'] = {
-    dataSet: dataSet,
+    dataSet: SelectDataSet,
     style: {width: 400},
     placeholder: 'Select value',
 };

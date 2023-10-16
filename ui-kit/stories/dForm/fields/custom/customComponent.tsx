@@ -4,7 +4,7 @@ import {CustomField, ICustomFieldProps} from "@src/dForm/fields/custom/customFie
 
 type IComponent = ICustomFieldProps;
 
-/** DForm Custom component */
+/** DForm Custom field */
 export const CustomComponent = (props: IComponent): React.JSX.Element => <DForm
     buttons={null}
     fieldsProps={

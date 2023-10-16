@@ -70,6 +70,10 @@ const GridRender_ = (
             headerVisible={gridProps.headerVisible !== false}
             sortMode={gridProps.gridMode}
             filterMode={gridProps.gridMode}
+
+            ajaxRequestFunc={gridProps.ajaxRequestFunc}
+            updateColumnDefinition={gridProps.updateColumnDefinition}
+
             /*rowFormatter={(row: RowComponent) => {
                     const table = row.getTable() as ITabulator;
                     if (!tableBuilt) return;

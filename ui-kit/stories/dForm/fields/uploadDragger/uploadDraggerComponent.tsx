@@ -4,7 +4,7 @@ import {IUploadDraggerFieldProps, UploadDraggerField} from '@src/dForm/fields/fi
 
 type IComponent = IUploadDraggerFieldProps;
 
-/** DForm Input component */
+/** DForm Input field */
 export const UploadDraggerComponent = (props: IComponent): React.JSX.Element => (
     <DForm buttons={null} fieldsProps={{field1: {...props, component: UploadDraggerField}}} />
 );

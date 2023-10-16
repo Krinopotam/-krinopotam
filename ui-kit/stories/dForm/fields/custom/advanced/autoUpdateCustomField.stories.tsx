@@ -5,7 +5,7 @@ import AutoUpdateCustomField from "./autoUpdateCustomField";
 
 
 export default {
-    title: 'DForm/Advanced Examples/Auto update custom field',
+    title: 'DForm/Fields/Custom/Auto update custom field',
     component: AutoUpdateCustomField,
     tags: ['autodocs'],
     //excludeStories:/.*/,

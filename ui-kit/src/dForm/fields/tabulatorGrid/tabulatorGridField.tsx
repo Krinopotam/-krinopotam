@@ -1,7 +1,7 @@
 import {BaseField, IBaseFieldProps,} from "@src/dForm/fields/base/baseField";
 import React from "react";
 import {TabulatorGridFieldRender} from "@src/dForm/fields/tabulatorGrid/tabulatorGridFieldRender";
-import {ITabulatorProps} from "@src/tabulatorBase";
+import {ITabulator, ITabulatorProps} from "@src/tabulatorBase";
 import {IFormButton, IFormButtons} from "@src/buttonsRow";
 import {IDFormModalProps} from "@src/dFormModal";
 import {IGridApi, IGridDataSourcePromise, IGridDeletePromise, IGridRowData} from "@src/tabulatorGrid";
@@ -128,6 +128,11 @@ export interface ITabulatorGridFieldProps extends IBaseFieldProps<TabulatorGridF
 
     /** Default column properties */
     columnDefaults?: ITabulatorProps['columnDefaults'];
+
+    /** Ajax request handler */
+    ajaxRequestFunc?: ITabulatorProps['ajaxRequestFunc'];
+
+    updateColumnDefinition?:  ITabulatorProps['updateColumnDefinition'];
 
     // --- callbacks -----------------------------------------------------
 

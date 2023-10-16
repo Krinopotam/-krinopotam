@@ -4,7 +4,7 @@ import {INumberFieldProps, NumberField} from "@src/dForm/fields/number/numberFie
 
 type IComponent = INumberFieldProps;
 
-/** DForm Number component */
+/** DForm Number field */
 export const NumberComponent = (props: IComponent): React.JSX.Element => <DForm
     buttons={null}
     fieldsProps={

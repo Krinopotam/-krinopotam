@@ -4,7 +4,7 @@ import {IInputFieldProps, InputField} from "@src/dForm/fields/input/inputField";
 
 type IComponent = IInputFieldProps
 
-/** DForm Input component */
+/** DForm Input field */
 export const InputComponent = (props: IComponent): React.JSX.Element => <DForm
     buttons={null}
     fieldsProps={

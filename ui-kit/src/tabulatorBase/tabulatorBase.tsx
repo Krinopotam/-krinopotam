@@ -46,6 +46,7 @@ export interface ITabulator extends _ITabulator {
     /**  Tabulator property type correction */
     updateColumnDefinition: (column: ColumnLookup, definition: Partial<ColumnDefinition>) => Promise<void>
 
+    /** Ajax request handler */
     ajaxRequestFunc?: (url: string, config: IAjaxConfig, params: IRequestProps) => Promise<{ data: Record<string, unknown>[], last_page: number }>;
 }
 
@@ -95,6 +96,7 @@ export interface ITabulatorProps extends Omit<ITabulator['options'], 'footerElem
     /** If set to true, then when you resize a column its neighbouring column has the opposite resize applied to keep to total width of columns the same */
     resizableColumnFit?: boolean;
 
+    /** Ajax request handler */
     ajaxRequestFunc?: ITabulator['ajaxRequestFunc'];
 
     updateColumnDefinition?: ITabulator['updateColumnDefinition'];

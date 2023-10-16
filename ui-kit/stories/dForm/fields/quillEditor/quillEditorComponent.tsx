@@ -5,7 +5,7 @@ import {IQuillEditorProps} from '@src/quillEditor';
 
 type IComponent = IQuillEditorFieldProps;
 
-/** DForm QuillEditor component */
+/** DForm QuillEditor field */
 export const QuillEditorComponent = (props: IComponent): React.JSX.Element => (
     <DForm buttons={null} fieldsProps={{field1: {...props, component: QuillEditorField}}} />
 );
