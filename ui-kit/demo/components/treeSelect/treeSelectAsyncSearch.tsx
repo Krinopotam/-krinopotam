@@ -1,10 +1,10 @@
 // noinspection DuplicatedCode
 
 import React from 'react';
-import {DForm, IDFormProps} from '@src/dynamicForm';
+import {DForm, IDFormProps} from '@src/dForm';
 import {ITreeSelectSourcePromise} from '@src/treeSelect'
 import {HelpersObjects} from "@krinopotam/js-helpers";
-import {IDFormFieldTreeSelectProps, TreeSelectComponent} from "@src/dynamicForm/components/treeSelectComponent";
+import {TreeSelectField} from "@src/dForm/fields/treeSelect/treeSelectField";
 
 
 /*Description Start*/
@@ -154,10 +154,10 @@ const formProps: IDFormProps = {
     confirmChanges: true,
     fieldsProps: {
         departments: {
-            component: TreeSelectComponent, label: 'Подразделения', fetchMode: 'onUse', noCacheFetchedData: true, minSearchLength: 1, onDataFetch: (search:string) => {
+            component: TreeSelectField, label: 'Подразделения', fetchMode: 'onUse', noCacheFetchedData: true, minSearchLength: 1, onDataFetch: (search:string) => {
                 return asyncFetch(search) as ITreeSelectSourcePromise;
             }
-        } as unknown as IDFormFieldTreeSelectProps,
+        } ,
     },
     buttons: null,
 };

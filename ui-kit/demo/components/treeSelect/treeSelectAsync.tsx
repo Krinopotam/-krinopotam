@@ -1,8 +1,8 @@
 // noinspection DuplicatedCode
 
 import React from 'react';
-import {DForm, IDFormProps} from '@src/dynamicForm';
-import {IDFormFieldTreeSelectProps, TreeSelectComponent} from "@src/dynamicForm/components/treeSelectComponent";
+import {DForm, IDFormProps} from '@src/dForm';
+import {TreeSelectField} from "@src/dForm/fields/treeSelect/treeSelectField";
 
 const dataSet = [
     {
@@ -111,7 +111,7 @@ const formProps: IDFormProps = {
     confirmChanges: true,
     fieldsProps: {
         departments: {
-            component: TreeSelectComponent, label: 'Подразделения', fetchMode: 'onUse', noCacheFetchedData: true, onDataFetch: () => {
+            component: TreeSelectField, label: 'Подразделения', fetchMode: 'onUse', noCacheFetchedData: true, onDataFetch: () => {
                 return new Promise((resolve, reject) => {
                     setTimeout(() => {
                         if (Math.random() < 0.0) reject({message: 'Ошибка загрузки данных', code: 400});
@@ -119,7 +119,7 @@ const formProps: IDFormProps = {
                     }, 2000);
                 });
             }
-        } as unknown as IDFormFieldTreeSelectProps,
+        } ,
     },
     buttons: null,
 };

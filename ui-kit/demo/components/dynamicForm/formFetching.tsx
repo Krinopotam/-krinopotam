@@ -1,16 +1,16 @@
 // noinspection DuplicatedCode
 
 import React from 'react';
-import {DForm, IDFormProps} from '@src/dynamicForm';
-import {IDFormFieldInputProps, InputComponent} from '@src/dynamicForm/components/inputComponent';
+import {DForm, IDFormProps} from '@src/dForm';
+import {InputField} from "@src/dForm/fields/input/inputField";
 
 const formProps: IDFormProps = {
     formId: 'Test form',
     formMode: 'update',
     confirmChanges: true,
     fieldsProps: {
-        position: {component: InputComponent, label: 'Должность'} as IDFormFieldInputProps,
-        department: {component: InputComponent, label: 'Подразделение'} as IDFormFieldInputProps,
+        position: {component: InputField, label: 'Должность'},
+        department: {component: InputField, label: 'Подразделение'},
     },
 
     onDataFetch: () => {

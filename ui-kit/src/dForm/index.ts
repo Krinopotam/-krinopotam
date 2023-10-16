@@ -18,7 +18,7 @@ import {ITextAreaFieldProps} from '@src/dForm/fields/textArea/textAreaField';
 import {ITreeSelectFieldProps} from '@src/dForm/fields/treeSelect/treeSelectField';
 
 export {DForm} from './dForm';
-export type {IDFormCallbacks, IDFormProps, IDFormDataSet, IDFormDataSourcePromise, IDFormMode, IDFormFieldValidationRules} from './dForm';
+export type {IDFormCallbacks, IDFormProps, IDFormDataSet, IDFormDataSourcePromise, IDFormMode, IDFormValidationRules} from './dForm';
 
 export type {IDFormApi} from './hooks/api';
 

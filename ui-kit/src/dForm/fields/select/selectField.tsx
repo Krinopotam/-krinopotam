@@ -36,7 +36,7 @@ export interface ISelectFieldProps extends IBaseFieldProps<SelectField> {
     /** Customize node label, value, options field name */
     fieldNames?: SelectProps['fieldNames'];
 
-    /** If true, filter options by input, if function, filter options against it. */
+    /** If true, filter options by input, if value is function, filter options against it. */
     filterOption?: ISelectProps['filterOption'];
 
     /** Sort function for search options sorting, see Array sort compareFunction */

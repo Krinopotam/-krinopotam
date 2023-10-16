@@ -9,8 +9,8 @@
     // language=text
     const source = `
 import React from 'react';
-import {DForm, IDFormProps} from @krinopotam/ui-kit/dynamicForm';
-import {IDFormFieldTreeSelectProps, TreeSelectComponent} from @krinopotam/ui-kit/dynamicForm/components/treeSelectComponent";
+import {DForm, IDFormProps} from @krinopotam/ui-kit/dForm';
+import {TreeSelectField} from @krinopotam/ui-kit/dForm/fields/treeSelect/treeSelectField";
 const dataSet = [
     {
         id: '01',
@@ -117,7 +117,7 @@ const formProps: IDFormProps = {
     confirmChanges: true,
     fieldsProps: {
         departments: {
-            component: TreeSelectComponent, label: 'Подразделения', fetchMode: 'onUse', noCacheFetchedData: true, onDataFetch: () => {
+            component: TreeSelectField, label: 'Подразделения', fetchMode: 'onUse', noCacheFetchedData: true, onDataFetch: () => {
                 return new Promise((resolve, reject) => {
                     setTimeout(() => {
                         if (Math.random() < 0.0) reject({message: 'Ошибка загрузки данных', code: 400});
@@ -125,7 +125,7 @@ const formProps: IDFormProps = {
                     }, 2000);
                 });
             }
-        } as unknown as IDFormFieldTreeSelectProps,
+        } ,
     },
     buttons: null,
 };

@@ -247,21 +247,6 @@ export class TabsField extends BaseField<ITabsFieldProps> {
 
     //region Field methods
     /**
-     * Handling an erroneous TabField value get
-     */
-    getValue() {
-        console.warn("TabField can't have values");
-        return undefined;
-    }
-
-    /**
-     * Handling an erroneous TabField value setting
-     */
-    setValue() {
-        console.error("TabField can't have values");
-    }
-
-    /**
      * Sets a disabled status to the field
      * @param value - disabled status
      * @param noEvents - do not emit onDisabledStateChanged and onTabDisabledStateChanged callbacks

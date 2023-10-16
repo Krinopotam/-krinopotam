@@ -9,7 +9,7 @@ import {UploadDraggerFieldRender} from '@src/dForm/fields/fileDrop/uploadDragger
 export interface IUploadDraggerFieldProps extends IBaseFieldProps<UploadDraggerField> {
     /** Default list of files that have been uploaded*/
     value?: Array<UploadFile<unknown>>;
-    /** File types that can be accepted (See html input accept Attribute) */
+    /** File types that can be accepted (See html input "accept" Attribute) */
     accept?: string;
     /** Uploading URL/promise */
     action?: string | ((file: RcFile) => string) | ((file: RcFile) => Promise<string>);

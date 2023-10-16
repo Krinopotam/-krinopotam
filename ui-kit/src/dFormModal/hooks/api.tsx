@@ -22,7 +22,7 @@ export interface IDFormModalApi extends IDFormApi {
     forceClose: () => void;
 }
 
-export type {IDFormApi} from '@src/dynamicForm/hooks/api'
+export type {IDFormApi} from '@src/dForm/hooks/api'
 
 export const useInitModalFormApi = (
     formId: string,

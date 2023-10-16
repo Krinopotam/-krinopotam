@@ -14,12 +14,12 @@ import {TabulatorGridField} from '@src/dForm/fields/tabulatorGrid/tabulatorGridF
 import {TreeSelectField} from '@src/dForm/fields/treeSelect/treeSelectField';
 import {SwitchField} from '@src/dForm/fields/switch/switchField';
 import {ITreeSelectNode} from '@src/treeSelect';
-import {IDFormFieldValidationRules} from '@src/dForm';
+import {IDFormValidationRules} from '@src/dForm';
 import {TabsField} from '@src/dForm/fields/tabs/tabsField';
 
 dayjs.locale('ru');
 
-const validationRules: IDFormFieldValidationRules = {
+const validationRules: IDFormValidationRules = {
     //password: [{type: 'string', rule: 'not-empty', message: 'Поле не должно быть пустым'}],
     profess: [{type: 'string', rule: 'not-empty', message: 'Поле не должно быть пустым'}],
     specialty: [{type: 'string', rule: 'not-empty', message: 'Поле не должно быть пустым'}],

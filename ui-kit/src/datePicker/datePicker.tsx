@@ -9,10 +9,9 @@
 import {DatePicker as AntDatePicker} from 'antd';
 import {DatePickerProps as AntDatePickerProps} from "antd/lib/date-picker";
 import 'antd/es/date-picker/style/index';
-import {Dayjs} from 'dayjs';
+import dayjs, {Dayjs} from 'dayjs';
 import {SharedTimeProps} from 'rc-picker/lib/panels/TimePanel/index';
 import React from "react";
-import {dayjs} from "@src/dynamicForm/components/dateTimeComponent";
 import {DisabledTime} from 'rc-picker/lib/interface';
 
 

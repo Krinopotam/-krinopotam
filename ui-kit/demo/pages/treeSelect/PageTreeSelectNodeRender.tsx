@@ -9,9 +9,10 @@
     // language=text
     const source = `
 import React from 'react';
-import {DForm, IDFormProps} from @krinopotam/ui-kit/dynamicForm';
-import {ITreeSelectNode, IDFormFieldTreeSelectProps, TreeSelectComponent} from @krinopotam/ui-kit/dynamicForm/components/treeSelectComponent';
-const dataSet: ITreeSelectNode[] = [
+import {DForm, IDFormProps} from @krinopotam/ui-kit/dForm';
+import {ITreeSelectFieldProps, TreeSelectField} from @krinopotam/ui-kit/dForm/fields/treeSelect/treeSelectField";
+import {ITreeSelectNode} from @krinopotam/ui-kit/treeSelect";
+const dataSet: ITreeSelectFieldProps['dataSet'] = [
     {
         id: '01',
         title: 'Департамент аналитики данных',
@@ -119,7 +120,7 @@ const dataSet: ITreeSelectNode[] = [
         ],
     },
 ];
-const titleRender: IDFormFieldTreeSelectProps['titleRender'] = (treeNode: ITreeSelectNode) => {
+const titleRender: ITreeSelectFieldProps['titleRender'] = (treeNode: ITreeSelectNode) => {
     return (
         <>
             {treeNode.title}
@@ -128,14 +129,14 @@ const titleRender: IDFormFieldTreeSelectProps['titleRender'] = (treeNode: ITreeS
         </>
     );
 };
-const labelRender: IDFormFieldTreeSelectProps['labelRender'] = (treeNode: ITreeSelectNode) => {
+const labelRender: ITreeSelectFieldProps['labelRender'] = (treeNode: ITreeSelectNode) => {
     return (
         <>
             {treeNode.title} <small style={{color: '#808080'}}>{treeNode.head ? '(' + treeNode.head + ')' : ''}</small>
         </>
     );
 };
-const filterTreeNode: IDFormFieldTreeSelectProps['filterTreeNode'] = (inputValue: string, treeNode: ITreeSelectNode) => {
+const filterTreeNode: ITreeSelectFieldProps['filterTreeNode'] = (inputValue: string, treeNode: ITreeSelectNode) => {
     const nodeString = (treeNode.title + ' (' + treeNode.head + ')').toLowerCase();
     return nodeString.indexOf(inputValue.toLowerCase()) >= 0;
 };
@@ -144,13 +145,13 @@ const formProps: IDFormProps = {
     confirmChanges: true,
     fieldsProps: {
         departments: {
-            component: TreeSelectComponent,
+            component: TreeSelectField,
             label: 'Подразделения',
             dataSet: dataSet,
             titleRender: titleRender, //node title render
             labelRender: labelRender, //selected value render
             filterTreeNode: filterTreeNode, //custom filter
-        } as IDFormFieldTreeSelectProps,
+        } ,
     },
     buttons: null,
 };

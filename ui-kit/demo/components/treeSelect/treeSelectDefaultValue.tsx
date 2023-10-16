@@ -1,8 +1,8 @@
 // noinspection DuplicatedCode
 
 import React from 'react';
-import {DForm, IDFormProps} from '@src/dynamicForm';
-import {IDFormFieldTreeSelectProps, TreeSelectComponent} from '@src/dynamicForm/components/treeSelectComponent';
+import {DForm, IDFormProps} from '@src/dForm';
+import {TreeSelectField} from "@src/dForm/fields/treeSelect/treeSelectField";
 
 const dataSet = [
     {
@@ -110,7 +110,7 @@ const formProps: IDFormProps = {
     formId: 'Test form',
     confirmChanges: true,
     fieldsProps: {
-        departments: {component: TreeSelectComponent, label: 'Подразделения', dataSet: dataSet, value: '03-03-01'} as IDFormFieldTreeSelectProps,
+        departments: {component: TreeSelectField, label: 'Подразделения', dataSet: dataSet, value: '03-03-01'},
     },
     formMode: 'create',
     buttons: null,

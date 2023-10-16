@@ -9,15 +9,15 @@
     // language=text
     const source = `
 import React from 'react';
-import {DForm, IDFormProps} from @krinopotam/ui-kit/dynamicForm';
-import {IDFormFieldInputProps, InputComponent} from @krinopotam/ui-kit/dynamicForm/components/inputComponent';
-import {IDFormFieldPasswordProps, PasswordComponent} from @krinopotam/ui-kit/dynamicForm/components/passwordComponent';
+import {DForm, IDFormProps} from @krinopotam/ui-kit/dForm';
+import {InputField} from @krinopotam/ui-kit/dForm/fields/input/inputField";
+import {PasswordField} from @krinopotam/ui-kit/dForm/fields/password/passwordField";
 const formProps: IDFormProps = {
     formId: 'Test form',
     confirmChanges: true,
     fieldsProps: {
-        login: {component: InputComponent, label: 'Логин'} as IDFormFieldInputProps,
-        password: {component: PasswordComponent, label: 'Пароль'} as IDFormFieldPasswordProps,
+        login: {component: InputField, label: 'Логин'},
+        password: {component: PasswordField, label: 'Пароль'},
     },
     onSubmit: () => {
         return new Promise((resolve, reject) => {

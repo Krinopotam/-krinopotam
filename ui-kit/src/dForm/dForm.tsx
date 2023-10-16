@@ -92,7 +92,7 @@ export interface IDFormProps extends IDFormCallbacks {
     unfilledForm?: boolean;
 
     /** Validation rules */
-    validationRules?: IDFormFieldValidationRules;
+    validationRules?: IDFormValidationRules;
 
     /** Should the form request confirmation before the form submitting or cancel, if the form data was changed by the user  */
     confirmChanges?: boolean;
@@ -118,7 +118,7 @@ export interface IDFormDataSet extends Record<string, unknown> {
 
 export type IDFormDataSourcePromise = TPromise<{ data: Record<string, unknown> }, { message: string; code: number }>;
 
-export type IDFormFieldValidationRules = Record<string, IRuleType[]>;
+export type IDFormValidationRules = Record<string, IRuleType[]>;
 
 
 //endregion

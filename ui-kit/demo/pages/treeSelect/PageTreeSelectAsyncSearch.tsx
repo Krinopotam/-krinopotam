@@ -9,19 +9,19 @@
     // language=text
     const source = `
 import React from 'react';
-import {DForm, IDFormProps} from @krinopotam/ui-kit/dynamicForm';
+import {DForm, IDFormProps} from @krinopotam/ui-kit/dForm';
 import {ITreeSelectSourcePromise} from @krinopotam/ui-kit/treeSelect'
 import {HelpersObjects} from "@krinopotam/js-helpers";
-import {IDFormFieldTreeSelectProps, TreeSelectComponent} from @krinopotam/ui-kit/dynamicForm/components/treeSelectComponent";
+import {TreeSelectField} from @krinopotam/ui-kit/dForm/fields/treeSelect/treeSelectField";
 const formProps: IDFormProps = {
     formId: 'Test form',
     confirmChanges: true,
     fieldsProps: {
         departments: {
-            component: TreeSelectComponent, label: 'Подразделения', fetchMode: 'onUse', noCacheFetchedData: true, minSearchLength: 1, onDataFetch: (search:string) => {
+            component: TreeSelectField, label: 'Подразделения', fetchMode: 'onUse', noCacheFetchedData: true, minSearchLength: 1, onDataFetch: (search:string) => {
                 return asyncFetch(search) as ITreeSelectSourcePromise;
             }
-        } as unknown as IDFormFieldTreeSelectProps,
+        } ,
     },
     buttons: null,
 };

@@ -1,9 +1,9 @@
 import React from 'react';
 import {DForm} from '@src/dForm';
-import {QuillEditorField} from '@src/dForm/fields/quillEditor/quillEditorField';
+import {IQuillEditorFieldProps, QuillEditorField} from '@src/dForm/fields/quillEditor/quillEditorField';
 import {IQuillEditorProps} from '@src/quillEditor';
 
-type IComponent = IQuillEditorProps;
+type IComponent = IQuillEditorFieldProps;
 
 /** DForm QuillEditor component */
 export const QuillEditorComponent = (props: IComponent): React.JSX.Element => (

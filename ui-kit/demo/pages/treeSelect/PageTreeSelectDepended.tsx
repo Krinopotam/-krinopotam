@@ -9,8 +9,8 @@
     // language=text
     const source = `
 import React from 'react';
-import {DForm, IDFormProps} from @krinopotam/ui-kit/dynamicForm';
-import {IDFormFieldTreeSelectProps, TreeSelectComponent} from @krinopotam/ui-kit/dynamicForm/components/treeSelectComponent";
+import {DForm, IDFormProps} from @krinopotam/ui-kit/dForm';
+import {ITreeSelectFieldProps, TreeSelectField} from @krinopotam/ui-kit/dForm/fields/treeSelect/treeSelectField';
 const departments = [
     {
         id: '01',
@@ -116,23 +116,28 @@ const formProps: IDFormProps = {
     formId: 'Test form',
     confirmChanges: true,
     fieldsProps: {
-        department: {component: TreeSelectComponent, label: 'Департамент', dataSet: departments} as IDFormFieldTreeSelectProps,
-        division: {component: TreeSelectComponent, label: 'Управления', dependsOn: ['department']} as IDFormFieldTreeSelectProps,
-    },
-    onFieldValueChanged: (fieldName, _value, _prevValue, formApi) => {
-        if (fieldName !== 'department') return;
-        const departmentValue = formApi.model.getFieldValue('department') as Record<'id', unknown>;
-        let newDataSet: IDFormFieldTreeSelectProps['dataSet'];
-        if (!departmentValue) newDataSet = [];
-        else if (departmentValue.id === '01') newDataSet = divisions1;
-        else if (departmentValue.id === '02') newDataSet = divisions2;
-        else if (departmentValue.id === '03') newDataSet = divisions3;
-        else newDataSet = [];
-        formApi.model.updateFieldProps('division', {dataSet: newDataSet});
-        formApi.model.setFieldValue('division', null);
+        department: {
+            component: TreeSelectField,
+            label: 'Департамент',
+            dataSet: departments,
+            onValueChanged: (value, prevValue, field) => {
+                const departmentValue = value as Record<'id', unknown>;
+                let newDataSet: ITreeSelectFieldProps['dataSet'];
+                if (!departmentValue) newDataSet = [];
+                else if (departmentValue.id === '01') newDataSet = divisions1;
+                else if (departmentValue.id === '02') newDataSet = divisions2;
+                else if (departmentValue.id === '03') newDataSet = divisions3;
+                else newDataSet = [];
+                const model = field.getModel();
+                const division = model.getField('division');
+                division.updateProps({dataSet: newDataSet});
+                division.setValue(null);
+            },
+        } as ITreeSelectFieldProps,
+        division: {component: TreeSelectField, label: 'Управления', dependsOn: ['department']},
     },
     buttons: null,
-}
+};
 export const TreeSelectDepended = (): React.JSX.Element => {
     return (
         <>
