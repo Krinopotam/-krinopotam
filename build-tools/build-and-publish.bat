@@ -20,20 +20,8 @@ if exist src\css (
 	@echo src\css
 	robocopy src\css dist\css /E /NJH /NJS /NFL /NDL
 )
-
-if exist src\dynamicForm\css (
-	@echo src\dynamicForm\css
-	robocopy src\dynamicForm\css dist\dynamicForm\css /E /NJH /NJS /NFL /NDL
-)
-
-if exist src\messageBox\css (
-	@echo src\messageBox\css
-	robocopy src\messageBox\css dist\messageBox\css /E /NJH /NJS /NFL /NDL
-)
-
-if exist src\modal\css (
-	@echo src\modal\css
-	robocopy src\modal\css dist\modal\css /E /NJH /NJS /NFL /NDL
+if exist !copyCssToDist.bat (
+	call !copyCssToDist.bat
 )
 
 @echo:

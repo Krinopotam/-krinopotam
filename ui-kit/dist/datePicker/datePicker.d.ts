@@ -1,0 +1,23 @@
+import { DatePickerProps as AntDatePickerProps } from "antd/lib/date-picker";
+import 'antd/es/date-picker/style/index';
+import { Dayjs } from 'dayjs';
+import { SharedTimeProps } from 'rc-picker/lib/panels/TimePanel/index';
+import React from "react";
+import { DisabledTime } from 'rc-picker/lib/interface';
+export type IDatePickerProps = Omit<AntDatePickerProps, 'mode' | 'picker' | 'showTime'> & {
+    mode?: 'time' | 'date' | 'dateTime' | 'week' | 'month' | 'quarter' | 'year';
+    timeMode?: 'seconds' | 'minutes' | 'hours';
+    readOnly?: boolean;
+    format?: string;
+    value?: string | Dayjs;
+    disabledTime?: DisabledTime<Dayjs>;
+    showNow?: boolean;
+    showToday?: boolean;
+    popupClassName?: string;
+};
+export declare const DatePicker: ({ mode, timeMode, readOnly, allowClear, open, inputReadOnly, panelRender, format, value, ...props }: IDatePickerProps) => React.JSX.Element;
+type IDatePickerMode = "time" | "date" | "week" | "month" | "quarter" | "year" | undefined;
+type IDatePickerPickerMode = "date" | "week" | "month" | "quarter" | "year" | undefined;
+export declare const GetDatePickerParams: (mode: IDatePickerProps['mode'], timeMode: IDatePickerProps['timeMode'], format?: string) => [IDatePickerMode, IDatePickerPickerMode, string, SharedTimeProps<Dayjs> | undefined];
+export declare const GetDatePickerFormat: (mode: IDatePickerProps['mode'], timeMode: IDatePickerProps['timeMode'], format?: IDatePickerProps['format']) => string;
+export {};

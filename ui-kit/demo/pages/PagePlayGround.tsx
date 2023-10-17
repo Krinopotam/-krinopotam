@@ -20,10 +20,10 @@ import {TabulatorGridField} from @krinopotam/ui-kit/dForm/fields/tabulatorGrid/t
 import {TreeSelectField} from @krinopotam/ui-kit/dForm/fields/treeSelect/treeSelectField';
 import {SwitchField} from @krinopotam/ui-kit/dForm/fields/switch/switchField';
 import {ITreeSelectNode} from @krinopotam/ui-kit/treeSelect';
-import {IDFormFieldValidationRules} from @krinopotam/ui-kit/dForm';
+import {IDFormValidationRules} from @krinopotam/ui-kit/dForm';
 import {TabsField} from @krinopotam/ui-kit/dForm/fields/tabs/tabsField';
 dayjs.locale('ru');
-const validationRules: IDFormFieldValidationRules = {
+const validationRules: IDFormValidationRules = {
     //password: [{type: 'string', rule: 'not-empty', message: 'Поле не должно быть пустым'}],
     profess: [{type: 'string', rule: 'not-empty', message: 'Поле не должно быть пустым'}],
     specialty: [{type: 'string', rule: 'not-empty', message: 'Поле не должно быть пустым'}],

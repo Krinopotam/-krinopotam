@@ -1,4 +1,4 @@
-import React, {CSSProperties, useSyncExternalStore} from 'react';
+import React, {CSSProperties, useEffect, useSyncExternalStore} from 'react';
 import {Form} from 'antd';
 import {InlineGroupField} from '@src/dForm/fields/inlineGroup/inlineGroupField';
 import {IBaseField} from '@src/dForm/fields/base/baseField';
@@ -6,6 +6,11 @@ import Animate from 'rc-animate';
 
 export const InlineGroupRender = ({field}: {field: InlineGroupField}): React.JSX.Element => {
     useSyncExternalStore(field.subscribe.bind(field), field.getSnapshot.bind(field));
+
+    useEffect(() => {
+        field.setReady(true)
+    }, [field]);
+
     if (!field.hasVisibleChildren()) return <> </>;
 
     const model = field.getModel();

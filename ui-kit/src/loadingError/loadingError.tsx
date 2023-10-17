@@ -1,5 +1,5 @@
 import {Card, Col, Row, Typography} from 'antd';
-import React, {useCallback} from 'react';
+import React, {CSSProperties, useCallback} from 'react';
 import {Button} from '../button';
 
 const {Text} = Typography;
@@ -7,14 +7,11 @@ const {Text} = Typography;
 export interface ILoadingErrorProps {
     errorMessage?: string;
     retryHandler?: () => void;
+    style?: CSSProperties;
     children: React.ReactNode;
 }
-export const LoadingError = ({
-    errorMessage,
-    children,
-    retryHandler,
-}: ILoadingErrorProps): React.JSX.Element => {
-    
+
+export const LoadingError = ({errorMessage, children, retryHandler, style}: ILoadingErrorProps): React.JSX.Element => {
     const onRetryHandler = useCallback(() => {
         if (retryHandler) retryHandler();
     }, [retryHandler]);
@@ -22,7 +19,7 @@ export const LoadingError = ({
     if (!errorMessage) return <>{children}</>;
 
     return (
-        <Row justify="center" align="middle" style={{height: '100%'}}>
+        <Row justify="center" align="middle" style={{height: '100%', ...style}}>
             <Col>
                 <Card role="alert" title={<div>Ошибка загрузки данных</div>} headStyle={{backgroundColor: '#ff7875', textAlign: 'center'}}>
                     <Row justify="center" align="middle">

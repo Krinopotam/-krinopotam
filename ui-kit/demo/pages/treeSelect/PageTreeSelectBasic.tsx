@@ -9,8 +9,8 @@
     // language=text
     const source = `
 import React from 'react';
-import {DForm, IDFormProps} from @krinopotam/ui-kit/dynamicForm';
-import {IDFormFieldTreeSelectProps, TreeSelectComponent} from @krinopotam/ui-kit/dynamicForm/components/treeSelectComponent';
+import {DForm, IDFormProps} from @krinopotam/ui-kit/dForm';
+import {TreeSelectField} from @krinopotam/ui-kit/dForm/fields/treeSelect/treeSelectField";
 const dataSet = [
     {
         id: '01',
@@ -116,7 +116,7 @@ const formProps: IDFormProps = {
     formId: 'Test form',
     confirmChanges: true,
     fieldsProps: {
-        departments: {component: TreeSelectComponent, label: 'Подразделения', dataSet: dataSet} as IDFormFieldTreeSelectProps,
+        departments: {component: TreeSelectField, label: 'Подразделения', dataSet: dataSet},
     },
     buttons: null,
 };

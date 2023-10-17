@@ -1,4 +1,4 @@
-import React, {ComponentType, CSSProperties, useCallback, useSyncExternalStore} from 'react';
+import React, {ComponentType, CSSProperties, useCallback, useEffect, useSyncExternalStore} from 'react';
 import {Tabs, TabsProps, theme} from 'antd';
 import {TabsField} from '@src/dForm/fields/tabs/tabsField';
 import {FieldsRender} from '@src/dForm/renders/fieldsRender';
@@ -7,6 +7,11 @@ import {TabNavListProps} from 'rc-tabs/lib/TabNavList';
 
 const {useToken} = theme;
 export const TabsFieldRender = ({field}: {field: TabsField}): React.JSX.Element => {
+    useEffect(() => {
+        field.setReady(true)
+    }, [field]);
+
+
     const fieldProps = field.getProps();
     const tabsRootFields = field.getTabsRootFields();
 

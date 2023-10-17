@@ -3,7 +3,16 @@
     import {Route, Routes} from 'react-router-dom';
     import {DemoLayout} from './demoLayout';
     import {Home} from './home';
+    const PageFormSubmitting = lazy(() => import('./pages/dForm/validation/PageFormSubmitting'))
+    const PageFormValidation = lazy(() => import('./pages/dForm/validation/PageFormValidation'))
+
     const PageDependedFields = lazy(() => import('./pages/dForm/PageDependedFields'))
+    const PageFormBetweenFields = lazy(() => import('./pages/dForm/PageFormBetweenFields'))
+    const PageFormDependedField = lazy(() => import('./pages/dForm/PageFormDependedField'))
+    const PageFormFetching = lazy(() => import('./pages/dForm/PageFormFetching'))
+    const PageFormSimple = lazy(() => import('./pages/dForm/PageFormSimple'))
+    const PageFormSimpleHorizontal = lazy(() => import('./pages/dForm/PageFormSimpleHorizontal'))
+    const PageFormWithTemplatedFields = lazy(() => import('./pages/dForm/PageFormWithTemplatedFields'))
     const PageNewFormSimple = lazy(() => import('./pages/dForm/PageNewFormSimple'))
     const PageNewFormWithTabs = lazy(() => import('./pages/dForm/PageNewFormWithTabs'))
 
@@ -16,16 +25,6 @@
     const PageModalFormWithSeveralTabs = lazy(() => import('./pages/dFormModal/PageModalFormWithSeveralTabs'))
     const PageModalFormWithTabs = lazy(() => import('./pages/dFormModal/PageModalFormWithTabs'))
     const PageModalFormWithTabsGroups = lazy(() => import('./pages/dFormModal/PageModalFormWithTabsGroups'))
-
-    const PageFormSubmitting = lazy(() => import('./pages/dynamicForm/validation/PageFormSubmitting'))
-    const PageFormValidation = lazy(() => import('./pages/dynamicForm/validation/PageFormValidation'))
-
-    const PageFormBetweenFields = lazy(() => import('./pages/dynamicForm/PageFormBetweenFields'))
-    const PageFormDependedField = lazy(() => import('./pages/dynamicForm/PageFormDependedField'))
-    const PageFormFetching = lazy(() => import('./pages/dynamicForm/PageFormFetching'))
-    const PageFormSimple = lazy(() => import('./pages/dynamicForm/PageFormSimple'))
-    const PageFormSimpleHorizontal = lazy(() => import('./pages/dynamicForm/PageFormSimpleHorizontal'))
-    const PageFormWithTemplatedFields = lazy(() => import('./pages/dynamicForm/PageFormWithTemplatedFields'))
 
     const PageTabulatorGridCellFormat = lazy(() => import('./pages/tabulator/PageTabulatorGridCellFormat'))
     const PageTabulatorGridChangeDataSet = lazy(() => import('./pages/tabulator/PageTabulatorGridChangeDataSet'))
@@ -55,7 +54,16 @@ export const DemoRoutes = (props: {darkMode: boolean; setDarkMode: (mode:boolean
         <Routes>
             <Route path="/" element={<DemoLayout setDarkMode={props.setDarkMode} />}>
                 <Route index element={<Home />} />
+                <Route path="FormSubmitting" element={<PageFormSubmitting darkMode={props.darkMode} />} />;
+                <Route path="FormValidation" element={<PageFormValidation darkMode={props.darkMode} />} />;
+
                 <Route path="DependedFields" element={<PageDependedFields darkMode={props.darkMode} />} />;
+                <Route path="FormBetweenFields" element={<PageFormBetweenFields darkMode={props.darkMode} />} />;
+                <Route path="FormDependedField" element={<PageFormDependedField darkMode={props.darkMode} />} />;
+                <Route path="FormFetching" element={<PageFormFetching darkMode={props.darkMode} />} />;
+                <Route path="FormSimple" element={<PageFormSimple darkMode={props.darkMode} />} />;
+                <Route path="FormSimpleHorizontal" element={<PageFormSimpleHorizontal darkMode={props.darkMode} />} />;
+                <Route path="FormWithTemplatedFields" element={<PageFormWithTemplatedFields darkMode={props.darkMode} />} />;
                 <Route path="NewFormSimple" element={<PageNewFormSimple darkMode={props.darkMode} />} />;
                 <Route path="NewFormWithTabs" element={<PageNewFormWithTabs darkMode={props.darkMode} />} />;
 
@@ -68,16 +76,6 @@ export const DemoRoutes = (props: {darkMode: boolean; setDarkMode: (mode:boolean
                 <Route path="ModalFormWithSeveralTabs" element={<PageModalFormWithSeveralTabs darkMode={props.darkMode} />} />;
                 <Route path="ModalFormWithTabs" element={<PageModalFormWithTabs darkMode={props.darkMode} />} />;
                 <Route path="ModalFormWithTabsGroups" element={<PageModalFormWithTabsGroups darkMode={props.darkMode} />} />;
-
-                <Route path="FormSubmitting" element={<PageFormSubmitting darkMode={props.darkMode} />} />;
-                <Route path="FormValidation" element={<PageFormValidation darkMode={props.darkMode} />} />;
-
-                <Route path="FormBetweenFields" element={<PageFormBetweenFields darkMode={props.darkMode} />} />;
-                <Route path="FormDependedField" element={<PageFormDependedField darkMode={props.darkMode} />} />;
-                <Route path="FormFetching" element={<PageFormFetching darkMode={props.darkMode} />} />;
-                <Route path="FormSimple" element={<PageFormSimple darkMode={props.darkMode} />} />;
-                <Route path="FormSimpleHorizontal" element={<PageFormSimpleHorizontal darkMode={props.darkMode} />} />;
-                <Route path="FormWithTemplatedFields" element={<PageFormWithTemplatedFields darkMode={props.darkMode} />} />;
 
                 <Route path="TabulatorGridCellFormat" element={<PageTabulatorGridCellFormat darkMode={props.darkMode} />} />;
                 <Route path="TabulatorGridChangeDataSet" element={<PageTabulatorGridChangeDataSet darkMode={props.darkMode} />} />;
