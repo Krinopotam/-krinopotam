@@ -199,9 +199,8 @@ export class AdvancedHeaderFilterModule extends Module {
         const tabulatorHeader = this.table.element.querySelector<HTMLElement>('.tabulator-headers');
         const headerElements = this.table.element.querySelectorAll<HTMLElement>('.tabulator-col');
         const filterElements = this.table.element.querySelectorAll<HTMLElement>('.tabulator-header-filter');
-        const resizeElements = this.table.element.querySelectorAll<HTMLElement>('.tabulator-col-resize-handle');
-
         if (!tableHolder || !tabulatorHeader || !headerElements || !filterElements) return this.headerFilterStatus;
+        const resizeElements = tabulatorHeader.querySelectorAll('.tabulator-col-resize-handle')
 
         if (typeof show === 'undefined') show = !this.headerFilterStatus
         this.headerFilterStatus = show;
@@ -219,7 +218,7 @@ export class AdvancedHeaderFilterModule extends Module {
         });
 
         resizeElements.forEach((elem) => {
-            elem.style.height = elem.offsetHeight + filterHeight * (show ? 1 : -1) + 'px';
+            (elem as HTMLElement).style.height = (elem as HTMLElement).offsetHeight + filterHeight * (show ? 1 : -1) + 'px';
         });
 
         tabulatorHeader.style.height = tabulatorHeader.offsetHeight + filterHeight * (show ? 1 : -1) + 'px'

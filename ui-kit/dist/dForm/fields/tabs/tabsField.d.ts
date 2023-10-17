@@ -8,6 +8,9 @@ export interface ITabsFieldProps extends IBaseFieldProps<TabsField> {
     tabsStyle?: React.CSSProperties;
     tabBarStyle?: React.CSSProperties;
     activeTab?: string;
+    panelsHeight?: string | number;
+    panelsMaxHeight?: string | number;
+    panelsMinHeight?: string | number;
     onTabDisabledStateChanged?: (tabName: string, value: boolean, field: TabsField) => void;
     onTabReadOnlyStateChanged?: (tabName: string, value: boolean, field: TabsField) => void;
     onTabHiddenStateChanged?: (tabName: string, value: boolean, field: TabsField) => void;

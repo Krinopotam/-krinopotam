@@ -15,6 +15,13 @@ export const TabsFieldRender = ({ field }) => {
     const onChange = useOnChange(field);
     if (!field.hasVisibleChildren())
         return React.createElement(React.Fragment, null, " ");
+    const containerStyle = {};
+    if (fieldProps.panelsHeight)
+        containerStyle.height = fieldProps.panelsHeight;
+    if (fieldProps.panelsMinHeight)
+        containerStyle.minHeight = fieldProps.panelsMinHeight;
+    if (fieldProps.panelsMaxHeight)
+        containerStyle.height = fieldProps.panelsMaxHeight;
     const items = [];
     for (const tabName in tabsRootFields) {
         if (!activeTab)
@@ -29,7 +36,7 @@ export const TabsFieldRender = ({ field }) => {
             forceRender: true,
             disabled: field.isDisabled(),
             style: fieldProps.tabsStyle,
-            children: React.createElement(FieldsRender, { fields: childrenFields, subscribe: field.tabSubscribe(tabName), getSnapshot: field.getTabSnapshot(tabName) }),
+            children: (React.createElement(FieldsRender, { fields: childrenFields, subscribe: field.tabSubscribe(tabName), getSnapshot: field.getTabSnapshot(tabName), containerStyle: containerStyle })),
             active: activeTab === tabName,
         });
     }
@@ -47,12 +54,13 @@ const useOnChange = (field) => {
     }, [field]);
 };
 const TabBarRender = (props, DefaultTabBar, field) => {
+    var _a, _b;
     const { token } = useToken();
     const formProps = field.getFormProps();
     const style = Object.assign({}, props.style);
     style.backgroundColor = token.colorBgElevated;
-    style.height = (formProps === null || formProps === void 0 ? void 0 : formProps.tabsHeight) || 35;
-    const indent = formProps.contentIndent || 0;
+    style.height = (_a = formProps === null || formProps === void 0 ? void 0 : formProps.tabsHeight) !== null && _a !== void 0 ? _a : 35;
+    const indent = (_b = formProps.contentIndent) !== null && _b !== void 0 ? _b : 0;
     const indentStyle = { height: indent, backgroundColor: style.backgroundColor };
     if (field.getParent()) {
         return (React.createElement(React.Fragment, null,

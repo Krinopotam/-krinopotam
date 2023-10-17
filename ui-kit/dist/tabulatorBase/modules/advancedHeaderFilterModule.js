@@ -128,9 +128,9 @@ export class AdvancedHeaderFilterModule extends Module {
         const tabulatorHeader = this.table.element.querySelector('.tabulator-headers');
         const headerElements = this.table.element.querySelectorAll('.tabulator-col');
         const filterElements = this.table.element.querySelectorAll('.tabulator-header-filter');
-        const resizeElements = this.table.element.querySelectorAll('.tabulator-col-resize-handle');
         if (!tableHolder || !tabulatorHeader || !headerElements || !filterElements)
             return this.headerFilterStatus;
+        const resizeElements = tabulatorHeader.querySelectorAll('.tabulator-col-resize-handle');
         if (typeof show === 'undefined')
             show = !this.headerFilterStatus;
         this.headerFilterStatus = show;

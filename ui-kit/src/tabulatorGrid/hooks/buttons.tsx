@@ -199,7 +199,7 @@ const useGetFilterToggleButton = (gridApi: IGridApi, tableApi: ITabulator | unde
         const gridProps = gridApi.gridProps;
         if (gridProps.buttons?.filterToggle === null) return undefined;
 
-        if (!tableApi?.isHeaderFilterVisible()) return undefined
+        if (!tableApi?.isHeaderFilterAvailable()) return undefined
 
         return {
             title: '',

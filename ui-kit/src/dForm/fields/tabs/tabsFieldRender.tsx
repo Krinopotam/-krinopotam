@@ -8,9 +8,8 @@ import {TabNavListProps} from 'rc-tabs/lib/TabNavList';
 const {useToken} = theme;
 export const TabsFieldRender = ({field}: {field: TabsField}): React.JSX.Element => {
     useEffect(() => {
-        field.setReady(true)
+        field.setReady(true);
     }, [field]);
-
 
     const fieldProps = field.getProps();
     const tabsRootFields = field.getTabsRootFields();
@@ -22,6 +21,11 @@ export const TabsFieldRender = ({field}: {field: TabsField}): React.JSX.Element 
     const onChange = useOnChange(field);
 
     if (!field.hasVisibleChildren()) return <> </>;
+
+    const containerStyle: CSSProperties = {};
+    if (fieldProps.panelsHeight) containerStyle.height = fieldProps.panelsHeight;
+    if (fieldProps.panelsMinHeight) containerStyle.minHeight = fieldProps.panelsMinHeight;
+    if (fieldProps.panelsMaxHeight) containerStyle.height = fieldProps.panelsMaxHeight;
 
     //there is no sense to use memo (rendering is not very often)
     const items: TabsProps['items'] = [];
@@ -38,7 +42,14 @@ export const TabsFieldRender = ({field}: {field: TabsField}): React.JSX.Element 
             forceRender: true,
             disabled: field.isDisabled(),
             style: fieldProps.tabsStyle,
-            children: <FieldsRender fields={childrenFields} subscribe={field.tabSubscribe(tabName)} getSnapshot={field.getTabSnapshot(tabName)} />,
+            children: (
+                <FieldsRender
+                    fields={childrenFields}
+                    subscribe={field.tabSubscribe(tabName)}
+                    getSnapshot={field.getTabSnapshot(tabName)}
+                    containerStyle={containerStyle}
+                />
+            ),
             active: activeTab === tabName,
         });
     }
@@ -82,9 +93,9 @@ const TabBarRender = (props: TabNavListProps, DefaultTabBar: ComponentType<TabNa
     const style = {...props.style};
     //style.backgroundColor = token.colorBgContainer;
     style.backgroundColor = token.colorBgElevated;
-    style.height = formProps?.tabsHeight || 35;
+    style.height = formProps?.tabsHeight ?? 35;
 
-    const indent = formProps.contentIndent || 0;
+    const indent = formProps.contentIndent ?? 0;
     const indentStyle = {height: indent, backgroundColor: style.backgroundColor};
 
     if (field.getParent()) {

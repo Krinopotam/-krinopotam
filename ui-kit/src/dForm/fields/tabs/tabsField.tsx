@@ -22,6 +22,15 @@ export interface ITabsFieldProps extends IBaseFieldProps<TabsField> {
     /** Active tab*/
     activeTab?: string;
 
+    /** Tab panels height */
+    panelsHeight?: string | number;
+
+    /** Tab panels max height */
+    panelsMaxHeight?: string | number;
+
+    /** Tab panels min height */
+    panelsMinHeight?: string | number;
+
     /*************** Callbacks *****************/
     /** Fires when the disable state of a tab changes  */
     onTabDisabledStateChanged?: (tabName: string, value: boolean, field: TabsField) => void;
@@ -66,6 +75,7 @@ export class TabsField extends BaseField<ITabsFieldProps> {
 
     /** tab rerender keys snapshots */
     private _tabRenderSnapshots: Record<string, Record<never, never>> = {};
+
     //endregion
 
     initChildrenFields(): [TabsField['fieldsMap'], TabsField['rootFields']] {
@@ -83,8 +93,8 @@ export class TabsField extends BaseField<ITabsFieldProps> {
             this._tabRenderSnapshots[tabName] = {};
             this._tabRenderListeners[tabName] = [];
 
-            this.fieldsMap = {...this.fieldsMap, ...fieldsMap}
-            this.rootFields = {...this.rootFields, ...rootFields}
+            this.fieldsMap = {...this.fieldsMap, ...fieldsMap};
+            this.rootFields = {...this.rootFields, ...rootFields};
         }
 
         return [this.fieldsMap, this.rootFields];
@@ -109,6 +119,7 @@ export class TabsField extends BaseField<ITabsFieldProps> {
     getTabsRootFields() {
         return this._tabsRootFields;
     }
+
     //endregion
 
     //region Tabs methods
@@ -233,8 +244,8 @@ export class TabsField extends BaseField<ITabsFieldProps> {
     }
 
     /** @return true if tab contains visible fields */
-    tabHasVisibleChildren(tabName:string) {
-        const fields = this._tabsRootFields[tabName]
+    tabHasVisibleChildren(tabName: string) {
+        const fields = this._tabsRootFields[tabName];
         for (const fieldName in fields) {
             const field = this.rootFields[fieldName];
             if ((!field.isContainer() && !field.isHidden()) || field.hasVisibleChildren()) return true;
@@ -305,5 +316,6 @@ export class TabsField extends BaseField<ITabsFieldProps> {
         this._tabRenderSnapshots[tabName] = {}; //new value
         for (const listener of this._tabRenderListeners[tabName]) listener();
     }
+
     //endregion
 }

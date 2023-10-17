@@ -193,7 +193,7 @@ const useGetFilterToggleButton = (gridApi, tableApi) => {
         const gridProps = gridApi.gridProps;
         if (((_a = gridProps.buttons) === null || _a === void 0 ? void 0 : _a.filterToggle) === null)
             return undefined;
-        if (!(tableApi === null || tableApi === void 0 ? void 0 : tableApi.isHeaderFilterVisible()))
+        if (!(tableApi === null || tableApi === void 0 ? void 0 : tableApi.isHeaderFilterAvailable()))
             return undefined;
         return {
             title: '',
