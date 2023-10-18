@@ -13,3 +13,8 @@ if exist src\modal\css (
 	@echo src\modal\css
 	robocopy src\modal\css dist\modal\css /E /NJH /NJS /NFL /NDL
 )
+
+if exist src\loadingContainer\css (
+	@echo src\loadingContainer\css
+	robocopy src\loadingContainer\css dist\loadingContainer\css /E /NJH /NJS /NFL /NDL
+)
