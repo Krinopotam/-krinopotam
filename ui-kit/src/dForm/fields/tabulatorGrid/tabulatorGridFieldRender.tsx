@@ -54,7 +54,7 @@ export const TabulatorGridFieldRender = ({field}: {field: TabulatorGridField}): 
         },
         [fieldProps]
     );
-    console.log(field.getModel().getFormId());
+
     return useMemo(() => {
         return (
             <TabulatorGrid

@@ -538,6 +538,7 @@ const useApiFetchData = (gridApi: IGridApi): IGridApi['fetchData'] => {
             const props = gridApi.gridProps;
             const curDataSource = dataSource ?? props?.onDataFetch?.(gridApi);
             if (!curDataSource) {
+                props?.onDataFetchSuccess?.(undefined, gridApi);
                 props?.onDataFetchCompleted?.(gridApi);
                 return;
             }
