@@ -8,3 +8,7 @@
     top: 6px;
     right: 9px;
 }
+
+.custom-antd-message-box .ant-modal-confirm-paragraph {
+    max-width: 100%;
+}
