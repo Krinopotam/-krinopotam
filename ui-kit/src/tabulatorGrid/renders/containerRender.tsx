@@ -25,11 +25,11 @@ export const ContainerRender = ({
     // Even though gridProps can be obtained from gridApi, we still separately pass gridProps to GridRender
     // Since GridRender is memoized, this is done so that the GridRender component is updated when gridProps changes
     return (
-        <>
+        <div className='tabulator-grid-container' style={{height: gridProps.height || undefined, minHeight: gridProps.minHeight, maxHeight: gridProps.maxHeight}}>
             <LoadingContainer
                 isLoading={gridApi.getIsLoading()}
                 notHideContent={true}
-                spinStyle={{height: gridProps.height || undefined, minHeight: gridProps.minHeight, maxHeight: gridProps.maxHeight}}
+                spinStyle={{height: '100%'}}
             >
                 <ButtonsRowWrapper style={{display: 'flex', flexDirection: 'column'}}>
                     <MenuRow gridApi={gridApi} />
@@ -37,6 +37,6 @@ export const ContainerRender = ({
                 </ButtonsRowWrapper>
             </LoadingContainer>
             {editFormProps ? <DFormModal {...editFormProps} apiRef={gridApi.editFormApi} /> : null}
-        </>
+        </div>
     );
 };

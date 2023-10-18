@@ -50,6 +50,9 @@ export interface IGridProps_ {
     /** No rows placeholder */
     placeholder?: string;
 
+    /** Selector of parent container (.className or #id). Tabulator Grid will resize height on container height change */
+    resizeHeightWithParent?:string
+
     // --- callbacks -----------------------------------------------------
 
     /** Fires when menu visibility status changed */
@@ -121,6 +124,7 @@ const useSplitTabulatorProps = (props: IGridProps) => {
             onDataFetchCompleted: true,
             onSelectionChange: true,
             onDelete: true,
+            resizeHeightWithParent:true
         });
 
         return result[1];

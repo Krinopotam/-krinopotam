@@ -11,7 +11,7 @@ import './css/antdAnimation.css';
 import {DModel, IDFormBaseCallbacks, IDFormModelCallbacks} from './dModel';
 import {IButtonsRowApi, IFormButtons} from 'src/buttonsRow';
 import {IDFormApi, useInitFormApi} from './hooks/api';
-import React, {useEffect, useRef, useState} from 'react';
+import React, {CSSProperties, useEffect, useRef, useState} from 'react';
 import {TPromise} from '@krinopotam/service-types';
 import {FormRender} from './renders/formRender';
 import {IRuleType} from './validators/baseValidator';
@@ -43,8 +43,14 @@ export interface IDFormProps extends IDFormCallbacks {
     /** Form CSS class */
     className?: string;
 
+    /** Form style */
+    formStyle?:CSSProperties;
+
     /** Form container class name */
     containerClassName?: string;
+
+    /** Form container style*/
+    containerStyle?:CSSProperties
 
     /** Indent from the beginning of the controls (default 12)  */
     contentIndent?: number;

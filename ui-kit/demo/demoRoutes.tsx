@@ -33,6 +33,7 @@
     const PageTabulatorGridTree = lazy(() => import('./pages/tabulator/PageTabulatorGridTree'))
     const PageTabulatorGridTreeCellFormat = lazy(() => import('./pages/tabulator/PageTabulatorGridTreeCellFormat'))
     const PageTabulatorGridTreeWithForm = lazy(() => import('./pages/tabulator/PageTabulatorGridTreeWithForm'))
+    const PageTabulatorGridWithComplexForm = lazy(() => import('./pages/tabulator/PageTabulatorGridWithComplexForm'))
     const PageTabulatorGridWithForm = lazy(() => import('./pages/tabulator/PageTabulatorGridWithForm'))
     const PageTabulatorGridWithFormAsync = lazy(() => import('./pages/tabulator/PageTabulatorGridWithFormAsync'))
 
@@ -84,6 +85,7 @@ export const DemoRoutes = (props: {darkMode: boolean; setDarkMode: (mode:boolean
                 <Route path="TabulatorGridTree" element={<PageTabulatorGridTree darkMode={props.darkMode} />} />;
                 <Route path="TabulatorGridTreeCellFormat" element={<PageTabulatorGridTreeCellFormat darkMode={props.darkMode} />} />;
                 <Route path="TabulatorGridTreeWithForm" element={<PageTabulatorGridTreeWithForm darkMode={props.darkMode} />} />;
+                <Route path="TabulatorGridWithComplexForm" element={<PageTabulatorGridWithComplexForm darkMode={props.darkMode} />} />;
                 <Route path="TabulatorGridWithForm" element={<PageTabulatorGridWithForm darkMode={props.darkMode} />} />;
                 <Route path="TabulatorGridWithFormAsync" element={<PageTabulatorGridWithFormAsync darkMode={props.darkMode} />} />;
 

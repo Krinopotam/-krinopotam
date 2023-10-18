@@ -49,7 +49,15 @@ export const DFormModalRender = ({formId, buttons, buttonsApi, formApi, formProp
             onCancel={formApi.close}
             centered
             destroyOnClose={true}
-            footer={<ButtonsRender buttons={buttons} colorType={modalFormProps.colorType} buttonsApi={buttonsApi} arrowsSelection={modalFormProps.arrowsButtonsSelection} context={formApi} />}
+            footer={
+                <ButtonsRender
+                    buttons={buttons}
+                    colorType={modalFormProps.colorType}
+                    buttonsApi={buttonsApi}
+                    arrowsSelection={modalFormProps.arrowsButtonsSelection}
+                    context={formApi}
+                />
+            }
             footerStyle={modalFormProps.footerStyle}
             maskClosable={false}
             keyboard={false}
@@ -66,7 +74,14 @@ export const DFormModalRender = ({formId, buttons, buttonsApi, formApi, formProp
             headerStyle={modalFormProps.headerStyle}
             colorType={formProps.colorType}
         >
-            {modalFormProps.isOpened ? <DForm apiRef={formApi} {...formProps} /> : null}
+            {modalFormProps.isOpened ? (
+                <DForm
+                    apiRef={formApi}
+                    {...formProps}
+                    formStyle={{height: '100%', ...formProps.formStyle}}
+                    containerStyle={{height: '100%', ...formProps.containerStyle}}
+                />
+            ) : null}
         </Modal>
     );
 };

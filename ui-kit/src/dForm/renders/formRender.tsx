@@ -17,7 +17,7 @@ import {LoadingContainer} from '@src/loadingContainer';
 
 interface IFormRenderProps {
     /** Form props*/
-    formProps: IDFormProps
+    formProps: IDFormProps;
 
     /** form api instance */
     formApi: IDFormApi;
@@ -36,17 +36,14 @@ export const FormRender = ({formProps, formApi, formButtons}: IFormRenderProps):
     const model = formApi.model;
     useSyncExternalStore(model.subscribeRenderForm.bind(model), model.getFormRenderSnapshot.bind(model));
 
-    const labelCol = {span: (formProps.layout === 'horizontal' ? 8 : 24), ...formProps.labelCol};
-    labelCol.style = {paddingBottom: 2, ...formProps.labelCol?.style}
+    const labelCol = {span: formProps.layout === 'horizontal' ? 8 : 24, ...formProps.labelCol};
+    labelCol.style = {paddingBottom: 2, ...formProps.labelCol?.style};
 
-    const wrapperCol = {span: (formProps.layout === 'horizontal' ? 16 : 24), ...formProps.wrapperCol};
+    const wrapperCol = {span: formProps.layout === 'horizontal' ? 16 : 24, ...formProps.wrapperCol};
 
     return (
-        <div className={formProps.containerClassName ?? ''}>
-            <LoadingContainer
-                isLoading={model.isFormFetching() || (model.isFormSubmitting() && !formProps.confirmChanges)}
-                notHideContent={true}
-            >
+        <div className={formProps.containerClassName ?? ''} style={formProps.containerStyle}>
+            <LoadingContainer isLoading={model.isFormFetching() || (model.isFormSubmitting() && !formProps.confirmChanges)} notHideContent={true}>
                 <ButtonsRowWrapper>
                     <Form
                         colon={false}
@@ -59,10 +56,11 @@ export const FormRender = ({formProps, formApi, formButtons}: IFormRenderProps):
                         labelAlign={formProps.labelAlign}
                         layout={formProps.layout === 'horizontal' ? 'horizontal' : 'vertical'}
                         requiredMark={formProps.requiredMark}
+                        style={formProps.formStyle}
                     >
-                        <FormInit model={model}/>
+                        <FormInit model={model} />
 
-                        <FieldsRender fields={model.getRootFields()}/>
+                        <FieldsRender fields={model.getRootFields()} />
 
                         <ButtonsRender
                             buttons={formButtons}
@@ -79,7 +77,7 @@ export const FormRender = ({formProps, formApi, formButtons}: IFormRenderProps):
 };
 
 /** Special component to fire onFormInit event before another events*/
-const FormInit = ({model}: { model: DModel }): React.JSX.Element | null => {
+const FormInit = ({model}: {model: DModel}): React.JSX.Element | null => {
     useEffect(() => {
         model.setFormInit();
     }, [model]);

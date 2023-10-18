@@ -7,6 +7,9 @@ export interface ITabulatorGridFieldOnlyProps extends IBaseFieldProps<TabulatorG
     /** Default value */
     value?: IGridRowData[];
 
+    /** Auto resize height on form resize */
+    resizeHeightWithForm?:boolean;
+
     // --- callbacks -----------------------------------------------------
     /** Fires when menu visibility status changed */
     onMenuVisibilityChanged?: (isVisible: boolean, gridApi: IGridApi, field: TabulatorGridField) => void;

@@ -21,7 +21,8 @@ import {IButtonRowWrapperRemoteCallbacks} from '@src/buttonsRow/components/butto
 import {IColorType} from '@src/button/button';
 import {HelpersStrings} from '@krinopotam/js-helpers';
 
-export interface IModalProps extends Omit<AntModalProps, 'afterOpenChange' | 'okButtonProps' | 'okType' | 'okText' | 'onOk' | 'cancelText' | 'cancelButtonProps'> {
+export interface IModalProps
+    extends Omit<AntModalProps, 'afterOpenChange' | 'okButtonProps' | 'okType' | 'okText' | 'onOk' | 'cancelText' | 'cancelButtonProps'> {
     /** the modal ID for form dispatcher */
     modalId?: string;
 
@@ -92,7 +93,15 @@ export const Modal = ({resizable = true, headerStyle, footerStyle, ...props}: IM
     );
 
     const [formSize, setFormSize] = useState({width: props.width ?? 0, bodyHeight: props.bodyHeight ?? 0});
-    const onMouseResize = useResize(formSize.width, formSize.bodyHeight, setFormSize, props.minWidth ?? 200, props.maxWidth ?? 5000, props.bodyMinHeight ?? 50, props.bodyMaxHeight ?? 5000);
+    const onMouseResize = useResize(
+        formSize.width,
+        formSize.bodyHeight,
+        setFormSize,
+        props.minWidth ?? 200,
+        props.maxWidth ?? 5000,
+        props.bodyMinHeight ?? 50,
+        props.bodyMaxHeight ?? 5000
+    );
 
     const bodyStyleVal = useGetBodyStyle({
         bodyStyle: props.bodyStyle,
@@ -122,7 +131,7 @@ export const Modal = ({resizable = true, headerStyle, footerStyle, ...props}: IM
             {...props}
             width={formSize.width || undefined}
             // no override section
-            bodyStyle={bodyStyleVal}
+            styles={{body: bodyStyleVal, footer: {margin: 0}}}
             className={classNames('custom-antd-modal', props.className)}
             modalRender={node => {
                 return ModalRender(node, draggableId, wrapperRemoteCallbacksRef);
@@ -130,7 +139,7 @@ export const Modal = ({resizable = true, headerStyle, footerStyle, ...props}: IM
             //transitionName="zoom"
             title={<HeaderRender draggableId={draggableId} icon={props.headerIcon} title={props.title} colorType={props.colorType} style={_headerStyle} />}
             footer={
-                <FooterRender onMouseResize={onMouseResize} resizable={resizable} style={_footerStyle}>
+                <FooterRender onMouseResize={onMouseResize} resizable={resizable} style={_footerStyle} colorType={props.colorType}>
                     {props.footer}
                 </FooterRender>
             }

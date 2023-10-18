@@ -6,6 +6,8 @@ import {HelpersObjects} from '@krinopotam/js-helpers';
 export const TabulatorGridFieldRender = ({field}: {field: TabulatorGridField}): React.JSX.Element => {
     useSyncExternalStore(field.subscribe.bind(field), field.getSnapshot.bind(field));
 
+    const [gridApi] = useState({} as IGridApi);
+
     const fieldProps = field.getProps();
     const tabulatorProps = useSplitTabulatorProps(fieldProps);
 
@@ -23,8 +25,6 @@ export const TabulatorGridFieldRender = ({field}: {field: TabulatorGridField}): 
         prevValueRef.current = value;
     }
     const curDataSet = prevDataSetRef.current;
-
-    const [gridApi] = useState({} as IGridApi);
 
     const onDataSetChange = useCallback(
         (dataSet: IGridRowData[] | undefined, gridApi: IGridApi, field: TabulatorGridField) => {
@@ -54,7 +54,7 @@ export const TabulatorGridFieldRender = ({field}: {field: TabulatorGridField}): 
         },
         [fieldProps]
     );
-
+    console.log(field.getModel().getFormId());
     return useMemo(() => {
         return (
             <TabulatorGrid
@@ -64,6 +64,7 @@ export const TabulatorGridFieldRender = ({field}: {field: TabulatorGridField}): 
                 readOnly={fieldProps.readOnly}
                 placeholder={fieldProps.placeholder}
                 width={fieldProps.width}
+                resizeHeightWithParent={fieldProps.resizeHeightWithForm ? '#' + field.getModel().getFormId() : fieldProps.resizeHeightWithParent}
                 /** Callbacks*/
                 onMenuVisibilityChanged={(isVisible: boolean, gridApi: IGridApi) => fieldProps?.onMenuVisibilityChanged?.(isVisible, gridApi, field)}
                 onDataSetChange={(dataSet: IGridRowData[] | undefined, gridApi: IGridApi) => onDataSetChange?.(dataSet, gridApi, field)}
@@ -118,6 +119,7 @@ const useSplitTabulatorProps = (props: ITabulatorGridFieldProps) => {
             rowStyle: true,
             style: true,
             tooltip: true,
+            resizeHeightWithForm: true,
         });
 
         return result[1];
