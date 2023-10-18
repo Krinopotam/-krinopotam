@@ -315,14 +315,6 @@ const TabulatorCss = createGlobalStyle `
     .expand-button button {
     }
   }
-  
-  /** WORKAROUND: add height 100% for tabulatorGrid spinner wrapper*/
-  .tabulator-grid-spinner {
-    height: 100%;
-    .ant-spin-container {
-      height: 100%;
-    }
-  }
 `;
 export const Stylization = ({ striped }) => {
     const { token } = useToken();

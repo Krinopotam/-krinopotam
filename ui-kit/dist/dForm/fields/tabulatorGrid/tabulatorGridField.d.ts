@@ -3,6 +3,7 @@ import React from 'react';
 import { IGridApi, IGridDataSourcePromise, IGridDeletePromise, IGridProps, IGridRowData } from '../../../tabulatorGrid';
 export interface ITabulatorGridFieldOnlyProps extends IBaseFieldProps<TabulatorGridField> {
     value?: IGridRowData[];
+    resizeHeightWithForm?: boolean;
     onMenuVisibilityChanged?: (isVisible: boolean, gridApi: IGridApi, field: TabulatorGridField) => void;
     onDataSetChange?: (dataSet: IGridRowData[] | undefined, gridApi: IGridApi, field: TabulatorGridField) => IGridRowData[] | void;
     onDataFetch?: (gridApi: IGridApi, field: TabulatorGridField) => IGridDataSourcePromise | undefined | void;

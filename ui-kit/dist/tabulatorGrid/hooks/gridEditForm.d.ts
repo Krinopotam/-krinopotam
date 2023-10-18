@@ -50,7 +50,9 @@ export declare const usePrepareEditFormProps: (gridApi: IGridApi) => {
     formId?: string | undefined;
     buttons?: import("../../buttonsRow").IFormButtons | null | undefined;
     className?: string | undefined;
+    formStyle?: import("react").CSSProperties | undefined;
     containerClassName?: string | undefined;
+    containerStyle?: import("react").CSSProperties | undefined;
     contentIndent?: number | undefined;
     dataSet?: import("../../dForm").IDFormDataSet | undefined;
     parentDataSet?: import("../../dForm").IDFormDataSet | undefined;

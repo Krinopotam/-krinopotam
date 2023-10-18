@@ -2,7 +2,7 @@ import React, {CSSProperties} from 'react';
 import {LoadingError} from '../loadingError';
 import {Spin} from 'antd';
 
-import './css/loadingContainer.scss';
+import './css/loadingContainer.css';
 
 export interface ILoginContainerProps {
     isLoading: boolean;

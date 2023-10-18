@@ -21,6 +21,7 @@ export interface IGridProps_ {
     rowDeleteMessage?: React.ReactNode;
     confirmDelete?: boolean;
     placeholder?: string;
+    resizeHeightWithParent?: string;
     onMenuVisibilityChanged?: (isVisible: boolean, gridApi: IGridApi) => void;
     onDataSetChange?: (dataSet: IGridRowData[] | undefined, gridApi: IGridApi) => IGridRowData[] | void;
     onDataFetch?: (gridApi: IGridApi) => IGridDataSourcePromise | undefined | void;

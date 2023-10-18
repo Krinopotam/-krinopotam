@@ -346,11 +346,12 @@ const useApiDeleteRows = (gridApi) => {
 };
 const useApiFetchData = (gridApi) => {
     return useCallback((dataSource) => {
-        var _a, _b;
+        var _a, _b, _c;
         const props = gridApi.gridProps;
         const curDataSource = dataSource !== null && dataSource !== void 0 ? dataSource : (_a = props === null || props === void 0 ? void 0 : props.onDataFetch) === null || _a === void 0 ? void 0 : _a.call(props, gridApi);
         if (!curDataSource) {
-            (_b = props === null || props === void 0 ? void 0 : props.onDataFetchCompleted) === null || _b === void 0 ? void 0 : _b.call(props, gridApi);
+            (_b = props === null || props === void 0 ? void 0 : props.onDataFetchSuccess) === null || _b === void 0 ? void 0 : _b.call(props, undefined, gridApi);
+            (_c = props === null || props === void 0 ? void 0 : props.onDataFetchCompleted) === null || _c === void 0 ? void 0 : _c.call(props, gridApi);
             return;
         }
         gridApi.setIsLoading(true);

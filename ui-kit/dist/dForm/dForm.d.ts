@@ -2,7 +2,7 @@ import './css/antdAnimation.css';
 import { IDFormBaseCallbacks } from './dModel';
 import { IFormButtons } from 'src/buttonsRow';
 import { IDFormApi } from './hooks/api';
-import React from 'react';
+import React, { CSSProperties } from 'react';
 import { TPromise } from '@krinopotam/service-types';
 import { IRuleType } from './validators/baseValidator';
 import { ColProps } from "antd";
@@ -15,7 +15,9 @@ export interface IDFormProps extends IDFormCallbacks {
     formId?: string;
     buttons?: IFormButtons | null;
     className?: string;
+    formStyle?: CSSProperties;
     containerClassName?: string;
+    containerStyle?: CSSProperties;
     contentIndent?: number;
     dataSet?: IDFormDataSet;
     parentDataSet?: IDFormDataSet;

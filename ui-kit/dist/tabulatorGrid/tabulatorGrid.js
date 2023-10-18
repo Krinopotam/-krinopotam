@@ -37,6 +37,7 @@ const useSplitTabulatorProps = (props) => {
             onDataFetchCompleted: true,
             onSelectionChange: true,
             onDelete: true,
+            resizeHeightWithParent: true
         });
         return result[1];
     }, [props]);
