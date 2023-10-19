@@ -79,6 +79,16 @@ export interface IGridApi {
     /** Get selected rows */
     getSelectedRows: () => IGridRowData[];
 
+    /**
+     * @return row data (suitable as a dataSet for dForm)
+     * @param node - row node
+     * @param withParent - Add parent information to data
+     * @param selfParent - The parent of a row must be the row itself
+     * @param parentOnly - The data should not contain any data other than parent data
+     * @param withChildren - The data must contain children data
+     */
+    getRowData: (node: RowComponent|undefined, withParent?: boolean, selfParent?: boolean, parentOnly?: boolean, withChildren?: boolean) => Record<string, unknown>;
+
     /** Select all rows*/
     // selectAll: () => void;
 
@@ -101,21 +111,21 @@ export interface IGridApi {
     editFormApi: IDFormModalApi;
 
     /** Buttons api */
-    buttonsApi: IButtonsRowApi & { refreshButtons: () => void };
+    buttonsApi: IButtonsRowApi & {refreshButtons: () => void};
 
     /** Fetch data */
     fetchData: (dataSource?: IGridDataFetchPromise) => void;
 }
 
-export type IGridDataFetchPromise = TPromise<{ data: IGridRowData[] }, { message: string; code: number }>;
+export type IGridDataFetchPromise = TPromise<{data: IGridRowData[]}, {message: string; code: number}>;
 
 export const useInitGridApi = ({
-                                   gridApi,
-                                   props,
-                                   tableRef,
-                                   editFormApi,
-                                   buttonsApi,
-                               }: {
+    gridApi,
+    props,
+    tableRef,
+    editFormApi,
+    buttonsApi,
+}: {
     gridApi: IGridApi;
     props: IGridApi['gridProps'];
     tableRef: MutableRefObject<Tabulator | undefined>;
@@ -155,6 +165,7 @@ export const useInitGridApi = ({
     gridApi.deleteRowsByKeys = useApiDeleteRowsByKeys(dataSetRef, gridApi);
     gridApi.deleteRows = useApiDeleteRows(gridApi);
     gridApi.fetchData = useApiFetchData(gridApi);
+    gridApi.getRowData = useApiGetRowData(gridApi);
 
     /*
     gridApi.selectAll = useApiSelectAll(gridApi);
@@ -229,11 +240,11 @@ const useApiSetActiveRowKey = (gridApi: IGridApi): IGridApi['setActiveRowKey'] =
 };
 
 const useApiGetActiveRowKey = (gridApi: IGridApi): IGridApi['getActiveRowKey'] => {
-    return useCallback(() => (gridApi.tableApi?.getActiveRowKey?.()), [gridApi]);
+    return useCallback(() => gridApi.tableApi?.getActiveRowKey?.(), [gridApi]);
 };
 
 const useApiGetActiveNode = (gridApi: IGridApi): IGridApi['getActiveNode'] => {
-    return useCallback(() => (gridApi.tableApi?.getActiveRow?.()), [gridApi]);
+    return useCallback(() => gridApi.tableApi?.getActiveRow?.(), [gridApi]);
 };
 
 const useApiGetActiveRow = (gridApi: IGridApi): IGridApi['getActiveRow'] => {
@@ -545,7 +556,7 @@ const useApiFetchData = (gridApi: IGridApi): IGridApi['fetchData'] => {
 
             gridApi.setIsLoading(true);
             curDataSource.then(
-                (result) => {
+                result => {
                     if (!gridApi.getIsMounted()) return;
                     const values = (result.data || []) as IGridRowData[];
                     gridApi.setDataSet(values);
@@ -553,7 +564,7 @@ const useApiFetchData = (gridApi: IGridApi): IGridApi['fetchData'] => {
                     props?.onDataFetchSuccess?.(values, gridApi);
                     gridApi.setIsLoading(false);
                 },
-                (error) => {
+                error => {
                     if (!gridApi.getIsMounted()) return;
                     props?.onDataFetchCompleted?.(gridApi);
                     props?.onDataFetchError?.(error.message, error.code, gridApi);
@@ -577,6 +588,36 @@ const useApiFetchData = (gridApi: IGridApi): IGridApi['fetchData'] => {
                     });
                 }
             );
+        },
+        [gridApi]
+    );
+};
+
+const useApiGetRowData = (gridApi: IGridApi): IGridApi['getRowData'] => {
+    return useCallback(
+        (node: RowComponent, withParent?: boolean, selfParent?: boolean, parentOnly?: boolean, withChildren?: boolean) => {
+            const tableApi = gridApi.tableApi;
+
+            if (!tableApi || !node) return {};
+
+            const rowData = parentOnly ? {} : {...node.getData()};
+
+            if (!tableApi.options.dataTree) return rowData;
+
+            const parentFieldKey = tableApi.options.dataTreeParentField;
+            const childrenKey = tableApi.options.dataTreeChildField;
+
+            if (!withChildren && childrenKey) delete rowData[childrenKey];
+
+            if (!parentFieldKey || typeof rowData[parentFieldKey] !== 'undefined') return rowData;
+
+            const parentNode = selfParent ? node : node.getTreeParent();
+            if (!parentNode) return rowData;
+            const parentData = parentNode.getData();
+            if (!withChildren && childrenKey) delete parentData[childrenKey];
+            rowData[parentFieldKey] = parentNode.getData();
+
+            return rowData;
         },
         [gridApi]
     );

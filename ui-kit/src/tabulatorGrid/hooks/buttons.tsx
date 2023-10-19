@@ -67,7 +67,7 @@ const useGetViewButton = (gridApi: IGridApi, activeRow: IGridRowData | undefined
             hotKeys: [{key: 'Enter'}],
             onClick: () => {
                 if (!gridApi.getActiveRow()) return;
-                const dataSet = getRowDataSet(gridApi, true);
+                const dataSet = getRowDataSet(gridApi, false);
                 editFormApi.open('view', dataSet);
             },
         } satisfies IFormButton;
@@ -88,7 +88,7 @@ const useGetCreateButton = (gridApi: IGridApi): IFormButton | undefined => {
             position: 'right',
             hotKeys: [{key: 'Insert'}],
             onClick: () => {
-                const dataSet = getRowDataSet(gridApi, false, true);
+                const dataSet = getRowDataSet(gridApi, true, true);
                 editFormApi.open('create', dataSet);
             },
         } satisfies IFormButton;
@@ -111,7 +111,7 @@ const useGetCloneButton = (gridApi: IGridApi, activeRow: IGridRowData | undefine
             hotKeys: [{key: 'F9'}],
             onClick: () => {
                 if (!gridApi.getActiveRow()) return;
-                const dataSet = getRowDataSet(gridApi, true);
+                const dataSet = getRowDataSet(gridApi, false);
                 editFormApi.open('clone', dataSet);
             },
         } satisfies IFormButton;
@@ -134,7 +134,7 @@ const useGetUpdateButton = (gridApi: IGridApi, activeRow: IGridRowData | undefin
             hotKeys: [{key: 'Enter'}, {key: 'F2'}],
             onClick: () => {
                 if (!gridApi.getActiveRow()) return;
-                const dataSet = getRowDataSet(gridApi, true);
+                const dataSet = getRowDataSet(gridApi, false);
                 editFormApi.open('update', dataSet);
             },
         } satisfies IFormButton;
@@ -232,24 +232,7 @@ const useGetFilterToggleButton = (gridApi: IGridApi, tableApi: ITabulator | unde
     }, [gridApi, tableApi]);
 };
 
-const getRowDataSet = (gridApi: IGridApi, parent: boolean, empty?: boolean) => {
-    const activeNode = gridApi.getActiveNode();
-    if (!gridApi.tableApi || !activeNode) return;
-    const gridProps = gridApi.gridProps;
-
-    const dataSet = empty ? {} : {...activeNode.getData()};
-
-    if (gridProps.dataTree) {
-        const parentFieldKey = gridApi.tableApi.options.dataTreeParentField;
-        const childrenKey = gridApi.tableApi.options.dataTreeChildField;
-
-        if (childrenKey) delete dataSet[childrenKey];
-
-        if (parentFieldKey && typeof dataSet[parentFieldKey] === 'undefined') {
-            const parentNode = parent ? activeNode.getTreeParent() : activeNode;
-            if (parentNode) dataSet[parentFieldKey] = parentNode.getData();
-        }
-    }
-
-    return dataSet;
+const getRowDataSet = (gridApi: IGridApi, selfParent: boolean, parentOnly?: boolean) => {
+    const node = gridApi.getActiveNode();
+    return gridApi.getRowData(node, true, selfParent, parentOnly)
 };
