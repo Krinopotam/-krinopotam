@@ -11,8 +11,10 @@ export const TextAreaFieldRender = ({field}: {field: TextAreaField}): React.JSX.
 
     const onChange = useCallback(
         (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-            field.setValue(e.target.value || null);
-            field.setDirty(true);
+            if (field.isReady()) {
+                field.setValue(e.target.value || null);
+                field.setDirty(true);
+            }
         },
         [field]
     );

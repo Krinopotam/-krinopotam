@@ -87,7 +87,13 @@ export interface IGridApi {
      * @param parentOnly - The data should not contain any data other than parent data
      * @param withChildren - The data must contain children data
      */
-    getRowData: (node: RowComponent|undefined, withParent?: boolean, selfParent?: boolean, parentOnly?: boolean, withChildren?: boolean) => Record<string, unknown>;
+    getRowData: (
+        node: RowComponent | undefined,
+        withParent?: boolean,
+        selfParent?: boolean,
+        parentOnly?: boolean,
+        withChildren?: boolean
+    ) => Record<string, unknown>;
 
     /** Select all rows*/
     // selectAll: () => void;
@@ -595,7 +601,7 @@ const useApiFetchData = (gridApi: IGridApi): IGridApi['fetchData'] => {
 
 const useApiGetRowData = (gridApi: IGridApi): IGridApi['getRowData'] => {
     return useCallback(
-        (node: RowComponent, withParent?: boolean, selfParent?: boolean, parentOnly?: boolean, withChildren?: boolean) => {
+        (node: RowComponent | undefined, withParent?: boolean, selfParent?: boolean, parentOnly?: boolean, withChildren?: boolean) => {
             const tableApi = gridApi.tableApi;
 
             if (!tableApi || !node) return {};

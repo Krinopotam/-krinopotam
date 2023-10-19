@@ -28,9 +28,9 @@ export const TabulatorGridFieldRender = ({field}: {field: TabulatorGridField}): 
 
     const onDataSetChange = useCallback(
         (dataSet: IGridRowData[] | undefined, gridApi: IGridApi, field: TabulatorGridField) => {
-            prevValueRef.current = dataSet;
-            field.setValue(dataSet ?? undefined);
             if (field.isReady()) {
+                prevValueRef.current = dataSet;
+                field.setValue(dataSet ?? undefined);
                 field.setDirty(true);
                 field.setTouched(true); //TODO: rework field touched
             }

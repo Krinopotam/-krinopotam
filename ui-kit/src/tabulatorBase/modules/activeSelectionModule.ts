@@ -113,7 +113,7 @@ export class ActiveSelectionModule extends Module {
         }
     }
 
-    public setActiveRow(row: RowComponent | undefined | null, clearSelection?: boolean, scrollPosition?: ScrollToRowPosition) {
+    public setActiveRow(row: RowComponent | undefined | null | false, clearSelection?: boolean, scrollPosition?: ScrollToRowPosition) {
         const _this = this as unknown as IModule;
         const prevActiveRow = this.activeRow;
         this.activeRow = row || undefined;
@@ -121,10 +121,12 @@ export class ActiveSelectionModule extends Module {
         if (prevActiveRow !== this.activeRow) {
             if (clearSelection || !row) this.table.deselectRow();
             prevActiveRow?.reformat();
-            row?.reformat();
-            row?.select();
+            if (row !==false) {
+                row?.reformat();
+                row?.select();
+                row?.getElement()?.classList?.add('tabulator-active');
+            }
             prevActiveRow?.getElement()?.classList?.remove('tabulator-active');
-            row?.getElement()?.classList?.add('tabulator-active');
             _this.dispatchExternal('activeRowChanged', row);
         }
 
