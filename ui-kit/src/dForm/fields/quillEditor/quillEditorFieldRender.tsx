@@ -13,6 +13,7 @@ export const QuillEditorFieldRender = ({field}: {field: QuillEditorField}): Reac
 
     const onChange = useCallback(
         function (this: Quill, value: string, delta: DeltaStatic, source: Sources, editor: UnprivilegedEditor) {
+            if (!field.isReady()) return;
             field.setValue(value || undefined);
             field.setDirty(true);
             fieldProps.onChange?.(value, delta, source, editor, field);

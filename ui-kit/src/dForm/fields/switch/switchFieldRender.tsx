@@ -11,6 +11,7 @@ export const SwitchFieldRender = ({field}: {field: SwitchField}): React.JSX.Elem
 
     const onChange = useCallback(
         (checked: boolean) => {
+            if (!field.isReady()) return;
             field.setValue(checked || false);
             field.setDirty(true);
             field.setTouched(true);

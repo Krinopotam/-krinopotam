@@ -12,9 +12,11 @@ export const UploadDraggerFieldRender = ({field}: {field: UploadDraggerField}): 
 
     const onChange = useCallback(
         (e: UploadChangeParam<UploadFile<unknown>>) => {
-            field.setValue(e.fileList || null);
-            field.setDirty(true);
-            field.setTouched(true);
+            if (field.isReady()) {
+                field.setValue(e.fileList || null);
+                field.setDirty(true);
+                field.setTouched(true);
+            }
             fieldProps.onChange?.(e);
         },
         [field, fieldProps]

@@ -12,6 +12,7 @@ export const InputFieldRender = ({field}:{field:InputField}):React.JSX.Element =
 
     const onChange = useCallback(
         (e: React.ChangeEvent<HTMLInputElement>) => {
+            if (!field.isReady()) return;
             field.setValue( e.target.value || null)
             field.setDirty(true)
         },

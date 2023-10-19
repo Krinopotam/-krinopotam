@@ -19,6 +19,7 @@ export const DateTimeFieldRender = ({field}: {field: DateTimeField}): React.JSX.
     }
     const onChange = useCallback(
         (e: dayjs.Dayjs | null) => {
+            if (!field.isReady()) return;
             field.setDirty(true);
             field.setValue(e?.format(fieldFormat));
         },

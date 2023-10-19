@@ -12,6 +12,7 @@ export const PasswordFieldRender = ({field}:{field:PasswordField}):React.JSX.Ele
 
     const onChange = useCallback(
         (e: React.ChangeEvent<HTMLInputElement>) => {
+            if (!field.isReady()) return;
             field.setValue( e.target.value || null)
             field.setDirty(true)
         },

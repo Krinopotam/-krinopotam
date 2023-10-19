@@ -13,6 +13,7 @@ export const CheckboxFieldRender = ({field}:{field:CheckboxField}):React.JSX.Ele
 
     const onChange = useCallback(
         (e: CheckboxChangeEvent) => {
+            if (!field.isReady()) return;
             field.setValue( e.target.checked || false);
             field.setTouched( true);
             field.setDirty( true);

@@ -11,6 +11,7 @@ export const SelectFieldRender = ({field}: {field: SelectField}): React.JSX.Elem
 
     const onChange = useCallback(
         (value: ISelectValue, options: ISelectNode | ISelectNode[]) => {
+            if (!field.isReady()) return;
             field.setValue(fieldProps.fullItemValue ? options: value);
             field.setDirty(true);
         },

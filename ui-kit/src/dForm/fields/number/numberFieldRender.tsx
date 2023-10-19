@@ -12,6 +12,7 @@ export const NumberFieldRender = ({field}: {field: NumberField}): React.JSX.Elem
 
     const onChange = useCallback(
         (val: string | number | null) => {
+            if (!field.isReady()) return;
             field.setValue(val ?? 0);
             field.setDirty(true);
         },
