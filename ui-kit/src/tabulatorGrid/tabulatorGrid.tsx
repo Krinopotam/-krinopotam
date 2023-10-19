@@ -1,5 +1,5 @@
 import React, {useMemo, useRef, useState} from 'react';
-import {ITabulatorProps, ITabulator} from '@src/tabulatorBase';
+import {ITabulatorProps, ITabulator, IRequestProps} from '@src/tabulatorBase';
 import {IButtonsRowApi, IFormButton, IFormButtons} from '@src/buttonsRow/buttonsRow';
 import {IDFormModalProps, IDFormModalApi} from '@src/dFormModal';
 import {TPromise} from '@krinopotam/service-types';
@@ -69,7 +69,7 @@ export interface IGridProps_ {
     onDataSetChange?: (dataSet: IGridRowData[] | undefined, gridApi: IGridApi) => IGridRowData[] | void;
 
     /** fires when the grid trying to fetch data */
-    onDataFetch?: (gridApi: IGridApi) => IGridDataSourcePromise | undefined | void;
+    onDataFetch?: (gridApi: IGridApi, params?:IRequestProps) => IGridDataSourcePromise | undefined | void;
 
     /** fires when the grid data fetch success */
     onDataFetchSuccess?: (dataSet: IGridRowData[] | undefined, gridApi: IGridApi) => void;
@@ -89,8 +89,8 @@ export interface IGridProps_ {
 
 export type IGridProps = IGridProps_ & ITabulatorProps;
 
-export type IGridDataSourcePromise = TPromise<{data: Record<string, unknown>[]}, {message: string; code: number}>;
-export type IGridDeletePromise = TPromise<{data: Record<string, unknown>}, {message: string; code: number}>;
+export type IGridDataSourcePromise = TPromise<{data: IGridRowData[],  last_page?: number}, {message: string; code: number}>;
+export type IGridDeletePromise = TPromise<{data: IGridRowData,  last_page?: number}, {message: string; code: number}>;
 
 const TabulatorGrid = (props: IGridProps): React.JSX.Element => {
     const tabulatorProps = useSplitTabulatorProps(props);

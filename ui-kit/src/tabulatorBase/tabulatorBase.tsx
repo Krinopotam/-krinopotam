@@ -1,5 +1,5 @@
 import 'tabulator-tables/dist/css/tabulator_simple.css';
-import {ColumnComponent, ColumnDefinition, ColumnLookup, EmptyCallback, EventCallBackMethods, RowComponent, TabulatorFull as Tabulator} from 'tabulator-tables';
+import {ColumnComponent, ColumnDefinition, ColumnLookup, EmptyCallback, EventCallBackMethods, FilterType, RowComponent, TabulatorFull as Tabulator} from 'tabulator-tables';
 import React, {MouseEvent} from 'react';
 import {useInit} from './hooks/init';
 import {
@@ -18,12 +18,12 @@ type _ITabulator = IAdvancedHeaderFilterTabulator & IActiveSelectionTabulator & 
 export type ITabulatorFilterFunc = (headerValue: AnyType, rowValue: AnyType, rowData: Record<string, unknown>, filterParams: Record<string, unknown>) => boolean;
 
 export interface IRequestProps extends Record<string, unknown> {
-    page: number,
-    size: number,
+    page?: number,
+    size?: number,
     sort?: { field: string, dir: 'asc' | 'desc' }[],
     filter?: {
         field: string,
-        type: "=" | "!=" | "like" | "<" | ">" | "<=" | ">=" | "in" | "regex" | "starts" | "ends" | ITabulatorFilterFunc,
+        type: FilterType | ITabulatorFilterFunc,
         value: unknown
     }
 }

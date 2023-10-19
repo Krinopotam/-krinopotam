@@ -86,7 +86,19 @@ export const PaginationRemote: Story = {
         filterMode: "remote",
         sortMode: 'remote',
         ajaxURL: '-', //ajax URL. Workaround: if you need to use your own fetcher (for example Axios), then you must specify any non-empty string
-        ajaxRequestFunc: (url, config, params) => {
+        onDataFetch:(gridApi, params)=>{
+            return new Promise((resolve) => {
+                setTimeout(() => {
+                    //make any remote fetch
+                    const page = params?.page ?? 1;
+                    const size = params?.size ?? gridApi.gridProps.paginationSize ?? 5;
+                    const lastPage = Math.ceil(TabulatorTreeDataset.length/size)
+                    const dataSet = TabulatorTreeDataset.slice((page - 1) * size, page * size); //remote fetch imitation
+                    resolve({data: dataSet, last_page: lastPage });
+                }, 1000)
+            })
+        },
+/*        ajaxRequestFunc: (url, config, params) => {
             return new Promise((resolve) => {
                 setTimeout(() => {
                     //make any remote fetch
@@ -94,7 +106,7 @@ export const PaginationRemote: Story = {
                     resolve({data: dataSet, last_page: 4})
                 }, 1000)
             })
-        },
+        },*/
         ajaxParams: {key1: "value1", key2: "value2"} //any additional params (you can pass a callback)
     },
 }

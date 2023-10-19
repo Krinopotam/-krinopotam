@@ -3,11 +3,10 @@ import {HelpersStrings, HelpersObjects} from '@krinopotam/js-helpers';
 import {IDFormModalApi} from '@src/dFormModal';
 import {IButtonsRowApi} from '@src/buttonsRow/buttonsRow';
 import useUnmountedRef from 'ahooks/lib/useUnmountedRef';
-import {TPromise} from '@krinopotam/service-types';
 import {MessageBox} from '@src/messageBox';
-import {IGridProps, IGridRowData} from '../tabulatorGrid';
+import {IGridDataSourcePromise, IGridProps, IGridRowData} from '../tabulatorGrid';
 import {RowComponent, ScrollToRowPosition, TabulatorFull as Tabulator} from 'tabulator-tables';
-import {ITabulator} from '@src/tabulatorBase';
+import {IRequestProps, ITabulator} from '@src/tabulatorBase';
 
 type IRowKey = IGridRowData['id'];
 type IRowKeys = IRowKey | IRowKey[];
@@ -120,10 +119,8 @@ export interface IGridApi {
     buttonsApi: IButtonsRowApi & {refreshButtons: () => void};
 
     /** Fetch data */
-    fetchData: (dataSource?: IGridDataFetchPromise) => void;
+    fetchData: (dataSource?: IGridDataSourcePromise, params?:IRequestProps) => void;
 }
-
-export type IGridDataFetchPromise = TPromise<{data: IGridRowData[]}, {message: string; code: number}>;
 
 export const useInitGridApi = ({
     gridApi,
@@ -551,9 +548,9 @@ const useApiDeleteRows = (gridApi: IGridApi): IGridApi['deleteRows'] => {
 
 const useApiFetchData = (gridApi: IGridApi): IGridApi['fetchData'] => {
     return useCallback(
-        (dataSource?: IGridDataFetchPromise) => {
+        (dataSource?: IGridDataSourcePromise, params?: IRequestProps) => {
             const props = gridApi.gridProps;
-            const curDataSource = dataSource ?? props?.onDataFetch?.(gridApi);
+            const curDataSource = dataSource ?? props?.onDataFetch?.(gridApi, params);
             if (!curDataSource) {
                 props?.onDataFetchSuccess?.(undefined, gridApi);
                 props?.onDataFetchCompleted?.(gridApi);
@@ -587,7 +584,7 @@ const useApiFetchData = (gridApi: IGridApi): IGridApi['fetchData'] => {
                             ok: {
                                 onClick: () => {
                                     box.destroy();
-                                    gridApi.fetchData(dataSource);
+                                    gridApi.fetchData(curDataSource, params);
                                 },
                             },
                         },

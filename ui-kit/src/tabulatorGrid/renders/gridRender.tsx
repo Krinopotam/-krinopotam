@@ -1,9 +1,10 @@
 import React, {useCallback, useEffect, useRef} from 'react';
-import ReactTabulator, {ITabulator, ITabulatorProps} from '@src/tabulatorBase';
+import ReactTabulator, {IAjaxConfig, IRequestProps, ITabulator, ITabulatorProps} from '@src/tabulatorBase';
 import {IGridApi} from '../hooks/api';
 import dispatcher from '@src/formsDispatcher';
-import {IGridProps} from '../tabulatorGrid';
+import {IGridProps, IGridRowData} from '../tabulatorGrid';
 import {useEvents} from '../hooks/events';
+import {MessageBox} from "@src/messageBox";
 
 const GridRender_ = ({
     tableRef,
@@ -37,9 +38,66 @@ const GridRender_ = ({
         dispatcher.pushToStack(gridApi.getGridId());
     }, [gridApi]);
 
+    const ajaxRequestFunc = useCallback((url:string, config:IAjaxConfig, params:IRequestProps)=>{
+            return new Promise((resolve) => {
+
+                const dataSource = gridProps?.onDataFetch?.(gridApi, params);
+                if (!dataSource) {
+                    gridProps?.onDataFetchSuccess?.(undefined, gridApi);
+                    gridProps?.onDataFetchCompleted?.(gridApi);
+                    resolve ({data:[], last_page:1});
+                    return
+                }
+
+                gridApi.setIsLoading(true);
+                dataSource.then(
+                    result => {
+                        const data = (result.data || []) as IGridRowData[];
+                        if (gridApi.getIsMounted()) {
+                            gridProps?.onDataFetchCompleted?.(gridApi);
+                            gridProps?.onDataFetchSuccess?.(data, gridApi);
+                            gridApi.setIsLoading(false);
+                        }
+                        resolve({data:data, last_page: result.last_page ?? 1})
+                        return
+                    },
+                    error => {
+                        if (!gridApi.getIsMounted()) {
+                            resolve(  {data:[], last_page:1});
+                            return
+                        }
+                        gridProps?.onDataFetchCompleted?.(gridApi);
+                        gridProps?.onDataFetchError?.(error.message, error.code, gridApi);
+                        gridApi.setIsLoading(false);
+                        const box = MessageBox.confirm({
+                            content: (
+                                <>
+                                    <p>{error.message}</p>
+                                    <p>{'Попробовать снова?'}</p>
+                                </>
+                            ),
+                            colorType: 'danger',
+                            buttons: {
+                                ok: {
+                                    onClick: () => {
+                                        box.destroy();
+                                        gridApi.fetchData(dataSource, params);
+                                    },
+                                },
+                            },
+                        });
+                    }
+                );
+            })
+
+          //  return gridProps.onDataFetch?.(gridApi, params)
+
+    } , [gridApi, gridProps])
+
     return (
         <ReactTabulator
             {...tabulatorProps}
+            ajaxRequestFunc={ gridProps.onDataFetch ? ajaxRequestFunc as ITabulator['ajaxRequestFunc']: undefined}
             height={'100%'}
             onTableRef={onTableRef}
             gridId={gridApi.getGridId()}
