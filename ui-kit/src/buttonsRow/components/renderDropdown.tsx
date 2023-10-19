@@ -5,6 +5,7 @@ import {ItemType, MenuDividerType, MenuItemGroupType} from 'antd/es/menu/hooks/u
 import {ButtonDropdownClickable} from '@src/buttonsRow/components/buttonDropdownClickable';
 import {ButtonDropdownLink} from '@src/buttonsRow/components/buttonDropdownLink';
 import {ButtonDropdown} from '@src/buttonsRow/components/buttonDropdown';
+import {getSortedButtonsKeys} from '@src/buttonsRow/helpers/buttonMethods';
 
 export const RenderDropdown = ({id, button, context, componentProps}: {id: string; button: IFormButton; context: unknown; componentProps: IButtonRowProps}) => {
     const items: MenuProps['items'] = prepareDropdownItems(button.children, id, context);
@@ -25,7 +26,9 @@ const prepareDropdownItems = (buttons: IFormButton['children'], parentId: string
     const result: MenuProps['items'] = [];
     if (!buttons) return result;
 
-    for (const id in buttons) {
+    const buttonsKeys = getSortedButtonsKeys(buttons);
+
+    for (const id of buttonsKeys) {
         const button = buttons[id];
         if (!button) continue;
 
@@ -67,7 +70,7 @@ const prepareDropdownItems = (buttons: IFormButton['children'], parentId: string
                 icon: button.icon,
                 children: children,
                 disabled: button.disabled,
-                danger: button.colorType==='danger',
+                danger: button.colorType === 'danger',
                 expandIcon: button.expandIcon,
                 style: button.type !== 'link' ? button.style : undefined,
                 className: button.className,

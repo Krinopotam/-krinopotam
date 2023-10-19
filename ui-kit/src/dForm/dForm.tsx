@@ -133,7 +133,7 @@ export const DForm = (props: IDFormProps): React.JSX.Element => {
     useUpdateMessageBoxTheme(); //set current theme to messageBox
 
     const [formProps, updateFormProps] = useGetActualProps(props); //props can be set both by parent component and via api
-
+//
     //region Common component states
     const [formId] = useState(formProps.formId ?? 'dForm-' + HelpersStrings.getUuid());
     const [formApi] = useState((formProps.apiRef || {}) as IDFormApi);

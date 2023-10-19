@@ -21,8 +21,10 @@ export interface IFormButton {
     /** Button title */
     title?: React.ReactNode;
 
+    /** Component type */
     type?: 'button' | 'link' | 'text' | 'divider' | 'group' | 'element';
 
+    /** Color type*/
     colorType?: IButtonProps['colorType'];
 
     /** Is button active (set primary style) */
@@ -81,6 +83,9 @@ export interface IFormButton {
 
     /** Button shape */
     shape?: IButtonProps['shape'];
+
+    /** Order weight (default 0) */
+    weight?:number
 
     /************* Callbacks *************/
     /**Button onClick callback */

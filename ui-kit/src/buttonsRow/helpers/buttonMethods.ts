@@ -6,10 +6,13 @@ export const prepareButtons = (buttons: IFormButtons | undefined, rowColorType?:
     const leftButtons: IFormButtons = {};
     const centerButtons: IFormButtons = {};
     const rightButtons: IFormButtons = {};
-    for (const key in clonedButtons) {
+
+    const buttonsKeys = getSortedButtonsKeys(clonedButtons);
+
+    for (const key of buttonsKeys) {
         const button = clonedButtons[key];
         if (!button) continue;
-        if (!button.title) button.title = key;
+        if (!button.title && !button.icon) button.title = key;
         if (!button.type) button.type = 'button';
         if (!button.position) button.position = 'right';
         if (rowColorType) button.colorType = rowColorType;
@@ -20,6 +23,22 @@ export const prepareButtons = (buttons: IFormButtons | undefined, rowColorType?:
     }
 
     return {...leftButtons, ...centerButtons, ...rightButtons};
+};
+
+export const getSortedButtonsKeys = (buttons: IFormButtons | undefined) => {
+    if (!buttons) return [] as string[];
+
+    const buttonsKeys = Object.keys(buttons);
+    buttonsKeys.sort((key1, key2) => {
+        const btn1 = buttons[key1];
+        const btn2 = buttons[key2];
+        const btnWeight1 = btn1?.weight ?? 0;
+        const btnWeight2 = btn2?.weight ?? 0;
+        if (btnWeight1 === btnWeight2) return 0;
+        return btnWeight1 < btnWeight2 ? -1 : 1;
+    });
+
+    return buttonsKeys;
 };
 
 export const getNextButtonName = (currentName: string, buttons: IFormButtons, direction: 'forward' | 'backward') => {

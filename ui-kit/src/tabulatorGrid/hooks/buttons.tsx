@@ -49,6 +49,7 @@ const useGetViewButton = (gridApi: IGridApi, activeRow: IGridRowData | undefined
         if (!gridProps.editFormProps || !gridProps.readOnly || gridProps.buttons?.view === null) return undefined;
 
         return {
+            weight:100,
             title: 'Просмотреть',
             icon: <EyeOutlined/>,
             position: 'right',
@@ -72,6 +73,7 @@ const useGetCreateButton = (gridApi: IGridApi): IFormButton | undefined => {
         const editFormApi = gridApi.editFormApi;
         if (!gridProps.editFormProps || gridProps.readOnly || gridProps.buttons?.create === null) return undefined;
         return {
+            weight:110,
             title: 'Создать',
             icon: <PlusOutlined/>,
             position: 'right',
@@ -93,6 +95,7 @@ const useGetCloneButton = (gridApi: IGridApi, activeRow: IGridRowData | undefine
         if (!gridProps.editFormProps || gridProps.readOnly || gridProps.buttons?.clone === null) return undefined;
 
         return {
+            weight:120,
             title: 'Клонировать',
             icon: <CopyOutlined/>,
             position: 'right',
@@ -116,6 +119,7 @@ const useGetUpdateButton = (gridApi: IGridApi, activeRow: IGridRowData | undefin
         if (!gridProps.editFormProps || gridProps.readOnly || gridProps.buttons?.update === null) return undefined;
 
         return {
+            weight:130,
             title: 'Редактировать',
             icon: <EditOutlined/>,
             position: 'right',
@@ -138,6 +142,7 @@ const useGetDeleteButton = (gridApi: IGridApi, selectedRows: IGridRowData[]): IF
         if (!gridProps.editFormProps || gridProps.readOnly || gridProps.buttons?.delete === null) return undefined;
 
         return {
+            weight:140,
             title: 'Удалить',
             icon: <DeleteOutlined/>,
             position: 'right',
@@ -202,6 +207,7 @@ const useGetFilterToggleButton = (gridApi: IGridApi, tableApi: ITabulator | unde
         if (!tableApi?.isHeaderFilterAvailable()) return undefined
 
         return {
+            weight:1000,
             title: '',
             icon: <FilterOutlined/>,
             position: 'right',
