@@ -30,7 +30,14 @@ export interface IGridProps_ {
     /** Grid class name */
     className?: string;
 
-    buttons?: Record<'view' | 'create' | 'clone' | 'update' | 'delete' | 'filterToggle', IFormButton | null> | IFormButtons;
+    /** Grid header buttons */
+    buttons?: Record<'view' | 'create' | 'clone' | 'update' | 'delete' | 'filterToggle' | 'system', IFormButton | null> | IFormButtons;
+
+    /** Grid header buttons size. Default: 'small'*/
+    buttonsSize?: IFormButton['size'];
+
+    /** Grid header buttons size. Default: 'right'*/
+    buttonsPosition?: IFormButton['position'];
 
     /** Table can't be edited */
     readOnly?: boolean;
@@ -51,7 +58,7 @@ export interface IGridProps_ {
     placeholder?: string;
 
     /** Selector of parent container (.className or #id). Tabulator Grid will resize height on container height change */
-    resizeHeightWithParent?:string
+    resizeHeightWithParent?: string;
 
     // --- callbacks -----------------------------------------------------
 
@@ -110,6 +117,8 @@ const useSplitTabulatorProps = (props: IGridProps) => {
             dataSet: true,
             className: true,
             buttons: true,
+            buttonsSize: true,
+            buttonsPosition: true,
             readOnly: true,
             editFormProps: true,
             noHover: true,
@@ -124,7 +133,7 @@ const useSplitTabulatorProps = (props: IGridProps) => {
             onDataFetchCompleted: true,
             onSelectionChange: true,
             onDelete: true,
-            resizeHeightWithParent:true
+            resizeHeightWithParent: true,
         });
 
         return result[1];

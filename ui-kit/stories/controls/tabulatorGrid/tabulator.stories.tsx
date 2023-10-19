@@ -39,10 +39,10 @@ export const Simple: Story = {
     },
 }
 
-export const WithoutHeaderFilter: Story = {
+export const WithHeaderFilter: Story = {
     args: {
         ...baseArgs,
-        headerFilterHidden: true,
+        showHeaderFilter: true,
         footerElement: <div>My Footer</div>
     },
 }

@@ -9,6 +9,8 @@ import {IGridDeletePromise, IGridRowData, ITabulator} from '@src/tabulatorGrid';
 export const useInitButtons = (gridApi: IGridApi): IFormButtons => {
     const [, refreshButtons] = useState({});
     const buttons = gridApi.gridProps.buttons;
+    const buttonsSize = gridApi.gridProps.buttonsSize ?? 'small';
+    const buttonsPos = gridApi.gridProps.buttonsPosition ?? 'right';
     const activeRow = gridApi.getActiveRow();
     const selectedRows = gridApi.getSelectedRows();
 
@@ -31,8 +33,16 @@ export const useInitButtons = (gridApi: IGridApi): IFormButtons => {
             filterToggle: filterToggleButton,
         } as IFormButtons;
 
-        return HelpersObjects.mergeObjects(defaultButtons, buttons);
-    }, [buttons, cloneButton, createButton, deleteButton, filterToggleButton, updateButton, vewButton]);
+        const resultButtons = HelpersObjects.mergeObjects(defaultButtons, buttons);
+        for (const key in resultButtons) {
+            const btn = resultButtons[key];
+            if (!btn) continue;
+            btn.size = btn.size ?? buttonsSize;
+            btn.position = btn.position ?? buttonsPos;
+        }
+
+        return resultButtons;
+    }, [buttons, buttonsPos, buttonsSize, cloneButton, createButton, deleteButton, filterToggleButton, updateButton, vewButton]);
 };
 
 const useRefreshButtons = (refreshButtons: React.Dispatch<React.SetStateAction<Record<string, unknown>>>) => {
@@ -49,11 +59,10 @@ const useGetViewButton = (gridApi: IGridApi, activeRow: IGridRowData | undefined
         if (!gridProps.editFormProps || !gridProps.readOnly || gridProps.buttons?.view === null) return undefined;
 
         return {
-            weight:100,
+            weight: 100,
             title: 'Просмотреть',
-            icon: <EyeOutlined/>,
+            icon: <EyeOutlined />,
             position: 'right',
-            size: 'small',
             disabled: !activeRow || selectedRows.length !== 1,
             hotKeys: [{key: 'Enter'}],
             onClick: () => {
@@ -73,11 +82,10 @@ const useGetCreateButton = (gridApi: IGridApi): IFormButton | undefined => {
         const editFormApi = gridApi.editFormApi;
         if (!gridProps.editFormProps || gridProps.readOnly || gridProps.buttons?.create === null) return undefined;
         return {
-            weight:110,
+            weight: 110,
             title: 'Создать',
-            icon: <PlusOutlined/>,
+            icon: <PlusOutlined />,
             position: 'right',
-            size: 'small',
             hotKeys: [{key: 'Insert'}],
             onClick: () => {
                 const dataSet = getRowDataSet(gridApi, false, true);
@@ -95,11 +103,10 @@ const useGetCloneButton = (gridApi: IGridApi, activeRow: IGridRowData | undefine
         if (!gridProps.editFormProps || gridProps.readOnly || gridProps.buttons?.clone === null) return undefined;
 
         return {
-            weight:120,
+            weight: 120,
             title: 'Клонировать',
-            icon: <CopyOutlined/>,
+            icon: <CopyOutlined />,
             position: 'right',
-            size: 'small',
             disabled: !activeRow || selectedRows.length !== 1,
             hotKeys: [{key: 'F9'}],
             onClick: () => {
@@ -119,11 +126,10 @@ const useGetUpdateButton = (gridApi: IGridApi, activeRow: IGridRowData | undefin
         if (!gridProps.editFormProps || gridProps.readOnly || gridProps.buttons?.update === null) return undefined;
 
         return {
-            weight:130,
+            weight: 130,
             title: 'Редактировать',
-            icon: <EditOutlined/>,
+            icon: <EditOutlined />,
             position: 'right',
-            size: 'small',
             disabled: !activeRow || selectedRows.length !== 1,
             hotKeys: [{key: 'Enter'}, {key: 'F2'}],
             onClick: () => {
@@ -142,12 +148,11 @@ const useGetDeleteButton = (gridApi: IGridApi, selectedRows: IGridRowData[]): IF
         if (!gridProps.editFormProps || gridProps.readOnly || gridProps.buttons?.delete === null) return undefined;
 
         return {
-            weight:140,
+            weight: 140,
             title: 'Удалить',
-            icon: <DeleteOutlined/>,
+            icon: <DeleteOutlined />,
             position: 'right',
-            colorType:'danger',
-            size: 'small',
+            colorType: 'danger',
             disabled: !selectedRows || selectedRows.length === 0,
             hotKeys: [{key: 'Delete', ctrl: true}],
             onClick: () => {
@@ -175,7 +180,7 @@ const deleteHandler = (gridApi: IGridApi) => {
                     if (!gridProps.confirmDelete) gridApi.setIsLoading(false);
                     else if (messageBox) messageBox.destroy();
                 })
-                .catch((error) => {
+                .catch(error => {
                     if (!gridApi.getIsMounted()) return;
                     if (!gridProps.confirmDelete) gridApi.setIsLoading(false);
                     else if (messageBox) messageBox.destroy();
@@ -204,19 +209,18 @@ const useGetFilterToggleButton = (gridApi: IGridApi, tableApi: ITabulator | unde
         const gridProps = gridApi.gridProps;
         if (gridProps.buttons?.filterToggle === null) return undefined;
 
-        if (!tableApi?.isHeaderFilterAvailable()) return undefined
+        if (!tableApi?.isHeaderFilterAvailable()) return undefined;
 
         return {
-            weight:1000,
+            weight: 1000,
             title: '',
-            icon: <FilterOutlined/>,
+            icon: <FilterOutlined />,
             position: 'right',
-            size: 'small',
             active: gridApi.tableApi?.isHeaderFilterVisible(),
             //disabled: !activeRowKey || selectedRow.length !== 1,
 
             onClick: () => {
-                const show = tableApi?.toggleHeaderFilter()
+                const show = tableApi?.toggleHeaderFilter();
 
                 gridApi.buttonsApi.updateButtons({
                     filterToggle: {

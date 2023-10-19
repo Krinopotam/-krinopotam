@@ -10,7 +10,7 @@ export interface IAdvancedHeaderFilterTabulator extends Tabulator {
         dataTreeParentField?: string | number;
 
         /** Hide HeaderFilter when grid is initialized */
-        headerFilterHidden?: boolean
+        showHeaderFilter?: boolean
     };
 
     getBaseTreeDataFilter: (matchFunction: ITabulatorFilterFunc | undefined) => ITabulatorFilterFunc;
@@ -54,7 +54,7 @@ export class AdvancedHeaderFilterModule extends Module {
         */
 
         _this.registerTableOption('dataTreeParentField', undefined);
-        _this.registerTableOption('headerFilterHidden', undefined);
+        _this.registerTableOption('showHeaderFilter', undefined);
         _this.registerTableFunction('getBaseTreeDataFilter', this.getBaseTreeDataFilter.bind(this));
         _this.registerTableFunction('toggleHeaderFilter', this.toggleHeaderFilter.bind(this));
         _this.registerTableFunction('isHeaderFilterVisible', this.isHeaderFilterVisible.bind(this));
@@ -77,7 +77,7 @@ export class AdvancedHeaderFilterModule extends Module {
     public onTableBuiltHandler() {
         if (this.table.options.dataTree) this.wrapUserFilters()
 
-        if (this.table.options.headerFilterHidden) this.toggleHeaderFilter(false);
+        if (!this.table.options.showHeaderFilter) this.toggleHeaderFilter(false);
         else this.headerFilterStatus = true;
     }
 

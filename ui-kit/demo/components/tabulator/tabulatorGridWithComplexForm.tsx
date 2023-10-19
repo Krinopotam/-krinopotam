@@ -83,7 +83,6 @@ const editFormProps: IDFormModalProps = {
                     inputs: {
                         component: TabulatorGridField,
                         columns: TagsColumns,
-                        headerFilterHidden: true,
                         height: '320px',
                         layout: 'fitColumns',
                         resizeHeightWithForm: true,
@@ -94,7 +93,6 @@ const editFormProps: IDFormModalProps = {
                     outputs: {
                         component: TabulatorGridField,
                         columns: TagsColumns,
-                        headerFilterHidden: true,
                         height: '320px',
                         layout: 'fitColumns',
                         resizeHeightWithForm: true,
