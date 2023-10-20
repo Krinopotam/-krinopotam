@@ -92,7 +92,7 @@ export interface IGridProps_ {
 export type IGridProps = IGridProps_ & Omit<ITabulatorProps, 'data' | 'ajaxURL'>;
 
 export type IGridDataSourcePromise = TPromise<{data: IGridRowData[]; last_page?: number}, {message: string; code: number}>;
-export type IGridDeletePromise = TPromise<{data: IGridRowData; last_page?: number}, {message: string; code: number}>;
+export type IGridDeletePromise = TPromise<{data: IGridRowData[]; last_page?: number}, {message: string; code: number}>;
 
 const TabulatorGrid = (props: IGridProps): React.JSX.Element => {
     const tabulatorProps = useSplitTabulatorProps(props);

@@ -3,9 +3,10 @@ import {HelpersStrings, HelpersObjects} from '@krinopotam/js-helpers';
 import {IDFormModalApi} from '@src/dFormModal';
 import {IButtonsRowApi} from '@src/buttonsRow/buttonsRow';
 import useUnmountedRef from 'ahooks/lib/useUnmountedRef';
-import {IGridProps, IGridRowData} from '../tabulatorGrid';
+import {IGridDeletePromise, IGridProps, IGridRowData} from '../tabulatorGrid';
 import {RowComponent, ScrollToRowPosition, TabulatorFull as Tabulator} from 'tabulator-tables';
 import {ITabulator} from '@src/tabulatorBase';
+import {MessageBox, MessageBoxApi} from '@src/messageBox';
 
 type IRowKey = IGridRowData['id'];
 type IRowKeys = IRowKey | IRowKey[];
@@ -42,9 +43,12 @@ export interface IGridApi {
     updateRows: (rowData: IGridRowData | IGridRowData[], updateActiveRow?: boolean) => void;
 
     /** Delete existed row/rows by keys */
-    deleteRowsByKeys: (keys: IRowKeys) => void;
+    removeRowsByKeys: (keys: IRowKeys) => void;
 
-    /** Delete existed row/rows */
+    /** Simple remove existed row/rows from grid without any logic (not to be confused with deleteRows) */
+    removeRows: (rowData: IGridRowData | IGridRowData[]) => void;
+
+    /** Delete existed row/rows from grid with deletion confirmation and asynchronous processing (not to be confused with removeRows) */
     deleteRows: (rowData: IGridRowData | IGridRowData[]) => void;
 
     /** Set active row */
@@ -164,7 +168,8 @@ export const useInitGridApi = ({
     gridApi.getRowByKey = useApiGetRowByKey(gridApi);
     gridApi.insertRows = useApiInsertRows(dataSetRef, gridApi);
     gridApi.updateRows = useApiUpdateRows(dataSetRef, gridApi);
-    gridApi.deleteRowsByKeys = useApiDeleteRowsByKeys(dataSetRef, gridApi);
+    gridApi.removeRowsByKeys = useApiRemoveRowsByKeys(dataSetRef, gridApi);
+    gridApi.removeRows = useApiRemoveRows(gridApi);
     gridApi.deleteRows = useApiDeleteRows(gridApi);
     gridApi.fetchData = useApiFetchData(gridApi);
     gridApi.getRowData = useApiGetRowData(gridApi);
@@ -498,7 +503,7 @@ const cascadeNodeExpand = (node: RowComponent | false) => {
     if (!node.isTreeExpanded()) node.treeExpand();
 };
 
-const useApiDeleteRowsByKeys = (dataSetRef: React.MutableRefObject<IGridProps['dataSet'] | undefined>, gridApi: IGridApi): IGridApi['deleteRowsByKeys'] => {
+const useApiRemoveRowsByKeys = (dataSetRef: React.MutableRefObject<IGridProps['dataSet'] | undefined>, gridApi: IGridApi): IGridApi['removeRowsByKeys'] => {
     return useCallback(
         (keys: IRowKeys) => {
             if (!gridApi.tableApi) return;
@@ -533,13 +538,59 @@ const useApiDeleteRowsByKeys = (dataSetRef: React.MutableRefObject<IGridProps['d
     );
 };
 
-const useApiDeleteRows = (gridApi: IGridApi): IGridApi['deleteRows'] => {
+const useApiRemoveRows = (gridApi: IGridApi): IGridApi['removeRows'] => {
     return useCallback(
         (rows: IGridRowData | IGridRowData[]) => {
             const clonedRows: IGridRowData[] = HelpersObjects.isArray(rows) ? [...(rows as IGridRowData[])] : [rows as IGridRowData];
             const keys: IRowKey[] = [];
             for (const row of clonedRows) keys.push(row.id);
-            gridApi.deleteRowsByKeys(keys);
+            gridApi.removeRowsByKeys(keys);
+        },
+        [gridApi]
+    );
+};
+
+const useApiDeleteRows = (gridApi: IGridApi): IGridApi['deleteRows'] => {
+    return useCallback(
+        (rows: IGridRowData | IGridRowData[] | undefined) => {
+            if (!rows) return;
+            const rowsData = Array.isArray(rows) ? rows : [rows];
+            const gridProps = gridApi.gridProps;
+            let messageBox: MessageBoxApi;
+            const removeRows = () => {
+                const deletePromise = gridProps?.onDelete?.(rowsData, gridApi);
+
+                if (HelpersObjects.isPromise(deletePromise)) {
+                    if (!gridProps.confirmDelete) gridApi.setIsLoading(true);
+                    const promiseResult = deletePromise as IGridDeletePromise;
+                    promiseResult
+                        .then(() => {
+                            if (!gridApi.getIsMounted()) return;
+                            gridApi.removeRows(rowsData);
+                            if (!gridProps.confirmDelete) gridApi.setIsLoading(false);
+                            else messageBox?.destroy();
+                        })
+                        .catch(error => {
+                            if (!gridApi.getIsMounted()) return;
+                            if (!gridProps.confirmDelete) gridApi.setIsLoading(false);
+                            else messageBox?.destroy();
+                            MessageBox.alert({content: error.message, colorType: 'danger'});
+                        });
+                    return;
+                }
+
+                gridApi.removeRows(rowsData);
+                if (messageBox) messageBox.destroy();
+            };
+
+            if (gridProps.confirmDelete) {
+                messageBox = MessageBox.confirmWaiter({
+                    content: gridProps.rowDeleteMessage ?? 'Удалить выбранные строки?',
+                    onOk: removeRows,
+                });
+            } else {
+                removeRows();
+            }
         },
         [gridApi]
     );

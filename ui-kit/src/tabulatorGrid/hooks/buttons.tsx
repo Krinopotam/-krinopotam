@@ -156,51 +156,11 @@ const useGetDeleteButton = (gridApi: IGridApi, selectedRows: IGridRowData[]): IF
             disabled: !selectedRows || selectedRows.length === 0,
             hotKeys: [{key: 'Delete', ctrl: true}],
             onClick: () => {
-                deleteHandler(gridApi);
+                const selectedRows = gridApi.getSelectedRows();
+                gridApi.deleteRows(selectedRows);
             },
         } satisfies IFormButton;
     }, [gridApi, selectedRows]);
-};
-
-const deleteHandler = (gridApi: IGridApi) => {
-    const gridProps = gridApi.gridProps;
-    const selectedRows = gridApi.getSelectedRows();
-
-    let messageBox: MessageBoxApi;
-    const removeRows = () => {
-        const deletePromise = gridProps?.onDelete?.(selectedRows, gridApi);
-
-        if (HelpersObjects.isPromise(deletePromise)) {
-            if (!gridProps.confirmDelete) gridApi.setIsLoading(true);
-            const promiseResult = deletePromise as IGridDeletePromise;
-            promiseResult
-                .then(() => {
-                    if (!gridApi.getIsMounted()) return;
-                    gridApi.deleteRows(selectedRows);
-                    if (!gridProps.confirmDelete) gridApi.setIsLoading(false);
-                    else if (messageBox) messageBox.destroy();
-                })
-                .catch(error => {
-                    if (!gridApi.getIsMounted()) return;
-                    if (!gridProps.confirmDelete) gridApi.setIsLoading(false);
-                    else if (messageBox) messageBox.destroy();
-                    MessageBox.alert({content: error.message, colorType: 'danger'});
-                });
-            return;
-        }
-
-        gridApi.deleteRows(selectedRows);
-        if (messageBox) messageBox.destroy();
-    };
-
-    if (gridProps.confirmDelete) {
-        messageBox = MessageBox.confirmWaiter({
-            content: gridProps.rowDeleteMessage ?? 'Удалить выбранные строки?',
-            onOk: removeRows,
-        });
-    } else {
-        removeRows();
-    }
 };
 
 /** Get update button props */

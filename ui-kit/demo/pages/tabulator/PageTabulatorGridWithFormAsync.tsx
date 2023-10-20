@@ -88,11 +88,11 @@ export const TabulatorGridWithFormAsync = (): React.JSX.Element => {
                         }, 2000);
                     });
                 }}
-                onDelete={() => {
+                onDelete={(rows) => {
                     return new Promise((resolve, reject) => {
                         setTimeout(() => {
                             if (Math.random() < 0.3) reject({message: 'Ошибка удаления строк', code: 400});
-                            else resolve({data: {result: 'OK'}});
+                            else resolve({data: rows});
                         }, 2000);
                     });
                 }}
