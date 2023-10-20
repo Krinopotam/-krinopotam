@@ -549,6 +549,9 @@ const useApiDeleteRows = (gridApi: IGridApi): IGridApi['deleteRows'] => {
 const useApiFetchData = (gridApi: IGridApi): IGridApi['fetchData'] => {
     return useCallback(
         () => {
+            console.log('-------------------')
+            gridApi.tableApi?.setData()
+            return
             const props = gridApi.gridProps;
             const dataSource = props?.onDataFetch?.(gridApi, GetPaginationParams(gridApi));
             BaseFetchHandler(gridApi, dataSource)?.then(result => {

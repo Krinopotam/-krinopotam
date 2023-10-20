@@ -42,12 +42,14 @@ export interface IAjaxConfig extends Record<string, unknown> {
     },
 }
 
-export interface ITabulator extends _ITabulator {
+export interface ITabulator extends Omit<_ITabulator, 'setData'> {
     /**  Tabulator property type correction */
     updateColumnDefinition: (column: ColumnLookup, definition: Partial<ColumnDefinition>) => Promise<void>
 
     /** Ajax request handler */
     ajaxRequestFunc?: (url: string, config: IAjaxConfig, params: IRequestProps) => Promise<{ data: Record<string, unknown>[], last_page: number }>;
+
+    setData?:_ITabulator['setData'];
 }
 
 export interface ITabulatorColumn extends Omit<ColumnDefinition, 'headerPopup'> {
