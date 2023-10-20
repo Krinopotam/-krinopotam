@@ -174,7 +174,7 @@ function generatePageComponent(file, subFolderPath, relativeRoot, level) {
             <Divider />
             <div>
                 <Collapse 
-                    items={[{key: 1, label: 'Show source', children: <SyntaxHighlighter language="javascript" style={props.darkMode ? darcula : docco}>{source}</SyntaxHighlighter>}]}>
+                    items={[{key: 1, label: 'Show source', children: <SyntaxHighlighter language="javascript" style={props.darkMode ? darcula : docco} showLineNumbers={true}>{source}</SyntaxHighlighter>}]}>
                 </Collapse>
             </div>
         </>

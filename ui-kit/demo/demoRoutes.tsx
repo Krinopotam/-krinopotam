@@ -38,6 +38,8 @@
     const PageTabulatorGridWithForm = lazy(() => import('./pages/tabulator/PageTabulatorGridWithForm'))
     const PageTabulatorGridWithFormAsync = lazy(() => import('./pages/tabulator/PageTabulatorGridWithFormAsync'))
 
+    const PagePropsToArgs = lazy(() => import('./pages/tools/PagePropsToArgs'))
+
     const PageTreeSelectAsync = lazy(() => import('./pages/treeSelect/PageTreeSelectAsync'))
     const PageTreeSelectAsyncSearch = lazy(() => import('./pages/treeSelect/PageTreeSelectAsyncSearch'))
     const PageTreeSelectBasic = lazy(() => import('./pages/treeSelect/PageTreeSelectBasic'))
@@ -90,6 +92,8 @@ export const DemoRoutes = (props: {darkMode: boolean; setDarkMode: (mode:boolean
                 <Route path="TabulatorGridWithComplexForm" element={<PageTabulatorGridWithComplexForm darkMode={props.darkMode} />} />;
                 <Route path="TabulatorGridWithForm" element={<PageTabulatorGridWithForm darkMode={props.darkMode} />} />;
                 <Route path="TabulatorGridWithFormAsync" element={<PageTabulatorGridWithFormAsync darkMode={props.darkMode} />} />;
+
+                <Route path="PropsToArgs" element={<PagePropsToArgs darkMode={props.darkMode} />} />;
 
                 <Route path="TreeSelectAsync" element={<PageTreeSelectAsync darkMode={props.darkMode} />} />;
                 <Route path="TreeSelectAsyncSearch" element={<PageTreeSelectAsyncSearch darkMode={props.darkMode} />} />;
