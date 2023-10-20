@@ -83,7 +83,7 @@ export const TabulatorGridWithFormAsync = (): React.JSX.Element => {
                 onDataFetch={() => {
                     return new Promise((resolve, reject) => {
                         setTimeout(() => {
-                            if (Math.random() < 0.3) reject({message: 'Ошибка загрузки данных', code: 400});
+                            if (Math.random() < 0.5) reject({message: 'Ошибка загрузки данных', code: 400});
                             else resolve({data: dataSet});
                         }, 2000);
                     });

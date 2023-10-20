@@ -76,7 +76,7 @@ export const PaginationLocal: Story = {
 export const PaginationRemote: Story = {
     args: {
         ...baseArgs,
-        data: undefined,
+        dataSet: undefined,
         height: undefined,
         pagination: true,
         paginationSize: 5,
@@ -85,7 +85,6 @@ export const PaginationRemote: Story = {
         paginationMode: 'remote',
         filterMode: "remote",
         sortMode: 'remote',
-        ajaxURL: '-', //ajax URL. Workaround: if you need to use your own fetcher (for example Axios), then you must specify any non-empty string
         onDataFetch:(gridApi, params)=>{
             return new Promise((resolve) => {
                 setTimeout(() => {

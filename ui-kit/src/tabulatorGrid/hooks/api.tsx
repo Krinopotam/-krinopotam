@@ -6,7 +6,6 @@ import useUnmountedRef from 'ahooks/lib/useUnmountedRef';
 import {IGridProps, IGridRowData} from '../tabulatorGrid';
 import {RowComponent, ScrollToRowPosition, TabulatorFull as Tabulator} from 'tabulator-tables';
 import {ITabulator} from '@src/tabulatorBase';
-import {BaseFetchHandler, GetPaginationParams} from '@src/tabulatorGrid/helpers/fetchHelpers';
 
 type IRowKey = IGridRowData['id'];
 type IRowKeys = IRowKey | IRowKey[];
@@ -547,21 +546,9 @@ const useApiDeleteRows = (gridApi: IGridApi): IGridApi['deleteRows'] => {
 };
 
 const useApiFetchData = (gridApi: IGridApi): IGridApi['fetchData'] => {
-    return useCallback(
-        () => {
-            console.log('-------------------')
-            gridApi.tableApi?.setData()
-            return
-            const props = gridApi.gridProps;
-            const dataSource = props?.onDataFetch?.(gridApi, GetPaginationParams(gridApi));
-            BaseFetchHandler(gridApi, dataSource)?.then(result => {
-                if (!gridApi.getIsMounted()) return;
-                const values = (result.data || []) as IGridRowData[];
-                gridApi.setDataSet(values);
-            });
-        },
-        [gridApi]
-    );
+    return useCallback(() => {
+        gridApi.tableApi?.setData(undefined);
+    }, [gridApi]);
 };
 
 const useApiGetRowData = (gridApi: IGridApi): IGridApi['getRowData'] => {
