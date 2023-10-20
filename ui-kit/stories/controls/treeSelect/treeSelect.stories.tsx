@@ -28,7 +28,7 @@ const commonArgs: Story['args'] = {
     style: {width: 400},
     placeholder: 'Select value',
 }
-export const Default: Story = {
+export const Simple: Story = {
     args: {
         ...commonArgs
     },
@@ -58,6 +58,14 @@ export const ReadOnly: Story = {
     args: {
         ...commonArgs,
         readOnly: true
+    },
+}
+
+export const DefaultValue: Story = {
+    args: {
+        ...commonArgs,
+        value:'03-03-01'
+
     },
 }
 
