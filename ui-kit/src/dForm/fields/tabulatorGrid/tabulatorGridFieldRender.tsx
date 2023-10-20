@@ -2,6 +2,7 @@ import React, {useCallback, useMemo, useRef, useState, useSyncExternalStore} fro
 import {ITabulatorGridFieldOnlyProps, ITabulatorGridFieldProps, TabulatorGridField} from '@src/dForm/fields/tabulatorGrid/tabulatorGridField';
 import TabulatorGrid, {IGridApi, IGridRowData, ITabulatorProps} from '@src/tabulatorGrid';
 import {HelpersObjects} from '@krinopotam/js-helpers';
+import {IRequestProps} from '@src/tabulatorBase';
 
 export const TabulatorGridFieldRender = ({field}: {field: TabulatorGridField}): React.JSX.Element => {
     useSyncExternalStore(field.subscribe.bind(field), field.getSnapshot.bind(field));
@@ -34,15 +35,23 @@ export const TabulatorGridFieldRender = ({field}: {field: TabulatorGridField}): 
                 field.setDirty(true);
                 field.setTouched(true); //TODO: rework field touched
             }
-            return fieldProps?.onDataSetChange?.(dataSet, gridApi, field);
+            return fieldProps.onDataSetChange?.(dataSet, gridApi, field);
         },
         [fieldProps]
     );
 
     const onDataFetch = useCallback(
-        (gridApi: IGridApi, field: TabulatorGridField) => {
+        (gridApi: IGridApi, params: IRequestProps, field: TabulatorGridField) => {
             field.setReady(false);
-            return fieldProps?.onDataFetch?.(gridApi, field);
+            return fieldProps.onDataFetch?.(gridApi, params, field);
+        },
+        [fieldProps]
+    );
+
+    const onDataLoaded = useCallback(
+        (dataSet: IGridRowData[] | undefined, gridApi: IGridApi, field: TabulatorGridField) => {
+            field.setReady(true);
+            return fieldProps.onDataLoaded?.(dataSet, gridApi, field);
         },
         [fieldProps]
     );
@@ -50,15 +59,15 @@ export const TabulatorGridFieldRender = ({field}: {field: TabulatorGridField}): 
     const onDataFetchError = useCallback(
         (message: string, code: number, gridApi: IGridApi, field: TabulatorGridField) => {
             field.setReady(false);
-            return fieldProps?.onDataFetchError?.(message, code, gridApi, field);
+            return fieldProps.onDataFetchError?.(message, code, gridApi, field);
         },
         [fieldProps]
     );
 
-    const onDataFetchSuccess = useCallback(
-        (dataSet: IGridRowData[] | undefined, gridApi: IGridApi, field: TabulatorGridField) => {
+    const onDataFetchCompleted = useCallback(
+        (gridApi: IGridApi, field: TabulatorGridField) => {
             field.setReady(true);
-            return fieldProps?.onDataFetchSuccess?.(dataSet, gridApi, field);
+            return fieldProps.onDataFetchCompleted?.(gridApi, field);
         },
         [fieldProps]
     );
@@ -75,16 +84,17 @@ export const TabulatorGridFieldRender = ({field}: {field: TabulatorGridField}): 
                 resizeHeightWithParent={fieldProps.resizeHeightWithForm ? '#' + field.getModel().getFormId() : fieldProps.resizeHeightWithParent}
                 /** Callbacks*/
                 onMenuVisibilityChanged={(isVisible, gridApi) => fieldProps?.onMenuVisibilityChanged?.(isVisible, gridApi, field)}
+                onDataLoaded={(dataSet, gridApi) => onDataLoaded?.(dataSet, gridApi, field)}
                 onDataSetChange={(dataSet, gridApi) => onDataSetChange?.(dataSet, gridApi, field)}
-                onDataFetch={gridApi => onDataFetch?.(gridApi, field)}
-                onDataFetchSuccess={(dataSet, gridApi) => onDataFetchSuccess?.(dataSet, gridApi, field)}
+                onDataFetch={(gridApi, params) => onDataFetch?.(gridApi, params, field)}
+                onDataFetchSuccess={(dataSet, gridApi) => fieldProps.onDataFetchSuccess?.(dataSet, gridApi, field)}
                 onDataFetchError={(message, code, gridApi) => onDataFetchError?.(message, code, gridApi, field)}
-                onDataFetchCompleted={gridApi => fieldProps?.onDataFetchCompleted?.(gridApi, field)}
+                onDataFetchCompleted={gridApi => onDataFetchCompleted?.(gridApi, field)}
                 onSelectionChange={(keys, selectedRows, gridApi) => fieldProps?.onSelectionChange?.(keys, selectedRows, gridApi, field)}
                 onDelete={(selectedRows, gridApi) => fieldProps?.onDelete?.(selectedRows, gridApi, field)}
             />
         );
-    }, [tabulatorProps, gridApi, curDataSet, fieldProps, field, onDataSetChange, onDataFetch, onDataFetchSuccess, onDataFetchError]);
+    }, [tabulatorProps, gridApi, curDataSet, fieldProps, field, onDataLoaded, onDataSetChange, onDataFetch, onDataFetchError, onDataFetchCompleted]);
 };
 
 const useSplitTabulatorProps = (props: ITabulatorGridFieldProps) => {
@@ -92,6 +102,7 @@ const useSplitTabulatorProps = (props: ITabulatorGridFieldProps) => {
         const result = HelpersObjects.splitObject<ITabulatorGridFieldOnlyProps, ITabulatorProps>(props, {
             value: true,
             onMenuVisibilityChanged: true,
+            onDataLoaded: true,
             onDataSetChange: true,
             onDataFetch: true,
             onDataFetchSuccess: true,

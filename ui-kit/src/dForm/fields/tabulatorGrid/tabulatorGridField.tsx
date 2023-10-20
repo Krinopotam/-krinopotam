@@ -2,23 +2,27 @@ import {BaseField, IBaseFieldProps} from '@src/dForm/fields/base/baseField';
 import React from 'react';
 import {TabulatorGridFieldRender} from '@src/dForm/fields/tabulatorGrid/tabulatorGridFieldRender';
 import {IGridApi, IGridDataSourcePromise, IGridDeletePromise, IGridProps, IGridRowData} from '@src/tabulatorGrid';
+import {IRequestProps} from '@src/tabulatorBase';
 
 export interface ITabulatorGridFieldOnlyProps extends IBaseFieldProps<TabulatorGridField> {
     /** Default value */
     value?: IGridRowData[];
 
     /** Auto resize height on form resize */
-    resizeHeightWithForm?:boolean;
+    resizeHeightWithForm?: boolean;
 
     // --- callbacks -----------------------------------------------------
     /** Fires when menu visibility status changed */
     onMenuVisibilityChanged?: (isVisible: boolean, gridApi: IGridApi, field: TabulatorGridField) => void;
 
     /** Fires, when the dataSet changed. User can modify the dataSet before dataSet will apply */
+    onDataLoaded?: (dataSet: IGridRowData[] | undefined, gridApi: IGridApi, field: TabulatorGridField) => void;
+
+    /** Fires, when the dataSet changed. User can modify the dataSet before dataSet will apply */
     onDataSetChange?: (dataSet: IGridRowData[] | undefined, gridApi: IGridApi, field: TabulatorGridField) => IGridRowData[] | void;
 
     /** fires when the grid trying to fetch data */
-    onDataFetch?: (gridApi: IGridApi, field: TabulatorGridField) => IGridDataSourcePromise | undefined;
+    onDataFetch?: (gridApi: IGridApi, params: IRequestProps, field: TabulatorGridField) => IGridDataSourcePromise | undefined;
 
     /** fires when the grid data fetch success */
     onDataFetchSuccess?: (dataSet: IGridRowData[] | undefined, gridApi: IGridApi, field: TabulatorGridField) => void;
@@ -36,7 +40,21 @@ export interface ITabulatorGridFieldOnlyProps extends IBaseFieldProps<TabulatorG
     onDelete?: (selectedRows: IGridRowData[], gridApi: IGridApi, field: TabulatorGridField) => IGridDeletePromise | void | undefined;
 }
 
-export type ITabulatorGridFieldProps = ITabulatorGridFieldOnlyProps & Omit<IGridProps, 'placeholder' | 'value' | 'onReady'>;
+export type ITabulatorGridFieldProps = ITabulatorGridFieldOnlyProps &
+    Omit<
+        IGridProps,
+        | 'placeholder'
+        | 'value'
+        | 'onReady'
+        | 'onDataLoaded'
+        | 'onDataSetChange'
+        | 'onDataFetch'
+        | 'onDataFetchSuccess'
+        | 'onDataFetchError'
+        | 'onDataFetchCompleted'
+        | 'onSelectionChange'
+        | 'onDelete'
+    >;
 
 export class TabulatorGridField extends BaseField<ITabulatorGridFieldProps> {
     protected render() {

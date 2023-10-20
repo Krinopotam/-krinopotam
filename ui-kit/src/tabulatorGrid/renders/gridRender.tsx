@@ -40,7 +40,7 @@ const GridRender_ = ({
 
     const ajaxRequestFunc = useCallback(
         (url: string, config: IAjaxConfig, params: IRequestProps) => {
-            console.log(params)
+            console.log('ajaxRequestFunc',params)
             return new Promise((resolve, reject) => {
                 const dataSource = gridProps?.onDataFetch?.(gridApi, params);
 

@@ -65,10 +65,13 @@ export interface IGridProps_ {
     onMenuVisibilityChanged?: (isVisible: boolean, gridApi: IGridApi) => void;
 
     /** Fires, when the dataSet changed. User can modify the dataSet before dataSet will apply */
+    onDataLoaded?: (dataSet: IGridRowData[] | undefined, gridApi: IGridApi) => void;
+
+    /** Fires, when the dataSet changed. User can modify the dataSet before dataSet will apply */
     onDataSetChange?: (dataSet: IGridRowData[] | undefined, gridApi: IGridApi) => IGridRowData[] | void;
 
     /** fires when the grid trying to fetch data */
-    onDataFetch?: (gridApi: IGridApi, params?: IRequestProps) => IGridDataSourcePromise | undefined;
+    onDataFetch?: (gridApi: IGridApi, params: IRequestProps) => IGridDataSourcePromise | undefined;
 
     /** fires when the grid data fetch success */
     onDataFetchSuccess?: (dataSet: IGridRowData[] | undefined, gridApi: IGridApi) => void;
@@ -123,6 +126,7 @@ const useSplitTabulatorProps = (props: IGridProps) => {
             confirmDelete: true,
             placeholder: true,
             onMenuVisibilityChanged: true,
+            onDataLoaded:true,
             onDataSetChange: true,
             onDataFetch: true,
             onDataFetchSuccess: true,
