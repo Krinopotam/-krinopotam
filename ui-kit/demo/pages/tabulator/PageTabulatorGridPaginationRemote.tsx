@@ -75,12 +75,12 @@ export const TabulatorGridPaginationRemote = (): React.JSX.Element => {
                     return new Promise((resolve, reject) => {
                         setTimeout(() => {
                             //make any remote fetch
+                            if (Math.random() < 0.5) reject({message: 'Ошибка загрузки данных', code: 400});
                             const page = params?.page ?? 1;
                             const size = params?.size ?? gridApi.gridProps.paginationSize ?? 5;
                             const lastPage = Math.ceil(dataSet.length/size)
                             const slicedDataSet = dataSet.slice((page - 1) * size, page * size); //remote fetch imitation
-                            //resolve({data: slicedDataSet, last_page: lastPage });
-                            reject({message:'34242424234234', code:300})
+                            resolve({data: slicedDataSet, last_page: lastPage });
                         }, 1000);
                     });
                 }}
