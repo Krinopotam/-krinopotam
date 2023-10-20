@@ -71,9 +71,8 @@ export const TabulatorGridPaginationRemote = (): React.JSX.Element => {
                 paginationMode={'remote'}
                 filterMode={'remote'}
                 sortMode={'remote'}
-                ajaxURL={'-'} //ajax URL. Workaround: if you need to use your own fetcher (for example Axios), then you must specify any non-empty string
                 onDataFetch={(gridApi, params) => {
-                    return new Promise(resolve => {
+                    return new Promise((resolve, reject) => {
                         setTimeout(() => {
                             //make any remote fetch
                             const page = params?.page ?? 1;
@@ -81,6 +80,7 @@ export const TabulatorGridPaginationRemote = (): React.JSX.Element => {
                             const lastPage = Math.ceil(dataSet.length/size)
                             const slicedDataSet = dataSet.slice((page - 1) * size, page * size); //remote fetch imitation
                             resolve({data: slicedDataSet, last_page: lastPage });
+                            //reject({message:'34242424234234', code:300})
                         }, 1000);
                     });
                 }}

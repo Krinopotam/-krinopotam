@@ -18,7 +18,7 @@ export interface ITabulatorGridFieldOnlyProps extends IBaseFieldProps<TabulatorG
     onDataSetChange?: (dataSet: IGridRowData[] | undefined, gridApi: IGridApi, field: TabulatorGridField) => IGridRowData[] | void;
 
     /** fires when the grid trying to fetch data */
-    onDataFetch?: (gridApi: IGridApi, field: TabulatorGridField) => IGridDataSourcePromise | undefined | void;
+    onDataFetch?: (gridApi: IGridApi, field: TabulatorGridField) => IGridDataSourcePromise | undefined;
 
     /** fires when the grid data fetch success */
     onDataFetchSuccess?: (dataSet: IGridRowData[] | undefined, gridApi: IGridApi, field: TabulatorGridField) => void;

@@ -4,7 +4,6 @@ import {IButtonsRowApi, IFormButton, IFormButtons} from '@src/buttonsRow/buttons
 import {IDFormModalProps, IDFormModalApi} from '@src/dFormModal';
 import {TPromise} from '@krinopotam/service-types';
 import {IGridApi, useInitGridApi} from './hooks/api';
-import {useInitialFetchData} from './hooks/initialFetchRows';
 import {ContainerRender} from './renders/containerRender';
 import {HelpersObjects} from '@krinopotam/js-helpers';
 
@@ -69,7 +68,7 @@ export interface IGridProps_ {
     onDataSetChange?: (dataSet: IGridRowData[] | undefined, gridApi: IGridApi) => IGridRowData[] | void;
 
     /** fires when the grid trying to fetch data */
-    onDataFetch?: (gridApi: IGridApi, params?:IRequestProps) => IGridDataSourcePromise | undefined | void;
+    onDataFetch?: (gridApi: IGridApi, params?: IRequestProps) => IGridDataSourcePromise | undefined;
 
     /** fires when the grid data fetch success */
     onDataFetchSuccess?: (dataSet: IGridRowData[] | undefined, gridApi: IGridApi) => void;
@@ -87,10 +86,10 @@ export interface IGridProps_ {
     onDelete?: (selectedRows: IGridRowData[], gridApi: IGridApi) => IGridDeletePromise | void | undefined;
 }
 
-export type IGridProps = IGridProps_ & ITabulatorProps;
+export type IGridProps = IGridProps_ & Omit<ITabulatorProps, 'data' | 'ajaxURL'>;
 
-export type IGridDataSourcePromise = TPromise<{data: IGridRowData[],  last_page?: number}, {message: string; code: number}>;
-export type IGridDeletePromise = TPromise<{data: IGridRowData,  last_page?: number}, {message: string; code: number}>;
+export type IGridDataSourcePromise = TPromise<{data: IGridRowData[]; last_page?: number}, {message: string; code: number}>;
+export type IGridDeletePromise = TPromise<{data: IGridRowData; last_page?: number}, {message: string; code: number}>;
 
 const TabulatorGrid = (props: IGridProps): React.JSX.Element => {
     const tabulatorProps = useSplitTabulatorProps(props);
@@ -100,8 +99,6 @@ const TabulatorGrid = (props: IGridProps): React.JSX.Element => {
     const [gridApi] = useState((props.apiRef || {}) as IGridApi);
 
     useInitGridApi({gridApi, props, tableRef, editFormApi, buttonsApi});
-
-    useInitialFetchData(gridApi);
 
     return <ContainerRender tableRef={tableRef} gridApi={gridApi} gridProps={props} tabulatorProps={tabulatorProps} />;
 };

@@ -77,7 +77,7 @@ export class AdvancedHeaderFilterModule extends Module {
     public onTableBuiltHandler() {
         if (this.table.options.dataTree) this.wrapUserFilters()
 
-        if (!this.table.options.showHeaderFilter) this.toggleHeaderFilter(false);
+        if (!this.table.options.showHeaderFilter) this.toggleHeaderFilter(false, true);
         else this.headerFilterStatus = true;
     }
 
@@ -188,12 +188,12 @@ export class AdvancedHeaderFilterModule extends Module {
     }
 
     /** Show/hide filters */
-    public toggleHeaderFilter(show?: boolean) {
+    public toggleHeaderFilter(show?: boolean, firstInit?:boolean) {
         // *Workaround:
         // Tabulator allows to show/hide headerFilter only via updateColumnDefinition, which is very slow and leads to glitches and regenerates all columns.
         // Let's use a workaround. We include headerFilter on grid initialization and hide it in CSS. When necessary, we display it, but this requires additional style calculations.
 
-        if (!show) this.table.clearHeaderFilter();
+        if (!show && !firstInit) this.table.clearHeaderFilter();
 
         const tableHolder = this.table.element.querySelector<HTMLElement>('.tabulator-tableholder');
         const tabulatorHeader = this.table.element.querySelector<HTMLElement>('.tabulator-headers');

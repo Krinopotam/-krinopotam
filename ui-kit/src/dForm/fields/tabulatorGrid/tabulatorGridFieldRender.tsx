@@ -47,6 +47,14 @@ export const TabulatorGridFieldRender = ({field}: {field: TabulatorGridField}): 
         [fieldProps]
     );
 
+    const onDataFetchError = useCallback(
+        (message: string, code: number, gridApi: IGridApi, field: TabulatorGridField) => {
+            field.setReady(false);
+            return fieldProps?.onDataFetchError?.(message, code, gridApi, field);
+        },
+        [fieldProps]
+    );
+
     const onDataFetchSuccess = useCallback(
         (dataSet: IGridRowData[] | undefined, gridApi: IGridApi, field: TabulatorGridField) => {
             field.setReady(true);
@@ -66,19 +74,17 @@ export const TabulatorGridFieldRender = ({field}: {field: TabulatorGridField}): 
                 width={fieldProps.width}
                 resizeHeightWithParent={fieldProps.resizeHeightWithForm ? '#' + field.getModel().getFormId() : fieldProps.resizeHeightWithParent}
                 /** Callbacks*/
-                onMenuVisibilityChanged={(isVisible: boolean, gridApi: IGridApi) => fieldProps?.onMenuVisibilityChanged?.(isVisible, gridApi, field)}
-                onDataSetChange={(dataSet: IGridRowData[] | undefined, gridApi: IGridApi) => onDataSetChange?.(dataSet, gridApi, field)}
-                onDataFetch={(gridApi: IGridApi) => onDataFetch?.(gridApi, field)}
-                onDataFetchSuccess={(dataSet: IGridRowData[] | undefined, gridApi: IGridApi) => onDataFetchSuccess?.(dataSet, gridApi, field)}
-                onDataFetchError={(message: string, code: number, gridApi: IGridApi) => fieldProps?.onDataFetchError?.(message, code, gridApi, field)}
-                onDataFetchCompleted={(gridApi: IGridApi) => fieldProps?.onDataFetchCompleted?.(gridApi, field)}
-                onSelectionChange={(keys: string[], selectedRows: IGridRowData[], gridApi: IGridApi) =>
-                    fieldProps?.onSelectionChange?.(keys, selectedRows, gridApi, field)
-                }
-                onDelete={(selectedRows: IGridRowData[], gridApi: IGridApi) => fieldProps?.onDelete?.(selectedRows, gridApi, field)}
+                onMenuVisibilityChanged={(isVisible, gridApi) => fieldProps?.onMenuVisibilityChanged?.(isVisible, gridApi, field)}
+                onDataSetChange={(dataSet, gridApi) => onDataSetChange?.(dataSet, gridApi, field)}
+                onDataFetch={gridApi => onDataFetch?.(gridApi, field)}
+                onDataFetchSuccess={(dataSet, gridApi) => onDataFetchSuccess?.(dataSet, gridApi, field)}
+                onDataFetchError={(message, code, gridApi) => onDataFetchError?.(message, code, gridApi, field)}
+                onDataFetchCompleted={gridApi => fieldProps?.onDataFetchCompleted?.(gridApi, field)}
+                onSelectionChange={(keys, selectedRows, gridApi) => fieldProps?.onSelectionChange?.(keys, selectedRows, gridApi, field)}
+                onDelete={(selectedRows, gridApi) => fieldProps?.onDelete?.(selectedRows, gridApi, field)}
             />
         );
-    }, [tabulatorProps, gridApi, curDataSet, fieldProps, field, onDataSetChange, onDataFetch, onDataFetchSuccess]);
+    }, [tabulatorProps, gridApi, curDataSet, fieldProps, field, onDataSetChange, onDataFetch, onDataFetchSuccess, onDataFetchError]);
 };
 
 const useSplitTabulatorProps = (props: ITabulatorGridFieldProps) => {

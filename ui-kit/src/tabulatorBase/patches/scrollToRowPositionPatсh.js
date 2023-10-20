@@ -1,3 +1,5 @@
+/** In Tabulator 5.5.2 scrollToRowPosition works incorrectly */
+
 const elVisible = function (el) {
     return !(el.offsetWidth <= 0 && el.offsetHeight <= 0);
 };

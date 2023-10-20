@@ -3,10 +3,10 @@ import {HelpersStrings, HelpersObjects} from '@krinopotam/js-helpers';
 import {IDFormModalApi} from '@src/dFormModal';
 import {IButtonsRowApi} from '@src/buttonsRow/buttonsRow';
 import useUnmountedRef from 'ahooks/lib/useUnmountedRef';
-import {MessageBox} from '@src/messageBox';
-import {IGridDataSourcePromise, IGridProps, IGridRowData} from '../tabulatorGrid';
+import {IGridProps, IGridRowData} from '../tabulatorGrid';
 import {RowComponent, ScrollToRowPosition, TabulatorFull as Tabulator} from 'tabulator-tables';
-import {IRequestProps, ITabulator} from '@src/tabulatorBase';
+import {ITabulator} from '@src/tabulatorBase';
+import {BaseFetchHandler, GetPaginationParams} from '@src/tabulatorGrid/helpers/fetchHelpers';
 
 type IRowKey = IGridRowData['id'];
 type IRowKeys = IRowKey | IRowKey[];
@@ -25,7 +25,7 @@ export interface IGridApi {
     getIsMounted: () => boolean;
 
     /** Get current data set*/
-    getDataSet: () => IGridRowData[];
+    getDataSet: () => IGridRowData[] | undefined;
 
     /** Set data set*/
     setDataSet: (dataSet: IGridRowData[] | null | undefined) => void;
@@ -119,7 +119,7 @@ export interface IGridApi {
     buttonsApi: IButtonsRowApi & {refreshButtons: () => void};
 
     /** Fetch data */
-    fetchData: (dataSource?: IGridDataSourcePromise, params?:IRequestProps) => void;
+    fetchData: () => void;
 }
 
 export const useInitGridApi = ({
@@ -200,7 +200,7 @@ const useApiIsMounted = (unmountRef: React.MutableRefObject<boolean>): IGridApi[
 };
 
 const useApiGetDataSet = (dataSetRef: React.MutableRefObject<IGridProps['dataSet'] | undefined>): IGridApi['getDataSet'] => {
-    return useCallback(() => dataSetRef.current ?? [], [dataSetRef]);
+    return useCallback(() => dataSetRef.current ?? undefined, [dataSetRef]);
 };
 
 const useApiSetDataSet = (dataSetRef: React.MutableRefObject<IGridProps['dataSet']>, gridApi: IGridApi): IGridApi['setDataSet'] => {
@@ -548,49 +548,14 @@ const useApiDeleteRows = (gridApi: IGridApi): IGridApi['deleteRows'] => {
 
 const useApiFetchData = (gridApi: IGridApi): IGridApi['fetchData'] => {
     return useCallback(
-        (dataSource?: IGridDataSourcePromise, params?: IRequestProps) => {
+        () => {
             const props = gridApi.gridProps;
-            const curDataSource = dataSource ?? props?.onDataFetch?.(gridApi, params);
-            if (!curDataSource) {
-                props?.onDataFetchSuccess?.(undefined, gridApi);
-                props?.onDataFetchCompleted?.(gridApi);
-                return;
-            }
-
-            gridApi.setIsLoading(true);
-            curDataSource.then(
-                result => {
-                    if (!gridApi.getIsMounted()) return;
-                    const values = (result.data || []) as IGridRowData[];
-                    gridApi.setDataSet(values);
-                    props?.onDataFetchCompleted?.(gridApi);
-                    props?.onDataFetchSuccess?.(values, gridApi);
-                    gridApi.setIsLoading(false);
-                },
-                error => {
-                    if (!gridApi.getIsMounted()) return;
-                    props?.onDataFetchCompleted?.(gridApi);
-                    props?.onDataFetchError?.(error.message, error.code, gridApi);
-                    gridApi.setIsLoading(false);
-                    const box = MessageBox.confirm({
-                        content: (
-                            <>
-                                <p>{error.message}</p>
-                                <p>{'Попробовать снова?'}</p>
-                            </>
-                        ),
-                        colorType: 'danger',
-                        buttons: {
-                            ok: {
-                                onClick: () => {
-                                    box.destroy();
-                                    gridApi.fetchData(curDataSource, params);
-                                },
-                            },
-                        },
-                    });
-                }
-            );
+            const dataSource = props?.onDataFetch?.(gridApi, GetPaginationParams(gridApi));
+            BaseFetchHandler(gridApi, dataSource)?.then(result => {
+                if (!gridApi.getIsMounted()) return;
+                const values = (result.data || []) as IGridRowData[];
+                gridApi.setDataSet(values);
+            });
         },
         [gridApi]
     );

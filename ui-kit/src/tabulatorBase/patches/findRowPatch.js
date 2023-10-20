@@ -1,10 +1,10 @@
-/** In Tabulator 5.4 findRow looks for root rows only.
+/** In Tabulator 5.5.2 findRow looks for root rows only.
  * This patch corrects this behavior so that the function can also find the child row */
 
 let oldFindRow;
 export const setFindRowPatch = tableApi => {
     oldFindRow = tableApi.rowManager.findRow;
-    tableApi.rowManager.findRow = findRowPatch.bind(tableApi.rowManager);
+    tableApi.rowManager.findRow = findRowPatch;
 };
 
 export const findRowPatch = function (subject) {

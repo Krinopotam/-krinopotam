@@ -2,9 +2,9 @@ import React, {useCallback, useEffect, useRef} from 'react';
 import ReactTabulator, {IAjaxConfig, IRequestProps, ITabulator, ITabulatorProps} from '@src/tabulatorBase';
 import {IGridApi} from '../hooks/api';
 import dispatcher from '@src/formsDispatcher';
-import {IGridProps, IGridRowData} from '../tabulatorGrid';
+import {IGridProps} from '../tabulatorGrid';
 import {useEvents} from '../hooks/events';
-import {MessageBox} from "@src/messageBox";
+import {BaseFetchHandler} from '@src/tabulatorGrid/helpers/fetchHelpers';
 
 const GridRender_ = ({
     tableRef,
@@ -38,71 +38,38 @@ const GridRender_ = ({
         dispatcher.pushToStack(gridApi.getGridId());
     }, [gridApi]);
 
-    const ajaxRequestFunc = useCallback((url:string, config:IAjaxConfig, params:IRequestProps)=>{
-            return new Promise((resolve) => {
-
+    const ajaxRequestFunc = useCallback(
+        (url: string, config: IAjaxConfig, params: IRequestProps) => {
+            return new Promise((resolve, reject) => {
                 const dataSource = gridProps?.onDataFetch?.(gridApi, params);
-                if (!dataSource) {
-                    gridProps?.onDataFetchSuccess?.(undefined, gridApi);
-                    gridProps?.onDataFetchCompleted?.(gridApi);
-                    resolve ({data:[], last_page:1});
-                    return
-                }
 
-                gridApi.setIsLoading(true);
-                dataSource.then(
+                BaseFetchHandler(gridApi, dataSource)?.then(
                     result => {
-                        const data = (result.data || []) as IGridRowData[];
-                        if (gridApi.getIsMounted()) {
-                            gridProps?.onDataFetchCompleted?.(gridApi);
-                            gridProps?.onDataFetchSuccess?.(data, gridApi);
-                            gridApi.setIsLoading(false);
-                        }
-                        resolve({data:data, last_page: result.last_page ?? 1})
-                        return
+                        if (!gridApi.getIsMounted())  return
+
+                        if (gridProps.pagination) resolve({data: result.data, last_page: result.last_page ?? 1});
+                        else resolve(result.data); //WORKAROUND:The page module expects data in the format {data:[rows], last_page:number}. Without pagination data expected [rows]
                     },
-                    error => {
-                        if (!gridApi.getIsMounted()) {
-                            resolve(  {data:[], last_page:1});
-                            return
-                        }
-                        gridProps?.onDataFetchCompleted?.(gridApi);
-                        gridProps?.onDataFetchError?.(error.message, error.code, gridApi);
-                        gridApi.setIsLoading(false);
-                        const box = MessageBox.confirm({
-                            content: (
-                                <>
-                                    <p>{error.message}</p>
-                                    <p>{'Попробовать снова?'}</p>
-                                </>
-                            ),
-                            colorType: 'danger',
-                            buttons: {
-                                ok: {
-                                    onClick: () => {
-                                        box.destroy();
-                                        gridApi.fetchData(dataSource, params);
-                                    },
-                                },
-                            },
-                        });
+                    () => {
+                        reject();
                     }
                 );
-            })
-
-          //  return gridProps.onDataFetch?.(gridApi, params)
-
-    } , [gridApi, gridProps])
+            });
+        },
+        [gridApi, gridProps]
+    );
 
     return (
         <ReactTabulator
             {...tabulatorProps}
-            ajaxRequestFunc={ gridProps.onDataFetch ? ajaxRequestFunc as ITabulator['ajaxRequestFunc']: undefined}
+            ajaxRequestFunc={!gridProps.onDataFetch ? undefined : (ajaxRequestFunc as ITabulator['ajaxRequestFunc'])}
             height={'100%'}
+            dataLoader={false} //disable tabulator inbuilt loader overlay
             onTableRef={onTableRef}
             gridId={gridApi.getGridId()}
             dataTreeFilter={true}
             data={gridApi.getDataSet()}
+            ajaxURL={!gridProps.onDataFetch ? undefined : '-'} //WORKAROUND: if we want to use ajax request, we should set ajaxUrl to any value
             containerClassName={gridProps.className}
             placeholder={gridProps.placeholder ?? 'Строки отсутствуют'}
             layout={gridProps.layout ?? 'fitData'}
