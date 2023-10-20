@@ -4,7 +4,7 @@ import {IRequestProps} from '@src/tabulatorBase';
 import React from 'react';
 
 /** Basic handler that must be executed on any call of the dataSource Promise*/
-export const BaseFetchHandler = (gridApi: IGridApi, dataSource: IGridDataSourcePromise | undefined) => {
+export const BaseFetchHandler = (gridApi: IGridApi, dataSource: IGridDataSourcePromise | undefined, params?: Record<string, unknown>) => {
     const props = gridApi.gridProps;
     if (!dataSource) {
         props?.onDataFetchSuccess?.(undefined, gridApi);
@@ -38,7 +38,7 @@ export const BaseFetchHandler = (gridApi: IGridApi, dataSource: IGridDataSourceP
                     ok: {
                         onClick: () => {
                             message.destroy();
-                            gridApi.fetchData();
+                            gridApi.fetchData(params);
                         },
                     },
                 },
@@ -46,7 +46,7 @@ export const BaseFetchHandler = (gridApi: IGridApi, dataSource: IGridDataSourceP
         }
     );
 
-    return dataSource
+    return dataSource;
 };
 
 /** Returns pagination parameters for a data request (such as current page, filter status, sorting)*/

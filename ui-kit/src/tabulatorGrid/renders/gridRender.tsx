@@ -43,7 +43,7 @@ const GridRender_ = ({
             return new Promise((resolve, reject) => {
                 const dataSource = gridProps?.onDataFetch?.(gridApi, params);
 
-                BaseFetchHandler(gridApi, dataSource)?.then(
+                BaseFetchHandler(gridApi, dataSource, params)?.then(
                     result => {
                         if (!gridApi.getIsMounted())  return
 

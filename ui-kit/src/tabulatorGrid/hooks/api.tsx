@@ -118,7 +118,7 @@ export interface IGridApi {
     buttonsApi: IButtonsRowApi & {refreshButtons: () => void};
 
     /** Fetch data */
-    fetchData: () => void;
+    fetchData: (params?: Record<string, unknown>) => void;
 }
 
 export const useInitGridApi = ({
@@ -546,9 +546,14 @@ const useApiDeleteRows = (gridApi: IGridApi): IGridApi['deleteRows'] => {
 };
 
 const useApiFetchData = (gridApi: IGridApi): IGridApi['fetchData'] => {
-    return useCallback(() => {
-        gridApi.tableApi?.setData(undefined);
-    }, [gridApi]);
+    return useCallback(
+        (params?: Record<string, unknown>) => {
+            if (!gridApi.tableApi) return;
+            gridApi.tableApi.modules.page.dataChanging = true; //WORKAROUND: by default dataChanging=false and tabulator will reset params
+            gridApi.tableApi?.setData(undefined, params);
+        },
+        [gridApi]
+    );
 };
 
 const useApiGetRowData = (gridApi: IGridApi): IGridApi['getRowData'] => {
