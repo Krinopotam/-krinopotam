@@ -40,6 +40,7 @@ const GridRender_ = ({
 
     const ajaxRequestFunc = useCallback(
         (url: string, config: IAjaxConfig, params: IRequestProps) => {
+            console.log(params)
             return new Promise((resolve, reject) => {
                 const dataSource = gridProps?.onDataFetch?.(gridApi, params);
 
@@ -62,6 +63,8 @@ const GridRender_ = ({
     return (
         <ReactTabulator
             {...tabulatorProps}
+            layout={tabulatorProps.layout ?? 'fitData'}
+            movableColumns={tabulatorProps.movableColumns !== false}
             ajaxRequestFunc={!gridProps.onDataFetch ? undefined : (ajaxRequestFunc as ITabulator['ajaxRequestFunc'])}
             height={'100%'}
             dataLoader={false} //disable tabulator inbuilt loader overlay
@@ -72,11 +75,6 @@ const GridRender_ = ({
             ajaxURL={!gridProps.onDataFetch ? undefined : '-'} //WORKAROUND: if we want to use ajax request, we should set ajaxUrl to any value
             containerClassName={gridProps.className}
             placeholder={gridProps.placeholder ?? 'Строки отсутствуют'}
-            layout={gridProps.layout ?? 'fitData'}
-            movableColumns={gridProps.movableColumns !== false}
-            headerVisible={gridProps.headerVisible !== false}
-            sortMode={gridProps.gridMode}
-            filterMode={gridProps.gridMode}
             events={events}
         />
     );
