@@ -1,0 +1,9 @@
+
+/** WORKAROUND: add height 100% for tabulatorGrid spinner wrapper*/
+.wrapper-full-height-grid-spinner {
+  height: 100%;
+}
+
+.wrapper-full-height-grid-spinner .ant-spin-container {
+  height: 100%;
+}

@@ -1,0 +1,20 @@
+import React, { useCallback, useEffect, useSyncExternalStore } from 'react';
+export const LinkFieldRender = ({ field }) => {
+    useSyncExternalStore(field.subscribe.bind(field), field.getSnapshot.bind(field));
+    const fieldProps = field.getProps();
+    const value = field.getValue();
+    const onClick = useCallback((e) => {
+        var _a;
+        field.setTouched(true);
+        (_a = fieldProps === null || fieldProps === void 0 ? void 0 : fieldProps.onClick) === null || _a === void 0 ? void 0 : _a.call(fieldProps, e, field);
+    }, [field, fieldProps]);
+    useEffect(() => {
+        field.setReady(true);
+    }, [field]);
+    let defStyle = {};
+    if (fieldProps.width) {
+        defStyle = { width: fieldProps.width };
+    }
+    const style = Object.assign(Object.assign({}, defStyle), fieldProps.style);
+    return (React.createElement("a", { href: fieldProps.href, target: fieldProps.target, style: style, onClick: e => onClick(e), onContextMenu: e => { var _a; return (_a = fieldProps === null || fieldProps === void 0 ? void 0 : fieldProps.onContextMenu) === null || _a === void 0 ? void 0 : _a.call(fieldProps, e, field); }, onDoubleClick: e => { var _a; return (_a = fieldProps === null || fieldProps === void 0 ? void 0 : fieldProps.onDoubleClick) === null || _a === void 0 ? void 0 : _a.call(fieldProps, e, field); }, onDrag: e => { var _a; return (_a = fieldProps === null || fieldProps === void 0 ? void 0 : fieldProps.onDrag) === null || _a === void 0 ? void 0 : _a.call(fieldProps, e, field); }, onDragEnd: e => { var _a; return (_a = fieldProps === null || fieldProps === void 0 ? void 0 : fieldProps.onDragEnd) === null || _a === void 0 ? void 0 : _a.call(fieldProps, e, field); }, onDragEnter: e => { var _a; return (_a = fieldProps === null || fieldProps === void 0 ? void 0 : fieldProps.onDragEnter) === null || _a === void 0 ? void 0 : _a.call(fieldProps, e, field); }, onDragExit: e => { var _a; return (_a = fieldProps === null || fieldProps === void 0 ? void 0 : fieldProps.onDragExit) === null || _a === void 0 ? void 0 : _a.call(fieldProps, e, field); }, onDragLeave: e => { var _a; return (_a = fieldProps === null || fieldProps === void 0 ? void 0 : fieldProps.onDragLeave) === null || _a === void 0 ? void 0 : _a.call(fieldProps, e, field); }, onDragOver: e => { var _a; return (_a = fieldProps === null || fieldProps === void 0 ? void 0 : fieldProps.onDragOver) === null || _a === void 0 ? void 0 : _a.call(fieldProps, e, field); }, onDragStart: e => { var _a; return (_a = fieldProps === null || fieldProps === void 0 ? void 0 : fieldProps.onDragStart) === null || _a === void 0 ? void 0 : _a.call(fieldProps, e, field); }, onMouseDown: e => { var _a; return (_a = fieldProps === null || fieldProps === void 0 ? void 0 : fieldProps.onMouseDown) === null || _a === void 0 ? void 0 : _a.call(fieldProps, e, field); }, onMouseEnter: e => { var _a; return (_a = fieldProps === null || fieldProps === void 0 ? void 0 : fieldProps.onMouseEnter) === null || _a === void 0 ? void 0 : _a.call(fieldProps, e, field); }, onMouseLeave: e => { var _a; return (_a = fieldProps === null || fieldProps === void 0 ? void 0 : fieldProps.onMouseLeave) === null || _a === void 0 ? void 0 : _a.call(fieldProps, e, field); }, onMouseMove: e => { var _a; return (_a = fieldProps === null || fieldProps === void 0 ? void 0 : fieldProps.onMouseMove) === null || _a === void 0 ? void 0 : _a.call(fieldProps, e, field); }, onMouseOut: e => { var _a; return (_a = fieldProps === null || fieldProps === void 0 ? void 0 : fieldProps.onMouseOut) === null || _a === void 0 ? void 0 : _a.call(fieldProps, e, field); }, onMouseOver: e => { var _a; return (_a = fieldProps === null || fieldProps === void 0 ? void 0 : fieldProps.onMouseOver) === null || _a === void 0 ? void 0 : _a.call(fieldProps, e, field); }, onMouseUp: e => { var _a; return (_a = fieldProps === null || fieldProps === void 0 ? void 0 : fieldProps.onMouseUp) === null || _a === void 0 ? void 0 : _a.call(fieldProps, e, field); } }, value));
+};
