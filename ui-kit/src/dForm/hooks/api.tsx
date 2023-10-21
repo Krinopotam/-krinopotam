@@ -50,14 +50,14 @@ export const useInitFormApi = (
 };
 
 /** Get the current form props */
-export const useApiGetFormProps = (formProps: IDFormProps) => {
+const useApiGetFormProps = (formProps: IDFormProps) => {
     return useCallback(() => {
         return formProps;
     }, [formProps]);
 };
 
 /** Update the current form props (will cause rerender of the form) */
-export const useApiSetFormProps = (formProps: IDFormProps, setFormProps: (props: IDFormProps) => void) => {
+const useApiSetFormProps = (formProps: IDFormProps, setFormProps: (props: IDFormProps) => void) => {
     return useCallback(
         (props: Partial<IDFormProps>) => {
             setFormProps({...formProps, ...props});
@@ -66,7 +66,7 @@ export const useApiSetFormProps = (formProps: IDFormProps, setFormProps: (props:
     );
 };
 
-export const useApiValidateForm = (formApi: IDFormApi) => {
+const useApiValidateForm = (formApi: IDFormApi) => {
     return useCallback(
         (showAlert?: boolean) => {
             const errors = formApi.model.validateForm();

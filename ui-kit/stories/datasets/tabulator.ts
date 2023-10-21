@@ -1,4 +1,4 @@
-import {dateTimeFormatter, dateTimeSorter, ITabulatorColumn} from "@src/tabulatorBase";
+import {DateTimeFormatter, DateTimeSorter, ITabulatorColumn} from "@src/tabulatorBase";
 
 export const TabulatorTreeDataset = [
     {
@@ -87,8 +87,8 @@ export const TabulatorGridColumns: ITabulatorColumn[] = [
 
     {
         title: 'Date Of Birth', field: 'dob', hozAlign: 'center',
-        formatter: dateTimeFormatter, formatterParams: {inputFormat: 'DD/MM/YYYY', outputFormat: 'DD.MM.YYYY'},
-        sorter: dateTimeSorter, sorterParams: {format: 'DD/MM/YYYY'},
+        formatter: DateTimeFormatter, formatterParams: {inputFormat: 'DD/MM/YYYY', outputFormat: 'DD.MM.YYYY'},
+        sorter: DateTimeSorter, sorterParams: {format: 'DD/MM/YYYY'},
         headerFilter: true, headerFilterFunc: 'like'
     }
 ]

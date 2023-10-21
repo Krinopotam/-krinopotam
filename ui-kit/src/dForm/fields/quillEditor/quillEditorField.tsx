@@ -2,7 +2,7 @@ import {BaseField, IBaseFieldProps} from '@src/dForm/fields/base/baseField';
 import React from 'react';
 import {QuillEditorFieldRender} from '@src/dForm/fields/quillEditor/quillEditorFieldRender';
 import {IQuillEditorProps} from '@src/quillEditor';
-import {DeltaStatic} from '@src/quillEditor/quillEditor';
+import {IDeltaStatic} from '@src/quillEditor/quillEditor';
 import {Sources} from 'quill';
 import {Range, UnprivilegedEditor} from 'react-quill';
 
@@ -30,7 +30,7 @@ export interface IQuillEditorFieldProps extends IBaseFieldProps<QuillEditorField
     theme?: IQuillEditorProps['theme'];
 
     /** ------ Callbacks --------*/
-    onChange?: (value: string, delta: DeltaStatic, source: Sources, editor: UnprivilegedEditor, field: QuillEditorField) => void;
+    onChange?: (value: string, delta: IDeltaStatic, source: Sources, editor: UnprivilegedEditor, field: QuillEditorField) => void;
     onBlur?: (previousSelection: Range, source: Sources, editor: UnprivilegedEditor, field: QuillEditorField) => void;
     onChangeSelection?: (selection: Range, source: Sources, editor: UnprivilegedEditor, field: QuillEditorField) => void;
     onFocus?: (selection: Range, source: Sources, editor: UnprivilegedEditor, field: QuillEditorField) => void;

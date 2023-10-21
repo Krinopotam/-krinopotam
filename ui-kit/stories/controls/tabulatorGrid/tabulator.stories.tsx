@@ -3,7 +3,7 @@
 import type {Meta, StoryObj} from '@storybook/react'
 import React from "react";
 import {TabulatorGridColumns, TabulatorTreeDataset} from "../../datasets/tabulator";
-import TabulatorGrid from "@src/tabulatorGrid";
+import {TabulatorGrid} from '@src/tabulatorGrid';
 
 export default {
     title: 'Controls/TabulatorGrid',

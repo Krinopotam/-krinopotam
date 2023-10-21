@@ -22,8 +22,6 @@ export interface IDFormModalApi extends IDFormApi {
     forceClose: () => void;
 }
 
-export type {IDFormApi} from '@src/dForm/hooks/api'
-
 export const useInitModalFormApi = (
     formId: string,
     formApi: IDFormModalApi,
@@ -41,7 +39,7 @@ export const useInitModalFormApi = (
 };
 
 /** Get the current form ID */
-export const useApiGetFormId = (formId: string) => {
+const useApiGetFormId = (formId: string) => {
     return useCallback(() => {
         return formId;
     }, [formId]);

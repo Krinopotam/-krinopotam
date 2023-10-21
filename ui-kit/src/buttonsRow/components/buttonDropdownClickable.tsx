@@ -1,4 +1,4 @@
-import {ButtonType} from '@src/button';
+import {IButtonType} from '@src/button';
 import React, {useCallback} from 'react';
 import {Dropdown, MenuProps} from 'antd';
 import {IButtonRowProps, IFormButton} from '@src/buttonsRow';
@@ -16,7 +16,7 @@ export const ButtonDropdownClickable = ({
     menuProps: MenuProps;
     componentProps: IButtonRowProps;
 }): React.JSX.Element => {
-    let type: ButtonType = 'default';
+    let type: IButtonType = 'default';
     if (componentProps.makeActivePrimary !== false && button.active) type = 'primary';
     else if (button.type === 'text') type = 'text';
     else if (button.type === 'link') type = 'link';

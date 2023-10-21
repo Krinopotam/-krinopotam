@@ -9,7 +9,7 @@
     // language=text
     const source = `
 import React from 'react';
-import TabulatorGrid from @krinopotam/ui-kit/tabulatorGrid';
+import {TabulatorGrid} from @krinopotam/ui-kit/tabulatorGrid';
 import {ITabulatorColumn} from @krinopotam/ui-kit/tabulatorBase';
 import {IDFormModalProps} from @krinopotam/ui-kit/dFormModal';
 import {TabsField} from @krinopotam/ui-kit/dForm/fields/tabs/tabsField';

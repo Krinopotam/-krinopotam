@@ -58,7 +58,7 @@ export interface IQuillEditorProps {
     theme?: string;
 
     /** ------ Callbacks --------*/
-    onChange?: (value: string, delta: DeltaStatic, source: Sources, editor: UnprivilegedEditor) => void;
+    onChange?: (value: string, delta: IDeltaStatic, source: Sources, editor: UnprivilegedEditor) => void;
     onChangeSelection?: (selection: Range, source: Sources, editor: UnprivilegedEditor) => void;
     onFocus?: (selection: Range, source: Sources, editor: UnprivilegedEditor) => void;
     onBlur?: (previousSelection: Range, source: Sources, editor: UnprivilegedEditor) => void;
@@ -67,18 +67,18 @@ export interface IQuillEditorProps {
     onKeyUp?: React.KeyboardEventHandler<HTMLElement>;
 }
 
-export interface DeltaStatic {
+export interface IDeltaStatic {
     ops?: DeltaOperation[];
 
-    retain(length: number, attributes?: StringMap): DeltaStatic;
+    retain(length: number, attributes?: StringMap): IDeltaStatic;
 
-    delete(length: number): DeltaStatic;
+    delete(length: number): IDeltaStatic;
 
     filter(predicate: (op: DeltaOperation) => boolean): DeltaOperation[];
 
     forEach(predicate: (op: DeltaOperation) => void): void;
 
-    insert(text: AnyType, attributes?: StringMap): DeltaStatic;
+    insert(text: AnyType, attributes?: StringMap): IDeltaStatic;
 
     map<T>(predicate: (op: DeltaOperation) => T): T[];
 
@@ -86,23 +86,23 @@ export interface DeltaStatic {
 
     reduce<T>(predicate: (acc: T, curr: DeltaOperation, idx: number, arr: DeltaOperation[]) => T, initial: T): T;
 
-    chop(): DeltaStatic;
+    chop(): IDeltaStatic;
 
     length(): number;
 
-    slice(start?: number, end?: number): DeltaStatic;
+    slice(start?: number, end?: number): IDeltaStatic;
 
-    compose(other: DeltaStatic): DeltaStatic;
+    compose(other: IDeltaStatic): IDeltaStatic;
 
-    concat(other: DeltaStatic): DeltaStatic;
+    concat(other: IDeltaStatic): IDeltaStatic;
 
-    diff(other: DeltaStatic, index?: number): DeltaStatic;
+    diff(other: IDeltaStatic, index?: number): IDeltaStatic;
 
-    eachLine(predicate: (line: DeltaStatic, attributes: StringMap, idx: number) => AnyType, newline?: string): DeltaStatic;
+    eachLine(predicate: (line: IDeltaStatic, attributes: StringMap, idx: number) => AnyType, newline?: string): IDeltaStatic;
 
     transform(index: number, priority?: boolean): number;
 
-    transform(other: DeltaStatic, priority: boolean): DeltaStatic;
+    transform(other: IDeltaStatic, priority: boolean): IDeltaStatic;
 
     transformPosition(index: number, priority?: boolean): number;
 }

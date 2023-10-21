@@ -1,9 +1,9 @@
 // noinspection DuplicatedCode
 
 import React from 'react';
-import TabulatorGrid, {ITabulatorProps, IGridRowData} from '@src/tabulatorGrid';
-import {dateTimeFormatter} from '@src/tabulatorBase/formatters/dateTime';
-import {dateTimeSorter} from '@src/tabulatorBase/sorters/dateTime';
+import {TabulatorGrid, ITabulatorProps, IGridRowData} from '@src/tabulatorGrid';
+import {DateTimeFormatter} from '@src/tabulatorBase/formatters/dateTime';
+import {DateTimeSorter} from '@src/tabulatorBase/sorters/dateTime';
 
 const columnDefaults: ITabulatorProps['columnDefaults'] = {
     resizable: 'header',
@@ -19,9 +19,9 @@ const columns: ITabulatorProps['columns'] = [
         title: 'Date Of Birth',
         field: 'dob',
         hozAlign: 'center',
-        formatter: dateTimeFormatter,
+        formatter: DateTimeFormatter,
         formatterParams: {inputFormat: 'DD/MM/YYYY', outputFormat: 'DD.MM.YYYY'},
-        sorter: dateTimeSorter,
+        sorter: DateTimeSorter,
         sorterParams: {format: 'DD/MM/YYYY'},
     },
     {title: 'Rating', field: 'rating', hozAlign: 'center', formatter: 'star', headerFilterFunc: '='},

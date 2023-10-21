@@ -102,7 +102,7 @@ export interface ITabulatorProps extends Omit<ITabulator['options'], 'footerElem
     updateColumnDefinition?: ITabulator['updateColumnDefinition'];
 }
 
-const TabulatorBase = ({onTableRef, gridId, events, containerClassName, width, minWidth, maxWidth, ...props}: ITabulatorProps): React.JSX.Element => {
+export const TabulatorBase = ({onTableRef, gridId, events, containerClassName, width, minWidth, maxWidth, ...props}: ITabulatorProps): React.JSX.Element => {
     const containerRef = React.useRef<HTMLDivElement>(null as unknown as HTMLDivElement);
     const tableRef = React.useRef<ITabulator>();
 

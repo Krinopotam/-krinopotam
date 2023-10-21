@@ -3,7 +3,7 @@
 import React, {useCallback, useState} from 'react';
 
 import {Button} from '@src/button';
-import TabulatorGrid, {ITabulatorProps, IGridProps, IGridApi, IGridRowData} from '@src/tabulatorGrid';
+import {TabulatorGrid, ITabulatorProps, IGridProps, IGridApi, IGridRowData} from '@src/tabulatorGrid';
 
 const columnDefaults: ITabulatorProps['columnDefaults'] = {
     resizable: 'header',

@@ -1,7 +1,7 @@
 import React, {CSSProperties, useCallback, useEffect, useSyncExternalStore} from 'react';
 import {QuillEditorField} from '@src/dForm/fields/quillEditor/quillEditorField';
 import Quill, {Sources} from 'quill';
-import {DeltaStatic, QuillEditor} from '@src/quillEditor/quillEditor';
+import {IDeltaStatic, QuillEditor} from '@src/quillEditor/quillEditor';
 import {Range, UnprivilegedEditor} from 'react-quill';
 
 export const QuillEditorFieldRender = ({field}: {field: QuillEditorField}): React.JSX.Element => {
@@ -12,7 +12,7 @@ export const QuillEditorFieldRender = ({field}: {field: QuillEditorField}): Reac
     const value = field.getValue() as string | undefined;
 
     const onChange = useCallback(
-        function (this: Quill, value: string, delta: DeltaStatic, source: Sources, editor: UnprivilegedEditor) {
+        function (this: Quill, value: string, delta: IDeltaStatic, source: Sources, editor: UnprivilegedEditor) {
             if (!field.isReady()) return;
             field.setValue(value || undefined);
             field.setDirty(true);

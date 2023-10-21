@@ -3,8 +3,8 @@
 import React from 'react';
 
 import {ColumnDefinition} from 'tabulator-tables';
-import TabulatorGrid, {ITabulatorProps, IGridRowData} from "@src/tabulatorGrid";
-import {dateTimeSorter} from "@src/tabulatorBase/sorters/dateTime";
+import {TabulatorGrid, ITabulatorProps, IGridRowData} from "@src/tabulatorGrid";
+import {DateTimeSorter} from "@src/tabulatorBase/sorters/dateTime";
 
 const data: IGridRowData[] = [
     {id: '01', surname: 'Иванов', name: 'Иван', patronymic: 'Иванович', email: 'ivanov@mail.ru', birthday: '11.01.1980'},
@@ -82,7 +82,7 @@ const columns: ITabulatorProps['columns'] = [
     {
         title: 'День рождения',
         field: 'birthday',
-        sorter: dateTimeSorter,
+        sorter: DateTimeSorter,
         //sorterParams:{format:'DD.MM.YYYY'} - you can set custom format. Default DD.MM.YYYY
         headerFilter:undefined
     },

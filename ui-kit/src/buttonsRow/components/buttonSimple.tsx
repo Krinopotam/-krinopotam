@@ -1,6 +1,6 @@
 import {IButtonRowProps, IFormButton} from '@src/buttonsRow';
 import React, {useCallback, useEffect, useRef} from 'react';
-import {Button, ButtonType} from '@src/button';
+import {Button, IButtonType} from '@src/button';
 
 export const ButtonSimple = ({
     id,
@@ -24,7 +24,7 @@ export const ButtonSimple = ({
         if (button.active && componentProps.makeActivePrimary === false) btnRef.current?.focus();
     }, [button.active, componentProps.makeActivePrimary]);
 
-    let type: ButtonType | undefined;
+    let type: IButtonType | undefined;
     if (componentProps.makeActivePrimary !== false && button.active) type = 'primary';
     else if (button.type === 'text') type = 'text';
     else if (button.type === 'link') type = 'link';

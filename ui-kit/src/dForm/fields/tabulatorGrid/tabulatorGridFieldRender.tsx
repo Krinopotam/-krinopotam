@@ -1,6 +1,6 @@
 import React, {useCallback, useMemo, useRef, useState, useSyncExternalStore} from 'react';
 import {ITabulatorGridFieldOnlyProps, ITabulatorGridFieldProps, TabulatorGridField} from '@src/dForm/fields/tabulatorGrid/tabulatorGridField';
-import TabulatorGrid, {IGridApi, IGridRowData, ITabulatorProps} from '@src/tabulatorGrid';
+import {TabulatorGrid, IGridApi, IGridRowData, ITabulatorProps} from '@src/tabulatorGrid';
 import {HelpersObjects} from '@krinopotam/js-helpers';
 import {IRequestProps} from '@src/tabulatorBase';
 

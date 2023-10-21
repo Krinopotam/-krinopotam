@@ -7,7 +7,8 @@ export type {
     ITreeSelectValue,
     IAntTreeSelectProps,
     ITreeSelectDeletePromise,
-    ITreeSelectSourcePromise
+    ITreeSelectSourcePromise,
+    ITreeSelectBaseProps,
 } from '@src/treeSelect/treeSelect';
 
-export type {ITreeSelectApi} from "@src/treeSelect/hooks/api";
+export type {ITreeSelectApi} from '@src/treeSelect/hooks/api';

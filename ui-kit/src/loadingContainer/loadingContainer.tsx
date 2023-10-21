@@ -4,7 +4,7 @@ import {Spin} from 'antd';
 
 import './css/loadingContainer.css';
 
-export interface ILoginContainerProps {
+export interface ILoadingContainerProps {
     isLoading: boolean;
     error?: {code: number; message: string};
     retryHandler?: () => void;
@@ -30,7 +30,7 @@ export const LoadingContainer = ({
     spinStyle,
     errorStyle,
     noFullHeight,
-}: ILoginContainerProps): React.JSX.Element => {
+}: ILoadingContainerProps): React.JSX.Element => {
     const tip = caption ?? 'Пожалуйста, подождите...';
     return (
         <LoadingError errorMessage={error?.message} retryHandler={retryHandler} style={errorStyle}>

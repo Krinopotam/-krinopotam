@@ -5,7 +5,7 @@ export interface IDateTimeSorterParams {
     format?: string | undefined;
     alignEmptyValues?: 'top'|'bottom';
 }
-export const dateTimeSorter: ColumnDefinition['sorter'] = function (a, b, aRow, bRow, column, dir, params:IDateTimeSorterParams) {
+export const DateTimeSorter: ColumnDefinition['sorter'] = function (a, b, aRow, bRow, column, dir, params:IDateTimeSorterParams) {
     let format = params.format;
     if (!format) {
         if (a.length === 10) format = 'DD.MM.YYYY';

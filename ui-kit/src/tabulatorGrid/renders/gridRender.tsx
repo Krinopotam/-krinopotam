@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useRef} from 'react';
-import ReactTabulator, {IAjaxConfig, IRequestProps, ITabulator, ITabulatorProps} from '@src/tabulatorBase';
+import {TabulatorBase, IAjaxConfig, IRequestProps, ITabulator, ITabulatorProps} from '@src/tabulatorBase';
 import {IGridApi} from '../hooks/api';
 import dispatcher from '@src/formsDispatcher';
 import {IGridProps} from '../tabulatorGrid';
@@ -61,7 +61,7 @@ const GridRender_ = ({
     );
 
     return (
-        <ReactTabulator
+        <TabulatorBase
             {...tabulatorProps}
             layout={tabulatorProps.layout ?? 'fitData'}
             movableColumns={tabulatorProps.movableColumns !== false}

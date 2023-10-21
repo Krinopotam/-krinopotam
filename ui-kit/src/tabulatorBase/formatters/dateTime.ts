@@ -8,7 +8,7 @@ export interface IDateTimeFormatterParams {
     invalidPlaceholder?: string | number | ValueStringCallback;
 }
 
-export const dateTimeFormatter: ColumnDefinition['formatter'] = function (cell, formatterParams: IDateTimeFormatterParams) {
+export const DateTimeFormatter: ColumnDefinition['formatter'] = function (cell, formatterParams: IDateTimeFormatterParams) {
     //cell - the cell component
     //formatterParams - parameters set for the column
     //onRendered - function to call when the formatter has been rendered

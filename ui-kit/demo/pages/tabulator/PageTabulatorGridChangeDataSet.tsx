@@ -10,7 +10,7 @@
     const source = `
 import React, {useCallback, useState} from 'react';
 import {Button} from @krinopotam/ui-kit/button';
-import TabulatorGrid, {ITabulatorProps, IGridProps, IGridApi, IGridRowData} from @krinopotam/ui-kit/tabulatorGrid';
+import {TabulatorGrid, ITabulatorProps, IGridProps, IGridApi, IGridRowData} from @krinopotam/ui-kit/tabulatorGrid';
 const columnDefaults: ITabulatorProps['columnDefaults'] = {
     resizable: 'header',
     headerFilter: true,

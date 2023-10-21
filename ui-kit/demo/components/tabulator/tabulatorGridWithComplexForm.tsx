@@ -1,5 +1,5 @@
 import React from 'react';
-import TabulatorGrid from '@src/tabulatorGrid';
+import {TabulatorGrid} from '@src/tabulatorGrid';
 import {ITabulatorColumn} from '@src/tabulatorBase';
 import {IDFormModalProps} from '@src/dFormModal';
 import {TabsField} from '@src/dForm/fields/tabs/tabsField';

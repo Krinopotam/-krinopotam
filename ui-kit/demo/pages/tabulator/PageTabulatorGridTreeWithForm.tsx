@@ -9,9 +9,9 @@
     // language=text
     const source = `
 import React from 'react';
-import TabulatorGrid, {ITabulatorProps, IGridRowData} from @krinopotam/ui-kit/tabulatorGrid';
-import {dateTimeFormatter} from @krinopotam/ui-kit/tabulatorBase/formatters/dateTime';
-import {dateTimeSorter} from @krinopotam/ui-kit/tabulatorBase/sorters/dateTime';
+import {TabulatorGrid, ITabulatorProps, IGridRowData} from @krinopotam/ui-kit/tabulatorGrid';
+import {DateTimeFormatter} from @krinopotam/ui-kit/tabulatorBase/formatters/dateTime';
+import {DateTimeSorter} from @krinopotam/ui-kit/tabulatorBase/sorters/dateTime';
 import {IDFormModalProps} from @krinopotam/ui-kit/dFormModal';
 import {TreeSelectField} from @krinopotam/ui-kit/dForm/fields/treeSelect/treeSelectField';
 import {InputField} from @krinopotam/ui-kit/dForm/fields/input/inputField';
@@ -29,9 +29,9 @@ const columns: ITabulatorProps['columns'] = [
         title: 'Date Of Birth',
         field: 'dob',
         hozAlign: 'center',
-        formatter: dateTimeFormatter,
+        formatter: DateTimeFormatter,
         formatterParams: {inputFormat: 'DD/MM/YYYY', outputFormat: 'DD.MM.YYYY'},
-        sorter: dateTimeSorter,
+        sorter: DateTimeSorter,
         sorterParams: {format: 'DD/MM/YYYY'},
     },
     {title: 'Rating', field: 'rating', hozAlign: 'center', formatter: 'star', headerFilterFunc: '='},
