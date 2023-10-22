@@ -9,7 +9,7 @@ import {
     RowComponent,
     TabulatorFull as Tabulator,
 } from 'tabulator-tables';
-import React, {MouseEvent, useEffect} from 'react';
+import React, {MouseEvent} from 'react';
 import {useInit} from './hooks/init';
 import {IActiveSelectionModuleRow, IActiveSelectionModuleTableEvents, IActiveSelectionTabulator} from './modules/activeSelectionModule';
 import {IAdvancedHeaderFilterTabulator} from './modules/advancedHeaderFilterModule';

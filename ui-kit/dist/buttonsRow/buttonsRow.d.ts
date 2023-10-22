@@ -26,7 +26,7 @@ export interface IFormButton {
     href?: string;
     target?: HTMLAttributeAnchorTarget;
     rel?: string;
-    children?: IFormButtons;
+    children?: Record<string, Omit<IFormButton, 'expandIcon' | 'danger'> | null>;
     style?: CSSProperties;
     className?: string;
     shape?: IButtonProps['shape'];

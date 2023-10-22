@@ -8,8 +8,9 @@ export const TabulatorGrid = (props) => {
     const [editFormApi] = useState({});
     const [buttonsApi] = useState({});
     const [gridApi] = useState((props.apiRef || {}));
-    useInitGridApi({ gridApi, props, tableRef, editFormApi, buttonsApi });
-    return React.createElement(ContainerRender, { tableRef: tableRef, gridApi: gridApi, gridProps: props, tabulatorProps: tabulatorProps });
+    const [columnsDialog, openColumnsDialog] = useState(false);
+    useInitGridApi({ gridApi, props, tableRef, editFormApi, buttonsApi, openColumnsDialog: openColumnsDialog });
+    return React.createElement(ContainerRender, { tableRef: tableRef, gridApi: gridApi, gridProps: props, tabulatorProps: tabulatorProps, columnsDialog: columnsDialog });
 };
 export default TabulatorGrid;
 const useSplitTabulatorProps = (props) => {
@@ -23,6 +24,7 @@ const useSplitTabulatorProps = (props) => {
             buttons: true,
             buttonsSize: true,
             buttonsPosition: true,
+            buttonsIconsOnly: true,
             readOnly: true,
             editFormProps: true,
             noHover: true,

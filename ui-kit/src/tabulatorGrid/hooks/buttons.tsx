@@ -4,7 +4,9 @@ import {CopyOutlined, DeleteOutlined, EditOutlined, EyeOutlined, FilterOutlined,
 import {HelpersObjects} from '@krinopotam/js-helpers';
 import {IGridApi} from './api';
 import {IGridRowData, ITabulator} from '@src/tabulatorGrid';
-import {ColumnsDialog} from "@src/tabulatorGrid/renders/columnsDialog";
+//import * as XLSX from 'xlsx';
+
+//window.XLSX = XLSX
 
 export const useInitButtons = (gridApi: IGridApi): IFormButtons => {
     const [, refreshButtons] = useState({});
@@ -23,7 +25,7 @@ export const useInitButtons = (gridApi: IGridApi): IFormButtons => {
     const updateButton = useGetUpdateButton(gridApi, activeRow, selectedRows);
     const deleteButton = useGetDeleteButton(gridApi, selectedRows);
     const filterToggleButton = useGetFilterToggleButton(gridApi, gridApi.tableApi);
-    const systemButtons = useGetSystemButton(gridApi, gridApi.tableApi);
+    const systemButtons = useGetSystemButton(gridApi);
 
     return useMemo(() => {
         const defaultButtons = {
@@ -209,7 +211,7 @@ const getRowDataSet = (gridApi: IGridApi, selfParent: boolean, parentOnly?: bool
 };
 
 /** Get system button props */
-const useGetSystemButton = (gridApi: IGridApi, tableApi: ITabulator | undefined): IFormButton | undefined => {
+const useGetSystemButton = (gridApi: IGridApi): IFormButton | undefined => {
     //a separate tableApi parameter is required for the memo field to be updated (initially tableApi is undefined)
     return useMemo(() => {
         const gridProps = gridApi.gridProps;
@@ -223,16 +225,29 @@ const useGetSystemButton = (gridApi: IGridApi, tableApi: ITabulator | undefined)
             //tooltip: 'Параметры таблицы',
             position: 'right',
             children: {
+/*                toCSV: {
+                    title: 'Экспорт в CSV',
+                    onClick: () => {
+                        gridApi.tableApi?.download('csv', 'table.csv');
+                    },
+                },*/
+                toXlsx: {
+                    title: 'Экспорт в Excel',
+                    onClick: () => {
+                        const xlsx = import('xlsx'); //dynamic import
+                        xlsx.then(value => {
+                            (window as unknown as {XLSX: typeof value}).XLSX = value; //WORKAROUND: Tabulator uses external library sheetjs (expects XLSX.utils exists in global scope)
+                            gridApi.tableApi?.download('xlsx', 'table.xlsx');
+                        });
+                    },
+                },
                 columns: {
                     title: 'Настройки столбцов',
                     onClick: () => {
-                        gridApi.openColumnDialog(true)
+                        gridApi.openColumnDialog(true);
                     },
                 },
             },
-            //onClick: () => {}
-            //active: gridApi.tableApi?.isHeaderFilterVisible(),
-            //disabled: !activeRowKey || selectedRow.length !== 1,
         } satisfies IFormButton;
     }, [gridApi]);
 };

@@ -3,7 +3,7 @@ import { ColumnComponent, ColumnDefinition, ColumnLookup, EmptyCallback, EventCa
 import React, { MouseEvent } from 'react';
 import { IActiveSelectionModuleRow, IActiveSelectionModuleTableEvents, IActiveSelectionTabulator } from './modules/activeSelectionModule';
 import { IAdvancedHeaderFilterTabulator } from './modules/advancedHeaderFilterModule';
-import { AnyType } from "@krinopotam/service-types";
+import { AnyType } from '@krinopotam/service-types';
 type _ITabulator = IAdvancedHeaderFilterTabulator & IActiveSelectionTabulator & Tabulator;
 export type ITabulatorFilterFunc = (headerValue: AnyType, rowValue: AnyType, rowData: Record<string, unknown>, filterParams: Record<string, unknown>) => boolean;
 export interface IRequestProps extends Record<string, unknown> {
@@ -24,10 +24,10 @@ export interface IAjaxConfig extends Record<string, unknown> {
     mode?: string;
     credentials?: string;
     headers?: Record<string, string> & {
-        "Accept"?: string;
-        "X-Requested-With"?: string;
-        "Content-type"?: string;
-        "Access-Control-Allow-Origin"?: string;
+        Accept?: string;
+        'X-Requested-With'?: string;
+        'Content-type'?: string;
+        'Access-Control-Allow-Origin'?: string;
     };
 }
 export interface ITabulator extends _ITabulator {
@@ -52,6 +52,7 @@ export interface ITabulatorProps extends Omit<ITabulator['options'], 'footerElem
     width?: string | number;
     minWidth?: string | number;
     maxWidth?: string | number;
+    allowTextSelection?: boolean;
     resizableColumnFit?: boolean;
     ajaxRequestFunc?: ITabulator['ajaxRequestFunc'];
     updateColumnDefinition?: ITabulator['updateColumnDefinition'];

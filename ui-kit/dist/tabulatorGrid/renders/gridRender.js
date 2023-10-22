@@ -23,7 +23,6 @@ const GridRender_ = ({ tableRef, gridApi, gridProps, tabulatorProps, }) => {
         dispatcher.pushToStack(gridApi.getGridId());
     }, [gridApi]);
     const ajaxRequestFunc = useCallback((url, config, params) => {
-        console.log('ajaxRequestFunc', params);
         return new Promise((resolve, reject) => {
             var _a, _b;
             const dataSource = (_a = gridProps === null || gridProps === void 0 ? void 0 : gridProps.onDataFetch) === null || _a === void 0 ? void 0 : _a.call(gridProps, gridApi, params);

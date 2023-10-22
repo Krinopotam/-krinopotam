@@ -20,5 +20,5 @@ export const ButtonSimple = ({ id, button, context, componentProps, children, })
         type = 'link';
     else if (button.dashed)
         type = 'dashed';
-    return (React.createElement(Button, { ref: btnRef, type: type, href: button.href, target: button.target, disabled: button.disabled, ghost: button.ghost, loading: button.loading, colorType: button.colorType, onClick: onClick, size: button.size, rel: button.rel, style: button.style, className: button.className, icon: button.icon, shape: button.shape }, children !== null && children !== void 0 ? children : button.title));
+    return (React.createElement(Button, { ref: btnRef, type: type, href: button.href, target: button.target, disabled: button.disabled, ghost: button.ghost, loading: button.loading, colorType: button.colorType, onClick: onClick, size: button.size, rel: button.rel, style: button.style, className: button.className, icon: button.icon, shape: button.shape, squareSize: !button.title && ((!!button.icon && !button.expandIcon) || (!button.icon && !!button.expandIcon)) }, children !== null && children !== void 0 ? children : button.title));
 };

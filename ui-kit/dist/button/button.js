@@ -13,7 +13,7 @@ import { Button as AntButton, ConfigProvider, theme } from 'antd';
 import React from 'react';
 const { useToken } = theme;
 export const Button = React.forwardRef((_a, ref) => {
-    var { colorType, children } = _a, props = __rest(_a, ["colorType", "children"]);
+    var { colorType, children, squareSize } = _a, props = __rest(_a, ["colorType", "children", "squareSize"]);
     const { token } = useToken();
     let colorPrimary = token.colorPrimary;
     if (colorType === 'neutral' || colorType === 'info')
@@ -24,9 +24,14 @@ export const Button = React.forwardRef((_a, ref) => {
         colorPrimary = token.colorWarning;
     else if (colorType === 'danger')
         colorPrimary = token.colorError;
-    const style = !children
+    let emptyWidth = 32;
+    if (props.size === 'small')
+        emptyWidth = 24;
+    else if (props.size === 'large')
+        emptyWidth = 40;
+    const style = !squareSize
         ? props.style
-        : Object.assign({ paddingLeft: 10, paddingRight: 10 }, props.style);
+        : Object.assign({ width: emptyWidth, padding: 0 }, props.style);
     return (React.createElement(ConfigProvider, { theme: { token: { colorPrimary: colorPrimary } } },
         React.createElement(AntButton, Object.assign({}, props, { style: style, ref: ref }), children)));
 });

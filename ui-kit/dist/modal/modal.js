@@ -52,9 +52,7 @@ export const Modal = (_a) => {
     const _headerStyle = Object.assign({ paddingLeft: paddingLeft, paddingRight: paddingRight, paddingTop: 5, paddingBottom: 5 }, headerStyle);
     const _footerStyle = Object.assign({ paddingTop: 20, paddingLeft: paddingLeft, paddingRight: paddingRight, paddingBottom: 20 }, footerStyle);
     const [draggableId] = useState('draggable-' + HelpersStrings.getUuid());
-    return (React.createElement(AntModal, Object.assign({}, props, { width: formSize.width || undefined, styles: { body: bodyStyleVal, footer: { margin: 0 } }, className: classNames('custom-antd-modal', props.className), modalRender: node => {
-            return ModalRender(node, draggableId, wrapperRemoteCallbacksRef);
-        }, title: React.createElement(HeaderRender, { draggableId: draggableId, icon: props.headerIcon, title: props.title, colorType: props.colorType, style: _headerStyle }), footer: React.createElement(FooterRender, { onMouseResize: onMouseResize, resizable: resizable, style: _footerStyle, colorType: props.colorType }, props.footer), afterOpenChange: onAfterOpenChange })));
+    return (React.createElement(AntModal, Object.assign({}, props, { width: formSize.width || undefined, styles: { body: bodyStyleVal, footer: { margin: 0 } }, className: classNames('custom-antd-modal', props.className), modalRender: node => ModalRender(node, draggableId, wrapperRemoteCallbacksRef), title: React.createElement(HeaderRender, { draggableId: draggableId, icon: props.headerIcon, title: props.title, colorType: props.colorType, style: _headerStyle }), footer: React.createElement(FooterRender, { onMouseResize: onMouseResize, resizable: resizable, style: _footerStyle, colorType: props.colorType }, props.footer), afterOpenChange: onAfterOpenChange })));
 };
 const useGetBodyStyle = ({ bodyStyle, bodyHeight, bodyMaxHeight, bodyMinHeight, notScrollable, }) => {
     const newStyle = Object.assign(Object.assign({}, bodyStyle), { padding: '0 24px 0 24px', overflowY: notScrollable ? 'hidden' : 'auto' });

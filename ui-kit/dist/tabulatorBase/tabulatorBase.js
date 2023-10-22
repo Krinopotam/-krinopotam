@@ -12,15 +12,20 @@ var __rest = (this && this.__rest) || function (s, e) {
 import 'tabulator-tables/dist/css/tabulator_simple.css';
 import React from 'react';
 import { useInit } from './hooks/init';
-import { HelpersStrings } from "@krinopotam/js-helpers";
-import { Stylization } from "../tabulatorBase/stylization";
+import { HelpersStrings } from '@krinopotam/js-helpers';
+import { Stylization } from '../tabulatorBase/stylization';
 export const TabulatorBase = (_a) => {
     var { onTableRef, gridId, events, containerClassName, width, minWidth, maxWidth } = _a, props = __rest(_a, ["onTableRef", "gridId", "events", "containerClassName", "width", "minWidth", "maxWidth"]);
     const containerRef = React.useRef(null);
     const tableRef = React.useRef();
     const [newId] = React.useState(HelpersStrings.getUuid());
     useInit({ props, events, containerRef, tableRef, onTableRef });
-    const containerStyle = { width: width, maxWidth: maxWidth, minWidth: minWidth };
+    const containerStyle = {
+        width: width,
+        maxWidth: maxWidth,
+        minWidth: minWidth,
+        userSelect: !props.allowTextSelection ? 'none' : undefined,
+    };
     return (React.createElement(React.Fragment, null,
         React.createElement(Stylization, { striped: true }),
         React.createElement("div", { ref: containerRef, id: gridId !== null && gridId !== void 0 ? gridId : newId, "data-instance": gridId !== null && gridId !== void 0 ? gridId : newId, className: containerClassName, style: containerStyle })));

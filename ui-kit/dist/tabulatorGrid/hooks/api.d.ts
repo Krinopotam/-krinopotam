@@ -1,7 +1,7 @@
-import { MutableRefObject } from 'react';
+import React, { MutableRefObject } from 'react';
 import { IDFormModalApi } from '../../dFormModal';
 import { IButtonsRowApi } from '../../buttonsRow/buttonsRow';
-import { IGridProps, IGridRowData } from '../tabulatorGrid';
+import { IGridDataSourcePromise, IGridProps, IGridRowData } from '../tabulatorGrid';
 import { RowComponent, ScrollToRowPosition, TabulatorFull as Tabulator } from 'tabulator-tables';
 import { ITabulator } from '../../tabulatorBase';
 type IRowKey = IGridRowData['id'];
@@ -31,19 +31,21 @@ export interface IGridApi {
     getSelectedNodes: () => RowComponent[];
     getSelectedRows: () => IGridRowData[];
     getRowData: (node: RowComponent | undefined, withParent?: boolean, selfParent?: boolean, parentOnly?: boolean, withChildren?: boolean) => Record<string, unknown>;
+    openColumnDialog: (open: boolean) => void;
     getNodeByKey: (key: IRowKey) => RowComponent | undefined;
     getRowByKey: (key: IRowKey) => IGridRowData | undefined;
     editFormApi: IDFormModalApi;
     buttonsApi: IButtonsRowApi & {
         refreshButtons: () => void;
     };
-    fetchData: (params?: Record<string, unknown>) => void;
+    fetchData: (params?: Record<string, unknown>, dataSource?: IGridDataSourcePromise) => void;
 }
-export declare const useInitGridApi: ({ gridApi, props, tableRef, editFormApi, buttonsApi, }: {
+export declare const useInitGridApi: ({ gridApi, props, tableRef, editFormApi, buttonsApi, openColumnsDialog, }: {
     gridApi: IGridApi;
     props: IGridApi['gridProps'];
     tableRef: MutableRefObject<Tabulator | undefined>;
     editFormApi: IGridApi['editFormApi'];
     buttonsApi: IGridApi['buttonsApi'];
+    openColumnsDialog: React.Dispatch<React.SetStateAction<boolean>>;
 }) => IGridApi;
 export {};

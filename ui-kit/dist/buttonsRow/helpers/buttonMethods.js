@@ -8,7 +8,7 @@ export const prepareButtons = (buttons, rowColorType) => {
         const button = clonedButtons[key];
         if (!button)
             continue;
-        if (!button.title && !button.icon)
+        if (!button.title && !button.icon && !button.expandIcon)
             button.title = key;
         if (!button.type)
             button.type = 'button';

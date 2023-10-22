@@ -16,6 +16,7 @@ export interface IGridProps_ {
     className?: string;
     buttons?: Record<'view' | 'create' | 'clone' | 'update' | 'delete' | 'filterToggle' | 'system', IFormButton | null> | IFormButtons;
     buttonsSize?: IFormButton['size'];
+    buttonsIconsOnly?: boolean;
     buttonsPosition?: IFormButton['position'];
     readOnly?: boolean;
     editFormProps?: IDFormModalProps;

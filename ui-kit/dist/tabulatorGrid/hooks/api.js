@@ -2,7 +2,8 @@ import { useCallback, useRef, useState } from 'react';
 import { HelpersStrings, HelpersObjects } from '@krinopotam/js-helpers';
 import useUnmountedRef from 'ahooks/lib/useUnmountedRef';
 import { MessageBox } from '../../messageBox';
-export const useInitGridApi = ({ gridApi, props, tableRef, editFormApi, buttonsApi, }) => {
+import { BaseFetchHandler } from '../../tabulatorGrid/helpers/fetchHelpers';
+export const useInitGridApi = ({ gridApi, props, tableRef, editFormApi, buttonsApi, openColumnsDialog, }) => {
     const dataSetRef = useRef(undefined);
     const [isLoading, setIsLoading] = useState(false);
     const unmountRef = useUnmountedRef();
@@ -36,6 +37,7 @@ export const useInitGridApi = ({ gridApi, props, tableRef, editFormApi, buttonsA
     gridApi.deleteRows = useApiDeleteRows(gridApi);
     gridApi.fetchData = useApiFetchData(gridApi);
     gridApi.getRowData = useApiGetRowData(gridApi);
+    gridApi.openColumnDialog = useApiOpenColumnDialog(gridApi, openColumnsDialog);
     return gridApi;
 };
 const useUpdateDataSetFromProps = (curDataSetRef, propsDataSet) => {
@@ -398,12 +400,19 @@ const useApiDeleteRows = (gridApi) => {
     }, [gridApi]);
 };
 const useApiFetchData = (gridApi) => {
-    return useCallback((params) => {
-        var _a;
+    return useCallback((params, dataSource) => {
+        var _a, _b;
         if (!gridApi.tableApi)
             return;
+        if (dataSource) {
+            (_a = BaseFetchHandler(gridApi, dataSource)) === null || _a === void 0 ? void 0 : _a.then(value => {
+                var _a;
+                (_a = gridApi.tableApi) === null || _a === void 0 ? void 0 : _a.setData(value.data);
+            });
+            return;
+        }
         gridApi.tableApi.modules.page.dataChanging = true;
-        (_a = gridApi.tableApi) === null || _a === void 0 ? void 0 : _a.setData(undefined, params);
+        (_b = gridApi.tableApi) === null || _b === void 0 ? void 0 : _b.setData(undefined, params);
     }, [gridApi]);
 };
 const useApiGetRowData = (gridApi) => {
@@ -429,4 +438,9 @@ const useApiGetRowData = (gridApi) => {
         rowData[parentFieldKey] = parentNode.getData();
         return rowData;
     }, [gridApi]);
+};
+const useApiOpenColumnDialog = (gridApi, openColumnsDialog) => {
+    return useCallback((open) => {
+        openColumnsDialog(open);
+    }, [openColumnsDialog]);
 };

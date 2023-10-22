@@ -1,6 +1,6 @@
 {
 	"name": "@krinopotam/ui-kit",
-	"version": "2.0.17",
+	"version": "2.0.18",
 	"description": "UI kitfor Krinopotam's projects",
 	"private": false,
 	"author": "Maxim Zaytsev",
@@ -72,6 +72,7 @@
 		"react-quill": "^2.0.0",
 		"react-sticky-box": "^2.0.4",
 		"styled-components": "^6.1.0",
-		"tabulator-tables": "^5.5.2"
+		"tabulator-tables": "^5.5.2",
+		"xlsx": "https://cdn.sheetjs.com/xlsx-0.20.0/xlsx-0.20.0.tgz"
 	}
 }
