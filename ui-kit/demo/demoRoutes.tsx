@@ -28,6 +28,7 @@
 
     const PageTabulatorGridCellFormat = lazy(() => import('./pages/tabulator/PageTabulatorGridCellFormat'))
     const PageTabulatorGridChangeDataSet = lazy(() => import('./pages/tabulator/PageTabulatorGridChangeDataSet'))
+    const PageTabulatorGridColumnsGroups = lazy(() => import('./pages/tabulator/PageTabulatorGridColumnsGroups'))
     const PageTabulatorGridMultiSelect = lazy(() => import('./pages/tabulator/PageTabulatorGridMultiSelect'))
     const PageTabulatorGridPaginationRemote = lazy(() => import('./pages/tabulator/PageTabulatorGridPaginationRemote'))
     const PageTabulatorGridSimple = lazy(() => import('./pages/tabulator/PageTabulatorGridSimple'))
@@ -83,6 +84,7 @@ export const DemoRoutes = (props: {darkMode: boolean; setDarkMode: (mode:boolean
 
                 <Route path="TabulatorGridCellFormat" element={<PageTabulatorGridCellFormat darkMode={props.darkMode} />} />;
                 <Route path="TabulatorGridChangeDataSet" element={<PageTabulatorGridChangeDataSet darkMode={props.darkMode} />} />;
+                <Route path="TabulatorGridColumnsGroups" element={<PageTabulatorGridColumnsGroups darkMode={props.darkMode} />} />;
                 <Route path="TabulatorGridMultiSelect" element={<PageTabulatorGridMultiSelect darkMode={props.darkMode} />} />;
                 <Route path="TabulatorGridPaginationRemote" element={<PageTabulatorGridPaginationRemote darkMode={props.darkMode} />} />;
                 <Route path="TabulatorGridSimple" element={<PageTabulatorGridSimple darkMode={props.darkMode} />} />;

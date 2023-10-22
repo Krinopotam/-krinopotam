@@ -1,48 +1,56 @@
 import {IFormButton, IFormButtons} from '@src/buttonsRow/buttonsRow';
 import React, {useCallback, useMemo, useState} from 'react';
-import {CopyOutlined, DeleteOutlined, EditOutlined, EyeOutlined, FilterOutlined, PlusOutlined} from '@ant-design/icons';
-import {MessageBox, MessageBoxApi} from '@src/messageBox';
+import {CopyOutlined, DeleteOutlined, EditOutlined, EyeOutlined, FilterOutlined, MenuOutlined, PlusOutlined} from '@ant-design/icons';
 import {HelpersObjects} from '@krinopotam/js-helpers';
 import {IGridApi} from './api';
-import {IGridDeletePromise, IGridRowData, ITabulator} from '@src/tabulatorGrid';
+import {IGridRowData, ITabulator} from '@src/tabulatorGrid';
+import {ColumnsDialog} from "@src/tabulatorGrid/renders/columnsDialog";
 
 export const useInitButtons = (gridApi: IGridApi): IFormButtons => {
     const [, refreshButtons] = useState({});
     const buttons = gridApi.gridProps.buttons;
     const buttonsSize = gridApi.gridProps.buttonsSize ?? 'small';
     const buttonsPos = gridApi.gridProps.buttonsPosition ?? 'right';
+    const iconsOnly = gridApi.gridProps.buttonsIconsOnly;
     const activeRow = gridApi.getActiveRow();
     const selectedRows = gridApi.getSelectedRows();
 
     gridApi.buttonsApi.refreshButtons = useRefreshButtons(refreshButtons);
 
-    const vewButton = useGetViewButton(gridApi, activeRow, selectedRows);
+    const viewButton = useGetViewButton(gridApi, activeRow, selectedRows);
     const createButton = useGetCreateButton(gridApi);
     const cloneButton = useGetCloneButton(gridApi, activeRow, selectedRows);
     const updateButton = useGetUpdateButton(gridApi, activeRow, selectedRows);
     const deleteButton = useGetDeleteButton(gridApi, selectedRows);
     const filterToggleButton = useGetFilterToggleButton(gridApi, gridApi.tableApi);
+    const systemButtons = useGetSystemButton(gridApi, gridApi.tableApi);
 
     return useMemo(() => {
         const defaultButtons = {
-            view: vewButton,
+            view: viewButton,
             create: createButton,
             clone: cloneButton,
             update: updateButton,
             delete: deleteButton,
             filterToggle: filterToggleButton,
+            system: systemButtons,
         } as IFormButtons;
 
         const resultButtons = HelpersObjects.mergeObjects(defaultButtons, buttons);
+
         for (const key in resultButtons) {
             const btn = resultButtons[key];
             if (!btn) continue;
             btn.size = btn.size ?? buttonsSize;
             btn.position = btn.position ?? buttonsPos;
+            if (iconsOnly) {
+                btn.tooltip = btn.tooltip ?? btn.title?.toString();
+                btn.title = undefined;
+            }
         }
 
         return resultButtons;
-    }, [buttons, buttonsPos, buttonsSize, cloneButton, createButton, deleteButton, filterToggleButton, updateButton, vewButton]);
+    }, [buttons, buttonsPos, buttonsSize, cloneButton, createButton, deleteButton, filterToggleButton, iconsOnly, systemButtons, updateButton, viewButton]);
 };
 
 const useRefreshButtons = (refreshButtons: React.Dispatch<React.SetStateAction<Record<string, unknown>>>) => {
@@ -61,6 +69,7 @@ const useGetViewButton = (gridApi: IGridApi, activeRow: IGridRowData | undefined
         return {
             weight: 100,
             title: 'Просмотреть',
+            tooltip: 'Просмотреть запись',
             icon: <EyeOutlined />,
             position: 'right',
             disabled: !activeRow || selectedRows.length !== 1,
@@ -84,6 +93,7 @@ const useGetCreateButton = (gridApi: IGridApi): IFormButton | undefined => {
         return {
             weight: 110,
             title: 'Создать',
+            tooltip: 'Создать новую запись',
             icon: <PlusOutlined />,
             position: 'right',
             hotKeys: [{key: 'Insert'}],
@@ -105,6 +115,7 @@ const useGetCloneButton = (gridApi: IGridApi, activeRow: IGridRowData | undefine
         return {
             weight: 120,
             title: 'Клонировать',
+            tooltip: 'Клонировать запись',
             icon: <CopyOutlined />,
             position: 'right',
             disabled: !activeRow || selectedRows.length !== 1,
@@ -128,6 +139,7 @@ const useGetUpdateButton = (gridApi: IGridApi, activeRow: IGridRowData | undefin
         return {
             weight: 130,
             title: 'Редактировать',
+            tooltip: 'Редактировать запись',
             icon: <EditOutlined />,
             position: 'right',
             disabled: !activeRow || selectedRows.length !== 1,
@@ -150,6 +162,7 @@ const useGetDeleteButton = (gridApi: IGridApi, selectedRows: IGridRowData[]): IF
         return {
             weight: 140,
             title: 'Удалить',
+            tooltip: 'Удалить запись',
             icon: <DeleteOutlined />,
             position: 'right',
             colorType: 'danger',
@@ -163,22 +176,20 @@ const useGetDeleteButton = (gridApi: IGridApi, selectedRows: IGridRowData[]): IF
     }, [gridApi, selectedRows]);
 };
 
-/** Get update button props */
+/** Get filter button props */
 const useGetFilterToggleButton = (gridApi: IGridApi, tableApi: ITabulator | undefined): IFormButton | undefined => {
+    //a separate tableApi parameter is required for the memo field to be updated (initially tableApi is undefined)
     return useMemo(() => {
         const gridProps = gridApi.gridProps;
         if (gridProps.buttons?.filterToggle === null) return undefined;
-
         if (!tableApi?.isHeaderFilterAvailable()) return undefined;
 
         return {
             weight: 1000,
-            title: '',
             icon: <FilterOutlined />,
             position: 'right',
             active: gridApi.tableApi?.isHeaderFilterVisible(),
-            //disabled: !activeRowKey || selectedRow.length !== 1,
-
+            tooltip: 'Фильтр',
             onClick: () => {
                 const show = tableApi?.toggleHeaderFilter();
 
@@ -188,11 +199,40 @@ const useGetFilterToggleButton = (gridApi: IGridApi, tableApi: ITabulator | unde
                     },
                 });
             },
-        };
-    }, [gridApi, tableApi]);
+        } satisfies IFormButton;
+    }, [gridApi.buttonsApi, gridApi.gridProps, gridApi.tableApi, tableApi]);
 };
 
 const getRowDataSet = (gridApi: IGridApi, selfParent: boolean, parentOnly?: boolean) => {
     const node = gridApi.getActiveNode();
-    return gridApi.getRowData(node, true, selfParent, parentOnly)
+    return gridApi.getRowData(node, true, selfParent, parentOnly);
+};
+
+/** Get system button props */
+const useGetSystemButton = (gridApi: IGridApi, tableApi: ITabulator | undefined): IFormButton | undefined => {
+    //a separate tableApi parameter is required for the memo field to be updated (initially tableApi is undefined)
+    return useMemo(() => {
+        const gridProps = gridApi.gridProps;
+        if (gridProps.buttons?.filterToggle === null) return undefined;
+
+        //if (tableApi?.disableSystemMenu) return undefined;
+
+        return {
+            weight: 2000,
+            expandIcon: <MenuOutlined />, //<EllipsisOutlined />
+            //tooltip: 'Параметры таблицы',
+            position: 'right',
+            children: {
+                columns: {
+                    title: 'Настройки столбцов',
+                    onClick: () => {
+                        gridApi.openColumnDialog(true)
+                    },
+                },
+            },
+            //onClick: () => {}
+            //active: gridApi.tableApi?.isHeaderFilterVisible(),
+            //disabled: !activeRowKey || selectedRow.length !== 1,
+        } satisfies IFormButton;
+    }, [gridApi]);
 };

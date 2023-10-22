@@ -133,11 +133,9 @@ export const Modal = ({resizable = true, headerStyle, footerStyle, ...props}: IM
             // no override section
             styles={{body: bodyStyleVal, footer: {margin: 0}}}
             className={classNames('custom-antd-modal', props.className)}
-            modalRender={node => {
-                return ModalRender(node, draggableId, wrapperRemoteCallbacksRef);
-            }}
+            modalRender={node => ModalRender(node, draggableId, wrapperRemoteCallbacksRef)}
             //transitionName="zoom"
-            title={<HeaderRender draggableId={draggableId} icon={props.headerIcon} title={props.title} colorType={props.colorType} style={_headerStyle} />}
+            title={<HeaderRender draggableId={draggableId} icon={props.headerIcon} title={props.title} colorType={props.colorType} style={_headerStyle}/>}
             footer={
                 <FooterRender onMouseResize={onMouseResize} resizable={resizable} style={_footerStyle} colorType={props.colorType}>
                     {props.footer}
@@ -149,12 +147,12 @@ export const Modal = ({resizable = true, headerStyle, footerStyle, ...props}: IM
 };
 
 const useGetBodyStyle = ({
-    bodyStyle,
-    bodyHeight,
-    bodyMaxHeight,
-    bodyMinHeight,
-    notScrollable,
-}: {
+                             bodyStyle,
+                             bodyHeight,
+                             bodyMaxHeight,
+                             bodyMinHeight,
+                             notScrollable,
+                         }: {
     bodyStyle?: React.CSSProperties;
     bodyHeight?: number;
     bodyMaxHeight?: number;

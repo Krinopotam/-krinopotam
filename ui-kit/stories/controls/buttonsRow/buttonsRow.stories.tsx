@@ -173,7 +173,7 @@ export const DropdownButtonIconOnly: Story = {
     args: {
         buttons: {
             button1: {
-                title: '',
+                //title: '',
                 position: 'left',
                 expandIcon: <MenuOutlined />,
                 children: dropDownItems,

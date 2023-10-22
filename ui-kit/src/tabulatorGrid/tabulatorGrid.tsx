@@ -35,6 +35,9 @@ export interface IGridProps_ {
     /** Grid header buttons size. Default: 'small'*/
     buttonsSize?: IFormButton['size'];
 
+    /** If true, only button icons will be displayed, without title */
+    buttonsIconsOnly? :boolean
+
     /** Grid header buttons size. Default: 'right'*/
     buttonsPosition?: IFormButton['position'];
 
@@ -101,9 +104,10 @@ export const TabulatorGrid = (props: IGridProps): React.JSX.Element => {
     const [buttonsApi] = useState({} as IButtonsRowApi & {refreshButtons: () => void});
     const [gridApi] = useState((props.apiRef || {}) as IGridApi);
 
-    useInitGridApi({gridApi, props, tableRef, editFormApi, buttonsApi});
+    const [columnsDialog, openColumnsDialog] = useState(false);
+    useInitGridApi({gridApi, props, tableRef, editFormApi, buttonsApi, openColumnsDialog: openColumnsDialog});
 
-    return <ContainerRender tableRef={tableRef} gridApi={gridApi} gridProps={props} tabulatorProps={tabulatorProps} />;
+    return <ContainerRender tableRef={tableRef} gridApi={gridApi} gridProps={props} tabulatorProps={tabulatorProps} columnsDialog={columnsDialog} />;
 };
 
 export default TabulatorGrid;
@@ -119,6 +123,7 @@ const useSplitTabulatorProps = (props: IGridProps) => {
             buttons: true,
             buttonsSize: true,
             buttonsPosition: true,
+            buttonsIconsOnly:true,
             readOnly: true,
             editFormProps: true,
             noHover: true,

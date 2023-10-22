@@ -1,30 +1,45 @@
+// noinspection DuplicatedCode
 
-    import React from 'react';
-    import {TabulatorGridSimple} from '../../components/tabulator/tabulatorGridSimple';
-    import { Divider, Collapse } from 'antd';
-    import SyntaxHighlighter from 'react-syntax-highlighter';
-    import {darcula, docco} from 'react-syntax-highlighter/dist/esm/styles/hljs';
-
-    export const PageTabulatorGridSimple = (props: {darkMode: boolean}): React.JSX.Element => {
-    // language=text
-    const source = `
 import React from 'react';
-import {TabulatorGrid, ITabulatorProps, IGridRowData} from @krinopotam/ui-kit/tabulatorGrid';
-import {DateTimeFormatter} from @krinopotam/ui-kit/tabulatorBase/formatters/dateTime";
-import {DateTimeSorter} from @krinopotam/ui-kit/tabulatorBase/sorters/dateTime";
+import {TabulatorGrid, ITabulatorProps, IGridRowData} from '@src/tabulatorGrid';
+import {DateTimeFormatter} from '@src/tabulatorBase/formatters/dateTime';
+import {DateTimeSorter} from '@src/tabulatorBase/sorters/dateTime';
+
 const columnDefaults: ITabulatorProps['columnDefaults'] = {
     resizable: 'header',
     headerFilter: true,
-    headerFilterFunc: 'like'
+    headerFilterFunc: 'like',
 };
+
 const columns: ITabulatorProps['columns'] = [
     {title: 'Name', field: 'name'},
-    {title: 'Age', field: 'age', hozAlign: 'left', formatter: 'progress'},
-    {title: 'Favourite Color', field: 'col'},
-    {title: 'Date Of Birth', field: 'dob', hozAlign: 'center', formatter: DateTimeFormatter, formatterParams: {inputFormat: 'DD/MM/YYYY', outputFormat: 'DD.MM.YYYY'}, sorter: DateTimeSorter, sorterParams: {format: 'DD/MM/YYYY'}},
-    {title: 'Rating', field: 'rating', hozAlign: 'center', formatter: 'star', headerFilterFunc: '='},
-    {title: 'Passed?', field: 'passed', hozAlign: 'center', formatter: 'tickCross', headerFilterFunc: '='},
+    {
+        title: 'Info',
+        headerFilter:undefined,
+        columns: [
+            {title: 'Age', field: 'age', hozAlign: 'left', formatter: 'progress'},
+            {title: 'Favourite Color', field: 'col'},
+        ],
+    },
+    {
+        title: 'Date Of Birth',
+        field: 'dob',
+        hozAlign: 'center',
+        formatter: DateTimeFormatter,
+        formatterParams: {inputFormat: 'DD/MM/YYYY', outputFormat: 'DD.MM.YYYY'},
+        sorter: DateTimeSorter,
+        sorterParams: {format: 'DD/MM/YYYY'},
+    },
+    {
+        title: 'Result',
+        headerFilter:undefined,
+        columns: [
+            {title: 'Rating', field: 'rating', hozAlign: 'center', formatter: 'star', headerFilterFunc: '='},
+            {title: 'Passed?', field: 'passed', hozAlign: 'center', formatter: 'tickCross', headerFilterFunc: '='},
+        ],
+    },
 ];
+
 const dataSet: IGridRowData[] = [
     {id: '1', name: 'Oli Bob1', age: '12', col: 'red', dob: '', rating: 1, passed: false},
     {id: '2', name: 'Mary May1', age: '1', col: 'blue', dob: '14/05/1982', rating: 2, passed: false},
@@ -47,27 +62,21 @@ const dataSet: IGridRowData[] = [
     {id: '19', name: 'Brendon Philips4', age: '125', col: 'orange', dob: '01/08/1980', rating: 4, passed: true},
     {id: '20', name: 'Margret Marmalade4', age: '16', col: 'yellow', dob: '31/01/1999', rating: 1, passed: false},
 ];
-export const TabulatorGridSimple = (): React.JSX.Element => {
-    return (
-        <>
-            <TabulatorGrid id={'TabulatorGridSimple'} columnDefaults={columnDefaults} columns={columns} dataSet={dataSet} height={500} layout={'fitColumns'}/>
-        </>
-    );
-};
-`
-    return (
-        <>
-            <div>
-                <TabulatorGridSimple />
-            </div>
-            <Divider />
-            <div>
-                <Collapse 
-                    items={[{key: 1, label: 'Show source', children: <SyntaxHighlighter language="javascript" style={props.darkMode ? darcula : docco} showLineNumbers={true}>{source}</SyntaxHighlighter>}]}>
-                </Collapse>
-            </div>
-        </>
-    );
-};
 
-export default PageTabulatorGridSimple;
+export const TabulatorGridColumnsGroups = (): React.JSX.Element => {
+    return (
+        <>
+            {/*Description Start*/}
+            <h1>Пример простого с группированными столбцами</h1>
+            {/*Description End*/}
+            <TabulatorGrid
+                id={'TabulatorGridColumnsGroups'}
+                columnDefaults={columnDefaults}
+                columns={columns}
+                dataSet={dataSet}
+                height={500}
+                layout={'fitColumns'}
+            />
+        </>
+    );
+};

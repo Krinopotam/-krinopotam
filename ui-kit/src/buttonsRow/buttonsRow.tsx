@@ -73,7 +73,7 @@ export interface IFormButton {
     rel?: string;
 
     /** Button dropDown children*/
-    children?: IFormButtons;
+    children?: Record<string, Omit<IFormButton, 'expandIcon' | 'danger'> | null>;
 
     /** Button style*/
     style?: CSSProperties;

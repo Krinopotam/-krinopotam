@@ -3,10 +3,11 @@ import {HelpersStrings, HelpersObjects} from '@krinopotam/js-helpers';
 import {IDFormModalApi} from '@src/dFormModal';
 import {IButtonsRowApi} from '@src/buttonsRow/buttonsRow';
 import useUnmountedRef from 'ahooks/lib/useUnmountedRef';
-import {IGridDeletePromise, IGridProps, IGridRowData} from '../tabulatorGrid';
+import {IGridDataSourcePromise, IGridDeletePromise, IGridProps, IGridRowData} from '../tabulatorGrid';
 import {RowComponent, ScrollToRowPosition, TabulatorFull as Tabulator} from 'tabulator-tables';
 import {ITabulator} from '@src/tabulatorBase';
 import {MessageBox, MessageBoxApi} from '@src/messageBox';
+import {BaseFetchHandler} from '@src/tabulatorGrid/helpers/fetchHelpers';
 
 type IRowKey = IGridRowData['id'];
 type IRowKeys = IRowKey | IRowKey[];
@@ -97,6 +98,9 @@ export interface IGridApi {
         withChildren?: boolean
     ) => Record<string, unknown>;
 
+    /** Open columns properties dialog */
+    openColumnDialog: (open: boolean) => void;
+
     /** Select all rows*/
     // selectAll: () => void;
 
@@ -122,7 +126,7 @@ export interface IGridApi {
     buttonsApi: IButtonsRowApi & {refreshButtons: () => void};
 
     /** Fetch data */
-    fetchData: (params?: Record<string, unknown>) => void;
+    fetchData: (params?: Record<string, unknown>, dataSource?: IGridDataSourcePromise) => void;
 }
 
 export const useInitGridApi = ({
@@ -131,12 +135,14 @@ export const useInitGridApi = ({
     tableRef,
     editFormApi,
     buttonsApi,
+    openColumnsDialog,
 }: {
     gridApi: IGridApi;
     props: IGridApi['gridProps'];
     tableRef: MutableRefObject<Tabulator | undefined>;
     editFormApi: IGridApi['editFormApi'];
     buttonsApi: IGridApi['buttonsApi'];
+    openColumnsDialog: React.Dispatch<React.SetStateAction<boolean>>;
 }): IGridApi => {
     const dataSetRef = useRef<IGridProps['dataSet']>(undefined);
     const [isLoading, setIsLoading] = useState(false);
@@ -173,6 +179,7 @@ export const useInitGridApi = ({
     gridApi.deleteRows = useApiDeleteRows(gridApi);
     gridApi.fetchData = useApiFetchData(gridApi);
     gridApi.getRowData = useApiGetRowData(gridApi);
+    gridApi.openColumnDialog = useApiOpenColumnDialog(gridApi, openColumnsDialog);
 
     /*
     gridApi.selectAll = useApiSelectAll(gridApi);
@@ -598,8 +605,16 @@ const useApiDeleteRows = (gridApi: IGridApi): IGridApi['deleteRows'] => {
 
 const useApiFetchData = (gridApi: IGridApi): IGridApi['fetchData'] => {
     return useCallback(
-        (params?: Record<string, unknown>) => {
+        (params?: Record<string, unknown>, dataSource?: IGridDataSourcePromise) => {
             if (!gridApi.tableApi) return;
+
+            if (dataSource) {
+                BaseFetchHandler(gridApi, dataSource)?.then(value => {
+                    gridApi.tableApi?.setData(value.data);
+                });
+                return;
+            }
+
             gridApi.tableApi.modules.page.dataChanging = true; //WORKAROUND: by default dataChanging=false and tabulator will reset params
             gridApi.tableApi?.setData(undefined, params);
         },
@@ -637,6 +652,14 @@ const useApiGetRowData = (gridApi: IGridApi): IGridApi['getRowData'] => {
     );
 };
 
+const useApiOpenColumnDialog = (gridApi: IGridApi, openColumnsDialog: React.Dispatch<React.SetStateAction<boolean>>) => {
+    return useCallback(
+        (open: boolean) => {
+            openColumnsDialog(open);
+        },
+        [openColumnsDialog]
+    );
+};
 /*
 
 const useApiSelectAll = (gridApi: IGridApi) => {

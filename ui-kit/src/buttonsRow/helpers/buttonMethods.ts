@@ -12,7 +12,7 @@ export const prepareButtons = (buttons: IFormButtons | undefined, rowColorType?:
     for (const key of buttonsKeys) {
         const button = clonedButtons[key];
         if (!button) continue;
-        if (!button.title && !button.icon) button.title = key;
+        if (!button.title && !button.icon && !button.expandIcon) button.title = key;
         if (!button.type) button.type = 'button';
         if (!button.position) button.position = 'right';
         if (rowColorType) button.colorType = rowColorType;

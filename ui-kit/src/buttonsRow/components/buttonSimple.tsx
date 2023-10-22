@@ -30,7 +30,7 @@ export const ButtonSimple = ({
     else if (button.type === 'link') type = 'link';
     else if (button.dashed) type = 'dashed';
 
-     return (
+    return (
         <Button
             ref={btnRef}
             type={type}
@@ -47,6 +47,7 @@ export const ButtonSimple = ({
             className={button.className}
             icon={button.icon}
             shape={button.shape}
+            squareSize={!button.title && ((!!button.icon && !button.expandIcon) || (!button.icon && !!button.expandIcon))}
         >
             {children ?? button.title}
         </Button>
