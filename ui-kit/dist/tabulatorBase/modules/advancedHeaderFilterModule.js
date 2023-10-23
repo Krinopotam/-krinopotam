@@ -122,7 +122,8 @@ export class AdvancedHeaderFilterModule extends Module {
         return (_a = this.lastFilteredField) !== null && _a !== void 0 ? _a : '';
     }
     toggleHeaderFilter(show, firstInit) {
-        if (!show && !firstInit)
+        var _a;
+        if (!show && !firstInit && ((_a = this.table.getData()) === null || _a === void 0 ? void 0 : _a.length))
             this.table.clearHeaderFilter();
         const tableHolder = this.table.element.querySelector('.tabulator-tableholder');
         const tabulatorHeader = this.table.element.querySelector('.tabulator-headers');

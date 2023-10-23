@@ -193,7 +193,7 @@ export class AdvancedHeaderFilterModule extends Module {
         // Tabulator allows to show/hide headerFilter only via updateColumnDefinition, which is very slow and leads to glitches and regenerates all columns.
         // Let's use a workaround. We include headerFilter on grid initialization and hide it in CSS. When necessary, we display it, but this requires additional style calculations.
 
-        if (!show && !firstInit) this.table.clearHeaderFilter();
+        if (!show && !firstInit && this.table.getData()?.length) this.table.clearHeaderFilter();
 
         const tableHolder = this.table.element.querySelector<HTMLElement>('.tabulator-tableholder');
         const tabulatorHeader = this.table.element.querySelector<HTMLElement>('.tabulator-headers');

@@ -15,7 +15,7 @@ export interface ITabulatorGridFieldOnlyProps extends IBaseFieldProps<TabulatorG
     onSelectionChange?: (keys: string[], selectedRows: IGridRowData[], gridApi: IGridApi, field: TabulatorGridField) => void;
     onDelete?: (selectedRows: IGridRowData[], gridApi: IGridApi, field: TabulatorGridField) => IGridDeletePromise | void | undefined;
 }
-export type ITabulatorGridFieldProps = ITabulatorGridFieldOnlyProps & Omit<IGridProps, 'placeholder' | 'value' | 'onReady' | 'onDataLoaded' | 'onDataSetChange' | 'onDataFetch' | 'onDataFetchSuccess' | 'onDataFetchError' | 'onDataFetchCompleted' | 'onSelectionChange' | 'onDelete'>;
+export type ITabulatorGridFieldProps = ITabulatorGridFieldOnlyProps & Omit<IGridProps, 'placeholder' | 'dataSet' | 'onReady' | 'onDataLoaded' | 'onDataSetChange' | 'onDataFetch' | 'onDataFetchSuccess' | 'onDataFetchError' | 'onDataFetchCompleted' | 'onSelectionChange' | 'onDelete'>;
 export declare class TabulatorGridField extends BaseField<ITabulatorGridFieldProps> {
     protected render(): React.JSX.Element;
 }

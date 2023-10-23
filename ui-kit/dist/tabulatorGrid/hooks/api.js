@@ -183,23 +183,31 @@ const useApiGetRowByKey = (gridApi) => {
 };
 const useApiInsertRows = (dataSetRef, gridApi) => {
     return useCallback((rows, place, key, updateActiveRow) => {
-        var _a, _b, _c, _d;
-        if (!gridApi.tableApi)
+        var _a;
+        const tableApi = gridApi.tableApi;
+        if (!tableApi)
             return;
         const dataTree = gridApi.gridProps.dataTree;
         const above = place === 'above';
         const clonedRows = HelpersObjects.isArray(rows) ? [...rows] : [rows];
-        for (const row of clonedRows) {
-            if (!dataTree)
-                (_a = gridApi.tableApi) === null || _a === void 0 ? void 0 : _a.addData([row], above, key).then();
-            else
-                addTreeRows(gridApi, [row], place, key);
-        }
-        dataSetRef.current = ((_b = gridApi.tableApi) === null || _b === void 0 ? void 0 : _b.getData()) || [];
-        (_d = (_c = gridApi.gridProps) === null || _c === void 0 ? void 0 : _c.onDataSetChange) === null || _d === void 0 ? void 0 : _d.call(_c, dataSetRef.current, gridApi);
-        if (updateActiveRow && clonedRows[0])
-            gridApi.setActiveRowKey(clonedRows[0].id, true, 'center');
-        gridApi.tableApi.setTableBodyFocus();
+        const addData = () => {
+            var _a, _b;
+            for (const row of clonedRows) {
+                if (!dataTree)
+                    tableApi.addData([row], above, key).then();
+                else
+                    addTreeRows(gridApi, [row], place, key);
+            }
+            dataSetRef.current = tableApi.getData() || [];
+            (_b = (_a = gridApi.gridProps) === null || _a === void 0 ? void 0 : _a.onDataSetChange) === null || _b === void 0 ? void 0 : _b.call(_a, dataSetRef.current, gridApi);
+            if (updateActiveRow && clonedRows[0])
+                gridApi.setActiveRowKey(clonedRows[0].id, true, 'center');
+            tableApi.setTableBodyFocus();
+        };
+        if (!((_a = tableApi.getData()) === null || _a === void 0 ? void 0 : _a.length))
+            tableApi.addData([]).then(() => addData());
+        else
+            addData();
     }, [dataSetRef, gridApi]);
 };
 const useApiUpdateRows = (dataSetRef, gridApi) => {

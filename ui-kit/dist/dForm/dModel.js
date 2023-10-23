@@ -44,10 +44,9 @@ export class DModel {
         this._formReadOnly = !!formProps.readOnly;
         const prevFieldsMap = this._fieldsMap;
         [this._fieldsMap, this._rootFields] = this.prepareFieldCollection(formProps.fieldsProps);
-        [this._labels, this._values, this._hidden, this._readOnly, this._disabled] = this.initFieldsParameters(this._fieldsMap, prevFieldsMap, this._values, (_b = formProps.formMode) !== null && _b !== void 0 ? _b : 'create');
         const oldDataSet = this.getFormDataSet();
-        if (oldDataSet !== formProps.dataSet)
-            this.setFormValues(formProps.dataSet, true, true);
+        [this._labels, this._values, this._hidden, this._readOnly, this._disabled] = this.initFieldsParameters(this._fieldsMap, prevFieldsMap, this._values, oldDataSet !== formProps.dataSet ? formProps.dataSet : undefined, (_b = formProps.formMode) !== null && _b !== void 0 ? _b : 'create');
+        this._dataSet = formProps.dataSet;
         if (!formProps.disableDepended)
             this._hidden = this.calculateLockedFields();
         else
@@ -110,7 +109,8 @@ export class DModel {
         }
         return result;
     }
-    initFieldsParameters(fieldsMap, prevFieldsMap, curValues, mode) {
+    initFieldsParameters(fieldsMap, prevFieldsMap, curValues, dataSet, mode) {
+        var _a;
         const values = {};
         const hidden = {};
         const readOnly = {};
@@ -129,8 +129,10 @@ export class DModel {
                 continue;
             }
             let fieldValue = undefined;
-            if (mode === 'create' && fieldProps.value)
+            if (mode === 'create')
                 fieldValue = fieldProps.value;
+            else
+                fieldValue = (_a = fieldProps.value) !== null && _a !== void 0 ? _a : dataSet === null || dataSet === void 0 ? void 0 : dataSet[fieldName];
             values[fieldName] = fieldValue;
         }
         return [labels, values, hidden, readOnly, disabled];

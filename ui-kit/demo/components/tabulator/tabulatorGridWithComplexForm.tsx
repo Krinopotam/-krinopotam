@@ -8,20 +8,12 @@ import {PasswordField} from '@src/dForm/fields/password/passwordField';
 import {ITextAreaFieldProps, TextAreaField} from '@src/dForm/fields/textArea/textAreaField';
 import {ITabulatorGridFieldProps, TabulatorGridField} from '@src/dForm/fields/tabulatorGrid/tabulatorGridField';
 import {ISelectNode} from '@src/select';
+import {SelectField} from '@src/dForm';
 
 export const TagsColumns: ITabulatorColumn[] = [
     {field: 'num', title: '№', formatter: 'rownum', width: 50},
     {field: 'name', title: 'Наименование', headerFilter: true, headerFilterFunc: 'like'},
-    {
-        field: 'format',
-        title: 'Формат',
-        headerFilter: true,
-        headerFilterFunc: 'like',
-        formatter: cell => {
-            const val = cell.getValue() as ISelectNode;
-            return val.label as string;
-        },
-    },
+    {field: 'format.label', title: 'Формат', headerFilter: true, headerFilterFunc: 'like'},
 ];
 
 const columns: ITabulatorColumn[] = [
@@ -60,48 +52,76 @@ const dataSet = [
     {id: '03', name: 'SAP Кадровый модуль', shortName: 'SAP HT', code: 'SAP_HR'},
 ];
 
+const FormatsList = [
+    {id: '01', label: 'JSON', description: 'Файлы в формате JSON'},
+    {id: '02', label: 'PDF', description: 'Файлы в формате PDF'},
+    {id: '03', label: 'XML', description: 'Файлы в формате PDF'},
+    {id: '04', label: 'PNG', description: 'Файлы в формате PNG'},
+    {id: '05', label: 'JPEG', description: 'Файлы в формате JPEG'},
+];
+
+const inputsFormProps: IDFormModalProps = {
+    confirmChanges: true,
+    bodyHeight: 300,
+    fieldsProps: {
+        name: {component: InputField, label: 'Наименование'},
+        shortName: {component: InputField, label: 'Краткое наименование'},
+        format: {component: SelectField, label: 'Формат', dataSet: FormatsList, fullItemValue: true},
+        description: {component: TextAreaField, label: 'Описание', autoSize: true},
+    },
+};
+
 const editFormProps: IDFormModalProps = {
     confirmChanges: true,
     bodyHeight: 400,
+    width: 600,
     fieldsProps: {
         tabs1: {
             component: TabsField,
             tabs: {
-                ' Основные ': {
-                    name: {component: InputField, label: 'Наименование'},
-                    shortName: {component: InputField, label: 'Краткое наименование'},
-                    code: {component: InputField, label: 'Код'},
-                    description: {component: TextAreaField, label: 'Описание', autoSize: true} as ITextAreaFieldProps,
-                },
-
-                ' Доступ ': {
-                    address: {component: InputField, label: 'Адрес'},
-                    login: {component: InputField, label: 'Логин'},
-                    password: {component: PasswordField, label: 'Пароль'},
-                },
+                /*                " Основные ": {
+                                    name: {component: InputField, label: 'Наименование'},
+                                    shortName: {component: InputField, label: 'Краткое наименование'},
+                                    code: {component: InputField, label: 'Код'},
+                                    description: {component: TextAreaField, label: 'Описание', autoSize: true} as ITextAreaFieldProps,
+                                },
+                
+                                " Доступ ": {
+                                    address: {component: InputField, label: 'Адрес'},
+                                    login: {component: InputField, label: 'Логин'},
+                                    password: {component: PasswordField, label: 'Пароль'},
+                                },*/
                 ' Входы ': {
                     inputs: {
                         component: TabulatorGridField,
                         columns: TagsColumns,
+                        headerFilterHidden: true,
                         height: '320px',
-                        layout: 'fitColumns',
                         resizeHeightWithForm: true,
-                        buttons: {select: {title: 'Выбрать1', size: 'small'}},
-                    } as ITabulatorGridFieldProps,
-                },
-                ' Выходы ': {
-                    outputs: {
-                        component: TabulatorGridField,
-                        columns: TagsColumns,
-                        height: '320px',
                         layout: 'fitColumns',
-                        resizeHeightWithForm: true,
-                    },
+                        editFormProps: inputsFormProps,
+                        //value: [{id: '111', name: '3232', format: {id: 1, label: '111'}}],
+                    } satisfies ITabulatorGridFieldProps,
                 },
+                /*                " Выходы ": {
+                                    outputs: {component: TabulatorGridField, columns: TagsColumns, headerFilterHidden: true, height: '320px', resizeHeightWithForm: true, layout: 'fitColumns',editFormProps: inputsFormProps} as ITabulatorGridFieldProps,
+                                }*/
             },
         },
     },
 };
+
 export const TabulatorGridWithComplexForm = (): React.JSX.Element => {
-    return <TabulatorGrid columns={columns} dataSet={dataSet} layout={'fitColumns'} movableColumns editFormProps={editFormProps} height={'100%'} />;
+    return (
+        <TabulatorGrid
+            columns={columns}
+            dataSet={dataSet}
+            layout={'fitColumns'}
+            movableColumns
+            buttonsSize={'middle'}
+            editFormProps={editFormProps}
+            height={'100%'}
+            buttons={{title: {type: 'element', title: <b style={{fontSize: 18}}>Системы</b>, position: 'left'}}}
+        />
+    );
 };

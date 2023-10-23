@@ -206,15 +206,17 @@ export class DModel {
         const prevFieldsMap = this._fieldsMap;
         [this._fieldsMap, this._rootFields] = this.prepareFieldCollection(formProps.fieldsProps);
 
+        const oldDataSet = this.getFormDataSet();
         [this._labels, this._values, this._hidden, this._readOnly, this._disabled] = this.initFieldsParameters(
             this._fieldsMap,
             prevFieldsMap,
             this._values,
+            oldDataSet !== formProps.dataSet ? formProps.dataSet : undefined,
             formProps.formMode ?? 'create'
         );
 
-        const oldDataSet = this.getFormDataSet();
-        if (oldDataSet !== formProps.dataSet) this.setFormValues(formProps.dataSet, true, true);
+        //if (oldDataSet !== formProps.dataSet) this.setFormValues(formProps.dataSet, true, true);
+        this._dataSet = formProps.dataSet;
 
         if (!formProps.disableDepended) this._hidden = this.calculateLockedFields();
         else this._disabled = this.calculateLockedFields();
@@ -290,6 +292,7 @@ export class DModel {
         fieldsMap: DModel['_fieldsMap'],
         prevFieldsMap: DModel['_fieldsMap'],
         curValues: DModel['_values'],
+        dataSet: IDFormDataSet | undefined,
         mode: IDFormMode
     ): [Record<string, React.ReactNode | undefined>, Record<string, unknown>, Record<string, boolean>, Record<string, boolean>, Record<string, boolean>] {
         const values: Record<string, unknown> = {};
@@ -316,7 +319,8 @@ export class DModel {
             }
 
             let fieldValue: unknown = undefined;
-            if (mode === 'create' && fieldProps.value) fieldValue = fieldProps.value;
+            if (mode === 'create') fieldValue = fieldProps.value;
+            else fieldValue = fieldProps.value ?? dataSet?.[fieldName];
             values[fieldName] = fieldValue;
         }
 
@@ -739,6 +743,7 @@ export class DModel {
         this.setFormFetching(true);
         this.setFormFetchingFailed(false);
     }
+
     //endregion
 
     //region Submit

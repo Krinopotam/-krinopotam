@@ -365,7 +365,8 @@ const useApiGetRowByKey = (gridApi: IGridApi): IGridApi['getRowByKey'] => {
 const useApiInsertRows = (dataSetRef: React.MutableRefObject<IGridProps['dataSet'] | undefined>, gridApi: IGridApi): IGridApi['insertRows'] => {
     return useCallback(
         (rows: IGridRowData[] | IGridRowData, place?: 'above' | 'below', key?: IRowKey, updateActiveRow?: boolean) => {
-            if (!gridApi.tableApi) return;
+            const tableApi = gridApi.tableApi;
+            if (!tableApi) return;
 
             const dataTree = gridApi.gridProps.dataTree;
 
@@ -373,17 +374,25 @@ const useApiInsertRows = (dataSetRef: React.MutableRefObject<IGridProps['dataSet
 
             const clonedRows: IGridRowData[] = HelpersObjects.isArray(rows) ? [...(rows as IGridRowData[])] : [rows as IGridRowData];
 
-            for (const row of clonedRows) {
-                if (!dataTree) gridApi.tableApi?.addData([row], above, key).then();
-                else addTreeRows(gridApi, [row], place, key);
-            }
+            const addData = () => {
+                for (const row of clonedRows) {
+                    if (!dataTree) tableApi.addData([row], above, key).then();
+                    else addTreeRows(gridApi, [row], place, key);
+                }
 
-            dataSetRef.current = gridApi.tableApi?.getData() || [];
-            gridApi.gridProps?.onDataSetChange?.(dataSetRef.current, gridApi);
+                dataSetRef.current = tableApi.getData() || [];
+                gridApi.gridProps?.onDataSetChange?.(dataSetRef.current, gridApi);
 
-            if (updateActiveRow && clonedRows[0]) gridApi.setActiveRowKey(clonedRows[0].id, true, 'center');
+                if (updateActiveRow && clonedRows[0]) gridApi.setActiveRowKey(clonedRows[0].id, true, 'center');
 
-            gridApi.tableApi.setTableBodyFocus();
+                tableApi.setTableBodyFocus();
+            };
+
+            //WORKAROUND: Tabulator have a bug. If dataSet is not set, then adding a record will produce an error, although getData returns an empty array
+            //But we should be able to set an undefined dataSet, since only in this case the tabulator executes the ajax request
+            //Therefore, before adding a row, set the dataSet to an empty array
+            if (!tableApi.getData()?.length) tableApi.addData([]).then(() => addData());
+            else addData();
         },
         [dataSetRef, gridApi]
     );

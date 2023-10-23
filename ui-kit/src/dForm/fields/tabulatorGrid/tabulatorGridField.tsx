@@ -44,7 +44,7 @@ export type ITabulatorGridFieldProps = ITabulatorGridFieldOnlyProps &
     Omit<
         IGridProps,
         | 'placeholder'
-        | 'value'
+        | 'dataSet'
         | 'onReady'
         | 'onDataLoaded'
         | 'onDataSetChange'
