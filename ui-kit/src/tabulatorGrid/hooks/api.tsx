@@ -3,11 +3,11 @@ import {HelpersStrings, HelpersObjects} from '@krinopotam/js-helpers';
 import {IDFormModalApi} from '@src/dFormModal';
 import {IButtonsRowApi} from '@src/buttonsRow/buttonsRow';
 import useUnmountedRef from 'ahooks/lib/useUnmountedRef';
-import {IGridDataSourcePromise, IGridDeletePromise, IGridProps, IGridRowData} from '../tabulatorGrid';
+import {IGridDeletePromise, IGridProps, IGridRowData} from '../tabulatorGrid';
 import {RowComponent, ScrollToRowPosition, TabulatorFull as Tabulator} from 'tabulator-tables';
 import {ITabulator} from '@src/tabulatorBase';
 import {MessageBox, MessageBoxApi} from '@src/messageBox';
-import {BaseFetchHandler} from '@src/tabulatorGrid/helpers/fetchHelpers';
+import {GenerateAjaxRequestFunc} from '@src/tabulatorGrid/helpers/fetchHelpers';
 
 type IRowKey = IGridRowData['id'];
 type IRowKeys = IRowKey | IRowKey[];
@@ -126,7 +126,16 @@ export interface IGridApi {
     buttonsApi: IButtonsRowApi & {refreshButtons: () => void};
 
     /** Fetch data */
-    fetchData: (params?: Record<string, unknown>, dataSource?: IGridDataSourcePromise) => void;
+    fetchData: (dataFetchFunc?: IGridProps['onDataFetchHandler']) => void;
+
+    /** Retry fetch data (with last fetch function) */
+    retryFetchData: () => void;
+
+    /** Set current data fetch handler */
+    setCurrentDataFetchHandler: (dataFetchHandler: IGridProps['onDataFetchHandler']) => void;
+
+    /** Get current data fetch handler */
+    getCurrentDataFetchHandler: () => IGridProps['onDataFetchHandler'];
 }
 
 export const useInitGridApi = ({
@@ -145,6 +154,8 @@ export const useInitGridApi = ({
     openColumnsDialog: React.Dispatch<React.SetStateAction<boolean>>;
 }): IGridApi => {
     const dataSetRef = useRef<IGridProps['dataSet']>(undefined);
+    const curDataFetchHandler = useRef<IGridProps['onDataFetchHandler'] | undefined>();
+
     const [isLoading, setIsLoading] = useState(false);
     const unmountRef = useUnmountedRef();
 
@@ -178,6 +189,9 @@ export const useInitGridApi = ({
     gridApi.removeRows = useApiRemoveRows(gridApi);
     gridApi.deleteRows = useApiDeleteRows(gridApi);
     gridApi.fetchData = useApiFetchData(gridApi);
+    gridApi.retryFetchData = useApiRetryFetchData(gridApi);
+    gridApi.setCurrentDataFetchHandler = useSetCurrentDataFetchHandler(curDataFetchHandler);
+    gridApi.getCurrentDataFetchHandler = useGetCurrentDataFetchHandler(curDataFetchHandler);
     gridApi.getRowData = useApiGetRowData(gridApi);
     gridApi.openColumnDialog = useApiOpenColumnDialog(gridApi, openColumnsDialog);
 
@@ -218,11 +232,14 @@ const useApiSetDataSet = (dataSetRef: React.MutableRefObject<IGridProps['dataSet
     return useCallback(
         (dataSet: IGridProps['dataSet'] | null) => {
             if (!gridApi.tableApi) return;
-            const newDataSet = gridApi.gridProps?.onDataSetChange?.(dataSet ?? undefined, gridApi) ?? dataSet;
-            dataSetRef.current = newDataSet as IGridProps['dataSet'];
+
+            dataSetRef.current = dataSet  ?? undefined;
+
             gridApi.tableApi?.deselectRow();
             gridApi.tableApi?.clearData();
-            gridApi.tableApi?.addData(dataSetRef.current);
+            gridApi.tableApi?.setData(dataSetRef.current);
+
+            gridApi.gridProps.onDataChanged?.(dataSetRef.current, gridApi);
         },
         [dataSetRef, gridApi]
     );
@@ -372,27 +389,21 @@ const useApiInsertRows = (dataSetRef: React.MutableRefObject<IGridProps['dataSet
 
             const above = place === 'above';
 
-            const clonedRows: IGridRowData[] = HelpersObjects.isArray(rows) ? [...(rows as IGridRowData[])] : [rows as IGridRowData];
+            const _rows: IGridRowData[] = HelpersObjects.isArray(rows) ? [...(rows as IGridRowData[])] : [rows as IGridRowData];
 
-            const addData = () => {
-                for (const row of clonedRows) {
-                    if (!dataTree) tableApi.addData([row], above, key).then();
-                    else addTreeRows(gridApi, [row], place, key);
-                }
 
-                dataSetRef.current = tableApi.getData() || [];
-                gridApi.gridProps?.onDataSetChange?.(dataSetRef.current, gridApi);
 
-                if (updateActiveRow && clonedRows[0]) gridApi.setActiveRowKey(clonedRows[0].id, true, 'center');
+            for (const row of _rows) {
+                if (!dataTree) tableApi.addData([row], above, key).then();
+                else addTreeRows(gridApi, [row], place, key);
+            }
 
-                tableApi.setTableBodyFocus();
-            };
+            dataSetRef.current = tableApi.getData() || [];
+            gridApi.gridProps.onDataChanged?.(dataSetRef.current, gridApi);
 
-            //WORKAROUND: Tabulator have a bug. If dataSet is not set, then adding a record will produce an error, although getData returns an empty array
-            //But we should be able to set an undefined dataSet, since only in this case the tabulator executes the ajax request
-            //Therefore, before adding a row, set the dataSet to an empty array
-            if (!tableApi.getData()?.length) tableApi.addData([]).then(() => addData());
-            else addData();
+            if (updateActiveRow && _rows[0]) gridApi.setActiveRowKey(_rows[0].id, true, 'center');
+
+            tableApi.setTableBodyFocus();
         },
         [dataSetRef, gridApi]
     );
@@ -404,18 +415,17 @@ const useApiUpdateRows = (dataSetRef: React.MutableRefObject<IGridProps['dataSet
             if (!gridApi.tableApi) return;
             const dataTree = gridApi.gridProps.dataTree;
 
-            const clonedRows: IGridRowData[] = HelpersObjects.isArray(rows) ? [...(rows as IGridRowData[])] : [rows as IGridRowData];
+            const _rows: IGridRowData[] = HelpersObjects.isArray(rows) ? [...(rows as IGridRowData[])] : [rows as IGridRowData];
 
-            for (const row of clonedRows) {
+            for (const row of _rows) {
                 if (!dataTree) gridApi.tableApi.updateData([row]).then();
                 else updateTreeRows(gridApi, row);
             }
 
             dataSetRef.current = gridApi.tableApi?.getData() || [];
+            gridApi.gridProps.onDataChanged?.(dataSetRef.current, gridApi);
 
-            gridApi.gridProps?.onDataSetChange?.(dataSetRef.current, gridApi);
-
-            if (updateActiveRow && clonedRows[0]) gridApi.setActiveRowKey(clonedRows[0].id, true, 'center');
+            if (updateActiveRow && _rows[0]) gridApi.setActiveRowKey(_rows[0].id, true, 'center');
             gridApi.tableApi.setTableBodyFocus();
         },
         [dataSetRef, gridApi]
@@ -522,33 +532,35 @@ const cascadeNodeExpand = (node: RowComponent | false) => {
 const useApiRemoveRowsByKeys = (dataSetRef: React.MutableRefObject<IGridProps['dataSet'] | undefined>, gridApi: IGridApi): IGridApi['removeRowsByKeys'] => {
     return useCallback(
         (keys: IRowKeys) => {
-            if (!gridApi.tableApi) return;
-            const indexField = gridApi.tableApi.options.index;
+            const table = gridApi.tableApi
+            if (!table) return;
+            const indexField = table.options.index;
 
-            const clonedKeys: string[] = HelpersObjects.isArray(keys) ? [...(keys as string[])] : [keys as string];
+            const _keys: IGridRowData['id'][] = HelpersObjects.isArray(keys) ? [...(keys as IRowKey[])] : [keys as IRowKey];
 
             let newActiveNode: RowComponent | false = false;
             let newActiveNodeCandidate: RowComponent | false = false;
-            for (const key of clonedKeys) {
-                const node = gridApi.tableApi?.getRow(key);
+            for (const key of _keys) {
+                const node = table.getRow(key);
                 if (!node) continue;
                 if (newActiveNode && node === newActiveNode) newActiveNode = false;
                 newActiveNodeCandidate = node.getNextRow() || node.getPrevRow();
                 if (newActiveNodeCandidate) newActiveNode = newActiveNodeCandidate;
 
-                const parentNode = gridApi.tableApi.options.dataTree ? node.getTreeParent() : false;
-                gridApi.tableApi.deselectRow(node);
-                gridApi.tableApi.deleteRow(key);
+                const parentNode = table.options.dataTree ? node.getTreeParent() : false;
+                table.deselectRow(node);
+                table.deleteRow(key);
                 if (parentNode) parentNode.reformat();
             }
 
-            if (newActiveNode && indexField) newActiveNode = gridApi.tableApi.getRow(newActiveNode.getData()[indexField]); //we update the link to the node, because after deleting the node map is rebuilt and the objects are not equal to each other (glitches occur)
-            gridApi.tableApi.setActiveRow(newActiveNode || null, true, 'bottom');
+            if (newActiveNode && indexField) newActiveNode = table.getRow(newActiveNode.getData()[indexField]); //we update the link to the node, because after deleting the node map is rebuilt and the objects are not equal to each other (glitches occur)
+            table.setActiveRow(newActiveNode || null, true, 'bottom');
 
-            dataSetRef.current = gridApi.tableApi?.getData() || [];
-            gridApi.gridProps?.onDataSetChange?.(dataSetRef.current, gridApi);
+            dataSetRef.current = table?.getData() ?? [];
 
-            gridApi.tableApi.setTableBodyFocus();
+            gridApi.gridProps.onDataChanged?.(dataSetRef.current, gridApi);
+
+            table.setTableBodyFocus();
         },
         [dataSetRef, gridApi]
     );
@@ -614,21 +626,44 @@ const useApiDeleteRows = (gridApi: IGridApi): IGridApi['deleteRows'] => {
 
 const useApiFetchData = (gridApi: IGridApi): IGridApi['fetchData'] => {
     return useCallback(
-        (params?: Record<string, unknown>, dataSource?: IGridDataSourcePromise) => {
-            if (!gridApi.tableApi) return;
+        (dataFetchHandler?: IGridProps['onDataFetchHandler']) => {
+            const table = gridApi.tableApi;
+            if (!table) return;
 
-            if (dataSource) {
-                BaseFetchHandler(gridApi, dataSource)?.then(value => {
-                    gridApi.tableApi?.setData(value.data);
-                });
-                return;
+            table.modules.page.dataChanging = true; //WORKAROUND: by default dataChanging=false and tabulator will reset params
+            table.modules.ajax.setUrl('-'); //WORKAROUND^ Tabulator will request ajax data only when ((!data && url) || typeof dataSet === 'string')
+
+            if (dataFetchHandler) {
+                console.log('fetch');
+                table.modules.ajax.loaderPromise = GenerateAjaxRequestFunc(gridApi, dataFetchHandler); //WORKAROUND: update current table AjaxRequestFunc
             }
 
-            gridApi.tableApi.modules.page.dataChanging = true; //WORKAROUND: by default dataChanging=false and tabulator will reset params
-            gridApi.tableApi?.setData(undefined, params);
+            table.setData(undefined).then();
         },
         [gridApi]
     );
+};
+
+const useSetCurrentDataFetchHandler = (curDataFetchFunc: React.MutableRefObject<IGridProps['onDataFetchHandler'] | undefined>) => {
+    return useCallback(
+        (dataFetchFunc?: IGridProps['onDataFetchHandler']) => {
+            curDataFetchFunc.current = dataFetchFunc;
+        },
+        [curDataFetchFunc]
+    );
+};
+
+const useGetCurrentDataFetchHandler = (curDataFetchFunc: React.MutableRefObject<IGridProps['onDataFetchHandler'] | undefined>) => {
+    return useCallback(() => {
+        return curDataFetchFunc.current;
+    }, [curDataFetchFunc]);
+};
+
+const useApiRetryFetchData = (gridApi: IGridApi): IGridApi['fetchData'] => {
+    return useCallback(() => {
+        const currentDataFetchHandler = gridApi.getCurrentDataFetchHandler();
+        if (currentDataFetchHandler) gridApi.fetchData(currentDataFetchHandler);
+    }, [gridApi]);
 };
 
 const useApiGetRowData = (gridApi: IGridApi): IGridApi['getRowData'] => {

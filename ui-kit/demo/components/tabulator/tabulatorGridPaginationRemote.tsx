@@ -70,7 +70,7 @@ export const TabulatorGridPaginationRemote = (): React.JSX.Element => {
                 paginationMode={'remote'}
                 filterMode={'remote'}
                 sortMode={'remote'}
-                onDataFetch={(gridApi, params) => {
+                onDataFetchHandler={( params, gridApi) => {
                     return new Promise((resolve, reject) => {
                         setTimeout(() => {
                             //make any remote fetch

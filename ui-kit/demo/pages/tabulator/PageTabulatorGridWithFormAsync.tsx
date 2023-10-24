@@ -80,7 +80,7 @@ export const TabulatorGridWithFormAsync = (): React.JSX.Element => {
                 confirmDelete
                 height={500}
                 layout={'fitColumns'}
-                onDataFetch={() => {
+                onDataFetchHandler={() => {
                     return new Promise((resolve, reject) => {
                         setTimeout(() => {
                             if (Math.random() < 0.5) reject({message: 'Ошибка загрузки данных', code: 400});

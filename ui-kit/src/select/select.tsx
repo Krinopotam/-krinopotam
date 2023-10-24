@@ -62,8 +62,6 @@ export const Select = (props: ISelectProps): React.JSX.Element => {
     const antdSelectProps = useSplitAntTreeSelectProps(props);
     const option = useGetOptions(props);
     const value = useConvertToBaseVal(props, props.value);
-    console.log('value', value);
-    console.log('option', option);
     return (
         <AntdSelect
             {...antdSelectProps}

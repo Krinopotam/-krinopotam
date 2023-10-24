@@ -1,10 +1,10 @@
-import React, {useCallback, useEffect, useRef} from 'react';
-import {TabulatorBase, IAjaxConfig, IRequestProps, ITabulator, ITabulatorProps} from '@src/tabulatorBase';
+import React, {useCallback, useEffect, useMemo, useRef} from 'react';
+import {TabulatorBase, ITabulator, ITabulatorProps} from '@src/tabulatorBase';
 import {IGridApi} from '../hooks/api';
 import dispatcher from '@src/formsDispatcher';
 import {IGridProps} from '../tabulatorGrid';
 import {useEvents} from '../hooks/events';
-import {BaseFetchHandler} from '@src/tabulatorGrid/helpers/fetchHelpers';
+import {GenerateAjaxRequestFunc} from '@src/tabulatorGrid/helpers/fetchHelpers';
 
 const GridRender_ = ({
     tableRef,
@@ -38,40 +38,21 @@ const GridRender_ = ({
         dispatcher.pushToStack(gridApi.getGridId());
     }, [gridApi]);
 
-    const ajaxRequestFunc = useCallback(
-        (url: string, config: IAjaxConfig, params: IRequestProps) => {
-            return new Promise((resolve, reject) => {
-                const dataSource = gridProps?.onDataFetch?.(gridApi, params);
-
-                BaseFetchHandler(gridApi, dataSource, params)?.then(
-                    result => {
-                        if (!gridApi.getIsMounted())  return
-
-                        if (gridProps.pagination) resolve({data: result.data, last_page: result.last_page ?? 1});
-                        else resolve(result.data); //WORKAROUND:The page module expects data in the format {data:[rows], last_page:number}. Without pagination data expected [rows]
-                    },
-                    () => {
-                        reject();
-                    }
-                );
-            });
-        },
-        [gridApi, gridProps]
-    );
+    const ajaxRequestFunc = useMemo(() => GenerateAjaxRequestFunc(gridApi, gridProps?.onDataFetchHandler), [gridApi, gridProps]);
 
     return (
         <TabulatorBase
             {...tabulatorProps}
             layout={tabulatorProps.layout ?? 'fitData'}
             movableColumns={tabulatorProps.movableColumns !== false}
-            ajaxRequestFunc={!gridProps.onDataFetch ? undefined : (ajaxRequestFunc as ITabulator['ajaxRequestFunc'])}
+            ajaxRequestFunc={!gridProps.onDataFetchHandler ? undefined : (ajaxRequestFunc as ITabulator['ajaxRequestFunc'])}
             height={'100%'}
             dataLoader={false} //disable tabulator inbuilt loader overlay
             onTableRef={onTableRef}
             gridId={gridApi.getGridId()}
             dataTreeFilter={true}
-            data={gridApi.getDataSet()}
-            ajaxURL={!gridProps.onDataFetch ? undefined : '-'} //WORKAROUND: if we want to use ajax request, we should set ajaxUrl to any value
+            data={gridApi.getDataSet() ?? (gridProps.onDataFetchHandler ? undefined : [])} //WORKAROUND: if dataSet is undefined and ajax is not used, dataSet must be []. Otherwise, problems may occur when adding rows
+            ajaxURL={gridProps?.onDataFetchHandler ? '-' : undefined} //WORKAROUND: if we want to use ajax request, we should set ajaxUrl to any value
             containerClassName={gridProps.className}
             placeholder={gridProps.placeholder ?? 'Строки отсутствуют'}
             events={events}

@@ -72,7 +72,7 @@ const formProps: IDFormModalProps = {
     width: 500,
     minWidth: 200,
     maxWidth: 1000,
-    /*onDataFetch: () => {
+    /*onDataFetchHandler: () => {
         return new Promise((resolve, reject) => {
             setTimeout(() => {
                 if (Math.random() < 0.5) reject({message: 'Ошибка загрузки данных', code: 400});

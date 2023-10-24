@@ -2,7 +2,6 @@ import React, {useCallback, useMemo, useRef, useState, useSyncExternalStore} fro
 import {ITabulatorGridFieldOnlyProps, ITabulatorGridFieldProps, TabulatorGridField} from '@src/dForm/fields/tabulatorGrid/tabulatorGridField';
 import {TabulatorGrid, IGridApi, IGridRowData, ITabulatorProps} from '@src/tabulatorGrid';
 import {HelpersObjects} from '@krinopotam/js-helpers';
-import {IRequestProps} from '@src/tabulatorBase';
 
 export const TabulatorGridFieldRender = ({field}: {field: TabulatorGridField}): React.JSX.Element => {
     useSyncExternalStore(field.subscribe.bind(field), field.getSnapshot.bind(field));
@@ -20,14 +19,14 @@ export const TabulatorGridFieldRender = ({field}: {field: TabulatorGridField}): 
     // Workaround: it is necessary to ensure that,
     // on the one hand, when changing the rows by the grid itself, the memorized dataSet stay the same and the grid are not re-rendered.
     // On the other hand, if the dataSet is modified by the user, the grid must re-render.
-    // So the grid's memorized dataSet stays the same until it's set outside onDataSetChange.
+    // So the grid's memorized dataSet stays the same until it's set outside onDataSetChanging.
     if (prevValueRef.current !== value) {
         prevDataSetRef.current = value;
         prevValueRef.current = value;
     }
     const curDataSet = prevDataSetRef.current;
 
-    const onDataSetChange = useCallback(
+    const onDataChanged = useCallback(
         (dataSet: IGridRowData[] | undefined, gridApi: IGridApi, field: TabulatorGridField) => {
             if (field.isReady()) {
                 prevValueRef.current = dataSet;
@@ -35,15 +34,15 @@ export const TabulatorGridFieldRender = ({field}: {field: TabulatorGridField}): 
                 field.setDirty(true);
                 field.setTouched(true); //TODO: rework field touched
             }
-            return fieldProps.onDataSetChange?.(dataSet, gridApi, field);
+            return fieldProps.onDataChanged?.(dataSet, gridApi, field);
         },
         [fieldProps]
     );
 
-    const onDataFetch = useCallback(
-        (gridApi: IGridApi, params: IRequestProps, field: TabulatorGridField) => {
+    const onDataLoading = useCallback(
+        (dataSet: IGridRowData[] | undefined, gridApi: IGridApi, field:TabulatorGridField) => {
             field.setReady(false);
-            return fieldProps.onDataFetch?.(gridApi, params, field);
+            return fieldProps.onDataLoading?.(dataSet, gridApi, field);
         },
         [fieldProps]
     );
@@ -56,18 +55,10 @@ export const TabulatorGridFieldRender = ({field}: {field: TabulatorGridField}): 
         [fieldProps]
     );
 
-    const onDataFetchError = useCallback(
+    const onDataLoadError = useCallback(
         (message: string, code: number, gridApi: IGridApi, field: TabulatorGridField) => {
             field.setReady(false);
-            return fieldProps.onDataFetchError?.(message, code, gridApi, field);
-        },
-        [fieldProps]
-    );
-
-    const onDataFetchCompleted = useCallback(
-        (gridApi: IGridApi, field: TabulatorGridField) => {
-            field.setReady(true);
-            return fieldProps.onDataFetchCompleted?.(gridApi, field);
+            return fieldProps.onDataLoadError?.(message, code, gridApi, field);
         },
         [fieldProps]
     );
@@ -84,17 +75,16 @@ export const TabulatorGridFieldRender = ({field}: {field: TabulatorGridField}): 
                 resizeHeightWithParent={fieldProps.resizeHeightWithForm ? '#' + field.getModel().getFormId() : fieldProps.resizeHeightWithParent}
                 /** Callbacks*/
                 onMenuVisibilityChanged={(isVisible, gridApi) => fieldProps?.onMenuVisibilityChanged?.(isVisible, gridApi, field)}
+                onDataLoading={(data, gridApi) => onDataLoading(data, gridApi, field)}
                 onDataLoaded={(dataSet, gridApi) => onDataLoaded?.(dataSet, gridApi, field)}
-                onDataSetChange={(dataSet, gridApi) => onDataSetChange?.(dataSet, gridApi, field)}
-                onDataFetch={(gridApi, params) => onDataFetch?.(gridApi, params, field)}
-                onDataFetchSuccess={(dataSet, gridApi) => fieldProps.onDataFetchSuccess?.(dataSet, gridApi, field)}
-                onDataFetchError={(message, code, gridApi) => onDataFetchError?.(message, code, gridApi, field)}
-                onDataFetchCompleted={gridApi => onDataFetchCompleted?.(gridApi, field)}
+                onDataLoadError={(message, code, gridApi) => onDataLoadError?.(message, code, gridApi, field)}
+
+                onDataChanged={(dataSet, gridApi) => onDataChanged?.(dataSet, gridApi, field)}
                 onSelectionChange={(keys, selectedRows, gridApi) => fieldProps?.onSelectionChange?.(keys, selectedRows, gridApi, field)}
                 onDelete={(selectedRows, gridApi) => fieldProps?.onDelete?.(selectedRows, gridApi, field)}
             />
         );
-    }, [tabulatorProps, gridApi, curDataSet, fieldProps, field, onDataLoaded, onDataSetChange, onDataFetch, onDataFetchError, onDataFetchCompleted]);
+    }, [tabulatorProps, gridApi, curDataSet, fieldProps, field, onDataLoading, onDataLoaded, onDataLoadError, onDataChanged]);
 };
 
 const useSplitTabulatorProps = (props: ITabulatorGridFieldProps) => {
@@ -102,12 +92,12 @@ const useSplitTabulatorProps = (props: ITabulatorGridFieldProps) => {
         const result = HelpersObjects.splitObject<ITabulatorGridFieldOnlyProps, ITabulatorProps>(props, {
             value: true,
             onMenuVisibilityChanged: true,
+            onDataLoading:true,
             onDataLoaded: true,
-            onDataSetChange: true,
-            onDataFetch: true,
+            onDataLoadError:true,
+            onDataChanged: true,
+            onDataFetchHandler: true,
             onDataFetchSuccess: true,
-            onDataFetchError: true,
-            onDataFetchCompleted: true,
             onSelectionChange: true,
             onDelete: true,
             readOnly: true,
@@ -137,6 +127,7 @@ const useSplitTabulatorProps = (props: ITabulatorGridFieldProps) => {
             style: true,
             tooltip: true,
             resizeHeightWithForm: true,
+
         });
 
         return result[1];

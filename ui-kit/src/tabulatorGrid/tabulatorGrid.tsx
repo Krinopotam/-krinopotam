@@ -13,7 +13,7 @@ export interface IGridRowData extends Record<string, unknown> {
     children?: IGridRowData[];
 }
 
-export interface IGridProps_ {
+interface IGridOnlyProps {
     /** A mutable object to merge with these controls api */
     apiRef?: unknown;
 
@@ -62,28 +62,26 @@ export interface IGridProps_ {
     /** Selector of parent container (.className or #id). Tabulator Grid will resize height on container height change */
     resizeHeightWithParent?: string;
 
+
     // --- callbacks -----------------------------------------------------
 
     /** Fires when menu visibility status changed */
     onMenuVisibilityChanged?: (isVisible: boolean, gridApi: IGridApi) => void;
 
-    /** Fires, when the dataSet changed. User can modify the dataSet before dataSet will apply */
+    /** special callback used to fetch remote data. If not specified, the request will not be processed. */
+    onDataFetchHandler?: (params: IRequestProps, gridApi: IGridApi) => IGridDataSourcePromise;
+
+    /** The callback is triggered when data set loading starts (regardless of whether it is an ajax request or a ready-made dataSet is passed) */
+    onDataLoading?: (dataSet: IGridRowData[] | undefined, gridApi: IGridApi) => void;
+
+    /** The callback is triggered when dataset changed or new dataSet is loaded into the table (regardless of whether it is an ajax request or a ready-made dataSet is passed) */
     onDataLoaded?: (dataSet: IGridRowData[] | undefined, gridApi: IGridApi) => void;
 
-    /** Fires, when the dataSet changed. User can modify the dataSet before dataSet will apply */
-    onDataSetChange?: (dataSet: IGridRowData[] | undefined, gridApi: IGridApi) => IGridRowData[] | void;
+    /** Fires when the grid data loading failed */
+    onDataLoadError?: (message: string, code: number, gridApi: IGridApi) => void;
 
-    /** fires when the grid trying to fetch data */
-    onDataFetch?: (gridApi: IGridApi, params: IRequestProps) => IGridDataSourcePromise | undefined;
-
-    /** fires when the grid data fetch success */
-    onDataFetchSuccess?: (dataSet: IGridRowData[] | undefined, gridApi: IGridApi) => void;
-
-    /** fires when the grid data fetch failed */
-    onDataFetchError?: (message: string, code: number, gridApi: IGridApi) => void;
-
-    /** fires when the grid data fetch completed */
-    onDataFetchCompleted?: (gridApi: IGridApi) => void;
+    /** Fires before the data change (the data set updated, rows added/deleted, etc.) */
+    onDataChanged?: (dataSet: IGridRowData[] | undefined, gridApi: IGridApi) => void;
 
     /** Callback executed when selected rows change */
     onSelectionChange?: (keys: string[], selectedRows: IGridRowData[], gridApi: IGridApi) => void;
@@ -92,7 +90,7 @@ export interface IGridProps_ {
     onDelete?: (selectedRows: IGridRowData[], gridApi: IGridApi) => IGridDeletePromise | void | undefined;
 }
 
-export type IGridProps = IGridProps_ & Omit<ITabulatorProps, 'data' | 'ajaxURL'>;
+export type IGridProps = IGridOnlyProps & Omit<ITabulatorProps, 'data' | 'ajaxURL'>;
 
 export type IGridDataSourcePromise = TPromise<{data: IGridRowData[]; last_page?: number}, {message: string; code: number}>;
 export type IGridDeletePromise = TPromise<{data: IGridRowData[]; last_page?: number}, {message: string; code: number}>;
@@ -114,7 +112,7 @@ export default TabulatorGrid;
 
 const useSplitTabulatorProps = (props: IGridProps) => {
     return useMemo((): ITabulatorProps => {
-        const result = HelpersObjects.splitObject<IGridProps_, ITabulatorProps>(props, {
+        const result = HelpersObjects.splitObject<IGridOnlyProps, ITabulatorProps>(props, {
             apiRef: true,
             id: true,
             gridMode: true,
@@ -131,12 +129,11 @@ const useSplitTabulatorProps = (props: IGridProps) => {
             confirmDelete: true,
             placeholder: true,
             onMenuVisibilityChanged: true,
+            onDataLoading:true,
+            onDataLoadError:true,
             onDataLoaded:true,
-            onDataSetChange: true,
-            onDataFetch: true,
-            onDataFetchSuccess: true,
-            onDataFetchError: true,
-            onDataFetchCompleted: true,
+            onDataChanged:true,
+            onDataFetchHandler: true,
             onSelectionChange: true,
             onDelete: true,
             resizeHeightWithParent: true,
