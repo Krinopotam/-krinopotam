@@ -14,13 +14,15 @@ export const useEvents = (gridApi: IGridApi, events: ITabulatorEvents | undefine
             dataLoading: data => {
                 events?.dataLoading?.(data);
                 gridApi.gridProps.onDataLoading?.(data, gridApi);
-                gridApi.setIsLoading(true);
+                console.log('dataLoading')
+                if (!gridApi.gridProps.progressiveLoad) gridApi.setIsLoading(true);
             },
             dataLoaded: data => {
                 events?.dataLoaded?.(data);
                 gridApi.gridProps.onDataLoaded?.(data, gridApi);
                 if (!gridApi.getIsMounted()) return;
-                gridApi.setIsLoading(false);
+                console.log('dataLoaded')
+                if (!gridApi.gridProps.progressiveLoad) gridApi.setIsLoading(false);
             },
             dataLoadError: error => {
                 events?.dataLoadError?.(error);

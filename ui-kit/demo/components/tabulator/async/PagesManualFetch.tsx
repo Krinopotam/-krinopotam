@@ -4,13 +4,7 @@ import React, {useCallback, useState} from 'react';
 
 import {Button} from '@src/button';
 import {TabulatorGrid, ITabulatorProps, IGridProps, IGridApi} from '@src/tabulatorGrid';
-import {GenerateDataSet} from '../../../data/tabulatorData';
-
-const columnDefaults: ITabulatorProps['columnDefaults'] = {
-    resizable: 'header',
-    headerFilter: true,
-    headerFilterFunc: 'like',
-};
+import {GenerateDataSet, TabulatorBaseColumnsDef} from '../../../data/tabulatorData';
 
 const columns: ITabulatorProps['columns'] = [
     {title: 'Column 1', field: 'col1'},
@@ -44,7 +38,7 @@ export const PagesManualFetch = (): React.JSX.Element => {
 
     const props: IGridProps = {
         apiRef: gridApi,
-        columnDefaults: columnDefaults,
+        columnDefaults: TabulatorBaseColumnsDef,
         columns: columns,
         height: 500,
         pagination: true,

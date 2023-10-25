@@ -12,7 +12,7 @@ export const GenerateAjaxRequestFunc = (gridApi: IGridApi, dataFetchCallback: IG
                 result => {
                     if (!gridApi.getIsMounted()) return;
 
-                    if (gridProps.pagination) resolve({data: result.data, last_page: result.last_page ?? 1});
+                    if (gridProps.pagination || gridProps.progressiveLoad) resolve({data: result.data, last_page: result.last_page ?? 1});
                     else resolve(result.data); //WORKAROUND:The page module expects data in the format {data:[rows], last_page:number}. Without pagination data expected [rows]
                 },
                 error => {
