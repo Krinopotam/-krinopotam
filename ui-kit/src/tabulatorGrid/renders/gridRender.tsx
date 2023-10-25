@@ -50,7 +50,7 @@ const GridRender_ = ({
             onTableRef={onTableRef}
             gridId={gridApi.getGridId()}
             dataTreeFilter={true}
-            data={gridApi.getDataSet() ?? (gridProps.onDataFetch ? undefined : [])} //WORKAROUND: if dataSet is undefined and ajax is not used, dataSet must be []. Otherwise, problems may occur when adding rows
+            data={gridProps.onDataFetch ? undefined : (gridApi.getDataSet() ?? [])} //WORKAROUND: if dataSet is undefined and ajax is not used, dataSet must be []. Otherwise, problems may occur when adding rows
             ajaxURL={gridProps?.onDataFetch ? '-' : undefined} //WORKAROUND: if we want to use ajax request, we should set ajaxUrl to any value
             ajaxRequestFunc={!gridProps.onDataFetch ? undefined : (ajaxRequestFunc as ITabulator['ajaxRequestFunc'])}
             ajaxResponse={!gridProps.onDataFetchResponse ? undefined : (url, params, response) => gridProps.onDataFetchResponse?.(response, params, gridApi)}

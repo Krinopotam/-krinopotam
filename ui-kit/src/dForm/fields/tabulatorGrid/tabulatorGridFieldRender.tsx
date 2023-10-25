@@ -26,7 +26,7 @@ export const TabulatorGridFieldRender = ({field}: {field: TabulatorGridField}): 
         prevDataSetRef.current = value;
         prevValueRef.current = value;
     }
-    const curDataSet = prevDataSetRef.current;
+    const curDataSet =  prevDataSetRef.current;
 
     const callbacks = usePrepareCallbacks(field, fieldProps, prevValueRef);
     return useMemo(() => {
@@ -133,7 +133,7 @@ const usePrepareCallbacks = (
             },
             onDataFetch: !fieldProps.onDataFetch
                 ? undefined
-                : (params: IRequestProps, gridApi: IGridApi, field: TabulatorGridField) => {
+                : (params: IRequestProps, gridApi: IGridApi) => {
                       return fieldProps.onDataFetch!(params, gridApi, field);
                   },
             onDataFetchResponse: (dataSet, params, gridApi) => fieldProps?.onDataFetchResponse?.(dataSet, params, gridApi, field) ?? dataSet,
