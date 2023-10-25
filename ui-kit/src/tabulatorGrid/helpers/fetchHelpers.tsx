@@ -1,13 +1,14 @@
 import {IGridApi, IGridProps} from '@src/tabulatorGrid';
 import {IAjaxConfig, IRequestProps} from '@src/tabulatorBase';
 
-export const GenerateAjaxRequestFunc = (gridApi: IGridApi, dataFetchCallback: IGridProps['onDataFetchHandler']) => {
+export const GenerateAjaxRequestFunc = (gridApi: IGridApi, dataFetchCallback: IGridProps['onDataFetch'], extraParams?:Record<string, unknown>) => {
     if (!dataFetchCallback) return undefined;
     const gridProps = gridApi.gridProps;
-    gridApi.setCurrentDataFetchHandler(dataFetchCallback)
+    gridApi.setCurrentDataFetchHandler(dataFetchCallback, extraParams)
     return (url: string, config: IAjaxConfig, params: IRequestProps) => {
         return new Promise((resolve, reject) => {
-            dataFetchCallback(params, gridApi).then(
+            const totalParams = {...params, ...extraParams}
+            dataFetchCallback(totalParams, gridApi).then(
                 result => {
                     if (!gridApi.getIsMounted()) return;
 

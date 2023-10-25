@@ -3,14 +3,16 @@ import React from 'react';
 import {TabulatorGridFieldRender} from '@src/dForm/fields/tabulatorGrid/tabulatorGridFieldRender';
 import {IGridApi, IGridDataSourcePromise, IGridDeletePromise, IGridProps, IGridRowData} from '@src/tabulatorGrid';
 import {IRequestProps} from '@src/tabulatorBase';
-export interface ITabulatorGridFieldOnlyProps extends IBaseFieldProps<TabulatorGridField> {
+
+export interface ITabulatorGridFieldPropsBase extends IBaseFieldProps<TabulatorGridField> {
     /** Default value */
     value?: IGridRowData[];
 
     /** Auto resize height on form resize */
     resizeHeightWithForm?: boolean;
+}
 
-    // --- callbacks -----------------------------------------------------
+export interface ITabulatorGridFieldPropsCallbacks {
     /** Fires when menu visibility status changed */
     onMenuVisibilityChanged?: (isVisible: boolean, gridApi: IGridApi, field: TabulatorGridField) => void;
 
@@ -24,10 +26,13 @@ export interface ITabulatorGridFieldOnlyProps extends IBaseFieldProps<TabulatorG
     onDataLoadError?: (message: string, code: number, gridApi: IGridApi, field: TabulatorGridField) => void;
 
     /** Fires before the data change (the data set updated, rows added/deleted, etc.) */
-    onDataChanged?: (dataSet: IGridRowData[] | undefined, gridApi: IGridApi,  field: TabulatorGridField) => void;
+    onDataChanged?: (dataSet: IGridRowData[] | undefined, gridApi: IGridApi, field: TabulatorGridField) => void;
 
     /** special callback used to fetch remote data. If not specified, the request will not be processed */
-    onDataFetchHandler?: (gridApi: IGridApi, params: IRequestProps, field: TabulatorGridField) => IGridDataSourcePromise | undefined;
+    onDataFetch?: (params: IRequestProps, gridApi: IGridApi, field: TabulatorGridField) => IGridDataSourcePromise | undefined;
+
+    /** Fires when a successful remote fetch request has been made. This callback can also be used to modify the received data before it is parsed by the table. If you use this callback it must return the data to be parsed by Tabulator, otherwise no data will be rendered. */
+    onDataFetchResponse?: (dataSet: IGridRowData[], params: IRequestProps, gridApi: IGridApi, field: TabulatorGridField) => IGridRowData[];
 
     /** Callback executed when selected rows change */
     onSelectionChange?: (keys: string[], selectedRows: IGridRowData[], gridApi: IGridApi, field: TabulatorGridField) => void;
@@ -36,20 +41,9 @@ export interface ITabulatorGridFieldOnlyProps extends IBaseFieldProps<TabulatorG
     onDelete?: (selectedRows: IGridRowData[], gridApi: IGridApi, field: TabulatorGridField) => IGridDeletePromise | void | undefined;
 }
 
-export type ITabulatorGridFieldProps = ITabulatorGridFieldOnlyProps &
-    Omit<
-        IGridProps,
-        | 'placeholder'
-        | 'dataSet'
-        | 'onReady'
-        | 'onDataLoaded'
-        | 'onDataLoading'
-        | 'onDataLoadError'
-        | 'onDataChanged'
-        | 'onDataFetchHandler'
-        | 'onSelectionChange'
-        | 'onDelete'
-    >;
+export type ITabulatorGridFieldProps = ITabulatorGridFieldPropsBase &
+    ITabulatorGridFieldPropsCallbacks &
+    Omit<IGridProps, keyof ITabulatorGridFieldPropsCallbacks>;
 
 export class TabulatorGridField extends BaseField<ITabulatorGridFieldProps> {
     protected render() {

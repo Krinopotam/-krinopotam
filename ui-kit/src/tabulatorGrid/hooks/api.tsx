@@ -125,17 +125,17 @@ export interface IGridApi {
     /** Buttons api */
     buttonsApi: IButtonsRowApi & {refreshButtons: () => void};
 
-    /** Fetch data */
-    fetchData: (dataFetchFunc?: IGridProps['onDataFetchHandler']) => void;
+    /** Fetch data. If onDataFetch callback  is undefined,the request will use the previously set onDataFetch callback  */
+    fetchData: (onDataFetch?: IGridProps['onDataFetch'], params?: Record<string, unknown>) => void;
 
     /** Retry fetch data (with last fetch function) */
     retryFetchData: () => void;
 
     /** Set current data fetch handler */
-    setCurrentDataFetchHandler: (dataFetchHandler: IGridProps['onDataFetchHandler']) => void;
+    setCurrentDataFetchHandler: (dataFetchHandler: IGridProps['onDataFetch'], params?: Record<string, unknown>) => void;
 
     /** Get current data fetch handler */
-    getCurrentDataFetchHandler: () => IGridProps['onDataFetchHandler'];
+    getCurrentDataFetchHandler: () => [IGridProps['onDataFetch'], Record<string, unknown> | undefined];
 }
 
 export const useInitGridApi = ({
@@ -154,7 +154,8 @@ export const useInitGridApi = ({
     openColumnsDialog: React.Dispatch<React.SetStateAction<boolean>>;
 }): IGridApi => {
     const dataSetRef = useRef<IGridProps['dataSet']>(undefined);
-    const curDataFetchHandler = useRef<IGridProps['onDataFetchHandler'] | undefined>();
+    const curDataFetchHandler = useRef<IGridProps['onDataFetch'] | undefined>();
+    const curDataFetchParams = useRef<Record<string, unknown> | undefined>();
 
     const [isLoading, setIsLoading] = useState(false);
     const unmountRef = useUnmountedRef();
@@ -190,8 +191,8 @@ export const useInitGridApi = ({
     gridApi.deleteRows = useApiDeleteRows(gridApi);
     gridApi.fetchData = useApiFetchData(gridApi);
     gridApi.retryFetchData = useApiRetryFetchData(gridApi);
-    gridApi.setCurrentDataFetchHandler = useSetCurrentDataFetchHandler(curDataFetchHandler);
-    gridApi.getCurrentDataFetchHandler = useGetCurrentDataFetchHandler(curDataFetchHandler);
+    gridApi.setCurrentDataFetchHandler = useSetCurrentDataFetchHandler(curDataFetchHandler, curDataFetchParams);
+    gridApi.getCurrentDataFetchHandler = useGetCurrentDataFetchHandler(curDataFetchHandler, curDataFetchParams);
     gridApi.getRowData = useApiGetRowData(gridApi);
     gridApi.openColumnDialog = useApiOpenColumnDialog(gridApi, openColumnsDialog);
 
@@ -233,7 +234,7 @@ const useApiSetDataSet = (dataSetRef: React.MutableRefObject<IGridProps['dataSet
         (dataSet: IGridProps['dataSet'] | null) => {
             if (!gridApi.tableApi) return;
 
-            dataSetRef.current = dataSet  ?? undefined;
+            dataSetRef.current = dataSet ?? undefined;
 
             gridApi.tableApi?.deselectRow();
             gridApi.tableApi?.clearData();
@@ -391,8 +392,6 @@ const useApiInsertRows = (dataSetRef: React.MutableRefObject<IGridProps['dataSet
 
             const _rows: IGridRowData[] = HelpersObjects.isArray(rows) ? [...(rows as IGridRowData[])] : [rows as IGridRowData];
 
-
-
             for (const row of _rows) {
                 if (!dataTree) tableApi.addData([row], above, key).then();
                 else addTreeRows(gridApi, [row], place, key);
@@ -532,7 +531,7 @@ const cascadeNodeExpand = (node: RowComponent | false) => {
 const useApiRemoveRowsByKeys = (dataSetRef: React.MutableRefObject<IGridProps['dataSet'] | undefined>, gridApi: IGridApi): IGridApi['removeRowsByKeys'] => {
     return useCallback(
         (keys: IRowKeys) => {
-            const table = gridApi.tableApi
+            const table = gridApi.tableApi;
             if (!table) return;
             const indexField = table.options.index;
 
@@ -626,7 +625,7 @@ const useApiDeleteRows = (gridApi: IGridApi): IGridApi['deleteRows'] => {
 
 const useApiFetchData = (gridApi: IGridApi): IGridApi['fetchData'] => {
     return useCallback(
-        (dataFetchHandler?: IGridProps['onDataFetchHandler']) => {
+        (dataFetchHandler?: IGridProps['onDataFetch'], params?: Record<string, unknown>) => {
             const table = gridApi.tableApi;
             if (!table) return;
 
@@ -634,35 +633,42 @@ const useApiFetchData = (gridApi: IGridApi): IGridApi['fetchData'] => {
             table.modules.ajax.setUrl('-'); //WORKAROUND^ Tabulator will request ajax data only when ((!data && url) || typeof dataSet === 'string')
 
             if (dataFetchHandler) {
-                console.log('fetch');
-                table.modules.ajax.loaderPromise = GenerateAjaxRequestFunc(gridApi, dataFetchHandler); //WORKAROUND: update current table AjaxRequestFunc
+                table.modules.ajax.loaderPromise = GenerateAjaxRequestFunc(gridApi, dataFetchHandler, params); //WORKAROUND: update current table AjaxRequestFunc
             }
 
-            table.setData(undefined).then();
+            console.log('api params', params);
+            table.setData(undefined, params).then();
         },
         [gridApi]
     );
 };
 
-const useSetCurrentDataFetchHandler = (curDataFetchFunc: React.MutableRefObject<IGridProps['onDataFetchHandler'] | undefined>) => {
+const useSetCurrentDataFetchHandler = (
+    curDataFetchHandler: React.MutableRefObject<IGridProps['onDataFetch'] | undefined>,
+    curDataFetchParams: React.MutableRefObject<Record<string, unknown> | undefined>
+) => {
     return useCallback(
-        (dataFetchFunc?: IGridProps['onDataFetchHandler']) => {
-            curDataFetchFunc.current = dataFetchFunc;
+        (dataFetchFunc?: IGridProps['onDataFetch'], params?: Record<string, unknown>) => {
+            curDataFetchHandler.current = dataFetchFunc;
+            curDataFetchParams.current = params;
         },
-        [curDataFetchFunc]
+        [curDataFetchHandler, curDataFetchParams]
     );
 };
 
-const useGetCurrentDataFetchHandler = (curDataFetchFunc: React.MutableRefObject<IGridProps['onDataFetchHandler'] | undefined>) => {
-    return useCallback(() => {
-        return curDataFetchFunc.current;
-    }, [curDataFetchFunc]);
+const useGetCurrentDataFetchHandler = (
+    curDataFetchFunc: React.MutableRefObject<IGridProps['onDataFetch'] | undefined>,
+    curDataFetchParams: React.MutableRefObject<Record<string, unknown> | undefined>
+) => {
+    return useCallback((): [IGridProps['onDataFetch'], Record<string, unknown> | undefined] => {
+        return [curDataFetchFunc.current, curDataFetchParams.current];
+    }, [curDataFetchFunc, curDataFetchParams]);
 };
 
 const useApiRetryFetchData = (gridApi: IGridApi): IGridApi['fetchData'] => {
     return useCallback(() => {
-        const currentDataFetchHandler = gridApi.getCurrentDataFetchHandler();
-        if (currentDataFetchHandler) gridApi.fetchData(currentDataFetchHandler);
+        const [currentDataFetchHandler, currentFetchParams] = gridApi.getCurrentDataFetchHandler();
+        if (currentDataFetchHandler) gridApi.fetchData(currentDataFetchHandler, currentFetchParams);
     }, [gridApi]);
 };
 

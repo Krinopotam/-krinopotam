@@ -83,7 +83,7 @@ export type {
     ISelectFieldProps,
     ISwitchFieldProps,
     ITabsFieldProps,
-    ITabulatorGridFieldOnlyProps,
+    ITabulatorGridFieldPropsBase,
     ITabulatorGridFieldProps,
     ITextAreaFieldProps,
     ITreeSelectFieldOnlyProps,
@@ -140,7 +140,7 @@ export type {
 
 /*************** TabulatorGrid *******************/
 export {TabulatorGrid} from '@src/tabulatorGrid';
-export type {IGridApi, IGridRowData, IGridDeletePromise, IGridDataSourcePromise, IGridProps} from '@src/tabulatorGrid';
+export type {IGridApi, IGridRowData, IGridDeletePromise, IGridDataSourcePromise, IGridProps, IGridPropsBase, IGridPropsCallbacks} from '@src/tabulatorGrid';
 
 /*************** TimePicker **********************/
 export {TimePicker} from '@src/timePicker';

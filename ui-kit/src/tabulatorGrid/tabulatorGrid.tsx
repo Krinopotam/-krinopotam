@@ -13,7 +13,7 @@ export interface IGridRowData extends Record<string, unknown> {
     children?: IGridRowData[];
 }
 
-interface IGridOnlyProps {
+export interface IGridPropsBase {
     /** A mutable object to merge with these controls api */
     apiRef?: unknown;
 
@@ -62,14 +62,17 @@ interface IGridOnlyProps {
     /** Selector of parent container (.className or #id). Tabulator Grid will resize height on container height change */
     resizeHeightWithParent?: string;
 
+}
 
-    // --- callbacks -----------------------------------------------------
-
+export interface IGridPropsCallbacks {
     /** Fires when menu visibility status changed */
     onMenuVisibilityChanged?: (isVisible: boolean, gridApi: IGridApi) => void;
 
     /** special callback used to fetch remote data. If not specified, the request will not be processed. */
-    onDataFetchHandler?: (params: IRequestProps, gridApi: IGridApi) => IGridDataSourcePromise;
+    onDataFetch?: (params: IRequestProps, gridApi: IGridApi) => IGridDataSourcePromise;
+
+    /** Fires when a successful remote fetch request has been made. This callback can also be used to modify the received data before it is parsed by the table. If you use this callback it must return the data to be parsed by Tabulator, otherwise no data will be rendered. */
+    onDataFetchResponse?: (dataSet: IGridRowData[], params: IRequestProps, gridApi: IGridApi)=>IGridRowData[];
 
     /** The callback is triggered when data set loading starts (regardless of whether it is an ajax request or a ready-made dataSet is passed) */
     onDataLoading?: (dataSet: IGridRowData[] | undefined, gridApi: IGridApi) => void;
@@ -90,8 +93,7 @@ interface IGridOnlyProps {
     onDelete?: (selectedRows: IGridRowData[], gridApi: IGridApi) => IGridDeletePromise | void | undefined;
 }
 
-export type IGridProps = IGridOnlyProps & Omit<ITabulatorProps, 'data' | 'ajaxURL'>;
-
+export type IGridProps = IGridPropsBase & IGridPropsCallbacks & Omit<ITabulatorProps, 'data' | 'ajaxURL' | 'ajaxRequestFunc' | 'ajaxResponse'>;
 export type IGridDataSourcePromise = TPromise<{data: IGridRowData[]; last_page?: number}, {message: string; code: number}>;
 export type IGridDeletePromise = TPromise<{data: IGridRowData[]; last_page?: number}, {message: string; code: number}>;
 
@@ -112,7 +114,7 @@ export default TabulatorGrid;
 
 const useSplitTabulatorProps = (props: IGridProps) => {
     return useMemo((): ITabulatorProps => {
-        const result = HelpersObjects.splitObject<IGridOnlyProps, ITabulatorProps>(props, {
+        const result = HelpersObjects.splitObject<IGridPropsBase & IGridPropsCallbacks, ITabulatorProps>(props, {
             apiRef: true,
             id: true,
             gridMode: true,
@@ -133,7 +135,8 @@ const useSplitTabulatorProps = (props: IGridProps) => {
             onDataLoadError:true,
             onDataLoaded:true,
             onDataChanged:true,
-            onDataFetchHandler: true,
+            onDataFetch: true,
+            onDataFetchResponse:true,
             onSelectionChange: true,
             onDelete: true,
             resizeHeightWithParent: true,

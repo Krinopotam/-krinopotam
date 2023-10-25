@@ -7,7 +7,7 @@ import {DFormModal, IDFormModalApi, IDFormModalProps} from '@src/dFormModal';
 import {ITabulatorProps, IGridRowData, IGridDataSourcePromise} from '@src/tabulatorGrid';
 import {InputField} from "@src/dForm/fields/input/inputField";
 import {NumberField} from "@src/dForm/fields/number/numberField";
-import {TabulatorGridField} from "@src/dForm/fields/tabulatorGrid/tabulatorGridField";
+import {ITabulatorGridFieldProps, TabulatorGridField} from "@src/dForm/fields/tabulatorGrid/tabulatorGridField";
 
 const columns: ITabulatorProps['columns'] = [
     {title: 'Name', field: 'name'},
@@ -77,8 +77,8 @@ const formProps: IDFormModalProps = {
                         else resolve({data: gridDefaultData}) ;
                     }, 1000);
                 }) as IGridDataSourcePromise;
-            },
-        },
+            } ,
+        } satisfies ITabulatorGridFieldProps,
     },
     width: 900,
 };

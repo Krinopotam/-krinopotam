@@ -3,31 +3,9 @@
 import React from 'react';
 
 import {ColumnDefinition} from 'tabulator-tables';
-import {TabulatorGrid, ITabulatorProps, IGridRowData} from "@src/tabulatorGrid";
+import {TabulatorGrid, ITabulatorProps, IGridProps} from "@src/tabulatorGrid";
 import {DateTimeSorter} from "@src/tabulatorBase/sorters/dateTime";
-
-const data: IGridRowData[] = [
-    {id: '01', surname: 'Иванов', name: 'Иван', patronymic: 'Иванович', email: 'ivanov@mail.ru', birthday: '11.01.1980'},
-    {id: '02', surname: 'Петров', name: 'Петр', patronymic: 'Петрович', email: 'petrov@mail.ru', birthday: '15.02.1975'},
-    {id: '03', surname: 'Сидоров', name: 'Сидр', patronymic: 'Сидорович', email: 'sidorov@mail.ru', birthday: '17.03.1981'},
-    {id: '04', surname: 'Смирнов', name: 'Смирен', patronymic: 'Смирнович', email: 'smirnov@mail.ru', birthday: '11.01.1958'},
-    {id: '05', surname: 'Самойлов', name: 'Самойл', patronymic: 'Самойлович', email: 'samoylov@mail.ru', birthday: '15.02.1937'},
-    {id: '06', surname: 'Арсенов', name: 'Арсен', patronymic: 'Арсенович', email: 'arsenov@mail.ru', birthday: '13.04.1989'},
-    {id: '07', surname: 'Дмитриев', name: 'Дмитрий', patronymic: 'Дмитриевич', email: 'dmitriev@mail.ru', birthday: '31.08.1971'},
-    {id: '08', surname: 'Александров', name: 'Александр', patronymic: 'Александрович', email: 'aleksandrov@mail.ru', birthday: '01.12.1956'},
-    {id: '09', surname: 'Васильев', name: 'Василий', patronymic: 'Васильевич', email: 'vasilyev@mail.ru', birthday: '09.11.1969'},
-    {id: '10', surname: 'Денисов', name: 'Денис', patronymic: 'Денисович', email: 'denisov@mail.ru', birthday: '21.04.1978'},
-    {id: '11', surname: 'Максимов', name: 'Максим', patronymic: 'Максимович', email: 'maksimov@mail.ru', birthday: '10.08.1977'},
-    {id: '12', surname: 'Протасов', name: 'Протас', patronymic: 'Протасович', email: 'protasov@mail.ru', birthday: '25.08.1973'},
-    {id: '13', surname: 'Алексеев', name: 'Алексей', patronymic: 'Алексеевич', email: 'alekseev@mail.ru', birthday: '19.12.1985'},
-    {id: '14', surname: 'Сергеев', name: 'Сергей', patronymic: 'Сергеевич', email: 'sergeev@mail.ru', birthday: '22.07.1990'},
-    {id: '15', surname: 'Артемьев', name: 'Артем', patronymic: 'Артемович', email: 'artemyev@mail.ru', birthday: '06.11.1995'},
-    {id: '16', surname: 'Демидов', name: 'Демид', patronymic: 'Демидович', email: 'demidov@mail.ru', birthday: '11.02.1997'},
-    {id: '17', surname: 'Кимов', name: 'Ким', patronymic: 'Кимович', email: 'kimov@mail.ru', birthday: '18.01.1988'},
-    {id: '18', surname: 'Абгазов', name: 'Абгаз', patronymic: 'Абгазович', email: 'abgazov@mail.ru', birthday: '03.09.1985'},
-    {id: '19', surname: 'Мансуров', name: 'Мансур', patronymic: 'Мансурович', email: 'mansurov@mail.ru', birthday: '02.05.1995'},
-    {id: '20', surname: 'Андросов', name: 'Андрей', patronymic: 'Андреевич', email: 'androsov@mail.ru', birthday: '10.04.1966'},
-];
+import {TabulatorNamesPlainData} from "../../data/tabulatorData";
 
 const fioFormatter: ColumnDefinition['formatter'] = (cell) => {
     //cell - the cell component
@@ -77,18 +55,25 @@ const columns: ITabulatorProps['columns'] = [
         formatter: fioFormatter,
         headerFilterFunc: fioFilter,
         sorter: fioSorter,
-        headerFilter:undefined
+        headerFilter: undefined
     },
     {
         title: 'День рождения',
         field: 'birthday',
         sorter: DateTimeSorter,
         //sorterParams:{format:'DD.MM.YYYY'} - you can set custom format. Default DD.MM.YYYY
-        headerFilter:undefined
+        headerFilter: undefined
     },
 ];
 
 export const TabulatorGridCellFormat = (): React.JSX.Element => {
+    const props: IGridProps = {
+        id: 'TabulatorGridCellFormat',
+        columnDefaults: columnDefaults,
+        columns: columns,
+        dataSet: TabulatorNamesPlainData,
+        height: 500,
+    }
     return (
         <>
             {/*Description Start*/}
@@ -96,7 +81,7 @@ export const TabulatorGridCellFormat = (): React.JSX.Element => {
             <p>В данном примере в ячейке столбца ФИО отображаются данные из полей surname, name, patronymic и email</p>
             <p>Фильтр и сортировка расчитываются по каждому из этих полей</p>
             {/*Description End*/}
-            <TabulatorGrid id={'TabulatorGridCellFormat'} columnDefaults={columnDefaults} columns={columns} dataSet={data} height={500} layout={'fitColumns'}/>
+            <TabulatorGrid {...props}/>
         </>
     );
 };

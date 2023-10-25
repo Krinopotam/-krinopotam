@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const fs = require("fs");
+const crypto = require("crypto");
 const _componentsFolder = 'components';
 const _pagesFolder = 'pages';
 const _examplesRoot = __dirname + '/' + _componentsFolder;
@@ -24,7 +25,14 @@ function recursiveDirectoriesRun(curDir, curDirFromRoot, files) {
         files = [];
     for (const entity of fileList) {
         if (entity.isDirectory()) {
-            const folder = { fileName: entity.name, fileDir: curDir, fileDirFromRoot: curDirFromRoot, menuItemName: upperFirstLetter(camelCaseSplit(entity.name)) };
+            const folder = {
+                fileGuid: crypto.randomUUID(),
+                fileName: entity.name,
+                fileExt: '',
+                fileDir: curDir,
+                fullFilePath: curDirFromRoot,
+                menuItemName: upperFirstLetter(camelCaseSplit(entity.name)),
+            };
             folder.children = recursiveDirectoriesRun(curDir + '/' + entity.name, curDirFromRoot + '/' + entity.name);
             files.push(folder);
         }
@@ -37,7 +45,7 @@ function recursiveDirectoriesRun(curDir, curDirFromRoot, files) {
     return files;
 }
 function processFile(fileName, fileDir, curDirFromRoot) {
-    const extensions = "ts|js|tsx|jsx";
+    const extensions = 'ts|js|tsx|jsx';
     const fnPattern = new RegExp('^(.*)\\.(' + extensions + ')$', 'gi');
     if (!fileName.match(fnPattern))
         return undefined;
@@ -47,10 +55,13 @@ function processFile(fileName, fileDir, curDirFromRoot) {
     const [componentName, menuItemName] = parseFileProperties(fileName, fileContent);
     fileContent = clearSource(fileContent);
     return {
-        fileName: fileName,
+        fileGuid: crypto.randomUUID(),
+        fileName: trimExtension(fileName),
+        fileExt: getFileExtension(fileName),
         fileDir: fileDir,
-        fileDirFromRoot: curDirFromRoot,
+        fullFilePath: curDirFromRoot,
         componentName: componentName,
+        componentGuid: crypto.randomUUID(),
         menuItemName: menuItemName,
         source: fileContent,
     };
@@ -69,7 +80,7 @@ function clearSource(source) {
     source = source.replaceAll(/\/\/ noinspection DuplicatedCode/gi, ''); //remove // noinspection DuplicatedCode
     source = source.replaceAll(/['"]@src\//gi, '@krinopotam/ui-kit/'); //remove // noinspection DuplicatedCode
     const sourceLines = source.split(/\r?\n/);
-    let newSource = "";
+    let newSource = '';
     for (const line of sourceLines) {
         if (line.trim().length === 0)
             continue;
@@ -87,7 +98,9 @@ function prepareMenuProps(filesInfo, level = 1) {
     for (const file of filesInfo) {
         _itemNum.num++;
         if (file.children?.length) {
-            result = result + `\n${' '.repeat(level * 4)}getItem("${file.menuItemName}", "Item${_itemNum.num}", <FolderOutlined />, ${prepareMenuProps(file.children, level + 1)}),`;
+            result =
+                result +
+                    `\n${' '.repeat(level * 4)}getItem("${file.menuItemName}", "Item${_itemNum.num}", <FolderOutlined />, ${prepareMenuProps(file.children, level + 1)}),`;
         }
         else {
             result = result + `\n${' '.repeat(level * 4)}getItem(<Link to="${file.componentName}">${file.menuItemName}</Link>, "Item${_itemNum.num}"),`;
@@ -122,7 +135,7 @@ function getItem(label: React.ReactNode, key: React.Key, icon?: React.ReactNode,
 }
 //endregion
 //<editor-fold desc="Generate pages">
-function generatePages(filesInfo, subFolderPath = '', relativePathToRoot = '', level = 0) {
+function generatePages(filesInfo, subFolderPath = '', level = 0) {
     let routesStrings = '';
     let routeImportStrings = '';
     if (filesInfo.length === 0)
@@ -130,28 +143,25 @@ function generatePages(filesInfo, subFolderPath = '', relativePathToRoot = '', l
     for (const file of filesInfo) {
         if (file.children?.length) {
             const folderName = file.fileName;
-            const folderFullPath = _pagesPath + subFolderPath + '/' + folderName;
-            if (!fs.existsSync(folderFullPath))
-                fs.mkdirSync(folderFullPath, { recursive: true });
             console.log(' '.repeat(level * 4), folderName);
-            const [routeStr, routeImportStr] = generatePages(file.children, subFolderPath + '/' + folderName, relativePathToRoot + '../', level + 1);
+            const [routeStr, routeImportStr] = generatePages(file.children, subFolderPath + '/' + folderName, level + 1);
             routesStrings = routesStrings + routeStr + '\n';
             routeImportStrings = routeImportStrings + routeImportStr + '\n';
         }
         else {
-            const [routeStr, routeImportStr] = generatePageComponent(file, subFolderPath, '../' + relativePathToRoot, level);
+            const [routeStr, routeImportStr] = generatePageComponent(file, subFolderPath, level);
             routesStrings = routesStrings + routeStr + '\n';
             routeImportStrings = routeImportStrings + routeImportStr + '\n';
         }
     }
     return [routesStrings, routeImportStrings];
 }
-function generatePageComponent(file, subFolderPath, relativeRoot, level) {
-    const componentModulePath = relativeRoot + trimExtension(file.fileDirFromRoot);
+function generatePageComponent(file, subFolderPath, level) {
+    const componentModulePath = '../' + trimExtension(file.fullFilePath);
     const componentName = file.componentName;
-    const pageComponentName = 'Page' + file.componentName;
-    const pagesPath = _pagesPath + subFolderPath + '/Page' + upperFirstLetter(file.fileName);
-    const pageModulePath = './' + _pagesFolder + subFolderPath + '/Page' + trimExtension(upperFirstLetter(file.fileName));
+    const pageComponentName = 'Page' + file.componentGuid?.replaceAll('-', ''); // 'Page' + file.componentName;
+    const pagesPath = _pagesPath + '/' + pageComponentName + '.tsx';
+    const pageModulePath = './' + _pagesFolder + '/' + pageComponentName;
     let source = file.source;
     source = source.replaceAll(/\$\{/g, '\\${');
     source = source.replaceAll(/`/g, '\\`');
@@ -187,9 +197,8 @@ export default ${pageComponentName};
     fs.writeFileSync(pagesPath, content, { encoding: 'utf8', flag: 'w' });
     // language=text
     const routeStr = `                <Route path="${componentName}" element={<${pageComponentName} darkMode={props.darkMode} />} />;`;
-    //const routeImportStr = `    import {${pageComponentName}} from '${pageModulePath}';`;
     const routeImportStr = `    const ${pageComponentName} = lazy(() => import('${pageModulePath}'))`;
-    console.log(' '.repeat(level * 4), pagesPath);
+    console.log(' '.repeat(level * 4), file.componentName);
     return [routeStr, routeImportStr];
 }
 //</editor-fold>
@@ -252,6 +261,12 @@ function parseComponentName(source) {
 function getFileNameMainPart(fileName) {
     const parts = fileName.split('.');
     return parts[0];
+}
+function getFileExtension(fileName) {
+    const parts = fileName.split('.');
+    if (parts.length === 1)
+        return '';
+    return parts[parts.length - 1];
 }
 function trimExtension(fileName) {
     return fileName.replace(/\.[^/.]+$/, '');

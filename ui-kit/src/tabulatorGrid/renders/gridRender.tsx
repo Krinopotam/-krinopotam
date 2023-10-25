@@ -38,21 +38,22 @@ const GridRender_ = ({
         dispatcher.pushToStack(gridApi.getGridId());
     }, [gridApi]);
 
-    const ajaxRequestFunc = useMemo(() => GenerateAjaxRequestFunc(gridApi, gridProps?.onDataFetchHandler), [gridApi, gridProps]);
+    const ajaxRequestFunc = useMemo(() => GenerateAjaxRequestFunc(gridApi, gridProps?.onDataFetch), [gridApi, gridProps]);
 
     return (
         <TabulatorBase
             {...tabulatorProps}
             layout={tabulatorProps.layout ?? 'fitData'}
             movableColumns={tabulatorProps.movableColumns !== false}
-            ajaxRequestFunc={!gridProps.onDataFetchHandler ? undefined : (ajaxRequestFunc as ITabulator['ajaxRequestFunc'])}
             height={'100%'}
             dataLoader={false} //disable tabulator inbuilt loader overlay
             onTableRef={onTableRef}
             gridId={gridApi.getGridId()}
             dataTreeFilter={true}
-            data={gridApi.getDataSet() ?? (gridProps.onDataFetchHandler ? undefined : [])} //WORKAROUND: if dataSet is undefined and ajax is not used, dataSet must be []. Otherwise, problems may occur when adding rows
-            ajaxURL={gridProps?.onDataFetchHandler ? '-' : undefined} //WORKAROUND: if we want to use ajax request, we should set ajaxUrl to any value
+            data={gridApi.getDataSet() ?? (gridProps.onDataFetch ? undefined : [])} //WORKAROUND: if dataSet is undefined and ajax is not used, dataSet must be []. Otherwise, problems may occur when adding rows
+            ajaxURL={gridProps?.onDataFetch ? '-' : undefined} //WORKAROUND: if we want to use ajax request, we should set ajaxUrl to any value
+            ajaxRequestFunc={!gridProps.onDataFetch ? undefined : (ajaxRequestFunc as ITabulator['ajaxRequestFunc'])}
+            ajaxResponse={!gridProps.onDataFetchResponse ? undefined : (url, params, response) => gridProps.onDataFetchResponse?.(response, params, gridApi)}
             containerClassName={gridProps.className}
             placeholder={gridProps.placeholder ?? 'Строки отсутствуют'}
             events={events}

@@ -1,5 +1,5 @@
-import * as fs from "fs";
-
+import * as fs from 'fs';
+import * as crypto from 'crypto';
 
 const _componentsFolder = 'components';
 const _pagesFolder = 'pages';
@@ -7,28 +7,42 @@ const _examplesRoot = __dirname + '/' + _componentsFolder;
 const _pagesPath = __dirname + '/' + _pagesFolder;
 
 interface IFileInfo {
-    fileName: string,
+    /** File or directory unique id*/
+    fileGuid: string;
+    /** File name without extension or directory name */
+    fileName: string;
+    /** File extension */
+    fileExt?:string;
+    /** file directory from app root */
     fileDir: string;
-    fileDirFromRoot: string;
+    /** full file path from app root */
+    fullFilePath: string;
+    /** file source content */
     source?: string;
+    /** component name */
     componentName?: string;
+    /** unique component id */
+    componentGuid?: string;
+    /** item name for menu */
     menuItemName?: string;
+    /** item title */
     title?: string;
+    /** item description */
     description?: string;
+    /** children files (for directory)*/
     children?: IFileInfo[];
 }
 
 function run() {
-
     //clear pages folder
-    fs.rmSync(_pagesPath, {recursive: true, force: true})
+    fs.rmSync(_pagesPath, {recursive: true, force: true});
     if (!fs.existsSync(_pagesPath)) fs.mkdirSync(_pagesPath, {recursive: true});
-    console.log('Generated:')
-    const files = recursiveDirectoriesRun(_examplesRoot, _componentsFolder)
-    menuItemsSorting(files)
-    const [routesString, routeImportString] = generatePages(files)
-    generateRoutes(routesString, routeImportString)
-    generateMenuProps(files)
+    console.log('Generated:');
+    const files = recursiveDirectoriesRun(_examplesRoot, _componentsFolder);
+    menuItemsSorting(files);
+    const [routesString, routeImportString] = generatePages(files);
+    generateRoutes(routesString, routeImportString);
+    generateMenuProps(files);
 }
 
 //region Prepare components files info
@@ -38,11 +52,18 @@ function recursiveDirectoriesRun(curDir: string, curDirFromRoot: string, files?:
     if (!files) files = [];
     for (const entity of fileList) {
         if (entity.isDirectory()) {
-            const folder: IFileInfo = {fileName: entity.name, fileDir: curDir, fileDirFromRoot: curDirFromRoot, menuItemName: upperFirstLetter(camelCaseSplit(entity.name))}
+            const folder: IFileInfo = {
+                fileGuid: crypto.randomUUID(),
+                fileName: entity.name,
+                fileExt:'',
+                fileDir: curDir,
+                fullFilePath: curDirFromRoot,
+                menuItemName: upperFirstLetter(camelCaseSplit(entity.name)),
+            };
             folder.children = recursiveDirectoriesRun(curDir + '/' + entity.name, curDirFromRoot + '/' + entity.name);
             files.push(folder);
         } else {
-            const item = processFile(entity.name, curDir, curDirFromRoot + '/' + entity.name)
+            const item = processFile(entity.name, curDir, curDirFromRoot + '/' + entity.name);
             if (item) files?.push(item);
         }
     }
@@ -51,7 +72,7 @@ function recursiveDirectoriesRun(curDir: string, curDirFromRoot: string, files?:
 }
 
 function processFile(fileName: string, fileDir: string, curDirFromRoot: string): IFileInfo | undefined {
-    const extensions = "ts|js|tsx|jsx";
+    const extensions = 'ts|js|tsx|jsx';
 
     const fnPattern = new RegExp('^(.*)\\.(' + extensions + ')$', 'gi');
     if (!fileName.match(fnPattern)) return undefined;
@@ -59,28 +80,31 @@ function processFile(fileName: string, fileDir: string, curDirFromRoot: string):
     let fileContent = fs.readFileSync(fileDir + '/' + fileName, {encoding: 'utf8', flag: 'r'});
     if (!fileContent) return undefined;
 
-    const [componentName, menuItemName] = parseFileProperties(fileName, fileContent)
-    fileContent = clearSource(fileContent)
+    const [componentName, menuItemName] = parseFileProperties(fileName, fileContent);
+    fileContent = clearSource(fileContent);
 
     return {
-        fileName: fileName,
+        fileGuid: crypto.randomUUID(),
+        fileName: trimExtension(fileName),
+        fileExt: getFileExtension(fileName),
         fileDir: fileDir,
-        fileDirFromRoot: curDirFromRoot,
+        fullFilePath: curDirFromRoot,
         componentName: componentName,
+        componentGuid: crypto.randomUUID(),
         menuItemName: menuItemName,
         source: fileContent,
-    }
+    };
 }
 
 function parseFileProperties(fileName: string, fileContent: string) {
     let componentName = parseComponentName(fileContent);
 
     const fName = getFileNameMainPart(fileName);
-    if (!componentName) componentName = upperFirstLetter(fName)
+    if (!componentName) componentName = upperFirstLetter(fName);
 
     const menuItemName = upperFirstLetter(camelCaseSplit(fName));
 
-    return [componentName, menuItemName]
+    return [componentName, menuItemName];
 }
 
 function clearSource(source: string) {
@@ -90,33 +114,39 @@ function clearSource(source: string) {
     source = source.replaceAll(/['"]@src\//gi, '@krinopotam/ui-kit/'); //remove // noinspection DuplicatedCode
 
     const sourceLines = source.split(/\r?\n/);
-    let newSource = ""
+    let newSource = '';
     for (const line of sourceLines) {
-        if (line.trim().length === 0) continue
-        newSource = newSource + '\n' + line
+        if (line.trim().length === 0) continue;
+        newSource = newSource + '\n' + line;
     }
 
-    return newSource + '\n'
+    return newSource + '\n';
 }
 
 //endregion
 
 //region Generate menu props
-const _itemNum={num:0}
+const _itemNum = {num: 0};
+
 function prepareMenuProps(filesInfo: IFileInfo[], level: number = 1) {
-    if (filesInfo.length === 0) return ''
-    let result = '['
+    if (filesInfo.length === 0) return '';
+    let result = '[';
     for (const file of filesInfo) {
         _itemNum.num++;
         if (file.children?.length) {
-            result = result + `\n${' '.repeat(level * 4)}getItem("${file.menuItemName}", "Item${_itemNum.num}", <FolderOutlined />, ${prepareMenuProps(file.children, level + 1)}),`;
+            result =
+                result +
+                `\n${' '.repeat(level * 4)}getItem("${file.menuItemName}", "Item${_itemNum.num}", <FolderOutlined />, ${prepareMenuProps(
+                    file.children,
+                    level + 1
+                )}),`;
         } else {
-            result = result + `\n${' '.repeat(level * 4)}getItem(<Link to="${file.componentName}">${file.menuItemName}</Link>, "Item${_itemNum.num}"),`
+            result = result + `\n${' '.repeat(level * 4)}getItem(<Link to="${file.componentName}">${file.menuItemName}</Link>, "Item${_itemNum.num}"),`;
         }
     }
-    result = result + ']'
+    result = result + ']';
 
-    return result
+    return result;
 }
 
 function generateMenuProps(filesInfo: IFileInfo[]) {
@@ -139,49 +169,46 @@ function getItem(label: React.ReactNode, key: React.Key, icon?: React.ReactNode,
     } as MenuItem;
 }
 
-`
+`;
 
-    content = content + 'export const menuItems: MenuProps["items"] =' + prepareMenuProps(filesInfo)
+    content = content + 'export const menuItems: MenuProps["items"] =' + prepareMenuProps(filesInfo);
     fs.writeFileSync(__dirname + '/menuProps.tsx', content, {encoding: 'utf8', flag: 'w'});
 }
 
 //endregion
 
-
 //<editor-fold desc="Generate pages">
-function generatePages(filesInfo: IFileInfo[], subFolderPath = '', relativePathToRoot = '', level: number = 0): [string, string] {
-    let routesStrings = ''
-    let routeImportStrings = ''
-    if (filesInfo.length === 0) return [routesStrings, routeImportStrings]
+function generatePages(filesInfo: IFileInfo[], subFolderPath = '',  level: number = 0): [string, string] {
+    let routesStrings = '';
+    let routeImportStrings = '';
+    if (filesInfo.length === 0) return [routesStrings, routeImportStrings];
     for (const file of filesInfo) {
         if (file.children?.length) {
             const folderName = file.fileName;
-            const folderFullPath = _pagesPath + subFolderPath + '/' + folderName;
-            if (!fs.existsSync(folderFullPath)) fs.mkdirSync(folderFullPath, {recursive: true});
 
-            console.log(' '.repeat(level * 4), folderName)
-            const [routeStr, routeImportStr] = generatePages(file.children, subFolderPath + '/' + folderName, relativePathToRoot + '../', level + 1)
+            console.log(' '.repeat(level * 4), folderName);
+            const [routeStr, routeImportStr] = generatePages(file.children, subFolderPath + '/' + folderName,  level + 1);
             routesStrings = routesStrings + routeStr + '\n';
             routeImportStrings = routeImportStrings + routeImportStr + '\n';
         } else {
-            const [routeStr, routeImportStr] = generatePageComponent(file, subFolderPath, '../' + relativePathToRoot, level);
+            const [routeStr, routeImportStr] = generatePageComponent(file, subFolderPath, level);
             routesStrings = routesStrings + routeStr + '\n';
             routeImportStrings = routeImportStrings + routeImportStr + '\n';
         }
     }
 
-    return [routesStrings, routeImportStrings]
+    return [routesStrings, routeImportStrings];
 }
 
-function generatePageComponent(file: IFileInfo, subFolderPath: string, relativeRoot: string, level: number) {
-    const componentModulePath = relativeRoot + trimExtension(file.fileDirFromRoot);
-    const componentName = file.componentName
-    const pageComponentName = 'Page' + file.componentName;
+function generatePageComponent(file: IFileInfo, subFolderPath: string, level: number) {
+    const componentModulePath = '../' + trimExtension(file.fullFilePath);
+    const componentName = file.componentName;
+    const pageComponentName = 'Page'+ file.componentGuid?.replaceAll('-','')// 'Page' + file.componentName;
 
-    const pagesPath: string = _pagesPath + subFolderPath + '/Page' + upperFirstLetter(file.fileName)
-    const pageModulePath = './' + _pagesFolder + subFolderPath + '/Page' + trimExtension(upperFirstLetter(file.fileName));
+    const pagesPath: string = _pagesPath + '/' + pageComponentName + '.tsx';
+    const pageModulePath = './' + _pagesFolder + '/' + pageComponentName;
 
-    let source = file.source!
+    let source = file.source!;
     source = source.replaceAll(/\$\{/g, '\\${');
     source = source.replaceAll(/`/g, '\\`');
 
@@ -220,15 +247,13 @@ export default ${pageComponentName};
 
     // language=text
     const routeStr = `                <Route path="${componentName}" element={<${pageComponentName} darkMode={props.darkMode} />} />;`;
-    //const routeImportStr = `    import {${pageComponentName}} from '${pageModulePath}';`;
     const routeImportStr = `    const ${pageComponentName} = lazy(() => import('${pageModulePath}'))`;
 
-    console.log(' '.repeat(level * 4), pagesPath)
+    console.log(' '.repeat(level * 4), file.componentName);
     return [routeStr, routeImportStr];
 }
 
 //</editor-fold>
-
 
 //region Generate routes
 function generateRoutes(routers: string, imports: string) {
@@ -260,15 +285,15 @@ ${routers}
 //region Sorting
 function menuItemsSorting(items: IFileInfo[]) {
     items.sort((a, b) => {
-        if (a.children?.length) menuItemsSorting(a.children)
-        if (b.children?.length) menuItemsSorting(b.children)
+        if (a.children?.length) menuItemsSorting(a.children);
+        if (b.children?.length) menuItemsSorting(b.children);
 
         if (a.children?.length && b.children?.length) {
             if (a.fileName === b.fileName) return 0;
-            else return a.fileName > b.fileName ? 1 : -1
-        } else if (a.children?.length) return -1
-        else return 1
-    })
+            else return a.fileName > b.fileName ? 1 : -1;
+        } else if (a.children?.length) return -1;
+        else return 1;
+    });
 }
 
 //endregion
@@ -276,7 +301,7 @@ function menuItemsSorting(items: IFileInfo[]) {
 //region Service methods
 function camelCaseSplit(str: string, splitter?: string) {
     if (typeof splitter === 'undefined') splitter = ' ';
-    return str.replace(/([a-z0-9])([A-Z])/g, '$1' + splitter + '$2')
+    return str.replace(/([a-z0-9])([A-Z])/g, '$1' + splitter + '$2');
 }
 
 function parseComponentName(source: string) {
@@ -286,12 +311,18 @@ function parseComponentName(source: string) {
 }
 
 function getFileNameMainPart(fileName: string) {
-    const parts = fileName.split('.')
+    const parts = fileName.split('.');
     return parts[0];
 }
 
+function getFileExtension(fileName: string) {
+    const parts = fileName.split('.');
+    if (parts.length===1) return '';
+    return parts[parts.length-1];
+}
+
 function trimExtension(fileName: string) {
-    return fileName.replace(/\.[^/.]+$/, '')
+    return fileName.replace(/\.[^/.]+$/, '');
 }
 
 function upperFirstLetter(val: string) {

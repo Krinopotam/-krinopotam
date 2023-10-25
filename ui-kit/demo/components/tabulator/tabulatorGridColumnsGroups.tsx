@@ -1,9 +1,10 @@
 // noinspection DuplicatedCode
 
 import React from 'react';
-import {TabulatorGrid, ITabulatorProps, IGridRowData} from '@src/tabulatorGrid';
+import {TabulatorGrid, ITabulatorProps} from '@src/tabulatorGrid';
 import {DateTimeFormatter} from '@src/tabulatorBase/formatters/dateTime';
 import {DateTimeSorter} from '@src/tabulatorBase/sorters/dateTime';
+import {TabulatorPlainData} from "../../data/tabulatorData";
 
 const columnDefaults: ITabulatorProps['columnDefaults'] = {
     resizable: 'header',
@@ -40,29 +41,6 @@ const columns: ITabulatorProps['columns'] = [
     },
 ];
 
-const dataSet: IGridRowData[] = [
-    {id: '1', name: 'Oli Bob1', age: '12', col: 'red', dob: '', rating: 1, passed: false},
-    {id: '2', name: 'Mary May1', age: '1', col: 'blue', dob: '14/05/1982', rating: 2, passed: false},
-    {id: '3', name: 'Christine Kozubowski1', age: '42', col: 'green', dob: '22/05/1982', rating: 5, passed: true},
-    {id: '4', name: 'Brendon Philips1', age: '125', col: 'orange', dob: '01/08/1980', rating: 4, passed: true},
-    {id: '5', name: 'Margret Marmalade1', age: '16', col: 'yellow', dob: '31/01/1999', rating: 3, passed: true},
-    {id: '6', name: 'Oli Bob2', age: '12', col: 'red', dob: '', rating: 5, passed: true},
-    {id: '7', name: 'Mary May2', age: '1', col: 'blue', dob: '14/05/1982', rating: 2, passed: false},
-    {id: '8', name: 'Christine Kozubowski2', age: '42', col: 'green', dob: '22/05/1982', rating: 3, passed: true},
-    {id: '9', name: 'Brendon Philips2', age: '125', col: 'orange', dob: '01/08/1980', rating: 3, passed: true},
-    {id: '10', name: 'Margret Marmalade2', age: '16', col: 'yellow', dob: '31/01/1999', rating: 2, passed: false},
-    {id: '11', name: 'Oli Bob3', age: '12', col: 'red', dob: '', rating: 1, passed: false},
-    {id: '12', name: 'Mary May3', age: '1', col: 'blue', dob: '14/05/1982', rating: 4, passed: true},
-    {id: '13', name: 'Christine Kozubowski3', age: '42', col: 'green', dob: '22/05/1982', rating: 1, passed: false},
-    {id: '14', name: 'Brendon Philips3', age: '125', col: 'orange', dob: '01/08/1980', rating: 5, passed: true},
-    {id: '15', name: 'Margret Marmalade3', age: '16', col: 'yellow', dob: '31/01/1999', rating: 1, passed: false},
-    {id: '16', name: 'Oli Bob4', age: '12', col: 'red', dob: '', rating: 5, passed: true},
-    {id: '17', name: 'Mary May4', age: '1', col: 'blue', dob: '14/05/1982', rating: 2, passed: false},
-    {id: '18', name: 'Christine Kozubowski4', age: '42', col: 'green', dob: '22/05/1982', rating: 3, passed: true},
-    {id: '19', name: 'Brendon Philips4', age: '125', col: 'orange', dob: '01/08/1980', rating: 4, passed: true},
-    {id: '20', name: 'Margret Marmalade4', age: '16', col: 'yellow', dob: '31/01/1999', rating: 1, passed: false},
-];
-
 export const TabulatorGridColumnsGroups = (): React.JSX.Element => {
     return (
         <>
@@ -73,7 +51,7 @@ export const TabulatorGridColumnsGroups = (): React.JSX.Element => {
                 id={'TabulatorGridColumnsGroups'}
                 columnDefaults={columnDefaults}
                 columns={columns}
-                dataSet={dataSet}
+                dataSet={TabulatorPlainData}
                 height={500}
                 layout={'fitColumns'}
             />

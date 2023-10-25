@@ -85,7 +85,7 @@ export const PaginationRemote: Story = {
         paginationMode: 'remote',
         filterMode: "remote",
         sortMode: 'remote',
-        onDataFetchHandler:(params, gridApi)=>{
+        onDataFetch:(params, gridApi)=>{
             return new Promise((resolve) => {
                 setTimeout(() => {
                     //make any remote fetch
