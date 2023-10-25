@@ -100,9 +100,11 @@ function prepareMenuProps(filesInfo, level = 1) {
         if (file.children?.length) {
             result =
                 result +
+                    // language=text
                     `\n${' '.repeat(level * 4)}getItem("${file.menuItemName}", "Item${_itemNum.num}", <FolderOutlined />, ${prepareMenuProps(file.children, level + 1)}),`;
         }
         else {
+            // language=text
             result = result + `\n${' '.repeat(level * 4)}getItem(<Link to="${file.componentName}">${file.menuItemName}</Link>, "Item${_itemNum.num}"),`;
         }
     }

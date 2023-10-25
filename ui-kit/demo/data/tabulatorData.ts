@@ -202,7 +202,12 @@ export const GenerateDataSet = (rows: number, prefix: string): IGridRowData[] =>
     const result = [];
     const colRow = prefix + 'Col';
     for (let i = 0; i < rows; i++) {
-        result.push({id: i, col1: colRow + '1_' + Math.random(), col2: colRow + '2_' + Math.random(), col3: colRow + '3_' + Math.random()});
+        result.push({
+            id: i,
+            col1: colRow + '1_' + i + '-' + Math.random(),
+            col2: colRow + '2_' + i + '-' + Math.random(),
+            col3: colRow + '3_' + i + '-' + Math.random(),
+        });
     }
     return result as IGridRowData[];
 };

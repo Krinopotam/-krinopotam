@@ -12,7 +12,7 @@ interface IFileInfo {
     /** File name without extension or directory name */
     fileName: string;
     /** File extension */
-    fileExt?:string;
+    fileExt?: string;
     /** file directory from app root */
     fileDir: string;
     /** full file path from app root */
@@ -29,6 +29,7 @@ interface IFileInfo {
     title?: string;
     /** item description */
     description?: string;
+
     /** children files (for directory)*/
     children?: IFileInfo[];
 }
@@ -55,7 +56,7 @@ function recursiveDirectoriesRun(curDir: string, curDirFromRoot: string, files?:
             const folder: IFileInfo = {
                 fileGuid: crypto.randomUUID(),
                 fileName: entity.name,
-                fileExt:'',
+                fileExt: '',
                 fileDir: curDir,
                 fullFilePath: curDirFromRoot,
                 menuItemName: upperFirstLetter(camelCaseSplit(entity.name)),
@@ -136,11 +137,13 @@ function prepareMenuProps(filesInfo: IFileInfo[], level: number = 1) {
         if (file.children?.length) {
             result =
                 result +
+                // language=text
                 `\n${' '.repeat(level * 4)}getItem("${file.menuItemName}", "Item${_itemNum.num}", <FolderOutlined />, ${prepareMenuProps(
                     file.children,
                     level + 1
                 )}),`;
         } else {
+            // language=text
             result = result + `\n${' '.repeat(level * 4)}getItem(<Link to="${file.componentName}">${file.menuItemName}</Link>, "Item${_itemNum.num}"),`;
         }
     }
@@ -178,7 +181,7 @@ function getItem(label: React.ReactNode, key: React.Key, icon?: React.ReactNode,
 //endregion
 
 //<editor-fold desc="Generate pages">
-function generatePages(filesInfo: IFileInfo[], subFolderPath = '',  level: number = 0): [string, string] {
+function generatePages(filesInfo: IFileInfo[], subFolderPath = '', level: number = 0): [string, string] {
     let routesStrings = '';
     let routeImportStrings = '';
     if (filesInfo.length === 0) return [routesStrings, routeImportStrings];
@@ -187,7 +190,7 @@ function generatePages(filesInfo: IFileInfo[], subFolderPath = '',  level: numbe
             const folderName = file.fileName;
 
             console.log(' '.repeat(level * 4), folderName);
-            const [routeStr, routeImportStr] = generatePages(file.children, subFolderPath + '/' + folderName,  level + 1);
+            const [routeStr, routeImportStr] = generatePages(file.children, subFolderPath + '/' + folderName, level + 1);
             routesStrings = routesStrings + routeStr + '\n';
             routeImportStrings = routeImportStrings + routeImportStr + '\n';
         } else {
@@ -203,7 +206,7 @@ function generatePages(filesInfo: IFileInfo[], subFolderPath = '',  level: numbe
 function generatePageComponent(file: IFileInfo, subFolderPath: string, level: number) {
     const componentModulePath = '../' + trimExtension(file.fullFilePath);
     const componentName = file.componentName;
-    const pageComponentName = 'Page'+ file.componentGuid?.replaceAll('-','')// 'Page' + file.componentName;
+    const pageComponentName = 'Page' + file.componentGuid?.replaceAll('-', ''); // 'Page' + file.componentName;
 
     const pagesPath: string = _pagesPath + '/' + pageComponentName + '.tsx';
     const pageModulePath = './' + _pagesFolder + '/' + pageComponentName;
@@ -317,8 +320,8 @@ function getFileNameMainPart(fileName: string) {
 
 function getFileExtension(fileName: string) {
     const parts = fileName.split('.');
-    if (parts.length===1) return '';
-    return parts[parts.length-1];
+    if (parts.length === 1) return '';
+    return parts[parts.length - 1];
 }
 
 function trimExtension(fileName: string) {
