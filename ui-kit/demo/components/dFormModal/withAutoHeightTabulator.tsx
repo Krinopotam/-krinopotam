@@ -7,7 +7,7 @@ import {IDFormModalApi, DFormModal, IDFormModalProps} from '@src/dFormModal';
 import {IInputFieldProps, InputField} from '@src/dForm/fields/input/inputField';
 import {IPasswordFieldProps, PasswordField} from '@src/dForm/fields/password/passwordField';
 import {TabulatorBaseColumns, TabulatorBaseColumnsDef} from '../../data/tabulatorData';
-import {InlineGroupField, ITabulatorGridFieldProps, TabulatorGridField} from '@src/dForm';
+import {ITabulatorGridFieldProps, TabulatorGridField} from '@src/dForm';
 import {IGridRowData} from '@src/tabulatorGrid';
 import {Switch} from 'antd';
 
