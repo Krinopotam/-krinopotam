@@ -43,7 +43,6 @@ const formProps: IDFormModalProps = {
             columnDefaults: TabulatorBaseColumnsDef,
             columns: TabulatorBaseColumns,
             value: dataSet,
-            
             autoHeightResize: true,
             rules: [{type: 'string', rule: 'not-empty', message: 'Поле не должно быть пустым'}],
         } as ITabulatorGridFieldProps,
