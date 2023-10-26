@@ -16,3 +16,4 @@ yarn-error.log
 /public/assets/components
 /app/sql_logger.cfg
 /storage/logs
+ui-kit/demo/demoRoutes.tsx
