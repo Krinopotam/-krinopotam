@@ -14,7 +14,8 @@ const editFormProps: IDFormModalProps = {
             columnDefaults: TabulatorBaseColumnsDef,
             columns: [{title: 'Name', field: 'name', headerFilter: true}],
             headerFilterHidden: true,
-            height: '320px',
+            autoResize:'100%',
+            height: '100%',
             resizeHeightWithForm: true,
             layout: 'fitColumns',
             onDataFetch: (params, gridApi,field) => {

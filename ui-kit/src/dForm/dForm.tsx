@@ -26,7 +26,7 @@ import {RequiredMark} from "antd/es/form/Form";
 import {IColorType} from "@src/button/button";
 import {IDFormFieldsProps} from "@src/dForm/index";
 
-//import './dynamicForm.css';
+import './css/dForm.scss';
 
 //region Types
 /** Form properties*/

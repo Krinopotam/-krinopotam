@@ -25,6 +25,8 @@ interface IFileInfo {
     componentGuid?: string;
     /** item name for menu */
     menuItemName?: string;
+    /** link name for menu item */
+    menuItemLink?: string;
     /** item title */
     title?: string;
     /** item description */
@@ -93,6 +95,7 @@ function processFile(fileName: string, fileDir: string, curDirFromRoot: string):
         componentName: componentName,
         componentGuid: crypto.randomUUID(),
         menuItemName: menuItemName,
+        menuItemLink: menuItemName.replaceAll(" ", ''),
         source: fileContent,
     };
 }
@@ -104,7 +107,6 @@ function parseFileProperties(fileName: string, fileContent: string) {
     if (!componentName) componentName = upperFirstLetter(fName);
 
     const menuItemName = upperFirstLetter(camelCaseSplit(fName));
-
     return [componentName, menuItemName];
 }
 
@@ -144,7 +146,7 @@ function prepareMenuProps(filesInfo: IFileInfo[], level: number = 1) {
                 )}),`;
         } else {
             // language=text
-            result = result + `\n${' '.repeat(level * 4)}getItem(<Link to="${file.componentName}">${file.menuItemName}</Link>, "Item${_itemNum.num}"),`;
+            result = result + `\n${' '.repeat(level * 4)}getItem(<Link to="${file.menuItemLink}">${file.menuItemName}</Link>, "Item${_itemNum.num}"),`;
         }
     }
     result = result + ']';
@@ -206,6 +208,7 @@ function generatePages(filesInfo: IFileInfo[], subFolderPath = '', level: number
 function generatePageComponent(file: IFileInfo, subFolderPath: string, level: number) {
     const componentModulePath = '../' + trimExtension(file.fullFilePath);
     const componentName = file.componentName;
+    const menuItemLink = file.menuItemLink;
     const pageComponentName = 'Page' + file.componentGuid?.replaceAll('-', ''); // 'Page' + file.componentName;
 
     const pagesPath: string = _pagesPath + '/' + pageComponentName + '.tsx';
@@ -249,7 +252,7 @@ export default ${pageComponentName};
     fs.writeFileSync(pagesPath, content, {encoding: 'utf8', flag: 'w'});
 
     // language=text
-    const routeStr = `                <Route path="${componentName}" element={<${pageComponentName} darkMode={props.darkMode} />} />;`;
+    const routeStr = `                <Route path="${menuItemLink}" element={<${pageComponentName} darkMode={props.darkMode} />} />;`;
     const routeImportStr = `    const ${pageComponentName} = lazy(() => import('${pageModulePath}'))`;
 
     console.log(' '.repeat(level * 4), file.componentName);

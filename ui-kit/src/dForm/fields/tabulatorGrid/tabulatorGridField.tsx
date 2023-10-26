@@ -43,7 +43,7 @@ export interface ITabulatorGridFieldPropsCallbacks {
 
 export type ITabulatorGridFieldProps = ITabulatorGridFieldPropsBase &
     ITabulatorGridFieldPropsCallbacks &
-    Omit<IGridProps, keyof ITabulatorGridFieldPropsCallbacks>;
+    Omit<IGridProps, keyof ITabulatorGridFieldPropsCallbacks | 'dataSet'>;
 
 export class TabulatorGridField extends BaseField<ITabulatorGridFieldProps> {
     protected render() {

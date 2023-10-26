@@ -50,6 +50,9 @@ export interface IBaseFieldProps<TField extends IBaseField> extends Record<strin
     /** Field width */
     width?: string | number;
 
+    /** Field container height auto resize  */
+    autoHeightResize?:boolean;
+
     /** Get focus by default */
     autoFocus?: boolean;
 

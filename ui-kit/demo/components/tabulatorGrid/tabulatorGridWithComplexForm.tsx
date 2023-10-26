@@ -78,6 +78,7 @@ const editFormProps: IDFormModalProps = {
     fieldsProps: {
         tabs1: {
             component: TabsField,
+            autoResize:true,
             tabs: {
                 /*                " Основные ": {
                                     name: {component: InputField, label: 'Наименование'},
@@ -97,7 +98,8 @@ const editFormProps: IDFormModalProps = {
                         columns: TagsColumns,
                         headerFilterHidden: true,
                         height: '320px',
-                        resizeHeightWithForm: true,
+                        autoResize:true,
+                        //resizeHeightWithForm: true,
                         layout: 'fitColumns',
                         editFormProps: inputsFormProps,
                         //value: [{id: '111', name: '3232', format: {id: 1, label: '111'}}],

@@ -12,7 +12,7 @@ class ResizeTable extends Module{
 		
 		this.tableHeight = 0;
 		this.tableWidth = 0;
-		this.containerHeight = 0;
+		this.autoHeightResize = 0;
 		this.containerWidth = 0;
 		
 		this.autoResize = false;
@@ -26,7 +26,7 @@ class ResizeTable extends Module{
 	}
 	
 	initialize(){
-		if(this.table.options.autoResize){
+		if(this.table.options.autoHeightResize){
 			var table = this.table,
 			tableStyle;
 			

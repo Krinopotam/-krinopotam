@@ -16,9 +16,10 @@ export const BaseFieldRender = ({field, altLabel, children}: { field: IBaseField
 
     const style: React.CSSProperties = {
         //marginBottom: formProps.layout !== 'horizontal' ? 0 : undefined,
-        flexGrow: fieldProps.width ? 0 : 1,
+/*        flexGrow: fieldProps.width ? 0 : 1,
         flexShrink: fieldProps.width ? 0 : 1,
-        flexBasis: fieldProps.width ? undefined : 0,
+        flexBasis: fieldProps.width ? undefined : 0,*/
+        height:'100%',
         ...fieldProps.rowStyle,
     };
 

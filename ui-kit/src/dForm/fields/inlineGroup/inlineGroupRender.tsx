@@ -8,7 +8,7 @@ export const InlineGroupRender = ({field}: {field: InlineGroupField}): React.JSX
     useSyncExternalStore(field.subscribe.bind(field), field.getSnapshot.bind(field));
 
     useEffect(() => {
-        field.setReady(true)
+        field.setReady(true);
     }, [field]);
 
     if (!field.hasVisibleChildren()) return <> </>;
@@ -35,18 +35,26 @@ export const InlineGroupRender = ({field}: {field: InlineGroupField}): React.JSX
     let groupLabel: React.ReactNode = '';
     if (formProps.layout === 'horizontal') groupLabel = groupName ?? firstField?.getLabel();
 
-    let defStyle: CSSProperties = {};
-    if (fieldProps.width) {
-        defStyle = {width: fieldProps.width, margin: 0};
-    }
+    const defStyle: CSSProperties = {margin: 0, marginBottom: 0};
+    if (fieldProps.width) defStyle.width = fieldProps.width;
+    if (fieldProps.autoHeightResize) defStyle.height = '100%';
+    const groupItemStyle = {...defStyle, ...fieldProps.style};
 
-    const groupStyle = {...defStyle, ...fieldProps.style};
+    const groupContainerStyle: React.CSSProperties = {
+        display: 'flex',
+        flexDirection: 'row',
+        flexWrap: 'nowrap',
+        gap: '24px',
+        alignItems: 'top',
+        width: '100%',
+    };
+    if (fieldProps.autoHeightResize) groupContainerStyle.height = '100%';
 
     return (
         <Animate component="" transitionName="zoom">
             {!isHidden ? (
-                <Form.Item label={groupLabel} style={groupStyle}>
-                    <div style={{display: 'inline-flex', gap: '24px', alignItems: 'center', width: '100%'}}>
+                <Form.Item label={groupLabel} style={groupItemStyle}>
+                    <div style={groupContainerStyle}>
                         {Object.keys(childFields).map(fieldName => {
                             const childField = childFields[fieldName];
                             const childProps = childField.getProps();

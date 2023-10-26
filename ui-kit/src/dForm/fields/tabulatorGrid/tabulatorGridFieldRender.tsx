@@ -26,21 +26,33 @@ export const TabulatorGridFieldRender = ({field}: {field: TabulatorGridField}): 
         prevDataSetRef.current = value;
         prevValueRef.current = value;
     }
-    const curDataSet =  prevDataSetRef.current;
+    const curDataSet = prevDataSetRef.current;
 
     const callbacks = usePrepareCallbacks(field, fieldProps, prevValueRef);
+
+    let height = fieldProps.height
+    const containerStyle: React.CSSProperties = {};
+    if (fieldProps.autoHeightResize) {
+        containerStyle.position = 'absolute';
+        containerStyle.inset = 0;
+        height = '100%'
+    }
+
     return useMemo(() => {
         return (
-            <TabulatorGrid
-                {...tabulatorProps}
-                {...callbacks}
-                apiRef={gridApi}
-                dataSet={curDataSet}
-                readOnly={fieldProps.readOnly}
-                placeholder={fieldProps.placeholder}
-                width={fieldProps.width}
-                resizeHeightWithParent={fieldProps.resizeHeightWithForm ? '#' + field.getModel().getFormId() : fieldProps.resizeHeightWithParent}
-            />
+            <div style={containerStyle}>
+                <TabulatorGrid
+                    {...tabulatorProps}
+                    {...callbacks}
+                    apiRef={gridApi}
+                    dataSet={curDataSet}
+                    readOnly={fieldProps.readOnly}
+                    placeholder={fieldProps.placeholder}
+                    width={fieldProps.width}
+                    height={height}
+                    resizeHeightWithParent={fieldProps.resizeHeightWithForm ? '#' + field.getModel().getFormId() : fieldProps.resizeHeightWithParent}
+                />
+            </div>
         );
     }, [
         tabulatorProps,
@@ -72,6 +84,7 @@ const useSplitTabulatorProps = (props: ITabulatorGridFieldProps) => {
             readOnly: true,
             onValueChanged: true,
             width: true,
+            autoHeightResize: true,
             component: true,
             rules: true,
             onReadyStateChanged: true,

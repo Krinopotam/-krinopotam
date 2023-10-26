@@ -35,16 +35,21 @@ export const TabsFieldRender = ({field}: {field: TabsField}): React.JSX.Element 
         if (!field.tabHasVisibleChildren(tabName)) continue;
         const childrenFields = tabsRootFields[tabName];
 
+        const tabStyleDef: React.CSSProperties = {};
+        if (fieldProps.autoHeightResize) tabStyleDef.height = '100%';
+
         items.push({
             key: tabName,
             tabKey: tabName,
             label: tabName,
+            className:fieldProps.autoHeightResize ? 'auto-height' : '',
             forceRender: true,
             disabled: field.isDisabled(),
-            style: fieldProps.tabsStyle,
+            style: {...tabStyleDef, ...fieldProps.tabsStyle},
             children: (
                 <FieldsRender
                     fields={childrenFields}
+                    formProps={field.getFormProps()}
                     subscribe={field.tabSubscribe(tabName)}
                     getSnapshot={field.getTabSnapshot(tabName)}
                     containerStyle={containerStyle}
@@ -56,12 +61,11 @@ export const TabsFieldRender = ({field}: {field: TabsField}): React.JSX.Element 
 
     const tabBarRender = (props: TabNavListProps, DefaultTabBar: ComponentType<TabNavListProps>) => TabBarRender(props, DefaultTabBar, field);
 
-    let defStyle: CSSProperties = {};
-    if (fieldProps.width) {
-        defStyle = {width: fieldProps.width};
-    }
+    const styleDef: CSSProperties = {};
+    if (fieldProps.width) styleDef.width = fieldProps.width;
+    if (fieldProps.autoHeightResize) styleDef.height = '100%';
 
-    const style = {...defStyle, ...fieldProps.style};
+    const style = {...styleDef, ...fieldProps.style};
 
     //return <Tabs type="card" size="small" renderTabBar={tabBarRender} items={items} />;
     return (
