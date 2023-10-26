@@ -8,7 +8,7 @@ Homestead.json
 Homestead.yaml
 npm-debug.log
 yarn-error.log
-
+/demo/pages
 .env
 /public/assets/react-app/
 /public/localreact.html
