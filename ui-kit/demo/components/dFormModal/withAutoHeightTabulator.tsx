@@ -9,7 +9,7 @@ import {IPasswordFieldProps, PasswordField} from '@src/dForm/fields/password/pas
 import {TabulatorBaseColumns, TabulatorBaseColumnsDef} from '../../data/tabulatorData';
 import {ITabulatorGridFieldProps, TabulatorGridField} from '@src/dForm';
 import {IGridRowData} from '@src/tabulatorGrid';
-import {Switch} from 'antd';
+import {FormLayoutSwitch} from "../../common/buttonsProps";
 
 const formApi = {} as IDFormModalApi;
 
@@ -53,21 +53,7 @@ const formProps: IDFormModalProps = {
             rules: [{type: 'string', rule: 'not-empty', message: 'Поле не должно быть пустым'}],
         } as IPasswordFieldProps,
     },
-    buttons: {
-        layout: {
-            type: 'element',
-            title: (
-                <Switch
-                    checkedChildren={'hor'}
-                    unCheckedChildren={'ver'}
-                    onChange={val => {
-                        formApi.setFormProps({layout: val ? 'horizontal' : 'vertical'});
-                    }}
-                />
-            ),
-            position: 'left',
-        },
-    },
+    buttons: FormLayoutSwitch(formApi),
 };
 
 export const WithAutoHeightTabulator = (): React.JSX.Element => {
@@ -78,8 +64,7 @@ export const WithAutoHeightTabulator = (): React.JSX.Element => {
     return (
         <>
             {/*Description Start*/}
-            <h1>Example of a simple modal form (vertical layout)</h1>
-            <p>By default, a modal form has the ability to drag it by its title and resize it</p>
+            <h1>Example of a form with a TabulatorGrid type field with automatic height</h1>
             {/*Description End*/}
             <div style={{maxWidth: 500}}>
                 <Button onClick={onClick}>Открыть форму</Button>

@@ -5,6 +5,7 @@ import {Button} from '@src/button';
 import {IDFormModalApi, DFormModal, IDFormModalProps} from '@src/dFormModal';
 import {InputField} from "@src/dForm/fields/input/inputField";
 import {PasswordField} from "@src/dForm/fields/password/passwordField";
+import {FormLayoutSwitch} from "../../common/buttonsProps";
 
 const formApi = {} as IDFormModalApi;
 
@@ -24,6 +25,7 @@ const formProps: IDFormModalProps = {
             }, 3000);
         });
     },
+    buttons: FormLayoutSwitch(formApi),
 }
 
 

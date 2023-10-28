@@ -6,6 +6,7 @@ import {IDFormModalApi, DFormModal, IDFormModalProps} from '@src/dFormModal';
 import {InputField} from '@src/dForm/fields/input/inputField';
 import {DateTimeField} from '@src/dForm/fields/dateTime/dateTimeField';
 import {TabsField} from '@src/dForm/fields/tabs/tabsField';
+import {FormLayoutSwitch} from "../../common/buttonsProps";
 
 const formApi = {} as IDFormModalApi;
 
@@ -29,6 +30,7 @@ const formProps: IDFormModalProps = {
         },
     },
     bodyHeight: 250,
+    buttons: FormLayoutSwitch(formApi),
 };
 
 export const ModalFormWithTabs = (): React.JSX.Element => {

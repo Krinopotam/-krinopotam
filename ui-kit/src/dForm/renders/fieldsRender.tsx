@@ -34,7 +34,6 @@ export const FieldsRender = ({
         ...containerStyle,
     };
 
-    const layoutClass = formProps.layout==='horizontal' ? ' layout-horizontal' : ' layout-vertical'
     useSyncExternalStore(subscribe, getSnapshot);
     return (
         <div className={'dform-fields-container'} style={style}>
@@ -46,7 +45,7 @@ export const FieldsRender = ({
                 const autoHeightClass= fieldProps.autoHeightResize ? ' auto-height' : '';
 
                 return (
-                    <div key={'field_' + field.getName()} className={'dform-field-container' + autoHeightClass + layoutClass} style={fieldStyle}>
+                    <div key={'field_' + field.getName()} className={'dform-field-container' + autoHeightClass} style={fieldStyle}>
                         {field.renderField()}{' '}
                     </div>
                 );

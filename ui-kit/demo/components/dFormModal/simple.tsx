@@ -6,6 +6,7 @@ import {Button} from '@src/button';
 import {IDFormModalApi, DFormModal, IDFormModalProps} from '@src/dFormModal';
 import {IInputFieldProps, InputField} from "@src/dForm/fields/input/inputField";
 import {IPasswordFieldProps, PasswordField} from "@src/dForm/fields/password/passwordField";
+import {FormLayoutSwitch} from "../../common/buttonsProps";
 
 const formApi = {} as IDFormModalApi;
 
@@ -15,9 +16,10 @@ const formProps: IDFormModalProps = {
     confirmChanges: true,
     arrowsButtonsSelection: true,
     fieldsProps: {
-        login: {component: InputField, label: 'Login', autoHeightResize:'100%'} as IInputFieldProps,
+        login: {component: InputField, label: 'Login'} as IInputFieldProps,
         password: {component: PasswordField, label: 'Password'} as IPasswordFieldProps
-    }
+    },
+    buttons: FormLayoutSwitch(formApi),
 }
 
 export const Simple = (): React.JSX.Element => {

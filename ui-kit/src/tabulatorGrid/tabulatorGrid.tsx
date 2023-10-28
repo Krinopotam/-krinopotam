@@ -100,7 +100,7 @@ export type IGridDeletePromise = TPromise<{data: IGridRowData[]; last_page?: num
 export const TabulatorGrid = (props: IGridProps): React.JSX.Element => {
     const tabulatorProps = useSplitTabulatorProps(props);
     const tableRef = useRef<ITabulator>();
-    const [editFormApi] = useState<IDFormModalApi>({} as IDFormModalApi);
+    const [editFormApi] = useState<IDFormModalApi>((props.editFormProps?.apiRef ?? {}) as IDFormModalApi);
     const [buttonsApi] = useState({} as IButtonsRowApi & {refreshButtons: () => void});
     const [gridApi] = useState((props.apiRef || {}) as IGridApi);
 

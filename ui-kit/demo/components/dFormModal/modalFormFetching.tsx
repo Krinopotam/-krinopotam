@@ -4,6 +4,7 @@ import React, {useCallback} from 'react';
 import {Button} from '@src/button';
 import {IDFormModalApi, DFormModal, IDFormModalProps} from '@src/dFormModal';
 import {InputField} from "@src/dForm/fields/input/inputField";
+import {FormLayoutSwitch} from "../../common/buttonsProps";
 
 const formApi = {} as IDFormModalApi;
 
@@ -24,7 +25,7 @@ const formProps: IDFormModalProps = {
         });
     },
 
-    buttons: {ok: {position: 'right'}}
+    buttons: FormLayoutSwitch(formApi),
 }
 
 export const ModalFormFetching = (): React.JSX.Element => {

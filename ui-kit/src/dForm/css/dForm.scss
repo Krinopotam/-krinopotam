@@ -1,80 +1,74 @@
 /* ================== Overloading of the Antd Form styles =====================*/
 
 /** WORKAROUND: Set row item height to be able to set the height of the form element content to 100%   */
-.dform-field-container.auto-height {
-  height: 100%;
+.ant-form {
+  .dform-fields-container {
+    .dform-field-container.auto-height {
+      height: 100%;
 
-  &.layout-vertical {
-    .ant-form-item {
-      .ant-row.ant-form-item-row {
-        height: calc(100% - 24px); //TODO: для inlineField компонента должно быть 100%
-        flex-flow: column;
+      .ant-form-item {
+        .ant-row.ant-form-item-row {
+          height: calc(100% - 24px); //TODO: для inlineField компонента должно быть 100%
 
-        .ant-form-item-label {
-          flex-basis: content;
-        }
-
-        .ant-form-item-control {
-          flex: 1;
-          /*height: 100%;*/
-          min-height: 100px;
-          display: flex;
-          flex-direction: column;
-
-          .ant-form-item-control-input {
+          .ant-form-item-control {
             flex: 1;
+            min-height: 100px;
+            display: flex;
+            flex-direction: column;
 
-            .ant-form-item-control-input-content {
-              height: 100%;
+            .ant-form-item-control-input {
+              flex: 1;
+
+              .ant-form-item-control-input-content {
+                height: 100%;
+              }
             }
-
           }
         }
-      }
 
-      &.ant-form-item-with-help .ant-row.ant-form-item-row {
-        height: 100%;
+        &.ant-form-item-with-help .ant-row.ant-form-item-row {
+          height: 100%;
+        }
       }
     }
   }
 
-  &.layout-horizontal {
-    .ant-form-item {
-      .ant-row.ant-form-item-row {
-        height: calc(100% - 24px);
-        flex-flow: row wrap;;
-
-        .ant-form-item-label {
-          flex-grow: 0;
-        }
-
-        .ant-form-item-control {
-          flex: 1;
-          min-height: 100px;
-          display: flex;
-          flex-direction: column;
-
-          .ant-form-item-control-input {
-            flex: 1;
-
-            .ant-form-item-control-input-content {
-              height: 100%;
+  &.ant-form-vertical {
+    .dform-fields-container{
+      .dform-field-container.auto-height {
+        .ant-form-item {
+          .ant-row.ant-form-item-row{
+            flex-flow: column;
+            .ant-form-item-label {
+              flex-basis: content;
             }
-
           }
         }
       }
+    }
+  }
 
-      &.ant-form-item-with-help .ant-row.ant-form-item-row {
-        height: 100%;
+  &.ant-form-horizontal {
+    .dform-fields-container{
+      .dform-field-container.auto-height {
+        .ant-form-item {
+          .ant-row.ant-form-item-row{
+            flex-flow: row wrap;;
+            .ant-form-item-label {
+              flex-grow: 0;
+            }
+          }
+        }
       }
     }
   }
+
+  .ant-tabs-content {
+    height: 100%;
+  }
 }
 
-.ant-tabs-content {
-  height: 100%;
-}
+
 
 /** -----------------------------------------------------------------------------------------**/
 

@@ -1,10 +1,14 @@
 import React from 'react';
 import {IGridProps, TabulatorGrid} from '@src/tabulatorGrid';
-import {IDFormModalProps} from '@src/dFormModal';
+import {IDFormModalApi, IDFormModalProps} from '@src/dFormModal';
 import {ITabulatorGridFieldProps, TabulatorGridField} from '@src/dForm/fields/tabulatorGrid/tabulatorGridField';
 import {TabulatorBaseColumns, TabulatorBaseColumnsDef, TabulatorPlainData} from '../../../data/tabulatorData';
+import {FormLayoutSwitch} from "../../../common/buttonsProps";
+
+const editFormApi = {} as IDFormModalApi;
 
 const editFormProps: IDFormModalProps = {
+    apiRef:editFormApi,
     confirmChanges: true,
     bodyHeight: 400,
     width: 600,
@@ -14,7 +18,7 @@ const editFormProps: IDFormModalProps = {
             columnDefaults: TabulatorBaseColumnsDef,
             columns: [{title: 'Name', field: 'name', headerFilter: true}],
             headerFilterHidden: true,
-            autoResize:'100%',
+            autoHeightResize:true,
             height: '100%',
             resizeHeightWithForm: true,
             layout: 'fitColumns',
@@ -31,6 +35,7 @@ const editFormProps: IDFormModalProps = {
             },
         } satisfies ITabulatorGridFieldProps,
     },
+    buttons: FormLayoutSwitch(editFormApi),
 };
 
 const mainGridProps: IGridProps = {
