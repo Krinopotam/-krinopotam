@@ -50,6 +50,7 @@ const useSplitTreeSelectProps = (props) => {
             requiredMark: true,
             readOnly: true,
             rowStyle: true,
+            autoHeightResize: true,
             onDirtyStateChanged: true,
             onReady: true,
             onDisabledStateChanged: true,

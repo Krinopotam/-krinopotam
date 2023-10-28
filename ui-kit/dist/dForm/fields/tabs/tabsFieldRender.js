@@ -29,23 +29,28 @@ export const TabsFieldRender = ({ field }) => {
         if (!field.tabHasVisibleChildren(tabName))
             continue;
         const childrenFields = tabsRootFields[tabName];
+        const tabStyleDef = {};
+        if (fieldProps.autoHeightResize)
+            tabStyleDef.height = '100%';
         items.push({
             key: tabName,
             tabKey: tabName,
             label: tabName,
+            className: fieldProps.autoHeightResize ? 'auto-height' : '',
             forceRender: true,
             disabled: field.isDisabled(),
-            style: fieldProps.tabsStyle,
-            children: (React.createElement(FieldsRender, { fields: childrenFields, subscribe: field.tabSubscribe(tabName), getSnapshot: field.getTabSnapshot(tabName), containerStyle: containerStyle })),
+            style: Object.assign(Object.assign({}, tabStyleDef), fieldProps.tabsStyle),
+            children: (React.createElement(FieldsRender, { fields: childrenFields, formProps: field.getFormProps(), subscribe: field.tabSubscribe(tabName), getSnapshot: field.getTabSnapshot(tabName), containerStyle: containerStyle })),
             active: activeTab === tabName,
         });
     }
     const tabBarRender = (props, DefaultTabBar) => TabBarRender(props, DefaultTabBar, field);
-    let defStyle = {};
-    if (fieldProps.width) {
-        defStyle = { width: fieldProps.width };
-    }
-    const style = Object.assign(Object.assign({}, defStyle), fieldProps.style);
+    const styleDef = {};
+    if (fieldProps.width)
+        styleDef.width = fieldProps.width;
+    if (fieldProps.autoHeightResize)
+        styleDef.height = '100%';
+    const style = Object.assign(Object.assign({}, styleDef), fieldProps.style);
     return (React.createElement(Tabs, { type: (_a = fieldProps.type) !== null && _a !== void 0 ? _a : 'card', tabBarStyle: fieldProps.tabBarStyle, size: (_b = fieldProps.size) !== null && _b !== void 0 ? _b : 'small', items: items, style: style, renderTabBar: tabBarRender, onChange: onChange }));
 };
 const useOnChange = (field) => {

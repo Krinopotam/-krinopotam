@@ -2,9 +2,11 @@ import { useCallback, useRef, useState } from 'react';
 import { HelpersStrings, HelpersObjects } from '@krinopotam/js-helpers';
 import useUnmountedRef from 'ahooks/lib/useUnmountedRef';
 import { MessageBox } from '../../messageBox';
-import { BaseFetchHandler } from '../../tabulatorGrid/helpers/fetchHelpers';
+import { GenerateAjaxRequestFunc } from '../../tabulatorGrid/helpers/fetchHelpers';
 export const useInitGridApi = ({ gridApi, props, tableRef, editFormApi, buttonsApi, openColumnsDialog, }) => {
     const dataSetRef = useRef(undefined);
+    const curDataFetchHandler = useRef();
+    const curDataFetchParams = useRef();
     const [isLoading, setIsLoading] = useState(false);
     const unmountRef = useUnmountedRef();
     useUpdateDataSetFromProps(dataSetRef, props.dataSet);
@@ -36,6 +38,9 @@ export const useInitGridApi = ({ gridApi, props, tableRef, editFormApi, buttonsA
     gridApi.removeRows = useApiRemoveRows(gridApi);
     gridApi.deleteRows = useApiDeleteRows(gridApi);
     gridApi.fetchData = useApiFetchData(gridApi);
+    gridApi.retryFetchData = useApiRetryFetchData(gridApi);
+    gridApi.setCurrentDataFetchHandler = useSetCurrentDataFetchHandler(curDataFetchHandler, curDataFetchParams);
+    gridApi.getCurrentDataFetchHandler = useGetCurrentDataFetchHandler(curDataFetchHandler, curDataFetchParams);
     gridApi.getRowData = useApiGetRowData(gridApi);
     gridApi.openColumnDialog = useApiOpenColumnDialog(gridApi, openColumnsDialog);
     return gridApi;
@@ -60,14 +65,14 @@ const useApiGetDataSet = (dataSetRef) => {
 };
 const useApiSetDataSet = (dataSetRef, gridApi) => {
     return useCallback((dataSet) => {
-        var _a, _b, _c, _d, _e, _f;
+        var _a, _b, _c, _d, _e;
         if (!gridApi.tableApi)
             return;
-        const newDataSet = (_c = (_b = (_a = gridApi.gridProps) === null || _a === void 0 ? void 0 : _a.onDataSetChange) === null || _b === void 0 ? void 0 : _b.call(_a, dataSet !== null && dataSet !== void 0 ? dataSet : undefined, gridApi)) !== null && _c !== void 0 ? _c : dataSet;
-        dataSetRef.current = newDataSet;
-        (_d = gridApi.tableApi) === null || _d === void 0 ? void 0 : _d.deselectRow();
-        (_e = gridApi.tableApi) === null || _e === void 0 ? void 0 : _e.clearData();
-        (_f = gridApi.tableApi) === null || _f === void 0 ? void 0 : _f.addData(dataSetRef.current);
+        dataSetRef.current = dataSet !== null && dataSet !== void 0 ? dataSet : undefined;
+        (_a = gridApi.tableApi) === null || _a === void 0 ? void 0 : _a.deselectRow();
+        (_b = gridApi.tableApi) === null || _b === void 0 ? void 0 : _b.clearData();
+        (_c = gridApi.tableApi) === null || _c === void 0 ? void 0 : _c.setData(dataSetRef.current);
+        (_e = (_d = gridApi.gridProps).onDataChanged) === null || _e === void 0 ? void 0 : _e.call(_d, dataSetRef.current, gridApi);
     }, [dataSetRef, gridApi]);
 };
 const useApiGetIsLoading = (isLoading) => {
@@ -183,31 +188,24 @@ const useApiGetRowByKey = (gridApi) => {
 };
 const useApiInsertRows = (dataSetRef, gridApi) => {
     return useCallback((rows, place, key, updateActiveRow) => {
-        var _a;
+        var _a, _b;
         const tableApi = gridApi.tableApi;
         if (!tableApi)
             return;
         const dataTree = gridApi.gridProps.dataTree;
         const above = place === 'above';
-        const clonedRows = HelpersObjects.isArray(rows) ? [...rows] : [rows];
-        const addData = () => {
-            var _a, _b;
-            for (const row of clonedRows) {
-                if (!dataTree)
-                    tableApi.addData([row], above, key).then();
-                else
-                    addTreeRows(gridApi, [row], place, key);
-            }
-            dataSetRef.current = tableApi.getData() || [];
-            (_b = (_a = gridApi.gridProps) === null || _a === void 0 ? void 0 : _a.onDataSetChange) === null || _b === void 0 ? void 0 : _b.call(_a, dataSetRef.current, gridApi);
-            if (updateActiveRow && clonedRows[0])
-                gridApi.setActiveRowKey(clonedRows[0].id, true, 'center');
-            tableApi.setTableBodyFocus();
-        };
-        if (!((_a = tableApi.getData()) === null || _a === void 0 ? void 0 : _a.length))
-            tableApi.addData([]).then(() => addData());
-        else
-            addData();
+        const _rows = HelpersObjects.isArray(rows) ? [...rows] : [rows];
+        for (const row of _rows) {
+            if (!dataTree)
+                tableApi.addData([row], above, key).then();
+            else
+                addTreeRows(gridApi, [row], place, key);
+        }
+        dataSetRef.current = tableApi.getData() || [];
+        (_b = (_a = gridApi.gridProps).onDataChanged) === null || _b === void 0 ? void 0 : _b.call(_a, dataSetRef.current, gridApi);
+        if (updateActiveRow && _rows[0])
+            gridApi.setActiveRowKey(_rows[0].id, true, 'center');
+        tableApi.setTableBodyFocus();
     }, [dataSetRef, gridApi]);
 };
 const useApiUpdateRows = (dataSetRef, gridApi) => {
@@ -216,17 +214,17 @@ const useApiUpdateRows = (dataSetRef, gridApi) => {
         if (!gridApi.tableApi)
             return;
         const dataTree = gridApi.gridProps.dataTree;
-        const clonedRows = HelpersObjects.isArray(rows) ? [...rows] : [rows];
-        for (const row of clonedRows) {
+        const _rows = HelpersObjects.isArray(rows) ? [...rows] : [rows];
+        for (const row of _rows) {
             if (!dataTree)
                 gridApi.tableApi.updateData([row]).then();
             else
                 updateTreeRows(gridApi, row);
         }
         dataSetRef.current = ((_a = gridApi.tableApi) === null || _a === void 0 ? void 0 : _a.getData()) || [];
-        (_c = (_b = gridApi.gridProps) === null || _b === void 0 ? void 0 : _b.onDataSetChange) === null || _c === void 0 ? void 0 : _c.call(_b, dataSetRef.current, gridApi);
-        if (updateActiveRow && clonedRows[0])
-            gridApi.setActiveRowKey(clonedRows[0].id, true, 'center');
+        (_c = (_b = gridApi.gridProps).onDataChanged) === null || _c === void 0 ? void 0 : _c.call(_b, dataSetRef.current, gridApi);
+        if (updateActiveRow && _rows[0])
+            gridApi.setActiveRowKey(_rows[0].id, true, 'center');
         gridApi.tableApi.setTableBodyFocus();
     }, [dataSetRef, gridApi]);
 };
@@ -317,15 +315,16 @@ const cascadeNodeExpand = (node) => {
 };
 const useApiRemoveRowsByKeys = (dataSetRef, gridApi) => {
     return useCallback((keys) => {
-        var _a, _b, _c, _d;
-        if (!gridApi.tableApi)
+        var _a, _b, _c;
+        const table = gridApi.tableApi;
+        if (!table)
             return;
-        const indexField = gridApi.tableApi.options.index;
-        const clonedKeys = HelpersObjects.isArray(keys) ? [...keys] : [keys];
+        const indexField = table.options.index;
+        const _keys = HelpersObjects.isArray(keys) ? [...keys] : [keys];
         let newActiveNode = false;
         let newActiveNodeCandidate = false;
-        for (const key of clonedKeys) {
-            const node = (_a = gridApi.tableApi) === null || _a === void 0 ? void 0 : _a.getRow(key);
+        for (const key of _keys) {
+            const node = table.getRow(key);
             if (!node)
                 continue;
             if (newActiveNode && node === newActiveNode)
@@ -333,18 +332,18 @@ const useApiRemoveRowsByKeys = (dataSetRef, gridApi) => {
             newActiveNodeCandidate = node.getNextRow() || node.getPrevRow();
             if (newActiveNodeCandidate)
                 newActiveNode = newActiveNodeCandidate;
-            const parentNode = gridApi.tableApi.options.dataTree ? node.getTreeParent() : false;
-            gridApi.tableApi.deselectRow(node);
-            gridApi.tableApi.deleteRow(key);
+            const parentNode = table.options.dataTree ? node.getTreeParent() : false;
+            table.deselectRow(node);
+            table.deleteRow(key);
             if (parentNode)
                 parentNode.reformat();
         }
         if (newActiveNode && indexField)
-            newActiveNode = gridApi.tableApi.getRow(newActiveNode.getData()[indexField]);
-        gridApi.tableApi.setActiveRow(newActiveNode || null, true, 'bottom');
-        dataSetRef.current = ((_b = gridApi.tableApi) === null || _b === void 0 ? void 0 : _b.getData()) || [];
-        (_d = (_c = gridApi.gridProps) === null || _c === void 0 ? void 0 : _c.onDataSetChange) === null || _d === void 0 ? void 0 : _d.call(_c, dataSetRef.current, gridApi);
-        gridApi.tableApi.setTableBodyFocus();
+            newActiveNode = table.getRow(newActiveNode.getData()[indexField]);
+        table.setActiveRow(newActiveNode || null, true, 'bottom');
+        dataSetRef.current = (_a = table === null || table === void 0 ? void 0 : table.getData()) !== null && _a !== void 0 ? _a : [];
+        (_c = (_b = gridApi.gridProps).onDataChanged) === null || _c === void 0 ? void 0 : _c.call(_b, dataSetRef.current, gridApi);
+        table.setTableBodyFocus();
     }, [dataSetRef, gridApi]);
 };
 const useApiRemoveRows = (gridApi) => {
@@ -408,19 +407,33 @@ const useApiDeleteRows = (gridApi) => {
     }, [gridApi]);
 };
 const useApiFetchData = (gridApi) => {
-    return useCallback((params, dataSource) => {
-        var _a, _b;
-        if (!gridApi.tableApi)
+    return useCallback((dataFetchHandler, params) => {
+        const table = gridApi.tableApi;
+        if (!table)
             return;
-        if (dataSource) {
-            (_a = BaseFetchHandler(gridApi, dataSource)) === null || _a === void 0 ? void 0 : _a.then(value => {
-                var _a;
-                (_a = gridApi.tableApi) === null || _a === void 0 ? void 0 : _a.setData(value.data);
-            });
-            return;
-        }
-        gridApi.tableApi.modules.page.dataChanging = true;
-        (_b = gridApi.tableApi) === null || _b === void 0 ? void 0 : _b.setData(undefined, params);
+        table.modules.page.dataChanging = true;
+        table.modules.ajax.setUrl('-');
+        if (dataFetchHandler)
+            table.modules.ajax.loaderPromise = GenerateAjaxRequestFunc(gridApi, dataFetchHandler, params);
+        table.setData(undefined, params).then();
+    }, [gridApi]);
+};
+const useSetCurrentDataFetchHandler = (curDataFetchHandler, curDataFetchParams) => {
+    return useCallback((dataFetchFunc, params) => {
+        curDataFetchHandler.current = dataFetchFunc;
+        curDataFetchParams.current = params;
+    }, [curDataFetchHandler, curDataFetchParams]);
+};
+const useGetCurrentDataFetchHandler = (curDataFetchFunc, curDataFetchParams) => {
+    return useCallback(() => {
+        return [curDataFetchFunc.current, curDataFetchParams.current];
+    }, [curDataFetchFunc, curDataFetchParams]);
+};
+const useApiRetryFetchData = (gridApi) => {
+    return useCallback(() => {
+        const [currentDataFetchHandler, currentFetchParams] = gridApi.getCurrentDataFetchHandler();
+        if (currentDataFetchHandler)
+            gridApi.fetchData(currentDataFetchHandler, currentFetchParams);
     }, [gridApi]);
 };
 const useApiGetRowData = (gridApi) => {

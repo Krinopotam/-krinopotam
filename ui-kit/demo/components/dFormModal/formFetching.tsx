@@ -28,7 +28,7 @@ const formProps: IDFormModalProps = {
     buttons: FormLayoutSwitch(formApi),
 }
 
-export const ModalFormFetching = (): React.JSX.Element => {
+export const FormFetching = (): React.JSX.Element => {
     const onClick = useCallback(() => {
         formApi.open('update');
     }, []);
@@ -36,16 +36,16 @@ export const ModalFormFetching = (): React.JSX.Element => {
     return (
         <>
             {/*Description Start*/}
-            <h1>Пример загрузки данных при открытии формы</h1>
-            <p>Для обеспечения загрузки необходимо в калбэк onDataFetch передать функцию, возвращающую Promise, который при успешном ответе сервера (resolve) возвращает объект вида:</p>
+            <h1>Example of loading data when opening a form</h1>
+            <p>To ensure loading, you need to pass a function to the onDataFetch callback that returns a Promise, which, if the server responds successfully (resolve), returns an object of the form:</p>
             <code>{`data:{имя_поля1: "значение", имя_поля2: "значение 2"...}`}</code>
-            <p>а при ошибке (reject)</p>
+            <p>and if there is an error (reject)</p>
             <code>{`error:{message: string, code: number}`}</code>
-            <p>Для примера, вероятность сбоя при загрузке 50%</p>
+            <p>For example, the probability of failure during loading is 50%</p>
             <p></p>
             {/*Description End*/}
             <div style={{maxWidth: 500}}>
-                <Button onClick={onClick}>Открыть форму</Button>
+                <Button onClick={onClick}>Open form</Button>
                 <DFormModal {...formProps} />
             </div>
         </>

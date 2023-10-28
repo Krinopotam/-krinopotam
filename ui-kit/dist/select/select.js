@@ -6,8 +6,6 @@ export const Select = (props) => {
     const antdSelectProps = useSplitAntTreeSelectProps(props);
     const option = useGetOptions(props);
     const value = useConvertToBaseVal(props, props.value);
-    console.log('value', value);
-    console.log('option', option);
     return (React.createElement(AntdSelect, Object.assign({}, antdSelectProps, { options: option, value: value, disabled: props.disabled || props.readOnly, optionFilterProp: (_a = props.optionFilterProp) !== null && _a !== void 0 ? _a : 'label', showSearch: props.showSearch !== false, onSelect: (value, option) => { var _a; return (_a = props.onSelect) === null || _a === void 0 ? void 0 : _a.call(props, value, option); }, onDeselect: (value, option) => { var _a; return (_a = props.onDeselect) === null || _a === void 0 ? void 0 : _a.call(props, value, option); }, onChange: (value, option) => { var _a; return (_a = props.onChange) === null || _a === void 0 ? void 0 : _a.call(props, value, option); } }), props.children));
 };
 const useGetOptions = (props) => {

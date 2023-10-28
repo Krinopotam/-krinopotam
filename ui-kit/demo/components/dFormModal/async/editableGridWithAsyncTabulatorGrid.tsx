@@ -3,12 +3,12 @@ import {IGridProps, TabulatorGrid} from '@src/tabulatorGrid';
 import {IDFormModalApi, IDFormModalProps} from '@src/dFormModal';
 import {ITabulatorGridFieldProps, TabulatorGridField} from '@src/dForm/fields/tabulatorGrid/tabulatorGridField';
 import {TabulatorBaseColumns, TabulatorBaseColumnsDef, TabulatorPlainData} from '../../../data/tabulatorData';
-import {FormLayoutSwitch} from "../../../common/buttonsProps";
+import {FormLayoutSwitch} from '../../../common/buttonsProps';
 
 const editFormApi = {} as IDFormModalApi;
 
 const editFormProps: IDFormModalProps = {
-    apiRef:editFormApi,
+    apiRef: editFormApi,
     confirmChanges: true,
     bodyHeight: 400,
     width: 600,
@@ -18,11 +18,11 @@ const editFormProps: IDFormModalProps = {
             columnDefaults: TabulatorBaseColumnsDef,
             columns: [{title: 'Name', field: 'name', headerFilter: true}],
             headerFilterHidden: true,
-            autoHeightResize:true,
+            autoHeightResize: true,
             height: '100%',
             resizeHeightWithForm: true,
             layout: 'fitColumns',
-            onDataFetch: (params, gridApi,field) => {
+            onDataFetch: (params, gridApi, field) => {
                 console.log('form data set', field.getModel().getFormDataSet());
                 console.log('params', params);
                 return new Promise((resolve, reject) => {
@@ -49,6 +49,13 @@ const mainGridProps: IGridProps = {
     height: '100%',
     buttons: {title: {type: 'element', title: <b style={{fontSize: 18}}>Системы</b>, position: 'left'}},
 };
-export const AsyncTabulatorField = (): React.JSX.Element => {
-    return <TabulatorGrid {...mainGridProps} />;
+export const EditableGridWithAsyncTabulatorGrid = (): React.JSX.Element => {
+    return (
+        <>
+            {/*Description Start*/}
+            <h1>An example of an editable TabulatorGrid, on the editing form of which there is another asynchronous TabulatorGrid</h1>
+            {/*Description End*/}
+            <TabulatorGrid {...mainGridProps} />;
+        </>
+    );
 };

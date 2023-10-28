@@ -25,13 +25,24 @@ export const InlineGroupRender = ({ field }) => {
     let groupLabel = '';
     if (formProps.layout === 'horizontal')
         groupLabel = groupName !== null && groupName !== void 0 ? groupName : firstField === null || firstField === void 0 ? void 0 : firstField.getLabel();
-    let defStyle = {};
-    if (fieldProps.width) {
-        defStyle = { width: fieldProps.width, margin: 0 };
-    }
-    const groupStyle = Object.assign(Object.assign({}, defStyle), fieldProps.style);
-    return (React.createElement(Animate, { component: "", transitionName: "zoom" }, !isHidden ? (React.createElement(Form.Item, { label: groupLabel, style: groupStyle },
-        React.createElement("div", { style: { display: 'inline-flex', gap: '24px', alignItems: 'center', width: '100%' } }, Object.keys(childFields).map(fieldName => {
+    const defStyle = { margin: 0, marginBottom: 0 };
+    if (fieldProps.width)
+        defStyle.width = fieldProps.width;
+    if (fieldProps.autoHeightResize)
+        defStyle.height = '100%';
+    const groupItemStyle = Object.assign(Object.assign({}, defStyle), fieldProps.style);
+    const groupContainerStyle = {
+        display: 'flex',
+        flexDirection: 'row',
+        flexWrap: 'nowrap',
+        gap: '24px',
+        alignItems: 'top',
+        width: '100%',
+    };
+    if (fieldProps.autoHeightResize)
+        groupContainerStyle.height = '100%';
+    return (React.createElement(Animate, { component: "", transitionName: "zoom" }, !isHidden ? (React.createElement(Form.Item, { label: groupLabel, style: groupItemStyle },
+        React.createElement("div", { style: groupContainerStyle }, Object.keys(childFields).map(fieldName => {
             const childField = childFields[fieldName];
             const childProps = childField.getProps();
             if (childField.isHidden())

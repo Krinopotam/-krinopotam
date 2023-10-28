@@ -31,6 +31,8 @@ const formProps: IDFormModalProps = {
     apiRef: formApi,
     confirmChanges: true,
     arrowsButtonsSelection: true,
+    bodyHeight:500,
+    width:750,
     fieldsProps: {
         login: {
             component: InputField,
@@ -56,7 +58,7 @@ const formProps: IDFormModalProps = {
     buttons: FormLayoutSwitch(formApi),
 };
 
-export const WithAutoHeightTabulator = (): React.JSX.Element => {
+export const AutoHeightTabulator = (): React.JSX.Element => {
     const onClick = useCallback(() => {
         formApi.open('create');
     }, []);
@@ -67,7 +69,7 @@ export const WithAutoHeightTabulator = (): React.JSX.Element => {
             <h1>Example of a form with a TabulatorGrid type field with automatic height</h1>
             {/*Description End*/}
             <div style={{maxWidth: 500}}>
-                <Button onClick={onClick}>Открыть форму</Button>
+                <Button onClick={onClick}>Open form</Button>
                 <DFormModal {...formProps} />
             </div>
         </>

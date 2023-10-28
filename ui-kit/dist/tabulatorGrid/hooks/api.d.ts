@@ -1,7 +1,7 @@
 import React, { MutableRefObject } from 'react';
 import { IDFormModalApi } from '../../dFormModal';
 import { IButtonsRowApi } from '../../buttonsRow/buttonsRow';
-import { IGridDataSourcePromise, IGridProps, IGridRowData } from '../tabulatorGrid';
+import { IGridProps, IGridRowData } from '../tabulatorGrid';
 import { RowComponent, ScrollToRowPosition, TabulatorFull as Tabulator } from 'tabulator-tables';
 import { ITabulator } from '../../tabulatorBase';
 type IRowKey = IGridRowData['id'];
@@ -38,7 +38,10 @@ export interface IGridApi {
     buttonsApi: IButtonsRowApi & {
         refreshButtons: () => void;
     };
-    fetchData: (params?: Record<string, unknown>, dataSource?: IGridDataSourcePromise) => void;
+    fetchData: (onDataFetch?: IGridProps['onDataFetch'], params?: Record<string, unknown>) => void;
+    retryFetchData: () => void;
+    setCurrentDataFetchHandler: (dataFetchHandler: IGridProps['onDataFetch'], params?: Record<string, unknown>) => void;
+    getCurrentDataFetchHandler: () => [IGridProps['onDataFetch'], Record<string, unknown> | undefined];
 }
 export declare const useInitGridApi: ({ gridApi, props, tableRef, editFormApi, buttonsApi, openColumnsDialog, }: {
     gridApi: IGridApi;

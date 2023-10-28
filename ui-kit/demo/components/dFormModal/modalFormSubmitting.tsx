@@ -46,7 +46,7 @@ export const ModalFormSubmitting = (): React.JSX.Element => {
             <p></p>
             {/*Description End*/}
             <div style={{maxWidth: 500}}>
-                <Button onClick={onClick}>Открыть форму</Button>
+                <Button onClick={onClick}>Open form</Button>
                 <DFormModal {...formProps} />
             </div>
         </>

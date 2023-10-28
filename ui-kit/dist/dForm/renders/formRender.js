@@ -16,7 +16,7 @@ export const FormRender = ({ formProps, formApi, formButtons }) => {
             React.createElement(ButtonsRowWrapper, null,
                 React.createElement(Form, { colon: false, className: formProps.className, name: model.getFormId(), labelCol: labelCol, wrapperCol: wrapperCol, autoComplete: "off", labelAlign: formProps.labelAlign, layout: formProps.layout === 'horizontal' ? 'horizontal' : 'vertical', requiredMark: formProps.requiredMark, style: formProps.formStyle },
                     React.createElement(FormInit, { model: model }),
-                    React.createElement(FieldsRender, { fields: model.getRootFields() }),
+                    React.createElement(FieldsRender, { fields: model.getRootFields(), formProps: formProps }),
                     React.createElement(ButtonsRender, { buttons: formButtons, colorType: formProps.colorType, buttonsApi: formApi.buttonsApi, arrowsSelection: formProps.arrowsButtonsSelection, context: formApi }))))));
 };
 const FormInit = ({ model }) => {

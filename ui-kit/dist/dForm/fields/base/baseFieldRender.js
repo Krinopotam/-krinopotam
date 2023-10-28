@@ -8,7 +8,7 @@ export const BaseFieldRender = ({ field, altLabel, children }) => {
     useSyncExternalStore(field.subscribe.bind(field), field.getSnapshot.bind(field));
     const error = field.getError();
     const fieldHidden = field.isHidden();
-    const style = Object.assign({ flexGrow: fieldProps.width ? 0 : 1, flexShrink: fieldProps.width ? 0 : 1, flexBasis: fieldProps.width ? undefined : 0 }, fieldProps.rowStyle);
+    const style = Object.assign({ height: '100%' }, fieldProps.rowStyle);
     let emptyLabel = undefined;
     if (formProps.layout === 'horizontal')
         emptyLabel = ' ';

@@ -3,9 +3,10 @@ import { useInitGridApi } from './hooks/api';
 import { ContainerRender } from './renders/containerRender';
 import { HelpersObjects } from '@krinopotam/js-helpers';
 export const TabulatorGrid = (props) => {
+    var _a, _b;
     const tabulatorProps = useSplitTabulatorProps(props);
     const tableRef = useRef();
-    const [editFormApi] = useState({});
+    const [editFormApi] = useState(((_b = (_a = props.editFormProps) === null || _a === void 0 ? void 0 : _a.apiRef) !== null && _b !== void 0 ? _b : {}));
     const [buttonsApi] = useState({});
     const [gridApi] = useState((props.apiRef || {}));
     const [columnsDialog, openColumnsDialog] = useState(false);
@@ -32,12 +33,12 @@ const useSplitTabulatorProps = (props) => {
             confirmDelete: true,
             placeholder: true,
             onMenuVisibilityChanged: true,
+            onDataLoading: true,
+            onDataLoadError: true,
             onDataLoaded: true,
-            onDataSetChange: true,
+            onDataChanged: true,
             onDataFetch: true,
-            onDataFetchSuccess: true,
-            onDataFetchError: true,
-            onDataFetchCompleted: true,
+            onDataFetchResponse: true,
             onSelectionChange: true,
             onDelete: true,
             resizeHeightWithParent: true,

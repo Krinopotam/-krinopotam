@@ -59,14 +59,14 @@ const formProps: IDFormModalProps = {
     buttons: FormLayoutSwitch(formApi),
 };
 
-export const ModalFormWithSeveralTabs = (): React.JSX.Element => {
+export const SeveralTabs = (): React.JSX.Element => {
     const onClick = useCallback(() => {
         formApi.open('create');
     }, []);
 
     return (
         <div style={{maxWidth: 500}}>
-            <Button onClick={onClick}>Открыть форму</Button>
+            <Button onClick={onClick}>Open form</Button>
             <DFormModal {...formProps} />
         </div>
     );

@@ -15,6 +15,7 @@ export interface IBaseFieldProps<TField extends IBaseField> extends Record<strin
     readOnly?: boolean;
     dependsOn?: string[];
     width?: string | number;
+    autoHeightResize?: boolean;
     autoFocus?: boolean;
     requiredMark?: boolean;
     tooltip?: LabelTooltipType;

@@ -10,6 +10,7 @@ import { FormLabelAlign } from "antd/es/form/interface";
 import { RequiredMark } from "antd/es/form/Form";
 import { IColorType } from "../button/button";
 import { IDFormFieldsProps } from "../dForm/index";
+import './css/dForm.scss';
 export interface IDFormProps extends IDFormCallbacks {
     apiRef?: unknown;
     formId?: string;

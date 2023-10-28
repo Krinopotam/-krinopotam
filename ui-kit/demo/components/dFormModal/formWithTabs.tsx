@@ -18,13 +18,13 @@ const formProps: IDFormModalProps = {
         tabs: {
             component: TabsField,
             tabs: {
-                ' Входы ': {
-                    nameIn: {component: InputField, label: 'Имя входящего', inlineGroup: 'row1'},
-                    dateIn: {component: DateTimeField, label: 'Дата входа', inlineGroup: 'row1', width: 150},
+                ' Inbound ': {
+                    nameIn: {component: InputField, label: 'Inbound Name', inlineGroup: 'row1'},
+                    dateIn: {component: DateTimeField, label: 'Inbound Date', inlineGroup: 'row1', width: 150},
                 },
-                ' Выходы ': {
-                    nameOut: {component: InputField, label: 'Имя выходящего', inlineGroup: 'row2'},
-                    dateOut: {component: DateTimeField, label: 'Дата выхода', inlineGroup: 'row2', width: 150},
+                ' Outbound ': {
+                    nameOut: {component: InputField, label: 'Outbound Name', inlineGroup: 'row2'},
+                    dateOut: {component: DateTimeField, label: 'Outbound Date', inlineGroup: 'row2', width: 150},
                 },
             },
         },
@@ -33,14 +33,14 @@ const formProps: IDFormModalProps = {
     buttons: FormLayoutSwitch(formApi),
 };
 
-export const ModalFormWithTabs = (): React.JSX.Element => {
+export const FormWithTabs = (): React.JSX.Element => {
     const onClick = useCallback(() => {
         formApi.open('create');
     }, []);
 
     return (
         <div style={{maxWidth: 500}}>
-            <Button onClick={onClick}>Открыть форму</Button>
+            <Button onClick={onClick}>Open form</Button>
             <DFormModal {...formProps} />
         </div>
     );

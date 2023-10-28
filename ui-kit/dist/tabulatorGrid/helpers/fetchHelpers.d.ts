@@ -1,2 +1,3 @@
-import { IGridApi, IGridDataSourcePromise } from '../../tabulatorGrid';
-export declare const BaseFetchHandler: (gridApi: IGridApi, dataSource: IGridDataSourcePromise | undefined, params?: Record<string, unknown>) => IGridDataSourcePromise | undefined;
+import { IGridApi, IGridProps } from '../../tabulatorGrid';
+import { IAjaxConfig, IRequestProps } from '../../tabulatorBase';
+export declare const GenerateAjaxRequestFunc: (gridApi: IGridApi, dataFetchCallback: IGridProps['onDataFetch'], extraParams?: Record<string, unknown>) => ((url: string, config: IAjaxConfig, params: IRequestProps) => Promise<unknown>) | undefined;

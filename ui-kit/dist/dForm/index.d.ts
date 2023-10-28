@@ -54,7 +54,7 @@ export type { ISwitchFieldProps } from './fields/switch/switchField';
 export { TabsField } from './fields/tabs/tabsField';
 export type { ITabsFieldProps } from './fields/tabs/tabsField';
 export { TabulatorGridField } from './fields/tabulatorGrid/tabulatorGridField';
-export type { ITabulatorGridFieldProps, ITabulatorGridFieldOnlyProps } from './fields/tabulatorGrid/tabulatorGridField';
+export type { ITabulatorGridFieldProps, ITabulatorGridFieldPropsBase } from './fields/tabulatorGrid/tabulatorGridField';
 export { TextAreaField } from './fields/textArea/textAreaField';
 export type { ITextAreaFieldProps } from './fields/textArea/textAreaField';
 export { TreeSelectField } from './fields/treeSelect/treeSelectField';

@@ -8,7 +8,7 @@ export interface IGridRowData extends Record<string, unknown> {
     id: string | number;
     children?: IGridRowData[];
 }
-export interface IGridProps_ {
+export interface IGridPropsBase {
     apiRef?: unknown;
     id?: string;
     gridMode?: 'local' | 'remote';
@@ -25,17 +25,19 @@ export interface IGridProps_ {
     confirmDelete?: boolean;
     placeholder?: string;
     resizeHeightWithParent?: string;
+}
+export interface IGridPropsCallbacks {
     onMenuVisibilityChanged?: (isVisible: boolean, gridApi: IGridApi) => void;
+    onDataFetch?: (params: IRequestProps, gridApi: IGridApi) => IGridDataSourcePromise;
+    onDataFetchResponse?: (dataSet: IGridRowData[], params: IRequestProps, gridApi: IGridApi) => IGridRowData[];
+    onDataLoading?: (dataSet: IGridRowData[] | undefined, gridApi: IGridApi) => void;
     onDataLoaded?: (dataSet: IGridRowData[] | undefined, gridApi: IGridApi) => void;
-    onDataSetChange?: (dataSet: IGridRowData[] | undefined, gridApi: IGridApi) => IGridRowData[] | void;
-    onDataFetch?: (gridApi: IGridApi, params: IRequestProps) => IGridDataSourcePromise | undefined;
-    onDataFetchSuccess?: (dataSet: IGridRowData[] | undefined, gridApi: IGridApi) => void;
-    onDataFetchError?: (message: string, code: number, gridApi: IGridApi) => void;
-    onDataFetchCompleted?: (gridApi: IGridApi) => void;
+    onDataLoadError?: (message: string, code: number, gridApi: IGridApi) => void;
+    onDataChanged?: (dataSet: IGridRowData[] | undefined, gridApi: IGridApi) => void;
     onSelectionChange?: (keys: string[], selectedRows: IGridRowData[], gridApi: IGridApi) => void;
     onDelete?: (selectedRows: IGridRowData[], gridApi: IGridApi) => IGridDeletePromise | void | undefined;
 }
-export type IGridProps = IGridProps_ & Omit<ITabulatorProps, 'data' | 'ajaxURL'>;
+export type IGridProps = IGridPropsBase & IGridPropsCallbacks & Omit<ITabulatorProps, 'data' | 'ajaxURL' | 'ajaxRequestFunc' | 'ajaxResponse'>;
 export type IGridDataSourcePromise = TPromise<{
     data: IGridRowData[];
     last_page?: number;

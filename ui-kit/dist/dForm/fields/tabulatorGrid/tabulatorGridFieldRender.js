@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef, useState, useSyncExternalStore } from 'react';
+import React, { useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { TabulatorGrid } from '../../../tabulatorGrid';
 import { HelpersObjects } from '@krinopotam/js-helpers';
 export const TabulatorGridFieldRender = ({ field }) => {
@@ -14,56 +14,47 @@ export const TabulatorGridFieldRender = ({ field }) => {
         prevValueRef.current = value;
     }
     const curDataSet = prevDataSetRef.current;
-    const onDataSetChange = useCallback((dataSet, gridApi, field) => {
-        var _a;
-        if (field.isReady()) {
-            prevValueRef.current = dataSet;
-            field.setValue(dataSet !== null && dataSet !== void 0 ? dataSet : undefined);
-            field.setDirty(true);
-            field.setTouched(true);
-        }
-        return (_a = fieldProps.onDataSetChange) === null || _a === void 0 ? void 0 : _a.call(fieldProps, dataSet, gridApi, field);
-    }, [fieldProps]);
-    const onDataFetch = useCallback((gridApi, params, field) => {
-        var _a;
-        field.setReady(false);
-        return (_a = fieldProps.onDataFetch) === null || _a === void 0 ? void 0 : _a.call(fieldProps, gridApi, params, field);
-    }, [fieldProps]);
-    const onDataLoaded = useCallback((dataSet, gridApi, field) => {
-        var _a;
-        field.setReady(true);
-        return (_a = fieldProps.onDataLoaded) === null || _a === void 0 ? void 0 : _a.call(fieldProps, dataSet, gridApi, field);
-    }, [fieldProps]);
-    const onDataFetchError = useCallback((message, code, gridApi, field) => {
-        var _a;
-        field.setReady(false);
-        return (_a = fieldProps.onDataFetchError) === null || _a === void 0 ? void 0 : _a.call(fieldProps, message, code, gridApi, field);
-    }, [fieldProps]);
-    const onDataFetchCompleted = useCallback((gridApi, field) => {
-        var _a;
-        field.setReady(true);
-        return (_a = fieldProps.onDataFetchCompleted) === null || _a === void 0 ? void 0 : _a.call(fieldProps, gridApi, field);
-    }, [fieldProps]);
+    const callbacks = usePrepareCallbacks(field, fieldProps, prevValueRef);
+    let height = fieldProps.height;
+    const containerStyle = {};
+    if (fieldProps.autoHeightResize) {
+        containerStyle.position = 'absolute';
+        containerStyle.inset = 0;
+        height = '100%';
+    }
     return useMemo(() => {
-        return (React.createElement(TabulatorGrid, Object.assign({}, tabulatorProps, { apiRef: gridApi, dataSet: curDataSet, readOnly: fieldProps.readOnly, placeholder: fieldProps.placeholder, width: fieldProps.width, resizeHeightWithParent: fieldProps.resizeHeightWithForm ? '#' + field.getModel().getFormId() : fieldProps.resizeHeightWithParent, onMenuVisibilityChanged: (isVisible, gridApi) => { var _a; return (_a = fieldProps === null || fieldProps === void 0 ? void 0 : fieldProps.onMenuVisibilityChanged) === null || _a === void 0 ? void 0 : _a.call(fieldProps, isVisible, gridApi, field); }, onDataLoaded: (dataSet, gridApi) => onDataLoaded === null || onDataLoaded === void 0 ? void 0 : onDataLoaded(dataSet, gridApi, field), onDataSetChange: (dataSet, gridApi) => onDataSetChange === null || onDataSetChange === void 0 ? void 0 : onDataSetChange(dataSet, gridApi, field), onDataFetch: (gridApi, params) => onDataFetch === null || onDataFetch === void 0 ? void 0 : onDataFetch(gridApi, params, field), onDataFetchSuccess: (dataSet, gridApi) => { var _a; return (_a = fieldProps.onDataFetchSuccess) === null || _a === void 0 ? void 0 : _a.call(fieldProps, dataSet, gridApi, field); }, onDataFetchError: (message, code, gridApi) => onDataFetchError === null || onDataFetchError === void 0 ? void 0 : onDataFetchError(message, code, gridApi, field), onDataFetchCompleted: gridApi => onDataFetchCompleted === null || onDataFetchCompleted === void 0 ? void 0 : onDataFetchCompleted(gridApi, field), onSelectionChange: (keys, selectedRows, gridApi) => { var _a; return (_a = fieldProps === null || fieldProps === void 0 ? void 0 : fieldProps.onSelectionChange) === null || _a === void 0 ? void 0 : _a.call(fieldProps, keys, selectedRows, gridApi, field); }, onDelete: (selectedRows, gridApi) => { var _a; return (_a = fieldProps === null || fieldProps === void 0 ? void 0 : fieldProps.onDelete) === null || _a === void 0 ? void 0 : _a.call(fieldProps, selectedRows, gridApi, field); } })));
-    }, [tabulatorProps, gridApi, curDataSet, fieldProps, field, onDataLoaded, onDataSetChange, onDataFetch, onDataFetchError, onDataFetchCompleted]);
+        return (React.createElement("div", { style: containerStyle },
+            React.createElement(TabulatorGrid, Object.assign({}, tabulatorProps, callbacks, { apiRef: gridApi, dataSet: curDataSet, readOnly: fieldProps.readOnly, placeholder: fieldProps.placeholder, width: fieldProps.width, height: height, resizeHeightWithParent: fieldProps.resizeHeightWithForm ? '#' + field.getModel().getFormId() : fieldProps.resizeHeightWithParent }))));
+    }, [
+        tabulatorProps,
+        callbacks,
+        gridApi,
+        curDataSet,
+        fieldProps.readOnly,
+        fieldProps.placeholder,
+        fieldProps.width,
+        fieldProps.resizeHeightWithForm,
+        fieldProps.resizeHeightWithParent,
+        field,
+    ]);
 };
 const useSplitTabulatorProps = (props) => {
     return useMemo(() => {
         const result = HelpersObjects.splitObject(props, {
             value: true,
             onMenuVisibilityChanged: true,
+            onDataLoading: true,
             onDataLoaded: true,
-            onDataSetChange: true,
-            onDataFetch: true,
-            onDataFetchSuccess: true,
-            onDataFetchError: true,
-            onDataFetchCompleted: true,
+            onDataLoadError: true,
+            onDataChanged: true,
+            onDataFetchHandler: true,
+            onDataFetchResponse: true,
             onSelectionChange: true,
             onDelete: true,
             readOnly: true,
             onValueChanged: true,
             width: true,
+            autoHeightResize: true,
             component: true,
             rules: true,
             onReadyStateChanged: true,
@@ -91,4 +82,44 @@ const useSplitTabulatorProps = (props) => {
         });
         return result[1];
     }, [props]);
+};
+const usePrepareCallbacks = (field, fieldProps, prevValueRef) => {
+    return useMemo(() => {
+        return {
+            onDataChanged: (dataSet, gridApi, field) => {
+                var _a;
+                if (field.isReady()) {
+                    prevValueRef.current = dataSet;
+                    field.setValue(dataSet !== null && dataSet !== void 0 ? dataSet : undefined);
+                    field.setDirty(true);
+                    field.setTouched(true);
+                }
+                return (_a = fieldProps.onDataChanged) === null || _a === void 0 ? void 0 : _a.call(fieldProps, dataSet, gridApi, field);
+            },
+            onDataLoading: (dataSet, gridApi) => {
+                var _a;
+                field.setReady(false);
+                return (_a = fieldProps.onDataLoading) === null || _a === void 0 ? void 0 : _a.call(fieldProps, dataSet, gridApi, field);
+            },
+            onDataLoaded: (dataSet, gridApi) => {
+                var _a;
+                field.setReady(true);
+                return (_a = fieldProps.onDataLoaded) === null || _a === void 0 ? void 0 : _a.call(fieldProps, dataSet, gridApi, field);
+            },
+            onDataLoadError: (message, code, gridApi) => {
+                var _a;
+                field.setReady(false);
+                return (_a = fieldProps.onDataLoadError) === null || _a === void 0 ? void 0 : _a.call(fieldProps, message, code, gridApi, field);
+            },
+            onDataFetch: !fieldProps.onDataFetch
+                ? undefined
+                : (params, gridApi) => {
+                    return fieldProps.onDataFetch(params, gridApi, field);
+                },
+            onDataFetchResponse: (dataSet, params, gridApi) => { var _a, _b; return (_b = (_a = fieldProps === null || fieldProps === void 0 ? void 0 : fieldProps.onDataFetchResponse) === null || _a === void 0 ? void 0 : _a.call(fieldProps, dataSet, params, gridApi, field)) !== null && _b !== void 0 ? _b : dataSet; },
+            onSelectionChange: (keys, selectedRows, gridApi) => { var _a; return (_a = fieldProps === null || fieldProps === void 0 ? void 0 : fieldProps.onSelectionChange) === null || _a === void 0 ? void 0 : _a.call(fieldProps, keys, selectedRows, gridApi, field); },
+            onMenuVisibilityChanged: (isVisible, gridApi) => { var _a; return (_a = fieldProps === null || fieldProps === void 0 ? void 0 : fieldProps.onMenuVisibilityChanged) === null || _a === void 0 ? void 0 : _a.call(fieldProps, isVisible, gridApi, field); },
+            onDelete: (selectedRows, gridApi) => { var _a; return (_a = fieldProps === null || fieldProps === void 0 ? void 0 : fieldProps.onDelete) === null || _a === void 0 ? void 0 : _a.call(fieldProps, selectedRows, gridApi, field); },
+        };
+    }, [field, fieldProps, prevValueRef]);
 };

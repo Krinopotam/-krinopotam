@@ -8,6 +8,7 @@ import { useModelCallbacks } from './hooks/callbacks';
 import { useGetButtons } from './hooks/buttons';
 import { useUpdateMessageBoxTheme } from '../messageBox';
 import { useGetActualProps } from '@krinopotam/common-hooks';
+import './css/dForm.scss';
 export const DForm = (props) => {
     var _a;
     useUpdateMessageBoxTheme();

@@ -7,7 +7,7 @@ export type { IButtonRowWrapperProps, IButtonRowWrapperContext, IButtonRowWrappe
 export { DatePicker, GetDatePickerFormat, GetDatePickerParams } from './datePicker';
 export type { IDatePickerProps } from './datePicker';
 export { BaseField, BaseValidator, CheckboxField, CustomField, DateTimeField, DForm, DividerField, DModel, InlineGroupField, InputField, LinkField, NumberField, PasswordField, QuillEditorField, SelectField, SwitchField, TabsField, TabulatorGridField, TextAreaField, TreeSelectField, UploadDraggerField, } from './dForm';
-export type { IAnyFieldProps, IBaseField, IBaseFieldProps, ICheckboxFieldProps, ICustomFieldProps, IDateTimeFieldProps, IDFormApi, IDFormBaseCallbacks, IDFormCallbacks, IDFormDataSet, IDFormDataSourcePromise, IDFormFieldProps, IDFormFieldsProps, IDFormMode, IDFormModelCallbacks, IDFormProps, IDFormSubmitResultObject, IDFormSubmitResultPromise, IDFormValidationRules, IDividerFieldProps, IInlineGroupProps, IInputFieldProps, ILinkFieldProps, INumberFieldProps, IPasswordFieldProps, IQuillEditorFieldProps, IRuleCustom, IRuleDate, IRuleFile, IRuleNumber, IRuleObject, IRuleString, IRuleType, ISelectFieldProps, ISwitchFieldProps, ITabsFieldProps, ITabulatorGridFieldOnlyProps, ITabulatorGridFieldProps, ITextAreaFieldProps, ITreeSelectFieldOnlyProps, ITreeSelectFieldProps, IUploadDraggerFieldProps, } from './dForm';
+export type { IAnyFieldProps, IBaseField, IBaseFieldProps, ICheckboxFieldProps, ICustomFieldProps, IDateTimeFieldProps, IDFormApi, IDFormBaseCallbacks, IDFormCallbacks, IDFormDataSet, IDFormDataSourcePromise, IDFormFieldProps, IDFormFieldsProps, IDFormMode, IDFormModelCallbacks, IDFormProps, IDFormSubmitResultObject, IDFormSubmitResultPromise, IDFormValidationRules, IDividerFieldProps, IInlineGroupProps, IInputFieldProps, ILinkFieldProps, INumberFieldProps, IPasswordFieldProps, IQuillEditorFieldProps, IRuleCustom, IRuleDate, IRuleFile, IRuleNumber, IRuleObject, IRuleString, IRuleType, ISelectFieldProps, ISwitchFieldProps, ITabsFieldProps, ITabulatorGridFieldPropsBase, ITabulatorGridFieldProps, ITextAreaFieldProps, ITreeSelectFieldOnlyProps, ITreeSelectFieldProps, IUploadDraggerFieldProps, } from './dForm';
 export { DFormModal } from './dFormModal';
 export type { IDFormModalApi, IDFormModalProps, IDModalProps, IDFormModalCallbacks } from './dFormModal';
 export { LoadingContainer } from './loadingContainer';
@@ -27,7 +27,7 @@ export type { ISelectBaseProps, ISelectNode, ISelectLabeledValue, ISelectProps, 
 export { TabulatorBase, DateTimeFormatter, DateTimeSorter } from './tabulatorBase';
 export type { ITabulator, ITabulatorRow, ITabulatorProps, ITabulatorFilterFunc, IRequestProps, IAjaxConfig, ITabulatorEvents, ITabulatorColumn, IDateTimeFormatterParams, IDateTimeSorterParams, } from './tabulatorBase';
 export { TabulatorGrid } from './tabulatorGrid';
-export type { IGridApi, IGridRowData, IGridDeletePromise, IGridDataSourcePromise, IGridProps } from './tabulatorGrid';
+export type { IGridApi, IGridRowData, IGridDeletePromise, IGridDataSourcePromise, IGridProps, IGridPropsBase, IGridPropsCallbacks } from './tabulatorGrid';
 export { TimePicker } from './timePicker';
 export type { ITimePickerProps } from './timePicker';
 export { TreeSelect } from './treeSelect';
