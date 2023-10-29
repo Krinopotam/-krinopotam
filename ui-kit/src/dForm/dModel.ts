@@ -641,7 +641,11 @@ export class DModel {
         }
 
         this.emitFormRender();
-        this._callbacks.onFormValidated?.(this.getFormValues(), this.getFormErrors(), this.isFormSubmitting(), this);
+
+        const formValues = this.getFormValues();
+        const dataSet = this.getFormDataSet();
+        const values = {...dataSet, ...formValues} // merge dataSet and values
+        this._callbacks.onFormValidated?.(values, this.getFormErrors(), this.isFormSubmitting(), this);
         return this.getFormErrors();
     }
 
@@ -760,7 +764,9 @@ export class DModel {
 
         this.setFormSubmitting(true);
 
-        const values = this.getFormValues();
+        const formValues = this.getFormValues();
+        const dataSet = this.getFormDataSet();
+        const values = {...dataSet, ...formValues} // merge dataSet and values
 
         if (this._formMode === 'create' || this._formMode === 'clone') values.id = '';
 
@@ -784,7 +790,7 @@ export class DModel {
             return;
         }
 
-        const result = this._callbacks?.onSubmit(this.getFormValues(), this);
+        const result = this._callbacks?.onSubmit(values, this);
 
         if (HelpersObjects.isPromise(result)) {
             const promiseResult = result as IDFormSubmitResultPromise;

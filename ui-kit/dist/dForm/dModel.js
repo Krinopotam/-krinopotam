@@ -326,7 +326,10 @@ export class DModel {
             field.validate(noEvents, noRerender);
         }
         this.emitFormRender();
-        (_b = (_a = this._callbacks).onFormValidated) === null || _b === void 0 ? void 0 : _b.call(_a, this.getFormValues(), this.getFormErrors(), this.isFormSubmitting(), this);
+        const formValues = this.getFormValues();
+        const dataSet = this.getFormDataSet();
+        const values = Object.assign(Object.assign({}, dataSet), formValues);
+        (_b = (_a = this._callbacks).onFormValidated) === null || _b === void 0 ? void 0 : _b.call(_a, values, this.getFormErrors(), this.isFormSubmitting(), this);
         return this.getFormErrors();
     }
     isFormSubmitting() {
@@ -405,7 +408,9 @@ export class DModel {
             return;
         this.incrementSubmitCount();
         this.setFormSubmitting(true);
-        const values = this.getFormValues();
+        const formValues = this.getFormValues();
+        const dataSet = this.getFormDataSet();
+        const values = Object.assign(Object.assign({}, dataSet), formValues);
         if (this._formMode === 'create' || this._formMode === 'clone')
             values.id = '';
         const errors = this.validateForm();
@@ -424,7 +429,7 @@ export class DModel {
             (_j = (_h = this._callbacks) === null || _h === void 0 ? void 0 : _h.onSubmitComplete) === null || _j === void 0 ? void 0 : _j.call(_h, values, errors, this);
             return;
         }
-        const result = (_k = this._callbacks) === null || _k === void 0 ? void 0 : _k.onSubmit(this.getFormValues(), this);
+        const result = (_k = this._callbacks) === null || _k === void 0 ? void 0 : _k.onSubmit(values, this);
         if (HelpersObjects.isPromise(result)) {
             const promiseResult = result;
             promiseResult
