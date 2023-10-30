@@ -215,7 +215,6 @@ export class DModel {
             formProps.formMode ?? 'create'
         );
 
-        //if (oldDataSet !== formProps.dataSet) this.setFormValues(formProps.dataSet, true, true);
         this._dataSet = formProps.dataSet;
 
         if (!formProps.disableDepended) this._hidden = this.calculateLockedFields();
@@ -318,6 +317,8 @@ export class DModel {
                 continue;
             }
 
+            if (!field.canHaveValue()) continue;
+
             let fieldValue: unknown = undefined;
             if (mode === 'create') fieldValue = fieldProps.value;
             else fieldValue = fieldProps.value ?? dataSet?.[fieldName];
@@ -375,7 +376,7 @@ export class DModel {
             if (
                 parentProps.hidden || //the field must be hidden because parent field must be hidden according field props
                 parentField.isHidden() || // the field must be hidden, because parent field is hidden
-                parentField.isEmptyValue() //the field must be hidden because parent field value is empty
+                (parentField.canHaveValue() && parentField.isEmptyValue()) //the field must be hidden because parent field value is empty
             )
                 return true;
 

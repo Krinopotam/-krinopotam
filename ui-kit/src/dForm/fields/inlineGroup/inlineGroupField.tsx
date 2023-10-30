@@ -1,7 +1,7 @@
 import {BaseField, IBaseFieldProps} from '@src/dForm/fields/base/baseField';
 import React from 'react';
 import {IDFormFieldsProps} from '@src/dForm';
-import {InlineGroupRender} from "@src/dForm/fields/inlineGroup/inlineGroupRender";
+import {InlineGroupRender} from '@src/dForm/fields/inlineGroup/inlineGroupRender';
 
 export interface IInlineGroupProps extends IBaseFieldProps<InlineGroupField> {
     /** Inline fields properties */
@@ -36,22 +36,27 @@ export class InlineGroupField extends BaseField<IInlineGroupProps> {
     getRootFields() {
         return this.rootFields;
     }
+
     //endregion
 
-     //region Field methods
+    //region Field methods
     /**
-     * Handling an erroneous TabField value get
+     * Handling an erroneous InlineGroup value get
      */
     getValue() {
-        console.warn("InlineGroupField can't have values");
         return undefined;
     }
 
     /**
-     * Handling an erroneous TabField value setting
+     * Handling an erroneous InlineGroup value setting
      */
     setValue() {
-        console.error("InlineGroupField can't have values");
+        /* field can't have value */
+    }
+
+    /** Is field can has value */
+    canHaveValue() {
+        return false;
     }
 
     /**
@@ -65,8 +70,8 @@ export class InlineGroupField extends BaseField<IInlineGroupProps> {
         if (prevValue === value) return;
 
         for (const fieldName in this.rootFields) {
-            const field = this.rootFields[fieldName]
-            field.setDisabled(value, noEvents, true) //current container will rerender, no field rerender need
+            const field = this.rootFields[fieldName];
+            field.setDisabled(value, noEvents, true); //current container will rerender, no field rerender need
         }
 
         super.setDisabled(value, noEvents, noRerender);
@@ -83,8 +88,8 @@ export class InlineGroupField extends BaseField<IInlineGroupProps> {
         if (prevValue === value) return;
 
         for (const fieldName in this.rootFields) {
-            const field = this.rootFields[fieldName]
-            field.setReadOnly(value, noEvents, true) //current container will rerender, no field rerender need
+            const field = this.rootFields[fieldName];
+            field.setReadOnly(value, noEvents, true); //current container will rerender, no field rerender need
         }
 
         super.setReadOnly(value, noEvents, noRerender);

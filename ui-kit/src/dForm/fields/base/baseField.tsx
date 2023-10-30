@@ -360,16 +360,8 @@ export class BaseField<TFieldProps extends IAnyFieldProps> {
 
         if (value) this.setReady(false, true); //the hidden fields are not ready because they are not rendered, but form ready status not changed
 
-        //let prevGroupValue = false;
-        //const fieldProps = this.getProps();
-        //if (fieldProps?.tab && fieldProps.inlineGroup) prevGroupValue = this.isGroupHidden(fieldProps.tab, fieldProps.inlineGroup);
-
         if (!noEvents) this.getProps()?.onHiddenStateChanged?.(value, this);
         if (!noRerender) this.model.emitFormRender(); //it is necessary to re-render the entire form, since hidden fields may change the behavior of containers
-
-        //if (!fieldProps?.tab || !fieldProps.inlineGroup) return;
-        //const curGroupValue = this.isGroupHidden(fieldProps.tab, fieldProps.inlineGroup);
-        //if (prevGroupValue !== curGroupValue) this.emitGroupRender(fieldProps.tab, fieldProps.inlineGroup);
     }
 
     /** @returns field ready status  */
@@ -492,6 +484,10 @@ export class BaseField<TFieldProps extends IAnyFieldProps> {
         );
     }
 
+    /** Is field can have value */
+    canHaveValue () {
+        return true;
+    }
     //endregion
 
     //region Field rerender implementation

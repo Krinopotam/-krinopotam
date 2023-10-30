@@ -100,6 +100,25 @@ export class TabsField extends BaseField<ITabsFieldProps> {
         return [this.fieldsMap, this.rootFields];
     }
 
+    /**
+     * Handling an erroneous TabsField value get
+     */
+    getValue() {
+        return undefined;
+    }
+
+    /**
+     * Handling an erroneous TabsField value setting
+     */
+    setValue() {
+        /* field can't have value */
+    }
+
+    /** Is field can have value */
+    canHaveValue() {
+        return false;
+    }
+
     protected render() {
         return <TabsFieldRender field={this} />;
     }

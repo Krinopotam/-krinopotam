@@ -9,33 +9,24 @@ const formProps: IDFormProps = {
     formId: 'Test form',
     confirmChanges: true,
     //disableDepended:true,
-    //layout:'horizontal',
     fieldsProps: {
-        //field1: {component: InputField, label: 'Field1'},
-        //field2: {component: InputField, label: 'Field2', dependsOn:['field1']},
-        field3: {component: InputField, label: 'Field3'},
-        field4: {component: InputField, label: 'Field4', inlineGroup:'row1', dependsOn:['field3']},
-        field5: {component: InputField, label: 'Field5', inlineGroup:'row1', dependsOn:['field4']},
+        field1: {component: InputField, label: 'Field1 (the field2 depends on it)'},
+        field2: {component: InputField, label: 'Field2 (the field3 depends on it)', inlineGroup:'row1', dependsOn:['field1']},
+        field3: {component: InputField, label: 'Field3 (the tab1 fields depends on it)', inlineGroup:'row1', dependsOn:['field2']},
         tabs: {
             component: TabsField,
             tabs: {
                 'Tab 1': {
-                    field1_1: {component: InputField, label: 'Field3', dependsOn:['field3']},
-                    field1_2: {component: InputField, label: 'Field4', dependsOn:['field3']},
-                    field1_3: {component: InputField, label: 'Field4', inlineGroup:'row2', dependsOn:['field1_1', 'field1_2']},
+                    tab_1_field1: {component: InputField, label: 'tab_1_field1', dependsOn:['field3']},
+                    tab_1_field2: {component: InputField, label: 'tab_1_field2', dependsOn:['field3']},
+                    tab_1_field3: {component: InputField, label: 'tab_1_field3', inlineGroup:'row2', dependsOn:['field3']},
                 },
-                'Tab 2': {
-                    field2_1: {component: InputField, label: 'Field5', showCount: true},
-                    field2_2: {component: InputField, label: 'Field6'},
+                'Tab 2 (independent) ': {
+                    tab_2_field1: {component: InputField, label: 'tab_2_field1 (independent )', showCount: true},
+                    tab_2_field2: {component: InputField, label: 'tab_2_field2 (independent )'},
                 },
             },
         },
-        /*        group1: {
-                    component:InlineGroupField, fieldsProps: {
-                        field1: {component: InputField, label: 'Field1' ,inlineGroup:'row1', rules: [{type: 'string', rule: 'not-empty', message: 'Поле не должно быть пустым'}]} ,
-                        field2: {component: InputField, label: 'Field2',inlineGroup:'row1'},
-                    },//label:'group1'
-                },*/
     },
 
     buttons: {ok: {position: 'right'}},
@@ -47,7 +38,7 @@ export const DependedFields = (): React.JSX.Element => {
             {/*Description Start*/}
             <h1>Пример простой формы с вертикальным расположением подписей полей1</h1>
             {/*Description End*/}
-            <div style={{maxWidth: 500}}>
+            <div style={{maxWidth: 600}}>
                 <DForm {...formProps} />
             </div>
         </>
