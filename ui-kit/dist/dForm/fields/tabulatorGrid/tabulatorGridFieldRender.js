@@ -92,7 +92,7 @@ const useSplitTabulatorProps = (props) => {
 const usePrepareCallbacks = (field, fieldProps, prevValueRef) => {
     return useMemo(() => {
         return {
-            onDataChanged: (dataSet, gridApi, field) => {
+            onDataChanged: (dataSet, gridApi) => {
                 var _a;
                 if (field.isReady()) {
                     prevValueRef.current = dataSet;

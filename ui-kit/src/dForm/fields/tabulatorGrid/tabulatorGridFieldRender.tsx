@@ -129,7 +129,7 @@ const usePrepareCallbacks = (
 ) => {
     return useMemo(() => {
         return {
-            onDataChanged: (dataSet: IGridRowData[] | undefined, gridApi: IGridApi, field: TabulatorGridField) => {
+            onDataChanged: (dataSet: IGridRowData[] | undefined, gridApi: IGridApi) => {
                 if (field.isReady()) {
                     prevValueRef.current = dataSet;
                     field.setValue(dataSet ?? undefined);

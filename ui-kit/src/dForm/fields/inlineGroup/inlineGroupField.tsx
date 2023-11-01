@@ -3,12 +3,12 @@ import React from 'react';
 import {IDFormFieldsProps} from '@src/dForm';
 import {InlineGroupRender} from '@src/dForm/fields/inlineGroup/inlineGroupRender';
 
-export interface IInlineGroupProps extends IBaseFieldProps<InlineGroupField> {
+export interface IInlineGroupFieldProps extends IBaseFieldProps<InlineGroupField> {
     /** Inline fields properties */
     fieldsProps: IDFormFieldsProps;
 }
 
-export class InlineGroupField extends BaseField<IInlineGroupProps> {
+export class InlineGroupField extends BaseField<IInlineGroupFieldProps> {
     initChildrenFields(): [InlineGroupField['fieldsMap'], InlineGroupField['rootFields']] {
         const groupProps = this.getProps();
         const fieldsProps = groupProps.fieldsProps;

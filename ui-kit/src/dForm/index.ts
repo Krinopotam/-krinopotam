@@ -1,7 +1,7 @@
 import {IAnyFieldProps} from '@src/dForm/fields/base/baseField';
 import {IInputFieldProps} from '@src/dForm/fields/input/inputField';
 import {ITabsFieldProps} from '@src/dForm/fields/tabs/tabsField';
-import {IInlineGroupProps} from '@src/dForm/fields/inlineGroup/inlineGroupField';
+import {IInlineGroupFieldProps} from '@src/dForm/fields/inlineGroup/inlineGroupField';
 import {IPasswordFieldProps} from '@src/dForm/fields/password/passwordField';
 import {ICustomFieldProps} from '@src/dForm/fields/custom/customField';
 import {IDateTimeFieldProps} from '@src/dForm/fields/dateTime/dateTimeField';
@@ -48,7 +48,7 @@ export {UploadDraggerField} from './fields/fileDrop/uploadDraggerField';
 export type {IUploadDraggerFieldProps} from './fields/fileDrop/uploadDraggerField';
 
 export {InlineGroupField} from './fields/inlineGroup/inlineGroupField';
-export type {IInlineGroupProps} from './fields/inlineGroup/inlineGroupField';
+export type {IInlineGroupFieldProps} from './fields/inlineGroup/inlineGroupField';
 
 export {InputField} from './fields/input/inputField';
 export type {IInputFieldProps} from './fields/input/inputField';
@@ -84,7 +84,7 @@ export {TreeSelectField} from './fields/treeSelect/treeSelectField';
 export type {ITreeSelectFieldProps, ITreeSelectFieldOnlyProps} from './fields/treeSelect/treeSelectField';
 
 export type IDFormFieldProps =
-    | IInlineGroupProps
+    | IInlineGroupFieldProps
     | ITabsFieldProps
     | IInputFieldProps
     | IPasswordFieldProps

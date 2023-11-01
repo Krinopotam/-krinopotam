@@ -67,7 +67,7 @@ export type {
     IDFormSubmitResultPromise,
     IDFormValidationRules,
     IDividerFieldProps,
-    IInlineGroupProps,
+    IInlineGroupFieldProps,
     IInputFieldProps,
     ILinkFieldProps,
     INumberFieldProps,

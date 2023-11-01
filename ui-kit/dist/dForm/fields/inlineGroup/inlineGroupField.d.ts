@@ -1,10 +1,10 @@
 import { BaseField, IBaseFieldProps } from '../../../dForm/fields/base/baseField';
 import React from 'react';
 import { IDFormFieldsProps } from '../../../dForm';
-export interface IInlineGroupProps extends IBaseFieldProps<InlineGroupField> {
+export interface IInlineGroupFieldProps extends IBaseFieldProps<InlineGroupField> {
     fieldsProps: IDFormFieldsProps;
 }
-export declare class InlineGroupField extends BaseField<IInlineGroupProps> {
+export declare class InlineGroupField extends BaseField<IInlineGroupFieldProps> {
     initChildrenFields(): [InlineGroupField['fieldsMap'], InlineGroupField['rootFields']];
     protected render(): React.JSX.Element;
     renderField(): React.ReactNode;
