@@ -52,6 +52,7 @@ const useApiValidateForm = (formApi) => {
 };
 const useApiSubmitForm = (formApi) => {
     return useCallback(() => {
+        var _a;
         formApi.model.incrementSubmitCount();
         const errors = formApi.validateForm(true);
         if (Object.keys(errors).length > 0)
@@ -63,7 +64,7 @@ const useApiSubmitForm = (formApi) => {
             return;
         }
         const waiter = MessageBox.confirmWaiter({
-            content: formProps.submitConfirmMessage || 'Сохранить сделанные изменения?',
+            content: (_a = formProps.submitConfirmMessage) !== null && _a !== void 0 ? _a : 'Сохранить сделанные изменения?',
             okText: 'Да',
             cancelText: 'Отмена',
             onOk: () => {

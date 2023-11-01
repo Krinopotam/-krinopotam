@@ -3,7 +3,7 @@
 import React, {useSyncExternalStore} from 'react';
 import Animate from 'rc-animate';
 import {Form} from 'antd';
-import {IBaseField} from './baseField';
+import {IBaseField} from '@src/dForm';
 
 export const BaseFieldRender = ({field, altLabel, children}: { field: IBaseField; altLabel?: React.ReactNode; children?: React.ReactNode }): React.JSX.Element => {
     const fieldProps = field.getProps();

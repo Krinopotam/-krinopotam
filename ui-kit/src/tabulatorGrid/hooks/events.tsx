@@ -14,14 +14,14 @@ export const useEvents = (gridApi: IGridApi, events: ITabulatorEvents | undefine
             dataLoading: data => {
                 events?.dataLoading?.(data);
                 gridApi.gridProps.onDataLoading?.(data, gridApi);
-                console.log('dataLoading')
+
                 if (!gridApi.gridProps.progressiveLoad) gridApi.setIsLoading(true);
             },
             dataLoaded: data => {
                 events?.dataLoaded?.(data);
                 gridApi.gridProps.onDataLoaded?.(data, gridApi);
                 if (!gridApi.getIsMounted()) return;
-                console.log('dataLoaded')
+
                 if (!gridApi.gridProps.progressiveLoad) gridApi.setIsLoading(false);
             },
             dataLoadError: error => {
@@ -29,14 +29,16 @@ export const useEvents = (gridApi: IGridApi, events: ITabulatorEvents | undefine
                 const err = error as unknown as {message: string; code: number};
                 gridApi.gridProps.onDataLoadError?.(err.message, err.code, gridApi);
 
-                console.log('dataLoadError', error);
-
                 if (!gridApi.getIsMounted()) return;
                 gridApi.setIsLoading(false);
                 const message = MessageBox.confirm({
                     content: (
                         <div>
-                            <p>{error.message}</p> <p>{'Попробовать снова?'}</p>
+                            <p>
+                                <b>{error.message}</b>
+                            </p>
+                            {error.stack && import.meta.env.MODE === 'development' ? <p>{error.stack}</p> : ''}
+                            <p>{'Попробовать снова?'}</p>
                         </div>
                     ),
                     colorType: 'danger',

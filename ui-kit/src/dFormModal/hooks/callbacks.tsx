@@ -37,10 +37,12 @@ export const useFormCallbacks = (formModalApi: IDFormModalApi, modalFormProps: I
             onFormReadyStateChanged: (state: boolean) => modalFormProps?.onFormReadyStateChanged?.(state, formModalApi),
 
             /** fires when the form validated */
-            onFormValidated: (values: Record<string, unknown>, errors: Record<string, string>, isSubmit: boolean) => modalFormProps?.onFormValidated?.(values, errors, isSubmit, formModalApi),
+            onFormValidated: (values: Record<string, unknown>, errors: Record<string, string>, isSubmit: boolean) =>
+                modalFormProps?.onFormValidated?.(values, errors, isSubmit, formModalApi),
 
             /** fires when the form has errors */
-            onFormHasErrors: (values: Record<string, unknown>, errors: Record<string, unknown>) => modalFormProps?.onFormHasErrors?.(values, errors, formModalApi),
+            onFormHasErrors: (values: Record<string, unknown>, errors: Record<string, unknown>) =>
+                modalFormProps?.onFormHasErrors?.(values, errors, formModalApi),
 
             /** fires when the form has no errors */
             onFormHasNoErrors: (values: Record<string, unknown>) => modalFormProps?.onFormHasNoErrors?.(values, formModalApi),
@@ -52,13 +54,16 @@ export const useFormCallbacks = (formModalApi: IDFormModalApi, modalFormProps: I
             onDataFetchSuccess: (result: {data: Record<string, unknown>}) => modalFormProps?.onDataFetchSuccess?.(result, formModalApi),
 
             /** fires when the form fetch failed */
-            onDataFetchError: (message: string, code: number) => {
-                if (modalFormProps?.onDataFetchError?.(message, code, formModalApi) === false) return false;
+            onDataFetchError: error => {
+                if (modalFormProps?.onDataFetchError?.(error, formModalApi) === false) return false;
 
                 const box = MessageBox.confirm({
                     content: (
                         <>
-                            <p>{message}</p>
+                            <p>
+                                <b>{error.message}</b>
+                            </p>
+                            {error.stack && import.meta.env.MODE === 'development' ? <p>{error.stack}</p> : ''}
                             <p>{'Попробовать снова?'}</p>
                         </>
                     ),
@@ -86,7 +91,8 @@ export const useFormCallbacks = (formModalApi: IDFormModalApi, modalFormProps: I
             onDataFetchComplete: () => modalFormProps?.onDataFetchComplete?.(formModalApi),
 
             /** fires on submit validation */
-            onSubmitValidation: (values: Record<string, unknown>, errors: Record<string, string | undefined>) => modalFormProps?.onSubmitValidation?.(values, errors, formModalApi),
+            onSubmitValidation: (values: Record<string, unknown>, errors: Record<string, string | undefined>) =>
+                modalFormProps?.onSubmitValidation?.(values, errors, formModalApi),
 
             /** fires on submitting the form */
             onSubmit: (values: Record<string, unknown>) => {
@@ -103,7 +109,7 @@ export const useFormCallbacks = (formModalApi: IDFormModalApi, modalFormProps: I
             },
 
             /** fires on submit error */
-            onSubmitError: (values: Record<string, unknown>, message: string, code: number) => modalFormProps?.onSubmitError?.(values, message, code, formModalApi),
+            onSubmitError: (values: Record<string, unknown>, error) => modalFormProps?.onSubmitError?.(values, error, formModalApi),
 
             /** fires after the completion of sending the form, regardless of the result */
             onSubmitComplete: (values: Record<string, unknown>, errors: Record<string, string | undefined>) => {

@@ -16,16 +16,21 @@ export const TabulatorGridFieldRender = ({ field }) => {
     const curDataSet = prevDataSetRef.current;
     const callbacks = usePrepareCallbacks(field, fieldProps, prevValueRef);
     let height = fieldProps.height;
-    const containerStyle = {};
-    if (fieldProps.autoHeightResize) {
-        containerStyle.position = 'absolute';
-        containerStyle.inset = 0;
+    if (fieldProps.autoHeightResize)
         height = '100%';
-    }
+    const containerStyle = useMemo(() => {
+        return fieldProps.autoHeightResize
+            ? {
+                position: 'absolute',
+                inset: 0,
+            }
+            : {};
+    }, [fieldProps.autoHeightResize]);
     return useMemo(() => {
         return (React.createElement("div", { style: containerStyle },
             React.createElement(TabulatorGrid, Object.assign({}, tabulatorProps, callbacks, { apiRef: gridApi, dataSet: curDataSet, readOnly: fieldProps.readOnly, placeholder: fieldProps.placeholder, width: fieldProps.width, height: height, resizeHeightWithParent: fieldProps.resizeHeightWithForm ? '#' + field.getModel().getFormId() : fieldProps.resizeHeightWithParent }))));
     }, [
+        containerStyle,
         tabulatorProps,
         callbacks,
         gridApi,
@@ -35,6 +40,7 @@ export const TabulatorGridFieldRender = ({ field }) => {
         fieldProps.width,
         fieldProps.resizeHeightWithForm,
         fieldProps.resizeHeightWithParent,
+        height,
         field,
     ]);
 };

@@ -30,6 +30,14 @@ export class TabsField extends BaseField {
         }
         return [this.fieldsMap, this.rootFields];
     }
+    getValue() {
+        return undefined;
+    }
+    setValue() {
+    }
+    canHaveValue() {
+        return false;
+    }
     render() {
         return React.createElement(TabsFieldRender, { field: this });
     }

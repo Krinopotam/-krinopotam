@@ -4,7 +4,6 @@ import { InlineGroupField } from '../dForm/fields/inlineGroup/inlineGroupField';
 export class DModel {
     constructor(formId) {
         this._formProps = {};
-        this._fieldsProps = {};
         this._fieldsMap = {};
         this._rootFields = {};
         this._dataSet = undefined;
@@ -128,6 +127,8 @@ export class DModel {
                 values[fieldName] = curValues[fieldName];
                 continue;
             }
+            if (!field.canHaveValue())
+                continue;
             let fieldValue = undefined;
             if (mode === 'create')
                 fieldValue = fieldProps.value;
@@ -170,7 +171,7 @@ export class DModel {
             const parentProps = parentField.getProps();
             if (parentProps.hidden ||
                 parentField.isHidden() ||
-                parentField.isEmptyValue())
+                (parentField.canHaveValue() && parentField.isEmptyValue()))
                 return true;
             if (this.isFieldMustBeLocked(parentField))
                 return true;
@@ -395,7 +396,7 @@ export class DModel {
                 return;
             this.setFormFetching(false);
             this.setFormFetchingFailed(true);
-            (_b = (_a = this._callbacks).onDataFetchError) === null || _b === void 0 ? void 0 : _b.call(_a, error.message, error.code, this);
+            (_b = (_a = this._callbacks).onDataFetchError) === null || _b === void 0 ? void 0 : _b.call(_a, error, this);
             (_d = (_c = this._callbacks).onDataFetchComplete) === null || _d === void 0 ? void 0 : _d.call(_c, this);
         });
         this.setFormReady(false);
@@ -412,21 +413,21 @@ export class DModel {
         const dataSet = this.getFormDataSet();
         const values = Object.assign(Object.assign({}, dataSet), formValues);
         if (this._formMode === 'create' || this._formMode === 'clone')
-            values.id = '';
-        const errors = this.validateForm();
-        (_b = (_a = this._callbacks) === null || _a === void 0 ? void 0 : _a.onSubmitValidation) === null || _b === void 0 ? void 0 : _b.call(_a, values, errors, this);
+            delete values.id;
+        const validationErrors = this.validateForm();
+        (_b = (_a = this._callbacks) === null || _a === void 0 ? void 0 : _a.onSubmitValidation) === null || _b === void 0 ? void 0 : _b.call(_a, values, validationErrors, this);
         if (this.isFormHasError()) {
             this.setFormSubmitting(false);
-            onSubmitComplete === null || onSubmitComplete === void 0 ? void 0 : onSubmitComplete(values, errors, this);
-            (_d = (_c = this._callbacks) === null || _c === void 0 ? void 0 : _c.onSubmitComplete) === null || _d === void 0 ? void 0 : _d.call(_c, values, errors, this);
+            onSubmitComplete === null || onSubmitComplete === void 0 ? void 0 : onSubmitComplete(values, validationErrors, this);
+            (_d = (_c = this._callbacks) === null || _c === void 0 ? void 0 : _c.onSubmitComplete) === null || _d === void 0 ? void 0 : _d.call(_c, values, validationErrors, this);
             return;
         }
         if (!((_e = this._callbacks) === null || _e === void 0 ? void 0 : _e.onSubmit)) {
             this.setFormSubmitting(false);
-            onSubmitError === null || onSubmitError === void 0 ? void 0 : onSubmitError(values, 'The onSubmit callback not specified', 405, this);
-            onSubmitComplete === null || onSubmitComplete === void 0 ? void 0 : onSubmitComplete(values, errors, this);
-            (_g = (_f = this._callbacks) === null || _f === void 0 ? void 0 : _f.onSubmitError) === null || _g === void 0 ? void 0 : _g.call(_f, values, 'The onSubmit callback not specified', 405, this);
-            (_j = (_h = this._callbacks) === null || _h === void 0 ? void 0 : _h.onSubmitComplete) === null || _j === void 0 ? void 0 : _j.call(_h, values, errors, this);
+            onSubmitError === null || onSubmitError === void 0 ? void 0 : onSubmitError(values, { message: 'The onSubmit callback not specified', code: 405, stack: Error().stack }, this);
+            onSubmitComplete === null || onSubmitComplete === void 0 ? void 0 : onSubmitComplete(values, validationErrors, this);
+            (_g = (_f = this._callbacks) === null || _f === void 0 ? void 0 : _f.onSubmitError) === null || _g === void 0 ? void 0 : _g.call(_f, values, { message: 'The onSubmit callback not specified', code: 405, stack: Error().stack }, this);
+            (_j = (_h = this._callbacks) === null || _h === void 0 ? void 0 : _h.onSubmitComplete) === null || _j === void 0 ? void 0 : _j.call(_h, values, validationErrors, this);
             return;
         }
         const result = (_k = this._callbacks) === null || _k === void 0 ? void 0 : _k.onSubmit(values, this);
@@ -439,19 +440,19 @@ export class DModel {
                     return;
                 this.setFormSubmitting(false);
                 onSubmitSuccess === null || onSubmitSuccess === void 0 ? void 0 : onSubmitSuccess(values, promiseResult.data || values, this);
-                onSubmitComplete === null || onSubmitComplete === void 0 ? void 0 : onSubmitComplete(values, errors, this);
+                onSubmitComplete === null || onSubmitComplete === void 0 ? void 0 : onSubmitComplete(values, validationErrors, this);
                 (_b = (_a = this._callbacks) === null || _a === void 0 ? void 0 : _a.onSubmitSuccess) === null || _b === void 0 ? void 0 : _b.call(_a, values, promiseResult.data || values, this);
-                (_d = (_c = this._callbacks) === null || _c === void 0 ? void 0 : _c.onSubmitComplete) === null || _d === void 0 ? void 0 : _d.call(_c, values, errors, this);
+                (_d = (_c = this._callbacks) === null || _c === void 0 ? void 0 : _c.onSubmitComplete) === null || _d === void 0 ? void 0 : _d.call(_c, values, validationErrors, this);
             })
-                .catch(error => {
+                .catch((error) => {
                 var _a, _b, _c, _d;
                 if (!this.isFormMounted())
                     return;
                 this.setFormSubmitting(false);
-                onSubmitError === null || onSubmitError === void 0 ? void 0 : onSubmitError(values, error.message, error.code, this);
-                onSubmitComplete === null || onSubmitComplete === void 0 ? void 0 : onSubmitComplete(values, errors, this);
-                (_b = (_a = this._callbacks) === null || _a === void 0 ? void 0 : _a.onSubmitError) === null || _b === void 0 ? void 0 : _b.call(_a, values, error.message, error.code, this);
-                (_d = (_c = this._callbacks) === null || _c === void 0 ? void 0 : _c.onSubmitComplete) === null || _d === void 0 ? void 0 : _d.call(_c, values, errors, this);
+                onSubmitError === null || onSubmitError === void 0 ? void 0 : onSubmitError(values, error, this);
+                onSubmitComplete === null || onSubmitComplete === void 0 ? void 0 : onSubmitComplete(values, validationErrors, this);
+                (_b = (_a = this._callbacks) === null || _a === void 0 ? void 0 : _a.onSubmitError) === null || _b === void 0 ? void 0 : _b.call(_a, values, error, this);
+                (_d = (_c = this._callbacks) === null || _c === void 0 ? void 0 : _c.onSubmitComplete) === null || _d === void 0 ? void 0 : _d.call(_c, values, validationErrors, this);
             });
             return;
         }
@@ -459,15 +460,15 @@ export class DModel {
             this.setFormSubmitting(false);
             const objectResult = result;
             if ((_l = objectResult.error) === null || _l === void 0 ? void 0 : _l.message) {
-                onSubmitError === null || onSubmitError === void 0 ? void 0 : onSubmitError(values, objectResult.error.message || '', objectResult.error.code || 400, this);
-                (_o = (_m = this._callbacks) === null || _m === void 0 ? void 0 : _m.onSubmitError) === null || _o === void 0 ? void 0 : _o.call(_m, values, objectResult.error.message || '', objectResult.error.code || 400, this);
+                onSubmitError === null || onSubmitError === void 0 ? void 0 : onSubmitError(values, { message: objectResult.error.message || '', code: objectResult.error.code || 400 }, this);
+                (_o = (_m = this._callbacks) === null || _m === void 0 ? void 0 : _m.onSubmitError) === null || _o === void 0 ? void 0 : _o.call(_m, values, { message: objectResult.error.message || '', code: objectResult.error.code || 400 }, this);
             }
             else {
                 onSubmitSuccess === null || onSubmitSuccess === void 0 ? void 0 : onSubmitSuccess(values, (_p = objectResult.data) !== null && _p !== void 0 ? _p : values, this);
                 (_r = (_q = this._callbacks) === null || _q === void 0 ? void 0 : _q.onSubmitSuccess) === null || _r === void 0 ? void 0 : _r.call(_q, values, (_s = objectResult.data) !== null && _s !== void 0 ? _s : values, this);
             }
-            onSubmitComplete === null || onSubmitComplete === void 0 ? void 0 : onSubmitComplete(values, errors, this);
-            (_u = (_t = this._callbacks) === null || _t === void 0 ? void 0 : _t.onSubmitComplete) === null || _u === void 0 ? void 0 : _u.call(_t, values, errors, this);
+            onSubmitComplete === null || onSubmitComplete === void 0 ? void 0 : onSubmitComplete(values, validationErrors, this);
+            (_u = (_t = this._callbacks) === null || _t === void 0 ? void 0 : _t.onSubmitComplete) === null || _u === void 0 ? void 0 : _u.call(_t, values, validationErrors, this);
             return;
         }
         this.setFormSubmitting(false);
@@ -477,18 +478,18 @@ export class DModel {
                 (_w = (_v = this._callbacks) === null || _v === void 0 ? void 0 : _v.onSubmitSuccess) === null || _w === void 0 ? void 0 : _w.call(_v, values, values, this);
             }
             else {
-                onSubmitError === null || onSubmitError === void 0 ? void 0 : onSubmitError(values, 'Неизвестная ошибка', 400, this);
-                (_y = (_x = this._callbacks) === null || _x === void 0 ? void 0 : _x.onSubmitError) === null || _y === void 0 ? void 0 : _y.call(_x, values, 'Неизвестная ошибка', 400, this);
+                onSubmitError === null || onSubmitError === void 0 ? void 0 : onSubmitError(values, { message: 'Неизвестная ошибка', code: 500, stack: Error().stack }, this);
+                (_y = (_x = this._callbacks) === null || _x === void 0 ? void 0 : _x.onSubmitError) === null || _y === void 0 ? void 0 : _y.call(_x, values, { message: 'Неизвестная ошибка', code: 500, stack: Error().stack }, this);
             }
-            onSubmitComplete === null || onSubmitComplete === void 0 ? void 0 : onSubmitComplete(values, errors, this);
-            (_0 = (_z = this._callbacks) === null || _z === void 0 ? void 0 : _z.onSubmitComplete) === null || _0 === void 0 ? void 0 : _0.call(_z, values, errors, this);
+            onSubmitComplete === null || onSubmitComplete === void 0 ? void 0 : onSubmitComplete(values, validationErrors, this);
+            (_0 = (_z = this._callbacks) === null || _z === void 0 ? void 0 : _z.onSubmitComplete) === null || _0 === void 0 ? void 0 : _0.call(_z, values, validationErrors, this);
             return;
         }
         if (typeof result === 'undefined') {
             onSubmitSuccess === null || onSubmitSuccess === void 0 ? void 0 : onSubmitSuccess(values, values, this);
-            onSubmitComplete === null || onSubmitComplete === void 0 ? void 0 : onSubmitComplete(values, errors, this);
+            onSubmitComplete === null || onSubmitComplete === void 0 ? void 0 : onSubmitComplete(values, validationErrors, this);
             (_2 = (_1 = this._callbacks) === null || _1 === void 0 ? void 0 : _1.onSubmitSuccess) === null || _2 === void 0 ? void 0 : _2.call(_1, values, values, this);
-            (_4 = (_3 = this._callbacks) === null || _3 === void 0 ? void 0 : _3.onSubmitComplete) === null || _4 === void 0 ? void 0 : _4.call(_3, values, errors, this);
+            (_4 = (_3 = this._callbacks) === null || _3 === void 0 ? void 0 : _3.onSubmitComplete) === null || _4 === void 0 ? void 0 : _4.call(_3, values, validationErrors, this);
         }
     }
     getSubmitCount() {

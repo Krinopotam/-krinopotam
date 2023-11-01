@@ -41,7 +41,8 @@ export const useModelCallbacks = (formProps: IDFormProps, formApi: IDFormApi) =>
             },
 
             /** fires when the form validated */
-            onFormValidated: (values: Record<string, unknown>, errors: Record<string, string>, isSubmit: boolean) => formProps?.onFormValidated?.(values, errors, isSubmit, formApi),
+            onFormValidated: (values: Record<string, unknown>, errors: Record<string, string>, isSubmit: boolean) =>
+                formProps?.onFormValidated?.(values, errors, isSubmit, formApi),
 
             /** fires when the form has errors */
             onFormHasErrors: (values: Record<string, unknown>, errors: Record<string, unknown>) => formProps?.onFormHasErrors?.(values, errors, formApi),
@@ -62,13 +63,16 @@ export const useModelCallbacks = (formProps: IDFormProps, formApi: IDFormApi) =>
             },
 
             /** fires when the form fetch failed */
-            onDataFetchError: (message: string, code: number) => {
-                if (formProps?.onDataFetchError?.(message, code, formApi) === false) return false;
+            onDataFetchError: error => {
+                if (formProps?.onDataFetchError?.(error, formApi) === false) return false;
 
                 const box = MessageBox.confirm({
                     content: (
                         <>
-                            <p>{message}</p>
+                            <p>
+                                <b>{error.message}</b>
+                            </p>
+                            {error.stack && import.meta.env.MODE === 'development' ? <p>{error.stack}</p> : ''}
                             <p>{'Попробовать снова?'}</p>
                         </>
                     ),
@@ -88,7 +92,8 @@ export const useModelCallbacks = (formProps: IDFormProps, formApi: IDFormApi) =>
             onDataFetchComplete: () => formProps?.onDataFetchComplete?.(formApi),
 
             /** fires on submit validation */
-            onSubmitValidation: (values: Record<string, unknown>, errors: Record<string, string | undefined>) => formProps?.onSubmitValidation?.(values, errors, formApi),
+            onSubmitValidation: (values: Record<string, unknown>, errors: Record<string, string | undefined>) =>
+                formProps?.onSubmitValidation?.(values, errors, formApi),
 
             /** fires on submitting the form */
             onSubmit: (values: Record<string, unknown>) => {
@@ -98,12 +103,23 @@ export const useModelCallbacks = (formProps: IDFormProps, formApi: IDFormApi) =>
             },
 
             /** fires on submit success */
-            onSubmitSuccess: (values: Record<string, unknown>, resultValues: Record<string, unknown> | undefined) => formProps?.onSubmitSuccess?.(values, resultValues, formApi),
+            onSubmitSuccess: (values: Record<string, unknown>, resultValues: Record<string, unknown> | undefined) =>
+                formProps?.onSubmitSuccess?.(values, resultValues, formApi),
 
             /** fires on submit error */
-            onSubmitError: (values: Record<string, unknown>, message: string, code: number) => {
-                if (formProps?.onSubmitError?.(values, message, code, formApi) === false) return false;
-                MessageBox.alert({content: message, colorType: 'danger'});
+            onSubmitError: (values: Record<string, unknown>, error) => {
+                if (formProps?.onSubmitError?.(values, error, formApi) === false) return false;
+                MessageBox.alert({
+                    content: (
+                        <>
+                            <p>
+                                <b>{error.message}</b>
+                            </p>
+                            {error.stack && import.meta.env.MODE === 'development' ? <p>{error.stack}</p> : ''}
+                        </>
+                    ),
+                    colorType: 'danger',
+                });
             },
 
             /** fires after the completion of sending the form, regardless of the result */

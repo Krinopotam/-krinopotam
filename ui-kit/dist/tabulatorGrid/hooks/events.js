@@ -12,7 +12,6 @@ export const useEvents = (gridApi, events) => {
                 var _a, _b, _c;
                 (_a = events === null || events === void 0 ? void 0 : events.dataLoading) === null || _a === void 0 ? void 0 : _a.call(events, data);
                 (_c = (_b = gridApi.gridProps).onDataLoading) === null || _c === void 0 ? void 0 : _c.call(_b, data, gridApi);
-                console.log('dataLoading');
                 if (!gridApi.gridProps.progressiveLoad)
                     gridApi.setIsLoading(true);
             },
@@ -22,7 +21,6 @@ export const useEvents = (gridApi, events) => {
                 (_c = (_b = gridApi.gridProps).onDataLoaded) === null || _c === void 0 ? void 0 : _c.call(_b, data, gridApi);
                 if (!gridApi.getIsMounted())
                     return;
-                console.log('dataLoaded');
                 if (!gridApi.gridProps.progressiveLoad)
                     gridApi.setIsLoading(false);
             },
@@ -31,14 +29,14 @@ export const useEvents = (gridApi, events) => {
                 (_a = events === null || events === void 0 ? void 0 : events.dataLoadError) === null || _a === void 0 ? void 0 : _a.call(events, error);
                 const err = error;
                 (_c = (_b = gridApi.gridProps).onDataLoadError) === null || _c === void 0 ? void 0 : _c.call(_b, err.message, err.code, gridApi);
-                console.log('dataLoadError', error);
                 if (!gridApi.getIsMounted())
                     return;
                 gridApi.setIsLoading(false);
                 const message = MessageBox.confirm({
                     content: (React.createElement("div", null,
-                        React.createElement("p", null, error.message),
-                        " ",
+                        React.createElement("p", null,
+                            React.createElement("b", null, error.message)),
+                        error.stack && import.meta.env.MODE === 'development' ? React.createElement("p", null, error.stack) : '',
                         React.createElement("p", null, 'Попробовать снова?'))),
                     colorType: 'danger',
                     buttons: {

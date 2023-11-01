@@ -15,7 +15,7 @@ import {BaseValidator} from './validators/baseValidator';
 import React from 'react';
 import {IBaseField, IAnyFieldProps} from '@src/dForm/fields/base/baseField';
 import {IDFormFieldsProps} from '@src/dForm/index';
-import {TPromise} from '@krinopotam/service-types';
+import {IError, TPromise} from '@krinopotam/service-types';
 import {InlineGroupField} from '@src/dForm/fields/inlineGroup/inlineGroupField';
 
 export interface IDFormBaseCallbacks<T> {
@@ -58,10 +58,10 @@ export interface IDFormBaseCallbacks<T> {
     onDataFetch?: (api: T) => IDFormDataSourcePromise | undefined;
 
     /** fires when the form fetch success */
-    onDataFetchSuccess?: (result: {data: Record<string, unknown>}, api: T) => boolean | void;
+    onDataFetchSuccess?: (result: { data: Record<string, unknown> }, api: T) => boolean | void;
 
     /** fires when the form fetch failed */
-    onDataFetchError?: (message: string, code: number, api: T) => boolean | void;
+    onDataFetchError?: (error: IError, api: T) => boolean | void;
 
     /** fires after the completion of fetching the data, regardless of the result */
     onDataFetchComplete?: (api: T) => void;
@@ -76,7 +76,7 @@ export interface IDFormBaseCallbacks<T> {
     onSubmitSuccess?: (values: Record<string, unknown>, resultValues: Record<string, unknown> | undefined, api: T) => boolean | void;
 
     /** fires on submit error */
-    onSubmitError?: (values: Record<string, unknown>, message: string, code: number, api: T) => boolean | void;
+    onSubmitError?: (values: Record<string, unknown>, error: IError, api: T) => boolean | void;
 
     /** fires, when the submitting finishes, whether in failure or success. */
     onSubmitComplete?: (values: Record<string, unknown>, errors: Record<string, string | undefined>, api: T) => boolean | void;
@@ -87,8 +87,8 @@ export interface IDFormBaseCallbacks<T> {
 
 export type IDFormModelCallbacks = IDFormBaseCallbacks<DModel>;
 
-export type IDFormSubmitResultPromise = TPromise<{data: Record<string, unknown>}, {message: string; code: number}>;
-export type IDFormSubmitResultObject = {data?: Record<string, unknown>; error?: {message: string; code: number}};
+export type IDFormSubmitResultPromise = TPromise<{ data: Record<string, unknown> }, IError>;
+export type IDFormSubmitResultObject = { data?: Record<string, unknown>; error?: IError };
 
 export class DModel {
     //region Private properties
@@ -97,9 +97,6 @@ export class DModel {
 
     /** form properties (immutable clone) */
     private _formProps: IDFormProps = {};
-
-    /** fields properties */
-    private _fieldsProps: IDFormFieldsProps = {};
 
     //region Fields collections
     /** field collection (plain list of all fields in all component tabs, including child fields) */
@@ -723,7 +720,7 @@ export class DModel {
         if (!dataSource) return;
 
         dataSource.then(
-            (result: {data: Record<string, unknown>}) => {
+            (result: { data: Record<string, unknown> }) => {
                 if (!this.isFormMounted()) return;
                 this.setFormFetching(false);
                 this.setFormFetchingFailed(false);
@@ -735,11 +732,11 @@ export class DModel {
 
                 this.setFormReady(true);
             },
-            (error: {message: string; code: number}) => {
+            (error: IError) => {
                 if (!this.isFormMounted()) return;
                 this.setFormFetching(false);
                 this.setFormFetchingFailed(true);
-                this._callbacks.onDataFetchError?.(error.message, error.code, this);
+                this._callbacks.onDataFetchError?.(error, this);
                 this._callbacks.onDataFetchComplete?.(this);
             }
         );
@@ -757,7 +754,7 @@ export class DModel {
      */
     submit(
         onSubmitSuccess?: (values: Record<string, unknown>, result: Record<string, unknown> | undefined, model: DModel) => void,
-        onSubmitError?: (values: Record<string, unknown>, message: string, code: number, model: DModel) => void,
+        onSubmitError?: (values: Record<string, unknown>, error: IError, model: DModel) => void,
         onSubmitComplete?: (values: Record<string, unknown>, errors: Record<string, string | undefined>, model: DModel) => void
     ) {
         if (this.isFormSubmitting()) return;
@@ -769,25 +766,26 @@ export class DModel {
         const dataSet = this.getFormDataSet();
         const values = {...dataSet, ...formValues} // merge dataSet and values
 
-        if (this._formMode === 'create' || this._formMode === 'clone') values.id = '';
+        if (this._formMode === 'create' || this._formMode === 'clone') delete values.id;
 
-        const errors = this.validateForm();
+        const validationErrors = this.validateForm();
 
-        this._callbacks?.onSubmitValidation?.(values, errors, this);
+        this._callbacks?.onSubmitValidation?.(values, validationErrors, this);
 
         if (this.isFormHasError()) {
             this.setFormSubmitting(false);
-            onSubmitComplete?.(values, errors, this);
-            this._callbacks?.onSubmitComplete?.(values, errors, this);
+            onSubmitComplete?.(values, validationErrors, this);
+            this._callbacks?.onSubmitComplete?.(values, validationErrors, this);
             return;
         }
 
+
         if (!this._callbacks?.onSubmit) {
             this.setFormSubmitting(false);
-            onSubmitError?.(values, 'The onSubmit callback not specified', 405, this);
-            onSubmitComplete?.(values, errors, this);
-            this._callbacks?.onSubmitError?.(values, 'The onSubmit callback not specified', 405, this);
-            this._callbacks?.onSubmitComplete?.(values, errors, this);
+            onSubmitError?.(values, {message: 'The onSubmit callback not specified', code: 405, stack:Error().stack}, this);
+            onSubmitComplete?.(values, validationErrors, this);
+            this._callbacks?.onSubmitError?.(values, {message: 'The onSubmit callback not specified', code: 405, stack:Error().stack}, this);
+            this._callbacks?.onSubmitComplete?.(values, validationErrors, this);
             return;
         }
 
@@ -800,17 +798,17 @@ export class DModel {
                     if (!this.isFormMounted()) return;
                     this.setFormSubmitting(false);
                     onSubmitSuccess?.(values, promiseResult.data || values, this);
-                    onSubmitComplete?.(values, errors, this);
+                    onSubmitComplete?.(values, validationErrors, this);
                     this._callbacks?.onSubmitSuccess?.(values, promiseResult.data || values, this);
-                    this._callbacks?.onSubmitComplete?.(values, errors, this);
+                    this._callbacks?.onSubmitComplete?.(values, validationErrors, this);
                 })
-                .catch(error => {
+                .catch((error: IError) => {
                     if (!this.isFormMounted()) return;
                     this.setFormSubmitting(false);
-                    onSubmitError?.(values, error.message, error.code, this);
-                    onSubmitComplete?.(values, errors, this);
-                    this._callbacks?.onSubmitError?.(values, error.message, error.code, this);
-                    this._callbacks?.onSubmitComplete?.(values, errors, this);
+                    onSubmitError?.(values, error, this);
+                    onSubmitComplete?.(values, validationErrors, this);
+                    this._callbacks?.onSubmitError?.(values, error, this);
+                    this._callbacks?.onSubmitComplete?.(values, validationErrors, this);
                 });
 
             return;
@@ -820,15 +818,15 @@ export class DModel {
             this.setFormSubmitting(false);
             const objectResult = result as IDFormSubmitResultObject;
             if (objectResult.error?.message) {
-                onSubmitError?.(values, objectResult.error.message || '', objectResult.error.code || 400, this);
-                this._callbacks?.onSubmitError?.(values, objectResult.error.message || '', objectResult.error.code || 400, this);
+                onSubmitError?.(values, {message: objectResult.error.message || '', code: objectResult.error.code || 400}, this);
+                this._callbacks?.onSubmitError?.(values, {message: objectResult.error.message || '', code: objectResult.error.code || 400}, this);
             } else {
                 onSubmitSuccess?.(values, objectResult.data ?? values, this);
                 this._callbacks?.onSubmitSuccess?.(values, objectResult.data ?? values, this);
             }
 
-            onSubmitComplete?.(values, errors, this);
-            this._callbacks?.onSubmitComplete?.(values, errors, this);
+            onSubmitComplete?.(values, validationErrors, this);
+            this._callbacks?.onSubmitComplete?.(values, validationErrors, this);
 
             return;
         }
@@ -839,20 +837,20 @@ export class DModel {
                 onSubmitSuccess?.(values, values, this);
                 this._callbacks?.onSubmitSuccess?.(values, values, this);
             } else {
-                onSubmitError?.(values, 'Неизвестная ошибка', 400, this);
-                this._callbacks?.onSubmitError?.(values, 'Неизвестная ошибка', 400, this);
+                onSubmitError?.(values, {message:'Неизвестная ошибка', code: 500, stack:Error().stack}, this);
+                this._callbacks?.onSubmitError?.(values, {message: 'Неизвестная ошибка', code: 500, stack:Error().stack}, this);
             }
 
-            onSubmitComplete?.(values, errors, this);
-            this._callbacks?.onSubmitComplete?.(values, errors, this);
+            onSubmitComplete?.(values, validationErrors, this);
+            this._callbacks?.onSubmitComplete?.(values, validationErrors, this);
             return;
         }
 
         if (typeof result === 'undefined') {
             onSubmitSuccess?.(values, values, this);
-            onSubmitComplete?.(values, errors, this);
+            onSubmitComplete?.(values, validationErrors, this);
             this._callbacks?.onSubmitSuccess?.(values, values, this);
-            this._callbacks?.onSubmitComplete?.(values, errors, this);
+            this._callbacks?.onSubmitComplete?.(values, validationErrors, this);
         }
     }
 

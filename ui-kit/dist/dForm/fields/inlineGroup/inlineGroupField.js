@@ -1,6 +1,6 @@
 import { BaseField } from '../../../dForm/fields/base/baseField';
 import React from 'react';
-import { InlineGroupRender } from "../../../dForm/fields/inlineGroup/inlineGroupRender";
+import { InlineGroupRender } from '../../../dForm/fields/inlineGroup/inlineGroupRender';
 export class InlineGroupField extends BaseField {
     initChildrenFields() {
         const groupProps = this.getProps();
@@ -23,11 +23,12 @@ export class InlineGroupField extends BaseField {
         return this.rootFields;
     }
     getValue() {
-        console.warn("InlineGroupField can't have values");
         return undefined;
     }
     setValue() {
-        console.error("InlineGroupField can't have values");
+    }
+    canHaveValue() {
+        return false;
     }
     setDisabled(value, noEvents, noRerender) {
         const prevValue = this.isDisabled();

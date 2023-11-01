@@ -12,6 +12,7 @@ export declare class InlineGroupField extends BaseField<IInlineGroupProps> {
     getRootFields(): Record<string, import("../../../dForm").IBaseField>;
     getValue(): undefined;
     setValue(): void;
+    canHaveValue(): boolean;
     setDisabled(value: boolean, noEvents?: boolean, noRerender?: boolean): void;
     setReadOnly(value: boolean, noEvents?: boolean, noRerender?: boolean): void;
 }

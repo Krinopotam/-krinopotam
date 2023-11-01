@@ -1,10 +1,11 @@
 import {IFormButtons} from '@src/buttonsRow/buttonsRow';
-import {HelpersObjects} from "@krinopotam/js-helpers";
+import {HelpersObjects} from '@krinopotam/js-helpers';
 import React, {useMemo} from 'react';
 import {ITreeSelectApi, ITreeSelectDeletePromise} from '@src/treeSelect';
 import {DeleteOutlined, EditOutlined, PlusOutlined} from '@ant-design/icons';
 import {IDFormModalApi} from '@src/dFormModal';
 import {MessageBoxApi, MessageBox} from '@src/messageBox';
+import {IError} from '@krinopotam/service-types';
 
 /** Generate buttons */
 export const useInitButtons = (api: ITreeSelectApi, formApi: IDFormModalApi) => {
@@ -73,14 +74,24 @@ const deleteHandler = (api: ITreeSelectApi) => {
                         api.buttonsApi.disabled('add', false);
                     } else messageBox?.destroy();
                 })
-                .catch((error:{message:string}) => {
+                .catch((error: IError) => {
                     if (!api.isMounted()) return;
                     if (!treeProps.confirmDelete) {
                         api.buttonsApi.loading('delete', false);
                         api.buttonsApi.disabled('add', false);
                         api.buttonsApi.disabled('edit', false);
                     } else messageBox?.destroy();
-                    MessageBox.alert({content: error.message, colorType: 'danger'});
+                    MessageBox.alert({
+                        content: (
+                            <>
+                                <p>
+                                    <b>{error.message}</b>
+                                </p>
+                                {error.stack && import.meta.env.MODE === 'development' ? <p>{error.stack}</p> : ''}
+                            </>
+                        ),
+                        colorType: 'danger',
+                    });
                 });
             return;
         }

@@ -13,7 +13,6 @@ import {IDFormProps} from "@src/dForm";
 /** Render form body */
 export const FieldsRender = ({
     fields,
-    formProps,
     subscribe,
     getSnapshot,
     containerStyle,

@@ -32,13 +32,15 @@ export const useModelCallbacks = (formProps, formApi) => {
                 if (((_a = formProps === null || formProps === void 0 ? void 0 : formProps.onDataFetchSuccess) === null || _a === void 0 ? void 0 : _a.call(formProps, result, formApi)) === false)
                     return false;
             },
-            onDataFetchError: (message, code) => {
+            onDataFetchError: error => {
                 var _a;
-                if (((_a = formProps === null || formProps === void 0 ? void 0 : formProps.onDataFetchError) === null || _a === void 0 ? void 0 : _a.call(formProps, message, code, formApi)) === false)
+                if (((_a = formProps === null || formProps === void 0 ? void 0 : formProps.onDataFetchError) === null || _a === void 0 ? void 0 : _a.call(formProps, error, formApi)) === false)
                     return false;
                 const box = MessageBox.confirm({
                     content: (React.createElement(React.Fragment, null,
-                        React.createElement("p", null, message),
+                        React.createElement("p", null,
+                            React.createElement("b", null, error.message)),
+                        error.stack && import.meta.env.MODE === 'development' ? React.createElement("p", null, error.stack) : '',
                         React.createElement("p", null, 'Попробовать снова?'))),
                     colorType: 'danger',
                     buttons: {
@@ -61,11 +63,17 @@ export const useModelCallbacks = (formProps, formApi) => {
                 return (_e = formProps === null || formProps === void 0 ? void 0 : formProps.onSubmit) === null || _e === void 0 ? void 0 : _e.call(formProps, values, formApi);
             },
             onSubmitSuccess: (values, resultValues) => { var _a; return (_a = formProps === null || formProps === void 0 ? void 0 : formProps.onSubmitSuccess) === null || _a === void 0 ? void 0 : _a.call(formProps, values, resultValues, formApi); },
-            onSubmitError: (values, message, code) => {
+            onSubmitError: (values, error) => {
                 var _a;
-                if (((_a = formProps === null || formProps === void 0 ? void 0 : formProps.onSubmitError) === null || _a === void 0 ? void 0 : _a.call(formProps, values, message, code, formApi)) === false)
+                if (((_a = formProps === null || formProps === void 0 ? void 0 : formProps.onSubmitError) === null || _a === void 0 ? void 0 : _a.call(formProps, values, error, formApi)) === false)
                     return false;
-                MessageBox.alert({ content: message, colorType: 'danger' });
+                MessageBox.alert({
+                    content: (React.createElement(React.Fragment, null,
+                        React.createElement("p", null,
+                            React.createElement("b", null, error.message)),
+                        error.stack && import.meta.env.MODE === 'development' ? React.createElement("p", null, error.stack) : '')),
+                    colorType: 'danger',
+                });
             },
             onSubmitComplete: (values, errors) => {
                 var _a, _b, _c, _d, _e;

@@ -1,5 +1,5 @@
 import React from 'react';
-import { IBaseField } from './baseField';
+import { IBaseField } from '../../../dForm';
 export declare const BaseFieldRender: ({ field, altLabel, children }: {
     field: IBaseField;
     altLabel?: React.ReactNode;

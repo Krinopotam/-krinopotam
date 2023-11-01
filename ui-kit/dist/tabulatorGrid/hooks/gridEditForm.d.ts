@@ -38,12 +38,12 @@ export declare const usePrepareEditFormProps: (gridApi: IGridApi) => {
     }, api: import("../..").IDFormModalApi) => boolean | void) & ((result: {
         data: Record<string, unknown>;
     }, api: IDFormApi) => boolean | void)) | undefined;
-    onDataFetchError?: (((message: string, code: number, api: import("../..").IDFormModalApi) => boolean | void) & ((message: string, code: number, api: IDFormApi) => boolean | void)) | undefined;
+    onDataFetchError?: (((error: import("@krinopotam/service-types").IError, api: import("../..").IDFormModalApi) => boolean | void) & ((error: import("@krinopotam/service-types").IError, api: IDFormApi) => boolean | void)) | undefined;
     onDataFetchComplete?: (((api: import("../..").IDFormModalApi) => void) & ((api: IDFormApi) => void)) | undefined;
     onSubmit?: (((values: Record<string, unknown>, api: import("../..").IDFormModalApi) => boolean | void | import("../../dForm").IDFormSubmitResultPromise | import("../../dForm").IDFormSubmitResultObject) & ((values: Record<string, unknown>, api: IDFormApi) => boolean | void | import("../../dForm").IDFormSubmitResultPromise | import("../../dForm").IDFormSubmitResultObject)) | undefined;
     onSubmitValidation?: (((values: Record<string, unknown>, errors: Record<string, string | undefined>, api: import("../..").IDFormModalApi) => void) & ((values: Record<string, unknown>, errors: Record<string, string | undefined>, api: IDFormApi) => void)) | undefined;
     onSubmitSuccess?: (((values: Record<string, unknown>, resultValues: Record<string, unknown> | undefined, api: import("../..").IDFormModalApi) => boolean | void) & ((values: Record<string, unknown>, resultValues: Record<string, unknown> | undefined, api: IDFormApi) => boolean | void)) | undefined;
-    onSubmitError?: (((values: Record<string, unknown>, message: string, code: number, api: import("../..").IDFormModalApi) => boolean | void) & ((values: Record<string, unknown>, message: string, code: number, api: IDFormApi) => boolean | void)) | undefined;
+    onSubmitError?: (((values: Record<string, unknown>, error: import("@krinopotam/service-types").IError, api: import("../..").IDFormModalApi) => boolean | void) & ((values: Record<string, unknown>, error: import("@krinopotam/service-types").IError, api: IDFormApi) => boolean | void)) | undefined;
     onSubmitComplete?: (((values: Record<string, unknown>, errors: Record<string, string | undefined>, api: import("../..").IDFormModalApi) => boolean | void) & ((values: Record<string, unknown>, errors: Record<string, string | undefined>, api: IDFormApi) => boolean | void)) | undefined;
     onDataSetChange?: (((dataSet: import("../../dForm").IDFormDataSet | undefined, api: import("../..").IDFormModalApi) => import("../../dForm").IDFormDataSet | undefined) & ((dataSet: import("../../dForm").IDFormDataSet | undefined, api: IDFormApi) => import("../../dForm").IDFormDataSet | undefined)) | undefined;
     apiRef?: unknown;

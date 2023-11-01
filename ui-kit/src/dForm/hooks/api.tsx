@@ -116,7 +116,7 @@ const useApiSubmitForm = (formApi: IDFormApi) => {
         }
 
         const waiter = MessageBox.confirmWaiter({
-            content: formProps.submitConfirmMessage || 'Сохранить сделанные изменения?',
+            content: formProps.submitConfirmMessage ?? 'Сохранить сделанные изменения?',
             okText: 'Да',
             cancelText: 'Отмена',
             onOk: () => {

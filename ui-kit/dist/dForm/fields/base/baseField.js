@@ -248,6 +248,9 @@ export class BaseField {
     renderFieldWrapper(field, altLabel) {
         return (React.createElement(BaseFieldRender, { key: this.getName(), field: this, altLabel: altLabel }, field));
     }
+    canHaveValue() {
+        return true;
+    }
     subscribe(listener) {
         this.listeners = [...this.listeners, listener];
         return () => {

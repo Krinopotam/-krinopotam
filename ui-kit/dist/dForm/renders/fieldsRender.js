@@ -1,5 +1,5 @@
 import React, { useSyncExternalStore } from 'react';
-export const FieldsRender = ({ fields, formProps, subscribe, getSnapshot, containerStyle, }) => {
+export const FieldsRender = ({ fields, subscribe, getSnapshot, containerStyle, }) => {
     if (!subscribe)
         subscribe = () => () => void 0;
     if (!getSnapshot)

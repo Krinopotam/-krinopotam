@@ -26,6 +26,9 @@ export declare class TabsField extends BaseField<ITabsFieldProps> {
     private _tabRenderListeners;
     private _tabRenderSnapshots;
     initChildrenFields(): [TabsField['fieldsMap'], TabsField['rootFields']];
+    getValue(): undefined;
+    setValue(): void;
+    canHaveValue(): boolean;
     protected render(): React.JSX.Element;
     renderField(): React.ReactNode;
     getTabsFieldsMap(): Record<string, Record<string, import("../../../dForm").IBaseField>>;

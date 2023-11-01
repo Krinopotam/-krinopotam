@@ -8,6 +8,7 @@ import {RowComponent, ScrollToRowPosition, TabulatorFull as Tabulator} from 'tab
 import {ITabulator} from '@src/tabulatorBase';
 import {MessageBox, MessageBoxApi} from '@src/messageBox';
 import {GenerateAjaxRequestFunc} from '@src/tabulatorGrid/helpers/fetchHelpers';
+import {IError} from '@krinopotam/service-types';
 
 type IRowKey = IGridRowData['id'];
 type IRowKeys = IRowKey | IRowKey[];
@@ -597,11 +598,21 @@ const useApiDeleteRows = (gridApi: IGridApi): IGridApi['deleteRows'] => {
                             if (!gridProps.confirmDelete) gridApi.setIsLoading(false);
                             else messageBox?.destroy();
                         })
-                        .catch(error => {
+                        .catch((error: IError) => {
                             if (!gridApi.getIsMounted()) return;
                             if (!gridProps.confirmDelete) gridApi.setIsLoading(false);
                             else messageBox?.destroy();
-                            MessageBox.alert({content: error.message, colorType: 'danger'});
+                            MessageBox.alert({
+                                content: (
+                                    <>
+                                        <p>
+                                            <b>{error.message}</b>
+                                        </p>
+                                        {error.stack && import.meta.env.MODE === 'development' ? <p>{error.stack}</p> : ''}
+                                    </>
+                                ),
+                                colorType: 'danger',
+                            });
                         });
                     return;
                 }

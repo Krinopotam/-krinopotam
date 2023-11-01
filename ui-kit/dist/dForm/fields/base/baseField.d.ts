@@ -80,6 +80,7 @@ export declare class BaseField<TFieldProps extends IAnyFieldProps> {
     protected render(): React.ReactNode;
     renderField(altLabel?: React.ReactNode): React.ReactNode;
     protected renderFieldWrapper(field: React.ReactNode, altLabel?: React.ReactNode): React.JSX.Element;
+    canHaveValue(): boolean;
     subscribe(listener: () => void): () => void;
     getSnapshot(): Record<never, never>;
     emitRender(): void;

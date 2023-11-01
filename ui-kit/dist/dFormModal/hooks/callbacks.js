@@ -15,13 +15,15 @@ export const useFormCallbacks = (formModalApi, modalFormProps) => {
             onFormHasNoErrors: (values) => { var _a; return (_a = modalFormProps === null || modalFormProps === void 0 ? void 0 : modalFormProps.onFormHasNoErrors) === null || _a === void 0 ? void 0 : _a.call(modalFormProps, values, formModalApi); },
             onDataFetch: () => { var _a; return (_a = modalFormProps === null || modalFormProps === void 0 ? void 0 : modalFormProps.onDataFetch) === null || _a === void 0 ? void 0 : _a.call(modalFormProps, formModalApi); },
             onDataFetchSuccess: (result) => { var _a; return (_a = modalFormProps === null || modalFormProps === void 0 ? void 0 : modalFormProps.onDataFetchSuccess) === null || _a === void 0 ? void 0 : _a.call(modalFormProps, result, formModalApi); },
-            onDataFetchError: (message, code) => {
+            onDataFetchError: error => {
                 var _a;
-                if (((_a = modalFormProps === null || modalFormProps === void 0 ? void 0 : modalFormProps.onDataFetchError) === null || _a === void 0 ? void 0 : _a.call(modalFormProps, message, code, formModalApi)) === false)
+                if (((_a = modalFormProps === null || modalFormProps === void 0 ? void 0 : modalFormProps.onDataFetchError) === null || _a === void 0 ? void 0 : _a.call(modalFormProps, error, formModalApi)) === false)
                     return false;
                 const box = MessageBox.confirm({
                     content: (React.createElement(React.Fragment, null,
-                        React.createElement("p", null, message),
+                        React.createElement("p", null,
+                            React.createElement("b", null, error.message)),
+                        error.stack && import.meta.env.MODE === 'development' ? React.createElement("p", null, error.stack) : '',
                         React.createElement("p", null, 'Попробовать снова?'))),
                     colorType: 'danger',
                     buttons: {
@@ -58,7 +60,7 @@ export const useFormCallbacks = (formModalApi, modalFormProps) => {
                     return false;
                 formModalApi.forceClose();
             },
-            onSubmitError: (values, message, code) => { var _a; return (_a = modalFormProps === null || modalFormProps === void 0 ? void 0 : modalFormProps.onSubmitError) === null || _a === void 0 ? void 0 : _a.call(modalFormProps, values, message, code, formModalApi); },
+            onSubmitError: (values, error) => { var _a; return (_a = modalFormProps === null || modalFormProps === void 0 ? void 0 : modalFormProps.onSubmitError) === null || _a === void 0 ? void 0 : _a.call(modalFormProps, values, error, formModalApi); },
             onSubmitComplete: (values, errors) => {
                 var _a, _b, _c, _d, _e, _f, _g;
                 if (((_a = modalFormProps === null || modalFormProps === void 0 ? void 0 : modalFormProps.onSubmitComplete) === null || _a === void 0 ? void 0 : _a.call(modalFormProps, values, errors, formModalApi)) === false)

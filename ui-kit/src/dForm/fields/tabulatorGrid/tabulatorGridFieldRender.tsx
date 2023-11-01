@@ -30,13 +30,18 @@ export const TabulatorGridFieldRender = ({field}: {field: TabulatorGridField}): 
 
     const callbacks = usePrepareCallbacks(field, fieldProps, prevValueRef);
 
-    let height = fieldProps.height
-    const containerStyle: React.CSSProperties = {};
-    if (fieldProps.autoHeightResize) {
-        containerStyle.position = 'absolute';
-        containerStyle.inset = 0;
-        height = '100%'
-    }
+    let height = fieldProps.height;
+
+    if (fieldProps.autoHeightResize) height = '100%';
+
+    const containerStyle = useMemo((): React.CSSProperties => {
+        return fieldProps.autoHeightResize
+            ? {
+                  position: 'absolute',
+                  inset: 0,
+              }
+            : {};
+    }, [fieldProps.autoHeightResize]);
 
     return useMemo(() => {
         return (
@@ -55,6 +60,7 @@ export const TabulatorGridFieldRender = ({field}: {field: TabulatorGridField}): 
             </div>
         );
     }, [
+        containerStyle,
         tabulatorProps,
         callbacks,
         gridApi,
@@ -64,6 +70,7 @@ export const TabulatorGridFieldRender = ({field}: {field: TabulatorGridField}): 
         fieldProps.width,
         fieldProps.resizeHeightWithForm,
         fieldProps.resizeHeightWithParent,
+        height,
         field,
     ]);
 };

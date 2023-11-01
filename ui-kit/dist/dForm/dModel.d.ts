@@ -3,7 +3,7 @@ import { BaseValidator } from './validators/baseValidator';
 import React from 'react';
 import { IBaseField } from '../dForm/fields/base/baseField';
 import { IDFormFieldsProps } from '../dForm/index';
-import { TPromise } from '@krinopotam/service-types';
+import { IError, TPromise } from '@krinopotam/service-types';
 export interface IDFormBaseCallbacks<T> {
     onTabHiddenStateChanged?: (tabName: string, state: boolean, api: T) => void;
     onTabReadOnlyStateChanged?: (tabName: string, state: boolean, api: T) => void;
@@ -20,33 +20,26 @@ export interface IDFormBaseCallbacks<T> {
     onDataFetchSuccess?: (result: {
         data: Record<string, unknown>;
     }, api: T) => boolean | void;
-    onDataFetchError?: (message: string, code: number, api: T) => boolean | void;
+    onDataFetchError?: (error: IError, api: T) => boolean | void;
     onDataFetchComplete?: (api: T) => void;
     onSubmit?: (values: Record<string, unknown>, api: T) => IDFormSubmitResultPromise | IDFormSubmitResultObject | boolean | void;
     onSubmitValidation?: (values: Record<string, unknown>, errors: Record<string, string | undefined>, api: T) => void;
     onSubmitSuccess?: (values: Record<string, unknown>, resultValues: Record<string, unknown> | undefined, api: T) => boolean | void;
-    onSubmitError?: (values: Record<string, unknown>, message: string, code: number, api: T) => boolean | void;
+    onSubmitError?: (values: Record<string, unknown>, error: IError, api: T) => boolean | void;
     onSubmitComplete?: (values: Record<string, unknown>, errors: Record<string, string | undefined>, api: T) => boolean | void;
     onDataSetChange?: (dataSet: IDFormDataSet | undefined, api: T) => IDFormDataSet | undefined;
 }
 export type IDFormModelCallbacks = IDFormBaseCallbacks<DModel>;
 export type IDFormSubmitResultPromise = TPromise<{
     data: Record<string, unknown>;
-}, {
-    message: string;
-    code: number;
-}>;
+}, IError>;
 export type IDFormSubmitResultObject = {
     data?: Record<string, unknown>;
-    error?: {
-        message: string;
-        code: number;
-    };
+    error?: IError;
 };
 export declare class DModel {
     private readonly _formId;
     private _formProps;
-    private _fieldsProps;
     private _fieldsMap;
     private _rootFields;
     private _dataSet;
@@ -120,7 +113,7 @@ export declare class DModel {
     setFormMounted(value: boolean): void;
     getFormMode(): IDFormMode;
     fetchData(): void;
-    submit(onSubmitSuccess?: (values: Record<string, unknown>, result: Record<string, unknown> | undefined, model: DModel) => void, onSubmitError?: (values: Record<string, unknown>, message: string, code: number, model: DModel) => void, onSubmitComplete?: (values: Record<string, unknown>, errors: Record<string, string | undefined>, model: DModel) => void): void;
+    submit(onSubmitSuccess?: (values: Record<string, unknown>, result: Record<string, unknown> | undefined, model: DModel) => void, onSubmitError?: (values: Record<string, unknown>, error: IError, model: DModel) => void, onSubmitComplete?: (values: Record<string, unknown>, errors: Record<string, string | undefined>, model: DModel) => void): void;
     getSubmitCount(): number;
     incrementSubmitCount(): void;
     subscribeRenderForm(listener: () => void): () => void;

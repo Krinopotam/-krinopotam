@@ -9,3 +9,15 @@ export type ArrayElement<A> = A extends readonly (infer T)[] ? T : never
 
 /** Any type */
 export type AnyType = any
+
+/** Error type */
+export type IError = {
+    /** Error  code */
+    code: number;
+
+    /** Error message*/
+    message: string;
+
+    /** Stack trace */
+    stack?: string;
+}

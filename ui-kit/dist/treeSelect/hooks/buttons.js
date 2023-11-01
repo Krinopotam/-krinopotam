@@ -1,4 +1,4 @@
-import { HelpersObjects } from "@krinopotam/js-helpers";
+import { HelpersObjects } from '@krinopotam/js-helpers';
 import React, { useMemo } from 'react';
 import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
 import { MessageBox } from '../../messageBox';
@@ -81,7 +81,13 @@ const deleteHandler = (api) => {
                 }
                 else
                     messageBox === null || messageBox === void 0 ? void 0 : messageBox.destroy();
-                MessageBox.alert({ content: error.message, colorType: 'danger' });
+                MessageBox.alert({
+                    content: (React.createElement(React.Fragment, null,
+                        React.createElement("p", null,
+                            React.createElement("b", null, error.message)),
+                        error.stack && import.meta.env.MODE === 'development' ? React.createElement("p", null, error.stack) : '')),
+                    colorType: 'danger',
+                });
             });
             return;
         }

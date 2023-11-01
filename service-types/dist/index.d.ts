@@ -3,3 +3,8 @@ export type TPromise<T, F = unknown> = {
 } & Promise<T>;
 export type ArrayElement<A> = A extends readonly (infer T)[] ? T : never;
 export type AnyType = any;
+export type IError = {
+    code: number;
+    message: string;
+    stack?: string;
+};

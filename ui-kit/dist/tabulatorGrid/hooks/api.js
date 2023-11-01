@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import { HelpersStrings, HelpersObjects } from '@krinopotam/js-helpers';
 import useUnmountedRef from 'ahooks/lib/useUnmountedRef';
 import { MessageBox } from '../../messageBox';
@@ -380,14 +380,20 @@ const useApiDeleteRows = (gridApi) => {
                     else
                         messageBox === null || messageBox === void 0 ? void 0 : messageBox.destroy();
                 })
-                    .catch(error => {
+                    .catch((error) => {
                     if (!gridApi.getIsMounted())
                         return;
                     if (!gridProps.confirmDelete)
                         gridApi.setIsLoading(false);
                     else
                         messageBox === null || messageBox === void 0 ? void 0 : messageBox.destroy();
-                    MessageBox.alert({ content: error.message, colorType: 'danger' });
+                    MessageBox.alert({
+                        content: (React.createElement(React.Fragment, null,
+                            React.createElement("p", null,
+                                React.createElement("b", null, error.message)),
+                            error.stack && import.meta.env.MODE === 'development' ? React.createElement("p", null, error.stack) : '')),
+                        colorType: 'danger',
+                    });
                 });
                 return;
             }
