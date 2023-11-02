@@ -3,13 +3,13 @@
 import React, {useCallback, useState} from 'react';
 
 import {Button} from '@src/button';
-import {TabulatorGrid, ITabulatorProps, IGridProps, IGridApi} from '@src/tabulatorGrid';
-import {GenerateDataSet} from "../../data/tabulatorData";
+import {IGridApi, IGridProps, ITabulatorProps, TabulatorGrid} from '@src/tabulatorGrid';
+import {GenerateDataSet} from '../../data/tabulatorData';
 
 const columnDefaults: ITabulatorProps['columnDefaults'] = {
     resizable: 'header',
     headerFilter: true,
-    headerFilterFunc: 'like'
+    headerFilterFunc: 'like',
 };
 
 const columns: ITabulatorProps['columns'] = [
@@ -18,7 +18,7 @@ const columns: ITabulatorProps['columns'] = [
     {title: 'Column 3', field: 'col3'},
 ];
 
-export const TabulatorGridChangeDataSet = (): React.JSX.Element => {
+export const ChangeDataSet = (): React.JSX.Element => {
     const [dataSet, setDataSet] = useState<IGridProps['dataSet']>(undefined);
     const [gridApi] = useState({} as IGridApi);
 
@@ -32,14 +32,13 @@ export const TabulatorGridChangeDataSet = (): React.JSX.Element => {
 
     const updateDataViaApiAsync = useCallback(() => {
         gridApi.fetchData(() => {
-                return new Promise((resolve, reject) => {
-                    setTimeout(() => {
-                        if (Math.random() < 0.5) reject({message: 'Ошибка загрузки данных', code: 400});
-                        else resolve({data: GenerateDataSet(1000, 'async')});
-                    }, 1000);
-                })
-            }
-        );
+            return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    if (Math.random() < 0.5) reject({message: 'Ошибка загрузки данных', code: 400});
+                    else resolve({data: GenerateDataSet(1000, 'async')});
+                }, 1000);
+            });
+        });
     }, [gridApi]);
 
     return (
@@ -48,14 +47,22 @@ export const TabulatorGridChangeDataSet = (): React.JSX.Element => {
             <h1>Пример обновбения dataSet грида Tabulator</h1>
             {/*Description End*/}
             <Button onClick={updateDataViaState}>Обновить DataSet через state</Button> - грид целиком перерендеривается
-            <br/>
-            <br/>
+            <br />
+            <br />
             <Button onClick={updateDataViaApi}>Обновить dataSet через Api.setDataSet</Button> - dataSet обновляется, но это не вызывает ререндер грида
-            <br/>
-            <br/>
-            <Button onClick={updateDataViaApiAsync}>Обновить dataSet асинхронно через Api.fetchData</Button> - ререндер вызывается, так как закрывается лоадером на время
-            загрузки, но используется мемоизированный компонет. Поэтому фактически ререндера нет.
-            <TabulatorGrid id={'TabulatorGridSimple'} apiRef={gridApi} columnDefaults={columnDefaults} columns={columns} dataSet={dataSet} height={500} layout={'fitColumns'}/>
+            <br />
+            <br />
+            <Button onClick={updateDataViaApiAsync}>Обновить dataSet асинхронно через Api.fetchData</Button> - ререндер вызывается, так как закрывается лоадером
+            на время загрузки, но используется мемоизированный компонет. Поэтому фактически ререндера нет.
+            <TabulatorGrid
+                id={'TabulatorGridSimple'}
+                apiRef={gridApi}
+                columnDefaults={columnDefaults}
+                columns={columns}
+                dataSet={dataSet}
+                height={500}
+                layout={'fitColumns'}
+            />
         </>
     );
 };

@@ -1,13 +1,12 @@
 // noinspection DuplicatedCode
 
 import React from 'react';
-
 import {ColumnDefinition} from 'tabulator-tables';
-import {TabulatorGrid, ITabulatorProps, IGridProps} from "@src/tabulatorGrid";
-import {DateTimeSorter} from "@src/tabulatorBase/sorters/dateTime";
-import {TabulatorNamesPlainData} from "../../data/tabulatorData";
+import {IGridProps, ITabulatorProps, TabulatorGrid} from '@src/tabulatorGrid';
+import {DateTimeSorter} from '@src/tabulatorBase/sorters/dateTime';
+import {TabulatorBaseColumnsDef, TabulatorNamesTreeData} from '../../data/tabulatorData';
 
-const fioFormatter: ColumnDefinition['formatter'] = (cell) => {
+const fioFormatter: ColumnDefinition['formatter'] = cell => {
     //cell - the cell component
     //formatterParams - parameters set for the column
     //onRendered - function to call when the formatter has been rendered
@@ -42,12 +41,6 @@ const fioSorter: ColumnDefinition['sorter'] = (_a, _b, aRow, bRow): number => {
     return valA > valB ? 1 : -1; //you must return the difference between the two values
 };
 
-const columnDefaults: ITabulatorProps['columnDefaults'] = {
-    resizable: 'header',
-    headerFilter: true,
-    headerFilterFunc: 'like'
-};
-
 const columns: ITabulatorProps['columns'] = [
     {
         title: 'ФИО',
@@ -55,33 +48,32 @@ const columns: ITabulatorProps['columns'] = [
         formatter: fioFormatter,
         headerFilterFunc: fioFilter,
         sorter: fioSorter,
-        headerFilter: undefined
     },
     {
         title: 'День рождения',
         field: 'birthday',
         sorter: DateTimeSorter,
-        //sorterParams:{format:'DD.MM.YYYY'} - you can set custom format. Default DD.MM.YYYY
-        headerFilter: undefined
     },
 ];
 
-export const TabulatorGridCellFormat = (): React.JSX.Element => {
-    const props: IGridProps = {
-        id: 'TabulatorGridCellFormat',
-        columnDefaults: columnDefaults,
-        columns: columns,
-        dataSet: TabulatorNamesPlainData,
-        height: 500,
-    }
+const props: IGridProps = {
+    id: 'TabulatorGridTreeCellFormat',
+    columnDefaults: TabulatorBaseColumnsDef,
+    columns: columns,
+    dataSet: TabulatorNamesTreeData,
+    dataTree: true,
+    height: 500,
+    layout: 'fitColumns',
+};
+export const TreeCellFormat = (): React.JSX.Element => {
     return (
         <>
             {/*Description Start*/}
-            <h1>Пример грида Tabulator с настраиваемым отображением ячеек</h1>
-            <p>В данном примере в ячейке столбца ФИО отображаются данные из полей surname, name, patronymic и email</p>
-            <p>Фильтр и сортировка расчитываются по каждому из этих полей</p>
+            <h1>Example of a hierarchical Tabulator grid with customizable cell display</h1>
+            <p>In this example, the cell in the full name column displays data from the fields surname, name, patronymic and email</p>
+            <p>Filter and sort are calculated for each of these fields</p>
             {/*Description End*/}
-            <TabulatorGrid {...props}/>
+            <TabulatorGrid {...props} />
         </>
     );
 };

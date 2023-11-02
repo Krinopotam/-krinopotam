@@ -3,6 +3,7 @@ import React from 'react';
 import {TabulatorGridFieldRender} from '@src/dForm/fields/tabulatorGrid/tabulatorGridFieldRender';
 import {IGridApi, IGridDataSourcePromise, IGridDeletePromise, IGridProps, IGridRowData} from '@src/tabulatorGrid';
 import {IRequestProps} from '@src/tabulatorBase';
+import {RowComponent} from "tabulator-tables";
 
 export interface ITabulatorGridFieldPropsBase extends IBaseFieldProps<TabulatorGridField> {
     /** Default value */
@@ -22,6 +23,9 @@ export interface ITabulatorGridFieldPropsCallbacks {
     /** callback is triggered when a new set of data is loaded into the table (regardless of whether it is an ajax request or a ready-made dataSet is passed) */
     onDataLoaded?: (dataSet: IGridRowData[] | undefined, gridApi: IGridApi, field: TabulatorGridField) => void;
 
+    /** The callback is triggered  after data has been processed and the table has been rendered. */
+    onDataProcessed?: (dataSet: IGridRowData[] | undefined, gridApi: IGridApi, field: TabulatorGridField) => void;
+
     /** fires when the grid data loading failed */
     onDataLoadError?: (message: string, code: number, gridApi: IGridApi, field: TabulatorGridField) => void;
 
@@ -35,7 +39,7 @@ export interface ITabulatorGridFieldPropsCallbacks {
     onDataFetchResponse?: (dataSet: IGridRowData[], params: IRequestProps, gridApi: IGridApi, field: TabulatorGridField) => IGridRowData[];
 
     /** Callback executed when selected rows change */
-    onSelectionChange?: (keys: string[], selectedRows: IGridRowData[], gridApi: IGridApi, field: TabulatorGridField) => void;
+    onSelectionChange?: (data: IGridRowData[], rows: RowComponent[], selectedRows: RowComponent[], deselectedRows: RowComponent[], gridApi: IGridApi, field: TabulatorGridField) => void;
 
     /** Callback executed when selected rows delete */
     onDelete?: (selectedRows: IGridRowData[], gridApi: IGridApi, field: TabulatorGridField) => IGridDeletePromise | void | undefined;
@@ -43,7 +47,7 @@ export interface ITabulatorGridFieldPropsCallbacks {
 
 export type ITabulatorGridFieldProps = ITabulatorGridFieldPropsBase &
     ITabulatorGridFieldPropsCallbacks &
-    Omit<IGridProps, keyof ITabulatorGridFieldPropsCallbacks | 'dataSet'>;
+    Omit<IGridProps, keyof ITabulatorGridFieldPropsCallbacks>;
 
 export class TabulatorGridField extends BaseField<ITabulatorGridFieldProps> {
     protected render() {

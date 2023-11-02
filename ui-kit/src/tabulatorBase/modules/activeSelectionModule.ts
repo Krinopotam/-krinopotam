@@ -5,6 +5,10 @@ import {IRow, IModule} from './innerTypes';
 //region Interfaces
 export interface IActiveSelectionTabulator extends Tabulator {
     options: Options & {
+        /** if true, use native tabulator selections rules without using active selection module */
+        selectionMode?: boolean;
+
+        /** Allow multi select rows (default true) */
         multiSelect?: boolean;
     };
 
@@ -61,6 +65,7 @@ export class ActiveSelectionModule extends Module {
         this.table = table as IActiveSelectionTabulator;
         const _this = this as unknown as IModule;
         _this.registerTableOption('multiSelect', true);
+        _this.registerTableOption('selectionMode', false);
         _this.registerTableFunction('getFirstRow', this.getFirstRow.bind(this));
         _this.registerTableFunction('getLastRow', this.getLastRow.bind(this));
         _this.registerTableFunction('setActiveRow', this.setActiveRow.bind(this));
@@ -85,6 +90,8 @@ export class ActiveSelectionModule extends Module {
 
     rowClickHandler(e: PointerEvent, row: IRow) {
         const options = this.table.options;
+        if (options.selectionMode) return;
+
         const rowNode = row.getComponent();
 
         if (!rowNode) return;
@@ -278,6 +285,9 @@ export class ActiveSelectionModule extends Module {
     }
 
     private onKeyDownHandler(e: KeyboardEvent) {
+        const options = this.table.options;
+        if (options.selectionMode) return;
+
         const _this = this as unknown as IModule;
         _this.dispatchExternal('keyDown', e);
 
@@ -309,6 +319,9 @@ export class ActiveSelectionModule extends Module {
     }
 
     private onKeyUpHandler(e: KeyboardEvent) {
+        const options = this.table.options;
+        if (options.selectionMode) return;
+
         const _this = this as unknown as IModule;
         _this.dispatchExternal('keyUp', e);
 

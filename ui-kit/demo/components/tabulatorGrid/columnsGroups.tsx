@@ -41,11 +41,11 @@ const columns: ITabulatorProps['columns'] = [
     },
 ];
 
-export const TabulatorGridColumnsGroups = (): React.JSX.Element => {
+export const ColumnsGroups = (): React.JSX.Element => {
     return (
         <>
             {/*Description Start*/}
-            <h1>Пример простого с группированными столбцами</h1>
+            <h1>Simple example with grouped columns</h1>
             {/*Description End*/}
             <TabulatorGrid
                 id={'TabulatorGridColumnsGroups'}

@@ -1,12 +1,11 @@
 // noinspection DuplicatedCode
 
 import React from 'react';
-import {TabulatorGrid} from '@src/tabulatorGrid';
+import {IGridProps, TabulatorGrid} from '@src/tabulatorGrid';
 import {IDFormModalProps} from '@src/dFormModal';
 import {InputField} from '@src/dForm/fields/input/inputField';
 import {NumberField} from '@src/dForm/fields/number/numberField';
 import {TabulatorBaseColumns, TabulatorBaseColumnsDef, TabulatorPlainData} from '../../data/tabulatorData';
-
 
 const editFormConfig: IDFormModalProps = {
     formId: 'gridEditForm',
@@ -20,24 +19,25 @@ const editFormConfig: IDFormModalProps = {
     confirmChanges: true,
 };
 
-export const TabulatorGridWithForm = (): React.JSX.Element => {
+const props: IGridProps = {
+    id: 'TabulatorGridWithForm',
+    columnDefaults: TabulatorBaseColumnsDef,
+    columns: TabulatorBaseColumns,
+    dataSet: TabulatorPlainData,
+    multiSelect: true,
+    editFormProps: editFormConfig,
+    confirmDelete: true,
+    height: '100%',
+    layout: 'fitColumns',
+};
+export const WithForm = (): React.JSX.Element => {
     return (
         <>
             {/*Description Start*/}
             <h1>Пример простого грида Tabulator с формой редактирование</h1>
             {/*Description End*/}
             <div style={{backgroundColor: 'bisque', padding: 5, height: 300}}>
-                <TabulatorGrid
-                    id={'TabulatorGridWithForm'}
-                    columnDefaults={TabulatorBaseColumnsDef}
-                    columns={TabulatorBaseColumns}
-                    dataSet={TabulatorPlainData}
-                    multiSelect={true}
-                    editFormProps={editFormConfig}
-                    confirmDelete
-                    height={'100%'}
-                    layout={'fitColumns'}
-                />
+                <TabulatorGrid {...props} />
             </div>
         </>
     );

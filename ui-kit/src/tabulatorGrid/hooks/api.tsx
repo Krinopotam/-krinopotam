@@ -77,6 +77,9 @@ export interface IGridApi {
     /** Set selected row/rows keys */
     setSelectedRowKeys: (keys: IRowKeys | null | undefined, clearPrevSelection?: boolean) => void;
 
+    /** Set selected row/rows keys */
+    setSelectedRows: (rows: IGridRowData[] | undefined, clearPrevSelection?: boolean) => void;
+
     /** Get selected tabulator row nodes */
     getSelectedNodes: () => RowComponent[];
 
@@ -123,6 +126,9 @@ export interface IGridApi {
     /** edit form api */
     editFormApi: IDFormModalApi;
 
+    /** selection form api */
+    selectionFormApi: IDFormModalApi;
+
     /** Buttons api */
     buttonsApi: IButtonsRowApi & {refreshButtons: () => void};
 
@@ -144,6 +150,7 @@ export const useInitGridApi = ({
     props,
     tableRef,
     editFormApi,
+    selectionFormApi,
     buttonsApi,
     openColumnsDialog,
 }: {
@@ -151,6 +158,7 @@ export const useInitGridApi = ({
     props: IGridApi['gridProps'];
     tableRef: MutableRefObject<Tabulator | undefined>;
     editFormApi: IGridApi['editFormApi'];
+    selectionFormApi: IGridApi['selectionFormApi'];
     buttonsApi: IGridApi['buttonsApi'];
     openColumnsDialog: React.Dispatch<React.SetStateAction<boolean>>;
 }): IGridApi => {
@@ -166,6 +174,7 @@ export const useInitGridApi = ({
     gridApi.gridProps = props;
     gridApi.tableApi = tableRef.current as ITabulator;
     gridApi.editFormApi = editFormApi;
+    gridApi.selectionFormApi = selectionFormApi;
     gridApi.buttonsApi = buttonsApi;
     gridApi.getIsMounted = useApiIsMounted(unmountRef);
     gridApi.getGridId = useApiGetGridId(gridApi);
@@ -183,6 +192,7 @@ export const useInitGridApi = ({
     gridApi.getSelectedNodes = useApiGetSelectedNodes(gridApi);
     gridApi.getSelectedRows = useApiGetSelectedRows(gridApi);
     gridApi.setSelectedRowKeys = useApiSetSelectedRowsKeys(gridApi);
+    gridApi.setSelectedRows = useApiSetSelectedRows(gridApi);
     gridApi.getNodeByKey = useApiGetNodeByKey(gridApi);
     gridApi.getRowByKey = useApiGetRowByKey(gridApi);
     gridApi.insertRows = useApiInsertRows(dataSetRef, gridApi);
@@ -349,6 +359,21 @@ const useApiSetSelectedRowsKeys = (gridApi: IGridApi): IGridApi['setSelectedRowK
 
             const selKeys: IRowKey[] = HelpersObjects.isArray(keys) ? (keys as IRowKey[]) : [keys as IRowKey];
             gridApi.tableApi?.selectRow(selKeys);
+        },
+        [gridApi]
+    );
+};
+
+const useApiSetSelectedRows = (gridApi: IGridApi): IGridApi['setSelectedRows'] => {
+    return useCallback(
+        (rows: IGridRowData[] | undefined, clearPrevSelection?: boolean) => {
+            if (!gridApi.tableApi) return;
+
+            if (!rows) return gridApi.setSelectedRowKeys(undefined, clearPrevSelection);
+
+            const keys = [];
+            for (const row of rows) keys.push(row.id);
+            gridApi.setSelectedRowKeys(keys, clearPrevSelection);
         },
         [gridApi]
     );

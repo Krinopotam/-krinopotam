@@ -1,12 +1,9 @@
 import {IFormButton, IFormButtons} from '@src/buttonsRow/buttonsRow';
 import React, {useCallback, useMemo, useState} from 'react';
-import {CopyOutlined, DeleteOutlined, EditOutlined, EyeOutlined, FilterOutlined, MenuOutlined, PlusOutlined} from '@ant-design/icons';
+import {CopyOutlined, DeleteOutlined, EditOutlined, EyeOutlined, FilterOutlined, MenuOutlined, PlusOutlined, PlusSquareOutlined} from '@ant-design/icons';
 import {HelpersObjects} from '@krinopotam/js-helpers';
 import {IGridApi} from './api';
 import {IGridRowData, ITabulator} from '@src/tabulatorGrid';
-//import * as XLSX from 'xlsx';
-
-//window.XLSX = XLSX
 
 export const useInitButtons = (gridApi: IGridApi): IFormButtons => {
     const [, refreshButtons] = useState({});
@@ -24,6 +21,7 @@ export const useInitButtons = (gridApi: IGridApi): IFormButtons => {
     const cloneButton = useGetCloneButton(gridApi, activeRow, selectedRows);
     const updateButton = useGetUpdateButton(gridApi, activeRow, selectedRows);
     const deleteButton = useGetDeleteButton(gridApi, selectedRows);
+    const selectButton = useGetSelectionButton(gridApi);
     const filterToggleButton = useGetFilterToggleButton(gridApi, gridApi.tableApi);
     const systemButtons = useGetSystemButton(gridApi);
 
@@ -33,6 +31,7 @@ export const useInitButtons = (gridApi: IGridApi): IFormButtons => {
             create: createButton,
             clone: cloneButton,
             update: updateButton,
+            select: selectButton,
             delete: deleteButton,
             filterToggle: filterToggleButton,
             system: systemButtons,
@@ -52,7 +51,20 @@ export const useInitButtons = (gridApi: IGridApi): IFormButtons => {
         }
 
         return resultButtons;
-    }, [buttons, buttonsPos, buttonsSize, cloneButton, createButton, deleteButton, filterToggleButton, iconsOnly, systemButtons, updateButton, viewButton]);
+    }, [
+        buttons,
+        buttonsPos,
+        buttonsSize,
+        cloneButton,
+        createButton,
+        deleteButton,
+        filterToggleButton,
+        iconsOnly,
+        selectButton,
+        systemButtons,
+        updateButton,
+        viewButton,
+    ]);
 };
 
 const useRefreshButtons = (refreshButtons: React.Dispatch<React.SetStateAction<Record<string, unknown>>>) => {
@@ -155,11 +167,33 @@ const useGetUpdateButton = (gridApi: IGridApi, activeRow: IGridRowData | undefin
     }, [activeRow, gridApi, selectedRows.length]);
 };
 
+/** Get selection button props */
+const useGetSelectionButton = (gridApi: IGridApi): IFormButton | undefined => {
+    return useMemo(() => {
+        const gridProps = gridApi.gridProps;
+        const selectionFormApi = gridApi.selectionFormApi;
+        if (!gridProps.selectionFormProps || gridProps.readOnly || gridProps.buttons?.select === null) return undefined;
+
+        return {
+            weight: 130,
+            title: 'Выбрать',
+            tooltip: 'Выбрать записи',
+            icon: <PlusSquareOutlined />,
+            position: 'right',
+            hotKeys: [{key: 'Insert'}],
+            onClick: () => {
+                const dataSet = gridApi.getDataSet();
+                selectionFormApi.open('update', {select: dataSet});
+            },
+        } satisfies IFormButton;
+    }, [gridApi]);
+};
+
 /** Get delete button props */
 const useGetDeleteButton = (gridApi: IGridApi, selectedRows: IGridRowData[]): IFormButton | undefined => {
     return useMemo(() => {
         const gridProps = gridApi.gridProps;
-        if (!gridProps.editFormProps || gridProps.readOnly || gridProps.buttons?.delete === null) return undefined;
+        if ((!gridProps.editFormProps && !gridProps.selectionFormProps) || gridProps.readOnly || gridProps.buttons?.delete === null) return undefined;
 
         return {
             weight: 140,
@@ -217,20 +251,18 @@ const useGetSystemButton = (gridApi: IGridApi): IFormButton | undefined => {
         const gridProps = gridApi.gridProps;
         if (gridProps.buttons?.filterToggle === null) return undefined;
 
-        //if (tableApi?.disableSystemMenu) return undefined;
-
         return {
             weight: 2000,
             expandIcon: <MenuOutlined />, //<EllipsisOutlined />
             //tooltip: 'Параметры таблицы',
             position: 'right',
             children: {
-/*                toCSV: {
-                    title: 'Экспорт в CSV',
-                    onClick: () => {
-                        gridApi.tableApi?.download('csv', 'table.csv');
-                    },
-                },*/
+                /*                toCSV: {
+                                    title: 'Экспорт в CSV',
+                                    onClick: () => {
+                                        gridApi.tableApi?.download('csv', 'table.csv');
+                                    },
+                                },*/
                 toXlsx: {
                     title: 'Экспорт в Excel',
                     onClick: () => {

@@ -113,7 +113,7 @@ const editFormProps: IDFormModalProps = {
     },
 };
 
-export const TabulatorGridWithComplexForm = (): React.JSX.Element => {
+export const WithComplexForm = (): React.JSX.Element => {
     return (
         <TabulatorGrid
             columns={columns}

@@ -27,7 +27,7 @@ export const PropsToArgs = (): React.JSX.Element => {
                 if (match[3]) argsResult = argsResult + ' ' + match[3]; //comment
             } else if (match[4]) {
                 //simple boolean prop without value
-                argsResult = argsResult + `\n    ${match[3]}: true,`;
+                argsResult = argsResult + `\n    ${match[4]}: true,`;
                 if (match[5]) argsResult = argsResult + ' ' + match[5]; //comment
             }
         }

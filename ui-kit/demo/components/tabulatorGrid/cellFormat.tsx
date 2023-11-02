@@ -1,10 +1,11 @@
 // noinspection DuplicatedCode
 
 import React from 'react';
+
 import {ColumnDefinition} from 'tabulator-tables';
-import {TabulatorGrid, ITabulatorProps} from '@src/tabulatorGrid';
+import {TabulatorGrid, ITabulatorProps, IGridProps} from "@src/tabulatorGrid";
 import {DateTimeSorter} from "@src/tabulatorBase/sorters/dateTime";
-import {TabulatorBaseColumnsDef, TabulatorNamesTreeData} from "../../data/tabulatorData";
+import {TabulatorNamesPlainData} from "../../data/tabulatorData";
 
 const fioFormatter: ColumnDefinition['formatter'] = (cell) => {
     //cell - the cell component
@@ -41,6 +42,12 @@ const fioSorter: ColumnDefinition['sorter'] = (_a, _b, aRow, bRow): number => {
     return valA > valB ? 1 : -1; //you must return the difference between the two values
 };
 
+const columnDefaults: ITabulatorProps['columnDefaults'] = {
+    resizable: 'header',
+    headerFilter: true,
+    headerFilterFunc: 'like'
+};
+
 const columns: ITabulatorProps['columns'] = [
     {
         title: 'ФИО',
@@ -48,23 +55,33 @@ const columns: ITabulatorProps['columns'] = [
         formatter: fioFormatter,
         headerFilterFunc: fioFilter,
         sorter: fioSorter,
+        headerFilter: undefined
     },
     {
         title: 'День рождения',
         field: 'birthday',
-        sorter: DateTimeSorter
+        sorter: DateTimeSorter,
+        //sorterParams:{format:'DD.MM.YYYY'} - you can set custom format. Default DD.MM.YYYY
+        headerFilter: undefined
     },
 ];
 
-export const TabulatorGridTreeCellFormat = (): React.JSX.Element => {
+export const CellFormat = (): React.JSX.Element => {
+    const props: IGridProps = {
+        id: 'TabulatorGridCellFormat',
+        columnDefaults: columnDefaults,
+        columns: columns,
+        dataSet: TabulatorNamesPlainData,
+        height: 500,
+    }
     return (
         <>
             {/*Description Start*/}
-            <h1>Пример иерархического грида Tabulator с настраиваемым отображением ячеек</h1>
+            <h1>Пример грида Tabulator с настраиваемым отображением ячеек</h1>
             <p>В данном примере в ячейке столбца ФИО отображаются данные из полей surname, name, patronymic и email</p>
             <p>Фильтр и сортировка расчитываются по каждому из этих полей</p>
             {/*Description End*/}
-            <TabulatorGrid id={'TabulatorGridTreeCellFormat'} columnDefaults={TabulatorBaseColumnsDef} columns={columns} dataSet={TabulatorNamesTreeData} dataTree={true} height={500} layout={'fitColumns'} />
+            <TabulatorGrid {...props}/>
         </>
     );
 };

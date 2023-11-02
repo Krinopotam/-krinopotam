@@ -24,6 +24,13 @@ export const useEvents = (gridApi: IGridApi, events: ITabulatorEvents | undefine
 
                 if (!gridApi.gridProps.progressiveLoad) gridApi.setIsLoading(false);
             },
+            dataProcessed: data=>{
+                events?.dataProcessed?.(data);
+                gridApi.gridProps.onDataProcessed?.(data, gridApi);
+
+                //console.log(data)
+                //gridApi.setSelectedRowKeys([1,2,3])
+            },
             dataLoadError: error => {
                 events?.dataLoadError?.(error);
                 const err = error as unknown as {message: string; code: number};
@@ -59,6 +66,10 @@ export const useEvents = (gridApi: IGridApi, events: ITabulatorEvents | undefine
             activeRowChanged: row => {
                 events?.activeRowChanged?.(row);
                 gridApi.buttonsApi.refreshButtons();
+            },
+            rowSelectionChanged: (data, rows, selectedRows, deselectedRows) => {
+                events?.rowSelectionChanged?.(data, rows, selectedRows, deselectedRows);
+                gridApi.gridProps.onSelectionChange?.(data, rows, selectedRows, deselectedRows, gridApi);
             },
         };
     }, [events, gridApi]);

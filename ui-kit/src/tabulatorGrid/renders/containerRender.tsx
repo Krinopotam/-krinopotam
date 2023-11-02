@@ -9,6 +9,7 @@ import {IGridProps} from '../tabulatorGrid';
 import {ITabulator, ITabulatorProps} from '@src/tabulatorBase';
 import {ButtonsRowWrapper} from '@src/buttonsRow';
 import {ColumnsDialog} from '@src/tabulatorGrid/renders/columnsDialog';
+import {usePrepareSelectionFormProps} from "@src/tabulatorGrid/hooks/gridSelectionForm";
 
 export const ContainerRender = ({
     tableRef,
@@ -24,6 +25,7 @@ export const ContainerRender = ({
     columnsDialog: boolean;
 }): React.JSX.Element => {
     const editFormProps = usePrepareEditFormProps(gridApi);
+    const selectionFormProps = usePrepareSelectionFormProps(gridApi);
 
     // Even though gridProps can be obtained from gridApi, we still separately pass gridProps to GridRender
     // Since GridRender is memoized, this is done so that the GridRender component is updated when gridProps changes
@@ -40,6 +42,7 @@ export const ContainerRender = ({
             </LoadingContainer>
             <ColumnsDialog open={columnsDialog} gridApi={gridApi} />
             {editFormProps ? <DFormModal {...editFormProps} apiRef={gridApi.editFormApi} /> : null}
+            {selectionFormProps ? <DFormModal {...selectionFormProps} apiRef={gridApi.selectionFormApi} /> : null}
         </div>
     );
 };
