@@ -28,6 +28,7 @@ export interface IGridApi {
     getPrevRowKey: (key: IRowKey | undefined, step?: number) => IRowKey | undefined;
     getSelectedRowKeys: () => IRowKey[];
     setSelectedRowKeys: (keys: IRowKeys | null | undefined, clearPrevSelection?: boolean) => void;
+    setSelectedRows: (rows: IGridRowData[] | undefined, clearPrevSelection?: boolean) => void;
     getSelectedNodes: () => RowComponent[];
     getSelectedRows: () => IGridRowData[];
     getRowData: (node: RowComponent | undefined, withParent?: boolean, selfParent?: boolean, parentOnly?: boolean, withChildren?: boolean) => Record<string, unknown>;
@@ -35,6 +36,7 @@ export interface IGridApi {
     getNodeByKey: (key: IRowKey) => RowComponent | undefined;
     getRowByKey: (key: IRowKey) => IGridRowData | undefined;
     editFormApi: IDFormModalApi;
+    selectionFormApi: IDFormModalApi;
     buttonsApi: IButtonsRowApi & {
         refreshButtons: () => void;
     };
@@ -43,11 +45,12 @@ export interface IGridApi {
     setCurrentDataFetchHandler: (dataFetchHandler: IGridProps['onDataFetch'], params?: Record<string, unknown>) => void;
     getCurrentDataFetchHandler: () => [IGridProps['onDataFetch'], Record<string, unknown> | undefined];
 }
-export declare const useInitGridApi: ({ gridApi, props, tableRef, editFormApi, buttonsApi, openColumnsDialog, }: {
+export declare const useInitGridApi: ({ gridApi, props, tableRef, editFormApi, selectionFormApi, buttonsApi, openColumnsDialog, }: {
     gridApi: IGridApi;
     props: IGridApi['gridProps'];
     tableRef: MutableRefObject<Tabulator | undefined>;
     editFormApi: IGridApi['editFormApi'];
+    selectionFormApi: IGridApi['selectionFormApi'];
     buttonsApi: IGridApi['buttonsApi'];
     openColumnsDialog: React.Dispatch<React.SetStateAction<boolean>>;
 }) => IGridApi;

@@ -24,6 +24,11 @@ export const useEvents = (gridApi, events) => {
                 if (!gridApi.gridProps.progressiveLoad)
                     gridApi.setIsLoading(false);
             },
+            dataProcessed: data => {
+                var _a, _b, _c;
+                (_a = events === null || events === void 0 ? void 0 : events.dataProcessed) === null || _a === void 0 ? void 0 : _a.call(events, data);
+                (_c = (_b = gridApi.gridProps).onDataProcessed) === null || _c === void 0 ? void 0 : _c.call(_b, data, gridApi);
+            },
             dataLoadError: error => {
                 var _a, _b, _c;
                 (_a = events === null || events === void 0 ? void 0 : events.dataLoadError) === null || _a === void 0 ? void 0 : _a.call(events, error);
@@ -58,6 +63,11 @@ export const useEvents = (gridApi, events) => {
                 var _a;
                 (_a = events === null || events === void 0 ? void 0 : events.activeRowChanged) === null || _a === void 0 ? void 0 : _a.call(events, row);
                 gridApi.buttonsApi.refreshButtons();
+            },
+            rowSelectionChanged: (data, rows, selectedRows, deselectedRows) => {
+                var _a, _b, _c;
+                (_a = events === null || events === void 0 ? void 0 : events.rowSelectionChanged) === null || _a === void 0 ? void 0 : _a.call(events, data, rows, selectedRows, deselectedRows);
+                (_c = (_b = gridApi.gridProps).onSelectionChange) === null || _c === void 0 ? void 0 : _c.call(_b, data, rows, selectedRows, deselectedRows, gridApi);
             },
         };
     }, [events, gridApi]);

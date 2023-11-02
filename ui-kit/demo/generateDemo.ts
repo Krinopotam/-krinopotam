@@ -95,7 +95,7 @@ function processFile(fileName: string, fileDir: string, curDirFromRoot: string):
         componentName: componentName,
         componentGuid: crypto.randomUUID(),
         menuItemName: menuItemName,
-        menuItemLink: menuItemName.replaceAll(" ", ''),
+        menuItemLink: menuItemName.replaceAll(' ', ''),
         source: fileContent,
     };
 }
@@ -131,23 +131,22 @@ function clearSource(source: string) {
 //region Generate menu props
 const _itemNum = {num: 0};
 
-function prepareMenuProps(filesInfo: IFileInfo[], level: number = 1) {
+function prepareMenuProps(filesInfo: IFileInfo[], level: number = 1, rootFolder = '/') {
     if (filesInfo.length === 0) return '';
     let result = '[';
     for (const file of filesInfo) {
         _itemNum.num++;
         if (file.children?.length) {
+            const childrenItems = prepareMenuProps(file.children, level + 1, rootFolder + file.fileName + '/');
             result =
                 result +
                 // language=text
-                `\n${' '.repeat(level * 4)}getItem("${file.menuItemName}", "Item${_itemNum.num}", <FolderOutlined />, ${prepareMenuProps(
-                    file.children,
-                    level + 1
-                )}),`;
-        } else {
-            // language=text
-            result = result + `\n${' '.repeat(level * 4)}getItem(<Link to="${file.menuItemLink}">${file.menuItemName}</Link>, "Item${_itemNum.num}"),`;
+                `\n${' '.repeat(level * 4)}getItem("${file.menuItemName}", "Item${_itemNum.num}", <FolderOutlined />, ${childrenItems}),`;
+            continue;
         }
+
+        // language=text
+        result = result + `\n${' '.repeat(level * 4)}getItem(<Link to="${rootFolder + file.menuItemLink}">${file.menuItemName}</Link>, "Item${_itemNum.num}"),`;
     }
     result = result + ']';
 
@@ -193,7 +192,8 @@ function generatePages(filesInfo: IFileInfo[], subFolderPath = '', level: number
 
             console.log(' '.repeat(level * 4), folderName);
             const [routeStr, routeImportStr] = generatePages(file.children, subFolderPath + '/' + folderName, level + 1);
-            routesStrings = routesStrings + routeStr + '\n';
+
+            routesStrings = routesStrings + `                        {path:"${folderName}", children: [\n${routeStr}\n]},` + '\n';
             routeImportStrings = routeImportStrings + routeImportStr + '\n';
         } else {
             const [routeStr, routeImportStr] = generatePageComponent(file, subFolderPath, level);
@@ -209,7 +209,7 @@ function generatePageComponent(file: IFileInfo, subFolderPath: string, level: nu
     const componentModulePath = '../' + trimExtension(file.fullFilePath);
     const componentName = file.componentName;
     const menuItemLink = file.menuItemLink;
-    const pageComponentName = 'Page' + file.componentGuid?.replaceAll('-', ''); // 'Page' + file.componentName;
+    const pageComponentName = 'Page' + file.componentGuid?.replaceAll('-', '');
 
     const pagesPath: string = _pagesPath + '/' + pageComponentName + '.tsx';
     const pageModulePath = './' + _pagesFolder + '/' + pageComponentName;
@@ -252,7 +252,7 @@ export default ${pageComponentName};
     fs.writeFileSync(pagesPath, content, {encoding: 'utf8', flag: 'w'});
 
     // language=text
-    const routeStr = `                <Route path="${menuItemLink}" element={<${pageComponentName} darkMode={props.darkMode} />} />;`;
+    const routeStr = `                        {path:"${menuItemLink}", element:<${pageComponentName} darkMode={props.darkMode} />},`;
     const routeImportStr = `    const ${pageComponentName} = lazy(() => import('${pageModulePath}'))`;
 
     console.log(' '.repeat(level * 4), file.componentName);
@@ -265,23 +265,28 @@ export default ${pageComponentName};
 function generateRoutes(routers: string, imports: string) {
     // language=text
     const result = `
-    import React, {lazy} from 'react';
-    import {Route, Routes} from 'react-router-dom';
+    import React, {lazy, useMemo} from 'react';
+    import {createBrowserRouter} from 'react-router-dom';
     import {DemoLayout} from './demoLayout';
     import {Home} from './home';
 ${imports}
 
-export const DemoRoutes = (props: {darkMode: boolean; setDarkMode: (mode:boolean) => void}) => {
-    return (
-        <Routes>
-            <Route path="/" element={<DemoLayout setDarkMode={props.setDarkMode} />}>
-                <Route index element={<Home />} />
+export const useDemoRoutes = (props: {darkMode: boolean; setDarkMode: (mode: boolean) => void}) => {
+        return useMemo(() => {
+            return createBrowserRouter([
+                {
+                    path: '/',
+                    element: <DemoLayout setDarkMode={props.setDarkMode} />,
+                    children: [
+                        {index: true, element: <Home />},
 ${routers}
-                <Route path="*" element={<Home />} />
-            </Route>
-        </Routes>
-    );
-};
+                        {path: '*', element: <Home />},
+                    ],
+                },
+            ]);
+        }, [props.darkMode, props.setDarkMode]);
+    };
+
 `;
     fs.writeFileSync(__dirname + '/demoRoutes.tsx', result, {encoding: 'utf8', flag: 'w'});
 }
@@ -307,7 +312,7 @@ function menuItemsSorting(items: IFileInfo[]) {
 //region Service methods
 function camelCaseSplit(str: string, splitter?: string) {
     if (typeof splitter === 'undefined') splitter = ' ';
-    return str.replace(/([a-z0-9])([A-Z])/g, '$1' + splitter + '$2');
+    return str.replace(/([a-z0-9][a-z0-9])([A-Z][a-z0-9])/g, '$1' + splitter + '$2');
 }
 
 function parseComponentName(source: string) {

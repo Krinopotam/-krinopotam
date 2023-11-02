@@ -6,6 +6,7 @@ export class ActiveSelectionModule extends Module {
         this.table = table;
         const _this = this;
         _this.registerTableOption('multiSelect', true);
+        _this.registerTableOption('selectionMode', false);
         _this.registerTableFunction('getFirstRow', this.getFirstRow.bind(this));
         _this.registerTableFunction('getLastRow', this.getLastRow.bind(this));
         _this.registerTableFunction('setActiveRow', this.setActiveRow.bind(this));
@@ -25,6 +26,8 @@ export class ActiveSelectionModule extends Module {
     }
     rowClickHandler(e, row) {
         const options = this.table.options;
+        if (options.selectionMode)
+            return;
         const rowNode = row.getComponent();
         if (!rowNode)
             return;
@@ -205,6 +208,9 @@ export class ActiveSelectionModule extends Module {
         this.table.element.removeEventListener('keyup', this.onKeyUpHandler.bind(this));
     }
     onKeyDownHandler(e) {
+        const options = this.table.options;
+        if (options.selectionMode)
+            return;
         const _this = this;
         _this.dispatchExternal('keyDown', e);
         switch (e.key) {
@@ -234,6 +240,9 @@ export class ActiveSelectionModule extends Module {
         }
     }
     onKeyUpHandler(e) {
+        const options = this.table.options;
+        if (options.selectionMode)
+            return;
         const _this = this;
         _this.dispatchExternal('keyUp', e);
         if (e.key === 'Shift')

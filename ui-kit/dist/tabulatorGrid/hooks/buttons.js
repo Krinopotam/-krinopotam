@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import { CopyOutlined, DeleteOutlined, EditOutlined, EyeOutlined, FilterOutlined, MenuOutlined, PlusOutlined } from '@ant-design/icons';
+import { CopyOutlined, DeleteOutlined, EditOutlined, EyeOutlined, FilterOutlined, MenuOutlined, PlusOutlined, PlusSquareOutlined } from '@ant-design/icons';
 import { HelpersObjects } from '@krinopotam/js-helpers';
 export const useInitButtons = (gridApi) => {
     var _a, _b;
@@ -16,6 +16,7 @@ export const useInitButtons = (gridApi) => {
     const cloneButton = useGetCloneButton(gridApi, activeRow, selectedRows);
     const updateButton = useGetUpdateButton(gridApi, activeRow, selectedRows);
     const deleteButton = useGetDeleteButton(gridApi, selectedRows);
+    const selectButton = useGetSelectionButton(gridApi);
     const filterToggleButton = useGetFilterToggleButton(gridApi, gridApi.tableApi);
     const systemButtons = useGetSystemButton(gridApi);
     return useMemo(() => {
@@ -25,6 +26,7 @@ export const useInitButtons = (gridApi) => {
             create: createButton,
             clone: cloneButton,
             update: updateButton,
+            select: selectButton,
             delete: deleteButton,
             filterToggle: filterToggleButton,
             system: systemButtons,
@@ -42,7 +44,20 @@ export const useInitButtons = (gridApi) => {
             }
         }
         return resultButtons;
-    }, [buttons, buttonsPos, buttonsSize, cloneButton, createButton, deleteButton, filterToggleButton, iconsOnly, systemButtons, updateButton, viewButton]);
+    }, [
+        buttons,
+        buttonsPos,
+        buttonsSize,
+        cloneButton,
+        createButton,
+        deleteButton,
+        filterToggleButton,
+        iconsOnly,
+        selectButton,
+        systemButtons,
+        updateButton,
+        viewButton,
+    ]);
 };
 const useRefreshButtons = (refreshButtons) => {
     return useCallback(() => {
@@ -142,11 +157,32 @@ const useGetUpdateButton = (gridApi, activeRow, selectedRows) => {
         };
     }, [activeRow, gridApi, selectedRows.length]);
 };
+const useGetSelectionButton = (gridApi) => {
+    return useMemo(() => {
+        var _a;
+        const gridProps = gridApi.gridProps;
+        const selectionFormApi = gridApi.selectionFormApi;
+        if (!gridProps.selectionFormProps || gridProps.readOnly || ((_a = gridProps.buttons) === null || _a === void 0 ? void 0 : _a.select) === null)
+            return undefined;
+        return {
+            weight: 130,
+            title: 'Выбрать',
+            tooltip: 'Выбрать записи',
+            icon: React.createElement(PlusSquareOutlined, null),
+            position: 'right',
+            hotKeys: [{ key: 'Insert' }],
+            onClick: () => {
+                const dataSet = gridApi.getDataSet();
+                selectionFormApi.open('update', { select: dataSet });
+            },
+        };
+    }, [gridApi]);
+};
 const useGetDeleteButton = (gridApi, selectedRows) => {
     return useMemo(() => {
         var _a;
         const gridProps = gridApi.gridProps;
-        if (!gridProps.editFormProps || gridProps.readOnly || ((_a = gridProps.buttons) === null || _a === void 0 ? void 0 : _a.delete) === null)
+        if ((!gridProps.editFormProps && !gridProps.selectionFormProps) || gridProps.readOnly || ((_a = gridProps.buttons) === null || _a === void 0 ? void 0 : _a.delete) === null)
             return undefined;
         return {
             weight: 140,

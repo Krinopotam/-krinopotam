@@ -3,7 +3,7 @@ import { HelpersStrings, HelpersObjects } from '@krinopotam/js-helpers';
 import useUnmountedRef from 'ahooks/lib/useUnmountedRef';
 import { MessageBox } from '../../messageBox';
 import { GenerateAjaxRequestFunc } from '../../tabulatorGrid/helpers/fetchHelpers';
-export const useInitGridApi = ({ gridApi, props, tableRef, editFormApi, buttonsApi, openColumnsDialog, }) => {
+export const useInitGridApi = ({ gridApi, props, tableRef, editFormApi, selectionFormApi, buttonsApi, openColumnsDialog, }) => {
     const dataSetRef = useRef(undefined);
     const curDataFetchHandler = useRef();
     const curDataFetchParams = useRef();
@@ -13,6 +13,7 @@ export const useInitGridApi = ({ gridApi, props, tableRef, editFormApi, buttonsA
     gridApi.gridProps = props;
     gridApi.tableApi = tableRef.current;
     gridApi.editFormApi = editFormApi;
+    gridApi.selectionFormApi = selectionFormApi;
     gridApi.buttonsApi = buttonsApi;
     gridApi.getIsMounted = useApiIsMounted(unmountRef);
     gridApi.getGridId = useApiGetGridId(gridApi);
@@ -30,6 +31,7 @@ export const useInitGridApi = ({ gridApi, props, tableRef, editFormApi, buttonsA
     gridApi.getSelectedNodes = useApiGetSelectedNodes(gridApi);
     gridApi.getSelectedRows = useApiGetSelectedRows(gridApi);
     gridApi.setSelectedRowKeys = useApiSetSelectedRowsKeys(gridApi);
+    gridApi.setSelectedRows = useApiSetSelectedRows(gridApi);
     gridApi.getNodeByKey = useApiGetNodeByKey(gridApi);
     gridApi.getRowByKey = useApiGetRowByKey(gridApi);
     gridApi.insertRows = useApiInsertRows(dataSetRef, gridApi);
@@ -164,6 +166,18 @@ const useApiSetSelectedRowsKeys = (gridApi) => {
             (_a = gridApi.tableApi) === null || _a === void 0 ? void 0 : _a.deselectRow();
         const selKeys = HelpersObjects.isArray(keys) ? keys : [keys];
         (_b = gridApi.tableApi) === null || _b === void 0 ? void 0 : _b.selectRow(selKeys);
+    }, [gridApi]);
+};
+const useApiSetSelectedRows = (gridApi) => {
+    return useCallback((rows, clearPrevSelection) => {
+        if (!gridApi.tableApi)
+            return;
+        if (!rows)
+            return gridApi.setSelectedRowKeys(undefined, clearPrevSelection);
+        const keys = [];
+        for (const row of rows)
+            keys.push(row.id);
+        gridApi.setSelectedRowKeys(keys, clearPrevSelection);
     }, [gridApi]);
 };
 const useApiGetSelectedNodes = (gridApi) => {

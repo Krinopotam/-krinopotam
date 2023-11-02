@@ -7,14 +7,20 @@ export const TabulatorGridFieldRender = ({ field }) => {
     const fieldProps = field.getProps();
     const tabulatorProps = useSplitTabulatorProps(fieldProps);
     const value = field.getValue();
-    const prevDataSetRef = useRef();
-    const prevValueRef = useRef();
-    if (prevValueRef.current !== value) {
-        prevDataSetRef.current = value;
-        prevValueRef.current = value;
+    const curDataSetRef = useRef(fieldProps.dataSet);
+    const curValueRef = useRef();
+    let curDataSet = undefined;
+    if (!fieldProps.selectionMode) {
+        if (curValueRef.current !== value) {
+            curDataSetRef.current = value;
+            curValueRef.current = value;
+        }
+        curDataSet = curDataSetRef.current;
     }
-    const curDataSet = prevDataSetRef.current;
-    const callbacks = usePrepareCallbacks(field, fieldProps, prevValueRef);
+    else {
+        curDataSet = curDataSetRef.current;
+    }
+    const callbacks = usePrepareCallbacks(field, fieldProps, curValueRef, curDataSetRef);
     let height = fieldProps.height;
     if (fieldProps.autoHeightResize)
         height = '100%';
@@ -48,6 +54,7 @@ const useSplitTabulatorProps = (props) => {
     return useMemo(() => {
         const result = HelpersObjects.splitObject(props, {
             value: true,
+            dataSet: true,
             onMenuVisibilityChanged: true,
             onDataLoading: true,
             onDataLoaded: true,
@@ -89,18 +96,32 @@ const useSplitTabulatorProps = (props) => {
         return result[1];
     }, [props]);
 };
-const usePrepareCallbacks = (field, fieldProps, prevValueRef) => {
+const usePrepareCallbacks = (field, fieldProps, curValueRef, curDataSetRef) => {
     return useMemo(() => {
         return {
             onDataChanged: (dataSet, gridApi) => {
                 var _a;
                 if (field.isReady()) {
-                    prevValueRef.current = dataSet;
-                    field.setValue(dataSet !== null && dataSet !== void 0 ? dataSet : undefined);
-                    field.setDirty(true);
-                    field.setTouched(true);
+                    if (!fieldProps.selectionMode) {
+                        curValueRef.current = dataSet;
+                        curDataSetRef.current = dataSet;
+                        field.setValue(dataSet !== null && dataSet !== void 0 ? dataSet : undefined);
+                        field.setDirty(true);
+                    }
                 }
                 return (_a = fieldProps.onDataChanged) === null || _a === void 0 ? void 0 : _a.call(fieldProps, dataSet, gridApi, field);
+            },
+            onSelectionChange: (selectedData, rows, selectedRows, deselectedRows, gridApi) => {
+                var _a;
+                if (field.isReady()) {
+                    if (fieldProps.selectionMode) {
+                        curValueRef.current = selectedData;
+                        field.setValue(selectedData !== null && selectedData !== void 0 ? selectedData : undefined);
+                        field.setDirty(true);
+                    }
+                    field.setTouched(true);
+                }
+                return (_a = fieldProps.onSelectionChange) === null || _a === void 0 ? void 0 : _a.call(fieldProps, selectedData, rows, selectedRows, deselectedRows, gridApi, field);
             },
             onDataLoading: (dataSet, gridApi) => {
                 var _a;
@@ -110,7 +131,15 @@ const usePrepareCallbacks = (field, fieldProps, prevValueRef) => {
             onDataLoaded: (dataSet, gridApi) => {
                 var _a;
                 field.setReady(true);
+                const fieldProps = field.getProps();
                 return (_a = fieldProps.onDataLoaded) === null || _a === void 0 ? void 0 : _a.call(fieldProps, dataSet, gridApi, field);
+            },
+            onDataProcessed: (dataSet, gridApi) => {
+                var _a;
+                const fieldProps = field.getProps();
+                if (fieldProps.selectionMode)
+                    gridApi.setSelectedRows(field.getValue());
+                return (_a = fieldProps.onDataProcessed) === null || _a === void 0 ? void 0 : _a.call(fieldProps, dataSet, gridApi, field);
             },
             onDataLoadError: (message, code, gridApi) => {
                 var _a;
@@ -123,9 +152,8 @@ const usePrepareCallbacks = (field, fieldProps, prevValueRef) => {
                     return fieldProps.onDataFetch(params, gridApi, field);
                 },
             onDataFetchResponse: (dataSet, params, gridApi) => { var _a, _b; return (_b = (_a = fieldProps === null || fieldProps === void 0 ? void 0 : fieldProps.onDataFetchResponse) === null || _a === void 0 ? void 0 : _a.call(fieldProps, dataSet, params, gridApi, field)) !== null && _b !== void 0 ? _b : dataSet; },
-            onSelectionChange: (keys, selectedRows, gridApi) => { var _a; return (_a = fieldProps === null || fieldProps === void 0 ? void 0 : fieldProps.onSelectionChange) === null || _a === void 0 ? void 0 : _a.call(fieldProps, keys, selectedRows, gridApi, field); },
             onMenuVisibilityChanged: (isVisible, gridApi) => { var _a; return (_a = fieldProps === null || fieldProps === void 0 ? void 0 : fieldProps.onMenuVisibilityChanged) === null || _a === void 0 ? void 0 : _a.call(fieldProps, isVisible, gridApi, field); },
             onDelete: (selectedRows, gridApi) => { var _a; return (_a = fieldProps === null || fieldProps === void 0 ? void 0 : fieldProps.onDelete) === null || _a === void 0 ? void 0 : _a.call(fieldProps, selectedRows, gridApi, field); },
         };
-    }, [field, fieldProps, prevValueRef]);
+    }, [fieldProps, field, curValueRef, curDataSetRef]);
 };

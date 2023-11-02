@@ -4,6 +4,7 @@ import { IFormButton, IFormButtons } from '../buttonsRow/buttonsRow';
 import { IDFormModalProps } from '../dFormModal';
 import { TPromise } from '@krinopotam/service-types';
 import { IGridApi } from './hooks/api';
+import { RowComponent } from 'tabulator-tables';
 export interface IGridRowData extends Record<string, unknown> {
     id: string | number;
     children?: IGridRowData[];
@@ -14,12 +15,14 @@ export interface IGridPropsBase {
     gridMode?: 'local' | 'remote';
     dataSet?: IGridRowData[];
     className?: string;
-    buttons?: Record<'view' | 'create' | 'clone' | 'update' | 'delete' | 'filterToggle' | 'system', IFormButton | null> | IFormButtons;
+    buttons?: Record<'view' | 'create' | 'clone' | 'update' | 'delete' | 'select' | 'filterToggle' | 'system', IFormButton | null> | IFormButtons;
     buttonsSize?: IFormButton['size'];
     buttonsIconsOnly?: boolean;
     buttonsPosition?: IFormButton['position'];
     readOnly?: boolean;
     editFormProps?: IDFormModalProps;
+    selectionFormProps?: IDFormModalProps;
+    appendSelection?: boolean;
     noHover?: boolean;
     rowDeleteMessage?: React.ReactNode;
     confirmDelete?: boolean;
@@ -32,9 +35,10 @@ export interface IGridPropsCallbacks {
     onDataFetchResponse?: (dataSet: IGridRowData[], params: IRequestProps, gridApi: IGridApi) => IGridRowData[];
     onDataLoading?: (dataSet: IGridRowData[] | undefined, gridApi: IGridApi) => void;
     onDataLoaded?: (dataSet: IGridRowData[] | undefined, gridApi: IGridApi) => void;
+    onDataProcessed?: (dataSet: IGridRowData[] | undefined, gridApi: IGridApi) => void;
     onDataLoadError?: (message: string, code: number, gridApi: IGridApi) => void;
     onDataChanged?: (dataSet: IGridRowData[] | undefined, gridApi: IGridApi) => void;
-    onSelectionChange?: (keys: string[], selectedRows: IGridRowData[], gridApi: IGridApi) => void;
+    onSelectionChange?: (data: IGridRowData[], rows: RowComponent[], selectedRows: RowComponent[], deselectedRows: RowComponent[], gridApi: IGridApi) => void;
     onDelete?: (selectedRows: IGridRowData[], gridApi: IGridApi) => IGridDeletePromise | void | undefined;
 }
 export type IGridProps = IGridPropsBase & IGridPropsCallbacks & Omit<ITabulatorProps, 'data' | 'ajaxURL' | 'ajaxRequestFunc' | 'ajaxResponse'>;

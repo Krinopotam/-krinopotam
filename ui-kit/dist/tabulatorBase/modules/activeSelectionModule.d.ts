@@ -2,6 +2,7 @@ import { TabulatorFull as Tabulator, Module, ScrollToRowPosition, Options, RowCo
 import { IRow } from './innerTypes';
 export interface IActiveSelectionTabulator extends Tabulator {
     options: Options & {
+        selectionMode?: boolean;
         multiSelect?: boolean;
     };
     setActiveRow: (row: RowComponent | undefined | null, clearSelection?: boolean, scrollPosition?: ScrollToRowPosition) => void;

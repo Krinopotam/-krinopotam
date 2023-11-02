@@ -1,12 +1,13 @@
 import {App, ConfigProvider, theme} from 'antd';
 
-import {BrowserRouter} from 'react-router-dom';
-import {DemoRoutes} from './demoRoutes';
+import {RouterProvider} from 'react-router-dom';
+import {useDemoRoutes} from './demoRoutes';
 import React, {useState} from 'react';
 import ruRU from 'antd/locale/ru_RU';
 
 export const DemoApp = (): React.JSX.Element => {
     const [darkMode, setDarkMode] = useState(false);
+    const demoRoutes = useDemoRoutes({darkMode, setDarkMode});
     return (
         <ConfigProvider
             locale={ruRU}
@@ -22,9 +23,7 @@ export const DemoApp = (): React.JSX.Element => {
         >
             {/** antd context for static Modal (form MessageBox). Should use in root component */}
             <App>
-                <BrowserRouter>
-                    <DemoRoutes darkMode={darkMode} setDarkMode={setDarkMode} />
-                </BrowserRouter>
+                <RouterProvider router={demoRoutes} />
             </App>
         </ConfigProvider>
     );

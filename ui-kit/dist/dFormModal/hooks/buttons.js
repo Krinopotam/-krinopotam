@@ -7,7 +7,7 @@ export const useInitButtons = (formApi, props) => {
                 position: 'right',
                 active: props.formMode !== 'view',
                 hidden: props.formMode === 'view',
-                title: 'Сохранить',
+                title: 'ОК',
                 hotKeys: [
                     { key: 'enter', ctrl: true },
                     { key: 's', ctrl: true },

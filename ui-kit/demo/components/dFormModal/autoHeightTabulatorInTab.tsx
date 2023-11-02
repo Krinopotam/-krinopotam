@@ -85,7 +85,7 @@ export const AutoHeightTabulatorInTab = (): React.JSX.Element => {
     return (
         <>
             {/*Description Start*/}
-            <h1>Example of a form with a TabulatorGrid type field with automatic height</h1>
+            <h1>Example of a form with a TabulatorGrid type field with automatic height in tab</h1>
             {/*Description End*/}
             <div style={{maxWidth: 500}}>
                 <Button onClick={onClick}>Open form</Button>

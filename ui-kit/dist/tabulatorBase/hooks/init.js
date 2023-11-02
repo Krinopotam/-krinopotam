@@ -14,7 +14,7 @@ import { ActiveSelectionModule } from '../modules/activeSelectionModule';
 import { AdvancedHeaderFilterModule } from '../modules/advancedHeaderFilterModule';
 import { collapseButton, expandButton } from '../parts/icons';
 import { setPatches } from '../patches/setPatches';
-import { BaseHOC } from "../../tabulatorBase/parts/baseHOC";
+import { BaseHOC } from '../../tabulatorBase/parts/baseHOC';
 export const useInit = ({ props, events, containerRef, tableRef, onTableRef, }) => {
     React.useEffect(() => {
         initTabulator({ props, events, containerRef, tableRef, onTableRef }).then();
@@ -31,19 +31,20 @@ export const useInit = ({ props, events, containerRef, tableRef, onTableRef, }) 
 const initTabulator = ({ props, events, containerRef, tableRef, onTableRef, }) => __awaiter(void 0, void 0, void 0, function* () {
     const $container = containerRef.current;
     const propOptions = yield propsToOptions(props);
-    tableRef.current = yield initTabulatorClass($container, propOptions, props, events);
-    onTableRef === null || onTableRef === void 0 ? void 0 : onTableRef(tableRef);
+    yield initTabulatorClass($container, tableRef, onTableRef, propOptions, props, events);
 });
 const syncRender = (component, container) => __awaiter(void 0, void 0, void 0, function* () {
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
         const root = createRoot(container);
-        root.render(React.createElement(BaseHOC, { onEffect: () => { resolve(container); } }, component));
+        root.render(React.createElement(BaseHOC, { onEffect: () => {
+                resolve(container);
+            } }, component));
     });
 });
 const propsToOptions = (props) => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b, _c;
     const output = Object.assign({}, props);
-    output.columns = (yield columnPropsToOptions(props));
+    const columns = (yield columnPropsToOptions(props));
     if (typeof props.footerElement === 'object') {
         const el = yield syncRender(props.footerElement, document.createElement('div'));
         output.footerElement = el.innerHTML;
@@ -56,7 +57,28 @@ const propsToOptions = (props) => __awaiter(void 0, void 0, void 0, function* ()
     if (!props.dataTreeChildIndent)
         output.dataTreeChildIndent = 22;
     output.dataTreeBranchElement = false;
-    output.selectable = false;
+    if (props.selectionMode) {
+        output.selectable = props.multiSelect === false ? 1 : true;
+        output.columns = [
+            {
+                title: '',
+                formatter: 'rowSelection',
+                titleFormatter: 'rowSelection',
+                titleFormatterParams: {
+                    rowRange: 'active',
+                },
+                hozAlign: 'center',
+                headerSort: false,
+                width: 35,
+            },
+            ...columns,
+        ];
+    }
+    else {
+        output.selectable = false;
+        output.columns = columns;
+    }
+    output.selectableRangeMode = undefined;
     output.dataTreeCollapseElement = (_b = props.dataTreeCollapseElement) !== null && _b !== void 0 ? _b : collapseButton;
     output.dataTreeExpandElement = (_c = props.dataTreeExpandElement) !== null && _c !== void 0 ? _c : expandButton;
     output.keybindings = {
@@ -82,11 +104,13 @@ const columnPropsToOptions = (props) => __awaiter(void 0, void 0, void 0, functi
     }
     return columns;
 });
-const initTabulatorClass = ($container, options, props, events) => __awaiter(void 0, void 0, void 0, function* () {
+const initTabulatorClass = ($container, tableRef, onTableRef, options, props, events) => __awaiter(void 0, void 0, void 0, function* () {
     Tabulator.registerModule(ActiveSelectionModule);
     Tabulator.registerModule(AdvancedHeaderFilterModule);
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
         const tableApi = new Tabulator($container, options);
+        tableRef.current = tableApi;
+        onTableRef === null || onTableRef === void 0 ? void 0 : onTableRef(tableRef);
         setPatches(tableApi);
         if (!events)
             events = {};
@@ -96,6 +120,8 @@ const initTabulatorClass = ($container, options, props, events) => __awaiter(voi
                 continue;
             tableApi === null || tableApi === void 0 ? void 0 : tableApi.on(eventName, handler);
         }
-        tableApi === null || tableApi === void 0 ? void 0 : tableApi.on('tableBuilt', () => { resolve(tableApi); });
+        tableApi === null || tableApi === void 0 ? void 0 : tableApi.on('tableBuilt', () => {
+            resolve(tableApi);
+        });
     });
 });
