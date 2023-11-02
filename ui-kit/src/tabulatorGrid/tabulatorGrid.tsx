@@ -51,6 +51,9 @@ export interface IGridPropsBase {
     /** Selection DFormModal parameters */
     selectionFormProps?: IDFormModalProps;
 
+    /** Append row selection when using selectionFormProps (by default, the dataSet is replaced with the selected rows. This option allows you to change this behavior) */
+    appendSelection?:boolean;
+
     /** Disable row hover effect */
     noHover?: boolean;
 
@@ -134,6 +137,7 @@ const useSplitTabulatorProps = (props: IGridProps) => {
             readOnly: true,
             editFormProps: true,
             selectionFormProps: true,
+            appendSelection:true,
             noHover: true,
             rowDeleteMessage: true,
             confirmDelete: true,

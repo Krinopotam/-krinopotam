@@ -1,25 +1,19 @@
 // noinspection DuplicatedCode
 
 import React from 'react';
-import {IGridProps, ITabulatorProps, TabulatorGrid} from '@src/tabulatorGrid';
-import {GenerateDataSet, TabulatorBaseColumnsDef} from '../../../data/tabulatorData';
+import {IGridProps, TabulatorGrid} from '@src/tabulatorGrid';
+import {TabulatorBaseColumns, TabulatorBaseColumnsDef, TabulatorPlainData} from '../../../data/tabulatorData';
 
-const columns: ITabulatorProps['columns'] = [
-    {title: 'Column 1', field: 'col1'},
-    {title: 'Column 2', field: 'col2'},
-    {title: 'Column 3', field: 'col3'},
-];
-
-const dataSet = GenerateDataSet(500, 'async');
-export const Progressive = (): React.JSX.Element => {
+export const AsyncPages = (): React.JSX.Element => {
     const props: IGridProps = {
         columnDefaults: TabulatorBaseColumnsDef,
-        columns: columns,
+        columns: TabulatorBaseColumns,
         layout: 'fitColumns',
-        height: 500,
-        progressiveLoad: 'scroll',
-        paginationSize: 10,
-        progressiveLoadScrollMargin:300,
+        height: undefined,
+        pagination: true,
+        paginationSize: 5,
+        paginationSizeSelector: [5, 10, 50, 100],
+        paginationCounter: 'rows',
         paginationMode: 'remote',
         filterMode: 'remote',
         sortMode: 'remote',
@@ -27,10 +21,12 @@ export const Progressive = (): React.JSX.Element => {
             console.log('params', params);
             return new Promise((resolve, reject) => {
                 setTimeout(() => {
+                    const random = Math.random();
+                    if (random < 0.5) reject({message: 'Loading error', code: 400});
                     const page = params?.page ?? 1;
                     const size = params?.size ?? gridApi.gridProps.paginationSize ?? 5;
-                    const lastPage = Math.ceil(dataSet.length / size);
-                    const slicedDataSet = dataSet.slice((page - 1) * size, page * size); //remote fetch imitation
+                    const lastPage = Math.ceil(TabulatorPlainData.length / size);
+                    const slicedDataSet = TabulatorPlainData.slice((page - 1) * size, page * size); //remote fetch imitation
                     resolve({data: slicedDataSet, last_page: lastPage});
                 }, 1000);
             });
@@ -41,7 +37,8 @@ export const Progressive = (): React.JSX.Element => {
     return (
         <>
             {/*Description Start*/}
-            <h1>Asynchronous progressive loading data to the TabulatorGrid</h1>
+            <h1>Asynchronous data loading to the TabulatorGrid in the page mode</h1>
+            <p style={{color:'red'}}>To test boot resumption there is a 50/50 chance of error</p>
             {/*Description End*/}
 
             <TabulatorGrid {...props} />

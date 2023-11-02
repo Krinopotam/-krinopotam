@@ -27,6 +27,7 @@ const props: IGridProps = {
     dataSet: TabulatorPlainData,
     multiSelect: true,
     selectionFormProps: selectionFormProps,
+    appendSelection:true,
     confirmDelete: true,
     height: '100%',
     layout: 'fitColumns',

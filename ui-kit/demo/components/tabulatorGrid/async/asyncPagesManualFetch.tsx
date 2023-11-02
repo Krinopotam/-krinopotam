@@ -13,7 +13,7 @@ const columns: ITabulatorProps['columns'] = [
 ];
 
 const dataSet = GenerateDataSet(10000, 'async');
-export const PagesManualFetch = (): React.JSX.Element => {
+export const AsyncPagesManualFetch = (): React.JSX.Element => {
     const [gridApi] = useState({} as IGridApi);
 
     const updateDataViaApiAsync = useCallback(() => {

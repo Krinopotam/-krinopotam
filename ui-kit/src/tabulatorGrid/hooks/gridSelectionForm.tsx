@@ -1,8 +1,7 @@
 import {useMemo} from 'react';
 import {IDFormApi} from '@src/dForm';
-import {HelpersStrings} from "@krinopotam/js-helpers";
-import {IGridApi} from "./api";
-import {IGridRowData} from "../tabulatorGrid";
+import {IGridApi} from './api';
+import {IGridRowData} from '../tabulatorGrid';
 
 export const usePrepareSelectionFormProps = (gridApi: IGridApi) => {
     return useMemo(() => {
@@ -17,7 +16,23 @@ export const usePrepareSelectionFormProps = (gridApi: IGridApi) => {
             if (prevOnSubmitSuccess && prevOnSubmitSuccess(values, resultValues, formApi) === false) return false;
             const formValues = {...formApi.model.getFormDataSet(), ...resultValues};
 
-            gridApi.setDataSet(formValues.select as  IGridRowData[])
+            const gridProps = gridApi.gridProps;
+            const selectedRows = (formValues.select as IGridRowData[]) ?? [];
+
+            if (!gridProps.appendSelection) return gridApi.setDataSet(selectedRows);
+
+            const dataSet = gridApi.getDataSet() ?? [];
+
+            for (const selectedRow of selectedRows) {
+                if (
+                    dataSet.find(row => {
+                        return row.id === selectedRow.id;
+                    })
+                ) {
+                    continue;
+                }
+                gridApi.insertRows(selectedRow);
+            }
         };
 
         return formProps;

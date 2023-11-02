@@ -41,7 +41,7 @@ const props: IGridProps = {
     layout: 'fitColumns',
 };
 
-export const WithSelectionForm = (): React.JSX.Element => {
+export const AsyncWithSelectionForm = (): React.JSX.Element => {
     return (
         <>
             {/*Description Start*/}

@@ -4,7 +4,7 @@ import React from 'react';
 import {IGridProps, TabulatorGrid} from '@src/tabulatorGrid';
 import {TabulatorBaseColumns, TabulatorBaseColumnsDef, TabulatorPlainData} from '../../../data/tabulatorData';
 
-export const Loading = (): React.JSX.Element => {
+export const AsyncLoading = (): React.JSX.Element => {
     const props: IGridProps = {
         columns: TabulatorBaseColumns,
         columnDefaults: TabulatorBaseColumnsDef,

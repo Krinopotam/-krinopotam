@@ -12,7 +12,7 @@ const columns: ITabulatorProps['columns'] = [
     {title: 'Column 3', field: 'col3'},
 ];
 
-export const ManualFetch = (): React.JSX.Element => {
+export const AsyncManualFetch = (): React.JSX.Element => {
     const [gridApi] = useState({} as IGridApi);
 
     const updateDataViaApiAsync = useCallback(() => {
