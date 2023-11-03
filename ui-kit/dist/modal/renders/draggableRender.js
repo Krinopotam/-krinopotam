@@ -1,6 +1,6 @@
 import React, { useCallback, useRef, useState } from 'react';
 import Draggable from 'react-draggable';
-import { HelpersDom } from '@krinopotam/js-helpers';
+import { isDescendant } from '@krinopotam/js-helpers';
 export const DraggableRender = ({ node, targetId, onStartCallback }) => {
     const draggableFieldRef = React.createRef();
     const [dragDisabled, setDragDisabled] = useState(false);
@@ -30,7 +30,7 @@ export const DraggableRender = ({ node, targetId, onStartCallback }) => {
                     return;
                 }
                 const targetElement = getTargetElement();
-                if (HelpersDom.isDescendant(targetElement, e.target, true)) {
+                if (isDescendant(targetElement, e.target, true)) {
                     setDragDisabled(false);
                     setDraggableStyle({ cursor: 'move' });
                     return;

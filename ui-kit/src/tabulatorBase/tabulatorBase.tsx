@@ -13,7 +13,7 @@ import React, {MouseEvent} from 'react';
 import {useInit} from './hooks/init';
 import {IActiveSelectionModuleRow, IActiveSelectionModuleTableEvents, IActiveSelectionTabulator} from './modules/activeSelectionModule';
 import {IAdvancedHeaderFilterTabulator} from './modules/advancedHeaderFilterModule';
-import {HelpersStrings} from '@krinopotam/js-helpers';
+import {getUuid} from '@krinopotam/js-helpers';
 import {Stylization} from '@src/tabulatorBase/stylization';
 import {AnyType} from '@krinopotam/service-types';
 
@@ -119,7 +119,7 @@ export const TabulatorBase = ({onTableRef, gridId, events, containerClassName, w
     const containerRef = React.useRef<HTMLDivElement>(null as unknown as HTMLDivElement);
     const tableRef = React.useRef<ITabulator>();
 
-    const [newId] = React.useState(HelpersStrings.getUuid());
+    const [newId] = React.useState(getUuid());
 
     useInit({props, events, containerRef, tableRef, onTableRef});
 

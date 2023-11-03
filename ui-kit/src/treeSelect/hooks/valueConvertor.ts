@@ -1,5 +1,5 @@
 import React, {useCallback, useRef, useState} from 'react';
-import {HelpersObjects} from "@krinopotam/js-helpers";
+import {isArray} from "@krinopotam/js-helpers";
 import {ITreeSelectNode, ITreeSelectPlainValue, ITreeSelectProps, ITreeSelectValue, ITreeSelectApi} from '@src/treeSelect';
 
 export interface ITreeSelectInternalValue {
@@ -29,7 +29,7 @@ export const useValueConvertor = (
                 return;
             }
 
-            if (!HelpersObjects.isArray(nodes)) {
+            if (!isArray(nodes)) {
                 const _nodes = {...nodes} as ITreeSelectNode;
                 const value = nodeToInternalValue(_nodes);
                 selectedNodesRef.current = [_nodes];
@@ -137,7 +137,7 @@ export const usePlainValuesToNodes = (api: ITreeSelectApi) => {
     return useCallback(
         (plainValues: ITreeSelectPlainValue | ITreeSelectPlainValue[] | null | undefined) => {
             if (!plainValues) return undefined;
-            const values = HelpersObjects.isArray(plainValues) ? (plainValues as ITreeSelectPlainValue[]) : ([plainValues] as ITreeSelectPlainValue[]);
+            const values = isArray(plainValues) ? (plainValues as ITreeSelectPlainValue[]) : ([plainValues] as ITreeSelectPlainValue[]);
             const result: ITreeSelectNode[] = [];
             for (const value of values) {
                 const node = plainValueToNode(value);

@@ -12,12 +12,12 @@ var __rest = (this && this.__rest) || function (s, e) {
 import { ButtonsRow } from '../buttonsRow/buttonsRow';
 import { Popover } from 'antd';
 import React, { useEffect, useRef, useState } from 'react';
-import { HelpersStrings, HelpersObjects } from '@krinopotam/js-helpers';
+import { getUuid, mergeObjects } from '@krinopotam/js-helpers';
 import { useInitFormDispatcher } from '../modal/hooks/useInitFormDispatcher';
 import { ButtonsRowWrapper } from "../buttonsRow";
 export const PopConfirm = (_a) => {
     var { content } = _a, props = __rest(_a, ["content"]);
-    const [formId] = useState(HelpersStrings.getUuid);
+    const [formId] = useState(getUuid());
     useInitFormDispatcher(formId, !!props.open);
     const buttons = useInitButtons(props);
     const buttonsRowRef = useRef(null);
@@ -56,7 +56,7 @@ const useInitButtons = ({ okText, cancelText, onConfirm, onCancel, okButtonProps
                 size: 'small',
             },
         };
-        const resultButtons = HelpersObjects.mergeObjects(defaultButtons, { ok: okButtonProps, cancel: cancelButtonProps });
+        const resultButtons = mergeObjects(defaultButtons, { ok: okButtonProps, cancel: cancelButtonProps });
         setFormButtons(resultButtons);
     }, [okText, cancelText, onConfirm, onCancel, okButtonProps, cancelButtonProps]);
     return formButtons;

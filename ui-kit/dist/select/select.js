@@ -1,6 +1,6 @@
 import { Select as AntdSelect } from 'antd';
 import React, { useMemo } from 'react';
-import { HelpersObjects } from '@krinopotam/js-helpers';
+import { splitObject } from '@krinopotam/js-helpers';
 export const Select = (props) => {
     var _a;
     const antdSelectProps = useSplitAntTreeSelectProps(props);
@@ -52,7 +52,7 @@ const useConvertToBaseVal = (props, val) => {
 };
 const useSplitAntTreeSelectProps = (props) => {
     return useMemo(() => {
-        const result = HelpersObjects.splitObject(props, {
+        const result = splitObject(props, {
             dataSet: true,
             value: true,
             readOnly: true,

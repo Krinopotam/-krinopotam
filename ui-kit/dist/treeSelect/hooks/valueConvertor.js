@@ -1,5 +1,5 @@
 import { useCallback, useRef, useState } from 'react';
-import { HelpersObjects } from "@krinopotam/js-helpers";
+import { isArray } from "@krinopotam/js-helpers";
 export const useValueConvertor = (fieldNames, labelRender, titleRender, multiple) => {
     const selectedNodesRef = useRef([]);
     const [internalValue, _setInternalValue] = useState(!multiple ? null : []);
@@ -12,7 +12,7 @@ export const useValueConvertor = (fieldNames, labelRender, titleRender, multiple
             _setInternalValue(!multiple ? null : []);
             return;
         }
-        if (!HelpersObjects.isArray(nodes)) {
+        if (!isArray(nodes)) {
             const _nodes = Object.assign({}, nodes);
             const value = nodeToInternalValue(_nodes);
             selectedNodesRef.current = [_nodes];
@@ -95,7 +95,7 @@ export const usePlainValuesToNodes = (api) => {
     return useCallback((plainValues) => {
         if (!plainValues)
             return undefined;
-        const values = HelpersObjects.isArray(plainValues) ? plainValues : [plainValues];
+        const values = isArray(plainValues) ? plainValues : [plainValues];
         const result = [];
         for (const value of values) {
             const node = plainValueToNode(value);

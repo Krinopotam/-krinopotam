@@ -19,7 +19,7 @@ import {useInitFormDispatcher} from './hooks/useInitFormDispatcher';
 import {useResize} from './hooks/useResize';
 import {IButtonRowWrapperRemoteCallbacks} from '@src/buttonsRow/components/buttonsRowWrapper';
 import {IColorType} from '@src/button/button';
-import {HelpersStrings} from '@krinopotam/js-helpers';
+import {getUuid} from '@krinopotam/js-helpers';
 
 export interface IModalProps
     extends Omit<AntModalProps, 'afterOpenChange' | 'okButtonProps' | 'okType' | 'okText' | 'onOk' | 'cancelText' | 'cancelButtonProps'> {
@@ -72,7 +72,7 @@ export interface IModalProps
 }
 
 export const Modal = ({resizable = true, headerStyle, footerStyle, ...props}: IModalProps): React.JSX.Element => {
-    const [modalId] = useState(props.modalId ?? 'modal-' + HelpersStrings.getUuid());
+    const [modalId] = useState(props.modalId ?? 'modal-' + getUuid());
     useInitFormDispatcher(modalId, !!props.open);
 
     const wrapperRemoteCallbacksRef = useRef<IButtonRowWrapperRemoteCallbacks>({});
@@ -124,7 +124,7 @@ export const Modal = ({resizable = true, headerStyle, footerStyle, ...props}: IM
 
     const _footerStyle = {paddingTop: 20, paddingLeft: paddingLeft, paddingRight: paddingRight, paddingBottom: 20, ...footerStyle};
 
-    const [draggableId] = useState('draggable-' + HelpersStrings.getUuid());
+    const [draggableId] = useState('draggable-' + getUuid());
 
     return (
         <AntModal

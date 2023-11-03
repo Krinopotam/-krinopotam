@@ -15,7 +15,7 @@ import React, {CSSProperties, useEffect, useRef, useState} from 'react';
 import {TPromise} from '@krinopotam/service-types';
 import {FormRender} from './renders/formRender';
 import {IRuleType} from './validators/baseValidator';
-import {HelpersStrings} from '@krinopotam/js-helpers';
+import {getUuid} from '@krinopotam/js-helpers';
 import {useModelCallbacks} from './hooks/callbacks';
 import {useGetButtons} from './hooks/buttons';
 import {useUpdateMessageBoxTheme} from '@src/messageBox';
@@ -135,7 +135,7 @@ export const DForm = (props: IDFormProps): React.JSX.Element => {
     const [formProps, updateFormProps] = useGetActualProps(props); //props can be set both by parent component and via api
 //
     //region Common component states
-    const [formId] = useState(formProps.formId ?? 'dForm-' + HelpersStrings.getUuid());
+    const [formId] = useState(formProps.formId ?? 'dForm-' + getUuid());
     const [formApi] = useState((formProps.apiRef || {}) as IDFormApi);
     const [buttonsApi] = useState({} as IButtonsRowApi);
     const formButtons = useGetButtons(formProps, formApi); //init buttons

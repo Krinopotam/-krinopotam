@@ -1,5 +1,5 @@
 import React, {useLayoutEffect, useState} from 'react';
-import {HelpersObjects} from "@krinopotam/js-helpers";
+import {objectKeysLength} from "@krinopotam/js-helpers";
 import {ButtonsRow} from '@src/buttonsRow/buttonsRow';
 import {useInitButtons} from "../hooks/buttons";
 import {IGridApi} from "../hooks/api";
@@ -16,7 +16,7 @@ export const MenuRow = ({gridApi}: IGridMenuProps): React.JSX.Element | null => 
     const [isMenuVisible, setIsMenuVisible] = useState<boolean | undefined>(undefined);
 
     useLayoutEffect(() => {
-        const menuVisible = HelpersObjects.objectKeysLength(buttons) > 0;
+        const menuVisible = objectKeysLength(buttons) > 0;
         if (typeof isMenuVisible === 'undefined' || isMenuVisible !== menuVisible) {
             setIsMenuVisible(menuVisible);
             gridProps?.onMenuVisibilityChanged?.(menuVisible, gridApi);

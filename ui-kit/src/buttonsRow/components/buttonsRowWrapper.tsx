@@ -1,9 +1,9 @@
-import React, {CSSProperties, useMemo, useRef, useState} from "react";
-import {HelpersDom, HelpersStrings} from "@krinopotam/js-helpers";
+import React, {CSSProperties, useMemo, useRef, useState} from 'react';
+import {getUuid, isDescendant} from '@krinopotam/js-helpers';
 
 export interface IButtonRowWrapperContext {
-    wrapperId: string,
-    wrapperRef: React.RefObject<HTMLDivElement> | undefined,
+    wrapperId: string;
+    wrapperRef: React.RefObject<HTMLDivElement> | undefined;
 }
 
 export const ButtonRowWrapperContext = React.createContext<IButtonRowWrapperContext>({wrapperId: '', wrapperRef: undefined});
@@ -18,7 +18,7 @@ export interface IButtonRowWrapperProps extends React.HTMLAttributes<HTMLDivElem
 }
 
 export const ButtonsRowWrapper = (props: IButtonRowWrapperProps): React.JSX.Element => {
-    const [wrapperId] = useState(HelpersStrings.getUuid());
+    const [wrapperId] = useState(getUuid());
 
     const defStyle: CSSProperties = {
         outline: 'none',
@@ -64,6 +64,6 @@ export default ButtonsRowWrapper;
 
 const ensureWrapperFocus = (wrapper: HTMLElement | null) => {
     if (!wrapper) return;
-    if (HelpersDom.isDescendant(wrapper, document.activeElement)) return;
+    if (isDescendant(wrapper, document.activeElement)) return;
     wrapper.focus();
 }

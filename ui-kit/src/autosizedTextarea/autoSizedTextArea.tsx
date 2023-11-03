@@ -2,7 +2,7 @@ import React, {CSSProperties, ChangeEvent, useEffect, useMemo, useRef, useState}
 import {TextAreaProps, TextAreaRef} from 'antd/es/input/TextArea';
 
 import {Input} from 'antd';
-import {HelpersObjects} from "@krinopotam/js-helpers";
+import {mergeObjects} from "@krinopotam/js-helpers";
 import styled from 'styled-components';
 
 const {TextArea} = Input;
@@ -176,7 +176,7 @@ const useCalculateSize = (
 
 const usePrepareInputStyles = (style: CSSProperties | undefined, inputHeight: number, inputWidth: number) => {
     return useMemo(() => {
-        return HelpersObjects.mergeObjects(style ?? {}, {
+        return mergeObjects(style ?? {}, {
             height: inputHeight,
             width: inputWidth,
             transition: 'none',

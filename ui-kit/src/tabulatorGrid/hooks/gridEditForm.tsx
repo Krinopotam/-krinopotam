@@ -1,6 +1,6 @@
 import {useMemo} from 'react';
 import {IDFormApi} from '@src/dForm';
-import {HelpersStrings} from "@krinopotam/js-helpers";
+import {getUuid} from "@krinopotam/js-helpers";
 import {IGridApi} from "./api";
 import {IGridRowData} from "../tabulatorGrid";
 
@@ -20,7 +20,7 @@ export const usePrepareEditFormProps = (gridApi: IGridApi) => {
             const formMode = formApi.model.getFormMode();
 
             if (formMode === 'create' || formMode === 'clone') {
-                if (!updatedRow.id) updatedRow.id = HelpersStrings.getUuid();
+                if (!updatedRow.id) updatedRow.id = getUuid();
                 const activeKey = gridApi.getActiveRowKey();
                 gridApi.insertRows(updatedRow, 'below', activeKey ?? undefined, true);
             } else if (formMode === 'update') {

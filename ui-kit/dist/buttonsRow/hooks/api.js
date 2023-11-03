@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { HelpersObjects } from '@krinopotam/js-helpers';
+import { mergeObjects } from '@krinopotam/js-helpers';
 import { changeActiveButton, prepareButtons, setActiveButton } from '../../buttonsRow/helpers/buttonMethods';
 export const useApi = (props, curButtons, setCurButtons) => {
     var _a;
@@ -12,7 +12,7 @@ export const useApi = (props, curButtons, setCurButtons) => {
             return buttons;
         };
         api.updateButtons = buttons => {
-            const updatedButtons = prepareButtons(HelpersObjects.mergeObjects(curButtons, buttons), props.colorType);
+            const updatedButtons = prepareButtons(mergeObjects(curButtons, buttons), props.colorType);
             setCurButtons(updatedButtons);
             return updatedButtons;
         };

@@ -1,5 +1,5 @@
 import {IFormButtons} from '@src/buttonsRow/buttonsRow';
-import {HelpersObjects} from '@krinopotam/js-helpers';
+import {isPromise, mergeObjects} from '@krinopotam/js-helpers';
 import React, {useMemo} from 'react';
 import {ITreeSelectApi, ITreeSelectDeletePromise} from '@src/treeSelect';
 import {DeleteOutlined, EditOutlined, PlusOutlined} from '@ant-design/icons';
@@ -43,7 +43,7 @@ export const useInitButtons = (api: ITreeSelectApi, formApi: IDFormModalApi) => 
             },
         };
 
-        return HelpersObjects.mergeObjects(defaultButtons, treeProps.editButtons);
+        return mergeObjects(defaultButtons, treeProps.editButtons);
     }, [api, formApi, selectedNodes, treeProps.editButtons]);
 };
 
@@ -56,7 +56,7 @@ const deleteHandler = (api: ITreeSelectApi) => {
     const removeRows = () => {
         const deletePromise = treeProps?.onDelete?.(selectedNodes, api);
 
-        if (HelpersObjects.isPromise(deletePromise)) {
+        if (isPromise(deletePromise)) {
             if (!treeProps.confirmDelete) {
                 api.buttonsApi.loading('delete', true);
                 api.buttonsApi.disabled('add', true);

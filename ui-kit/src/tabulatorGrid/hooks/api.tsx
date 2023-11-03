@@ -1,5 +1,5 @@
 import React, {MutableRefObject, useCallback, useRef, useState} from 'react';
-import {HelpersStrings, HelpersObjects} from '@krinopotam/js-helpers';
+import {getUuid, isArray, isPromise} from '@krinopotam/js-helpers';
 import {IDFormModalApi} from '@src/dFormModal';
 import {IButtonsRowApi} from '@src/buttonsRow/buttonsRow';
 import useUnmountedRef from 'ahooks/lib/useUnmountedRef';
@@ -228,7 +228,7 @@ const useUpdateDataSetFromProps = (curDataSetRef: MutableRefObject<IGridProps['d
 };
 
 const useApiGetGridId = (gridApi: IGridApi): IGridApi['getGridId'] => {
-    const [gridId] = useState(gridApi.gridProps.id ?? 'grid-' + HelpersStrings.getUuid());
+    const [gridId] = useState(gridApi.gridProps.id ?? 'grid-' + getUuid());
     return useCallback(() => gridId, [gridId]);
 };
 
@@ -357,7 +357,7 @@ const useApiSetSelectedRowsKeys = (gridApi: IGridApi): IGridApi['setSelectedRowK
 
             if (!keys || clearPrevSelection) gridApi.tableApi?.deselectRow();
 
-            const selKeys: IRowKey[] = HelpersObjects.isArray(keys) ? (keys as IRowKey[]) : [keys as IRowKey];
+            const selKeys: IRowKey[] = isArray(keys) ? (keys as IRowKey[]) : [keys as IRowKey];
             gridApi.tableApi?.selectRow(selKeys);
         },
         [gridApi]
@@ -416,7 +416,7 @@ const useApiInsertRows = (dataSetRef: React.MutableRefObject<IGridProps['dataSet
 
             const above = place === 'above';
 
-            const _rows: IGridRowData[] = HelpersObjects.isArray(rows) ? [...(rows as IGridRowData[])] : [rows as IGridRowData];
+            const _rows: IGridRowData[] = isArray(rows) ? [...(rows as IGridRowData[])] : [rows as IGridRowData];
 
             for (const row of _rows) {
                 if (!dataTree) tableApi.addData([row], above, key).then();
@@ -440,7 +440,7 @@ const useApiUpdateRows = (dataSetRef: React.MutableRefObject<IGridProps['dataSet
             if (!gridApi.tableApi) return;
             const dataTree = gridApi.gridProps.dataTree;
 
-            const _rows: IGridRowData[] = HelpersObjects.isArray(rows) ? [...(rows as IGridRowData[])] : [rows as IGridRowData];
+            const _rows: IGridRowData[] = isArray(rows) ? [...(rows as IGridRowData[])] : [rows as IGridRowData];
 
             for (const row of _rows) {
                 if (!dataTree) gridApi.tableApi.updateData([row]).then();
@@ -479,7 +479,7 @@ const addTreeRows = (gridApi: IGridApi, rows: IGridRowData[] | IGridRowData, pla
     }
 
     const above = place === 'above';
-    const clonedRows: IGridRowData[] = HelpersObjects.isArray(rows) ? [...(rows as IGridRowData[])] : [rows as IGridRowData];
+    const clonedRows: IGridRowData[] = isArray(rows) ? [...(rows as IGridRowData[])] : [rows as IGridRowData];
 
     for (const rowData of clonedRows) {
         const parentNode = findParentNode(gridApi, rowData);
@@ -503,7 +503,7 @@ const updateTreeRows = (gridApi: IGridApi, rows: IGridRowData[] | IGridRowData) 
     const childField = gridApi.tableApi.options.dataTreeChildField;
     if (!indexField || !childField) return;
 
-    const clonedRows: IGridRowData[] = HelpersObjects.isArray(rows) ? [...(rows as IGridRowData[])] : [rows as IGridRowData];
+    const clonedRows: IGridRowData[] = isArray(rows) ? [...(rows as IGridRowData[])] : [rows as IGridRowData];
 
     for (const rowData of clonedRows) {
         const rowKey = rowData[indexField] as string | number;
@@ -561,7 +561,7 @@ const useApiRemoveRowsByKeys = (dataSetRef: React.MutableRefObject<IGridProps['d
             if (!table) return;
             const indexField = table.options.index;
 
-            const _keys: IGridRowData['id'][] = HelpersObjects.isArray(keys) ? [...(keys as IRowKey[])] : [keys as IRowKey];
+            const _keys: IGridRowData['id'][] = isArray(keys) ? [...(keys as IRowKey[])] : [keys as IRowKey];
 
             let newActiveNode: RowComponent | false = false;
             let newActiveNodeCandidate: RowComponent | false = false;
@@ -594,7 +594,7 @@ const useApiRemoveRowsByKeys = (dataSetRef: React.MutableRefObject<IGridProps['d
 const useApiRemoveRows = (gridApi: IGridApi): IGridApi['removeRows'] => {
     return useCallback(
         (rows: IGridRowData | IGridRowData[]) => {
-            const clonedRows: IGridRowData[] = HelpersObjects.isArray(rows) ? [...(rows as IGridRowData[])] : [rows as IGridRowData];
+            const clonedRows: IGridRowData[] = isArray(rows) ? [...(rows as IGridRowData[])] : [rows as IGridRowData];
             const keys: IRowKey[] = [];
             for (const row of clonedRows) keys.push(row.id);
             gridApi.removeRowsByKeys(keys);
@@ -613,7 +613,7 @@ const useApiDeleteRows = (gridApi: IGridApi): IGridApi['deleteRows'] => {
             const removeRows = () => {
                 const deletePromise = gridProps?.onDelete?.(rowsData, gridApi);
 
-                if (HelpersObjects.isPromise(deletePromise)) {
+                if (isPromise(deletePromise)) {
                     if (!gridProps.confirmDelete) gridApi.setIsLoading(true);
                     const promiseResult = deletePromise as IGridDeletePromise;
                     promiseResult

@@ -1,5 +1,5 @@
 import {useMemo, useState} from 'react';
-import {HelpersStrings} from "@krinopotam/js-helpers";
+import {getUuid} from "@krinopotam/js-helpers";
 import {ITreeSelectNode, ITreeSelectApi} from '@src/treeSelect';
 import {IDFormModalProps, IDFormModalApi} from '@src/dFormModal';
 
@@ -7,7 +7,7 @@ export const useEditableInit = (api: ITreeSelectApi): [typeof formProps, typeof 
     const treeProps = api.getProps();
     const treeFormProps = treeProps.editFormProps;
     const [formApi] = useState<IDFormModalApi>((treeFormProps?.apiRef || {}) as IDFormModalApi);
-    const [formId] = useState(treeFormProps?.formId ?? 'SelectItemEdit-' + HelpersStrings.getUuid());
+    const [formId] = useState(treeFormProps?.formId ?? 'SelectItemEdit-' + getUuid());
 
     const formProps: IDFormModalProps | undefined = useMemo(() => {
         if (!treeFormProps) return undefined;

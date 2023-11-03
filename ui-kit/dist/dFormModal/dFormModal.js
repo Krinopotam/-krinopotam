@@ -1,7 +1,7 @@
 import { useInitModalFormApi } from './hooks/api';
 import React, { useEffect, useMemo, useState } from 'react';
 import { DFormModalRender } from './renders/dFormModalRender';
-import { HelpersStrings, HelpersObjects } from "@krinopotam/js-helpers";
+import { getUuid, splitObject } from "@krinopotam/js-helpers";
 import { useFormCallbacks } from './hooks/callbacks';
 import { useInitButtons } from './hooks/buttons';
 import { useUpdateMessageBoxTheme } from '../messageBox';
@@ -9,7 +9,7 @@ import { useGetActualProps } from '@krinopotam/common-hooks';
 export const DFormModal = (props) => {
     var _a;
     useUpdateMessageBoxTheme();
-    const [formId] = useState((_a = props.formId) !== null && _a !== void 0 ? _a : 'dFormModal-' + HelpersStrings.getUuid());
+    const [formId] = useState((_a = props.formId) !== null && _a !== void 0 ? _a : 'dFormModal-' + getUuid());
     const [modalFormProps, updateModalFormProps] = useGetActualProps(props);
     const [formApi, setFormApi] = useState((modalFormProps.apiRef || {}));
     const [buttonsApi] = useState({});
@@ -26,7 +26,7 @@ export const DFormModal = (props) => {
 };
 const useSeparateProps = (formModalProps, formCallbacks) => {
     return useMemo(() => {
-        const [modalProps, formProps] = HelpersObjects.splitObject(formModalProps, {
+        const [modalProps, formProps] = splitObject(formModalProps, {
             title: true,
             width: true,
             minWidth: true,

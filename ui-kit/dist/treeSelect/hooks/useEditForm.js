@@ -1,11 +1,11 @@
 import { useMemo, useState } from 'react';
-import { HelpersStrings } from "@krinopotam/js-helpers";
+import { getUuid } from "@krinopotam/js-helpers";
 export const useEditableInit = (api) => {
     var _a;
     const treeProps = api.getProps();
     const treeFormProps = treeProps.editFormProps;
     const [formApi] = useState(((treeFormProps === null || treeFormProps === void 0 ? void 0 : treeFormProps.apiRef) || {}));
-    const [formId] = useState((_a = treeFormProps === null || treeFormProps === void 0 ? void 0 : treeFormProps.formId) !== null && _a !== void 0 ? _a : 'SelectItemEdit-' + HelpersStrings.getUuid());
+    const [formId] = useState((_a = treeFormProps === null || treeFormProps === void 0 ? void 0 : treeFormProps.formId) !== null && _a !== void 0 ? _a : 'SelectItemEdit-' + getUuid());
     const formProps = useMemo(() => {
         if (!treeFormProps)
             return undefined;

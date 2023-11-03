@@ -3,7 +3,7 @@
 import React from 'react';
 import {DForm, IDFormProps} from '@src/dForm';
 import {ITreeSelectSourcePromise} from '@src/treeSelect'
-import {HelpersObjects} from "@krinopotam/js-helpers";
+import {cloneObject} from "@krinopotam/js-helpers";
 import {TreeSelectField} from "@src/dForm/fields/treeSelect/treeSelectField";
 
 
@@ -122,7 +122,7 @@ const filterDataSet = (nodes: IDataSet, search: string) => {
     const result: IDataSet = [];
     let resultChildren: IDataSet = [];
     for (const node of nodes) {
-        const nodeClone = HelpersObjects.cloneObject(node);
+        const nodeClone = cloneObject(node);
         if (node.children && node.children.length > 0) resultChildren = filterDataSet(node.children, search);
 
         if (resultChildren.length > 0) {

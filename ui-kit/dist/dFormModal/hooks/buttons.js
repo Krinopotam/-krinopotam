@@ -1,4 +1,4 @@
-import { HelpersObjects } from "@krinopotam/js-helpers";
+import { mergeObjects } from "@krinopotam/js-helpers";
 import { useMemo } from "react";
 export const useInitButtons = (formApi, props) => {
     return useMemo(() => {
@@ -27,6 +27,6 @@ export const useInitButtons = (formApi, props) => {
                 },
             },
         };
-        return HelpersObjects.mergeObjects(defaultButtons, props.buttons);
+        return mergeObjects(defaultButtons, props.buttons);
     }, [formApi, props.buttons, props.formMode]);
 };
