@@ -23,7 +23,7 @@ const devDemoCfg: UserConfig = {
         ...commonCfg.plugins,
         watch({
             pattern: ['demo/components/**/*.*'],
-            command: "node ./demo/generateDemo.js",
+            command: "node ./demo/.generator/generateDemo.js",
         }),
     ],
     server: {

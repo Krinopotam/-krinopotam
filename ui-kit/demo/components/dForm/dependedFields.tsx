@@ -36,7 +36,7 @@ export const DependedFields = (): React.JSX.Element => {
     return (
         <>
             {/*Description Start*/}
-            <h1>Пример простой формы с вертикальным расположением подписей полей1</h1>
+            <h1>Example DForm with interdependent fields</h1>
             {/*Description End*/}
             <div style={{maxWidth: 600}}>
                 <DForm {...formProps} />
