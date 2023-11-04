@@ -33,3 +33,4 @@ const getRowType = row => {
         return 'row';
     return undefined;
 };
+//# sourceMappingURL=findRowPatch.js.map

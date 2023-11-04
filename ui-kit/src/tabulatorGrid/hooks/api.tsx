@@ -207,12 +207,6 @@ export const useInitGridApi = ({
     gridApi.getRowData = useApiGetRowData(gridApi);
     gridApi.openColumnDialog = useApiOpenColumnDialog(gridApi, openColumnsDialog);
 
-    /*
-    gridApi.selectAll = useApiSelectAll(gridApi);
-    gridApi.selectNextRow = useApiSelectNextRow(gridApi);
-    gridApi.selectFirstRow = useApiSelectFirstRow(gridApi);
-    gridApi.selectLastRow = useApiSelectLastRow(gridApi);*/
-
     return gridApi;
 };
 
@@ -743,44 +737,4 @@ const useApiOpenColumnDialog = (gridApi: IGridApi, openColumnsDialog: React.Disp
         [openColumnsDialog]
     );
 };
-/*
 
-const useApiSelectAll = (gridApi: IGridApi) => {
-    return useCallback(() => {
-        gridApi.setSelectedRows(gridApi.dataSet(), true);
-    }, [gridApi]);
-};
-
-const useApiSelectFirstRow = (gridApi: IGridApi) => {
-    return useCallback(
-        (ensureVisible?: boolean) => {
-            const rows = gridApi.dataSet();
-            if (rows.length === 0) return;
-            const nextRowId = rows[0].id;
-            gridApi.setSelectedRowKeys(nextRowId, true);
-
-            if (ensureVisible) gridApi.scrollToRowKey(nextRowId, true);
-        },
-        [gridApi]
-    );
-};
-
-const useApiSelectLastRow = (gridApi: IGridApi) => {
-    return useCallback(
-        (ensureVisible?: boolean) => {
-            const rows = gridApi.dataSet();
-            if (rows.length === 0) return;
-            const nextRowId = rows[rows.length - 1].id;
-            gridApi.setSelectedRowKeys(nextRowId, true);
-
-            if (ensureVisible) gridApi.scrollToRowKey(nextRowId, true);
-        },
-        [gridApi]
-    );
-};
-
-
-
-
-
-*/

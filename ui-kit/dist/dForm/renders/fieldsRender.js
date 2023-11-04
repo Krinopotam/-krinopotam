@@ -16,3 +16,4 @@ export const FieldsRender = ({ fields, subscribe, getSnapshot, containerStyle, }
             ' '));
     })));
 };
+//# sourceMappingURL=fieldsRender.js.map

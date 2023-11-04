@@ -50,3 +50,4 @@ const useSplitTabulatorProps = (props) => {
         return result[1];
     }, [props]);
 };
+//# sourceMappingURL=tabulatorGrid.js.map

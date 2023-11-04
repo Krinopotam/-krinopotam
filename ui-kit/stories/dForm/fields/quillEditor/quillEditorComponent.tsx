@@ -1,7 +1,6 @@
 import React from 'react';
 import {DForm} from '@src/dForm';
 import {IQuillEditorFieldProps, QuillEditorField} from '@src/dForm/fields/quillEditor/quillEditorField';
-import {IQuillEditorProps} from '@src/quillEditor';
 
 type IComponent = IQuillEditorFieldProps;
 

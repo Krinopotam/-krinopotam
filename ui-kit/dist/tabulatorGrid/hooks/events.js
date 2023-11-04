@@ -72,3 +72,4 @@ export const useEvents = (gridApi, events) => {
         };
     }, [events, gridApi]);
 };
+//# sourceMappingURL=events.js.map

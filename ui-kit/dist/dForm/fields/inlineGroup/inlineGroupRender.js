@@ -56,3 +56,4 @@ export const InlineGroupRender = ({ field }) => {
             return (React.createElement("div", { key: 'item_' + childField.getName(), style: style }, childField.renderField(altLabel)));
         })))) : null));
 };
+//# sourceMappingURL=inlineGroupRender.js.map

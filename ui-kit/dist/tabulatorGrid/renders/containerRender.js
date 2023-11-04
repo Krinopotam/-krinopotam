@@ -19,3 +19,4 @@ export const ContainerRender = ({ tableRef, gridApi, gridProps, tabulatorProps, 
         editFormProps ? React.createElement(DFormModal, Object.assign({}, editFormProps, { apiRef: gridApi.editFormApi })) : null,
         selectionFormProps ? React.createElement(DFormModal, Object.assign({}, selectionFormProps, { apiRef: gridApi.selectionFormApi })) : null));
 };
+//# sourceMappingURL=containerRender.js.map

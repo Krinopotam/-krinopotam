@@ -45,3 +45,4 @@ export const HeaderRender = (props) => {
             icon,
             props.title)));
 };
+//# sourceMappingURL=headerRender.js.map

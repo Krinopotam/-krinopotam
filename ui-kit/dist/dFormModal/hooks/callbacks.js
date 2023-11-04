@@ -73,3 +73,4 @@ export const useFormCallbacks = (formModalApi, modalFormProps) => {
         };
     }, [formModalApi, modalFormProps]);
 };
+//# sourceMappingURL=callbacks.js.map

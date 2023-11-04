@@ -6,3 +6,4 @@ export const ContentRender = ({ paddingLeft, paddingRight, children, }) => {
     };
     return (React.createElement("div", { className: "antd-modal-confirm-body", style: style }, children));
 };
+//# sourceMappingURL=contentRender.js.map

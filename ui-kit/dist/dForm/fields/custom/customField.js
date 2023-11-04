@@ -9,3 +9,4 @@ export class CustomField extends BaseField {
         return this.render();
     }
 }
+//# sourceMappingURL=customField.js.map

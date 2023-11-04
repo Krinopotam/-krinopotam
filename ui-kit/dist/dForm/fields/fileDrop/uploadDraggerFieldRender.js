@@ -28,3 +28,4 @@ export const UploadDraggerFieldRender = ({ field }) => {
         React.createElement("p", { className: "ant-upload-text" }, (_b = fieldProps.uploadText) !== null && _b !== void 0 ? _b : 'Click or drag a file into this area to upload'),
         React.createElement("p", { className: "ant-upload-hint" }, (_c = fieldProps.uploadHint) !== null && _c !== void 0 ? _c : 'Support single or bulk download')));
 };
+//# sourceMappingURL=uploadDraggerFieldRender.js.map

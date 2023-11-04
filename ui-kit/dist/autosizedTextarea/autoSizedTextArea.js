@@ -137,3 +137,4 @@ const copyStyles = (sourceStyles, destinationStyles) => {
     destinationStyles.textTransform = sourceStyles.textTransform;
     destinationStyles.lineHeight = sourceStyles.lineHeight;
 };
+//# sourceMappingURL=autoSizedTextArea.js.map

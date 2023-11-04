@@ -64,3 +64,4 @@ const useGetBodyStyle = ({ bodyStyle, bodyHeight, bodyMaxHeight, bodyMinHeight, 
         newStyle.minHeight = bodyMinHeight;
     return newStyle;
 };
+//# sourceMappingURL=modal.js.map

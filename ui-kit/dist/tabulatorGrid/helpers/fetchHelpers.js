@@ -1,12 +1,16 @@
-export const GenerateAjaxRequestFunc = (gridApi, dataFetchCallback, extraParams) => {
-    if (!dataFetchCallback)
+import { isPromise } from '@krinopotam/js-helpers';
+export const GenerateAjaxRequestFunc = (gridApi, onDataFetch, extraParams) => {
+    if (!onDataFetch)
         return undefined;
     const gridProps = gridApi.gridProps;
-    gridApi.setCurrentDataFetchHandler(dataFetchCallback, extraParams);
-    return (url, config, params) => {
+    gridApi.setCurrentDataFetchHandler(onDataFetch, extraParams);
+    return (_url, _config, params) => {
         return new Promise((resolve, reject) => {
             const totalParams = Object.assign(Object.assign({}, params), extraParams);
-            dataFetchCallback(totalParams, gridApi).then(result => {
+            const fetchPromise = onDataFetch(totalParams, gridApi);
+            if (!isPromise(fetchPromise))
+                reject(new Error());
+            fetchPromise.then(result => {
                 var _a;
                 if (!gridApi.getIsMounted())
                     return;
@@ -20,3 +24,4 @@ export const GenerateAjaxRequestFunc = (gridApi, dataFetchCallback, extraParams)
         });
     };
 };
+//# sourceMappingURL=fetchHelpers.js.map

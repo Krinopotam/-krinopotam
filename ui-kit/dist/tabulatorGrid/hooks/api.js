@@ -485,3 +485,4 @@ const useApiOpenColumnDialog = (gridApi, openColumnsDialog) => {
         openColumnsDialog(open);
     }, [openColumnsDialog]);
 };
+//# sourceMappingURL=api.js.map

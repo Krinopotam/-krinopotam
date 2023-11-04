@@ -13,3 +13,4 @@ export const DividerFieldRender = ({ field }) => {
     const style = Object.assign(Object.assign({}, defStyle), fieldProps.style);
     return (React.createElement(Divider, { orientation: fieldProps.orientation, orientationMargin: fieldProps.orientationMargin, plain: fieldProps.plain, dashed: fieldProps.dashed, style: style }, fieldProps.value));
 };
+//# sourceMappingURL=dividerFieldRender.js.map

@@ -1,13 +1,13 @@
 // noinspection DuplicatedCode
 
 import type {Meta, StoryObj} from '@storybook/react'
-import Tabulator from "@src/tabulatorBase";
+import {TabulatorBase} from "@src/tabulatorBase";
 import React from "react";
 import {TabulatorGridColumns, TabulatorTreeDataset} from "../../datasets/tabulator";
 
 export default {
     title: 'Controls/TabulatorBase',
-    component: Tabulator,
+    component: TabulatorBase,
     tags: ['autodocs'],
     parameters: {
         docs: {
@@ -15,7 +15,7 @@ export default {
             /* AUTO-SOURCE-INJECT-END */
         }
     },
-} satisfies Meta<typeof Tabulator>
+} satisfies Meta<typeof TabulatorBase>
 
 
 
@@ -32,7 +32,7 @@ const baseArgs: Story['args'] = {
     movableColumns: true,
 }
 
-type Story = StoryObj<typeof Tabulator>;
+type Story = StoryObj<typeof TabulatorBase>;
 export const Simple: Story = {
     args: {
         ...baseArgs
@@ -90,8 +90,11 @@ export const PaginationRemote: Story = {
             return new Promise((resolve) => {
                 setTimeout(() => {
                     //make any remote fetch
-                    const dataSet = TabulatorTreeDataset.slice((params.page - 1) * params.size, params.page * params.size); //remote fetch imitation
-                    resolve({data: dataSet, last_page: 4})
+                    const page = params?.page ?? 1;
+                    const size = params?.size ?? 5;
+                    const lastPage = Math.ceil(TabulatorTreeDataset.length / size);
+                    const dataSet = TabulatorTreeDataset.slice((page - 1) * size, page * size); //remote fetch imitation
+                    resolve({data: dataSet, last_page: lastPage})
                 }, 1000)
             })
         },

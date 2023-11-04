@@ -30,6 +30,9 @@ const baseArgs: Story['args'] = {
     height: 500,
     layout: 'fitColumns',
     movableColumns: true,
+    onDataFetch:undefined, //manually set the callback values so that the storybook does not overwrite with its incorrect actions that cause tabulator errors
+    onDataFetchResponse:undefined
+
 }
 
 type Story = StoryObj<typeof TabulatorGrid>;
@@ -91,7 +94,7 @@ export const PaginationRemote: Story = {
                     //make any remote fetch
                     const page = params?.page ?? 1;
                     const size = params?.size ?? gridApi.gridProps.paginationSize ?? 5;
-                    const lastPage = Math.ceil(TabulatorTreeDataset.length/size)
+                    const lastPage = 4;
                     const dataSet = TabulatorTreeDataset.slice((page - 1) * size, page * size); //remote fetch imitation
                     resolve({data: dataSet, last_page: lastPage });
                 }, 1000)

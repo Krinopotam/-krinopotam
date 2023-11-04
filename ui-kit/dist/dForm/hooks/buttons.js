@@ -22,3 +22,4 @@ export const useGetButtons = (formProps, formApi) => {
         return mergeObjects(defaultButtons, formProps.buttons);
     }, [formProps.buttons, formApi]);
 };
+//# sourceMappingURL=buttons.js.map

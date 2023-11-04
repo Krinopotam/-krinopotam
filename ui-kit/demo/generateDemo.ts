@@ -129,24 +129,21 @@ function clearSource(source: string) {
 //endregion
 
 //region Generate menu props
-const _itemNum = {num: 0};
-
 function prepareMenuProps(filesInfo: IFileInfo[], level: number = 1, rootFolder = '/') {
     if (filesInfo.length === 0) return '';
     let result = '[';
     for (const file of filesInfo) {
-        _itemNum.num++;
         if (file.children?.length) {
             const childrenItems = prepareMenuProps(file.children, level + 1, rootFolder + file.fileName + '/');
             result =
                 result +
                 // language=text
-                `\n${' '.repeat(level * 4)}getItem("${file.menuItemName}", "Item${_itemNum.num}", <FolderOutlined />, ${childrenItems}),`;
+                `\n${' '.repeat(level * 4)}getItem("${file.menuItemName}", "Item${crypto.randomUUID()}", <FolderOutlined />, ${childrenItems}),`;
             continue;
         }
 
         // language=text
-        result = result + `\n${' '.repeat(level * 4)}getItem(<Link to="${rootFolder + file.menuItemLink}">${file.menuItemName}</Link>, "Item${_itemNum.num}"),`;
+        result = result + `\n${' '.repeat(level * 4)}getItem(<Link to="${rootFolder + file.menuItemLink}">${file.menuItemName}</Link>, "Item${crypto.randomUUID()}"),`;
     }
     result = result + ']';
 
@@ -196,7 +193,7 @@ function generatePages(filesInfo: IFileInfo[], subFolderPath = '', level: number
             routesStrings = routesStrings + `                        {path:"${folderName}", children: [\n${routeStr}\n]},` + '\n';
             routeImportStrings = routeImportStrings + routeImportStr + '\n';
         } else {
-            const [routeStr, routeImportStr] = generatePageComponent(file, subFolderPath, level);
+            const [routeStr, routeImportStr] = generatePageComponent(file, level);
             routesStrings = routesStrings + routeStr + '\n';
             routeImportStrings = routeImportStrings + routeImportStr + '\n';
         }
@@ -205,7 +202,7 @@ function generatePages(filesInfo: IFileInfo[], subFolderPath = '', level: number
     return [routesStrings, routeImportStrings];
 }
 
-function generatePageComponent(file: IFileInfo, subFolderPath: string, level: number) {
+function generatePageComponent(file: IFileInfo, level: number) {
     const componentModulePath = '../' + trimExtension(file.fullFilePath);
     const componentName = file.componentName;
     const menuItemLink = file.menuItemLink;
@@ -316,7 +313,7 @@ function camelCaseSplit(str: string, splitter?: string) {
 }
 
 function parseComponentName(source: string) {
-    const matcher = /export const ([A-Z][A-Za-z_0-9]*)\s?=/g;
+    const matcher = /export const ([A-Z]\w*)\s?=/g;
     const match = matcher.exec(source);
     return match?.[1] ?? '';
 }

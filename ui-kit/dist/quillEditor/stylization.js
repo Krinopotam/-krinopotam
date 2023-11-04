@@ -58,3 +58,4 @@ export const Stylization = () => {
     const { token } = useToken();
     return React.createElement(QuillCss, Object.assign({}, token));
 };
+//# sourceMappingURL=stylization.js.map

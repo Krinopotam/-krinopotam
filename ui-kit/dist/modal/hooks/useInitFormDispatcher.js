@@ -11,3 +11,4 @@ export const useInitFormDispatcher = (formId, isFormOpen) => {
         };
     }, [isFormOpen, formId]);
 };
+//# sourceMappingURL=useInitFormDispatcher.js.map

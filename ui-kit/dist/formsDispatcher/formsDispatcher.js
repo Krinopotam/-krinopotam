@@ -28,3 +28,4 @@ export class FormsDispatcher {
 }
 const dispatcher = FormsDispatcher.Instance;
 export default dispatcher;
+//# sourceMappingURL=formsDispatcher.js.map

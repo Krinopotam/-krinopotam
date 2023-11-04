@@ -48,3 +48,4 @@ const usePrepareButtons = (props) => {
     }, [props.buttons, props.colorType]);
     return [curButtons, setTimeoutCurButtons];
 };
+//# sourceMappingURL=buttonsRow.js.map

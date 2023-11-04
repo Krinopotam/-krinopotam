@@ -31,3 +31,4 @@ export const TabulatorBase = (_a) => {
         React.createElement("div", { ref: containerRef, id: gridId !== null && gridId !== void 0 ? gridId : newId, "data-instance": gridId !== null && gridId !== void 0 ? gridId : newId, className: containerClassName, style: containerStyle })));
 };
 export default TabulatorBase;
+//# sourceMappingURL=tabulatorBase.js.map

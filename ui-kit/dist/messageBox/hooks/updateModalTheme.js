@@ -4,3 +4,4 @@ export const useUpdateMessageBoxTheme = () => {
     const { modal } = App.useApp();
     messageBox.updateThemedModal(modal);
 };
+//# sourceMappingURL=updateModalTheme.js.map

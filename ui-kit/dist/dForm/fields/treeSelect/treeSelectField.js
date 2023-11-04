@@ -6,3 +6,4 @@ export class TreeSelectField extends BaseField {
         return React.createElement(TreeSelectFieldRender, { field: this });
     }
 }
+//# sourceMappingURL=treeSelectField.js.map

@@ -22,3 +22,4 @@ export const CheckboxFieldRender = ({ field }) => {
     const style = Object.assign(Object.assign({}, defStyle), fieldProps.style);
     return (React.createElement(Checkbox, { checked: value, disabled: field.isDisabled() || field.isReadOnly(), onChange: onChange, autoFocus: fieldProps.autoFocus, indeterminate: fieldProps.indeterminate, style: style }));
 };
+//# sourceMappingURL=checkboxFieldRender.js.map

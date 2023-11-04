@@ -106,3 +106,4 @@ const deleteHandler = (api) => {
         removeRows();
     }
 };
+//# sourceMappingURL=buttons.js.map

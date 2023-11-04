@@ -81,3 +81,4 @@ export const useApi = (props, curButtons, setCurButtons) => {
         return api;
     }, [api, curButtons, setCurButtons, props.colorType, props.context]);
 };
+//# sourceMappingURL=api.js.map

@@ -24,3 +24,4 @@ export const TextAreaFieldRender = ({ field }) => {
     const style = Object.assign(Object.assign({}, defStyle), fieldProps.style);
     return (React.createElement(TextArea, { autoFocus: fieldProps.autoFocus, autoSize: fieldProps.autoSize, cols: fieldProps.cols, disabled: field.isDisabled(), maxLength: fieldProps.maxLength, name: fieldName, onBlur: onBlur, onChange: onChange, placeholder: fieldProps.placeholder, readOnly: field.isReadOnly(), rows: fieldProps.rows, showCount: fieldProps.showCount, value: value, wrap: fieldProps.wrap, style: style }));
 };
+//# sourceMappingURL=textAreaFieldRender.js.map

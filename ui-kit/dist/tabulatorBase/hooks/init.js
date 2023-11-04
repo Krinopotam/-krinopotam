@@ -1,12 +1,3 @@
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 import React from 'react';
 import { TabulatorFull as Tabulator } from 'tabulator-tables';
 import { createRoot } from 'react-dom/client';
@@ -28,25 +19,25 @@ export const useInit = ({ props, events, containerRef, tableRef, onTableRef, }) 
         };
     }, [props, onTableRef, containerRef, tableRef, events]);
 };
-const initTabulator = ({ props, events, containerRef, tableRef, onTableRef, }) => __awaiter(void 0, void 0, void 0, function* () {
+const initTabulator = async ({ props, events, containerRef, tableRef, onTableRef, }) => {
     const $container = containerRef.current;
-    const propOptions = yield propsToOptions(props);
-    yield initTabulatorClass($container, tableRef, onTableRef, propOptions, props, events);
-});
-const syncRender = (component, container) => __awaiter(void 0, void 0, void 0, function* () {
+    const propOptions = await propsToOptions(props);
+    await initTabulatorClass($container, tableRef, onTableRef, propOptions, props, events);
+};
+const syncRender = async (component, container) => {
     return new Promise(resolve => {
         const root = createRoot(container);
         root.render(React.createElement(BaseHOC, { onEffect: () => {
                 resolve(container);
             } }, component));
     });
-});
-const propsToOptions = (props) => __awaiter(void 0, void 0, void 0, function* () {
+};
+const propsToOptions = async (props) => {
     var _a, _b, _c;
     const output = Object.assign({}, props);
-    const columns = (yield columnPropsToOptions(props));
+    const columns = (await columnPropsToOptions(props));
     if (typeof props.footerElement === 'object') {
-        const el = yield syncRender(props.footerElement, document.createElement('div'));
+        const el = await syncRender(props.footerElement, document.createElement('div'));
         output.footerElement = el.innerHTML;
     }
     output.columnDefaults = (_a = props.columnDefaults) !== null && _a !== void 0 ? _a : {};
@@ -90,21 +81,21 @@ const propsToOptions = (props) => __awaiter(void 0, void 0, void 0, function* ()
         scrollToEnd: false,
     };
     return output;
-});
-const columnPropsToOptions = (props) => __awaiter(void 0, void 0, void 0, function* () {
+};
+const columnPropsToOptions = async (props) => {
     if (!props.columns)
         return undefined;
     const columns = [];
     for (const column of props.columns) {
         if (React.isValidElement(column.headerPopup)) {
-            const el = yield syncRender(column.headerPopup, document.createElement('div'));
+            const el = await syncRender(column.headerPopup, document.createElement('div'));
             column.headerPopup = el.innerHTML;
         }
         columns.push(column);
     }
     return columns;
-});
-const initTabulatorClass = ($container, tableRef, onTableRef, options, props, events) => __awaiter(void 0, void 0, void 0, function* () {
+};
+const initTabulatorClass = async ($container, tableRef, onTableRef, options, props, events) => {
     Tabulator.registerModule(ActiveSelectionModule);
     Tabulator.registerModule(AdvancedHeaderFilterModule);
     return new Promise(resolve => {
@@ -124,4 +115,5 @@ const initTabulatorClass = ($container, tableRef, onTableRef, options, props, ev
             resolve(tableApi);
         });
     });
-});
+};
+//# sourceMappingURL=init.js.map

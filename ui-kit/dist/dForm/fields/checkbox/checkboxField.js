@@ -6,3 +6,4 @@ export class CheckboxField extends BaseField {
         return React.createElement(CheckboxFieldRender, { field: this });
     }
 }
+//# sourceMappingURL=checkboxField.js.map

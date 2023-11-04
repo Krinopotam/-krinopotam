@@ -394,3 +394,4 @@ export class ActiveSelectionModule extends Module {
     }
 }
 ActiveSelectionModule.moduleName = 'activeSelection';
+//# sourceMappingURL=activeSelectionModule.js.map

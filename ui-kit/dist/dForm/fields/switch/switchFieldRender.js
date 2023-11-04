@@ -16,3 +16,4 @@ export const SwitchFieldRender = ({ field }) => {
     }, [field]);
     return (React.createElement(Switch, { autoFocus: fieldProps.autoFocus, checked: value, checkedChildren: fieldProps.checkedChildren, disabled: field.isDisabled() || field.isReadOnly(), loading: fieldProps.loading, onChange: onChange, unCheckedChildren: fieldProps.unCheckedChildren, style: fieldProps.style }));
 };
+//# sourceMappingURL=switchFieldRender.js.map

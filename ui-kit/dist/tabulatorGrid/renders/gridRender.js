@@ -23,7 +23,7 @@ const GridRender_ = ({ tableRef, gridApi, gridProps, tabulatorProps, }) => {
         dispatcher.pushToStack(gridApi.getGridId());
     }, [gridApi]);
     const ajaxRequestFunc = useMemo(() => GenerateAjaxRequestFunc(gridApi, gridProps === null || gridProps === void 0 ? void 0 : gridProps.onDataFetch), [gridApi, gridProps]);
-    return (React.createElement(TabulatorBase, Object.assign({}, tabulatorProps, { layout: (_a = tabulatorProps.layout) !== null && _a !== void 0 ? _a : 'fitData', movableColumns: tabulatorProps.movableColumns !== false, height: '100%', dataLoader: false, onTableRef: onTableRef, gridId: gridApi.getGridId(), dataTreeFilter: true, data: gridProps.onDataFetch ? undefined : ((_b = gridApi.getDataSet()) !== null && _b !== void 0 ? _b : []), ajaxURL: (gridProps === null || gridProps === void 0 ? void 0 : gridProps.onDataFetch) ? '-' : undefined, ajaxRequestFunc: !gridProps.onDataFetch ? undefined : ajaxRequestFunc, ajaxResponse: !gridProps.onDataFetchResponse ? undefined : (url, params, response) => { var _a; return (_a = gridProps.onDataFetchResponse) === null || _a === void 0 ? void 0 : _a.call(gridProps, response, params, gridApi); }, containerClassName: gridProps.className, placeholder: (_c = gridProps.placeholder) !== null && _c !== void 0 ? _c : 'Строки отсутствуют', events: events })));
+    return (React.createElement(TabulatorBase, Object.assign({}, tabulatorProps, { layout: (_a = tabulatorProps.layout) !== null && _a !== void 0 ? _a : 'fitData', movableColumns: tabulatorProps.movableColumns !== false, height: '100%', dataLoader: false, onTableRef: onTableRef, gridId: gridApi.getGridId(), dataTreeFilter: true, data: gridProps.onDataFetch ? undefined : (_b = gridApi.getDataSet()) !== null && _b !== void 0 ? _b : [], ajaxURL: (gridProps === null || gridProps === void 0 ? void 0 : gridProps.onDataFetch) ? '-' : undefined, ajaxRequestFunc: !gridProps.onDataFetch ? undefined : ajaxRequestFunc, ajaxResponse: !gridProps.onDataFetchResponse ? undefined : (_url, params, response) => { var _a; return (_a = gridProps.onDataFetchResponse) === null || _a === void 0 ? void 0 : _a.call(gridProps, response, params, gridApi); }, containerClassName: gridProps.className, placeholder: (_c = gridProps.placeholder) !== null && _c !== void 0 ? _c : 'Строки отсутствуют', events: events })));
 };
 export const GridRender = React.memo(GridRender_);
 const resizeObserver = (tableRef, parentClassName) => {
@@ -46,3 +46,4 @@ const resizeObserver = (tableRef, parentClassName) => {
     observer.observe(observableElement);
     return observer;
 };
+//# sourceMappingURL=gridRender.js.map

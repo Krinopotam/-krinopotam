@@ -19,3 +19,4 @@ export const MenuRow = ({ gridApi }) => {
     return (React.createElement("div", { style: { width: '100%', paddingBottom: 8, paddingTop: 8 } },
         React.createElement(ButtonsRow, { buttons: buttons, apiRef: gridApi.buttonsApi })));
 };
+//# sourceMappingURL=menuRow.js.map

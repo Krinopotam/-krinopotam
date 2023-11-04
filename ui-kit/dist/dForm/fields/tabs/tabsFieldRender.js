@@ -76,3 +76,4 @@ const TabBarRender = (props, DefaultTabBar, field) => {
         React.createElement("div", { style: indentStyle }),
         React.createElement(DefaultTabBar, Object.assign({}, props, { style: style }))));
 };
+//# sourceMappingURL=tabsFieldRender.js.map

@@ -6,3 +6,4 @@ export const alertErrorPatch = function () {
         this.table.alertManager.alert(this.table.options.dataLoaderError || this.langText("data|error"), "error");
     }
 };
+//# sourceMappingURL=disableErrorOverlay.js.map

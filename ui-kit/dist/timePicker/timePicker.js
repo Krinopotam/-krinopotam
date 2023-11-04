@@ -16,3 +16,4 @@ export const TimePicker = (_a) => {
     return (React.createElement(AntTimePicker, Object.assign({}, props, { allowClear: readOnly ? false : allowClear, open: readOnly ? false : open, inputReadOnly: readOnly ? true : inputReadOnly, panelRender: readOnly ? () => null : panelRender })));
 };
 TimePicker.displayName = 'TimePicker';
+//# sourceMappingURL=timePicker.js.map

@@ -12,3 +12,4 @@ export class UploadDraggerField extends BaseField {
         return React.createElement(UploadDraggerFieldRender, { field: this });
     }
 }
+//# sourceMappingURL=uploadDraggerField.js.map

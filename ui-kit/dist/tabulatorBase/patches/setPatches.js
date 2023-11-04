@@ -6,3 +6,4 @@ export const setPatches = (tableApi) => {
     setFindRowPatch(tableApi);
     setDisableErrorOverlayPatch(tableApi);
 };
+//# sourceMappingURL=setPatches.js.map

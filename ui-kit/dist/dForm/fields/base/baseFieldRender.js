@@ -15,3 +15,4 @@ export const BaseFieldRender = ({ field, altLabel, children }) => {
     const label = typeof altLabel !== 'undefined' ? altLabel : (_a = fieldProps.label) !== null && _a !== void 0 ? _a : emptyLabel;
     return (React.createElement(Animate, { component: "", transitionName: "zoom" }, !fieldHidden ? (React.createElement(Form.Item, { label: label, help: error || undefined, validateStatus: error ? 'error' : undefined, required: !!fieldProps.requiredMark, tooltip: fieldProps.tooltip, style: style }, children)) : null));
 };
+//# sourceMappingURL=baseFieldRender.js.map

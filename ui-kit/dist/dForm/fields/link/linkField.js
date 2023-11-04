@@ -6,3 +6,4 @@ export class LinkField extends BaseField {
         return React.createElement(LinkFieldRender, { field: this });
     }
 }
+//# sourceMappingURL=linkField.js.map

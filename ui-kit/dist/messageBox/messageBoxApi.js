@@ -56,3 +56,4 @@ export class MessageBoxApi {
         return this._currentConfig.buttons || {};
     }
 }
+//# sourceMappingURL=messageBoxApi.js.map
