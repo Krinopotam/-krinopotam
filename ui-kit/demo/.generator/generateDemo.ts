@@ -113,9 +113,9 @@ function parseFileProperties(fileName: string, fileContent: string) {
 
 function clearSource(source: string) {
     source = source.replaceAll(/\s*\{\/\*Description Start\*\/}[\S\s]*?\{\/\*Description End\*\/}/gi, ''); //remove {/*Description Start/*} blocks
-    source = source.replaceAll(/\s*\/\*Description Start\*\/[\S\s]*?\/\*Description End\*\//gi, ''); //remove /*Description Start*/ blocks
+    source = source.replaceAll(/\s*\/\*Description Start\*\/[\S\s]*?\/\*Description End\*\//gi, ''); //remove /*Description End*/ blocks
     source = source.replaceAll(/\/\/ noinspection DuplicatedCode/gi, ''); //remove // noinspection DuplicatedCode
-    source = source.replaceAll(/['"]@src\//gi, '@krinopotam/ui-kit/'); //remove // noinspection DuplicatedCode
+    source = source.replaceAll(/['"]@src\//gi, '@krinopotam/ui-kit/'); //replace @src to @krinopotam/ui-kit
 
     const sourceLines = source.split(/\r?\n/);
     let newSource = '';
