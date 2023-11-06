@@ -3,7 +3,7 @@ import {IButtonRowProps, IButtonsRowApi} from '@src/buttonsRow';
 
 export const keyDownHandler = (e: KeyboardEvent, propsRef: React.MutableRefObject<IButtonRowProps>, api: IButtonsRowApi, wrapperId: string) => {
     const target = e.target as HTMLElement;
-    //target.style.borderColor = getRandomColor() //DEBUG: -----
+    //target.style.borderColor = GetRandomColor() //DEBUG: -----
 
     if (!e.key || !target?.closest('.buttons-row-wrapper-' + wrapperId)) return;
 

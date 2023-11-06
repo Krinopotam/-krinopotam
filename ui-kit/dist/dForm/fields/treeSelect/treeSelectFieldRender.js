@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useSyncExternalStore } from 'react';
 import { TreeSelect } from '../../../treeSelect';
-import { splitObject } from '@krinopotam/js-helpers';
+import { SplitObject } from '@krinopotam/js-helpers';
 export const TreeSelectFieldRender = ({ field }) => {
     var _a, _b;
     useSyncExternalStore(field.subscribe.bind(field), field.getSnapshot.bind(field));
@@ -32,7 +32,7 @@ export const TreeSelectFieldRender = ({ field }) => {
 };
 const useSplitTreeSelectProps = (props) => {
     return useMemo(() => {
-        const result = splitObject(props, {
+        const result = SplitObject(props, {
             component: true,
             helpClass: true,
             label: true,

@@ -1,5 +1,5 @@
 import React, { useCallback, useRef, useState } from 'react';
-import { getUuid, isArray, isPromise } from '@krinopotam/js-helpers';
+import { GetUuid, IsArray, IsPromise } from '@krinopotam/js-helpers';
 import useUnmountedRef from 'ahooks/lib/useUnmountedRef';
 import { MessageBox } from '../../messageBox';
 import { GenerateAjaxRequestFunc } from '../../tabulatorGrid/helpers/fetchHelpers';
@@ -56,7 +56,7 @@ const useUpdateDataSetFromProps = (curDataSetRef, propsDataSet) => {
 };
 const useApiGetGridId = (gridApi) => {
     var _a;
-    const [gridId] = useState((_a = gridApi.gridProps.id) !== null && _a !== void 0 ? _a : 'grid-' + getUuid());
+    const [gridId] = useState((_a = gridApi.gridProps.id) !== null && _a !== void 0 ? _a : 'grid-' + GetUuid());
     return useCallback(() => gridId, [gridId]);
 };
 const useApiIsMounted = (unmountRef) => {
@@ -164,7 +164,7 @@ const useApiSetSelectedRowsKeys = (gridApi) => {
             return;
         if (!keys || clearPrevSelection)
             (_a = gridApi.tableApi) === null || _a === void 0 ? void 0 : _a.deselectRow();
-        const selKeys = isArray(keys) ? keys : [keys];
+        const selKeys = IsArray(keys) ? keys : [keys];
         (_b = gridApi.tableApi) === null || _b === void 0 ? void 0 : _b.selectRow(selKeys);
     }, [gridApi]);
 };
@@ -208,7 +208,7 @@ const useApiInsertRows = (dataSetRef, gridApi) => {
             return;
         const dataTree = gridApi.gridProps.dataTree;
         const above = place === 'above';
-        const _rows = isArray(rows) ? [...rows] : [rows];
+        const _rows = IsArray(rows) ? [...rows] : [rows];
         for (const row of _rows) {
             if (!dataTree)
                 tableApi.addData([row], above, key).then();
@@ -228,7 +228,7 @@ const useApiUpdateRows = (dataSetRef, gridApi) => {
         if (!gridApi.tableApi)
             return;
         const dataTree = gridApi.gridProps.dataTree;
-        const _rows = isArray(rows) ? [...rows] : [rows];
+        const _rows = IsArray(rows) ? [...rows] : [rows];
         for (const row of _rows) {
             if (!dataTree)
                 gridApi.tableApi.updateData([row]).then();
@@ -267,7 +267,7 @@ const addTreeRows = (gridApi, rows, place, key) => {
         return;
     }
     const above = place === 'above';
-    const clonedRows = isArray(rows) ? [...rows] : [rows];
+    const clonedRows = IsArray(rows) ? [...rows] : [rows];
     for (const rowData of clonedRows) {
         const parentNode = findParentNode(gridApi, rowData);
         if (!parentNode)
@@ -290,7 +290,7 @@ const updateTreeRows = (gridApi, rows) => {
     const childField = gridApi.tableApi.options.dataTreeChildField;
     if (!indexField || !childField)
         return;
-    const clonedRows = isArray(rows) ? [...rows] : [rows];
+    const clonedRows = IsArray(rows) ? [...rows] : [rows];
     for (const rowData of clonedRows) {
         const rowKey = rowData[indexField];
         const node = gridApi.tableApi.getRow(rowKey);
@@ -334,7 +334,7 @@ const useApiRemoveRowsByKeys = (dataSetRef, gridApi) => {
         if (!table)
             return;
         const indexField = table.options.index;
-        const _keys = isArray(keys) ? [...keys] : [keys];
+        const _keys = IsArray(keys) ? [...keys] : [keys];
         let newActiveNode = false;
         let newActiveNodeCandidate = false;
         for (const key of _keys) {
@@ -362,7 +362,7 @@ const useApiRemoveRowsByKeys = (dataSetRef, gridApi) => {
 };
 const useApiRemoveRows = (gridApi) => {
     return useCallback((rows) => {
-        const clonedRows = isArray(rows) ? [...rows] : [rows];
+        const clonedRows = IsArray(rows) ? [...rows] : [rows];
         const keys = [];
         for (const row of clonedRows)
             keys.push(row.id);
@@ -380,7 +380,7 @@ const useApiDeleteRows = (gridApi) => {
         const removeRows = () => {
             var _a;
             const deletePromise = (_a = gridProps === null || gridProps === void 0 ? void 0 : gridProps.onDelete) === null || _a === void 0 ? void 0 : _a.call(gridProps, rowsData, gridApi);
-            if (isPromise(deletePromise)) {
+            if (IsPromise(deletePromise)) {
                 if (!gridProps.confirmDelete)
                     gridApi.setIsLoading(true);
                 const promiseResult = deletePromise;

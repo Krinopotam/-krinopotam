@@ -12,13 +12,13 @@ var __rest = (this && this.__rest) || function (s, e) {
 import 'tabulator-tables/dist/css/tabulator_simple.css';
 import React from 'react';
 import { useInit } from './hooks/init';
-import { getUuid } from '@krinopotam/js-helpers';
+import { GetUuid } from '@krinopotam/js-helpers';
 import { Stylization } from '../tabulatorBase/stylization';
 export const TabulatorBase = (_a) => {
     var { onTableRef, gridId, events, containerClassName, width, minWidth, maxWidth } = _a, props = __rest(_a, ["onTableRef", "gridId", "events", "containerClassName", "width", "minWidth", "maxWidth"]);
     const containerRef = React.useRef(null);
     const tableRef = React.useRef();
-    const [newId] = React.useState(getUuid());
+    const [newId] = React.useState(GetUuid());
     useInit({ props, events, containerRef, tableRef, onTableRef });
     const containerStyle = {
         width: width,

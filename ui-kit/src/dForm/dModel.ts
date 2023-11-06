@@ -9,7 +9,7 @@
  */
 
 import {IDFormDataSet, IDFormDataSourcePromise, IDFormMode, IDFormProps} from './dForm';
-import {isPromise} from '@krinopotam/js-helpers';
+import {IsPromise} from '@krinopotam/js-helpers';
 
 import {BaseValidator} from './validators/baseValidator';
 import React from 'react';
@@ -791,7 +791,7 @@ export class DModel {
 
         const result = this._callbacks?.onSubmit(values, this);
 
-        if (isPromise(result)) {
+        if (IsPromise(result)) {
             const promiseResult = result as IDFormSubmitResultPromise;
             promiseResult
                 .then(promiseResult => {

@@ -11,33 +11,33 @@
 import {v4 as uuid} from 'uuid';
 
 /** generate new UUID */
-export const getUuid = () => {
+export const GetUuid = () => {
     return uuid();
 };
 
 /** Converts the first letter of a string to uppercase */
-export const upperFirstLetter = (val: string) => {
+export const UpperFirstLetter = (val: string) => {
     return val.charAt(0).toUpperCase() + val.slice(1);
 };
 
 /** Converts the first letter of a string to lowercase */
-export const lowerFirstLetter = (val: string) => {
+export const LowerFirstLetter = (val: string) => {
     return val.charAt(0).toLowerCase() + val.slice(1);
 };
 
 /** Separates a string in CamelCase with spaces (for example: "CamelCaseString" to "Camel Case String")*/
-export const camelCaseSplit = (str: string, splitter?: string) => {
+export const CamelCaseSplit = (str: string, splitter?: string) => {
     if (typeof splitter === 'undefined') splitter = ' ';
     return str.replace(/([a-z0-9])([A-Z])/g, '$1' + splitter + '$2');
 };
 
 /** Removes extension from file name*/
-export const trimFileExtension = (fileName: string) => {
+export const TrimFileExtension = (fileName: string) => {
     return fileName.replace(/\.[^/.]+$/, '');
 };
 
 /* Returns random color **/
-export const getRandomColor = () => {
+export const GetRandomColor = () => {
     const letters = '0123456789ABCDEF';
     let color = '#';
     for (let i = 0; i < 6; i++) {

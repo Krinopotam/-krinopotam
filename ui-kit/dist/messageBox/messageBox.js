@@ -16,7 +16,7 @@ import { ContentRender } from './renders/contentRender';
 import { MessageBoxApi } from './messageBoxApi';
 import React from 'react';
 import dispatcher from '../formsDispatcher';
-import { getUuid, mergeObjects } from '@krinopotam/js-helpers';
+import { GetUuid, MergeObjects } from '@krinopotam/js-helpers';
 import { QuestionCircleOutlined } from '@ant-design/icons';
 class MessageBox {
     constructor() {
@@ -41,7 +41,7 @@ class MessageBox {
             },
         };
         const config = Object.assign({}, props);
-        const buttons = mergeObjects(defaultButtons, config.buttons);
+        const buttons = MergeObjects(defaultButtons, config.buttons);
         if (!props.onCrossClose)
             props.onCrossClose = () => this.triggerButtonClick('ok', buttons.ok);
         const messageBox = this.modalBase(Object.assign(Object.assign({}, config), { buttons }));
@@ -73,7 +73,7 @@ class MessageBox {
             },
         };
         const props = Object.assign({ icon: React.createElement(QuestionCircleOutlined, null) }, otherProps);
-        const buttons = mergeObjects(defaultButtons, props.buttons);
+        const buttons = MergeObjects(defaultButtons, props.buttons);
         if (!props.onCrossClose)
             props.onCrossClose = () => this.triggerButtonClick('cancel', buttons.cancel);
         if (typeof props.closable === 'undefined')
@@ -115,7 +115,7 @@ class MessageBox {
             },
         };
         const props = Object.assign({}, otherProps);
-        const buttons = mergeObjects(defaultButtons, props.buttons);
+        const buttons = MergeObjects(defaultButtons, props.buttons);
         if (!props.onCrossClose)
             props.onCrossClose = () => this.triggerButtonClick('cancel', buttons.cancel);
         if (typeof props.closable === 'undefined')
@@ -128,7 +128,7 @@ class MessageBox {
     modalBase(_a) {
         var otherProps = __rest(_a, []);
         const props = Object.assign({}, otherProps);
-        const formId = getUuid();
+        const formId = GetUuid();
         const config = Object.assign(Object.assign({}, props), { formId: formId });
         const prevFocused = document.activeElement;
         config.onAfterClose = () => {
@@ -136,7 +136,7 @@ class MessageBox {
             prevFocused === null || prevFocused === void 0 ? void 0 : prevFocused.focus();
             (_a = props.onAfterClose) === null || _a === void 0 ? void 0 : _a.call(props);
         };
-        const draggableId = 'draggable-' + getUuid();
+        const draggableId = 'draggable-' + GetUuid();
         let modal = Modal;
         if (this._themedModalInstance && Object.keys(this._themedModalInstance).length > 0)
             modal = this._themedModalInstance;

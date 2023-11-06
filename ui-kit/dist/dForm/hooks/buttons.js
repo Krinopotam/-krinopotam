@@ -1,4 +1,4 @@
-import { mergeObjects } from "@krinopotam/js-helpers";
+import { MergeObjects } from "@krinopotam/js-helpers";
 import { useMemo } from "react";
 export const useGetButtons = (formProps, formApi) => {
     return useMemo(() => {
@@ -19,7 +19,7 @@ export const useGetButtons = (formProps, formApi) => {
                 },
             },
         };
-        return mergeObjects(defaultButtons, formProps.buttons);
+        return MergeObjects(defaultButtons, formProps.buttons);
     }, [formProps.buttons, formApi]);
 };
 //# sourceMappingURL=buttons.js.map

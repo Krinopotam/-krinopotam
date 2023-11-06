@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { CopyOutlined, DeleteOutlined, EditOutlined, EyeOutlined, FilterOutlined, MenuOutlined, PlusOutlined, PlusSquareOutlined } from '@ant-design/icons';
-import { mergeObjects } from '@krinopotam/js-helpers';
+import { MergeObjects } from '@krinopotam/js-helpers';
 export const useInitButtons = (gridApi) => {
     var _a, _b;
     const [, refreshButtons] = useState({});
@@ -31,7 +31,7 @@ export const useInitButtons = (gridApi) => {
             filterToggle: filterToggleButton,
             system: systemButtons,
         };
-        const resultButtons = mergeObjects(defaultButtons, buttons);
+        const resultButtons = MergeObjects(defaultButtons, buttons);
         for (const key in resultButtons) {
             const btn = resultButtons[key];
             if (!btn)

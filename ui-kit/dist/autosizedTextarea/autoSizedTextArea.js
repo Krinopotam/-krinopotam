@@ -11,7 +11,7 @@ var __rest = (this && this.__rest) || function (s, e) {
 };
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Input } from 'antd';
-import { mergeObjects } from "@krinopotam/js-helpers";
+import { MergeObjects } from "@krinopotam/js-helpers";
 import styled from 'styled-components';
 const { TextArea } = Input;
 const SizerDiv = styled.div `
@@ -119,7 +119,7 @@ const useCalculateSize = (sizerRef, placeholderSizerRef, value, inputBoundsStyle
 };
 const usePrepareInputStyles = (style, inputHeight, inputWidth) => {
     return useMemo(() => {
-        return mergeObjects(style !== null && style !== void 0 ? style : {}, {
+        return MergeObjects(style !== null && style !== void 0 ? style : {}, {
             height: inputHeight,
             width: inputWidth,
             transition: 'none',

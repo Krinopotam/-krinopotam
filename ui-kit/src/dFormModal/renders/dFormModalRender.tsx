@@ -5,7 +5,7 @@ import {ButtonsRender, Modal} from '@src/modal';
 import {IDFormModalApi} from '../hooks/api';
 import {IDFormModalProps} from '../dFormModal';
 import React, {useState} from 'react';
-import {getUuid} from '@krinopotam/js-helpers';
+import {GetUuid} from '@krinopotam/js-helpers';
 
 interface IDFormModalRenderProps {
     /** the form ID */
@@ -37,7 +37,7 @@ interface IDFormModalRenderProps {
 }
 
 export const DFormModalRender = ({formId, buttons, buttonsApi, formApi, formProps, modalFormProps}: IDFormModalRenderProps): React.JSX.Element => {
-    const [formIdVal] = useState(formId ?? 'dFormModal-' + getUuid());
+    const [formIdVal] = useState(formId ?? 'dFormModal-' + GetUuid());
     const formMode = modalFormProps.formMode ?? 'create'; //The form model has not yet been initialized
     const modalTitle = useFormTitle(formMode, modalFormProps.title);
 

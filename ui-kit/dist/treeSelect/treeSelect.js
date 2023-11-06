@@ -1,7 +1,7 @@
 import { Col, Row } from 'antd';
 import { DFormModal } from '../dFormModal';
 import React, { useEffect, useMemo, useState } from 'react';
-import { getUuid, splitObject } from '@krinopotam/js-helpers';
+import { GetUuid, SplitObject } from '@krinopotam/js-helpers';
 import { TreeSelectRender } from '../treeSelect/renders/treeSelectRender';
 import { useEditableInit } from '../treeSelect/hooks/useEditForm';
 import { useInitApi } from '../treeSelect/hooks/api';
@@ -11,7 +11,7 @@ import { useInitButtons } from '../treeSelect/hooks/buttons';
 export const TreeSelect = (props) => {
     var _a, _b;
     const [treeProps, updateProps] = useGetActualProps(props);
-    const [componentId] = useState((_a = treeProps.treeSelectId) !== null && _a !== void 0 ? _a : 'treeSelect-' + getUuid());
+    const [componentId] = useState((_a = treeProps.treeSelectId) !== null && _a !== void 0 ? _a : 'treeSelect-' + GetUuid());
     const [api] = useState(((_b = treeProps.apiRef) !== null && _b !== void 0 ? _b : {}));
     const [buttonsApi] = useState({});
     useInitApi({ api, componentId, treeProps, updateProps, buttonsApi });
@@ -49,7 +49,7 @@ export const TreeSelect = (props) => {
 };
 const useSplitAntTreeSelectProps = (props) => {
     return useMemo(() => {
-        const result = splitObject(props, {
+        const result = SplitObject(props, {
             apiRef: true,
             treeSelectId: true,
             readOnly: true,

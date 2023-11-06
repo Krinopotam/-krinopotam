@@ -18,7 +18,7 @@ import {MessageBoxApi} from './messageBoxApi';
 import {ModalStaticFunctions} from 'antd/es/modal/confirm';
 import React from 'react';
 import dispatcher from '../formsDispatcher';
-import {getUuid, mergeObjects} from '@krinopotam/js-helpers';
+import {GetUuid, MergeObjects} from '@krinopotam/js-helpers';
 import {IColorType} from '@src/button/button';
 import {QuestionCircleOutlined} from '@ant-design/icons';
 
@@ -98,7 +98,7 @@ class MessageBox {
         };
 
         const config: IModalConfirmConfig = {...props};
-        const buttons = mergeObjects(defaultButtons, config.buttons);
+        const buttons = MergeObjects(defaultButtons, config.buttons);
 
         if (!props.onCrossClose) props.onCrossClose = () => this.triggerButtonClick('ok', buttons.ok);
 
@@ -135,7 +135,7 @@ class MessageBox {
         };
 
         // noinspection DuplicatedCode
-        const buttons = mergeObjects(defaultButtons, props.buttons);
+        const buttons = MergeObjects(defaultButtons, props.buttons);
 
         if (!props.onCrossClose) props.onCrossClose = () => this.triggerButtonClick('cancel', buttons.cancel);
 
@@ -180,7 +180,7 @@ class MessageBox {
         const props: IModalConfirmConfig = {...otherProps};
 
         // noinspection DuplicatedCode
-        const buttons = mergeObjects(defaultButtons, props.buttons);
+        const buttons = MergeObjects(defaultButtons, props.buttons);
 
         if (!props.onCrossClose) props.onCrossClose = () => this.triggerButtonClick('cancel', buttons.cancel);
 
@@ -194,7 +194,7 @@ class MessageBox {
     private modalBase({...otherProps}: IModalConfig): MessageBoxApi {
         const props: IModalConfig = {...otherProps};
 
-        const formId = getUuid();
+        const formId = GetUuid();
         const config: IModalBaseConfig = {...props, formId: formId};
 
         const prevFocused = document.activeElement;
@@ -203,7 +203,7 @@ class MessageBox {
             props.onAfterClose?.();
         };
 
-        const draggableId = 'draggable-' + getUuid();
+        const draggableId = 'draggable-' + GetUuid();
         let modal: ModalType = Modal;
         if (this._themedModalInstance && Object.keys(this._themedModalInstance).length > 0) modal = this._themedModalInstance;
         const modalInst = modal.info(this.generateModalConfig(config, draggableId));

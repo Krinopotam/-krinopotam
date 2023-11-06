@@ -14,30 +14,30 @@ import merge from 'lodash.merge';
 import {addedDiff, deletedDiff, detailedDiff, diff, updatedDiff} from 'deep-object-diff';
 
 /** Check if parameter is an array */
-export const isArray = (val: unknown): boolean => {
+export const IsArray = (val: unknown): boolean => {
     return val instanceof Array;
 };
 
 /** Check if parameter is promise */
-export const isPromise = (val: unknown): boolean => {
+export const IsPromise = (val: unknown): boolean => {
     return !!val && Object.prototype.toString.call(val) === '[object Promise]';
 };
 
 /** Returns object's keys list as string array */
-export const objectKeys = (val: unknown): string[] | undefined => {
+export const ObjectKeys = (val: unknown): string[] | undefined => {
     if (!val || typeof val !== 'object') return undefined;
     return Object.keys(val);
 };
 
 /**  Returns object's keys count */
-export const objectKeysLength = (val: unknown): number => {
-    const keys = objectKeys(val);
+export const ObjectKeysLength = (val: unknown): number => {
+    const keys = ObjectKeys(val);
     return keys ? keys.length : 0;
 };
 
 /** Search index in objects array with specified object property */
-export const findIndexInObjectsArray = (objArray: Record<string, unknown>[], objProperty: string, searchVal: unknown): number => {
-    if (!isArray(objArray)) return -1;
+export const FindIndexInObjectsArray = (objArray: Record<string, unknown>[], objProperty: string, searchVal: unknown): number => {
+    if (!IsArray(objArray)) return -1;
 
     for (let i = 0; i < objArray.length; i++) {
         if (objArray[i][objProperty] === searchVal) return i;
@@ -47,8 +47,8 @@ export const findIndexInObjectsArray = (objArray: Record<string, unknown>[], obj
 };
 
 /** Search value in objects array by object property */
-export const findObjectInArray = (objArray: Record<string, unknown>[], objProperty: string, searchVal: unknown): Record<string, unknown> | undefined => {
-    if (!isArray(objArray)) return undefined;
+export const FindObjectInArray = (objArray: Record<string, unknown>[], objProperty: string, searchVal: unknown): Record<string, unknown> | undefined => {
+    if (!IsArray(objArray)) return undefined;
 
     for (const item of objArray) {
         if (item[objProperty] === searchVal) return item;
@@ -58,17 +58,17 @@ export const findObjectInArray = (objArray: Record<string, unknown>[], objProper
 };
 
 /** Deep compare objects */
-export const isObjectsEqual = <TObject, TSource>(obj1: TObject, obj2: TSource): boolean => {
+export const IsObjectsEqual = <TObject, TSource>(obj1: TObject, obj2: TSource): boolean => {
     return isEqual(obj1, obj2);
 };
 
 /** Deep merge objects */
-export const mergeObjects = <TObject, TSource>(object: TObject, source: TSource): TObject & TSource => {
+export const MergeObjects = <TObject, TSource>(object: TObject, source: TSource): TObject & TSource => {
     return merge(object, source);
 };
 
 /** Deep clone  objects */
-export const cloneObject = <TObject>(object: TObject, maxLevel?: number): TObject => {
+export const CloneObject = <TObject>(object: TObject, maxLevel?: number): TObject => {
     if (typeof object !== 'object') return object;
 
     const objRecursion = (obj: Record<string, unknown> | null, level: number, cloneMaxLevel: number) => {
@@ -80,7 +80,7 @@ export const cloneObject = <TObject>(object: TObject, maxLevel?: number): TObjec
             const item = obj[key];
             if (typeof item !== 'object' || level >= cloneMaxLevel) clonedObj[key] = item;
             else
-                clonedObj[key] = !isArray(item)
+                clonedObj[key] = !IsArray(item)
                     ? objRecursion(item as Record<string, unknown>, level, cloneMaxLevel)
                     : arraysRecursion(item as unknown[], level, cloneMaxLevel);
         }
@@ -97,7 +97,7 @@ export const cloneObject = <TObject>(object: TObject, maxLevel?: number): TObjec
             const item = arr[i];
             if (typeof item !== 'object' || level >= cloneMaxLevel) clonedArr[i] = item;
             else
-                clonedArr[i] = !isArray(item)
+                clonedArr[i] = !IsArray(item)
                     ? objRecursion(item as Record<string, unknown>, level, cloneMaxLevel)
                     : arraysRecursion(item as unknown[], level, cloneMaxLevel);
         }
@@ -105,7 +105,7 @@ export const cloneObject = <TObject>(object: TObject, maxLevel?: number): TObjec
         return clonedArr;
     };
 
-    return !isArray(object)
+    return !IsArray(object)
         ? (objRecursion(object as Record<string, unknown>, 0, maxLevel ?? 0) as TObject)
         : (arraysRecursion(object, 0, maxLevel ?? 0) as TObject);
 
@@ -113,13 +113,13 @@ export const cloneObject = <TObject>(object: TObject, maxLevel?: number): TObjec
 };
 
 /** Get object content hash */
-export const hashObjectContent = (object: hash.NotUndefined, options?: hash.NormalOption): string => {
+export const HashObjectContent = (object: hash.NotUndefined, options?: hash.NormalOption): string => {
     // noinspection TypeScriptValidateTypes
     return hash(object, options);
 };
 
 /** Is object has own property */
-export const isObjectHasOwnProperty = (obj: Record<string, unknown>, propName: string) => {
+export const IsObjectHasOwnProperty = (obj: Record<string, unknown>, propName: string) => {
     return Object.prototype.hasOwnProperty.call(obj, propName);
 };
 
@@ -131,7 +131,7 @@ export const isObjectHasOwnProperty = (obj: Record<string, unknown>, propName: s
  * @param propNames
  * @returns
  */
-export const splitObject = <R1 extends object, R2 extends object>(obj: object, propNames: Required<{[K in keyof R1]: boolean}>): [R1, R2] => {
+export const SplitObject = <R1 extends object, R2 extends object>(obj: object, propNames: Required<{ [K in keyof R1]: boolean }>): [R1, R2] => {
     const obj1 = {} as R1;
     const obj2 = {} as R2;
 
@@ -145,7 +145,7 @@ export const splitObject = <R1 extends object, R2 extends object>(obj: object, p
 /**
  * Deep compares two JavaScript Objects, including nested structures of arrays and object
  */
-export const objectDiffs = (obj1: object, obj2: object, mode?: 'added' | 'deleted' | 'updated' | 'detailed') => {
+export const ObjectDiffs = (obj1: object, obj2: object, mode?: 'added' | 'deleted' | 'updated' | 'detailed') => {
     if (mode === 'added') return addedDiff(obj1, obj2);
     else if (mode === 'deleted') return deletedDiff(obj1, obj2);
     else if (mode === 'updated') return updatedDiff(obj1, obj2);
@@ -154,14 +154,14 @@ export const objectDiffs = (obj1: object, obj2: object, mode?: 'added' | 'delete
 };
 
 /** Check if an object is React Class Component */
-export const isReactClassComponent = <T>(obj: T) => {
+export const IsReactClassComponent = <T>(obj: T) => {
     return typeof obj === 'function' && !!obj.prototype.isReactComponent;
 };
 
 /** Check if an object is React Component */
 export const isReactComponent = <T>(obj: T) => {
     if (typeof obj === 'object') {
-        const _obj = obj as {$$typeof?: symbol};
+        const _obj = obj as { $$typeof?: symbol };
         if (_obj['$$typeof'] && _obj['$$typeof'].toString() === 'Symbol(react.element)') return true;
     } else if (typeof obj === 'function') {
         if (String(obj).includes('return React.createElement') || !!obj.prototype?.isReactComponent) return true;
@@ -170,18 +170,23 @@ export const isReactComponent = <T>(obj: T) => {
     return false;
 };
 
-export const parseJwt = (token: string) => {
-    const base64Url = token.split('.')[1];
-    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-    const jsonPayload = decodeURIComponent(
-        window
-            .atob(base64)
-            .split('')
-            .map((c) => {
-                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-            })
-            .join('')
-    );
+export const ParseJwt = <T extends Record<string, unknown> = Record<string, unknown>>(token: string | undefined): T | undefined => {
+    if (!token) return undefined
+    try {
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(
+            window
+                .atob(base64)
+                .split('')
+                .map((c) => {
+                    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+                })
+                .join('')
+        );
 
-    return JSON.parse(jsonPayload);
+        return JSON.parse(jsonPayload);
+    } catch (error) {
+        return undefined
+    }
 };

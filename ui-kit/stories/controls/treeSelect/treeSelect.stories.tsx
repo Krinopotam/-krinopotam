@@ -4,7 +4,7 @@ import type {Meta, StoryObj} from '@storybook/react'
 import {ITreeSelectNode, TreeSelect} from "@src/treeSelect";
 import {UserOutlined} from "@ant-design/icons"
 import React from "react";
-import {cloneObject} from "@krinopotam/js-helpers";
+import {CloneObject} from "@krinopotam/js-helpers";
 import {InputField} from "@src/dForm/fields/input/inputField";
 import {TreeSelectDataSet} from "../../datasets/treeSelect";
 
@@ -119,7 +119,7 @@ const filterDataSet = (nodes: ITreeSelectNode[], search: string) => {
     const result: ITreeSelectNode[] = [];
     let resultChildren: ITreeSelectNode[] = [];
     for (const node of nodes) {
-        const nodeClone = cloneObject(node);
+        const nodeClone = CloneObject(node);
         if (node.children && node.children.length > 0) resultChildren = filterDataSet(node.children, search);
 
         if (resultChildren.length > 0) {

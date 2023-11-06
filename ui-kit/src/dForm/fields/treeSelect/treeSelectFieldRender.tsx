@@ -1,7 +1,7 @@
 import React, {CSSProperties, useCallback, useEffect, useMemo, useSyncExternalStore} from 'react';
 import {ITreeSelectFieldOnlyProps, TreeSelectField} from '@src/dForm/fields/treeSelect/treeSelectField';
 import {ITreeSelectProps, ITreeSelectValue, TreeSelect} from '@src/treeSelect';
-import {splitObject} from '@krinopotam/js-helpers';
+import {SplitObject} from '@krinopotam/js-helpers';
 import {IDFormFieldProps} from '@src/dForm';
 
 export const TreeSelectFieldRender = ({field}: {field: TreeSelectField}): React.JSX.Element => {
@@ -80,7 +80,7 @@ export const TreeSelectFieldRender = ({field}: {field: TreeSelectField}): React.
 
 const useSplitTreeSelectProps = (props: IDFormFieldProps) => {
     return useMemo((): ITreeSelectProps => {
-        const result = splitObject<ITreeSelectFieldOnlyProps, ITreeSelectProps>(props, {
+        const result = SplitObject<ITreeSelectFieldOnlyProps, ITreeSelectProps>(props, {
             component: true,
             helpClass: true,
             label: true,

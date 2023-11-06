@@ -1,7 +1,7 @@
 import React, { useMemo, useRef, useState } from 'react';
 import { useInitGridApi } from './hooks/api';
 import { ContainerRender } from './renders/containerRender';
-import { splitObject } from '@krinopotam/js-helpers';
+import { SplitObject } from '@krinopotam/js-helpers';
 export const TabulatorGrid = (props) => {
     var _a, _b, _c, _d;
     const tabulatorProps = useSplitTabulatorProps(props);
@@ -17,7 +17,7 @@ export const TabulatorGrid = (props) => {
 export default TabulatorGrid;
 const useSplitTabulatorProps = (props) => {
     return useMemo(() => {
-        const result = splitObject(props, {
+        const result = SplitObject(props, {
             apiRef: true,
             id: true,
             gridMode: true,

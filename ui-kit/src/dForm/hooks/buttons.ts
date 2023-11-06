@@ -1,7 +1,7 @@
 import {IDFormApi} from './api';
 import {IDFormProps} from '../dForm';
 import {IFormButtons} from '@src/buttonsRow/buttonsRow';
-import {mergeObjects} from "@krinopotam/js-helpers";
+import {MergeObjects} from "@krinopotam/js-helpers";
 import {useMemo} from "react";
 
 export const useGetButtons = (formProps: IDFormProps, formApi: IDFormApi): IFormButtons => {
@@ -23,6 +23,6 @@ export const useGetButtons = (formProps: IDFormProps, formApi: IDFormApi): IForm
             },
         };
 
-        return mergeObjects(defaultButtons, formProps.buttons);
+        return MergeObjects(defaultButtons, formProps.buttons);
     }, [formProps.buttons, formApi]);
 };

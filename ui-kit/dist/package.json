@@ -1,6 +1,6 @@
 {
 	"name": "@krinopotam/ui-kit",
-	"version": "2.0.32",
+	"version": "2.0.33",
 	"description": "UI kitfor Krinopotam's projects",
 	"private": false,
 	"author": "Maxim Zaytsev",
@@ -56,7 +56,7 @@
 	},
 	"dependencies": {
 		"@krinopotam/common-hooks": "^1.0.1",
-		"@krinopotam/js-helpers": "^1.0.32",
+		"@krinopotam/js-helpers": "^1.0.34",
 		"@krinopotam/service-types": "^1.0.9",
 		"ahooks": "^3.7.8",
 		"antd": "^5.11.0",

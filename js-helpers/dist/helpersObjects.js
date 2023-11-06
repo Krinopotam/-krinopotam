@@ -2,23 +2,23 @@ import hash from 'object-hash';
 import isEqual from 'lodash.isequal';
 import merge from 'lodash.merge';
 import { addedDiff, deletedDiff, detailedDiff, diff, updatedDiff } from 'deep-object-diff';
-export const isArray = (val) => {
+export const IsArray = (val) => {
     return val instanceof Array;
 };
-export const isPromise = (val) => {
+export const IsPromise = (val) => {
     return !!val && Object.prototype.toString.call(val) === '[object Promise]';
 };
-export const objectKeys = (val) => {
+export const ObjectKeys = (val) => {
     if (!val || typeof val !== 'object')
         return undefined;
     return Object.keys(val);
 };
-export const objectKeysLength = (val) => {
-    const keys = objectKeys(val);
+export const ObjectKeysLength = (val) => {
+    const keys = ObjectKeys(val);
     return keys ? keys.length : 0;
 };
-export const findIndexInObjectsArray = (objArray, objProperty, searchVal) => {
-    if (!isArray(objArray))
+export const FindIndexInObjectsArray = (objArray, objProperty, searchVal) => {
+    if (!IsArray(objArray))
         return -1;
     for (let i = 0; i < objArray.length; i++) {
         if (objArray[i][objProperty] === searchVal)
@@ -26,8 +26,8 @@ export const findIndexInObjectsArray = (objArray, objProperty, searchVal) => {
     }
     return -1;
 };
-export const findObjectInArray = (objArray, objProperty, searchVal) => {
-    if (!isArray(objArray))
+export const FindObjectInArray = (objArray, objProperty, searchVal) => {
+    if (!IsArray(objArray))
         return undefined;
     for (const item of objArray) {
         if (item[objProperty] === searchVal)
@@ -35,13 +35,13 @@ export const findObjectInArray = (objArray, objProperty, searchVal) => {
     }
     return undefined;
 };
-export const isObjectsEqual = (obj1, obj2) => {
+export const IsObjectsEqual = (obj1, obj2) => {
     return isEqual(obj1, obj2);
 };
-export const mergeObjects = (object, source) => {
+export const MergeObjects = (object, source) => {
     return merge(object, source);
 };
-export const cloneObject = (object, maxLevel) => {
+export const CloneObject = (object, maxLevel) => {
     if (typeof object !== 'object')
         return object;
     const objRecursion = (obj, level, cloneMaxLevel) => {
@@ -56,7 +56,7 @@ export const cloneObject = (object, maxLevel) => {
             if (typeof item !== 'object' || level >= cloneMaxLevel)
                 clonedObj[key] = item;
             else
-                clonedObj[key] = !isArray(item)
+                clonedObj[key] = !IsArray(item)
                     ? objRecursion(item, level, cloneMaxLevel)
                     : arraysRecursion(item, level, cloneMaxLevel);
         }
@@ -72,23 +72,23 @@ export const cloneObject = (object, maxLevel) => {
             if (typeof item !== 'object' || level >= cloneMaxLevel)
                 clonedArr[i] = item;
             else
-                clonedArr[i] = !isArray(item)
+                clonedArr[i] = !IsArray(item)
                     ? objRecursion(item, level, cloneMaxLevel)
                     : arraysRecursion(item, level, cloneMaxLevel);
         }
         return clonedArr;
     };
-    return !isArray(object)
+    return !IsArray(object)
         ? objRecursion(object, 0, maxLevel !== null && maxLevel !== void 0 ? maxLevel : 0)
         : arraysRecursion(object, 0, maxLevel !== null && maxLevel !== void 0 ? maxLevel : 0);
 };
-export const hashObjectContent = (object, options) => {
+export const HashObjectContent = (object, options) => {
     return hash(object, options);
 };
-export const isObjectHasOwnProperty = (obj, propName) => {
+export const IsObjectHasOwnProperty = (obj, propName) => {
     return Object.prototype.hasOwnProperty.call(obj, propName);
 };
-export const splitObject = (obj, propNames) => {
+export const SplitObject = (obj, propNames) => {
     const obj1 = {};
     const obj2 = {};
     for (const key in obj) {
@@ -99,7 +99,7 @@ export const splitObject = (obj, propNames) => {
     }
     return [obj1, obj2];
 };
-export const objectDiffs = (obj1, obj2, mode) => {
+export const ObjectDiffs = (obj1, obj2, mode) => {
     if (mode === 'added')
         return addedDiff(obj1, obj2);
     else if (mode === 'deleted')
@@ -111,7 +111,7 @@ export const objectDiffs = (obj1, obj2, mode) => {
     else
         return diff(obj1, obj2);
 };
-export const isReactClassComponent = (obj) => {
+export const IsReactClassComponent = (obj) => {
     return typeof obj === 'function' && !!obj.prototype.isReactComponent;
 };
 export const isReactComponent = (obj) => {
@@ -127,15 +127,22 @@ export const isReactComponent = (obj) => {
     }
     return false;
 };
-export const parseJwt = (token) => {
-    const base64Url = token.split('.')[1];
-    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-    const jsonPayload = decodeURIComponent(window
-        .atob(base64)
-        .split('')
-        .map((c) => {
-        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-    })
-        .join(''));
-    return JSON.parse(jsonPayload);
+export const ParseJwt = (token) => {
+    if (!token)
+        return undefined;
+    try {
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(window
+            .atob(base64)
+            .split('')
+            .map((c) => {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        })
+            .join(''));
+        return JSON.parse(jsonPayload);
+    }
+    catch (error) {
+        return undefined;
+    }
 };

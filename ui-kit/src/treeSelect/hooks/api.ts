@@ -5,7 +5,7 @@ import {useDataFetcher} from '@src/treeSelect/hooks/dataFetcher';
 import runDebounce from 'lodash.debounce';
 import {ITreeSelectInternalValue, usePlainValuesToNodes, useValueConvertor} from '@src/treeSelect/hooks/valueConvertor';
 import {IButtonsRowApi} from '@src/buttonsRow';
-import {getUuid, isArray} from "@krinopotam/js-helpers";
+import {GetUuid, IsArray} from "@krinopotam/js-helpers";
 import {useDataSet} from "@src/treeSelect/hooks/dataSet";
 
 export interface ITreeSelectApi {
@@ -200,7 +200,7 @@ const useApiSetValue = (setValue: (value: ITreeSelectValue | null) => void, api:
                 treeProps?.onChange?.(null);
             } else if (!treeProps.multiple) {
                 treeProps?.onChange?.(
-                    isArray(newVal) && (newVal as ITreeSelectNode[]).length > 0 ? (newVal as ITreeSelectNode[])[0] : (newVal as ITreeSelectNode)
+                    IsArray(newVal) && (newVal as ITreeSelectNode[]).length > 0 ? (newVal as ITreeSelectNode[])[0] : (newVal as ITreeSelectNode)
                 );
             } else {
                 treeProps?.onChange?.(newVal || []);
@@ -302,7 +302,7 @@ const useFetchData = (dataFetcher: (searchString: string) => void, api: ITreeSel
 const useAddNodes = (api: ITreeSelectApi) => {
     return useCallback(
         (parentNode: ITreeSelectNode | undefined, newNodes: ITreeSelectNode | ITreeSelectNode[]) => {
-            const _newNodes = isArray(newNodes) ? (newNodes as ITreeSelectNode[]) : [newNodes as ITreeSelectNode];
+            const _newNodes = IsArray(newNodes) ? (newNodes as ITreeSelectNode[]) : [newNodes as ITreeSelectNode];
             const treeProps = api.getProps();
             const keyField = treeProps.fieldNames?.value ?? 'id';
             const childrenField = treeProps.fieldNames?.children ?? 'children';
@@ -332,7 +332,7 @@ const useAddNodes = (api: ITreeSelectApi) => {
             const dataSetClone = [...(api.getDataSet() ?? [])];
 
             for (const _newNode of _newNodes) {
-                if (!_newNode[keyField]) _newNode[keyField] = getUuid();
+                if (!_newNode[keyField]) _newNode[keyField] = GetUuid();
             }
 
             recursive(dataSetClone, parentNode, _newNodes);
@@ -345,7 +345,7 @@ const useAddNodes = (api: ITreeSelectApi) => {
 const useUpdateNodes = (api: ITreeSelectApi) => {
     return useCallback(
         (updatedNodes: ITreeSelectNode | ITreeSelectNode[]) => {
-            const _updatedNodes = isArray(updatedNodes) ? (updatedNodes as ITreeSelectNode[]) : [updatedNodes as ITreeSelectNode];
+            const _updatedNodes = IsArray(updatedNodes) ? (updatedNodes as ITreeSelectNode[]) : [updatedNodes as ITreeSelectNode];
             const treeProps = api.getProps();
             const keyField = treeProps.fieldNames?.value ?? 'id';
             const childrenField = treeProps.fieldNames?.children ?? 'children';
@@ -377,7 +377,7 @@ const useUpdateNodes = (api: ITreeSelectApi) => {
 const useDeleteNodes = (api: ITreeSelectApi) => {
     return useCallback(
         (removeNodes: ITreeSelectNode | ITreeSelectNode[]) => {
-            const _removeNodes = isArray(removeNodes) ? (removeNodes as ITreeSelectNode[]) : [removeNodes as ITreeSelectNode];
+            const _removeNodes = IsArray(removeNodes) ? (removeNodes as ITreeSelectNode[]) : [removeNodes as ITreeSelectNode];
             const treeProps = api.getProps();
             const keyField = treeProps.fieldNames?.value ?? 'id';
             const childrenField = treeProps.fieldNames?.children ?? 'children';

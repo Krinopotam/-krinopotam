@@ -3,7 +3,7 @@ import { useIsMountedRef } from '@krinopotam/common-hooks';
 import { useDataFetcher } from '../../treeSelect/hooks/dataFetcher';
 import runDebounce from 'lodash.debounce';
 import { usePlainValuesToNodes, useValueConvertor } from '../../treeSelect/hooks/valueConvertor';
-import { getUuid, isArray } from "@krinopotam/js-helpers";
+import { GetUuid, IsArray } from "@krinopotam/js-helpers";
 import { useDataSet } from "../../treeSelect/hooks/dataSet";
 export const useInitApi = ({ api, componentId, treeProps, updateProps, buttonsApi, }) => {
     const isMountedRef = useIsMountedRef();
@@ -80,7 +80,7 @@ const useApiSetValue = (setValue, api) => {
             (_c = treeProps === null || treeProps === void 0 ? void 0 : treeProps.onChange) === null || _c === void 0 ? void 0 : _c.call(treeProps, null);
         }
         else if (!treeProps.multiple) {
-            (_d = treeProps === null || treeProps === void 0 ? void 0 : treeProps.onChange) === null || _d === void 0 ? void 0 : _d.call(treeProps, isArray(newVal) && newVal.length > 0 ? newVal[0] : newVal);
+            (_d = treeProps === null || treeProps === void 0 ? void 0 : treeProps.onChange) === null || _d === void 0 ? void 0 : _d.call(treeProps, IsArray(newVal) && newVal.length > 0 ? newVal[0] : newVal);
         }
         else {
             (_e = treeProps === null || treeProps === void 0 ? void 0 : treeProps.onChange) === null || _e === void 0 ? void 0 : _e.call(treeProps, newVal || []);
@@ -148,7 +148,7 @@ const useFetchData = (dataFetcher, api) => {
 const useAddNodes = (api) => {
     return useCallback((parentNode, newNodes) => {
         var _a, _b, _c, _d, _e;
-        const _newNodes = isArray(newNodes) ? newNodes : [newNodes];
+        const _newNodes = IsArray(newNodes) ? newNodes : [newNodes];
         const treeProps = api.getProps();
         const keyField = (_b = (_a = treeProps.fieldNames) === null || _a === void 0 ? void 0 : _a.value) !== null && _b !== void 0 ? _b : 'id';
         const childrenField = (_d = (_c = treeProps.fieldNames) === null || _c === void 0 ? void 0 : _c.children) !== null && _d !== void 0 ? _d : 'children';
@@ -184,7 +184,7 @@ const useAddNodes = (api) => {
         const dataSetClone = [...((_e = api.getDataSet()) !== null && _e !== void 0 ? _e : [])];
         for (const _newNode of _newNodes) {
             if (!_newNode[keyField])
-                _newNode[keyField] = getUuid();
+                _newNode[keyField] = GetUuid();
         }
         recursive(dataSetClone, parentNode, _newNodes);
         api.setDataSet(dataSetClone);
@@ -193,7 +193,7 @@ const useAddNodes = (api) => {
 const useUpdateNodes = (api) => {
     return useCallback((updatedNodes) => {
         var _a, _b, _c, _d, _e;
-        const _updatedNodes = isArray(updatedNodes) ? updatedNodes : [updatedNodes];
+        const _updatedNodes = IsArray(updatedNodes) ? updatedNodes : [updatedNodes];
         const treeProps = api.getProps();
         const keyField = (_b = (_a = treeProps.fieldNames) === null || _a === void 0 ? void 0 : _a.value) !== null && _b !== void 0 ? _b : 'id';
         const childrenField = (_d = (_c = treeProps.fieldNames) === null || _c === void 0 ? void 0 : _c.children) !== null && _d !== void 0 ? _d : 'children';
@@ -224,7 +224,7 @@ const useUpdateNodes = (api) => {
 const useDeleteNodes = (api) => {
     return useCallback((removeNodes) => {
         var _a, _b, _c, _d, _e;
-        const _removeNodes = isArray(removeNodes) ? removeNodes : [removeNodes];
+        const _removeNodes = IsArray(removeNodes) ? removeNodes : [removeNodes];
         const treeProps = api.getProps();
         const keyField = (_b = (_a = treeProps.fieldNames) === null || _a === void 0 ? void 0 : _a.value) !== null && _b !== void 0 ? _b : 'id';
         const childrenField = (_d = (_c = treeProps.fieldNames) === null || _c === void 0 ? void 0 : _c.children) !== null && _d !== void 0 ? _d : 'children';

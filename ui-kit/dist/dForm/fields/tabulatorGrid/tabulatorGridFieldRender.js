@@ -1,6 +1,6 @@
 import React, { useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { TabulatorGrid } from '../../../tabulatorGrid';
-import { splitObject } from '@krinopotam/js-helpers';
+import { SplitObject } from '@krinopotam/js-helpers';
 export const TabulatorGridFieldRender = ({ field }) => {
     useSyncExternalStore(field.subscribe.bind(field), field.getSnapshot.bind(field));
     const [gridApi] = useState({});
@@ -52,7 +52,7 @@ export const TabulatorGridFieldRender = ({ field }) => {
 };
 const useSplitTabulatorProps = (props) => {
     return useMemo(() => {
-        const result = splitObject(props, {
+        const result = SplitObject(props, {
             value: true,
             dataSet: true,
             onMenuVisibilityChanged: true,

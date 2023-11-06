@@ -1,6 +1,6 @@
-export declare const getUuid: () => string;
-export declare const upperFirstLetter: (val: string) => string;
-export declare const lowerFirstLetter: (val: string) => string;
-export declare const camelCaseSplit: (str: string, splitter?: string) => string;
-export declare const trimFileExtension: (fileName: string) => string;
-export declare const getRandomColor: () => string;
+export declare const GetUuid: () => string;
+export declare const UpperFirstLetter: (val: string) => string;
+export declare const LowerFirstLetter: (val: string) => string;
+export declare const CamelCaseSplit: (str: string, splitter?: string) => string;
+export declare const TrimFileExtension: (fileName: string) => string;
+export declare const GetRandomColor: () => string;

@@ -1,7 +1,7 @@
 import {IFormButton, IFormButtons} from '@src/buttonsRow/buttonsRow';
 import React, {useCallback, useMemo, useState} from 'react';
 import {CopyOutlined, DeleteOutlined, EditOutlined, EyeOutlined, FilterOutlined, MenuOutlined, PlusOutlined, PlusSquareOutlined} from '@ant-design/icons';
-import {mergeObjects} from '@krinopotam/js-helpers';
+import {MergeObjects} from '@krinopotam/js-helpers';
 import {IGridApi} from './api';
 import {IGridRowData, ITabulator} from '@src/tabulatorGrid';
 
@@ -37,7 +37,7 @@ export const useInitButtons = (gridApi: IGridApi): IFormButtons => {
             system: systemButtons,
         } as IFormButtons;
 
-        const resultButtons = mergeObjects(defaultButtons, buttons);
+        const resultButtons = MergeObjects(defaultButtons, buttons);
 
         for (const key in resultButtons) {
             const btn = resultButtons[key];

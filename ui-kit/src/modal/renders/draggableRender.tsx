@@ -8,7 +8,7 @@
 
 import React, {useCallback, useRef, useState} from 'react';
 import Draggable, {DraggableData} from 'react-draggable';
-import {isDescendant} from '@krinopotam/js-helpers';
+import {IsDescendant} from '@krinopotam/js-helpers';
 
 export const DraggableRender = ({node, targetId, onStartCallback}: {node: React.ReactNode; targetId?: string; onStartCallback?: () => void}) => {
     const draggableFieldRef = React.createRef<HTMLDivElement>();
@@ -58,7 +58,7 @@ export const DraggableRender = ({node, targetId, onStartCallback}: {node: React.
 
                     const targetElement = getTargetElement();
 
-                    if (isDescendant(targetElement, e.target as Element, true)) {
+                    if (IsDescendant(targetElement, e.target as Element, true)) {
                         setDragDisabled(false);
                         setDraggableStyle({cursor: 'move'});
                         return;

@@ -1,7 +1,7 @@
 import React, {useMemo, useRef, useState, useSyncExternalStore} from 'react';
 import {ITabulatorGridFieldPropsBase, ITabulatorGridFieldProps, TabulatorGridField} from '@src/dForm/fields/tabulatorGrid/tabulatorGridField';
 import {IGridApi, IGridRowData, ITabulatorProps, TabulatorGrid} from '@src/tabulatorGrid';
-import {splitObject} from '@krinopotam/js-helpers';
+import {SplitObject} from '@krinopotam/js-helpers';
 import {IRequestProps} from '@src/tabulatorBase';
 import {IGridPropsCallbacks} from '@src/tabulatorGrid/tabulatorGrid';
 
@@ -82,7 +82,7 @@ export const TabulatorGridFieldRender = ({field}: {field: TabulatorGridField}): 
 
 const useSplitTabulatorProps = (props: ITabulatorGridFieldProps) => {
     return useMemo((): ITabulatorProps => {
-        const result = splitObject<ITabulatorGridFieldPropsBase, ITabulatorProps>(props, {
+        const result = SplitObject<ITabulatorGridFieldPropsBase, ITabulatorProps>(props, {
             value: true,
             dataSet: true,
             onMenuVisibilityChanged: true,

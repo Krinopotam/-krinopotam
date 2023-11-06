@@ -1,4 +1,4 @@
-import { isPromise } from '@krinopotam/js-helpers';
+import { IsPromise } from '@krinopotam/js-helpers';
 import { BaseValidator } from './validators/baseValidator';
 import { InlineGroupField } from '../dForm/fields/inlineGroup/inlineGroupField';
 export class DModel {
@@ -431,7 +431,7 @@ export class DModel {
             return;
         }
         const result = (_k = this._callbacks) === null || _k === void 0 ? void 0 : _k.onSubmit(values, this);
-        if (isPromise(result)) {
+        if (IsPromise(result)) {
             const promiseResult = result;
             promiseResult
                 .then(promiseResult => {

@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { getUuid } from "@krinopotam/js-helpers";
+import { GetUuid } from "@krinopotam/js-helpers";
 export const usePrepareEditFormProps = (gridApi) => {
     return useMemo(() => {
         var _a;
@@ -15,7 +15,7 @@ export const usePrepareEditFormProps = (gridApi) => {
             const formMode = formApi.model.getFormMode();
             if (formMode === 'create' || formMode === 'clone') {
                 if (!updatedRow.id)
-                    updatedRow.id = getUuid();
+                    updatedRow.id = GetUuid();
                 const activeKey = gridApi.getActiveRowKey();
                 gridApi.insertRows(updatedRow, 'below', activeKey !== null && activeKey !== void 0 ? activeKey : undefined, true);
             }

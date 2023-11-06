@@ -1,9 +1,9 @@
 import React, { useMemo, useRef, useState } from 'react';
-import { getUuid, isDescendant } from '@krinopotam/js-helpers';
+import { GetUuid, IsDescendant } from '@krinopotam/js-helpers';
 export const ButtonRowWrapperContext = React.createContext({ wrapperId: '', wrapperRef: undefined });
 export const ButtonsRowWrapper = (props) => {
     var _a, _b;
-    const [wrapperId] = useState(getUuid());
+    const [wrapperId] = useState(GetUuid());
     const defStyle = {
         outline: 'none',
         height: '100%',
@@ -29,7 +29,7 @@ export default ButtonsRowWrapper;
 const ensureWrapperFocus = (wrapper) => {
     if (!wrapper)
         return;
-    if (isDescendant(wrapper, document.activeElement))
+    if (IsDescendant(wrapper, document.activeElement))
         return;
     wrapper.focus();
 };

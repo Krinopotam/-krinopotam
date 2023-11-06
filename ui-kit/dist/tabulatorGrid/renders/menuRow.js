@@ -1,5 +1,5 @@
 import React, { useLayoutEffect, useState } from 'react';
-import { objectKeysLength } from "@krinopotam/js-helpers";
+import { ObjectKeysLength } from "@krinopotam/js-helpers";
 import { ButtonsRow } from '../../buttonsRow/buttonsRow';
 import { useInitButtons } from "../hooks/buttons";
 export const MenuRow = ({ gridApi }) => {
@@ -8,7 +8,7 @@ export const MenuRow = ({ gridApi }) => {
     const [isMenuVisible, setIsMenuVisible] = useState(undefined);
     useLayoutEffect(() => {
         var _a;
-        const menuVisible = objectKeysLength(buttons) > 0;
+        const menuVisible = ObjectKeysLength(buttons) > 0;
         if (typeof isMenuVisible === 'undefined' || isMenuVisible !== menuVisible) {
             setIsMenuVisible(menuVisible);
             (_a = gridProps === null || gridProps === void 0 ? void 0 : gridProps.onMenuVisibilityChanged) === null || _a === void 0 ? void 0 : _a.call(gridProps, menuVisible, gridApi);

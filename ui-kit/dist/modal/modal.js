@@ -18,11 +18,11 @@ import { ModalRender } from './renders/modalRender';
 import classNames from 'classnames';
 import { useInitFormDispatcher } from './hooks/useInitFormDispatcher';
 import { useResize } from './hooks/useResize';
-import { getUuid } from '@krinopotam/js-helpers';
+import { GetUuid } from '@krinopotam/js-helpers';
 export const Modal = (_a) => {
     var _b, _c, _d, _e, _f, _g, _h;
     var { resizable = true, headerStyle, footerStyle } = _a, props = __rest(_a, ["resizable", "headerStyle", "footerStyle"]);
-    const [modalId] = useState((_b = props.modalId) !== null && _b !== void 0 ? _b : 'modal-' + getUuid());
+    const [modalId] = useState((_b = props.modalId) !== null && _b !== void 0 ? _b : 'modal-' + GetUuid());
     useInitFormDispatcher(modalId, !!props.open);
     const wrapperRemoteCallbacksRef = useRef({});
     const prevFocusedRef = useRef();
@@ -51,7 +51,7 @@ export const Modal = (_a) => {
     const paddingRight = 24;
     const _headerStyle = Object.assign({ paddingLeft: paddingLeft, paddingRight: paddingRight, paddingTop: 5, paddingBottom: 5 }, headerStyle);
     const _footerStyle = Object.assign({ paddingTop: 20, paddingLeft: paddingLeft, paddingRight: paddingRight, paddingBottom: 20 }, footerStyle);
-    const [draggableId] = useState('draggable-' + getUuid());
+    const [draggableId] = useState('draggable-' + GetUuid());
     return (React.createElement(AntModal, Object.assign({}, props, { width: formSize.width || undefined, styles: { body: bodyStyleVal, footer: { margin: 0 } }, className: classNames('custom-antd-modal', props.className), modalRender: node => ModalRender(node, draggableId, wrapperRemoteCallbacksRef), title: React.createElement(HeaderRender, { draggableId: draggableId, icon: props.headerIcon, title: props.title, colorType: props.colorType, style: _headerStyle }), footer: React.createElement(FooterRender, { onMouseResize: onMouseResize, resizable: resizable, style: _footerStyle, colorType: props.colorType }, props.footer), afterOpenChange: onAfterOpenChange })));
 };
 const useGetBodyStyle = ({ bodyStyle, bodyHeight, bodyMaxHeight, bodyMinHeight, notScrollable, }) => {

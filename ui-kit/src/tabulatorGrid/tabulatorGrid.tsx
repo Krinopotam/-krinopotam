@@ -5,7 +5,7 @@ import {IDFormModalProps, IDFormModalApi} from '@src/dFormModal';
 import {TPromise} from '@krinopotam/service-types';
 import {IGridApi, useInitGridApi} from './hooks/api';
 import {ContainerRender} from './renders/containerRender';
-import {splitObject} from '@krinopotam/js-helpers';
+import {SplitObject} from '@krinopotam/js-helpers';
 import {RowComponent} from 'tabulator-tables';
 
 export interface IGridRowData extends Record<string, unknown> {
@@ -124,7 +124,7 @@ export default TabulatorGrid;
 
 const useSplitTabulatorProps = (props: IGridProps) => {
     return useMemo((): ITabulatorProps => {
-        const result = splitObject<IGridPropsBase & IGridPropsCallbacks, ITabulatorProps>(props, {
+        const result = SplitObject<IGridPropsBase & IGridPropsCallbacks, ITabulatorProps>(props, {
             apiRef: true,
             id: true,
             gridMode: true,

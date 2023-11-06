@@ -1,4 +1,4 @@
-export const isElementVisible = (elem) => {
+export const IsElementVisible = (elem) => {
     if (!elem)
         return false;
     const recursiveCheck = (target) => {
@@ -12,7 +12,7 @@ export const isElementVisible = (elem) => {
     };
     return recursiveCheck(elem);
 };
-export const isDescendant = (parent, child, includeSelf) => {
+export const IsDescendant = (parent, child, includeSelf) => {
     if (!parent || !child)
         return false;
     if (includeSelf && parent === child)
@@ -25,7 +25,37 @@ export const isDescendant = (parent, child, includeSelf) => {
     }
     return false;
 };
-export const isElementOverlapped = (elem) => {
+export const AddToLocalStorage = (key, value) => {
+    if (typeof (Storage) === "undefined") {
+        console.error("Local storage is not supported in this browser.");
+        return;
+    }
+    const userData = JSON.stringify(value);
+    localStorage.setItem(key, userData);
+};
+export const GetFromLocalStorage = (key) => {
+    if (typeof (Storage) === "undefined") {
+        console.error("Local storage is not supported in this browser.");
+        return undefined;
+    }
+    const userData = localStorage.getItem(key);
+    return userData ? JSON.parse(userData) : undefined;
+};
+export const RemoveFromLocalStorage = (key) => {
+    if (typeof (Storage) === "undefined") {
+        console.error("Local storage is not supported in this browser.");
+        return;
+    }
+    localStorage.removeItem(key);
+};
+export const ClearLocalStorage = () => {
+    if (typeof (Storage) === "undefined") {
+        console.error("Local storage is not supported in this browser.");
+        return;
+    }
+    localStorage.clear();
+};
+export const IsElementOverlapped = (elem) => {
     const isOverlap = (elem1, elem2) => {
         const rect1 = elem1.getBoundingClientRect();
         const rect2 = elem2.getBoundingClientRect();

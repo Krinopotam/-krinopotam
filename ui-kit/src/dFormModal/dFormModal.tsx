@@ -12,7 +12,7 @@ import React, {CSSProperties, useEffect, useMemo, useState} from 'react';
 
 import {DFormModalRender} from './renders/dFormModalRender';
 import {IButtonsRowApi} from '@src/buttonsRow/buttonsRow';
-import {getUuid, splitObject} from "@krinopotam/js-helpers";
+import {GetUuid, SplitObject} from "@krinopotam/js-helpers";
 import {useFormCallbacks} from './hooks/callbacks';
 import {useInitButtons} from './hooks/buttons';
 import {useUpdateMessageBoxTheme} from '@src/messageBox';
@@ -83,7 +83,7 @@ export type IDFormModalProps = IDModalProps & IDFormModalCallbacks & Exclude<IDF
 export const DFormModal = (props: IDFormModalProps): React.JSX.Element => {
     useUpdateMessageBoxTheme(); //set current theme to messageBox
 
-    const [formId] = useState(props.formId ?? 'dFormModal-' + getUuid());
+    const [formId] = useState(props.formId ?? 'dFormModal-' + GetUuid());
     const [modalFormProps, updateModalFormProps] = useGetActualProps(props); //props can be set both by parent component and via api
 
     //region Init api
@@ -121,7 +121,7 @@ export const DFormModal = (props: IDFormModalProps): React.JSX.Element => {
 const useSeparateProps = (formModalProps: IDFormModalProps, formCallbacks: IDFormCallbacks) => {
 
     return useMemo((): [IDModalProps, IDFormProps] => {
-        const [modalProps, formProps] = splitObject<IDModalProps, IDFormProps>(formModalProps, {
+        const [modalProps, formProps] = SplitObject<IDModalProps, IDFormProps>(formModalProps, {
             //--- IDFormModalProps -----
             title: true,
             width: true,

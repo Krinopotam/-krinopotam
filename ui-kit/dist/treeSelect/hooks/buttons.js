@@ -1,4 +1,4 @@
-import { isPromise, mergeObjects } from '@krinopotam/js-helpers';
+import { IsPromise, MergeObjects } from '@krinopotam/js-helpers';
 import React, { useMemo } from 'react';
 import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
 import { MessageBox } from '../../messageBox';
@@ -37,7 +37,7 @@ export const useInitButtons = (api, formApi) => {
                 },
             },
         };
-        return mergeObjects(defaultButtons, treeProps.editButtons);
+        return MergeObjects(defaultButtons, treeProps.editButtons);
     }, [api, formApi, selectedNodes, treeProps.editButtons]);
 };
 const deleteHandler = (api) => {
@@ -50,7 +50,7 @@ const deleteHandler = (api) => {
     const removeRows = () => {
         var _a;
         const deletePromise = (_a = treeProps === null || treeProps === void 0 ? void 0 : treeProps.onDelete) === null || _a === void 0 ? void 0 : _a.call(treeProps, selectedNodes, api);
-        if (isPromise(deletePromise)) {
+        if (IsPromise(deletePromise)) {
             if (!treeProps.confirmDelete) {
                 api.buttonsApi.loading('delete', true);
                 api.buttonsApi.disabled('add', true);

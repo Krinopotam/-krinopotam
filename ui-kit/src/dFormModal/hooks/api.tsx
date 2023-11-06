@@ -2,7 +2,7 @@ import {IButtonsRowApi} from '@src/buttonsRow';
 import {IDFormProps, IDFormApi} from '@src/dForm';
 import {IDFormModalProps} from '../dFormModal';
 import {MessageBox} from '@src/messageBox';
-import {cloneObject} from "@krinopotam/js-helpers";
+import {CloneObject} from "@krinopotam/js-helpers";
 import {useCallback} from 'react';
 
 export interface IDFormModalApi extends IDFormApi {
@@ -70,7 +70,7 @@ const useApiFormOpen = (formApi: IDFormModalApi) => {
             }
 
             const newDataSet = dataSet ?? formApi.getFormProps().dataSet;
-            const clonedDataSet = newDataSet ? cloneObject(newDataSet) : undefined;
+            const clonedDataSet = newDataSet ? CloneObject(newDataSet) : undefined;
             const modalFormProps = formApi.getFormProps();
             if (modalFormProps.onOpen?.(formApi, clonedDataSet) === false) return;
 

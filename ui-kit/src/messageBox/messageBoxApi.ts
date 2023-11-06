@@ -3,7 +3,7 @@ import dispatcher, {FormsDispatcher} from '../formsDispatcher';
 
 import {IFormButton} from '@src/buttonsRow/buttonsRow';
 import {ModalFuncProps} from 'antd';
-import {mergeObjects} from '@krinopotam/js-helpers';
+import {MergeObjects} from '@krinopotam/js-helpers';
 
 export class MessageBoxApi {
     private _modal: {destroy: () => void; update: (configUpdate: ModalFuncProps) => void};
@@ -42,7 +42,7 @@ export class MessageBoxApi {
     }
 
     public update(newConfig: Omit<IAnyModalConfig, 'formId'>) {
-        const resultConfig = mergeObjects(this._currentConfig, newConfig) || {};
+        const resultConfig = MergeObjects(this._currentConfig, newConfig) || {};
         const generatedConfig = this._modalConfigGenerator(resultConfig, this._draggableId);
         this._modal.update(generatedConfig);
         this._currentConfig = resultConfig;

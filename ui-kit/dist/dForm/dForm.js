@@ -3,7 +3,7 @@ import { DModel } from './dModel';
 import { useInitFormApi } from './hooks/api';
 import React, { useEffect, useRef, useState } from 'react';
 import { FormRender } from './renders/formRender';
-import { getUuid } from '@krinopotam/js-helpers';
+import { GetUuid } from '@krinopotam/js-helpers';
 import { useModelCallbacks } from './hooks/callbacks';
 import { useGetButtons } from './hooks/buttons';
 import { useUpdateMessageBoxTheme } from '../messageBox';
@@ -13,7 +13,7 @@ export const DForm = (props) => {
     var _a;
     useUpdateMessageBoxTheme();
     const [formProps, updateFormProps] = useGetActualProps(props);
-    const [formId] = useState((_a = formProps.formId) !== null && _a !== void 0 ? _a : 'dForm-' + getUuid());
+    const [formId] = useState((_a = formProps.formId) !== null && _a !== void 0 ? _a : 'dForm-' + GetUuid());
     const [formApi] = useState((formProps.apiRef || {}));
     const [buttonsApi] = useState({});
     const formButtons = useGetButtons(formProps, formApi);

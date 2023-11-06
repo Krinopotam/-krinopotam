@@ -1,6 +1,6 @@
 import {Select as AntdSelect} from 'antd';
 import React, {ComponentProps, useMemo} from 'react';
-import {splitObject} from '@krinopotam/js-helpers';
+import {SplitObject} from '@krinopotam/js-helpers';
 import {ArrayElement} from '@krinopotam/service-types';
 
 //region Types
@@ -121,7 +121,7 @@ const useConvertToBaseVal = (props: ISelectProps, val: ISelectValue | undefined)
 /*const useConvertFormBaseVal = (props: ISelectProps, val: ISelectBaseValue) => {
     return useMemo((): ISelectValue | undefined => {
         if (typeof val === 'undefined') return undefined;
-        if (!Array.isArray(val)) {
+        if (!Array.IsArray(val)) {
             if (typeof val === 'object') return {id: val.value as string | number, label: val.label};
             return val as string | number;
         }
@@ -138,7 +138,7 @@ const useConvertToBaseVal = (props: ISelectProps, val: ISelectValue | undefined)
 
 const useSplitAntTreeSelectProps = (props: ISelectProps) => {
     return useMemo((): IAntdSelectProps => {
-        const result = splitObject<ISelectBaseProps, IAntdSelectProps>(props, {
+        const result = SplitObject<ISelectBaseProps, IAntdSelectProps>(props, {
             dataSet: true,
             value: true,
             readOnly: true,

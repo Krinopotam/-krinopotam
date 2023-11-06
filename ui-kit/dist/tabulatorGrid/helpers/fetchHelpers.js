@@ -1,4 +1,4 @@
-import { isPromise } from '@krinopotam/js-helpers';
+import { IsPromise } from '@krinopotam/js-helpers';
 export const GenerateAjaxRequestFunc = (gridApi, onDataFetch, extraParams) => {
     if (!onDataFetch)
         return undefined;
@@ -8,7 +8,7 @@ export const GenerateAjaxRequestFunc = (gridApi, onDataFetch, extraParams) => {
         return new Promise((resolve, reject) => {
             const totalParams = Object.assign(Object.assign({}, params), extraParams);
             const fetchPromise = onDataFetch(totalParams, gridApi);
-            if (!isPromise(fetchPromise))
+            if (!IsPromise(fetchPromise))
                 reject(new Error());
             fetchPromise.then(result => {
                 var _a;

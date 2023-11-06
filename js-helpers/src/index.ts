@@ -1,20 +1,20 @@
-export {isDescendant, isElementVisible} from './helpersDOM';
+export {IsDescendant, IsElementVisible} from './helpersDOM';
 export {
-    cloneObject,
-    findIndexInObjectsArray,
-    findObjectInArray,
-    hashObjectContent,
-    isArray,
-    isObjectHasOwnProperty,
-    isObjectsEqual,
-    isPromise,
-    isReactClassComponent,
+    CloneObject,
+    FindIndexInObjectsArray,
+    FindObjectInArray,
+    HashObjectContent,
+    IsArray,
+    IsObjectHasOwnProperty,
+    IsObjectsEqual,
+    IsPromise,
+    IsReactClassComponent,
     isReactComponent,
-    mergeObjects,
-    objectDiffs,
-    objectKeys,
-    objectKeysLength,
-    parseJwt,
-    splitObject,
+    MergeObjects,
+    ObjectDiffs,
+    ObjectKeys,
+    ObjectKeysLength,
+    ParseJwt,
+    SplitObject,
 } from './helpersObjects';
-export {upperFirstLetter, lowerFirstLetter, getUuid, camelCaseSplit, trimFileExtension, getRandomColor} from './helpersString';
+export {UpperFirstLetter, LowerFirstLetter, GetUuid, CamelCaseSplit, TrimFileExtension, GetRandomColor} from './helpersString';

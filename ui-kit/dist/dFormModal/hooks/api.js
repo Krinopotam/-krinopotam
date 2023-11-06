@@ -1,5 +1,5 @@
 import { MessageBox } from '../../messageBox';
-import { cloneObject } from "@krinopotam/js-helpers";
+import { CloneObject } from "@krinopotam/js-helpers";
 import { useCallback } from 'react';
 export const useInitModalFormApi = (formId, formApi, modalFormProps, buttonsApi, updateFormProps) => {
     formApi.getFormId = useApiGetFormId(formId);
@@ -34,7 +34,7 @@ const useApiFormOpen = (formApi) => {
             return;
         }
         const newDataSet = dataSet !== null && dataSet !== void 0 ? dataSet : formApi.getFormProps().dataSet;
-        const clonedDataSet = newDataSet ? cloneObject(newDataSet) : undefined;
+        const clonedDataSet = newDataSet ? CloneObject(newDataSet) : undefined;
         const modalFormProps = formApi.getFormProps();
         if (((_a = modalFormProps.onOpen) === null || _a === void 0 ? void 0 : _a.call(modalFormProps, formApi, clonedDataSet)) === false)
             return;

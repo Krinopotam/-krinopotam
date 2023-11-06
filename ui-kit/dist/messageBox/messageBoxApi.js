@@ -1,5 +1,5 @@
 import dispatcher from '../formsDispatcher';
-import { mergeObjects } from '@krinopotam/js-helpers';
+import { MergeObjects } from '@krinopotam/js-helpers';
 export class MessageBoxApi {
     constructor(id, draggableId, modal, config, modalConfigGenerator, prevFocusedElement) {
         this._modal = modal;
@@ -19,7 +19,7 @@ export class MessageBoxApi {
         this._modal.destroy();
     }
     update(newConfig) {
-        const resultConfig = mergeObjects(this._currentConfig, newConfig) || {};
+        const resultConfig = MergeObjects(this._currentConfig, newConfig) || {};
         const generatedConfig = this._modalConfigGenerator(resultConfig, this._draggableId);
         this._modal.update(generatedConfig);
         this._currentConfig = resultConfig;
