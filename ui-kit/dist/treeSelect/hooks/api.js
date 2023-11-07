@@ -250,4 +250,3 @@ const useDeleteNodes = (api) => {
         api.setDataSet(dataSetClone);
     }, [api]);
 };
-//# sourceMappingURL=api.js.map

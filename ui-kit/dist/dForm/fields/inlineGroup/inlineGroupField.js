@@ -51,4 +51,3 @@ export class InlineGroupField extends BaseField {
         super.setReadOnly(value, noEvents, noRerender);
     }
 }
-//# sourceMappingURL=inlineGroupField.js.map

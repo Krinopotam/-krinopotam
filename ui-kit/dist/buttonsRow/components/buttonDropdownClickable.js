@@ -16,4 +16,3 @@ export const ButtonDropdownClickable = ({ id, button, context, menuProps, compon
     }, [button, context, id]);
     return (React.createElement(Dropdown.Button, { type: type, href: button.href, disabled: button.disabled, loading: button.loading, danger: button.colorType === 'danger', onClick: onClick, size: button.size, style: button.style, className: button.className, icon: button.expandIcon, menu: menuProps }, button.title));
 };
-//# sourceMappingURL=buttonDropdownClickable.js.map

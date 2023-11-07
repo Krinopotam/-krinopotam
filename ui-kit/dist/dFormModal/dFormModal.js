@@ -47,4 +47,3 @@ const useSeparateProps = (formModalProps, formCallbacks) => {
         return [modalProps, Object.assign(Object.assign({}, formProps), formCallbacks)];
     }, [formCallbacks, formModalProps]);
 };
-//# sourceMappingURL=dFormModal.js.map

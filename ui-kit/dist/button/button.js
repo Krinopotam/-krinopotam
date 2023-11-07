@@ -36,4 +36,3 @@ export const Button = React.forwardRef((_a, ref) => {
         React.createElement(AntButton, Object.assign({}, props, { style: style, ref: ref }), children)));
 });
 Button.displayName = 'Button';
-//# sourceMappingURL=button.js.map

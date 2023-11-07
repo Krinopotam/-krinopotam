@@ -58,4 +58,3 @@ export const useResize = (width, bodyHeight, onResize, minWidth, maxWidth, bodyM
     }, [setDragging]);
     return onMouseDown;
 };
-//# sourceMappingURL=useResize.js.map

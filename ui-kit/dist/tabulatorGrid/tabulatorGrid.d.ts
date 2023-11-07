@@ -50,7 +50,7 @@ export type IGridDataSourcePromise = TPromise<{
     code: number;
 }>;
 export type IGridDeletePromise = TPromise<{
-    data: IGridRowData[];
+    data: boolean;
     last_page?: number;
 }, {
     message: string;

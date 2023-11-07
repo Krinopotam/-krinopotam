@@ -27,4 +27,3 @@ export const RenderButton = ({ id, button, context, componentProps, }) => {
         React.createElement(React.Fragment, null,
             React.createElement(ButtonSimple, { id: id, button: button, context: context, componentProps: componentProps }))));
 };
-//# sourceMappingURL=renderButton.js.map

@@ -13,5 +13,5 @@ export declare const IsObjectHasOwnProperty: (obj: Record<string, unknown>, prop
 export declare const SplitObject: <R1 extends object, R2 extends object>(obj: object, propNames: Required<{ [K in keyof R1]: boolean; }>) => [R1, R2];
 export declare const ObjectDiffs: (obj1: object, obj2: object, mode?: 'added' | 'deleted' | 'updated' | 'detailed') => object;
 export declare const IsReactClassComponent: <T>(obj: T) => boolean;
-export declare const isReactComponent: <T>(obj: T) => boolean;
+export declare const IsReactComponent: <T>(obj: T) => boolean;
 export declare const ParseJwt: <T extends Record<string, unknown> = Record<string, unknown>>(token: string | undefined) => T | undefined;

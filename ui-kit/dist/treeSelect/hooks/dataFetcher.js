@@ -44,4 +44,3 @@ export const useDataFetcher = (api) => {
         });
     }, [api]);
 };
-//# sourceMappingURL=dataFetcher.js.map

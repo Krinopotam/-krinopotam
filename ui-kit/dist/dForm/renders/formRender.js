@@ -25,4 +25,3 @@ const FormInit = ({ model }) => {
     }, [model]);
     return null;
 };
-//# sourceMappingURL=formRender.js.map

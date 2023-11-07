@@ -63,4 +63,3 @@ export const QuillEditor = React.forwardRef((props, ref) => {
         React.createElement(ReactQuill, { ref: ref, theme: (_c = props.theme) !== null && _c !== void 0 ? _c : "snow", id: props.id, bounds: props.bounds, className: props.className, defaultValue: props.defaultValue, value: props.value, formats: formats, modules: modules, placeholder: props.placeholder, preserveWhitespace: props.preserveWhitespace, readOnly: props.readOnly || props.disabled, scrollingContainer: props.scrollingContainer, style: props.style, tabIndex: props.tabIndex, onChange: props.onChange, onBlur: props.onBlur, onChangeSelection: props.onChangeSelection, onFocus: props.onFocus, onKeyDown: props.onKeyUp, onKeyPress: props.onKeyPress, onKeyUp: props.onKeyUp })));
 });
 QuillEditor.displayName = 'QuillEditor';
-//# sourceMappingURL=quillEditor.js.map

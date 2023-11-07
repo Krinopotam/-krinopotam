@@ -12,4 +12,3 @@ export const RenderButtonGroup = ({ buttons, position, context, componentProps, 
     })));
 };
 export default RenderButtonGroup;
-//# sourceMappingURL=renderButtonGroup.js.map

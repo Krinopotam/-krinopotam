@@ -58,4 +58,3 @@ const scrollToRowPatch = function (row, position, ifVisible) {
 export const setScrollToRowPatch = (tableApi) => {
     tableApi.rowManager.scrollToRow = scrollToRowPatch.bind(tableApi.rowManager);
 };
-//# sourceMappingURL=scrollToRowPositionPat%D1%81h.js.map

@@ -98,4 +98,3 @@ export const setActiveButton = (buttons, name, active) => {
     }
     return _buttons;
 };
-//# sourceMappingURL=buttonMethods.js.map

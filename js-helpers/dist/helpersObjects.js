@@ -114,7 +114,7 @@ export const ObjectDiffs = (obj1, obj2, mode) => {
 export const IsReactClassComponent = (obj) => {
     return typeof obj === 'function' && !!obj.prototype.isReactComponent;
 };
-export const isReactComponent = (obj) => {
+export const IsReactComponent = (obj) => {
     var _a;
     if (typeof obj === 'object') {
         const _obj = obj;

@@ -23,4 +23,3 @@ const Fetching = () => {
 const Error = ({ error }) => {
     return (React.createElement("div", { role: "alert", style: { paddingLeft: '30px', fontSize: '12px', color: '#ff4d4f' } }, error));
 };
-//# sourceMappingURL=dropdownStatus.js.map

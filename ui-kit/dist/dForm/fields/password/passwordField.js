@@ -6,4 +6,3 @@ export class PasswordField extends BaseField {
         return React.createElement(PasswordFieldRender, { field: this });
     }
 }
-//# sourceMappingURL=passwordField.js.map

@@ -27,4 +27,3 @@ const onKeyDownDown = (e, gridApi) => {
     const nextId = gridApi.getNextRowKey(gridApi.getActiveRowKey());
     gridApi.setActiveRowKey(nextId !== null && nextId !== void 0 ? nextId : null, true, 'bottom');
 };
-//# sourceMappingURL=keyboardSelection.js.map

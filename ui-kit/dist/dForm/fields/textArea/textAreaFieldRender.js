@@ -1,7 +1,8 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useSyncExternalStore } from 'react';
 import { Input } from 'antd';
 const { TextArea } = Input;
 export const TextAreaFieldRender = ({ field }) => {
+    useSyncExternalStore(field.subscribe.bind(field), field.getSnapshot.bind(field));
     const fieldName = field.getName();
     const fieldProps = field.getProps();
     const value = field.getValue();
@@ -24,4 +25,3 @@ export const TextAreaFieldRender = ({ field }) => {
     const style = Object.assign(Object.assign({}, defStyle), fieldProps.style);
     return (React.createElement(TextArea, { autoFocus: fieldProps.autoFocus, autoSize: fieldProps.autoSize, cols: fieldProps.cols, disabled: field.isDisabled(), maxLength: fieldProps.maxLength, name: fieldName, onBlur: onBlur, onChange: onChange, placeholder: fieldProps.placeholder, readOnly: field.isReadOnly(), rows: fieldProps.rows, showCount: fieldProps.showCount, value: value, wrap: fieldProps.wrap, style: style }));
 };
-//# sourceMappingURL=textAreaFieldRender.js.map

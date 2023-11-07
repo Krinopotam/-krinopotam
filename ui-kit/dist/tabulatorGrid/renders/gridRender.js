@@ -46,4 +46,3 @@ const resizeObserver = (tableRef, parentClassName) => {
     observer.observe(observableElement);
     return observer;
 };
-//# sourceMappingURL=gridRender.js.map

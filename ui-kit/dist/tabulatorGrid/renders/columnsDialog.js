@@ -104,4 +104,3 @@ const onResetClick = (props, dialogApi) => {
     }
     dialogApi.setChecked(result);
 };
-//# sourceMappingURL=columnsDialog.js.map

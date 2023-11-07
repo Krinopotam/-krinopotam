@@ -19,4 +19,3 @@ export const PasswordFieldRender = ({ field }) => {
     }, [field]);
     return (React.createElement(Input.Password, { autoFocus: fieldProps.autoFocus, disabled: field.isDisabled(), iconRender: fieldProps.iconRender, maxLength: fieldProps.maxLength, name: fieldName, onBlur: onBlur, onChange: onChange, placeholder: fieldProps.placeholder, readOnly: field.isReadOnly(), showCount: fieldProps.showCount, value: value, style: fieldProps.style, width: fieldProps.width }));
 };
-//# sourceMappingURL=passwordFieldRender.js.map

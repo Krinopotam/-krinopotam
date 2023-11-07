@@ -6,4 +6,3 @@ export class SwitchField extends BaseField {
         return React.createElement(SwitchFieldRender, { field: this });
     }
 }
-//# sourceMappingURL=switchField.js.map

@@ -33,4 +33,3 @@ const prepareNodeRender = (dataSet, titleRender, labelRender) => {
     }
     return newDataSet;
 };
-//# sourceMappingURL=dataSet.js.map

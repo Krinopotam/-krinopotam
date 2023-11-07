@@ -12,4 +12,3 @@ export const CustomFieldRender = ({ field }) => {
     const style = Object.assign(Object.assign({}, defStyle), fieldProps.style);
     return React.createElement("div", { style: style }, curValue);
 };
-//# sourceMappingURL=customFieldRender.js.map

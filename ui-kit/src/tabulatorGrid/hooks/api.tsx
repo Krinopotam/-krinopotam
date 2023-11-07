@@ -152,7 +152,7 @@ export const useInitGridApi = ({
     editFormApi,
     selectionFormApi,
     buttonsApi,
-    openColumnsDialog,
+    setColumnsDialog,
 }: {
     gridApi: IGridApi;
     props: IGridApi['gridProps'];
@@ -160,7 +160,7 @@ export const useInitGridApi = ({
     editFormApi: IGridApi['editFormApi'];
     selectionFormApi: IGridApi['selectionFormApi'];
     buttonsApi: IGridApi['buttonsApi'];
-    openColumnsDialog: React.Dispatch<React.SetStateAction<boolean>>;
+    setColumnsDialog: React.Dispatch<React.SetStateAction<boolean>>;
 }): IGridApi => {
     const dataSetRef = useRef<IGridProps['dataSet']>(undefined);
     const curDataFetchHandler = useRef<IGridProps['onDataFetch'] | undefined>();
@@ -205,7 +205,7 @@ export const useInitGridApi = ({
     gridApi.setCurrentDataFetchHandler = useSetCurrentDataFetchHandler(curDataFetchHandler, curDataFetchParams);
     gridApi.getCurrentDataFetchHandler = useGetCurrentDataFetchHandler(curDataFetchHandler, curDataFetchParams);
     gridApi.getRowData = useApiGetRowData(gridApi);
-    gridApi.openColumnDialog = useApiOpenColumnDialog(gridApi, openColumnsDialog);
+    gridApi.openColumnDialog = useApiOpenColumnDialog(gridApi, setColumnsDialog);
 
     return gridApi;
 };

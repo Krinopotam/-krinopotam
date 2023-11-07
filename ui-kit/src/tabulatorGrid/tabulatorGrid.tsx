@@ -104,7 +104,7 @@ export interface IGridPropsCallbacks {
 
 export type IGridProps = IGridPropsBase & IGridPropsCallbacks & Omit<ITabulatorProps, 'data' | 'ajaxURL' | 'ajaxRequestFunc' | 'ajaxResponse'>;
 export type IGridDataSourcePromise = TPromise<{data: IGridRowData[]; last_page?: number}, {message: string; code: number}>;
-export type IGridDeletePromise = TPromise<{data: IGridRowData[]; last_page?: number}, {message: string; code: number}>;
+export type IGridDeletePromise = TPromise<{data: boolean; last_page?: number}, {message: string; code: number}>;
 
 export const TabulatorGrid = (props: IGridProps): React.JSX.Element => {
     const tabulatorProps = useSplitTabulatorProps(props);
@@ -114,8 +114,8 @@ export const TabulatorGrid = (props: IGridProps): React.JSX.Element => {
     const [buttonsApi] = useState({} as IButtonsRowApi & {refreshButtons: () => void});
     const [gridApi] = useState((props.apiRef || {}) as IGridApi);
 
-    const [columnsDialog, openColumnsDialog] = useState(false);
-    useInitGridApi({gridApi, props, tableRef, editFormApi, selectionFormApi, buttonsApi, openColumnsDialog: openColumnsDialog});
+    const [columnsDialog, setColumnsDialog] = useState(false);
+    useInitGridApi({gridApi, props, tableRef, editFormApi, selectionFormApi, buttonsApi, setColumnsDialog});
 
     return <ContainerRender tableRef={tableRef} gridApi={gridApi} gridProps={props} tabulatorProps={tabulatorProps} columnsDialog={columnsDialog} />;
 };

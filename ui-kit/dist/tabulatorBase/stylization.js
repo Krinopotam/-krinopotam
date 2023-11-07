@@ -320,4 +320,3 @@ export const Stylization = ({ striped }) => {
     const { token } = useToken();
     return React.createElement(TabulatorCss, Object.assign({ striped: striped }, token));
 };
-//# sourceMappingURL=stylization.js.map

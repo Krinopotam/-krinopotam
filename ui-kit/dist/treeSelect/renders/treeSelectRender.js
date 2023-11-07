@@ -47,4 +47,3 @@ export const TreeSelectRender = ({ api, treeSelectProps, antdTreeSelectProps }) 
             (_a = treeSelectProps.onSearch) === null || _a === void 0 ? void 0 : _a.call(treeSelectProps, searchString);
         } })));
 };
-//# sourceMappingURL=treeSelectRender.js.map

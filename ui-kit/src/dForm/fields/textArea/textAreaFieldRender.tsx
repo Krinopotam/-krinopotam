@@ -1,9 +1,11 @@
-import React, {CSSProperties, useCallback, useEffect} from 'react';
+import React, {CSSProperties, useCallback, useEffect, useSyncExternalStore} from 'react';
 import {Input} from 'antd';
 import {TextAreaField} from '@src/dForm/fields/textArea/textAreaField';
 
 const {TextArea} = Input;
 export const TextAreaFieldRender = ({field}: {field: TextAreaField}): React.JSX.Element => {
+    useSyncExternalStore(field.subscribe.bind(field), field.getSnapshot.bind(field));
+    
     const fieldName = field.getName();
     const fieldProps = field.getProps();
 

@@ -174,4 +174,3 @@ export class TabsField extends BaseField {
             listener();
     }
 }
-//# sourceMappingURL=tabsField.js.map

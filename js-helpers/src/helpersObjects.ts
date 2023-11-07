@@ -159,7 +159,7 @@ export const IsReactClassComponent = <T>(obj: T) => {
 };
 
 /** Check if an object is React Component */
-export const isReactComponent = <T>(obj: T) => {
+export const IsReactComponent = <T>(obj: T) => {
     if (typeof obj === 'object') {
         const _obj = obj as { $$typeof?: symbol };
         if (_obj['$$typeof'] && _obj['$$typeof'].toString() === 'Symbol(react.element)') return true;

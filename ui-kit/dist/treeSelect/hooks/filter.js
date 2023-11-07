@@ -10,4 +10,3 @@ export const useDefaultFilter = (api) => {
         return title.toLowerCase().indexOf(inputValue.toLowerCase()) >= 0;
     }, [titleKey]);
 };
-//# sourceMappingURL=filter.js.map

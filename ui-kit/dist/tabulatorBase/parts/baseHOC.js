@@ -6,4 +6,3 @@ export const BaseHOC = (props) => {
     }, [props]);
     return (React.createElement(React.Fragment, null, props.children));
 };
-//# sourceMappingURL=baseHOC.js.map

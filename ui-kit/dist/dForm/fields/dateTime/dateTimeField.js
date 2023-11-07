@@ -6,4 +6,3 @@ export class DateTimeField extends BaseField {
         return React.createElement(DateTimeFieldRender, { field: this });
     }
 }
-//# sourceMappingURL=dateTimeField.js.map

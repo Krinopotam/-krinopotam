@@ -22,4 +22,3 @@ const useGetColor = (token, colorType) => {
         color = token.colorErrorHover;
     return color;
 };
-//# sourceMappingURL=footerRender.js.map

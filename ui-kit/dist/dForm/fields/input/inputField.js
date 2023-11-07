@@ -6,4 +6,3 @@ export class InputField extends BaseField {
         return React.createElement(InputFieldRender, { field: this });
     }
 }
-//# sourceMappingURL=inputField.js.map

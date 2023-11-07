@@ -91,4 +91,3 @@ export const GetDatePickerFormat = (mode, timeMode, format) => {
     }
     return fieldFormat;
 };
-//# sourceMappingURL=datePicker.js.map

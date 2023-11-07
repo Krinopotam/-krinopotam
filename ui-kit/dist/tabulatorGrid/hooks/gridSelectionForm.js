@@ -29,4 +29,3 @@ export const usePrepareSelectionFormProps = (gridApi) => {
         return formProps;
     }, [gridApi]);
 };
-//# sourceMappingURL=gridSelectionForm.js.map

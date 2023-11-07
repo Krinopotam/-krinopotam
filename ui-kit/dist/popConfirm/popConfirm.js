@@ -61,4 +61,3 @@ const useInitButtons = ({ okText, cancelText, onConfirm, onCancel, okButtonProps
     }, [okText, cancelText, onConfirm, onCancel, okButtonProps, cancelButtonProps]);
     return formButtons;
 };
-//# sourceMappingURL=popConfirm.js.map

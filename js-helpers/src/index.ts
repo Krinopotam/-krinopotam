@@ -9,7 +9,7 @@ export {
     IsObjectsEqual,
     IsPromise,
     IsReactClassComponent,
-    isReactComponent,
+    IsReactComponent,
     MergeObjects,
     ObjectDiffs,
     ObjectKeys,

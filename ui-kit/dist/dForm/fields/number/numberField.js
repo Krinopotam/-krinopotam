@@ -6,4 +6,3 @@ export class NumberField extends BaseField {
         return React.createElement(NumberFieldRender, { field: this });
     }
 }
-//# sourceMappingURL=numberField.js.map

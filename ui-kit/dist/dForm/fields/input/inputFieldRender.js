@@ -19,4 +19,3 @@ export const InputFieldRender = ({ field }) => {
     }, [field]);
     return (React.createElement(Input, { autoFocus: fieldProps.autoFocus, disabled: field.isDisabled(), readOnly: field.isReadOnly(), maxLength: fieldProps.maxLength, name: fieldName, onBlur: onBlur, onChange: onChange, placeholder: fieldProps.placeholder, showCount: fieldProps.showCount, value: value, style: fieldProps.style, width: fieldProps.width }));
 };
-//# sourceMappingURL=inputFieldRender.js.map

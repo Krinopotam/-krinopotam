@@ -6,4 +6,3 @@ export const ButtonsRender = ({ colorType, buttons, buttonsApi, containerStyle, 
     return (React.createElement("div", { style: containerStyle },
         React.createElement(ButtonsRow, { buttons: buttons, apiRef: buttonsApi, colorType: colorType, arrowsSelection: arrowsSelection, context: context })));
 };
-//# sourceMappingURL=buttonsRender.js.map

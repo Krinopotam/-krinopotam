@@ -81,4 +81,3 @@ const useSplitAntTreeSelectProps = (props) => {
         return result[1];
     }, [props]);
 };
-//# sourceMappingURL=treeSelect.js.map

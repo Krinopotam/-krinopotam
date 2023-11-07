@@ -1,1 +1,0 @@
-{"version":3,"file":"updateModalTheme.js","sourceRoot":"","sources":["../../../src/messageBox/hooks/updateModalTheme.tsx"],"names":[],"mappings":"AAUA,OAAO,EAAC,GAAG,EAAC,MAAM,MAAM,CAAC;AACzB,OAAO,UAAU,MAAM,eAAe,CAAC;AAEvC,MAAM,CAAC,MAAM,wBAAwB,GAAG,GAAG,EAAE;IACzC,MAAM,EAAC,KAAK,EAAC,GAAG,GAAG,CAAC,MAAM,EAAE,CAAC;IAC7B,UAAU,CAAC,iBAAiB,CAAC,KAAK,CAAC,CAAC;AACxC,CAAC,CAAC"}

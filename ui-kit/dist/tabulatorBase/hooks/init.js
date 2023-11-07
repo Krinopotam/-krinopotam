@@ -116,4 +116,3 @@ const initTabulatorClass = async ($container, tableRef, onTableRef, options, pro
         });
     });
 };
-//# sourceMappingURL=init.js.map

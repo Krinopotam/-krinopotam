@@ -30,4 +30,3 @@ export const useInitButtons = (formApi, props) => {
         return MergeObjects(defaultButtons, props.buttons);
     }, [formApi, props.buttons, props.formMode]);
 };
-//# sourceMappingURL=buttons.js.map

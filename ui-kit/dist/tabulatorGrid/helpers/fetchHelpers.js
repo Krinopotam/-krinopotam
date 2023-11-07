@@ -24,4 +24,3 @@ export const GenerateAjaxRequestFunc = (gridApi, onDataFetch, extraParams) => {
         });
     };
 };
-//# sourceMappingURL=fetchHelpers.js.map
