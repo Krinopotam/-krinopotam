@@ -1,6 +1,6 @@
-import {IGridApi, IGridProps} from '@src/tabulatorGrid';
+import {IGridApi, IGridDataSourcePromise, IGridProps, IGridRowData} from '@src/tabulatorGrid';
 import {IAjaxConfig, IRequestProps} from '@src/tabulatorBase';
-import {IsPromise} from '@krinopotam/js-helpers';
+import {IsArray, IsPromise} from '@krinopotam/js-helpers';
 
 export const GenerateAjaxRequestFunc = (gridApi: IGridApi, onDataFetch: IGridProps['onDataFetch'], extraParams?: Record<string, unknown>) => {
     if (!onDataFetch) return undefined;
@@ -11,13 +11,18 @@ export const GenerateAjaxRequestFunc = (gridApi: IGridApi, onDataFetch: IGridPro
             const totalParams = {...params, ...extraParams};
 
             const fetchPromise = onDataFetch(totalParams, gridApi);
-            if (!IsPromise(fetchPromise)) reject(new Error());
-            fetchPromise.then(
+            if (typeof fetchPromise === 'undefined') resolve(prepareData(gridProps, {data: []}));
+            if (!IsPromise(fetchPromise)) {
+                if (IsArray(fetchPromise)) resolve(prepareData(gridProps, {data: fetchPromise as IGridRowData[]}));
+                else reject(new Error());
+
+                return;
+            }
+
+            (fetchPromise as IGridDataSourcePromise).then(
                 result => {
                     if (!gridApi.getIsMounted()) return;
-
-                    if (gridProps.pagination || gridProps.progressiveLoad) resolve({data: result.data, last_page: result.last_page ?? 1});
-                    else resolve(result.data); //WORKAROUND:The page module expects data in the format {data:[rows], last_page:number}. Without pagination data expected [rows]
+                    resolve(prepareData(gridProps, result));
                 },
                 error => {
                     reject(error);
@@ -25,4 +30,10 @@ export const GenerateAjaxRequestFunc = (gridApi: IGridApi, onDataFetch: IGridPro
             );
         });
     };
+};
+
+const prepareData = (gridProps: IGridProps, result: {data: IGridRowData[]; last_page?: number}) => {
+    //WORKAROUND:The page module expects data in the format {data:[rows], last_page:number}. Without pagination data expected [rows]
+    if (gridProps.pagination || gridProps.progressiveLoad) return {data: result.data, last_page: result.last_page ?? 1};
+    else return result.data;
 };

@@ -75,7 +75,7 @@ export interface IGridPropsCallbacks {
     onMenuVisibilityChanged?: (isVisible: boolean, gridApi: IGridApi) => void;
 
     /** special callback used to fetch remote data. If not specified, the request will not be processed. */
-    onDataFetch?: (params: IRequestProps, gridApi: IGridApi) => IGridDataSourcePromise;
+    onDataFetch?: (params: IRequestProps, gridApi: IGridApi) => IGridDataSourcePromise | IGridRowData[]| undefined;
 
     /** Fires when a successful remote fetch request has been made. This callback can also be used to modify the received data before it is parsed by the table. If you use this callback it must return the data to be parsed by Tabulator, otherwise no data will be rendered. */
     onDataFetchResponse?: (dataSet: IGridRowData[], params: IRequestProps, gridApi: IGridApi) => IGridRowData[];
