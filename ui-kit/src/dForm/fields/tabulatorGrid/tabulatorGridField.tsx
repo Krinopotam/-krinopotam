@@ -11,6 +11,9 @@ export interface ITabulatorGridFieldPropsBase extends IBaseFieldProps<TabulatorG
 
     /** Auto resize height on form resize */
     resizeHeightWithForm?: boolean;
+
+    /** By default, when a form is in Create mode, it does not load data even if onDataFetch callback is provided. This option changes this behavior*/
+    fetchInCreateMode?: boolean;
 }
 
 export interface ITabulatorGridFieldPropsCallbacks {
@@ -34,6 +37,9 @@ export interface ITabulatorGridFieldPropsCallbacks {
 
     /** special callback used to fetch remote data. If not specified, the request will not be processed */
     onDataFetch?: (params: IRequestProps, gridApi: IGridApi, field: TabulatorGridField) => IGridDataSourcePromise | undefined;
+
+    /** Called before a data fetching begins. If it returns false, then the fetch is canceled */
+    onDataFetching?: (url:string, params: IRequestProps, gridApi: IGridApi, field: TabulatorGridField) => boolean
 
     /** Fires when a successful remote fetch request has been made. This callback can also be used to modify the received data before it is parsed by the table. If you use this callback it must return the data to be parsed by Tabulator, otherwise no data will be rendered. */
     onDataFetchResponse?: (dataSet: IGridRowData[], params: IRequestProps, gridApi: IGridApi, field: TabulatorGridField) => IGridRowData[];

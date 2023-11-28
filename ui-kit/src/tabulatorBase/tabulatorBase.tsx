@@ -57,7 +57,7 @@ export interface ITabulator extends _ITabulator {
     updateColumnDefinition: (column: ColumnLookup, definition: Partial<ColumnDefinition>) => Promise<void>;
 
     /** Ajax request handler */
-    ajaxRequestFunc?: (url: string, config: IAjaxConfig, params: IRequestProps) => Promise<{data: Record<string, unknown>[]; last_page: number}>;
+    //ajaxRequestFunc?: (url: string, config: IAjaxConfig, params: IRequestProps) => Promise<{data: Record<string, unknown>[]; last_page: number}>;
 }
 
 export interface ITabulatorColumn extends Omit<ColumnDefinition, 'headerPopup'> {
@@ -110,7 +110,7 @@ export interface ITabulatorProps extends Omit<ITabulator['options'], 'footerElem
     resizableColumnFit?: boolean;
 
     /** Ajax request handler */
-    ajaxRequestFunc?: ITabulator['ajaxRequestFunc'];
+    ajaxRequestFunc?: ITabulator['options']['ajaxRequestFunc'];
 
     updateColumnDefinition?: ITabulator['updateColumnDefinition'];
 }

@@ -39,6 +39,7 @@ const props: IGridProps = {
     confirmDelete: true,
     height: '100%',
     layout: 'fitColumns',
+    onDataFetch: () => {return undefined}
 };
 
 export const AsyncWithSelectionForm = (): React.JSX.Element => {

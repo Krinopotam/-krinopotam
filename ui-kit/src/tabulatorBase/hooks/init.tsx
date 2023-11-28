@@ -86,6 +86,8 @@ const propsToOptions = async (props: ITabulatorProps) => {
 
     output.columnDefaults = props.columnDefaults ?? {};
 
+    output.data = props.data ?? []; //WORKAROUND: if dataSet is undefined dataSet must be []. Otherwise, problems may occur when adding rows
+
     if (!props.dataTreeChildField) output.dataTreeChildField = 'children';
     if (!props.dataTreeParentField) output.dataTreeParentField = 'parent';
     if (!props.dataTreeChildIndent) output.dataTreeChildIndent = 22;
