@@ -30,6 +30,9 @@ export interface IGridPropsBase {
     /** Grid class name */
     className?: string;
 
+    /** Grid label in header buttons row */
+    headerLabel?:React.ReactNode
+
     /** Grid header buttons */
     buttons?: Record<'view' | 'create' | 'clone' | 'update' | 'delete' | 'select' | 'filterToggle' | 'system', IFormButton | null> | IFormButtons;
 
@@ -133,6 +136,7 @@ const useSplitTabulatorProps = (props: IGridProps) => {
             gridMode: true,
             dataSet: true,
             className: true,
+            headerLabel:true,
             buttons: true,
             buttonsSize: true,
             buttonsPosition: true,

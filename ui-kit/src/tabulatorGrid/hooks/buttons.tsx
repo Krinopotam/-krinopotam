@@ -16,6 +16,7 @@ export const useInitButtons = (gridApi: IGridApi): IFormButtons => {
 
     gridApi.buttonsApi.refreshButtons = useRefreshButtons(refreshButtons);
 
+    const headerLabel = useGetHeaderLabel(gridApi);
     const viewButton = useGetViewButton(gridApi, activeRow, selectedRows);
     const createButton = useGetCreateButton(gridApi);
     const cloneButton = useGetCloneButton(gridApi, activeRow, selectedRows);
@@ -27,6 +28,7 @@ export const useInitButtons = (gridApi: IGridApi): IFormButtons => {
 
     return useMemo(() => {
         const defaultButtons = {
+            headerLabel: headerLabel,
             view: viewButton,
             create: createButton,
             clone: cloneButton,
@@ -41,7 +43,7 @@ export const useInitButtons = (gridApi: IGridApi): IFormButtons => {
 
         for (const key in resultButtons) {
             const btn = resultButtons[key];
-            if (!btn) continue;
+            if (!btn || key === 'headerLabel') continue;
             btn.size = btn.size ?? buttonsSize;
             btn.position = btn.position ?? buttonsPos;
             if (iconsOnly) {
@@ -60,6 +62,7 @@ export const useInitButtons = (gridApi: IGridApi): IFormButtons => {
         deleteButton,
         filterToggleButton,
         iconsOnly,
+        headerLabel,
         selectButton,
         systemButtons,
         updateButton,
@@ -71,6 +74,21 @@ const useRefreshButtons = (refreshButtons: React.Dispatch<React.SetStateAction<R
     return useCallback(() => {
         refreshButtons({});
     }, [refreshButtons]);
+};
+
+/** Get label props */
+const useGetHeaderLabel = (gridApi: IGridApi): IFormButton | undefined => {
+    return useMemo(() => {
+        const gridProps = gridApi.gridProps;
+        if (!gridProps.headerLabel) return undefined;
+
+        return {
+            weight: 1,
+            title: gridProps.headerLabel,
+            type:'element',
+            position: 'left',
+        } satisfies IFormButton;
+    }, [gridApi]);
 };
 
 /** Get view button props */
