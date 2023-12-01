@@ -337,8 +337,6 @@ const moveNode = (node: DataNode, targetNode: DataNode | undefined, position: 'a
 
 const useOnAllowDrop = (dialogApi: IColumnsDialogApi) => {
     const onAllowDrop: TreeProps['allowDrop'] = info => {
-        console.log(info, info.dropNode.title, info.dropPosition);
-
         const dragNode = getNodeByKey(dialogApi.nodes, info.dragNode.key);
         const dropNode = getNodeByKey(dialogApi.nodes, info.dropNode.key);
         if (!dragNode || !dropNode) return false;
