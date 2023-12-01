@@ -6,6 +6,7 @@ import {DeleteOutlined, EditOutlined, PlusOutlined} from '@ant-design/icons';
 import {IDFormModalApi} from '@src/dFormModal';
 import {MessageBoxApi, MessageBox} from '@src/messageBox';
 import {IError} from '@krinopotam/service-types';
+import {IsDebugMode} from "@krinopotam/common-hooks";
 
 /** Generate buttons */
 export const useInitButtons = (api: ITreeSelectApi, formApi: IDFormModalApi) => {
@@ -87,7 +88,7 @@ const deleteHandler = (api: ITreeSelectApi) => {
                                 <p>
                                     <b>{error.message}</b>
                                 </p>
-                                {error.stack && import.meta.env.MODE === 'development' ? <p>{error.stack}</p> : ''}
+                                {error.stack && IsDebugMode() ? <p>{error.stack}</p> : ''}
                             </>
                         ),
                         colorType: 'danger',

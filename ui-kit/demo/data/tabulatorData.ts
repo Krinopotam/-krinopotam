@@ -23,6 +23,36 @@ export const TabulatorBaseColumns: ITabulatorProps['columns'] = [
     {title: 'Rating', field: 'rating', hozAlign: 'center', formatter: 'star', headerFilterFunc: '='},
     {title: 'Passed?', field: 'passed', hozAlign: 'center', formatter: 'tickCross', headerFilterFunc: '='},
 ];
+
+export const TabulatorBaseGroupedColumns: ITabulatorProps['columns'] = [
+    {title: 'Name', field: 'name'},
+    {
+        title: 'Info',
+        headerFilter: undefined,
+        columns: [
+            {title: 'Age', field: 'age', hozAlign: 'left', formatter: 'progress'},
+            {title: 'Favourite Color', field: 'col'},
+        ],
+    },
+    {
+        title: 'Date Of Birth',
+        field: 'dob',
+        hozAlign: 'center',
+        formatter: DateTimeFormatter,
+        formatterParams: {inputFormat: 'DD/MM/YYYY', outputFormat: 'DD.MM.YYYY'},
+        sorter: DateTimeSorter,
+        sorterParams: {format: 'DD/MM/YYYY'},
+    },
+    {
+        title: 'Result',
+        headerFilter: undefined,
+        columns: [
+            {title: 'Rating', field: 'rating', hozAlign: 'center', formatter: 'star', headerFilterFunc: '='},
+            {title: 'Passed?', field: 'passed', hozAlign: 'center', formatter: 'tickCross', headerFilterFunc: '='},
+        ],
+    },
+];
+
 export const TabulatorPlainData: IGridRowData[] = [
     {id: '1', name: 'Oli Bob1', age: '12', col: 'red', dob: '', rating: 1, passed: false},
     {id: '2', name: 'Mary May1', age: '1', col: 'blue', dob: '14/05/1982', rating: 2, passed: false},

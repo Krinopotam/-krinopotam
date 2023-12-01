@@ -55,7 +55,7 @@
 		"vite-plugin-watch": "^0.2.0"
 	},
 	"dependencies": {
-		"@krinopotam/common-hooks": "^1.0.1",
+		"@krinopotam/common-hooks": "^1.0.3",
 		"@krinopotam/js-helpers": "^1.0.36",
 		"@krinopotam/service-types": "^1.0.9",
 		"ahooks": "^3.7.8",

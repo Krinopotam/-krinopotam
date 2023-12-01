@@ -79,7 +79,7 @@ export interface ITabulatorProps extends Omit<ITabulator['options'], 'footerElem
     onTableRef?: (ref: React.MutableRefObject<ITabulator>) => void;
 
     /** Grid ID*/
-    gridId?: string;
+    id?: string;
 
     /** Grid columns */
     columns: ITabulatorColumn[];
@@ -115,7 +115,7 @@ export interface ITabulatorProps extends Omit<ITabulator['options'], 'footerElem
     updateColumnDefinition?: ITabulator['updateColumnDefinition'];
 }
 
-export const TabulatorBase = ({onTableRef, gridId, events, containerClassName, width, minWidth, maxWidth, ...props}: ITabulatorProps): React.JSX.Element => {
+export const TabulatorBase = ({onTableRef, events, containerClassName, width, minWidth, maxWidth, ...props}: ITabulatorProps): React.JSX.Element => {
     const containerRef = React.useRef<HTMLDivElement>(null as unknown as HTMLDivElement);
     const tableRef = React.useRef<ITabulator>();
 
@@ -133,7 +133,7 @@ export const TabulatorBase = ({onTableRef, gridId, events, containerClassName, w
     return (
         <>
             <Stylization striped={true} />
-            <div ref={containerRef} id={gridId ?? newId} data-instance={gridId ?? newId} className={containerClassName} style={containerStyle} />
+            <div ref={containerRef} id={props.id ?? newId} data-instance={props.id ?? newId} className={containerClassName} style={containerStyle} />
         </>
     );
 };

@@ -9,13 +9,14 @@ import {ITabulator} from '@src/tabulatorBase';
 import {MessageBox, MessageBoxApi} from '@src/messageBox';
 import {GenerateAjaxRequestFunc} from '@src/tabulatorGrid/helpers/fetchHelpers';
 import {IError} from '@krinopotam/service-types';
+import {IsDebugMode} from "@krinopotam/common-hooks";
 
 type IRowKey = IGridRowData['id'];
 type IRowKeys = IRowKey | IRowKey[];
 
 export interface IGridApi {
     /** Get grid ID */
-    getGridId: () => string;
+    getId: () => string;
 
     /** Current grid props */
     gridProps: IGridProps;
@@ -177,7 +178,7 @@ export const useInitGridApi = ({
     gridApi.selectionFormApi = selectionFormApi;
     gridApi.buttonsApi = buttonsApi;
     gridApi.getIsMounted = useApiIsMounted(unmountRef);
-    gridApi.getGridId = useApiGetGridId(gridApi);
+    gridApi.getId = useApiGetId(gridApi);
     gridApi.getDataSet = useApiGetDataSet(dataSetRef);
     gridApi.setDataSet = useApiSetDataSet(dataSetRef, gridApi);
     gridApi.getIsLoading = useApiGetIsLoading(isLoading);
@@ -221,7 +222,7 @@ const useUpdateDataSetFromProps = (curDataSetRef: MutableRefObject<IGridProps['d
     curDataSetRef.current = propsDataSet;
 };
 
-const useApiGetGridId = (gridApi: IGridApi): IGridApi['getGridId'] => {
+const useApiGetId = (gridApi: IGridApi): IGridApi['getId'] => {
     const [gridId] = useState(gridApi.gridProps.id ?? 'grid-' + GetUuid());
     return useCallback(() => gridId, [gridId]);
 };
@@ -627,7 +628,7 @@ const useApiDeleteRows = (gridApi: IGridApi): IGridApi['deleteRows'] => {
                                         <p>
                                             <b>{error.message}</b>
                                         </p>
-                                        {error.stack && import.meta.env.MODE === 'development' ? <p>{error.stack}</p> : ''}
+                                        {error.stack && IsDebugMode() ? <p>{error.stack}</p> : ''}
                                     </>
                                 ),
                                 colorType: 'danger',

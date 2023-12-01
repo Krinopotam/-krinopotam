@@ -1,12 +1,13 @@
 import React from 'react';
 import {ColumnDefinition, EventCallBackMethods, TabulatorFull as Tabulator} from 'tabulator-tables';
-import {ITabulatorProps, ITabulator, ITabulatorColumn} from '../tabulatorBase';
+import {ITabulator, ITabulatorColumn, ITabulatorProps} from '../tabulatorBase';
 import {createRoot} from 'react-dom/client';
 import {ActiveSelectionModule} from '../modules/activeSelectionModule';
 import {AdvancedHeaderFilterModule} from '../modules/advancedHeaderFilterModule';
 import {collapseButton, expandButton} from '../parts/icons';
 import {setPatches} from '../patches/setPatches';
 import {BaseHOC} from '@src/tabulatorBase/parts/baseHOC';
+import {IsDebugMode} from '@krinopotam/common-hooks';
 
 export const useInit = ({
     props,
@@ -88,6 +89,10 @@ const propsToOptions = async (props: ITabulatorProps) => {
 
     output.data = props.data ?? []; //WORKAROUND: if dataSet is undefined dataSet must be []. Otherwise, problems may occur when adding rows
 
+    if (props.persistence && !props.id && !props.persistenceID && IsDebugMode())
+        console.warn('For Tabulator persistence to work correctly, you must specify an ID or persistenceID');
+
+
     if (!props.dataTreeChildField) output.dataTreeChildField = 'children';
     if (!props.dataTreeParentField) output.dataTreeParentField = 'parent';
     if (!props.dataTreeChildIndent) output.dataTreeChildIndent = 22;
@@ -130,17 +135,26 @@ const propsToOptions = async (props: ITabulatorProps) => {
 };
 const columnPropsToOptions = async (props: ITabulatorProps) => {
     if (!props.columns) return undefined;
-    const columns: ITabulatorColumn[] = [];
-    for (const column of props.columns) {
-        if (React.isValidElement(column.headerPopup)) {
-            // convert from JSX to HTML string (tabulator's element accepts string)
-            const el = await syncRender(column.headerPopup, document.createElement('div'));
-            column.headerPopup = el.innerHTML;
+
+    const recursive = async (columns: ITabulatorColumn[]) => {
+        const newColumns: ITabulatorColumn[] = [];
+        for (const column of columns) {
+            const newColumn: ITabulatorColumn = {...column};
+            if (React.isValidElement(newColumn.headerPopup)) {
+                // convert from JSX to HTML string (tabulator's element accepts string)
+                const el = await syncRender(newColumn.headerPopup, document.createElement('div'));
+                newColumn.headerPopup = el.innerHTML;
+            }
+
+            if (newColumn.columns?.length) newColumn.columns = await recursive(newColumn.columns)
+
+            newColumns.push(newColumn);
         }
 
-        columns.push(column);
-    }
-    return columns;
+        return newColumns;
+    };
+
+    return await recursive(props.columns);
 };
 
 const initTabulatorClass = async (

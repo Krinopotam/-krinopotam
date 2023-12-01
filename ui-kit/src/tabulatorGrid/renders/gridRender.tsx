@@ -35,7 +35,7 @@ const GridRender_ = ({
     }, []);
 
     useEffect(() => {
-        dispatcher.pushToStack(gridApi.getGridId());
+        dispatcher.pushToStack(gridApi.getId());
     }, [gridApi]);
 
     const ajaxRequestFunc = useMemo(() => GenerateAjaxRequestFunc(gridApi, gridProps?.onDataFetch), [gridApi, gridProps]);
@@ -44,12 +44,12 @@ const GridRender_ = ({
     return (
         <TabulatorBase
             {...tabulatorProps}
+            id={gridApi.getId()}
             layout={tabulatorProps.layout ?? 'fitData'}
             movableColumns={tabulatorProps.movableColumns !== false}
             height={'100%'}
             dataLoader={false} //disable tabulator inbuilt loader overlay
             onTableRef={onTableRef}
-            gridId={gridApi.getGridId()}
             dataTreeFilter={true}
             data={dataSet}
             //data={gridProps.onDataFetch ? undefined : gridApi.getDataSet() ?? []} //WORKAROUND: if dataSet is undefined and ajax is not used, dataSet must be []. Otherwise, problems may occur when adding rows

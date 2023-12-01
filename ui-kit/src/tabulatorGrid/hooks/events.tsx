@@ -3,6 +3,7 @@ import {ITabulatorProps} from '@src/tabulatorBase';
 import React, {useMemo} from 'react';
 import {ITabulatorEvents} from '@src/tabulatorBase/tabulatorBase';
 import {MessageBox} from '@src/messageBox';
+import {IsDebugMode} from "@krinopotam/common-hooks";
 
 export const useEvents = (gridApi: IGridApi, events: ITabulatorEvents | undefined): ITabulatorProps['events'] => {
     return useMemo(() => {
@@ -44,7 +45,7 @@ export const useEvents = (gridApi: IGridApi, events: ITabulatorEvents | undefine
                             <p>
                                 <b>{error.message}</b>
                             </p>
-                            {error.stack && import.meta.env.MODE === 'development' ? <p>{error.stack}</p> : ''}
+                            {error.stack && IsDebugMode() ? <p>{error.stack}</p> : ''}
                             <p>{'Попробовать снова?'}</p>
                         </div>
                     ),

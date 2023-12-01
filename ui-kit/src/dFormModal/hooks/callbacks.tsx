@@ -4,6 +4,7 @@ import {IDFormCallbacks, IDFormDataSet} from '@src/dForm';
 import {IDFormModalApi} from './api';
 import {IDFormModalProps} from '../dFormModal';
 import {MessageBox} from '@src/messageBox';
+import {IsDebugMode} from "@krinopotam/common-hooks";
 
 /**
  * Preparing callbacks for redirection to the form
@@ -63,7 +64,7 @@ export const useFormCallbacks = (formModalApi: IDFormModalApi, modalFormProps: I
                             <p>
                                 <b>{error.message}</b>
                             </p>
-                            {error.stack && import.meta.env.MODE === 'development' ? <p>{error.stack}</p> : ''}
+                            {error.stack && IsDebugMode() ? <p>{error.stack}</p> : ''}
                             <p>{'Попробовать снова?'}</p>
                         </>
                     ),

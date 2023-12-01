@@ -4,6 +4,7 @@ import {IDFormApi} from './api';
 import {IDFormModelCallbacks} from '../dModel';
 import {IDFormDataSet, IDFormProps} from '../dForm';
 import {MessageBox} from '@src/messageBox';
+import {IsDebugMode} from "@krinopotam/common-hooks";
 
 /**
  * Preparing callbacks for redirection to the model
@@ -72,7 +73,7 @@ export const useModelCallbacks = (formProps: IDFormProps, formApi: IDFormApi) =>
                             <p>
                                 <b>{error.message}</b>
                             </p>
-                            {error.stack && import.meta.env.MODE === 'development' ? <p>{error.stack}</p> : ''}
+                            {error.stack && IsDebugMode() ? <p>{error.stack}</p> : ''}
                             <p>{'Попробовать снова?'}</p>
                         </>
                     ),
@@ -115,7 +116,7 @@ export const useModelCallbacks = (formProps: IDFormProps, formApi: IDFormApi) =>
                             <p>
                                 <b>{error.message}</b>
                             </p>
-                            {error.stack && import.meta.env.MODE === 'development' ? <p>{error.stack}</p> : ''}
+                            {error.stack && IsDebugMode() ? <p>{error.stack}</p> : ''}
                         </>
                     ),
                     colorType: 'danger',
