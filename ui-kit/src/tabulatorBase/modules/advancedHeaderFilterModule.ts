@@ -208,7 +208,8 @@ export class AdvancedHeaderFilterModule extends Module {
         let filterHeight = 0;
         filterElements.forEach((elem) => {
             if (filterHeight < elem.offsetHeight) filterHeight = elem.offsetHeight;
-            elem.style.display = !show ? 'none' : 'block';
+            //elem.style.display = !show ? 'none' : 'block';
+            elem.style.visibility = !show ? 'hidden' : 'visible';
         });
 
         let headerHeight = 0;

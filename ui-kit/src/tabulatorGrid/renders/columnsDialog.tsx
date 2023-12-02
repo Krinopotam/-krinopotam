@@ -225,7 +225,7 @@ const getColumnsDefinitionsFromOptions = (gridProps: IGridProps): ColumnDefiniti
 };
 
 const commitChanges = (props: IColumnsDialogProps, dialogApi: IColumnsDialogApi) => {
-    if (dialogApi.default) {
+    if (dialogApi.default && props.gridApi.gridProps.persistence) {
         const persistentId = props.gridApi.gridProps.persistenceID ?? props.gridApi.getId();
         localStorage.removeItem(`tabulator-${persistentId}-columns`);
     }

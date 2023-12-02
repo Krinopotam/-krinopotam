@@ -3,69 +3,69 @@
     import {createBrowserRouter} from 'react-router-dom';
     import {DemoLayout} from './demoLayout';
     import {Home} from './home';
-    const Page9195740168124e6898a634fdb71e1bb0 = lazy(() => import('./../pages/Page9195740168124e6898a634fdb71e1bb0'))
-    const Pagea82b8780ece747bbb8016f67ad62fa3b = lazy(() => import('./../pages/Pagea82b8780ece747bbb8016f67ad62fa3b'))
+    const Page0415230b225a4d9bae9ba98bd9df6d97 = lazy(() => import('./../pages/Page0415230b225a4d9bae9ba98bd9df6d97'))
+    const Pagec9d4c47964b046fbbb40274f16b49a75 = lazy(() => import('./../pages/Pagec9d4c47964b046fbbb40274f16b49a75'))
 
-    const Page28f588a2a1964a589d18654a2dda6654 = lazy(() => import('./../pages/Page28f588a2a1964a589d18654a2dda6654'))
-    const Pageff946571158249b993a41e1ef3e200cb = lazy(() => import('./../pages/Pageff946571158249b993a41e1ef3e200cb'))
-    const Pagebf2ca8cd097445e0b3807e05488cfbc0 = lazy(() => import('./../pages/Pagebf2ca8cd097445e0b3807e05488cfbc0'))
-    const Page6705e96e1d164fda8942697f5c0de1e9 = lazy(() => import('./../pages/Page6705e96e1d164fda8942697f5c0de1e9'))
-    const Page8dbb3843f5e84afeabf78387d70e2e7a = lazy(() => import('./../pages/Page8dbb3843f5e84afeabf78387d70e2e7a'))
-    const Page25a8ac6b9d524e20b0db7e5134840faf = lazy(() => import('./../pages/Page25a8ac6b9d524e20b0db7e5134840faf'))
-    const Pagefcff9915a1cf4166ad4a297dbd270db5 = lazy(() => import('./../pages/Pagefcff9915a1cf4166ad4a297dbd270db5'))
-    const Page62a65a42bdb2445e957a04b8c4488a1a = lazy(() => import('./../pages/Page62a65a42bdb2445e957a04b8c4488a1a'))
-    const Pageb15ce5d920014a83ad7449680d78cb78 = lazy(() => import('./../pages/Pageb15ce5d920014a83ad7449680d78cb78'))
+    const Page81dabd39da4141438b862a1af01111e6 = lazy(() => import('./../pages/Page81dabd39da4141438b862a1af01111e6'))
+    const Page19c56919ce414264b1b07e8c6456fa44 = lazy(() => import('./../pages/Page19c56919ce414264b1b07e8c6456fa44'))
+    const Pagecdace89a82e24cf1a92b690dbf30110e = lazy(() => import('./../pages/Pagecdace89a82e24cf1a92b690dbf30110e'))
+    const Page6d6cbf3ea26645e2bc9ed6897f897842 = lazy(() => import('./../pages/Page6d6cbf3ea26645e2bc9ed6897f897842'))
+    const Pagea8efd16f069e40d39d9348f0fa065f26 = lazy(() => import('./../pages/Pagea8efd16f069e40d39d9348f0fa065f26'))
+    const Page53bc90ccdf7a460eb3badfba60d7f291 = lazy(() => import('./../pages/Page53bc90ccdf7a460eb3badfba60d7f291'))
+    const Pagee76224e3c6b24eb0b02e44f7fe6478e3 = lazy(() => import('./../pages/Pagee76224e3c6b24eb0b02e44f7fe6478e3'))
+    const Pagec26ab68702c1449a934bc783364e3520 = lazy(() => import('./../pages/Pagec26ab68702c1449a934bc783364e3520'))
+    const Page9296322935e34ee79bd0347bddec543b = lazy(() => import('./../pages/Page9296322935e34ee79bd0347bddec543b'))
 
-    const Pageb6dc1903df2f40448ee9aa0c0de66fe2 = lazy(() => import('./../pages/Pageb6dc1903df2f40448ee9aa0c0de66fe2'))
-    const Page72b633d75263480585beab41ae102ad0 = lazy(() => import('./../pages/Page72b633d75263480585beab41ae102ad0'))
+    const Page25c6f31daef849a798546cb20fcc60b6 = lazy(() => import('./../pages/Page25c6f31daef849a798546cb20fcc60b6'))
+    const Page45dd775332ec401d90230acc757e1776 = lazy(() => import('./../pages/Page45dd775332ec401d90230acc757e1776'))
 
-    const Page1f9763c70ed248aa84de90267c8565c7 = lazy(() => import('./../pages/Page1f9763c70ed248aa84de90267c8565c7'))
-    const Page0bb17bd5b34243b58613bc757c0c5af0 = lazy(() => import('./../pages/Page0bb17bd5b34243b58613bc757c0c5af0'))
-    const Pageb1f2aa9f678043948620e3e2e91dff29 = lazy(() => import('./../pages/Pageb1f2aa9f678043948620e3e2e91dff29'))
-    const Page748e70940f414859b6cb2725a56d6408 = lazy(() => import('./../pages/Page748e70940f414859b6cb2725a56d6408'))
-    const Pagebbe1bbb10a05439785b96453f51bc2db = lazy(() => import('./../pages/Pagebbe1bbb10a05439785b96453f51bc2db'))
-    const Page5d3cc26caa81497f8baf1c7701b3b82d = lazy(() => import('./../pages/Page5d3cc26caa81497f8baf1c7701b3b82d'))
-    const Pageb8ab64d41939456eb98ae3dca3eb8072 = lazy(() => import('./../pages/Pageb8ab64d41939456eb98ae3dca3eb8072'))
-    const Page4af659f7e7ac43d49f2a2126d0524c1b = lazy(() => import('./../pages/Page4af659f7e7ac43d49f2a2126d0524c1b'))
-    const Page0b292ed3bcea4e9482950598eeb31d58 = lazy(() => import('./../pages/Page0b292ed3bcea4e9482950598eeb31d58'))
-    const Pagea168269b40064e3f8baebafc863309f1 = lazy(() => import('./../pages/Pagea168269b40064e3f8baebafc863309f1'))
-    const Pagee98ad68b21774926944323f3a61ddf15 = lazy(() => import('./../pages/Pagee98ad68b21774926944323f3a61ddf15'))
+    const Page8cd7296d5a4543c38b603c189a2a6909 = lazy(() => import('./../pages/Page8cd7296d5a4543c38b603c189a2a6909'))
+    const Paged17eebba82a343189882713163a07002 = lazy(() => import('./../pages/Paged17eebba82a343189882713163a07002'))
+    const Page613e6167fc854e169125b6eb2ef15f96 = lazy(() => import('./../pages/Page613e6167fc854e169125b6eb2ef15f96'))
+    const Pagee0f46080db8c4d5f866510aedc269bcf = lazy(() => import('./../pages/Pagee0f46080db8c4d5f866510aedc269bcf'))
+    const Pagebd53f7b142d84575a12ab598c9fce820 = lazy(() => import('./../pages/Pagebd53f7b142d84575a12ab598c9fce820'))
+    const Pagefee10593807744ada86f4186d7c2068c = lazy(() => import('./../pages/Pagefee10593807744ada86f4186d7c2068c'))
+    const Page8d12a32e906b4c5c9562aa6684ce7c51 = lazy(() => import('./../pages/Page8d12a32e906b4c5c9562aa6684ce7c51'))
+    const Page47b5b4667530434c8a186213d56a6d01 = lazy(() => import('./../pages/Page47b5b4667530434c8a186213d56a6d01'))
+    const Page315fe7bc71f949ed9f189dfa9345b4e7 = lazy(() => import('./../pages/Page315fe7bc71f949ed9f189dfa9345b4e7'))
+    const Pagef5b5e7c4c54a40909dc5119529dfd07e = lazy(() => import('./../pages/Pagef5b5e7c4c54a40909dc5119529dfd07e'))
+    const Page494c84f151cf4ae399a32aa6fb6010d1 = lazy(() => import('./../pages/Page494c84f151cf4ae399a32aa6fb6010d1'))
 
-    const Page48b6331b91404edda754dac66aa0e039 = lazy(() => import('./../pages/Page48b6331b91404edda754dac66aa0e039'))
-    const Page3fbe5f9414a8469689191072c7aeb602 = lazy(() => import('./../pages/Page3fbe5f9414a8469689191072c7aeb602'))
-    const Page3b3c50c7810c472a86f986eb01738cdb = lazy(() => import('./../pages/Page3b3c50c7810c472a86f986eb01738cdb'))
-    const Page6f3e2eb90dd144a186d14c30a73f4758 = lazy(() => import('./../pages/Page6f3e2eb90dd144a186d14c30a73f4758'))
-    const Pagef2eb779fb89b46eb9000c161a35965c3 = lazy(() => import('./../pages/Pagef2eb779fb89b46eb9000c161a35965c3'))
-    const Page538530670e69468ca431017c45c2cb09 = lazy(() => import('./../pages/Page538530670e69468ca431017c45c2cb09'))
-    const Pageb85c04afd30946b88ee953d10e1fb30b = lazy(() => import('./../pages/Pageb85c04afd30946b88ee953d10e1fb30b'))
+    const Page34d30aa7d65c47c4ab2c1623416184f5 = lazy(() => import('./../pages/Page34d30aa7d65c47c4ab2c1623416184f5'))
+    const Pagef0d705bae0b14b1bbb2c965beb5e85a7 = lazy(() => import('./../pages/Pagef0d705bae0b14b1bbb2c965beb5e85a7'))
+    const Page6ff4363f872c40f88be1519013bf64e6 = lazy(() => import('./../pages/Page6ff4363f872c40f88be1519013bf64e6'))
+    const Pagef4a8443d43234d2ba3ed32e9d75c145a = lazy(() => import('./../pages/Pagef4a8443d43234d2ba3ed32e9d75c145a'))
+    const Page2ebf7a46cd8845fcbeaaa62a9b020ca5 = lazy(() => import('./../pages/Page2ebf7a46cd8845fcbeaaa62a9b020ca5'))
+    const Pageea04ae25794740ca8baf401e9c78e050 = lazy(() => import('./../pages/Pageea04ae25794740ca8baf401e9c78e050'))
+    const Paged93d2e4e81124d1cbba72555339ae670 = lazy(() => import('./../pages/Paged93d2e4e81124d1cbba72555339ae670'))
 
-    const Pagea38c264a04954fd1adf81b0bf4c5d0d5 = lazy(() => import('./../pages/Pagea38c264a04954fd1adf81b0bf4c5d0d5'))
-    const Page09140ab617bb43bab90178ba72ea5c47 = lazy(() => import('./../pages/Page09140ab617bb43bab90178ba72ea5c47'))
-    const Page4fe9229680794a249458e332155e5987 = lazy(() => import('./../pages/Page4fe9229680794a249458e332155e5987'))
-    const Page91f5f2ab54b94cd599431f7f4271bf64 = lazy(() => import('./../pages/Page91f5f2ab54b94cd599431f7f4271bf64'))
-    const Page32b9fe1b7fd349e0aea472a6fcc802fe = lazy(() => import('./../pages/Page32b9fe1b7fd349e0aea472a6fcc802fe'))
-    const Pagefb0abd20f69f43379b17019bba71d2cc = lazy(() => import('./../pages/Pagefb0abd20f69f43379b17019bba71d2cc'))
-    const Pagef45e228c01bb43998dc067ef95952ffe = lazy(() => import('./../pages/Pagef45e228c01bb43998dc067ef95952ffe'))
-    const Page9bae9dad6b704bcc99de5ab306eade99 = lazy(() => import('./../pages/Page9bae9dad6b704bcc99de5ab306eade99'))
-    const Page4ff73a26fc88485b891b3b86e6dc1592 = lazy(() => import('./../pages/Page4ff73a26fc88485b891b3b86e6dc1592'))
-    const Pageb7867924e41d487c90afcba9c85cffa6 = lazy(() => import('./../pages/Pageb7867924e41d487c90afcba9c85cffa6'))
-    const Pagedd76f1cf4ec5483abbf49d56945716d8 = lazy(() => import('./../pages/Pagedd76f1cf4ec5483abbf49d56945716d8'))
-    const Pagef7c69053b4c343859d9e49e9f6e77ec3 = lazy(() => import('./../pages/Pagef7c69053b4c343859d9e49e9f6e77ec3'))
-    const Pagefaab2e84feda43dcaea0e1009b7e71f8 = lazy(() => import('./../pages/Pagefaab2e84feda43dcaea0e1009b7e71f8'))
+    const Page2ac438bbccc14dc8beb34d3a7ae4e74e = lazy(() => import('./../pages/Page2ac438bbccc14dc8beb34d3a7ae4e74e'))
+    const Pagecc2cfd6fa64f470badc903ce0b5f13de = lazy(() => import('./../pages/Pagecc2cfd6fa64f470badc903ce0b5f13de'))
+    const Page224eaa69daaf4a8da58db2a6edb87b9e = lazy(() => import('./../pages/Page224eaa69daaf4a8da58db2a6edb87b9e'))
+    const Page36c2ea6c47654abe84127912b503f495 = lazy(() => import('./../pages/Page36c2ea6c47654abe84127912b503f495'))
+    const Pageb4bc7d5945b74c39b99ea76b8dbddda6 = lazy(() => import('./../pages/Pageb4bc7d5945b74c39b99ea76b8dbddda6'))
+    const Pageaab65aa3ec95481d82081f4c812e3b8a = lazy(() => import('./../pages/Pageaab65aa3ec95481d82081f4c812e3b8a'))
+    const Page9e277447f6be4b99bc0f45822f7a2d49 = lazy(() => import('./../pages/Page9e277447f6be4b99bc0f45822f7a2d49'))
+    const Page0e33fde766944931be7571927d9a9027 = lazy(() => import('./../pages/Page0e33fde766944931be7571927d9a9027'))
+    const Page7613cec8df9e4385a3ce3a0096c26dbc = lazy(() => import('./../pages/Page7613cec8df9e4385a3ce3a0096c26dbc'))
+    const Page7c2dbc20db144176bdf4ab5c35bb4fe8 = lazy(() => import('./../pages/Page7c2dbc20db144176bdf4ab5c35bb4fe8'))
+    const Page8508425d812a4bdda51e5ee730eb9d95 = lazy(() => import('./../pages/Page8508425d812a4bdda51e5ee730eb9d95'))
+    const Page3ad0c40c817c49b9864071f5339d2c9c = lazy(() => import('./../pages/Page3ad0c40c817c49b9864071f5339d2c9c'))
+    const Page9a3852ac6ed945d2a9ec059ba37904d3 = lazy(() => import('./../pages/Page9a3852ac6ed945d2a9ec059ba37904d3'))
 
-    const Page5faff8a9423b4a4297616450b54893eb = lazy(() => import('./../pages/Page5faff8a9423b4a4297616450b54893eb'))
+    const Pagea0e4d477c5214441b138dd5734f481ed = lazy(() => import('./../pages/Pagea0e4d477c5214441b138dd5734f481ed'))
 
-    const Page0773bd88f4964933bfec387a87645f3b = lazy(() => import('./../pages/Page0773bd88f4964933bfec387a87645f3b'))
-    const Page2a2648a858cd44edaa111da75fbd5801 = lazy(() => import('./../pages/Page2a2648a858cd44edaa111da75fbd5801'))
-    const Page9fe3957acf8e47ac9bc62c6b4c1cc50f = lazy(() => import('./../pages/Page9fe3957acf8e47ac9bc62c6b4c1cc50f'))
-    const Pageb3a536d55fbb4bf89d1f938ad25b3f70 = lazy(() => import('./../pages/Pageb3a536d55fbb4bf89d1f938ad25b3f70'))
-    const Page8451af9fadb94b919ed546bca215e2d3 = lazy(() => import('./../pages/Page8451af9fadb94b919ed546bca215e2d3'))
-    const Pageb59eae0477004d97b058b4f00fe02394 = lazy(() => import('./../pages/Pageb59eae0477004d97b058b4f00fe02394'))
-    const Pagef18df8bb7e8a41a18b70b72c7efca6c5 = lazy(() => import('./../pages/Pagef18df8bb7e8a41a18b70b72c7efca6c5'))
-    const Page12f279b031f74b9088f6dbfe09f378d4 = lazy(() => import('./../pages/Page12f279b031f74b9088f6dbfe09f378d4'))
-    const Page17e2969da0414ee8a39cd8d46be10e8a = lazy(() => import('./../pages/Page17e2969da0414ee8a39cd8d46be10e8a'))
+    const Page8dcab066f85e4150b38329de6e2d39c1 = lazy(() => import('./../pages/Page8dcab066f85e4150b38329de6e2d39c1'))
+    const Pagec3583445f2b840c989a4c9167aced407 = lazy(() => import('./../pages/Pagec3583445f2b840c989a4c9167aced407'))
+    const Page82cb6ce8c3d2423e9933cfd7b3f89ba7 = lazy(() => import('./../pages/Page82cb6ce8c3d2423e9933cfd7b3f89ba7'))
+    const Pagea453eff0d6c6451c882cb0b1ef9107a7 = lazy(() => import('./../pages/Pagea453eff0d6c6451c882cb0b1ef9107a7'))
+    const Page01de1e61c6f94506827cf21392920bcd = lazy(() => import('./../pages/Page01de1e61c6f94506827cf21392920bcd'))
+    const Pagee6f2503472fc411e87ee6804aae9ce74 = lazy(() => import('./../pages/Pagee6f2503472fc411e87ee6804aae9ce74'))
+    const Page4c903060572f4567aa59d6aa4f5d5c8d = lazy(() => import('./../pages/Page4c903060572f4567aa59d6aa4f5d5c8d'))
+    const Page3bd5710a0b4244bfb551b331be1a78d8 = lazy(() => import('./../pages/Page3bd5710a0b4244bfb551b331be1a78d8'))
+    const Pagef132d22d57124b4893719ead291952cf = lazy(() => import('./../pages/Pagef132d22d57124b4893719ead291952cf'))
 
-    const Pagef868ae1859d8426cbce20de5184b7526 = lazy(() => import('./../pages/Pagef868ae1859d8426cbce20de5184b7526'))
+    const Pagedfe2233ff8734124ad564e72d1b7146c = lazy(() => import('./../pages/Pagedfe2233ff8734124ad564e72d1b7146c'))
 
 
 export const useDemoRoutes = (props: {darkMode: boolean; setDarkMode: (mode: boolean) => void}) => {
@@ -78,83 +78,83 @@ export const useDemoRoutes = (props: {darkMode: boolean; setDarkMode: (mode: boo
                         {index: true, element: <Home />},
                         {path:"dForm", children: [
                         {path:"validation", children: [
-                        {path:"FormSubmitting", element:<Page9195740168124e6898a634fdb71e1bb0 darkMode={props.darkMode} />},
-                        {path:"FormValidation", element:<Pagea82b8780ece747bbb8016f67ad62fa3b darkMode={props.darkMode} />},
+                        {path:"FormSubmitting", element:<Page0415230b225a4d9bae9ba98bd9df6d97 darkMode={props.darkMode} />},
+                        {path:"FormValidation", element:<Pagec9d4c47964b046fbbb40274f16b49a75 darkMode={props.darkMode} />},
 
 ]},
-                        {path:"DependedFields", element:<Page28f588a2a1964a589d18654a2dda6654 darkMode={props.darkMode} />},
-                        {path:"FormBetweenFields", element:<Pageff946571158249b993a41e1ef3e200cb darkMode={props.darkMode} />},
-                        {path:"FormDependedField", element:<Pagebf2ca8cd097445e0b3807e05488cfbc0 darkMode={props.darkMode} />},
-                        {path:"FormFetching", element:<Page6705e96e1d164fda8942697f5c0de1e9 darkMode={props.darkMode} />},
-                        {path:"FormSimple", element:<Page8dbb3843f5e84afeabf78387d70e2e7a darkMode={props.darkMode} />},
-                        {path:"FormSimpleHorizontal", element:<Page25a8ac6b9d524e20b0db7e5134840faf darkMode={props.darkMode} />},
-                        {path:"FormWithTemplatedFields", element:<Pagefcff9915a1cf4166ad4a297dbd270db5 darkMode={props.darkMode} />},
-                        {path:"NewFormSimple", element:<Page62a65a42bdb2445e957a04b8c4488a1a darkMode={props.darkMode} />},
-                        {path:"NewFormWithTabs", element:<Pageb15ce5d920014a83ad7449680d78cb78 darkMode={props.darkMode} />},
+                        {path:"DependedFields", element:<Page81dabd39da4141438b862a1af01111e6 darkMode={props.darkMode} />},
+                        {path:"FormBetweenFields", element:<Page19c56919ce414264b1b07e8c6456fa44 darkMode={props.darkMode} />},
+                        {path:"FormDependedField", element:<Pagecdace89a82e24cf1a92b690dbf30110e darkMode={props.darkMode} />},
+                        {path:"FormFetching", element:<Page6d6cbf3ea26645e2bc9ed6897f897842 darkMode={props.darkMode} />},
+                        {path:"FormSimple", element:<Pagea8efd16f069e40d39d9348f0fa065f26 darkMode={props.darkMode} />},
+                        {path:"FormSimpleHorizontal", element:<Page53bc90ccdf7a460eb3badfba60d7f291 darkMode={props.darkMode} />},
+                        {path:"FormWithTemplatedFields", element:<Pagee76224e3c6b24eb0b02e44f7fe6478e3 darkMode={props.darkMode} />},
+                        {path:"NewFormSimple", element:<Pagec26ab68702c1449a934bc783364e3520 darkMode={props.darkMode} />},
+                        {path:"NewFormWithTabs", element:<Page9296322935e34ee79bd0347bddec543b darkMode={props.darkMode} />},
 
 ]},
                         {path:"dFormModal", children: [
                         {path:"async", children: [
-                        {path:"EditableGridWithAsyncTabulatorGrid", element:<Pageb6dc1903df2f40448ee9aa0c0de66fe2 darkMode={props.darkMode} />},
-                        {path:"FormWithAsyncTabulatorGrid", element:<Page72b633d75263480585beab41ae102ad0 darkMode={props.darkMode} />},
+                        {path:"EditableGridWithAsyncTabulatorGrid", element:<Page25c6f31daef849a798546cb20fcc60b6 darkMode={props.darkMode} />},
+                        {path:"FormWithAsyncTabulatorGrid", element:<Page45dd775332ec401d90230acc757e1776 darkMode={props.darkMode} />},
 
 ]},
-                        {path:"AutoHeightTabulator", element:<Page1f9763c70ed248aa84de90267c8565c7 darkMode={props.darkMode} />},
-                        {path:"AutoHeightTabulatorInTab", element:<Page0bb17bd5b34243b58613bc757c0c5af0 darkMode={props.darkMode} />},
-                        {path:"FormFetching", element:<Pageb1f2aa9f678043948620e3e2e91dff29 darkMode={props.darkMode} />},
-                        {path:"FormWithGrid", element:<Page748e70940f414859b6cb2725a56d6408 darkMode={props.darkMode} />},
-                        {path:"FormWithGridWithSelectionForm", element:<Pagebbe1bbb10a05439785b96453f51bc2db darkMode={props.darkMode} />},
-                        {path:"FormWithTabs", element:<Page5d3cc26caa81497f8baf1c7701b3b82d darkMode={props.darkMode} />},
-                        {path:"ModalFormSubmitting", element:<Pageb8ab64d41939456eb98ae3dca3eb8072 darkMode={props.darkMode} />},
-                        {path:"ModalFormWithGroups", element:<Page4af659f7e7ac43d49f2a2126d0524c1b darkMode={props.darkMode} />},
-                        {path:"SeveralTabs", element:<Page0b292ed3bcea4e9482950598eeb31d58 darkMode={props.darkMode} />},
-                        {path:"Simple", element:<Pagea168269b40064e3f8baebafc863309f1 darkMode={props.darkMode} />},
-                        {path:"TabsWithSimpleInlineGroups", element:<Pagee98ad68b21774926944323f3a61ddf15 darkMode={props.darkMode} />},
+                        {path:"AutoHeightTabulator", element:<Page8cd7296d5a4543c38b603c189a2a6909 darkMode={props.darkMode} />},
+                        {path:"AutoHeightTabulatorInTab", element:<Paged17eebba82a343189882713163a07002 darkMode={props.darkMode} />},
+                        {path:"FormFetching", element:<Page613e6167fc854e169125b6eb2ef15f96 darkMode={props.darkMode} />},
+                        {path:"FormWithGrid", element:<Pagee0f46080db8c4d5f866510aedc269bcf darkMode={props.darkMode} />},
+                        {path:"FormWithGridWithSelectionForm", element:<Pagebd53f7b142d84575a12ab598c9fce820 darkMode={props.darkMode} />},
+                        {path:"FormWithTabs", element:<Pagefee10593807744ada86f4186d7c2068c darkMode={props.darkMode} />},
+                        {path:"ModalFormSubmitting", element:<Page8d12a32e906b4c5c9562aa6684ce7c51 darkMode={props.darkMode} />},
+                        {path:"ModalFormWithGroups", element:<Page47b5b4667530434c8a186213d56a6d01 darkMode={props.darkMode} />},
+                        {path:"SeveralTabs", element:<Page315fe7bc71f949ed9f189dfa9345b4e7 darkMode={props.darkMode} />},
+                        {path:"Simple", element:<Pagef5b5e7c4c54a40909dc5119529dfd07e darkMode={props.darkMode} />},
+                        {path:"TabsWithSimpleInlineGroups", element:<Page494c84f151cf4ae399a32aa6fb6010d1 darkMode={props.darkMode} />},
 
 ]},
                         {path:"tabulatorGrid", children: [
                         {path:"async", children: [
-                        {path:"AsyncLoading", element:<Page48b6331b91404edda754dac66aa0e039 darkMode={props.darkMode} />},
-                        {path:"AsyncManualFetch", element:<Page3fbe5f9414a8469689191072c7aeb602 darkMode={props.darkMode} />},
-                        {path:"AsyncPages", element:<Page3b3c50c7810c472a86f986eb01738cdb darkMode={props.darkMode} />},
-                        {path:"AsyncPagesManualFetch", element:<Page6f3e2eb90dd144a186d14c30a73f4758 darkMode={props.darkMode} />},
-                        {path:"AsyncProgressive", element:<Pagef2eb779fb89b46eb9000c161a35965c3 darkMode={props.darkMode} />},
-                        {path:"AsyncWithForm", element:<Page538530670e69468ca431017c45c2cb09 darkMode={props.darkMode} />},
-                        {path:"AsyncWithSelectionForm", element:<Pageb85c04afd30946b88ee953d10e1fb30b darkMode={props.darkMode} />},
+                        {path:"AsyncLoading", element:<Page34d30aa7d65c47c4ab2c1623416184f5 darkMode={props.darkMode} />},
+                        {path:"AsyncManualFetch", element:<Pagef0d705bae0b14b1bbb2c965beb5e85a7 darkMode={props.darkMode} />},
+                        {path:"AsyncPages", element:<Page6ff4363f872c40f88be1519013bf64e6 darkMode={props.darkMode} />},
+                        {path:"AsyncPagesManualFetch", element:<Pagef4a8443d43234d2ba3ed32e9d75c145a darkMode={props.darkMode} />},
+                        {path:"AsyncProgressive", element:<Page2ebf7a46cd8845fcbeaaa62a9b020ca5 darkMode={props.darkMode} />},
+                        {path:"AsyncWithForm", element:<Pageea04ae25794740ca8baf401e9c78e050 darkMode={props.darkMode} />},
+                        {path:"AsyncWithSelectionForm", element:<Paged93d2e4e81124d1cbba72555339ae670 darkMode={props.darkMode} />},
 
 ]},
-                        {path:"CellFormat", element:<Pagea38c264a04954fd1adf81b0bf4c5d0d5 darkMode={props.darkMode} />},
-                        {path:"ChangeDataSet", element:<Page09140ab617bb43bab90178ba72ea5c47 darkMode={props.darkMode} />},
-                        {path:"ColumnsGroups", element:<Page4fe9229680794a249458e332155e5987 darkMode={props.darkMode} />},
-                        {path:"MultiSelect", element:<Page91f5f2ab54b94cd599431f7f4271bf64 darkMode={props.darkMode} />},
-                        {path:"Persistence", element:<Page32b9fe1b7fd349e0aea472a6fcc802fe darkMode={props.darkMode} />},
-                        {path:"SelectionMode", element:<Pagefb0abd20f69f43379b17019bba71d2cc darkMode={props.darkMode} />},
-                        {path:"Simple", element:<Pagef45e228c01bb43998dc067ef95952ffe darkMode={props.darkMode} />},
-                        {path:"Tree", element:<Page9bae9dad6b704bcc99de5ab306eade99 darkMode={props.darkMode} />},
-                        {path:"TreeCellFormat", element:<Page4ff73a26fc88485b891b3b86e6dc1592 darkMode={props.darkMode} />},
-                        {path:"TreeWithForm", element:<Pageb7867924e41d487c90afcba9c85cffa6 darkMode={props.darkMode} />},
-                        {path:"WithComplexForm", element:<Pagedd76f1cf4ec5483abbf49d56945716d8 darkMode={props.darkMode} />},
-                        {path:"WithForm", element:<Pagef7c69053b4c343859d9e49e9f6e77ec3 darkMode={props.darkMode} />},
-                        {path:"WithSelectionForm", element:<Pagefaab2e84feda43dcaea0e1009b7e71f8 darkMode={props.darkMode} />},
+                        {path:"CellFormat", element:<Page2ac438bbccc14dc8beb34d3a7ae4e74e darkMode={props.darkMode} />},
+                        {path:"ChangeDataSet", element:<Pagecc2cfd6fa64f470badc903ce0b5f13de darkMode={props.darkMode} />},
+                        {path:"ColumnsGroups", element:<Page224eaa69daaf4a8da58db2a6edb87b9e darkMode={props.darkMode} />},
+                        {path:"MultiSelect", element:<Page36c2ea6c47654abe84127912b503f495 darkMode={props.darkMode} />},
+                        {path:"Persistence", element:<Pageb4bc7d5945b74c39b99ea76b8dbddda6 darkMode={props.darkMode} />},
+                        {path:"SelectionMode", element:<Pageaab65aa3ec95481d82081f4c812e3b8a darkMode={props.darkMode} />},
+                        {path:"Simple", element:<Page9e277447f6be4b99bc0f45822f7a2d49 darkMode={props.darkMode} />},
+                        {path:"Tree", element:<Page0e33fde766944931be7571927d9a9027 darkMode={props.darkMode} />},
+                        {path:"TreeCellFormat", element:<Page7613cec8df9e4385a3ce3a0096c26dbc darkMode={props.darkMode} />},
+                        {path:"TreeWithForm", element:<Page7c2dbc20db144176bdf4ab5c35bb4fe8 darkMode={props.darkMode} />},
+                        {path:"WithComplexForm", element:<Page8508425d812a4bdda51e5ee730eb9d95 darkMode={props.darkMode} />},
+                        {path:"WithForm", element:<Page3ad0c40c817c49b9864071f5339d2c9c darkMode={props.darkMode} />},
+                        {path:"WithSelectionForm", element:<Page9a3852ac6ed945d2a9ec059ba37904d3 darkMode={props.darkMode} />},
 
 ]},
                         {path:"tools", children: [
-                        {path:"PropsToArgs", element:<Page5faff8a9423b4a4297616450b54893eb darkMode={props.darkMode} />},
+                        {path:"PropsToArgs", element:<Pagea0e4d477c5214441b138dd5734f481ed darkMode={props.darkMode} />},
 
 ]},
                         {path:"treeSelect", children: [
-                        {path:"TreeSelectAsync", element:<Page0773bd88f4964933bfec387a87645f3b darkMode={props.darkMode} />},
-                        {path:"TreeSelectAsyncSearch", element:<Page2a2648a858cd44edaa111da75fbd5801 darkMode={props.darkMode} />},
-                        {path:"TreeSelectBasic", element:<Page9fe3957acf8e47ac9bc62c6b4c1cc50f darkMode={props.darkMode} />},
-                        {path:"TreeSelectDefaultValue", element:<Pageb3a536d55fbb4bf89d1f938ad25b3f70 darkMode={props.darkMode} />},
-                        {path:"TreeSelectDepended", element:<Page8451af9fadb94b919ed546bca215e2d3 darkMode={props.darkMode} />},
-                        {path:"TreeSelectDependedAsync", element:<Pageb59eae0477004d97b058b4f00fe02394 darkMode={props.darkMode} />},
-                        {path:"TreeSelectNodeRender", element:<Pagef18df8bb7e8a41a18b70b72c7efca6c5 darkMode={props.darkMode} />},
-                        {path:"TreeSelectWithForm", element:<Page12f279b031f74b9088f6dbfe09f378d4 darkMode={props.darkMode} />},
-                        {path:"TreeSelectWithFormAsync", element:<Page17e2969da0414ee8a39cd8d46be10e8a darkMode={props.darkMode} />},
+                        {path:"TreeSelectAsync", element:<Page8dcab066f85e4150b38329de6e2d39c1 darkMode={props.darkMode} />},
+                        {path:"TreeSelectAsyncSearch", element:<Pagec3583445f2b840c989a4c9167aced407 darkMode={props.darkMode} />},
+                        {path:"TreeSelectBasic", element:<Page82cb6ce8c3d2423e9933cfd7b3f89ba7 darkMode={props.darkMode} />},
+                        {path:"TreeSelectDefaultValue", element:<Pagea453eff0d6c6451c882cb0b1ef9107a7 darkMode={props.darkMode} />},
+                        {path:"TreeSelectDepended", element:<Page01de1e61c6f94506827cf21392920bcd darkMode={props.darkMode} />},
+                        {path:"TreeSelectDependedAsync", element:<Pagee6f2503472fc411e87ee6804aae9ce74 darkMode={props.darkMode} />},
+                        {path:"TreeSelectNodeRender", element:<Page4c903060572f4567aa59d6aa4f5d5c8d darkMode={props.darkMode} />},
+                        {path:"TreeSelectWithForm", element:<Page3bd5710a0b4244bfb551b331be1a78d8 darkMode={props.darkMode} />},
+                        {path:"TreeSelectWithFormAsync", element:<Pagef132d22d57124b4893719ead291952cf darkMode={props.darkMode} />},
 
 ]},
-                        {path:"PlayGround", element:<Pagef868ae1859d8426cbce20de5184b7526 darkMode={props.darkMode} />},
+                        {path:"PlayGround", element:<Pagedfe2233ff8734124ad564e72d1b7146c darkMode={props.darkMode} />},
 
                         {path: '*', element: <Home />},
                     ],
