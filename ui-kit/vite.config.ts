@@ -34,6 +34,7 @@ const devDemoCfg: UserConfig = {
 const buildDemoCfg: UserConfig = {
     ...commonCfg,
 	server: undefined,
+    base: '/-krinopotam', //base URL (gitHub pages use https://krinopotam.github.io/-krinopotam)
     build: {
         ...commonCfg.build,
         outDir:'demo-build',

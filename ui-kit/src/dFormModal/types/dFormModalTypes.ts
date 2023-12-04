@@ -1,6 +1,5 @@
 import React, {CSSProperties} from "react";
-import {IDFormBaseCallbacks, IDFormCallbacks, IDFormDataSet, IDFormProps} from "@src/dForm";
-import {IDFormModalApi} from "@src/dFormModal";
+import {IDFormApi, IDFormBaseCallbacks, IDFormCallbacks, IDFormDataSet, IDFormProps} from "@src/dForm";
 
 export interface IDModalProps {
     /** Modal controls title */
@@ -60,3 +59,20 @@ export interface IDFormModalCallbacks extends IDFormBaseCallbacks<IDFormModalApi
 }
 
 export type IDFormModalProps = IDModalProps & IDFormModalCallbacks & Exclude<IDFormProps, keyof IDFormCallbacks>
+
+export interface IDFormModalApi extends IDFormApi {
+    /** Get the current modal form props */
+    getFormProps: () => IDFormModalProps;
+
+    /** Update the current modal form props (will cause rerender of the modal form). Can't update field props, because it is used in form model */
+    setFormProps: (formProps: Partial<Omit<IDFormModalProps, 'fieldsProps'>>) => void;
+
+    /** Open controls */
+    open: (formMode: IDFormProps['formMode'], dataSet?: IDFormProps['dataSet']) => void;
+
+    /** Close controls with confirmation*/
+    close: () => void;
+
+    /** Close controls without confirmation*/
+    forceClose: () => void;
+}

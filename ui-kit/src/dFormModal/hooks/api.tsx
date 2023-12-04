@@ -1,27 +1,10 @@
 import {IButtonsRowApi} from '@src/buttonsRow';
-import {IDFormProps, IDFormApi} from '@src/dForm';
+import {IDFormProps} from '@src/dForm';
 import {MessageBox} from '@src/messageBox';
 import {CloneObject} from "@krinopotam/js-helpers";
 import {useCallback} from 'react';
 import {IsDebugMode} from "@krinopotam/common-hooks";
-import {IDFormModalProps} from "@src/dFormModal";
-
-export interface IDFormModalApi extends IDFormApi {
-    /** Get the current modal form props */
-    getFormProps: () => IDFormModalProps;
-
-    /** Update the current modal form props (will cause rerender of the modal form). Can't update field props, because it is used in form model */
-    setFormProps: (formProps: Partial<Omit<IDFormModalProps, 'fieldsProps'>>) => void;
-
-    /** Open controls */
-    open: (formMode: IDFormProps['formMode'], dataSet?: IDFormProps['dataSet']) => void;
-
-    /** Close controls with confirmation*/
-    close: () => void;
-
-    /** Close controls without confirmation*/
-    forceClose: () => void;
-}
+import {IDFormModalApi, IDFormModalProps} from "@src/dFormModal";
 
 export const useInitModalFormApi = (
     formId: string,

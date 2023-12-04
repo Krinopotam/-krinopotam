@@ -49,7 +49,7 @@ const props: IGridProps = {
         return new Promise((resolve, reject) => {
             setTimeout(() => {
                 if (Math.random() < 0.3) reject({message: 'Ошибка удаления строк', code: 400});
-                else resolve({data: rows});
+                else resolve({data: true});
             }, 2000);
         });
     },

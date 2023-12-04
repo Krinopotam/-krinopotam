@@ -265,14 +265,14 @@ function generateRoutes(routers: string, imports: string) {
     // language=text
     const result = `
     import React, {lazy, useMemo} from 'react';
-    import {createBrowserRouter} from 'react-router-dom';
+    import {createHashRouter} from 'react-router-dom';
     import {DemoLayout} from './demoLayout';
     import {Home} from './home';
 ${imports}
 
 export const useDemoRoutes = (props: {darkMode: boolean; setDarkMode: (mode: boolean) => void}) => {
         return useMemo(() => {
-            return createBrowserRouter([
+            return createHashRouter([
                 {
                     path: '/',
                     element: <DemoLayout setDarkMode={props.setDarkMode} />,

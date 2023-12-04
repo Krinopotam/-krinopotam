@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const fs = require("fs");
 const crypto = require("crypto");
+const {createHashRouter} = require("react-router-dom");
 const _componentsFolder = 'components';
 const _pagesFolder = 'pages';
 const _examplesRoot = __dirname + '/../' + _componentsFolder;
@@ -211,14 +212,14 @@ function generateRoutes(routers, imports) {
     // language=text
     const result = `
     import React, {lazy, useMemo} from 'react';
-    import {createBrowserRouter} from 'react-router-dom';
+    import {createHashRouter} from 'react-router-dom';
     import {DemoLayout} from './demoLayout';
     import {Home} from './home';
 ${imports}
 
 export const useDemoRoutes = (props: {darkMode: boolean; setDarkMode: (mode: boolean) => void}) => {
         return useMemo(() => {
-            return createBrowserRouter([
+            return createHashRouter([
                 {
                     path: '/',
                     element: <DemoLayout setDarkMode={props.setDarkMode} />,

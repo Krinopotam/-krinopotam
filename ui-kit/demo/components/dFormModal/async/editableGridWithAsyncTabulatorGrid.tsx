@@ -1,6 +1,7 @@
 import React from 'react';
-import {IGridProps, TabulatorGrid} from '@src/tabulatorGrid';
-import {IDFormModalApi, IDFormModalProps} from '@src/dFormModal';
+import {TabulatorGrid} from '@src/tabulatorGrid/tabulatorGrid';
+import {IGridProps} from '@src/tabulatorGrid/types/tabulatorGridTypes';
+import {IDFormModalApi, IDFormModalProps} from '@src/dFormModal/types/dFormModalTypes';
 import {ITabulatorGridFieldProps, TabulatorGridField} from '@src/dForm/fields/tabulatorGrid/tabulatorGridField';
 import {TabulatorBaseColumns, TabulatorBaseColumnsDef, TabulatorPlainData} from '../../../data/tabulatorData';
 import {FormLayoutSwitch} from '../../../common/buttonsProps';

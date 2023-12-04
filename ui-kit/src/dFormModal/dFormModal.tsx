@@ -7,7 +7,7 @@
  */
 
 import {IDFormCallbacks, IDFormProps} from '@src/dForm';
-import {IDFormModalApi, useInitModalFormApi} from './hooks/api';
+import {useInitModalFormApi} from './hooks/api';
 import React, {useEffect, useMemo, useState} from 'react';
 
 import {DFormModalRender} from './renders/dFormModalRender';
@@ -17,7 +17,7 @@ import {useFormCallbacks} from './hooks/callbacks';
 import {useInitButtons} from './hooks/buttons';
 import {useUpdateMessageBoxTheme} from '@src/messageBox';
 import {useGetActualProps} from '@krinopotam/common-hooks';
-import {IDFormModalProps, IDModalProps} from "@src/dFormModal/types/dFormModalTypes";
+import {IDFormModalApi, IDFormModalProps, IDModalProps} from "@src/dFormModal/types/dFormModalTypes";
 
 export const DFormModal = (props: IDFormModalProps): React.JSX.Element => {
     useUpdateMessageBoxTheme(); //set current theme to messageBox

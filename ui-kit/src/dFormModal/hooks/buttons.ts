@@ -1,8 +1,7 @@
-import {IDFormModalApi} from './api';
 import {IFormButtons} from '@src/buttonsRow/buttonsRow';
 import {MergeObjects} from "@krinopotam/js-helpers";
 import {useMemo} from "react";
-import {IDFormModalProps} from "@src/dFormModal";
+import {IDFormModalApi, IDFormModalProps} from "@src/dFormModal";
 
 /** Generate buttons */
 export const useInitButtons = (formApi: IDFormModalApi, props: IDFormModalProps) => {
