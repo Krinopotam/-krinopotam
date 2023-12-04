@@ -9,9 +9,10 @@ Homestead.yaml
 npm-debug.log
 yarn-error.log
 /demo/pages
-/demo-build
+/demo/layouts/demoRoutes.tsx
+/demo/layouts/menuProps.tsx
+/deploy
 
-.env
 /public/assets/react-app/
 /public/localreact.html
 /public/mix-manifest.json

@@ -13,7 +13,10 @@
 		"build-demo": "node ./demo/.generator/generateDemo.js && tsc --noEmit && tsc-alias && vite build --mode demo",
 		"preview-demo": "vite preview",
 		"storybook": "storybook dev -p 6007",
-		"build-storybook": "storybook build",
+		"build-storybook": "storybook build --output-dir deploy/ui-kit/storybook",
+
+		"deploy": "gh-pages --nojekyll -d deploy",
+
 		"init-msw": "msw init public/"
 	},
 	"devDependencies": {

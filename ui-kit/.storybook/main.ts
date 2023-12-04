@@ -7,41 +7,43 @@ const config: StorybookConfig = {
     core: {
         disableTelemetry: true, // Disables telemetry
     },
-    staticDirs: ["../public"],
+    staticDirs: ['../public'],
     addons: [
-        "@storybook/addon-links",
-        "@storybook/addon-essentials",
-        "@storybook/addon-interactions",
-        "@storybook/addon-console",
-        "@storybook/addon-storysource",
-        "@storybook/addon-toolbars",
+        '@storybook/addon-links',
+        '@storybook/addon-essentials',
+        '@storybook/addon-interactions',
+        '@storybook/addon-console',
+        '@storybook/addon-storysource',
+        '@storybook/addon-toolbars',
     ],
     framework: {
-        name: "@storybook/react-vite",
+        name: '@storybook/react-vite',
         options: {},
     },
     docs: {
-        autodocs: "tag",
+        autodocs: 'tag',
     },
-    "typescript": {
+    typescript: {
         check: false,
         reactDocgen: 'react-docgen-typescript',
         reactDocgenTypescriptOptions: {
             // By default, react-doc-gen-typescript filters node_modules type, this includes any types excepts base types
-            propFilter: (prop) => {
+            propFilter: prop => {
                 if (!prop.parent?.name) return true;
                 if (['value', 'onChange'].includes(prop.name)) return true;
 
-                if ([
-                    'AriaAttributes',
-                    'AnchorHTMLAttributes',
-                    'Attributes',
-                    'ButtonHTMLAttributes',
-                    'ClassAttributes',
-                    'DOMAttributes',
-                    'HTMLAttributes',
-                    'InputHTMLAttributes'
-                ].includes(prop.parent.name)) {
+                if (
+                    [
+                        'AriaAttributes',
+                        'AnchorHTMLAttributes',
+                        'Attributes',
+                        'ButtonHTMLAttributes',
+                        'ClassAttributes',
+                        'DOMAttributes',
+                        'HTMLAttributes',
+                        'InputHTMLAttributes',
+                    ].includes(prop.parent.name)
+                ) {
                     return false;
                 }
 
@@ -64,7 +66,6 @@ const config: StorybookConfig = {
         },
     },
     async viteFinal(config, options) {
-
         /*
         // Add your vite configuration here
         config.build= {
@@ -74,6 +75,9 @@ const config: StorybookConfig = {
         console.log('---------------------------------', config)
         */
 
+        //config.base = '/-krinopotam/storybook';
+        //console.log('------------',config,options)
+        //config.build.outDir = 'deploy/ui-kit/storybook';
         return config;
     },
     //exclude: [/node_modules/, '/src/**/*/*.test.ts', '/src/**/*/*.test.tsx'],
