@@ -1,0 +1,1 @@
+import{j as o,S as r}from"./index-61817db7.js";const n=t=>({layout:{type:"element",title:o.jsx(r,{checkedChildren:"hor",unCheckedChildren:"ver",onChange:e=>{t.setFormProps({layout:e?"horizontal":"vertical"})}}),position:"left"}});export{n as F};
