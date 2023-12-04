@@ -1,0 +1,21 @@
+import{j as a,D as e}from"./index-239f7c99.js";import{P as o,C as s,S as l,d as i,a as u}from"./docco-df193236.js";import{T as d}from"./tabulatorGrid-76a09af9.js";import{T as m,a as n,e as c}from"./tabulatorData-6512b762.js";import"./index-e86df101.js";import"./dFormModal-2ecf2b9b.js";import"./EyeOutlined-6214a1a0.js";import"./DeleteOutlined-01bac62e.js";const p={id:"TabulatorGridTree",columnDefaults:m,columns:n,dataSet:c,dataTree:!0,height:500,layout:"fitColumns"},T=()=>a.jsxs(a.Fragment,{children:[a.jsx("h1",{children:"Example of a hierarchical grid TabulatorGrid"}),a.jsx(d,{...p})]}),G=r=>{const t=`
+import React from 'react';
+import {IGridProps, TabulatorGrid} from @krinopotam/ui-kit/tabulatorGrid';
+import {TabulatorBaseColumns, TabulatorBaseColumnsDef, TabulatorTreeData} from '../../data/tabulatorData';
+const props: IGridProps = {
+    id: 'TabulatorGridTree',
+    columnDefaults: TabulatorBaseColumnsDef,
+    columns: TabulatorBaseColumns,
+    dataSet: TabulatorTreeData,
+    dataTree: true,
+    height: 500,
+    layout: 'fitColumns',
+};
+export const Tree = (): React.JSX.Element => {
+    return (
+        <>
+            <TabulatorGrid {...props} />
+        </>
+    );
+};
+`;return a.jsxs(o,{children:[a.jsx("div",{children:a.jsx(T,{})}),a.jsx(e,{}),a.jsx("div",{children:a.jsx(s,{items:[{key:1,label:"Show source",children:a.jsx(l,{language:"javascript",style:r.darkMode?i:u,showLineNumbers:!0,children:t})}]})})]})};export{G as Page34cc4a32bded464dbe7a91f5d4ad563d,G as default};
