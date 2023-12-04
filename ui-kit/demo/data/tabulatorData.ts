@@ -25,7 +25,7 @@ export const TabulatorBaseColumns: ITabulatorProps['columns'] = [
 ];
 
 export const TabulatorBaseGroupedColumns: ITabulatorProps['columns'] = [
-    {title: 'Name', field: 'name'},
+    {title: 'Name', field: 'name', formatter:'textarea'},
     {
         title: 'Info',
         headerFilter: undefined,

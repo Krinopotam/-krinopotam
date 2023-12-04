@@ -87,28 +87,36 @@ const TabulatorCss = createGlobalStyle<IStyleType>`
           border-top: 1px solid ${(props: GlobalToken) => props.colorBorder};
         }
 
-        .tabulator-header-filter input {
-          color: ${(props: GlobalToken) => props.colorText};
-          font-size: ${(props: GlobalToken) => props.fontSize}px;
-          border-color: ${(props: GlobalToken) => props.colorBorder};
-          border-radius: ${(props: GlobalToken) => props.borderRadius}px;
-          background-color: ${(props: GlobalToken) => props.colorBgContainer};
-          padding-left: 11px !important;
-          padding-right: 11px !important;
-          border-style: solid;
-          border-width: 1px;
+        .tabulator-header-filter {
+          height: 27px;
+          max-height: 27px;
 
-          &:focus {
-            border-color: ${(props: GlobalToken) => props.colorPrimaryHover};
-            box-shadow: 0 0 0 2px ${(props: GlobalToken) => props.controlOutline};
-            border-inline-end-width: 1px;
-            outline: 0;
-          }
+          & input, textarea {
+            max-height: 27px;
+            color: ${(props: GlobalToken) => props.colorText};
+            font-size: ${(props: GlobalToken) => props.fontSize}px;
+            border-color: ${(props: GlobalToken) => props.colorBorder};
+            border-radius: ${(props: GlobalToken) => props.borderRadius}px;
+            background-color: ${(props: GlobalToken) => props.colorBgContainer};
+            padding-left: 11px !important;
+            padding-right: 11px !important;
+            border-style: solid;
+            border-width: 1px;
 
-          &:hover {
-            border-color: ${(props: GlobalToken) => props.colorPrimaryHover};
+            &:focus {
+              border-color: ${(props: GlobalToken) => props.colorPrimaryHover};
+              box-shadow: 0 0 0 2px ${(props: GlobalToken) => props.controlOutline};
+              border-inline-end-width: 1px;
+              outline: 0;
+            }
+
+            &:hover {
+              border-color: ${(props: GlobalToken) => props.colorPrimaryHover};
+            }
           }
         }
+
+
       }
     }
 
@@ -258,7 +266,7 @@ const TabulatorCss = createGlobalStyle<IStyleType>`
             cursor: not-allowed;
           }
         }
-        
+
         select.tabulator-page-size {
           min-width: 32px;
           height: 32px;
@@ -275,8 +283,8 @@ const TabulatorCss = createGlobalStyle<IStyleType>`
             border-inline-end-width: 1px;
             outline: 0;
           }
-          
-          
+
+
           &:hover {
             border: 1px solid ${(props: GlobalToken) => props.colorPrimaryHover};
           }
