@@ -33,16 +33,10 @@ const devDemoCfg: UserConfig = {
 
 const buildDemoCfg: UserConfig = {
     ...commonCfg,
-    plugins: [
-        ...commonCfg.plugins,
-        watch({
-            pattern: ['demo/components/**/*.*'],
-            command: "node ./demo/generateDemo.js",
-        }),
-    ],
+	server: undefined,
     build: {
         ...commonCfg.build,
-        outDir:'demo-dist',
+        outDir:'demo-build',
     }
 }
 

@@ -10,6 +10,7 @@ npm-debug.log
 yarn-error.log
 /demo/pages
 /demo/demoRoutes.tsx
+/demo-build
 
 .env
 /public/assets/react-app/
