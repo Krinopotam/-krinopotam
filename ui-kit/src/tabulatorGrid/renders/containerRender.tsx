@@ -1,15 +1,14 @@
 import React from 'react';
 import {DFormModal} from '@src/dFormModal';
 import {LoadingContainer} from '@src/loadingContainer';
-import {IGridApi} from '../hooks/api';
 import {usePrepareEditFormProps} from '../hooks/gridEditForm';
 import {MenuRow} from './menuRow';
 import {GridRender} from './gridRender';
-import {IGridProps} from '../tabulatorGrid';
 import {ITabulator, ITabulatorProps} from '@src/tabulatorBase';
 import {ButtonsRowWrapper} from '@src/buttonsRow';
 import {ColumnsDialog} from '@src/tabulatorGrid/renders/columnsDialog';
 import {usePrepareSelectionFormProps} from "@src/tabulatorGrid/hooks/gridSelectionForm";
+import {IGridApi, IGridProps} from "@src/tabulatorGrid";
 
 export const ContainerRender = ({
     tableRef,

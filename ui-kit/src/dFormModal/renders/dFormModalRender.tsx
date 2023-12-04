@@ -3,9 +3,9 @@ import {IButtonsRowApi, IFormButtons} from '@src/buttonsRow/buttonsRow';
 
 import {ButtonsRender, Modal} from '@src/modal';
 import {IDFormModalApi} from '../hooks/api';
-import {IDFormModalProps} from '../dFormModal';
 import React, {useState} from 'react';
 import {GetUuid} from '@krinopotam/js-helpers';
+import {IDFormModalProps} from "@src/dFormModal";
 
 interface IDFormModalRenderProps {
     /** the form ID */

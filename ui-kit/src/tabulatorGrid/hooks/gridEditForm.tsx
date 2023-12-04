@@ -1,8 +1,7 @@
 import {useMemo} from 'react';
 import {IDFormApi} from '@src/dForm';
 import {GetUuid} from "@krinopotam/js-helpers";
-import {IGridApi} from "./api";
-import {IGridRowData} from "../tabulatorGrid";
+import {IGridApi, IGridRowData} from "@src/tabulatorGrid";
 
 export const usePrepareEditFormProps = (gridApi: IGridApi) => {
     return useMemo(() => {

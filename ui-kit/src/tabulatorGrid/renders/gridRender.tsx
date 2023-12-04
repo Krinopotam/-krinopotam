@@ -1,10 +1,9 @@
 import React, {useCallback, useEffect, useMemo, useRef} from 'react';
 import {TabulatorBase, ITabulator, ITabulatorProps} from '@src/tabulatorBase';
-import {IGridApi} from '../hooks/api';
 import dispatcher from '@src/formsDispatcher';
-import {IGridProps} from '../tabulatorGrid';
 import {useEvents} from '../hooks/events';
 import {GenerateAjaxRequestFunc} from '@src/tabulatorGrid/helpers/fetchHelpers';
+import {IGridApi, IGridProps} from "@src/tabulatorGrid";
 
 const GridRender_ = ({
     tableRef,

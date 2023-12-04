@@ -1,6 +1,6 @@
 {
 	"name": "@krinopotam/ui-kit",
-	"version": "2.0.60",
+	"version": "2.0.61",
 	"description": "UI kitfor Krinopotam's projects",
 	"private": false,
 	"author": "Maxim Zaytsev",
@@ -9,7 +9,7 @@
 	"scripts": {
 		"build": "tsc -p tsconfig.json && tsc-alias",
 		"demo": "vite --mode demo",
-		"build-demo": "tsc --noEmit && tsc-alias && vite build --mode demo",
+		"build-demo": "node ./demo/.generator/generateDemo.js && tsc --noEmit && tsc-alias && vite build --mode demo",
 		"preview-demo": "vite preview",
 		"storybook": "storybook dev -p 6007",
 		"build-storybook": "storybook build",
@@ -38,6 +38,7 @@
 		"@typescript-eslint/parser": "^6.10.0",
 		"@vitejs/plugin-react-swc": "^3.4.1",
 		"eslint": "^8.53.0",
+		"eslint-plugin-import": "^2.29.0",
 		"eslint-plugin-react": "^7.33.2",
 		"eslint-plugin-react-hooks": "^4.6.0",
 		"eslint-plugin-storybook": "^0.6.15",

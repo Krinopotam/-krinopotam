@@ -1,9 +1,9 @@
-import {IAnyModalConfig, IModalBaseConfig} from './messageBox';
 import dispatcher, {FormsDispatcher} from '../formsDispatcher';
 
 import {IFormButton} from '@src/buttonsRow/buttonsRow';
 import {ModalFuncProps} from 'antd';
 import {MergeObjects} from '@krinopotam/js-helpers';
+import {IAnyModalConfig, IModalBaseConfig} from "@src/messageBox/types/messageBoxTypes";
 
 export class MessageBoxApi {
     private _modal: {destroy: () => void; update: (configUpdate: ModalFuncProps) => void};

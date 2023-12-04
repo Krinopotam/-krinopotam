@@ -1,7 +1,7 @@
 import {TabulatorFull as Tabulator, Module, Options, ColumnDefinition} from 'tabulator-tables';
 import {IModule} from './innerTypes';
 import {AnyType} from "@krinopotam/service-types";
-import {ITabulatorFilterFunc} from "@src/tabulatorBase/tabulatorBase";
+import {ITabulatorFilterFunc} from "@src/tabulatorBase";
 
 //region Interfaces
 export interface IAdvancedHeaderFilterTabulator extends Tabulator {

@@ -1,9 +1,10 @@
 import {IButtonsRowApi} from '@src/buttonsRow';
 import {IDFormProps, IDFormApi} from '@src/dForm';
-import {IDFormModalProps} from '../dFormModal';
 import {MessageBox} from '@src/messageBox';
 import {CloneObject} from "@krinopotam/js-helpers";
 import {useCallback} from 'react';
+import {IsDebugMode} from "@krinopotam/common-hooks";
+import {IDFormModalProps} from "@src/dFormModal";
 
 export interface IDFormModalApi extends IDFormApi {
     /** Get the current modal form props */
@@ -65,7 +66,7 @@ const useApiFormOpen = (formApi: IDFormModalApi) => {
     return useCallback(
         (formMode: IDFormProps['formMode'], dataSet?: IDFormProps['dataSet']) => {
             if (!formMode) {
-                if (process.env.NODE_ENV !== 'production') console.warn('The form mode is not set');
+                if (IsDebugMode()) console.warn('The form mode is not set');
                 return;
             }
 

@@ -1,10 +1,10 @@
 import React, {useMemo} from 'react';
 
-import {IDFormCallbacks, IDFormDataSet} from '@src/dForm';
 import {IDFormModalApi} from './api';
-import {IDFormModalProps} from '../dFormModal';
 import {MessageBox} from '@src/messageBox';
 import {IsDebugMode} from "@krinopotam/common-hooks";
+import {IDFormCallbacks, IDFormDataSet} from "@src/dForm/types/dFormTypes";
+import {IDFormModalProps} from "@src/dFormModal";
 
 /**
  * Preparing callbacks for redirection to the form

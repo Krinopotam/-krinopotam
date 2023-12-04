@@ -15,63 +15,11 @@ import {Modal, ModalFuncProps, Spin} from 'antd';
 import {ButtonsRender, HeaderRender, ModalRender} from '../modal';
 import {ContentRender} from './renders/contentRender';
 import {MessageBoxApi} from './messageBoxApi';
-import {ModalStaticFunctions} from 'antd/es/modal/confirm';
 import React from 'react';
 import dispatcher from '../formsDispatcher';
 import {GetUuid, MergeObjects} from '@krinopotam/js-helpers';
-import {IColorType} from '@src/button/button';
 import {QuestionCircleOutlined} from '@ant-design/icons';
-
-//region Types
-export interface IModalBaseConfig {
-    /** Form id */
-    formId: string;
-    /**  Form title */
-    title?: React.ReactNode;
-    /** Form icon */
-    icon?: React.ReactNode;
-    /** Form content */
-    content?: React.ReactNode;
-    /** Form type */
-    colorType?: IColorType;
-    /** Form buttons */
-    buttons?: IFormButtons;
-    /** Center modal */
-    centered?: boolean;
-    /** Whether a close (x) button is visible on top right of the modal dialog or not */
-    closable?: boolean;
-    /** Whether to close the modal dialog when the mask (area outside the modal) is clicked */
-    maskClosable?: boolean;
-    /** After controls close callback */
-    onAfterClose?: () => void;
-    /** On form close by close cross pressed callback */
-    onCrossClose?: () => void;
-}
-
-type IModalConfig = Omit<IModalBaseConfig, 'formId'>;
-
-export interface IModalAlertConfig extends IModalConfig {
-    okText?: string;
-    onOk?: (messageBox: MessageBoxApi) => boolean | void;
-}
-
-export interface IModalConfirmConfig extends IModalConfig {
-    okText?: string;
-    onOk?: (messageBox: MessageBoxApi) => boolean | void;
-    cancelText?: string;
-    onCancel?: (messageBox: MessageBoxApi) => boolean | void;
-}
-
-export interface IModalConfirmWaiterConfig extends IModalConfirmConfig {
-    waitTitle?: React.ReactNode;
-    waitContent?: React.ReactNode;
-}
-
-export type IAnyModalConfig = IModalAlertConfig | IModalConfirmConfig | IModalConfirmWaiterConfig;
-
-type ModalType = Omit<ModalStaticFunctions, 'warn'>;
-
-//endregion
+import {IModalAlertConfig, IModalBaseConfig, IModalConfig, IModalConfirmConfig, IModalConfirmWaiterConfig, ModalType} from "@src/messageBox/types/messageBoxTypes";
 
 class MessageBox {
     private static _instance: MessageBox; //singleton instance

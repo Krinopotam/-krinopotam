@@ -18,12 +18,10 @@ import {ITextAreaFieldProps} from '@src/dForm/fields/textArea/textAreaField';
 import {ITreeSelectFieldProps} from '@src/dForm/fields/treeSelect/treeSelectField';
 
 export {DForm} from './dForm';
-export type {IDFormCallbacks, IDFormProps, IDFormDataSet, IDFormDataSourcePromise, IDFormMode, IDFormValidationRules} from './dForm';
+export type {IDFormValidationRules, IDFormMode, IDFormProps, IDFormDataSet, IDFormDataSourcePromise, IDFormCallbacks, IDFormApi} from './types/dFormTypes';
 
 export {DModel} from './dModel';
-export type {IDFormBaseCallbacks, IDFormModelCallbacks, IDFormSubmitResultObject, IDFormSubmitResultPromise} from './dModel';
-
-export type {IDFormApi} from './hooks/api';
+export type {IDFormBaseCallbacks, IDFormModelCallbacks, IDFormSubmitResultObject, IDFormSubmitResultPromise} from './types/dModelTypes';
 
 export {BaseValidator} from './validators/baseValidator';
 export type {IRuleType, IRuleCustom, IRuleDate, IRuleFile, IRuleNumber, IRuleString, IRuleObject} from './validators/baseValidator';

@@ -1,7 +1,6 @@
 import {useMemo} from 'react';
 import {IDFormApi} from '@src/dForm';
-import {IGridApi} from './api';
-import {IGridRowData} from '../tabulatorGrid';
+import {IGridApi, IGridRowData} from "@src/tabulatorGrid";
 
 export const usePrepareSelectionFormProps = (gridApi: IGridApi) => {
     return useMemo(() => {

@@ -1,8 +1,7 @@
-import {IDFormApi} from './api';
-import {IDFormProps} from '../dForm';
 import {IFormButtons} from '@src/buttonsRow/buttonsRow';
 import {MergeObjects} from "@krinopotam/js-helpers";
 import {useMemo} from "react";
+import {IDFormApi, IDFormProps} from "@src/dForm";
 
 export const useGetButtons = (formProps: IDFormProps, formApi: IDFormApi): IFormButtons => {
     return useMemo(() => {

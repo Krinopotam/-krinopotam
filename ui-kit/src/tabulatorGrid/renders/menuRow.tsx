@@ -2,8 +2,7 @@ import React, {useLayoutEffect, useState} from 'react';
 import {ObjectKeysLength} from "@krinopotam/js-helpers";
 import {ButtonsRow} from '@src/buttonsRow/buttonsRow';
 import {useInitButtons} from "../hooks/buttons";
-import {IGridApi} from "../hooks/api";
-
+import {IGridApi} from "@src/tabulatorGrid";
 
 interface IGridMenuProps {
     gridApi:IGridApi

@@ -1,6 +1,5 @@
 import React from 'react';
 import {ColumnDefinition, EventCallBackMethods, TabulatorFull as Tabulator} from 'tabulator-tables';
-import {ITabulator, ITabulatorColumn, ITabulatorProps} from '../tabulatorBase';
 import {createRoot} from 'react-dom/client';
 import {ActiveSelectionModule} from '../modules/activeSelectionModule';
 import {AdvancedHeaderFilterModule} from '../modules/advancedHeaderFilterModule';
@@ -8,6 +7,7 @@ import {collapseButton, expandButton} from '../parts/icons';
 import {setPatches} from '../patches/setPatches';
 import {BaseHOC} from '@src/tabulatorBase/parts/baseHOC';
 import {IsDebugMode} from '@krinopotam/common-hooks';
+import {ITabulator, ITabulatorColumn, ITabulatorProps} from "@src/tabulatorBase";
 
 export const useInit = ({
     props,

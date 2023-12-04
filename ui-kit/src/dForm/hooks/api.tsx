@@ -3,32 +3,9 @@ import {Space, Typography} from 'antd';
 
 import {DModel} from '../dModel';
 import {IButtonsRowApi} from '@src/buttonsRow';
-import {IDFormProps} from '../dForm';
 import {MessageBox} from '@src/messageBox';
-
-/** Form api */
-export interface IDFormApi extends Record<string,unknown>{
-    /** Form model instance */
-    model: DModel;
-
-    /** Buttons row API */
-    buttonsApi: IButtonsRowApi;
-
-    /** Get the current form props */
-    getFormProps: () => IDFormProps;
-
-    /** Update the current form props (will cause rerender of the form) */
-    setFormProps: (formProps: Partial<IDFormProps>) => void;
-
-    /** Validate form */
-    validateForm: (showAlert: boolean) => Record<string, string | undefined>;
-
-    /** Submit form */
-    submitForm: () => void;
-
-    /** force render update method */
-    forceUpdate: () => void;
-}
+import {IDFormProps} from "@src/dForm";
+import {IDFormApi} from "@src/dForm/types/dFormTypes";
 
 export const useInitFormApi = (
     formApi: IDFormApi,

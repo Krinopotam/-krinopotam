@@ -1,5 +1,5 @@
 import { useLayoutEffect} from 'react';
-import {IGridApi} from './api';
+import {IGridApi} from "@src/tabulatorGrid";
 
 export const useKeyboardSelection = (tableContainer:HTMLElement, gridApi: IGridApi) => {
     useLayoutEffect(() => {

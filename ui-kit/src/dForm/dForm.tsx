@@ -6,128 +6,22 @@
  * @license MIT
  */
 
-import './css/antdAnimation.css';
-
-import {DModel, IDFormBaseCallbacks, IDFormModelCallbacks} from './dModel';
-import {IButtonsRowApi, IFormButtons} from 'src/buttonsRow';
-import {IDFormApi, useInitFormApi} from './hooks/api';
-import React, {CSSProperties, useEffect, useRef, useState} from 'react';
-import {TPromise} from '@krinopotam/service-types';
+import {IDFormApi, IDFormProps} from "@src/dForm/types/dFormTypes";
+import {DModel} from './dModel';
+import {IDFormModelCallbacks} from "@src/dForm/types/dModelTypes";
+import {IButtonsRowApi} from 'src/buttonsRow';
+import {useInitFormApi} from './hooks/api';
+import React, {useEffect, useRef, useState} from 'react';
 import {FormRender} from './renders/formRender';
-import {IRuleType} from './validators/baseValidator';
 import {GetUuid} from '@krinopotam/js-helpers';
 import {useModelCallbacks} from './hooks/callbacks';
 import {useGetButtons} from './hooks/buttons';
 import {useUpdateMessageBoxTheme} from '@src/messageBox';
 import {useGetActualProps} from '@krinopotam/common-hooks';
-import {ColProps} from "antd";
-import {FormLabelAlign} from "antd/es/form/interface";
-import {RequiredMark} from "antd/es/form/Form";
-import {IColorType} from "@src/button/button";
-import {IDFormFieldsProps} from "@src/dForm/index";
 
 import './css/dForm.scss';
+import './css/antdAnimation.css';
 
-//region Types
-/** Form properties*/
-export interface IDFormProps extends IDFormCallbacks {
-    /** A mutable object to merge with these controls api */
-    apiRef?: unknown;
-
-    /** Form formId */
-    formId?: string;
-
-    /** Buttons properties */
-    buttons?: IFormButtons | null;
-
-    /** Form CSS class */
-    className?: string;
-
-    /** Form style */
-    formStyle?:CSSProperties;
-
-    /** Form container class name */
-    containerClassName?: string;
-
-    /** Form container style*/
-    containerStyle?:CSSProperties
-
-    /** Indent from the beginning of the controls (default 12)  */
-    contentIndent?: number;
-
-    /** Form data */
-    dataSet?: IDFormDataSet;
-
-    /** Parent form data */
-    parentDataSet?: IDFormDataSet;
-
-    /** Fields properties */
-    fieldsProps?: IDFormFieldsProps;
-
-    /** Form color type */
-    colorType?: IColorType;
-
-    /** label column parameters, for example span:'8' */
-    labelCol?: ColProps;
-
-    /** wrapper column parameters, for example span:'16' */
-    wrapperCol?: ColProps;
-
-    /** text align of label of all items */
-    labelAlign?: FormLabelAlign
-
-    /** Form layout (horizontal or vertical). Vertical is default */
-    layout?: 'horizontal' | 'vertical';
-
-    /** Form mode */
-    formMode?: IDFormMode;
-
-    /** The form is read only */
-    readOnly?: boolean;
-
-    /** Automatically disable fields if they depend on fields whose value is not set. Otherwise, such fields will be automatically hidden */
-    disableDepended?: boolean;
-
-    /** Tabs panes height (default 40)*/
-    tabsHeight?: number
-
-    /** Form parent item data */
-    // formParentData?: IFormDataSet;
-
-    /** No use controls data */
-    unfilledForm?: boolean;
-
-    /** Validation rules */
-    validationRules?: IDFormValidationRules;
-
-    /** Should the form request confirmation before the form submitting or cancel, if the form data was changed by the user  */
-    confirmChanges?: boolean;
-
-    /** Confirm message before the form submitting */
-    submitConfirmMessage?: React.ReactNode;
-
-    /** Required mark style. Can use required mark or optional mark. You can not config to single Form.Item since this is a Form level config */
-    requiredMark?: RequiredMark;
-
-    /** allow select buttons using arrows keys */
-    arrowsButtonsSelection?: boolean;
-}
-
-export type IDFormCallbacks = IDFormBaseCallbacks<IDFormApi>
-
-export type IDFormMode = 'view' | 'create' | 'update' | 'clone' | 'delete';
-
-/** Form data set type */
-export interface IDFormDataSet extends Record<string, unknown> {
-    id?: string | number;
-}
-
-export type IDFormDataSourcePromise = TPromise<{ data: Record<string, unknown> }, { message: string; code: number }>;
-
-export type IDFormValidationRules = Record<string, IRuleType[]>;
-
-
-//endregion
 
 export const DForm = (props: IDFormProps): React.JSX.Element => {
     useUpdateMessageBoxTheme(); //set current theme to messageBox

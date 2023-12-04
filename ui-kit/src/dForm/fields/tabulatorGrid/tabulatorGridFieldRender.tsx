@@ -1,9 +1,8 @@
 import React, {useMemo, useRef, useState, useSyncExternalStore} from 'react';
 import {ITabulatorGridFieldProps, ITabulatorGridFieldPropsBase, ITabulatorGridFieldPropsCallbacks, TabulatorGridField} from '@src/dForm/fields/tabulatorGrid/tabulatorGridField';
-import {IGridApi, IGridRowData, ITabulatorProps, TabulatorGrid} from '@src/tabulatorGrid';
+import {IGridApi, IGridPropsCallbacks, IGridRowData, ITabulatorProps, TabulatorGrid} from '@src/tabulatorGrid';
 import {SplitObject} from '@krinopotam/js-helpers';
 import {IRequestProps} from '@src/tabulatorBase';
-import {IGridPropsCallbacks} from '@src/tabulatorGrid/tabulatorGrid';
 
 export const TabulatorGridFieldRender = ({field}: {field: TabulatorGridField}): React.JSX.Element => {
     useSyncExternalStore(field.subscribe.bind(field), field.getSnapshot.bind(field));
