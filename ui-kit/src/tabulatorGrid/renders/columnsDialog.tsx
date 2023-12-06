@@ -124,6 +124,8 @@ const generateNodes = (dialogApi: IColumnsDialogApi, columnsDefs: ColumnDefiniti
 
         const nodes: DataNode[] = [];
         for (const colDef of colDefs) {
+            if (colDef.formatter === 'rowSelection') continue;
+
             colKey.val++;
             const key = colKey.val.toString();
             const node: DataNode = {
