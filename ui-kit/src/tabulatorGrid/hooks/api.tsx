@@ -6,9 +6,9 @@ import {ITabulator} from '@src/tabulatorBase';
 import {MessageBox, MessageBoxApi} from '@src/messageBox';
 import {GenerateAjaxRequestFunc} from '@src/tabulatorGrid/helpers/fetchHelpers';
 import {IError} from '@krinopotam/service-types';
-import {IsDebugMode} from "@krinopotam/common-hooks";
-import {IGridDeletePromise, IGridProps, IGridRowData} from "@src/tabulatorGrid";
-import {IGridApi, IRowKey, IRowKeys} from "@src/tabulatorGrid/types/tabulatorGridTypes";
+import {IsDebugMode} from '@krinopotam/common-hooks';
+import {IGridDeletePromise, IGridProps, IGridRowData} from '@src/tabulatorGrid';
+import {IGridApi, IRowKey, IRowKeys} from '@src/tabulatorGrid/types/tabulatorGridTypes';
 
 export const useInitGridApi = ({
     gridApi,
@@ -43,7 +43,7 @@ export const useInitGridApi = ({
     gridApi.buttonsApi = buttonsApi;
     gridApi.getIsMounted = useApiIsMounted(unmountRef);
     gridApi.getId = useApiGetId(gridApi);
-    gridApi.getDataSet = useApiGetDataSet(dataSetRef);
+    gridApi.getDataSet = useApiGetDataSet(dataSetRef, gridApi);
     gridApi.setDataSet = useApiSetDataSet(dataSetRef, gridApi);
     gridApi.getIsLoading = useApiGetIsLoading(isLoading);
     gridApi.setIsLoading = useApiSetIsLoading(setIsLoading);
@@ -95,8 +95,11 @@ const useApiIsMounted = (unmountRef: React.MutableRefObject<boolean>): IGridApi[
     return useCallback(() => !unmountRef.current, [unmountRef]);
 };
 
-const useApiGetDataSet = (dataSetRef: React.MutableRefObject<IGridProps['dataSet'] | undefined>): IGridApi['getDataSet'] => {
-    return useCallback(() => dataSetRef.current ?? undefined, [dataSetRef]);
+const useApiGetDataSet = (dataSetRef: React.MutableRefObject<IGridProps['dataSet'] | undefined>, gridApi: IGridApi): IGridApi['getDataSet'] => {
+    return useCallback(() => {
+        if (!gridApi.tableApi) return dataSetRef.current ?? undefined;
+        return gridApi.tableApi.getData();
+    }, [dataSetRef, gridApi.tableApi]);
 };
 
 const useApiSetDataSet = (dataSetRef: React.MutableRefObject<IGridProps['dataSet']>, gridApi: IGridApi): IGridApi['setDataSet'] => {
@@ -602,4 +605,3 @@ const useApiOpenColumnDialog = (gridApi: IGridApi, openColumnsDialog: React.Disp
         [openColumnsDialog]
     );
 };
-

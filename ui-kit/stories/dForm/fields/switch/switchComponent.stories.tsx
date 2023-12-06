@@ -17,14 +17,11 @@ export default {
                 code: `
                     import React from 'react';
                     import {DForm} from @krinopotam/ui-kit/dForm';
-                    import {IDFormFieldProps} from @krinopotam/ui-kit/dForm';
-                    import {CheckboxField} from @krinopotam/ui-kit/dForm/fields/checkbox/checkboxField';
-                    type IComponent = IDFormFieldProps;
-                    /** DForm Checkbox component */
-                    export const CheckboxComponent = (props: IComponent): React.JSX.Element => (
-                        <DForm buttons={null} fieldsProps={{field1: {...props, component: CheckboxField}}} />
-                    );
-                    export default CheckboxComponent;
+                    import {ISwitchFieldProps, SwitchField} from @krinopotam/ui-kit/dForm/fields/switch/switchField';
+                    type IComponent = ISwitchFieldProps;
+                    /** DForm Switch field */
+                    export const SwitchComponent = (props: IComponent): React.JSX.Element => <DForm buttons={null} fieldsProps={{field1: {...props, component: SwitchField}}} />;
+                    export default SwitchComponent;
                 `
             }
             /* AUTO-SOURCE-INJECT-END */

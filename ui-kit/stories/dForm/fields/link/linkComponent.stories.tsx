@@ -17,10 +17,9 @@ export default {
                 code: `
                     import React from 'react';
                     import {DForm} from @krinopotam/ui-kit/dForm';
-                    import {IDFormFieldProps} from @krinopotam/ui-kit/dForm';
-                    import {LinkField} from @krinopotam/ui-kit/dForm/fields/link/linkField';
-                    type IComponent = IDFormFieldProps;
-                    /** DForm Link component */
+                    import {ILinkFieldProps, LinkField} from @krinopotam/ui-kit/dForm/fields/link/linkField';
+                    type IComponent = ILinkFieldProps;
+                    /** DForm Link field */
                     export const LinkComponent = (props: IComponent): React.JSX.Element => <DForm buttons={null} fieldsProps={{field1: {...props, component: LinkField}}} />;
                     export default LinkComponent;
                 `

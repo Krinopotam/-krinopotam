@@ -17,9 +17,8 @@ export default {
                 code: `
                     import React from 'react';
                     import {DForm} from @krinopotam/ui-kit/dForm';
-                    import {IDFormFieldProps} from @krinopotam/ui-kit/dForm';
-                    import {CheckboxField} from @krinopotam/ui-kit/dForm/fields/checkbox/checkboxField';
-                    type IComponent = IDFormFieldProps;
+                    import {CheckboxField, ICheckboxFieldProps} from @krinopotam/ui-kit/dForm/fields/checkbox/checkboxField';
+                    type IComponent = ICheckboxFieldProps;
                     /** DForm Checkbox component */
                     export const CheckboxComponent = (props: IComponent): React.JSX.Element => (
                         <DForm buttons={null} fieldsProps={{field1: {...props, component: CheckboxField}}} />

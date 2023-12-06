@@ -19,17 +19,16 @@ export default {
                 code: `
                     import React from "react";
                     import {DForm} from @krinopotam/ui-kit/dForm";
-                    import {IDFormFieldProps} from @krinopotam/ui-kit/dForm";
-                    import {InputField} from @krinopotam/ui-kit/dForm/fields/input/inputField";
-                    type IComponent = IDFormFieldProps
-                    /** DForm Input component */
-                    export const InputComponent = (props: IComponent): React.JSX.Element => <DForm
+                    import {ITabulatorGridFieldProps, TabulatorGridField} from @krinopotam/ui-kit/dForm/fields/tabulatorGrid/tabulatorGridField";
+                    type IComponent = ITabulatorGridFieldProps
+                    /** DForm TabulatorGrid field */
+                    export const TabulatorGridComponent = (props: IComponent): React.JSX.Element => <DForm
                         buttons={null}
                         fieldsProps={
-                            {field1: {...props, component: InputField}}
+                            {field1: {...props, component: TabulatorGridField}}
                         }
                     />
-                    export default InputComponent
+                    export default TabulatorGridComponent
                 `
             }
             /* AUTO-SOURCE-INJECT-END */

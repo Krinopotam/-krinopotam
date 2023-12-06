@@ -18,10 +18,9 @@ export default {
                 code: `
                     import React from "react";
                     import {DForm} from @krinopotam/ui-kit/dForm";
-                    import {IDFormFieldProps} from @krinopotam/ui-kit/dForm";
-                    import {DateTimeField} from @krinopotam/ui-kit/dForm/fields/dateTime/dateTimeField";
-                    type IComponent = IDFormFieldProps;
-                    /** DForm DateTime component */
+                    import {DateTimeField, IDateTimeFieldProps} from @krinopotam/ui-kit/dForm/fields/dateTime/dateTimeField";
+                    type IComponent = IDateTimeFieldProps;
+                    /** DForm DateTime field */
                     export const DateTimeComponent = (props: IComponent): React.JSX.Element => <DForm
                         buttons={null}
                         fieldsProps={

@@ -17,17 +17,17 @@ export default {
                 code: `
                     import React from "react";
                     import {DForm} from @krinopotam/ui-kit/dForm";
-                    import {IDFormFieldProps} from @krinopotam/ui-kit/dForm";
-                    import {InputField} from @krinopotam/ui-kit/dForm/fields/input/inputField";
-                    type IComponent = IDFormFieldProps
-                    /** DForm Input component */
-                    export const InputComponent = (props: IComponent): React.JSX.Element => <DForm
+                    import {ITreeSelectFieldProps, TreeSelectField} from @krinopotam/ui-kit/dForm/fields/treeSelect/treeSelectField";
+                    import {TreeSelectDataSet} from "../../../datasets/treeSelect";
+                    type IComponent = ITreeSelectFieldProps
+                    /** DForm TreeSelect field */
+                    export const TreeSelectComponent = (props: IComponent): React.JSX.Element => <DForm
                         buttons={null}
                         fieldsProps={
-                            {field1: {...props, component: InputField}}
+                            {field1: {...props, dataSet:TreeSelectDataSet, component: TreeSelectField}}
                         }
                     />
-                    export default InputComponent
+                    export default TreeSelectComponent
                 `
             }
             /* AUTO-SOURCE-INJECT-END */

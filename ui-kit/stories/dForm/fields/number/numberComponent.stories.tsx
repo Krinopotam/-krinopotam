@@ -16,10 +16,10 @@ export default {
                 // language=text
                 code: `
                     import React from "react";
-                    import {DForm, IDFormFieldProps} from @krinopotam/ui-kit/dForm";
-                    import {NumberField} from @krinopotam/ui-kit/dForm/fields/number/numberField";
-                    type IComponent = IDFormFieldProps;
-                    /** DForm Number component */
+                    import {DForm} from @krinopotam/ui-kit/dForm";
+                    import {INumberFieldProps, NumberField} from @krinopotam/ui-kit/dForm/fields/number/numberField";
+                    type IComponent = INumberFieldProps;
+                    /** DForm Number field */
                     export const NumberComponent = (props: IComponent): React.JSX.Element => <DForm
                         buttons={null}
                         fieldsProps={

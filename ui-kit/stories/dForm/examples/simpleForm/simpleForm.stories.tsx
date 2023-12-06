@@ -15,15 +15,14 @@ export default {
                 // language=text
                 code: `
                     import React from 'react';
-                    import {DForm, IDFormProps} from @krinopotam/ui-kit/dynamicForm';
-                    import {IDFormFieldInputProps, InputComponent} from @krinopotam/ui-kit/dynamicForm/components/inputComponent';
-                    import {IDFormFieldPasswordProps, PasswordComponent} from @krinopotam/ui-kit/dynamicForm/components/passwordComponent';
+                    import {DForm, IDFormProps} from @krinopotam/ui-kit/dForm';
+                    import {InputField} from @krinopotam/ui-kit/dForm/fields/input/inputField";
                     const formProps: IDFormProps = {
                         formId: 'Test form',
                         confirmChanges: true,
                         fieldsProps: {
-                            login: {component: InputComponent, label: 'Логин', tooltip: 'Ввод логина'} as IDFormFieldInputProps,
-                            password: {component: PasswordComponent, label: 'Пароль', tooltip: 'Ввод пвароль'} as IDFormFieldPasswordProps,
+                            login: {component: InputField, label: 'Логин', tooltip: 'Ввод логина'},
+                            password: {component: InputField, label: 'Пароль', tooltip: 'Ввод пвароль'},
                         },
                         buttons: {ok: {position: 'right'}},
                     };

@@ -21,10 +21,10 @@ export default {
                     import React from 'react';
                     import {DForm} from @krinopotam/ui-kit/dForm';
                     import {IDFormFieldProps} from @krinopotam/ui-kit/dForm';
-                    import {IDFormInputFieldProps, InputField} from @krinopotam/ui-kit/dForm/fields/input/inputField';
+                    import {IInputFieldProps, InputField} from @krinopotam/ui-kit/dForm/fields/input/inputField';
                     import {CustomField} from @krinopotam/ui-kit/dForm/fields/custom/customField';
                     type IComponent = IDFormFieldProps;
-                    /** DynamicForm Custom component */
+                    /** DForm Custom field auto-updating */
                     export const AutoUpdateCustomField = (props: IComponent): React.JSX.Element => (
                         <DForm
                             buttons={null}
@@ -36,7 +36,7 @@ export default {
                                         const field2 = field.getModel().getField('field2')
                                         field2.setValue(value);
                                     },
-                                } satisfies  IDFormInputFieldProps,
+                                } satisfies  IInputFieldProps,
                                 field2: {...props, component: CustomField, onRender: MyComponent},
                             }}
                         />

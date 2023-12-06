@@ -17,11 +17,10 @@ export default {
                 code: `
                     import React from "react";
                     import {DForm} from @krinopotam/ui-kit/dForm";
-                    import {IDFormFieldProps} from @krinopotam/ui-kit/dForm";
                     import {InputField} from @krinopotam/ui-kit/dForm/fields/input/inputField";
-                    import {DividerField} from @krinopotam/ui-kit/dForm/fields/divider/dividerField";
-                    type IComponent = IDFormFieldProps;
-                    /** DForm Divider component */
+                    import {DividerField, IDividerFieldProps} from @krinopotam/ui-kit/dForm/fields/divider/dividerField";
+                    type IComponent = IDividerFieldProps;
+                    /** DForm Divider field */
                     export const DividerComponent = (props: IComponent): React.JSX.Element => <DForm
                         buttons={null}
                         fieldsProps={

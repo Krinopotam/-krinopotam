@@ -6,7 +6,7 @@ import {IDFormModalApi, DFormModal, IDFormModalProps} from '@src/dFormModal';
 import {TabulatorGridField} from "@src/dForm/fields/tabulatorGrid/tabulatorGridField";
 import {InputField} from "@src/dForm/fields/input/inputField";
 import {FormLayoutSwitch} from "../../common/buttonsProps";
-import {TabulatorBaseColumns, TabulatorPlainData} from "../../data/tabulatorData";
+import {TabulatorBaseColumns, TabulatorBaseColumnsDef, TabulatorPlainData} from "../../data/tabulatorData";
 
 
 const formApi = {} as IDFormModalApi;
@@ -35,6 +35,7 @@ const formProps: IDFormModalProps = {
         users: {
             component: TabulatorGridField,
             label: 'Пользователи',
+            columnDefaults:TabulatorBaseColumnsDef,
             columns: TabulatorBaseColumns,
             layout: 'fitColumns',
             height: 300,

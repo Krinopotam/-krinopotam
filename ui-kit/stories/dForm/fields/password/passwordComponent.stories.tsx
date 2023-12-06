@@ -17,10 +17,9 @@ export default {
                 code: `
                     import React from "react";
                     import {DForm} from @krinopotam/ui-kit/dForm";
-                    import {IDFormFieldProps} from @krinopotam/ui-kit/dForm";
-                    import {PasswordField} from @krinopotam/ui-kit/dForm/fields/password/passwordField";
-                    type IComponent = IDFormFieldProps
-                    /** DForm Password component */
+                    import {IPasswordFieldProps, PasswordField} from @krinopotam/ui-kit/dForm/fields/password/passwordField";
+                    type IComponent = IPasswordFieldProps
+                    /** DForm Password field */
                     export const PasswordComponent = (props: IComponent): React.JSX.Element => <DForm
                         buttons={null}
                         fieldsProps={

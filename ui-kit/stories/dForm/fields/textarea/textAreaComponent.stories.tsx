@@ -17,10 +17,9 @@ export default {
                 code: `
                     import React from "react";
                     import {DForm} from @krinopotam/ui-kit/dForm";
-                    import {TextAreaField} from @krinopotam/ui-kit/dForm/fields/textArea/textAreaField";
-                    import {IDFormFieldProps} from @krinopotam/ui-kit/dForm";
-                    type IComponent = IDFormFieldProps
-                    /** DForm Textarea component */
+                    import {ITextAreaFieldProps, TextAreaField} from @krinopotam/ui-kit/dForm/fields/textArea/textAreaField";
+                    type IComponent = ITextAreaFieldProps
+                    /** DForm Textarea field */
                     export const TextAreaComponent = (props: IComponent): React.JSX.Element => <DForm
                         buttons={null}
                         fieldsProps={

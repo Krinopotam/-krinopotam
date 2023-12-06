@@ -15,19 +15,15 @@ export default {
                 format: true,
                 // language=text
                 code: `
-                    import React from "react";
-                    import {DForm} from @krinopotam/ui-kit/dForm";
-                    import {IDFormFieldProps} from @krinopotam/ui-kit/dForm";
-                    import {InputField} from @krinopotam/ui-kit/dForm/fields/input/inputField";
-                    type IComponent = IDFormFieldProps
-                    /** DForm Input component */
-                    export const InputComponent = (props: IComponent): React.JSX.Element => <DForm
-                        buttons={null}
-                        fieldsProps={
-                            {field1: {...props, component: InputField}}
-                        }
-                    />
-                    export default InputComponent
+                    import React from 'react';
+                    import {DForm} from @krinopotam/ui-kit/dForm';
+                    import {IUploadDraggerFieldProps, UploadDraggerField} from @krinopotam/ui-kit/dForm/fields/fileDrop/uploadDraggerField';
+                    type IComponent = IUploadDraggerFieldProps;
+                    /** DForm Input field */
+                    export const UploadDraggerComponent = (props: IComponent): React.JSX.Element => (
+                        <DForm buttons={null} fieldsProps={{field1: {...props, component: UploadDraggerField}}} />
+                    );
+                    export default UploadDraggerComponent;
                 `
             }
             /* AUTO-SOURCE-INJECT-END */

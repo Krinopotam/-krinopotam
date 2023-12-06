@@ -1,9 +1,9 @@
-import {TabulatorFull as Tabulator, Module, ScrollToRowPosition, Options, RowComponent} from 'tabulator-tables';
+import {Module, ScrollToRowPosition, Options, RowComponent} from 'tabulator-tables';
 
-import {IRow, IModule} from './innerTypes';
+import {IModule, IRow, ITabulatorCore} from "@src/tabulatorBase/types/tabulatorCoreTypes";
 
 //region Interfaces
-export interface IActiveSelectionTabulator extends Tabulator {
+export interface IActiveSelectionTabulator extends ITabulatorCore {
     options: Options & {
         /** if true, use native tabulator selections rules without using active selection module */
         selectionMode?: boolean;
@@ -60,7 +60,7 @@ export class ActiveSelectionModule extends Module {
     public table: IActiveSelectionTabulator;
     private activeRow: RowComponent | undefined = undefined;
 
-    constructor(table: Tabulator) {
+    constructor(table: ITabulatorCore) {
         super(table);
         this.table = table as IActiveSelectionTabulator;
         const _this = this as unknown as IModule;

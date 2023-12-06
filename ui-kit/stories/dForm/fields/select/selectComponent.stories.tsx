@@ -17,17 +17,17 @@ export default {
                 code: `
                     import React from "react";
                     import {DForm} from @krinopotam/ui-kit/dForm";
-                    import {IDFormFieldProps} from @krinopotam/ui-kit/dForm";
-                    import {InputField} from @krinopotam/ui-kit/dForm/fields/input/inputField";
-                    type IComponent = IDFormFieldProps
-                    /** DForm Input component */
-                    export const InputComponent = (props: IComponent): React.JSX.Element => <DForm
+                    import {ISelectFieldProps, SelectField} from @krinopotam/ui-kit/dForm/fields/select/selectField";
+                    import {SelectDataSet} from "../../../datasets/select";
+                    type IComponent = ISelectFieldProps
+                    /** DForm Select field */
+                    export const SelectComponent = (props: IComponent): React.JSX.Element => <DForm
                         buttons={null}
                         fieldsProps={
-                            {field1: {...props, component: InputField}}
+                            {field1: {...props, dataSet:SelectDataSet, component: SelectField}}
                         }
                     />
-                    export default InputComponent
+                    export default SelectComponent
                 `
             }
             /* AUTO-SOURCE-INJECT-END */

@@ -1,10 +1,20 @@
 import {AnyType} from '@krinopotam/service-types';
-import {ColumnComponent, ColumnDefinition, ColumnLookup, EmptyCallback, EventCallBackMethods, FilterType, RowComponent, TabulatorFull as Tabulator} from 'tabulator-tables';
+import {
+    ColumnComponent,
+    ColumnDefinition,
+    ColumnLookup,
+    EmptyCallback,
+    EventCallBackMethods,
+    FilterType,
+    RowComponent,
+} from 'tabulator-tables';
+
 import React, {MouseEvent} from 'react';
 import {IActiveSelectionModuleRow, IActiveSelectionModuleTableEvents, IActiveSelectionTabulator} from '@src/tabulatorBase/modules/activeSelectionModule';
-import {IAdvancedHeaderFilterTabulator} from "@src/tabulatorBase/modules/advancedHeaderFilterModule";
+import {IAdvancedHeaderFilterTabulator} from '@src/tabulatorBase/modules/advancedHeaderFilterModule';
+import {ITabulatorCore} from "@src/tabulatorBase/types/tabulatorCoreTypes";
 
-type _ITabulator = IAdvancedHeaderFilterTabulator & IActiveSelectionTabulator & Tabulator;
+type _ITabulator = IAdvancedHeaderFilterTabulator & IActiveSelectionTabulator & ITabulatorCore;
 
 export type ITabulatorFilterFunc = (
     headerValue: AnyType,

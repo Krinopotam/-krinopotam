@@ -19,10 +19,9 @@ export default {
                 code: `
                     import React from "react";
                     import {DForm} from @krinopotam/ui-kit/dForm";
-                    import {IDFormFieldProps} from @krinopotam/ui-kit/dForm";
-                    import {CustomField} from @krinopotam/ui-kit/dForm/fields/custom/customField";
-                    type IComponent = IDFormFieldProps;
-                    /** DForm Custom component */
+                    import {CustomField, ICustomFieldProps} from @krinopotam/ui-kit/dForm/fields/custom/customField";
+                    type IComponent = ICustomFieldProps;
+                    /** DForm Custom field */
                     export const CustomComponent = (props: IComponent): React.JSX.Element => <DForm
                         buttons={null}
                         fieldsProps={

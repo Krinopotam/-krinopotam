@@ -15,19 +15,15 @@ export default {
                 format: true,
                 // language=text
                 code: `
-                    import React from "react";
-                    import {DForm} from @krinopotam/ui-kit/dForm";
-                    import {IDFormFieldProps} from @krinopotam/ui-kit/dForm";
-                    import {QuillEditorField} from @krinopotam/ui-kit/dForm/fields/quillEditor/quillEditorField";
-                    type IComponent = IDFormFieldProps;
-                    /** DForm QuillEditor component */
-                    export const QuillEditorComponent = (props: IComponent): React.JSX.Element => <DForm
-                        buttons={null}
-                        fieldsProps={
-                            {field1: {...props, component: QuillEditorField}}
-                        }
-                    />
-                    export  default QuillEditorComponent
+                    import React from 'react';
+                    import {DForm} from @krinopotam/ui-kit/dForm';
+                    import {IQuillEditorFieldProps, QuillEditorField} from @krinopotam/ui-kit/dForm/fields/quillEditor/quillEditorField';
+                    type IComponent = IQuillEditorFieldProps;
+                    /** DForm QuillEditor field */
+                    export const QuillEditorComponent = (props: IComponent): React.JSX.Element => (
+                        <DForm buttons={null} fieldsProps={{field1: {...props, component: QuillEditorField}}} />
+                    );
+                    export default QuillEditorComponent;
                 `
             }
             /* AUTO-SOURCE-INJECT-END */
