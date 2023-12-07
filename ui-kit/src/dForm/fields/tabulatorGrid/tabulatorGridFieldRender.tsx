@@ -144,7 +144,7 @@ const usePrepareCallbacks = (
                 if (field.isReady()) {
                     if (!fieldProps.selectionMode) {
                         curValueRef.current = dataSet;
-                        curDataSetRef.current = dataSet;
+                        //curDataSetRef.current = dataSet;
                         field.setValue(dataSet ?? undefined);
                         field.setDirty(true);
                         //field.setTouched(true);
