@@ -4,13 +4,7 @@ import React, {useCallback, useState} from 'react';
 
 import {Button} from '@src/button';
 import {IGridApi, IGridProps, ITabulatorProps, TabulatorGrid} from '@src/tabulatorGrid';
-import {GenerateDataSet} from '../../data/tabulatorData';
-
-const columnDefaults: ITabulatorProps['columnDefaults'] = {
-    resizable: 'header',
-    headerFilter: true,
-    headerFilterFunc: 'like',
-};
+import {GenerateDataSet, TabulatorBaseColumnsDef} from '../../data/tabulatorData';
 
 const columns: ITabulatorProps['columns'] = [
     {title: 'Column 1', field: 'col1'},
@@ -44,20 +38,20 @@ export const ChangeDataSet = (): React.JSX.Element => {
     return (
         <>
             {/*Description Start*/}
-            <h1>Пример обновбения dataSet грида Tabulator</h1>
+            <h1>Example of updating the dataSet of the Tabulator grid</h1>
             {/*Description End*/}
-            <Button onClick={updateDataViaState}>Обновить DataSet через state</Button> - грид целиком перерендеривается
+            <Button onClick={updateDataViaState}>Update DataSet via setState</Button> - the entire grid is re-rendered
             <br />
             <br />
-            <Button onClick={updateDataViaApi}>Обновить dataSet через Api.setDataSet</Button> - dataSet обновляется, но это не вызывает ререндер грида
+            <Button onClick={updateDataViaApi}>Update dataSet via Api.setDataSet</Button> - dataSet is updated, but this does not cause the grid to rerender
             <br />
             <br />
-            <Button onClick={updateDataViaApiAsync}>Обновить dataSet асинхронно через Api.fetchData</Button> - ререндер вызывается, так как закрывается лоадером
-            на время загрузки, но используется мемоизированный компонет. Поэтому фактически ререндера нет.
+            <Button onClick={updateDataViaApiAsync}>Update dataSet asynchronously via Api.fetchData</Button> - the rerender is called because it is closed by the loader
+            during loading, but a memoized component is used. Therefore, there is actually no rerender.
             <TabulatorGrid
                 id={'TabulatorGridSimple'}
                 apiRef={gridApi}
-                columnDefaults={columnDefaults}
+                columnDefaults={TabulatorBaseColumnsDef}
                 columns={columns}
                 dataSet={dataSet}
                 height={500}

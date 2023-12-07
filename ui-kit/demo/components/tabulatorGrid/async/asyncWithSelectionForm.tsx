@@ -13,7 +13,6 @@ const selectionFormProps: IDFormModalProps = {
         select: {
             component: TabulatorGridField,
             columns: TabulatorBaseColumns,
-            dataSet: TabulatorPlainData,
             selectionMode: true,
             autoHeightResize: true,
             onDataFetch: () => {

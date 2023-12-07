@@ -1,38 +1,34 @@
 import React, {useMemo, useRef, useState, useSyncExternalStore} from 'react';
-import {ITabulatorGridFieldProps, ITabulatorGridFieldPropsBase, ITabulatorGridFieldPropsCallbacks, TabulatorGridField} from '@src/dForm/fields/tabulatorGrid/tabulatorGridField';
+import {
+    ITabulatorGridFieldProps,
+    ITabulatorGridFieldPropsBase,
+    ITabulatorGridFieldPropsCallbacks,
+    TabulatorGridField,
+} from '@src/dForm/fields/tabulatorGrid/tabulatorGridField';
 import {IGridApi, IGridPropsCallbacks, IGridRowData, ITabulatorProps, TabulatorGrid} from '@src/tabulatorGrid';
 import {SplitObject} from '@krinopotam/js-helpers';
 import {IRequestProps} from '@src/tabulatorBase';
 
-export const TabulatorGridFieldRender = ({field}: {field: TabulatorGridField}): React.JSX.Element => {
+export const TabulatorGridFieldRender = ({field, gridApi: gridApiBase}: {field: TabulatorGridField; gridApi: IGridApi}): React.JSX.Element => {
     useSyncExternalStore(field.subscribe.bind(field), field.getSnapshot.bind(field));
 
-    const [gridApi] = useState({} as IGridApi);
-
     const fieldProps = field.getProps();
+    const [gridApi] = useState(gridApiBase as IGridApi);
+
     const tabulatorProps = useSplitTabulatorProps(fieldProps);
 
     const value = field.getValue() as IGridRowData[];
 
-    const curDataSetRef = useRef<IGridRowData[] | undefined>(fieldProps.dataSet);
-    const curValueRef = useRef<IGridRowData[]>();
+    const curDataSetRef = useRef<IGridRowData[] | undefined>();
 
-    // Workaround: it is necessary to ensure that,
-    // on the one hand, when changing the rows by the grid itself, the memorized dataSet stay the same and the grid are not re-rendered.
-    // On the other hand, if the dataSet is modified by the user, the grid must re-render.
-    // So the grid's memorized dataSet stays the same until it's set outside onDataSetChanging.
-    let curDataSet: IGridRowData[] | undefined = undefined;
-    if (!fieldProps.selectionMode) {
-        if (curValueRef.current !== value) {
-            curDataSetRef.current = value;
-            curValueRef.current = value;
-        }
-        curDataSet = curDataSetRef.current;
-    } else {
-        curDataSet = curDataSetRef.current;
+    /** On the form we use a memoized TabulatorGrid, therefore the dataSet passed to the Grid should not change after the first initialization to avoid grid rerender
+     * All changes to grid data must be made by internal grid methods without component rerendering  */
+    if (typeof curDataSetRef.current === 'undefined') {
+        if (!fieldProps.selectionMode) curDataSetRef.current = value;
+        else curDataSetRef.current = fieldProps.dataSet;
     }
 
-    const callbacks = usePrepareCallbacks(field, fieldProps, curValueRef, curDataSetRef);
+    const callbacks = usePrepareCallbacks(field, fieldProps);
 
     let height = fieldProps.height;
 
@@ -54,7 +50,7 @@ export const TabulatorGridFieldRender = ({field}: {field: TabulatorGridField}): 
                     {...tabulatorProps}
                     {...callbacks}
                     apiRef={gridApi}
-                    dataSet={curDataSet}
+                    dataSet={curDataSetRef.current}
                     readOnly={fieldProps.readOnly}
                     placeholder={fieldProps.placeholder}
                     width={fieldProps.width}
@@ -68,7 +64,6 @@ export const TabulatorGridFieldRender = ({field}: {field: TabulatorGridField}): 
         tabulatorProps,
         callbacks,
         gridApi,
-        curDataSet,
         fieldProps.readOnly,
         fieldProps.placeholder,
         fieldProps.width,
@@ -87,13 +82,13 @@ const useSplitTabulatorProps = (props: ITabulatorGridFieldProps) => {
             onMenuVisibilityChanged: true,
             onDataLoading: true,
             onDataLoaded: true,
-            onDataProcessed:true,
+            onDataProcessed: true,
             onDataLoadError: true,
             onDataChanged: true,
             onDataFetch: true,
             onDataFetchResponse: true,
-            onDataFetching:true,
-            fetchInCreateMode:true,
+            onDataFetching: true,
+            fetchInCreateMode: true,
             onSelectionChange: true,
             onDelete: true,
             readOnly: true,
@@ -130,12 +125,7 @@ const useSplitTabulatorProps = (props: ITabulatorGridFieldProps) => {
     }, [props]);
 };
 
-const usePrepareCallbacks = (
-    field: TabulatorGridField,
-    fieldProps: ITabulatorGridFieldProps,
-    curValueRef: React.MutableRefObject<IGridRowData[] | undefined>,
-    curDataSetRef: React.MutableRefObject<IGridRowData[] | undefined>
-) => {
+const usePrepareCallbacks = (field: TabulatorGridField, fieldProps: ITabulatorGridFieldProps) => {
     return useMemo(() => {
         const model = field.getModel();
         const formMode = model.getFormMode();
@@ -143,11 +133,8 @@ const usePrepareCallbacks = (
             onDataChanged: (dataSet: IGridRowData[] | undefined, gridApi: IGridApi) => {
                 if (field.isReady()) {
                     if (!fieldProps.selectionMode) {
-                        curValueRef.current = dataSet;
-                        //curDataSetRef.current = dataSet;
-                        field.setValue(dataSet ?? undefined);
+                        field.setValue(dataSet ?? [], false, true, true);
                         field.setDirty(true);
-                        //field.setTouched(true);
                     }
                 }
                 return fieldProps.onDataChanged?.(dataSet, gridApi, field);
@@ -155,8 +142,7 @@ const usePrepareCallbacks = (
             onSelectionChange: (selectedData, rows, selectedRows, deselectedRows, gridApi: IGridApi) => {
                 if (field.isReady()) {
                     if (fieldProps.selectionMode) {
-                        curValueRef.current = selectedData;
-                        field.setValue(selectedData ?? undefined);
+                        field.setValue(selectedData ?? [], false, true, true);
                         field.setDirty(true);
                     }
 
@@ -183,16 +169,17 @@ const usePrepareCallbacks = (
                 field.setReady(false);
                 return fieldProps.onDataLoadError?.(message, code, gridApi, field);
             },
-            onDataFetch: (!fieldProps.onDataFetch || (formMode==='create' && !fieldProps.fetchInCreateMode))
-                ? undefined
-                : (params: IRequestProps, gridApi: IGridApi) => {
-                      return fieldProps.onDataFetch!(params, gridApi, field);
-                  },
+            onDataFetch:
+                !fieldProps.onDataFetch || (formMode === 'create' && !fieldProps.fetchInCreateMode)
+                    ? undefined
+                    : (params: IRequestProps, gridApi: IGridApi) => {
+                          return fieldProps.onDataFetch!(params, gridApi, field);
+                      },
             onDataFetching: !fieldProps.onDataFetching
                 ? undefined
                 : (url, params: IRequestProps, gridApi: IGridApi) => {
-                    return fieldProps.onDataFetching!(url, params, gridApi, field);
-                },
+                      return fieldProps.onDataFetching!(url, params, gridApi, field);
+                  },
             onDataFetchResponse: !fieldProps.onDataFetchResponse
                 ? undefined
                 : (dataSet, params, gridApi) => fieldProps?.onDataFetchResponse?.(dataSet, params, gridApi, field) ?? dataSet,
@@ -201,5 +188,5 @@ const usePrepareCallbacks = (
                 : (isVisible, gridApi) => fieldProps?.onMenuVisibilityChanged?.(isVisible, gridApi, field),
             onDelete: !fieldProps.onDelete ? undefined : (selectedRows, gridApi) => fieldProps?.onDelete?.(selectedRows, gridApi, field),
         } as Required<IGridPropsCallbacks>;
-    }, [fieldProps, field, curValueRef, curDataSetRef]);
+    }, [fieldProps, field]);
 };
