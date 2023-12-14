@@ -43,35 +43,21 @@ export const TabulatorGridFieldRender = ({field, gridApi: gridApiBase}: {field: 
             : {};
     }, [fieldProps.autoHeightResize]);
 
-    return useMemo(() => {
-        return (
-            <div style={containerStyle}>
-                <TabulatorGrid
-                    {...tabulatorProps}
-                    {...callbacks}
-                    apiRef={gridApi}
-                    dataSet={curDataSetRef.current}
-                    readOnly={fieldProps.readOnly}
-                    placeholder={fieldProps.placeholder}
-                    width={fieldProps.width}
-                    height={height}
-                    resizeHeightWithParent={fieldProps.resizeHeightWithForm ? '#' + field.getModel().getFormId() : fieldProps.resizeHeightWithParent}
-                />
-            </div>
-        );
-    }, [
-        containerStyle,
-        tabulatorProps,
-        callbacks,
-        gridApi,
-        fieldProps.readOnly,
-        fieldProps.placeholder,
-        fieldProps.width,
-        fieldProps.resizeHeightWithForm,
-        fieldProps.resizeHeightWithParent,
-        height,
-        field,
-    ]);
+    return (
+        <div style={containerStyle}>
+            <TabulatorGrid
+                {...tabulatorProps}
+                {...callbacks}
+                apiRef={gridApi}
+                dataSet={curDataSetRef.current}
+                readOnly={fieldProps.readOnly}
+                placeholder={fieldProps.placeholder}
+                width={fieldProps.width}
+                height={height}
+                resizeHeightWithParent={fieldProps.resizeHeightWithForm ? '#' + field.getModel().getFormId() : fieldProps.resizeHeightWithParent}
+            />
+        </div>
+    );
 };
 
 const useSplitTabulatorProps = (props: ITabulatorGridFieldProps) => {

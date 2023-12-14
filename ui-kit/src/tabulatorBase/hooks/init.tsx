@@ -140,6 +140,8 @@ const columnPropsToOptions = async (props: ITabulatorProps) => {
         const newColumns: ITabulatorColumn[] = [];
         for (const column of columns) {
             const newColumn: ITabulatorColumn = {...column};
+            if (column.visible !== false) newColumn.visible = true;
+
             if (React.isValidElement(newColumn.headerPopup)) {
                 // convert from JSX to HTML string (tabulator's element accepts string)
                 const el = await syncRender(newColumn.headerPopup, document.createElement('div'));

@@ -6,7 +6,6 @@ import {useInitGridApi} from './hooks/api';
 import {ContainerRender} from './renders/containerRender';
 import {SplitObject} from '@krinopotam/js-helpers';
 import {IGridApi, IGridProps, IGridPropsBase, IGridPropsCallbacks} from "@src/tabulatorGrid/types/tabulatorGridTypes";
-import {useWhyDidYouUpdate} from "ahooks";
 
 export const TabulatorGrid = (props: IGridProps): React.JSX.Element => {
     const tabulatorProps = useSplitTabulatorProps(props);

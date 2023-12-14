@@ -95,27 +95,27 @@ const useApiIsMounted = (unmountRef: React.MutableRefObject<boolean>): IGridApi[
     return useCallback(() => !unmountRef.current, [unmountRef]);
 };
 
-const useApiGetDataSet = (dataSetRef: React.MutableRefObject<IGridProps['dataSet'] | undefined>, gridApi: IGridApi): IGridApi['getDataSet'] => {
+const useApiGetDataSet = (curDataSetRef: React.MutableRefObject<IGridProps['dataSet'] | undefined>, gridApi: IGridApi): IGridApi['getDataSet'] => {
     return useCallback(() => {
-        if (!gridApi.tableApi) return dataSetRef.current ?? undefined;
+        if (!gridApi.tableApi) return curDataSetRef.current ?? undefined;
         return gridApi.tableApi.getData();
-    }, [dataSetRef, gridApi.tableApi]);
+    }, [curDataSetRef, gridApi.tableApi]);
 };
 
-const useApiSetDataSet = (dataSetRef: React.MutableRefObject<IGridProps['dataSet']>, gridApi: IGridApi): IGridApi['setDataSet'] => {
+const useApiSetDataSet = (curDataSetRef: React.MutableRefObject<IGridProps['dataSet']>, gridApi: IGridApi): IGridApi['setDataSet'] => {
     return useCallback(
         (dataSet: IGridProps['dataSet'] | null) => {
             if (!gridApi.tableApi) return;
 
-            dataSetRef.current = dataSet ?? undefined;
+            curDataSetRef.current = dataSet ?? undefined;
 
             gridApi.tableApi?.deselectRow();
             gridApi.tableApi?.clearData();
-            gridApi.tableApi?.setData(dataSetRef.current);
+            if (curDataSetRef.current?.length) gridApi.tableApi?.setData(curDataSetRef.current);
 
-            gridApi.gridProps.onDataChanged?.(dataSetRef.current, gridApi);
+            gridApi.gridProps.onDataChanged?.(curDataSetRef.current, gridApi);
         },
-        [dataSetRef, gridApi]
+        [curDataSetRef, gridApi]
     );
 };
 

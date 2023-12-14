@@ -28,7 +28,7 @@ export const ChangeDataSet = (): React.JSX.Element => {
         gridApi.fetchData(() => {
             return new Promise((resolve, reject) => {
                 setTimeout(() => {
-                    if (Math.random() < 0.5) reject({message: 'Ошибка загрузки данных', code: 400});
+                    if (Math.random() < 0.1) reject({message: 'Ошибка загрузки данных', code: 400});
                     else resolve({data: GenerateDataSet(1000, 'async')});
                 }, 1000);
             });

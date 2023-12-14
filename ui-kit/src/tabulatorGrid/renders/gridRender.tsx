@@ -1,11 +1,11 @@
 import React, {useCallback, useEffect, useMemo, useRef} from 'react';
-import {TabulatorBase, ITabulator, ITabulatorProps} from '@src/tabulatorBase';
+import {TabulatorBase, ITabulator, ITabulatorProps, IRequestProps} from '@src/tabulatorBase';
 import dispatcher from '@src/formsDispatcher';
 import {useEvents} from '../hooks/events';
 import {GenerateAjaxRequestFunc} from '@src/tabulatorGrid/helpers/fetchHelpers';
-import {IGridApi, IGridProps} from "@src/tabulatorGrid";
+import {IGridApi, IGridProps, IGridRowData} from "@src/tabulatorGrid";
 
-const GridRender_ = ({
+export const GridRender = ({
     tableRef,
     gridApi,
     gridProps,
@@ -37,9 +37,14 @@ const GridRender_ = ({
         dispatcher.pushToStack(gridApi.getId());
     }, [gridApi]);
 
-    const ajaxRequestFunc = useMemo(() => GenerateAjaxRequestFunc(gridApi, gridProps?.onDataFetch), [gridApi, gridProps]);
+    const ajaxRequestFunc = useMemo(() => GenerateAjaxRequestFunc(gridApi, gridProps?.onDataFetch), [gridApi, gridProps.onDataFetch]);
 
-    const dataSet = gridApi.getDataSet();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const onAjaxRequesting = useCallback((url:string, params:IRequestProps) => gridProps.onDataFetching?.(url, params, gridApi), [gridApi, gridProps.onDataFetching])
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const onAjaxResponse = useCallback( (_url:string, params: IRequestProps, response:IGridRowData[]) => gridProps.onDataFetchResponse?.(response, params, gridApi), [gridApi, gridProps.onDataFetchResponse])
+    
     return (
         <TabulatorBase
             {...tabulatorProps}
@@ -50,12 +55,10 @@ const GridRender_ = ({
             dataLoader={false} //disable tabulator inbuilt loader overlay
             onTableRef={onTableRef}
             dataTreeFilter={true}
-            data={dataSet}
-            //data={gridProps.onDataFetch ? undefined : gridApi.getDataSet() ?? []} //WORKAROUND: if dataSet is undefined and ajax is not used, dataSet must be []. Otherwise, problems may occur when adding rows
-            //ajaxURL={gridProps?.onDataFetch ? '-' : undefined} //WORKAROUND: if we want to use ajax request, we should set ajaxUrl to any value
-            ajaxRequesting={gridProps.onDataFetching ? undefined : ((url, params) => gridProps.onDataFetching?.(url, params, gridApi)) as ITabulator['options']['ajaxRequesting']}
+            data={gridProps.dataSet}
+            ajaxRequesting={gridProps.onDataFetching ? undefined : (onAjaxRequesting as ITabulator['options']['ajaxRequesting'])}
             ajaxRequestFunc={!gridProps.onDataFetch ? undefined : (ajaxRequestFunc as ITabulator['options']['ajaxRequestFunc'])}
-            ajaxResponse={!gridProps.onDataFetchResponse ? undefined : (_url, params, response) => gridProps.onDataFetchResponse?.(response, params, gridApi)}
+            ajaxResponse={!gridProps.onDataFetchResponse ? undefined : onAjaxResponse}
             containerClassName={gridProps.className}
             placeholder={gridProps.placeholder ?? 'Строки отсутствуют'}
             events={events}
@@ -63,7 +66,6 @@ const GridRender_ = ({
     );
 };
 
-export const GridRender = React.memo(GridRender_);
 
 /** Resize tabulator grid if parent container resized */
 const resizeObserver = (tableRef: React.MutableRefObject<ITabulator | undefined>, parentClassName: string) => {
