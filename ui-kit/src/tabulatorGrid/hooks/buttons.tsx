@@ -49,23 +49,28 @@ export const useInitButtons = (gridApi: IGridApi): IFormButtons => {
                 btn.tooltip = btn.tooltip ?? btn.title?.toString();
                 btn.title = undefined;
             }
+
+            if (btn.checkDisabled) btn.disabled = !activeRow || selectedRows.length !== 1;
+            if (btn.checkHidden) btn.hidden = !activeRow || selectedRows.length !== 1;
         }
 
         return resultButtons;
     }, [
-        buttons,
-        buttonsPos,
-        buttonsSize,
-        cloneButton,
+        headerLabel,
+        viewButton,
         createButton,
+        cloneButton,
+        updateButton,
+        selectButton,
         deleteButton,
         filterToggleButton,
-        iconsOnly,
-        headerLabel,
-        selectButton,
         systemButtons,
-        updateButton,
-        viewButton,
+        buttons,
+        buttonsSize,
+        buttonsPos,
+        iconsOnly,
+        activeRow,
+        selectedRows.length,
     ]);
 };
 
@@ -84,7 +89,7 @@ const useGetHeaderLabel = (gridApi: IGridApi): IFormButton | undefined => {
         return {
             weight: 1,
             title: gridProps.headerLabel,
-            type:'element',
+            type: 'element',
             position: 'left',
         } satisfies IFormButton;
     }, [gridApi]);

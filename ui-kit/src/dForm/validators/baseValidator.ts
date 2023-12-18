@@ -85,7 +85,7 @@ export class BaseValidator {
             } else if (rule.type === 'date') {
                 if (!this.validateDate(<string>value, rule)) return rule.message;
             } else if (rule.type === 'object') {
-                if (typeof value !== 'object') return 'Неподходящий тип данных';
+                if (value && typeof value !== 'object') return 'Неподходящий тип данных';
                 if (!this.validateRowObject(<{id: string} | [{id: string}]>value, rule)) return rule.message;
             } else if (rule.type === 'custom') {
                 if (typeof rule.callback === 'function') return rule.callback(value, formModel);

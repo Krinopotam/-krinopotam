@@ -1,9 +1,9 @@
-import React from "react";
-import {IButtonsRowApi, IFormButton, IFormButtons} from "@src/buttonsRow";
-import {IDFormModalApi, IDFormModalProps} from "@src/dFormModal";
-import {ITabulator, ITabulatorProps, IRequestProps} from "@src/tabulatorBase";
-import {RowComponent, ScrollToRowPosition} from "tabulator-tables";
-import {TPromise} from "@krinopotam/service-types";
+import React from 'react';
+import {IButtonsRowApi, IFormButton, IFormButtons} from '@src/buttonsRow';
+import {IDFormModalApi, IDFormModalProps} from '@src/dFormModal';
+import {IRequestProps, ITabulator, ITabulatorProps} from '@src/tabulatorBase';
+import {RowComponent, ScrollToRowPosition} from 'tabulator-tables';
+import {TPromise} from '@krinopotam/service-types';
 
 export interface IGridRowData extends Record<string, unknown> {
     /** Row id */
@@ -28,7 +28,7 @@ export interface IGridPropsBase {
     className?: string;
 
     /** Grid label in header buttons row */
-    headerLabel?:React.ReactNode
+    headerLabel?: React.ReactNode;
 
     /** Grid header buttons */
     buttons?: Record<'view' | 'create' | 'clone' | 'update' | 'delete' | 'select' | 'filterToggle' | 'system', IFormButton | null> | IFormButtons;
@@ -52,7 +52,7 @@ export interface IGridPropsBase {
     selectionFormProps?: IDFormModalProps;
 
     /** Append row selection when using selectionFormProps (by default, the dataSet is replaced with the selected rows. This option allows you to change this behavior) */
-    appendSelection?:boolean;
+    appendSelection?: boolean;
 
     /** Disable row hover effect */
     noHover?: boolean;
@@ -75,10 +75,10 @@ export interface IGridPropsCallbacks {
     onMenuVisibilityChanged?: (isVisible: boolean, gridApi: IGridApi) => void;
 
     /** special callback used to fetch remote data. If not specified, the request will not be processed. */
-    onDataFetch?: (params: IRequestProps, gridApi: IGridApi) => IGridDataSourcePromise | IGridRowData[]| undefined;
+    onDataFetch?: (params: IRequestProps, gridApi: IGridApi) => IGridDataSourcePromise | IGridRowData[] | undefined;
 
     /** Called before a data fetching begins. If it returns false, then the fetch is canceled */
-    onDataFetching?: (url:string, params: IRequestProps, gridApi: IGridApi) => boolean
+    onDataFetching?: (url: string, params: IRequestProps, gridApi: IGridApi) => boolean;
 
     /** Fires when a successful remote fetch request has been made. This callback can also be used to modify the received data before it is parsed by the table. If you use this callback it must return the data to be parsed by Tabulator, otherwise no data will be rendered. */
     onDataFetchResponse?: (dataSet: IGridRowData[], params: IRequestProps, gridApi: IGridApi) => IGridRowData[];
@@ -111,6 +111,7 @@ export type IGridDeletePromise = TPromise<{data: boolean; last_page?: number}, {
 
 export type IRowKey = IGridRowData['id'];
 export type IRowKeys = IRowKey | IRowKey[];
+
 export interface IGridApi {
     /** Get grid ID */
     getId: () => string;
