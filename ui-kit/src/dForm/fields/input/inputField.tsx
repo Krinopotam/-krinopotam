@@ -13,7 +13,7 @@ export interface IInputFieldProps extends IBaseFieldProps<InputField> {
     maxLength?: number;
 
     /** The autocomplete attribute*/
-    autocomplete?: 'on' | 'off';
+    autocomplete?: string;
 
     /** spellcheck attribute */
     spellcheck?: 'true' | 'false';

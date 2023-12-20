@@ -16,7 +16,7 @@ export interface IPasswordFieldProps extends IBaseFieldProps<PasswordField> {
     iconRender?: (visible: boolean) => React.ReactNode;
 
     /** The autocomplete attribute*/
-    autocomplete?: 'on' | 'off';
+    autocomplete?: string;
 
     /** spellcheck attribute */
     spellcheck?: 'true' | 'false';

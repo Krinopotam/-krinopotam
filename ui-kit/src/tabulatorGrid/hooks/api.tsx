@@ -128,7 +128,9 @@ const useApiGetIsLoading = (isLoading: boolean): IGridApi['getIsLoading'] => {
 const useApiSetIsLoading = (setIsLoading: React.Dispatch<React.SetStateAction<boolean>>): IGridApi['setIsLoading'] => {
     return useCallback(
         (isLoading: boolean) => {
-            setIsLoading(isLoading);
+            setTimeout(() => {
+                setIsLoading(isLoading);
+            }, 0);
         },
         [setIsLoading]
     );
