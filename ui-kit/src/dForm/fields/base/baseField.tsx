@@ -230,6 +230,7 @@ export class BaseField<TFieldProps extends IAnyFieldProps> {
 
         if (!noEvents) {
             this.getProps()?.onValueChanged?.(value, prevValue, this);
+            this.model.getModelCallbacks().onFormValuesChanged?.(this.fieldName, formValues, this.model)
             this.validate(noEvents, noRerender);
         }
 
@@ -358,7 +359,10 @@ export class BaseField<TFieldProps extends IAnyFieldProps> {
         this.model.getFormHiddenFields()[this.fieldName] = value;
         this.model.lockDependedFields(this, noEvents, noRerender);
 
-        if (value) this.setReady(false, true); //the hidden fields are not ready because they are not rendered, but form ready status not changed
+        if (value) {
+            this.setError('', noEvents, noRerender) //hidden fields can't have error
+            this.setReady(false, true); //the hidden fields are not ready because they are not rendered, but form ready status not changed
+        }
 
         if (!noEvents) this.getProps()?.onHiddenStateChanged?.(value, this);
         if (!noRerender) this.model.emitFormRender(); //it is necessary to re-render the entire form, since hidden fields may change the behavior of containers
@@ -407,11 +411,9 @@ export class BaseField<TFieldProps extends IAnyFieldProps> {
         if (!noEvents) {
             this.getProps()?.onErrorChanged?.(value, this);
             const modelCallbacks = this.model.getModelCallbacks();
-            if (value) modelCallbacks.onFormHasErrors?.(this.model.getFormValues(), errors, this.model);
-            else {
-                if (this.model.isFormHasError()) modelCallbacks.onFormHasErrors?.(this.model.getFormValues(), errors, this.model);
-                else modelCallbacks.onFormHasNoErrors?.(this.model.getFormValues(), this.model);
-            }
+
+            if (this.model.isFormHasError()) modelCallbacks.onFormHasErrors?.(this.model.getFormValues(), errors, this.model);
+            else modelCallbacks.onFormHasNoErrors?.(this.model.getFormValues(), this.model);
         }
 
         if (!noRerender) this.emitRender();

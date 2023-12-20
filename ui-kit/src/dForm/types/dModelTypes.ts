@@ -3,16 +3,6 @@ import {IError, TPromise} from "@krinopotam/service-types";
 import {DModel} from "@src/dForm";
 
 export interface IDFormBaseCallbacks<T> {
-    // Tabs callbacks
-    /** fires when the hidden state of a tab changed */
-    onTabHiddenStateChanged?: (tabName: string, state: boolean, api: T) => void;
-
-    /** fires when read only state of a tab changed */
-    onTabReadOnlyStateChanged?: (tabName: string, state: boolean, api: T) => void;
-
-    /** fires when the disable state of a tab changes  */
-    onTabDisabledStateChanged?: (tabName: string, state: boolean, api: T) => void;
-
     // The form callbacks
     /** fires when the dirty state of the form changed */
     onFormDirtyStateChanged?: (state: boolean, api: T) => void;
@@ -26,8 +16,14 @@ export interface IDFormBaseCallbacks<T> {
     /** fires when the form began initialization (renders for the first time) */
     onFormInit?: (api: T) => void;
 
+    /** fires when the form model has been initialized */
+    onFormModelInitialized?: (api: T) => void;
+
     /** fires when the form ready status changed (form ready means form is rendered, initialized and all fields data are loaded) */
     onFormReadyStateChanged?: (state: boolean, api: T) => boolean | void;
+
+    /** fires when the form values changed  */
+    onFormValuesChanged?: (fieldName:string, values: Record<string, unknown>,  api: T) => void;
 
     /** fires when the form validated */
     onFormValidated?: (values: Record<string, unknown>, errors: Record<string, string>, isSubmit: boolean, api: T) => void;
@@ -65,7 +61,7 @@ export interface IDFormBaseCallbacks<T> {
     /** fires, when the submitting finishes, whether in failure or success. */
     onSubmitComplete?: (values: Record<string, unknown>, errors: Record<string, string | undefined>, api: T) => boolean | void;
 
-    /** fires, when the dataSet change */
+    /** fires, when the form dataSet changed. Unlike onFormValuesChanged, it is triggered only when a new dataSet is set via setFormValues and is not called when the user changes the field values */
     onDataSetChange?: (dataSet: IDFormDataSet | undefined, api: T) => IDFormDataSet | undefined;
 }
 

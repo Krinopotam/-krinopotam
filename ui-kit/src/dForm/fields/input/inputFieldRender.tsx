@@ -40,6 +40,8 @@ export const InputFieldRender = ({field}:{field:InputField}):React.JSX.Element =
             value={value}
             style={fieldProps.style}
             width={fieldProps.width}
+            autoComplete={fieldProps.autocomplete}
+            spellCheck={fieldProps.spellcheck}
         />
     );
 }

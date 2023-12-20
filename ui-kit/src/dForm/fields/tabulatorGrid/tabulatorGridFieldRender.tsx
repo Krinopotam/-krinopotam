@@ -144,6 +144,7 @@ const usePrepareCallbacks = (field: TabulatorGridField, fieldProps: ITabulatorGr
             onDataLoaded: (dataSet: IGridRowData[] | undefined, gridApi: IGridApi) => {
                 field.setReady(true);
                 const fieldProps = field.getProps();
+                if (!fieldProps.selectionMode) field.setValue(dataSet ?? [], false, true, true);
                 return fieldProps.onDataLoaded?.(dataSet, gridApi, field);
             },
             onDataProcessed: (dataSet: IGridRowData[] | undefined, gridApi: IGridApi) => {

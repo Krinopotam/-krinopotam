@@ -10,7 +10,7 @@ export interface ISelectFieldProps extends IBaseFieldProps<SelectField> {
     fullItemValue?:boolean;
 
     /** Select component options items */
-    dataSet: ISelectProps['dataSet'];
+    dataSet?: ISelectProps['dataSet'];
 
     /** Allow clear and show clear button */
     allowClear?: ISelectProps['allowClear'];
@@ -101,9 +101,9 @@ export interface ISelectFieldProps extends IBaseFieldProps<SelectField> {
 
     /********** Callbacks *************/
     /** Fires when item selected */
-    onSelect: ISelectProps['onSelect'];
+    onSelect?: ISelectProps['onSelect'];
     /** Fires when item deselected */
-    onDeselect: ISelectProps['onDeselect'];
+    onDeselect?: ISelectProps['onDeselect'];
 }
 
 export class SelectField extends BaseField<ISelectFieldProps> {

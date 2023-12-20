@@ -14,6 +14,12 @@ export interface IPasswordFieldProps extends IBaseFieldProps<PasswordField> {
 
     /** Icons render */
     iconRender?: (visible: boolean) => React.ReactNode;
+
+    /** The autocomplete attribute*/
+    autocomplete?: 'on' | 'off';
+
+    /** spellcheck attribute */
+    spellcheck?: 'true' | 'false';
 }
 
 export class PasswordField extends BaseField<IPasswordFieldProps> {

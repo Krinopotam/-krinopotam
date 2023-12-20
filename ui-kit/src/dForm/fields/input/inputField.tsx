@@ -4,13 +4,19 @@ import React from "react";
 
 export interface IInputFieldProps extends IBaseFieldProps<InputField> {
     /** Default value */
-    value?: string | number ;
+    value?: string | number;
 
     /** Whether show text count */
     showCount?: boolean;
 
     /** The max length */
     maxLength?: number;
+
+    /** The autocomplete attribute*/
+    autocomplete?: 'on' | 'off';
+
+    /** spellcheck attribute */
+    spellcheck?: 'true' | 'false';
 }
 
 export class InputField extends BaseField<IInputFieldProps> {

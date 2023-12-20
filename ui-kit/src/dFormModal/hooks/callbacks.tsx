@@ -12,16 +12,6 @@ import {IDFormModalApi, IDFormModalProps} from "@src/dFormModal";
 export const useFormCallbacks = (formModalApi: IDFormModalApi, modalFormProps: IDFormModalProps) => {
     return useMemo((): IDFormCallbacks => {
         return {
-            // Tabs callbacks
-            /** fires when the hidden state of a tab changed */
-            onTabHiddenStateChanged: (tabName: string, state: boolean) => modalFormProps?.onTabHiddenStateChanged?.(tabName, state, formModalApi),
-
-            /** fires when read only state of a tab changed */
-            onTabReadOnlyStateChanged: (tabName: string, state: boolean) => modalFormProps?.onTabReadOnlyStateChanged?.(tabName, state, formModalApi),
-
-            /** fires when the disable state of a tab changes  */
-            onTabDisabledStateChanged: (tabName: string, state: boolean) => modalFormProps?.onTabDisabledStateChanged?.(tabName, state, formModalApi),
-
             // Form callbacks
             /** fires when the dirty state of the form changed */
             onFormDirtyStateChanged: (state: boolean) => modalFormProps?.onFormDirtyStateChanged?.(state, formModalApi),
@@ -32,8 +22,14 @@ export const useFormCallbacks = (formModalApi: IDFormModalApi, modalFormProps: I
             /** fires when the form began initialization (renders for the first time) */
             onFormInit: () => modalFormProps?.onFormInit?.(formModalApi),
 
+            /** fires when the form model has been initialized */
+            onFormModelInitialized: () => modalFormProps?.onFormModelInitialized?.(formModalApi),
+
             /** fires when a form ready state changed */
             onFormReadyStateChanged: (state: boolean) => modalFormProps?.onFormReadyStateChanged?.(state, formModalApi),
+
+            /** fires when the form values changed  */
+            onFormValuesChanged: (fieldName:string, values: Record<string, unknown>) => modalFormProps?.onFormValuesChanged?.(fieldName, values, formModalApi),
 
             /** fires when the form validated */
             onFormValidated: (values: Record<string, unknown>, errors: Record<string, string>, isSubmit: boolean) =>
@@ -117,7 +113,8 @@ export const useFormCallbacks = (formModalApi: IDFormModalApi, modalFormProps: I
                 formModalApi.buttonsApi.disabled?.('cancel', false);
                 formModalApi.buttonsApi.loading?.('ok', false);
             },
-            /** fires, when the dataSet change */
+
+            /** fires, when the form dataSet changed. Unlike onFormValuesChanged, it is triggered only when a new dataSet is set via setFormValues and is not called when the user changes the field values */
             onDataSetChange: (dataSet: IDFormDataSet | undefined) => modalFormProps?.onDataSetChange?.(dataSet, formModalApi),
         } as IDFormCallbacks;
     }, [formModalApi, modalFormProps]);

@@ -12,16 +12,6 @@ import {IDFormApi, IDFormDataSet, IDFormModelCallbacks, IDFormProps} from "@src/
 export const useModelCallbacks = (formProps: IDFormProps, formApi: IDFormApi) => {
     return useMemo((): IDFormModelCallbacks => {
         return {
-            // Tabs callbacks
-            /** fires when the hidden state of a tab changed */
-            onTabHiddenStateChanged: (tabName: string, state: boolean) => formProps?.onTabHiddenStateChanged?.(tabName, state, formApi),
-
-            /** fires when read only state of a tab changed */
-            onTabReadOnlyStateChanged: (tabName: string, state: boolean) => formProps?.onTabReadOnlyStateChanged?.(tabName, state, formApi),
-
-            /** fires when the disable state of a tab changes  */
-            onTabDisabledStateChanged: (tabName: string, state: boolean) => formProps?.onTabDisabledStateChanged?.(tabName, state, formApi),
-
             // The form callback
             /** fires when the dirty state of the form changed */
             onFormDirtyStateChanged: (state: boolean) => formProps?.onFormDirtyStateChanged?.(state, formApi),
@@ -32,12 +22,18 @@ export const useModelCallbacks = (formProps: IDFormProps, formApi: IDFormApi) =>
             /** fires when the form began initialization (renders for the first time) */
             onFormInit: () => formProps?.onFormInit?.(formApi),
 
+            /** fires when the form model has been initialized */
+            onFormModelInitialized: () => formProps?.onFormModelInitialized?.(formApi),
+
             /** fires when a form ready state changed */
             onFormReadyStateChanged: (state: boolean) => {
                 if (formProps?.onFormReadyStateChanged?.(state, formApi) === false) return false;
                 if (state) formApi.buttonsApi.disabled?.('ok', false);
                 else formApi.buttonsApi.disabled?.('ok', true);
             },
+
+            /** fires when the form values changed  */
+            onFormValuesChanged: (fieldName:string, values: Record<string, unknown>) => formProps?.onFormValuesChanged?.(fieldName, values, formApi),
 
             /** fires when the form validated */
             onFormValidated: (values: Record<string, unknown>, errors: Record<string, string>, isSubmit: boolean) =>
@@ -128,7 +124,7 @@ export const useModelCallbacks = (formProps: IDFormProps, formApi: IDFormApi) =>
                 formApi.buttonsApi.loading?.('ok', false);
             },
 
-            /** fires, when the dataSet change */
+            /** fires, when the form dataSet changed. Unlike onFormValuesChanged, it is triggered only when a new dataSet is set via setFormValues and is not called when the user changes the field values */
             onDataSetChange: (dataSet: IDFormDataSet | undefined) => formProps?.onDataSetChange?.(dataSet, formApi),
         };
     }, [formProps, formApi]);

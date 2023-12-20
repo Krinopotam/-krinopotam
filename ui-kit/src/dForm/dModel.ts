@@ -12,12 +12,12 @@ import {IsPromise} from '@krinopotam/js-helpers';
 
 import {BaseValidator} from './validators/baseValidator';
 import React from 'react';
-import {IBaseField, IAnyFieldProps} from '@src/dForm/fields/base/baseField';
+import {IAnyFieldProps, IBaseField} from '@src/dForm/fields/base/baseField';
 import {IDFormDataSet, IDFormFieldsProps, IDFormProps} from '@src/dForm/index';
 import {IError} from '@krinopotam/service-types';
 import {InlineGroupField} from '@src/dForm/fields/inlineGroup/inlineGroupField';
-import {IDFormMode} from "@src/dForm/types/dFormTypes";
-import {IDFormModelCallbacks, IDFormSubmitResultObject, IDFormSubmitResultPromise} from "@src/dForm/types/dModelTypes";
+import {IDFormMode} from '@src/dForm/types/dFormTypes';
+import {IDFormModelCallbacks, IDFormSubmitResultObject, IDFormSubmitResultPromise} from '@src/dForm/types/dModelTypes';
 
 export class DModel {
     //region Private properties
@@ -119,7 +119,7 @@ export class DModel {
     }
 
     initModel(formProps: IDFormProps, callbacks: IDFormModelCallbacks) {
-        const startTime = new Date().getTime();
+        //const startTime = new Date().getTime();
 
         this._callbacks = callbacks;
 
@@ -146,8 +146,10 @@ export class DModel {
         if (!formProps.disableDepended) this._hidden = this.calculateLockedFields();
         else this._disabled = this.calculateLockedFields();
 
-        const endTime = new Date().getTime();
-        console.log(`dModel init: ${endTime - startTime}ms`);
+        this._callbacks.onFormModelInitialized?.(this);
+
+        //const endTime = new Date().getTime();
+        //console.log(`dModel init: ${endTime - startTime}ms`);
     }
 
     /** Instantiate fields classes and prepare fields collections */
@@ -178,7 +180,7 @@ export class DModel {
 
     /** Transforming field properties.
      * If the field properties contain the short entry inlineGroup, then create additional parameters to transform to InlineGroupField  */
-    modifyFieldsProps(fieldsProps: IDFormFieldsProps) {
+    private modifyFieldsProps(fieldsProps: IDFormFieldsProps) {
         const fieldsPropsGroups: Record<string, Record<string, IAnyFieldProps>> = {};
         let i = 0;
         for (const fieldName in fieldsProps) {
@@ -571,7 +573,7 @@ export class DModel {
 
         const formValues = this.getFormValues();
         const dataSet = this.getFormDataSet();
-        const values = {...dataSet, ...formValues} // merge dataSet and values
+        const values = {...dataSet, ...formValues}; // merge dataSet and values
         this._callbacks.onFormValidated?.(values, this.getFormErrors(), this.isFormSubmitting(), this);
         return this.getFormErrors();
     }
@@ -649,7 +651,7 @@ export class DModel {
         if (!dataSource) return;
 
         dataSource.then(
-            (result: { data: Record<string, unknown> }) => {
+            (result: {data: Record<string, unknown>}) => {
                 if (!this.isFormMounted()) return;
                 this.setFormFetching(false);
                 this.setFormFetchingFailed(false);
@@ -693,7 +695,9 @@ export class DModel {
 
         const formValues = this.getFormValues();
         const dataSet = this.getFormDataSet();
-        const values = {...dataSet, ...formValues} // merge dataSet and values
+        const values = {...dataSet, ...formValues}; // merge dataSet and values
+
+        if (this._formMode === 'clone') values['_clonedFrom_'] = values.id;
 
         if (this._formMode === 'create' || this._formMode === 'clone') delete values.id;
 
@@ -708,12 +712,11 @@ export class DModel {
             return;
         }
 
-
         if (!this._callbacks?.onSubmit) {
             this.setFormSubmitting(false);
-            onSubmitError?.(values, {message: 'The onSubmit callback not specified', code: 405, stack:Error().stack}, this);
+            onSubmitError?.(values, {message: 'The onSubmit callback not specified', code: 405, stack: Error().stack}, this);
             onSubmitComplete?.(values, validationErrors, this);
-            this._callbacks?.onSubmitError?.(values, {message: 'The onSubmit callback not specified', code: 405, stack:Error().stack}, this);
+            this._callbacks?.onSubmitError?.(values, {message: 'The onSubmit callback not specified', code: 405, stack: Error().stack}, this);
             this._callbacks?.onSubmitComplete?.(values, validationErrors, this);
             return;
         }
@@ -766,8 +769,8 @@ export class DModel {
                 onSubmitSuccess?.(values, values, this);
                 this._callbacks?.onSubmitSuccess?.(values, values, this);
             } else {
-                onSubmitError?.(values, {message:'Неизвестная ошибка', code: 500, stack:Error().stack}, this);
-                this._callbacks?.onSubmitError?.(values, {message: 'Неизвестная ошибка', code: 500, stack:Error().stack}, this);
+                onSubmitError?.(values, {message: 'Неизвестная ошибка', code: 500, stack: Error().stack}, this);
+                this._callbacks?.onSubmitError?.(values, {message: 'Неизвестная ошибка', code: 500, stack: Error().stack}, this);
             }
 
             onSubmitComplete?.(values, validationErrors, this);
