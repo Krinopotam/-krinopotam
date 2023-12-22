@@ -6,7 +6,7 @@
  * @license MIT
  */
 
-import {StopOutlined, ExclamationCircleOutlined, InfoCircleOutlined, CheckCircleOutlined} from '@ant-design/icons';
+import {WarningOutlined, ExclamationCircleOutlined, InfoCircleOutlined, CheckCircleOutlined} from '@ant-design/icons';
 
 import React from 'react';
 import {Space, theme} from 'antd';
@@ -44,7 +44,7 @@ export const HeaderRender = (props: IHeaderRenderProps): React.JSX.Element => {
     } else if (props.colorType === 'danger') {
         backgroundColor = token.colorErrorHover;
         color = token.colorWhite;
-        icon = props.icon ?? <StopOutlined />;
+        icon = props.icon ?? <WarningOutlined />;
     } else {
         icon = props.icon ?? undefined;
     }

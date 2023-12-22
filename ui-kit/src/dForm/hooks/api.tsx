@@ -1,7 +1,5 @@
 import React, {useCallback} from 'react';
 import {Space, Typography} from 'antd';
-
-import {DModel} from '../dModel';
 import {IButtonsRowApi} from '@src/buttonsRow';
 import {MessageBox} from '@src/messageBox';
 import {IDFormProps} from "@src/dForm";
@@ -9,12 +7,10 @@ import {IDFormApi} from "@src/dForm/types/dFormTypes";
 
 export const useInitFormApi = (
     formApi: IDFormApi,
-    model: DModel,
     formProps: IDFormProps,
     buttonsApi: IButtonsRowApi,
     updateFormProps: (props: IDFormProps) => void
 ) => {
-    formApi.model = model;
     const apiGetFormProps = useApiGetFormProps(formProps);
     const apiSetFormProps = useApiSetFormProps(formProps, updateFormProps);
     const apiValidateForm = useApiValidateForm(formApi);

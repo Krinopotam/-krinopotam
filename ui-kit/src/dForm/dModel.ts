@@ -249,7 +249,7 @@ export class DModel {
 
             let fieldValue: unknown = undefined;
             if (mode === 'create') fieldValue = fieldProps.value;
-            else fieldValue = fieldProps.value ?? dataSet?.[fieldName];
+            else fieldValue = dataSet?.[fieldName];
             values[fieldName] = fieldValue;
         }
 

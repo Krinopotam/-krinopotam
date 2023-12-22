@@ -36,8 +36,8 @@ export const DForm = (props: IDFormProps): React.JSX.Element => {
     //endregion
 
     const modelCallbacks = useModelCallbacks(formProps, formApi);
-    const model = useFormModel(formId, formProps, modelCallbacks);
-    useInitFormApi(formApi, model, formProps, buttonsApi, updateFormProps);
+    useInitFormModel(formId, formApi, formProps, modelCallbacks);
+    useInitFormApi(formApi, formProps, buttonsApi, updateFormProps);
 
     useInitialFetchData(formApi);
 
@@ -46,9 +46,10 @@ export const DForm = (props: IDFormProps): React.JSX.Element => {
     return <FormRender formProps={formProps} formApi={formApi} formButtons={formButtons}/>;
 };
 
-const useFormModel = (formId: string, formProps: IDFormProps, callbacks: IDFormModelCallbacks) => {
+const useInitFormModel = (formId: string, formApi:IDFormApi, formProps: IDFormProps, callbacks: IDFormModelCallbacks) => {
     const modelRef = useRef<DModel>();
     if (!modelRef.current) modelRef.current = new DModel(formId);
+    formApi.model = modelRef.current;
     modelRef.current.initModel(formProps, callbacks);
 
     return modelRef.current;

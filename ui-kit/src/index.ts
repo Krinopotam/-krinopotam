@@ -159,3 +159,7 @@ export type {
     ITreeSelectSourcePromise,
     ITreeSelectApi,
 } from '@src/treeSelect';
+
+/*************** Waiter **************************/
+export {Waiter} from '@src/waiter';
+export type {IWaiterProps} from '@src/waiter';
