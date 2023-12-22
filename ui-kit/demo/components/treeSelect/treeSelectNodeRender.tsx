@@ -145,6 +145,7 @@ const formProps: IDFormProps = {
             component: TreeSelectField,
             label: 'Подразделения',
             dataSet: dataSet,
+            plainList:true,
             titleRender: titleRender, //node title render
             labelRender: labelRender, //selected value render
             filterTreeNode: filterTreeNode, //custom filter

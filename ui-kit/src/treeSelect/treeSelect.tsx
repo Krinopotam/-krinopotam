@@ -10,6 +10,8 @@ import {TPromise} from '@krinopotam/service-types';
 import {ButtonsRow, IButtonsRowApi, IFormButtons} from '@src/buttonsRow/buttonsRow';
 import {useInitButtons} from '@src/treeSelect/hooks/buttons';
 
+import './css/index.scss';
+
 //region Types
 interface ITreeSelectNodeBase extends Record<string, unknown> {
     /** Node id */
@@ -109,6 +111,9 @@ export interface ITreeSelectBaseProps {
 
     /** Edit buttons*/
     editButtons?: IFormButtons;
+
+    /** If true, the component is expected to contain a flat list (no children). In this case, the space for the expand/collapse icon will be hidden*/
+    plainList?: boolean;
 
     /** --- Callbacks --------------- */
 
@@ -234,6 +239,7 @@ const useSplitAntTreeSelectProps = (props: ITreeSelectProps) => {
             nodeDeleteMessage: true,
             confirmDelete: true,
             editButtons: true,
+            plainList:true,
             onReady: true,
             onChange: true,
             onClear: true,
@@ -247,4 +253,3 @@ const useSplitAntTreeSelectProps = (props: ITreeSelectProps) => {
         return result[1];
     }, [props]);
 };
-

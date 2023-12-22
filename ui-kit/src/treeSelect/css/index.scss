@@ -1,0 +1,11 @@
+.tree-select-plain {
+  .ant-select-tree-switcher {
+    display: none;
+  }
+
+  .ant-select-tree-treenode {
+    .ant-select-tree-node-content-wrapper {
+      padding-left: 8px;
+    }
+  }
+}

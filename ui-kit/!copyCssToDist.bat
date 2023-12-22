@@ -18,3 +18,9 @@ if exist src\loadingContainer\css (
 	@echo src\loadingContainer\css
 	robocopy src\loadingContainer\css dist\loadingContainer\css /E /NJH /NJS /NFL /NDL
 )
+
+if exist src\treeSelect\css (
+	@echo src\treeSelect\css
+	robocopy src\treeSelect\css dist\treeSelect\css /E /NJH /NJS /NFL /NDL
+)
+
