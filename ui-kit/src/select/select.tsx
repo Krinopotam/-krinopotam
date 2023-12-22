@@ -20,7 +20,7 @@ export interface ISelectLabeledValue extends Record<string, unknown> {
 /**
  * Item of select control or enum table column
  */
-export interface ISelectNode extends Record<string, unknown> {
+export interface ISelectNodeBase extends Record<string, unknown> {
     id?: string | number;
     label?: string | React.ReactNode;
     disabled?: boolean;
@@ -28,6 +28,8 @@ export interface ISelectNode extends Record<string, unknown> {
     className?: string;
     children?: Omit<ISelectNode, 'children'>;
 }
+
+export type ISelectNode<T extends Record<string, unknown> = Record<string, unknown>> = ISelectNodeBase & T;
 
 export type ISelectOptions = ISelectNode[];
 

@@ -699,7 +699,10 @@ export class DModel {
 
         if (this._formMode === 'clone') values['_clonedFrom_'] = values.id;
 
-        if (this._formMode === 'create' || this._formMode === 'clone') delete values.id;
+        if (this._formMode === 'create' || this._formMode === 'clone') {
+            values['_isNew_'] = true;
+            delete values.id;
+        }
 
         const validationErrors = this.validateForm();
 

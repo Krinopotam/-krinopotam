@@ -11,7 +11,7 @@ import {ButtonsRow, IButtonsRowApi, IFormButtons} from '@src/buttonsRow/buttonsR
 import {useInitButtons} from '@src/treeSelect/hooks/buttons';
 
 //region Types
-export interface ITreeSelectNode extends Record<string, unknown> {
+interface ITreeSelectNodeBase extends Record<string, unknown> {
     /** Node id */
     id?: string | number;
     /** Node value (same as id, used to avoid antd bug) */
@@ -38,6 +38,8 @@ export interface ITreeSelectNode extends Record<string, unknown> {
     /** Service rendered label, used if component has label render */
     __label?: string | React.ReactNode;
 }
+
+export type ITreeSelectNode<T extends Record<string, unknown> = Record<string, unknown>> = ITreeSelectNodeBase & T;
 
 export type ITreeSelectValue = ITreeSelectNode | ITreeSelectNode[] | null;
 
@@ -195,7 +197,8 @@ export const TreeSelect = (props: ITreeSelectProps): React.JSX.Element => {
 
     */
 
-    if (!editFormProps || treeProps.readOnly || treeProps.disabled) return <TreeSelectRender api={api} treeSelectProps={props} antdTreeSelectProps={antdTreeSelectProps} />;
+    if (!editFormProps || treeProps.readOnly || treeProps.disabled)
+        return <TreeSelectRender api={api} treeSelectProps={props} antdTreeSelectProps={antdTreeSelectProps} />;
 
     return (
         <Row wrap={false}>
