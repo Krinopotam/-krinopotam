@@ -697,10 +697,10 @@ export class DModel {
         const dataSet = this.getFormDataSet();
         const values = {...dataSet, ...formValues}; // merge dataSet and values
 
-        if (this._formMode === 'clone') values['_clonedFrom_'] = values.id;
+        if (this._formMode === 'clone') values['_clonedFrom'] = values.id;
 
         if (this._formMode === 'create' || this._formMode === 'clone') {
-            values['_isNew_'] = true;
+            values['_isNew'] = true;
             delete values.id;
         }
 
