@@ -9,8 +9,6 @@ export interface IWaiterProps {
 }
 
 export const Waiter = (props: PropsWithChildren<IWaiterProps>) => {
-    if (!props.show) return props.children;
-
     const style: React.CSSProperties = {
         position: props.fullScreen ? 'fixed' : 'absolute',
         top: 0,
@@ -27,7 +25,7 @@ export const Waiter = (props: PropsWithChildren<IWaiterProps>) => {
 
     return (
         <>
-            <div style={style}>{props.showSpinner !== false && <Spin />}</div>
+            {props.show && <div style={style}>{props.showSpinner !== false && <Spin/>}</div>}
             {props.showChildren && props.children}
         </>
     );

@@ -85,7 +85,7 @@ export const AutoSizedTextArea = React.forwardRef<TextAreaRef, IAutoSizedTextAre
         );
     }
 );
-AutoSizedTextArea.displayName = 'AutoSizedTextArea2';
+AutoSizedTextArea.displayName = 'AutoSizedTextArea';
 
 const useGetInputBoundsStyle = (textAreaRef: React.RefObject<TextAreaRef>): IInputBoundsStyle => {
     const [inputStyle, setInputStyle] = useState<IInputBoundsStyle>({
