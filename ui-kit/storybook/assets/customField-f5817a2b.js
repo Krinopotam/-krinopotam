@@ -1,0 +1,1 @@
+import{j as e}from"./useToken-b19ab62a.js";import{B as r,C as s}from"./tabulatorGrid-e0bda04d.js";class n extends r{render(){return e.jsx(s,{field:this})}renderField(){return this.render()}}export{n as C};
