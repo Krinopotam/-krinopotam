@@ -1,8 +1,9 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const fs = require("fs");
-const crypto = require("crypto");
-const {createHashRouter} = require("react-router-dom");
+import * as fs from 'fs';
+import * as crypto from 'crypto';
+import path from 'path';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 const _componentsFolder = 'components';
 const _pagesFolder = 'pages';
 const _examplesRoot = __dirname + '/../' + _componentsFolder;
@@ -79,9 +80,9 @@ function parseFileProperties(fileName, fileContent) {
 }
 function clearSource(source) {
     source = source.replaceAll(/\s*\{\/\*Description Start\*\/}[\S\s]*?\{\/\*Description End\*\/}/gi, ''); //remove {/*Description Start/*} blocks
-    source = source.replaceAll(/\s*\/\*Description Start\*\/[\S\s]*?\/\*Description End\*\//gi, ''); //remove /*Description Start*/ blocks
+    source = source.replaceAll(/\s*\/\*Description Start\*\/[\S\s]*?\/\*Description End\*\//gi, ''); //remove /*Description End*/ blocks
     source = source.replaceAll(/\/\/ noinspection DuplicatedCode/gi, ''); //remove // noinspection DuplicatedCode
-    source = source.replaceAll(/['"]@src\//gi, '@krinopotam/ui-kit/'); //remove // noinspection DuplicatedCode
+    source = source.replaceAll(/['"]@src\//gi, '@krinopotam/ui-kit/'); //replace @src to @krinopotam/ui-kit
     const sourceLines = source.split(/\r?\n/);
     let newSource = '';
     for (const line of sourceLines) {
