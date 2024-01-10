@@ -97,6 +97,7 @@ const useSplitTreeSelectProps = (props: IDFormFieldProps) => {
             disabled: true,
             requiredMark: true,
             readOnly: true,
+            nonEditable:true,
             rowStyle: true,
             autoHeightResize:true,
             onDirtyStateChanged: true,

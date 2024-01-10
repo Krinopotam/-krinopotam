@@ -33,7 +33,7 @@ export const TreeSelectRender = ({
             treeData={api.getDataSet()}
             showSearch={treeSelectProps.showSearch !== false}
             treeDefaultExpandAll={treeSelectProps.treeDefaultExpandAll !== false}
-            disabled={treeSelectProps.disabled ?? treeSelectProps.readOnly} //TODO: implement true readOnly
+            disabled={treeSelectProps.disabled || treeSelectProps.readOnly} //TODO: implement true readOnly
             //labelInValue // We do not use this mode, as it is useless. In this mode, onChange will return an object containing value and label, but you still can’t build a full node
 
             //loadData={onLoadData}

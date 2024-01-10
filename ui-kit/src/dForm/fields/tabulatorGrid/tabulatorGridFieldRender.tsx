@@ -90,6 +90,7 @@ const useSplitTabulatorProps = (props: ITabulatorGridFieldProps) => {
             helpClass: true,
             hidden: true,
             label: true,
+            nonEditable:true,
             inlineGroup: true,
             onDirtyStateChanged: true,
             onDisabledStateChanged: true,

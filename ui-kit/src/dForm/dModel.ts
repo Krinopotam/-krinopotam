@@ -236,7 +236,8 @@ export class DModel {
 
             labels[fieldName] = fieldProps.label;
             hidden[fieldName] = !!fieldProps.hidden;
-            readOnly[fieldName] = !!fieldProps.readOnly || mode === 'view';
+            if (mode === 'view' || (fieldProps.nonEditable && mode === 'update')) readOnly[fieldName] = true;
+            else readOnly[fieldName] = !!fieldProps.readOnly;
             disabled[fieldName] = !!fieldProps.disabled;
 
             if (oldField && field.constructor.name === oldField.constructor.name) {

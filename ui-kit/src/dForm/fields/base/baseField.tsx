@@ -35,14 +35,17 @@ export interface IBaseFieldProps<TField extends IBaseField> extends Record<strin
     /** Field default value */
     value?: AnyType;
 
-    /** If field default state is hidden */
+    /** Whether the field default state is hidden */
     hidden?: boolean;
 
-    /** If field default state is disabled */
+    /** Whether the field default state is disabled */
     disabled?: boolean;
 
-    /** If field default state is readonly */
+    /** Whether the field default state is readonly */
     readOnly?: boolean;
+
+    /** Whether the field can not be edited (the field will have readOnly state if formMode is 'update') */
+    nonEditable?: boolean;
 
     /** List of fields that must be filled in order to display this field */
     dependsOn?: string[];
@@ -51,7 +54,7 @@ export interface IBaseFieldProps<TField extends IBaseField> extends Record<strin
     width?: string | number;
 
     /** Field container height auto resize  */
-    autoHeightResize?:boolean;
+    autoHeightResize?: boolean;
 
     /** Get focus by default */
     autoFocus?: boolean;
@@ -230,7 +233,7 @@ export class BaseField<TFieldProps extends IAnyFieldProps> {
 
         if (!noEvents) {
             this.getProps()?.onValueChanged?.(value, prevValue, this);
-            this.model.getModelCallbacks().onFormValuesChanged?.(this.fieldName, formValues, this.model)
+            this.model.getModelCallbacks().onFormValuesChanged?.(this.fieldName, formValues, this.model);
             this.validate(noEvents, noRerender);
         }
 
@@ -332,6 +335,7 @@ export class BaseField<TFieldProps extends IAnyFieldProps> {
      */
     setReadOnly(value: boolean, noEvents?: boolean, noRerender?: boolean) {
         const prevValue = this.isReadOnly();
+        if (this.getProps().nonEditable && this.model.getFormMode() === 'update') value = true;
 
         if (prevValue === value) return;
 
@@ -360,7 +364,7 @@ export class BaseField<TFieldProps extends IAnyFieldProps> {
         this.model.lockDependedFields(this, noEvents, noRerender);
 
         if (value) {
-            this.setError('', noEvents, noRerender) //hidden fields can't have error
+            this.setError('', noEvents, noRerender); //hidden fields can't have error
             this.setReady(false, true); //the hidden fields are not ready because they are not rendered, but form ready status not changed
         }
 
@@ -487,9 +491,10 @@ export class BaseField<TFieldProps extends IAnyFieldProps> {
     }
 
     /** Is field can have value */
-    canHaveValue () {
+    canHaveValue() {
         return true;
     }
+
     //endregion
 
     //region Field rerender implementation
