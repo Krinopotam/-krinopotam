@@ -1,5 +1,5 @@
 import {IButtonType} from '@src/button';
-import React, {useCallback} from 'react';
+import React, {CSSProperties, useCallback} from 'react';
 import {Dropdown, MenuProps} from 'antd';
 import {IButtonRowProps, IFormButton} from '@src/buttonsRow';
 
@@ -20,11 +20,14 @@ export const ButtonDropdownClickable = ({
     if (componentProps.makeActivePrimary !== false && button.active) type = 'primary';
     else if (button.type === 'text') type = 'text';
     else if (button.type === 'link') type = 'link';
-    else if (button.dashed) type= 'dashed'
+    else if (button.dashed) type = 'dashed';
 
     const onClick = useCallback(() => {
         button.onClick?.(id, button, context);
     }, [button, context, id]);
+
+    const style: CSSProperties = {...button.style};
+    if (typeof button.width !== 'undefined') style.width = button.width;
 
     return (
         <Dropdown.Button
@@ -32,10 +35,10 @@ export const ButtonDropdownClickable = ({
             href={button.href}
             disabled={button.disabled}
             loading={button.loading}
-            danger={button.colorType==='danger'}
+            danger={button.colorType === 'danger'}
             onClick={onClick}
             size={button.size}
-            style={button.style}
+            style={style}
             className={button.className}
             icon={button.expandIcon}
             menu={menuProps}

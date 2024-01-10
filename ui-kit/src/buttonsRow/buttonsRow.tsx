@@ -1,6 +1,6 @@
 import {Col, Row} from 'antd';
 import React, {CSSProperties, HTMLAttributeAnchorTarget, useContext, useEffect, useRef, useState} from 'react';
-import RenderButtonGroup from '@src/buttonsRow/components/renderButtonGroup';
+import {RenderButtonGroup} from '@src/buttonsRow/components/renderButtonGroup';
 import {useApi} from '@src/buttonsRow/hooks/api';
 import {prepareButtons} from '@src/buttonsRow/helpers/buttonMethods';
 import {ButtonRowWrapperContext} from '@src/buttonsRow/components/buttonsRowWrapper';
@@ -73,10 +73,13 @@ export interface IFormButton {
     rel?: string;
 
     /** Button dropDown children*/
-    children?: Record<string, Omit<IFormButton, 'expandIcon' | 'danger'> | null>;
+    children?: Record<string, Omit<IFormButton, 'expandIcon' | 'danger' | 'width'> | null>;
 
     /** Button style*/
     style?: CSSProperties;
+
+    /** Button width */
+    width?: CSSProperties['width'];
 
     /** Button class name*/
     className?: string;
@@ -85,13 +88,13 @@ export interface IFormButton {
     shape?: IButtonProps['shape'];
 
     /** Order weight (default 0) */
-    weight?:number
+    weight?: number;
 
     /** Service property, used in other components to disable a button depending on conditions (for example, if no row is selected in the grid, disable the button)*/
-    checkDisabled?:boolean
+    checkDisabled?: boolean;
 
     /** Service property, used in other components to hide a button depending on conditions (for example, if no row is selected in the grid, hide the button)*/
-    checkHidden?:boolean
+    checkHidden?: boolean;
 
     /************* Callbacks *************/
     /**Button onClick callback */
@@ -153,13 +156,13 @@ export const ButtonsRow = (props: IButtonRowProps): React.JSX.Element => {
         <div style={{display: 'block', ...props.style}} className={'controls-buttons-dynamic-row ' + props.className}>
             <Row wrap={false}>
                 <Col flex="auto" style={{textAlign: 'left'}}>
-                    <RenderButtonGroup key="leftButtons" buttons={curButtons} position="left" context={props.context} componentProps={props}/>
+                    <RenderButtonGroup key="leftButtons" buttons={curButtons} position="left" context={props.context} componentProps={props} />
                 </Col>
                 <Col flex="auto" style={{textAlign: 'center'}}>
-                    <RenderButtonGroup key="centerButtons" buttons={curButtons} position="center" context={props.context} componentProps={props}/>
+                    <RenderButtonGroup key="centerButtons" buttons={curButtons} position="center" context={props.context} componentProps={props} />
                 </Col>
                 <Col flex="auto" style={{textAlign: 'right'}}>
-                    <RenderButtonGroup key="rightButtons" buttons={curButtons} position="right" context={props.context} componentProps={props}/>
+                    <RenderButtonGroup key="rightButtons" buttons={curButtons} position="right" context={props.context} componentProps={props} />
                 </Col>
             </Row>
         </div>

@@ -1,5 +1,5 @@
 import {IButtonRowProps, IFormButton} from '@src/buttonsRow';
-import React, {useCallback, useEffect, useRef} from 'react';
+import React, {CSSProperties, useCallback, useEffect, useRef} from 'react';
 import {Button, IButtonType} from '@src/button';
 
 export const ButtonSimple = ({
@@ -30,6 +30,9 @@ export const ButtonSimple = ({
     else if (button.type === 'link') type = 'link';
     else if (button.dashed) type = 'dashed';
 
+    const style: CSSProperties = {...button.style};
+    if (typeof button.width !== 'undefined') style.width = button.width;
+
     return (
         <Button
             ref={btnRef}
@@ -43,7 +46,7 @@ export const ButtonSimple = ({
             onClick={onClick}
             size={button.size}
             rel={button.rel}
-            style={button.style}
+            style={style}
             className={button.className}
             icon={button.icon}
             shape={button.shape}
