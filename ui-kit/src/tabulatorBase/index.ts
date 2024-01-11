@@ -15,3 +15,5 @@ export type {IDateTimeFormatterParams} from './formatters/dateTime';
 
 export {DateTimeSorter} from './sorters/dateTime';
 export type {IDateTimeSorterParams} from './sorters/dateTime';
+
+export {TabulatorLocaleRu} from '@src/tabulatorBase/locales/ru';

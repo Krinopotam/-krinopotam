@@ -3,9 +3,12 @@
 import React from 'react';
 import {IGridProps, TabulatorGrid} from '@src/tabulatorGrid';
 import {TabulatorBaseColumns, TabulatorBaseColumnsDef, TabulatorPlainData} from '../../../data/tabulatorData';
+import {TabulatorLocaleRu} from "@src/tabulatorBase";
 
 export const AsyncPages = (): React.JSX.Element => {
     const props: IGridProps = {
+        locale: 'ru-ru',
+        langs: TabulatorLocaleRu,
         columnDefaults: TabulatorBaseColumnsDef,
         columns: TabulatorBaseColumns,
         layout: 'fitColumns',
@@ -22,7 +25,7 @@ export const AsyncPages = (): React.JSX.Element => {
             return new Promise((resolve, reject) => {
                 setTimeout(() => {
                     const random = Math.random();
-                    if (random < 0.5) reject({message: 'Loading error', code: 400});
+                    if (random < 0.1) reject({message: 'Loading error', code: 400});
                     const page = params?.page ?? 1;
                     const size = params?.size ?? gridApi.gridProps.paginationSize ?? 5;
                     const lastPage = Math.ceil(TabulatorPlainData.length / size);
@@ -38,7 +41,7 @@ export const AsyncPages = (): React.JSX.Element => {
         <>
             {/*Description Start*/}
             <h1>Asynchronous data loading to the TabulatorGrid in the page mode</h1>
-            <p style={{color:'red'}}>To test boot resumption there is a 50/50 chance of error</p>
+            <p style={{color:'red'}}>To test boot resumption there is a 10% chance of error</p>
             {/*Description End*/}
 
             <TabulatorGrid {...props} />
