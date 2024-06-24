@@ -28,7 +28,8 @@ export interface IAdvancedHeaderFilterTabulator extends ITabulatorCore {
 //endregion
 
 export class AdvancedHeaderFilterModule extends Module {
-    private table: IAdvancedHeaderFilterTabulator;
+    static moduleName = "advancedHeaderFilter"; //module name
+    public table: IAdvancedHeaderFilterTabulator;
 
     private headerFilterStatus: boolean = false;
     private curHeaderFilterValues: Record<string, unknown> = {};
@@ -226,7 +227,6 @@ export class AdvancedHeaderFilterModule extends Module {
     }
 }
 
-AdvancedHeaderFilterModule.moduleName = 'advancedHeaderFilter';
 
 const defaultFilters: Record<string, ITabulatorFilterFunc | undefined> = {
     //equal to

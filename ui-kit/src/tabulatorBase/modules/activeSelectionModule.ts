@@ -57,6 +57,7 @@ type ISelectMode = 'select' | 'deselect' | 'invert';
 //endregion
 
 export class ActiveSelectionModule extends Module {
+    static moduleName = "activeSelection"; //module name
     public table: IActiveSelectionTabulator;
     private activeRow: RowComponent | undefined = undefined;
 
@@ -482,4 +483,3 @@ export class ActiveSelectionModule extends Module {
     }
 }
 
-ActiveSelectionModule.moduleName = 'activeSelection';
