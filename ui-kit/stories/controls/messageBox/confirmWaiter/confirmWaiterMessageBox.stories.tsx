@@ -1,6 +1,6 @@
 // noinspection DuplicatedCode
 import type {Meta, StoryObj} from '@storybook/react';
-import ConfirmWaiterMessageBoxComponent from "./confirmWaiterMessageBox";
+import ConfirmWaiterMessageBoxComponent from './confirmWaiterMessageBox';
 
 export default {
     title: 'Controls/MessageBox/ConfirmWaiter',
@@ -62,8 +62,8 @@ export default {
                         );
                     };
                     export default ConfirmWaiterMessageBoxComponent;
-                `
-            }
+                `,
+            },
             /* AUTO-SOURCE-INJECT-END */
         },
     },
@@ -71,9 +71,8 @@ export default {
 
 type Story = StoryObj<typeof ConfirmWaiterMessageBoxComponent>;
 
-
 export const ConfirmWaiter: Story = {
     args: {
-        content:'Info'
+        content: 'Info',
     },
 };

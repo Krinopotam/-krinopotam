@@ -1,7 +1,7 @@
 // noinspection DuplicatedCode
 
-import type {Meta, StoryObj} from '@storybook/react'
-import SelectComponent from "./selectComponent";
+import type {Meta, StoryObj} from '@storybook/react';
+import SelectComponent from './selectComponent';
 
 export default {
     title: 'DForm/Fields/Select',
@@ -28,16 +28,16 @@ export default {
                         }
                     />
                     export default SelectComponent
-                `
-            }
+                `,
+            },
             /* AUTO-SOURCE-INJECT-END */
-        }
+        },
     },
-} satisfies Meta<typeof SelectComponent>
+} satisfies Meta<typeof SelectComponent>;
 
 type Story = StoryObj<typeof SelectComponent>;
 export const Playground: Story = {
     args: {
         label: 'Select field',
     },
-}
+};

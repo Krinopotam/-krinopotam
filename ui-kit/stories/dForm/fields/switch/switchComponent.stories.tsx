@@ -1,7 +1,7 @@
 // noinspection DuplicatedCode
 
-import type {Meta, StoryObj} from '@storybook/react'
-import SwitchComponent from "./switchComponent";
+import type {Meta, StoryObj} from '@storybook/react';
+import SwitchComponent from './switchComponent';
 
 export default {
     title: 'DForm/Fields/Switch',
@@ -22,12 +22,12 @@ export default {
                     /** DForm Switch field */
                     export const SwitchComponent = (props: IComponent): React.JSX.Element => <DForm buttons={null} fieldsProps={{field1: {...props, component: SwitchField}}} />;
                     export default SwitchComponent;
-                `
-            }
+                `,
+            },
             /* AUTO-SOURCE-INJECT-END */
-        }
+        },
     },
-} satisfies Meta<typeof SwitchComponent>
+} satisfies Meta<typeof SwitchComponent>;
 
 type Story = StoryObj<typeof SwitchComponent>;
 
@@ -35,4 +35,4 @@ export const Playground: Story = {
     args: {
         label: 'Checkbox field',
     },
-}
+};

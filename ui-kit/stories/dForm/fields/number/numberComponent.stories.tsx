@@ -1,7 +1,7 @@
 // noinspection DuplicatedCode
 
-import type {Meta, StoryObj} from '@storybook/react'
-import NumberComponent from "./numberComponent";
+import type {Meta, StoryObj} from '@storybook/react';
+import NumberComponent from './numberComponent';
 
 export default {
     title: 'DForm/Fields/Number',
@@ -26,12 +26,12 @@ export default {
                             {field1: {...props, component: NumberField} }
                         }/>
                     export default NumberComponent
-                `
-            }
+                `,
+            },
             /* AUTO-SOURCE-INJECT-END */
-        }
+        },
     },
-} satisfies Meta<typeof NumberComponent>
+} satisfies Meta<typeof NumberComponent>;
 
 type Story = StoryObj<typeof NumberComponent>;
 
@@ -39,4 +39,4 @@ export const Playground: Story = {
     args: {
         label: 'Number field',
     },
-}
+};

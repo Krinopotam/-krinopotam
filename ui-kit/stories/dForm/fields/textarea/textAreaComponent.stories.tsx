@@ -1,7 +1,7 @@
 // noinspection DuplicatedCode
 
 import type {Meta, StoryObj} from '@storybook/react';
-import TextAreaComponent from "./textAreaComponent";
+import TextAreaComponent from './textAreaComponent';
 
 export default {
     title: 'DForm/Fields/TextArea',
@@ -27,8 +27,8 @@ export default {
                         }
                     />
                     export default TextAreaComponent
-                `
-            }
+                `,
+            },
             /* AUTO-SOURCE-INJECT-END */
         },
     },
@@ -41,4 +41,3 @@ export const Playground: Story = {
         label: 'TextArea field',
     },
 };
-

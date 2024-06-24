@@ -1,7 +1,7 @@
 // noinspection DuplicatedCode
 
-import type {Meta, StoryObj} from '@storybook/react'
-import DividerComponent from "./dividerComponent";
+import type {Meta, StoryObj} from '@storybook/react';
+import DividerComponent from './dividerComponent';
 
 export default {
     title: 'DForm/Fields/Divider',
@@ -32,33 +32,33 @@ export default {
                         }
                     />
                     export default DividerComponent
-                `
-            }
+                `,
+            },
             /* AUTO-SOURCE-INJECT-END */
-        }
+        },
     },
-} satisfies Meta<typeof DividerComponent>
+} satisfies Meta<typeof DividerComponent>;
 
 type Story = StoryObj<typeof DividerComponent>;
 export const WithTitle: Story = {
     args: {
-        value: "Divider",
-        plain: true
+        value: 'Divider',
+        plain: true,
     },
-}
+};
 
 export const TitleLeft: Story = {
     args: {
-        value: "Divider",
-        orientation:'left',
-        plain: true
+        value: 'Divider',
+        orientation: 'left',
+        plain: true,
     },
-}
+};
 
 export const TitleRight: Story = {
     args: {
-        value: "Divider",
-        orientation:'right',
-        plain: true
+        value: 'Divider',
+        orientation: 'right',
+        plain: true,
     },
-}
+};

@@ -1,7 +1,7 @@
 // noinspection DuplicatedCode
 
-import type {Meta, StoryObj} from '@storybook/react'
-import CheckboxComponent from "./checkboxComponent";
+import type {Meta, StoryObj} from '@storybook/react';
+import CheckboxComponent from './checkboxComponent';
 
 export default {
     title: 'DForm/Fields/Checkbox',
@@ -24,12 +24,12 @@ export default {
                         <DForm buttons={null} fieldsProps={{field1: {...props, component: CheckboxField}}} />
                     );
                     export default CheckboxComponent;
-                `
-            }
+                `,
+            },
             /* AUTO-SOURCE-INJECT-END */
-        }
+        },
     },
-} satisfies Meta<typeof CheckboxComponent>
+} satisfies Meta<typeof CheckboxComponent>;
 
 type Story = StoryObj<typeof CheckboxComponent>;
 
@@ -37,4 +37,4 @@ export const Playground: Story = {
     args: {
         label: 'Checkbox field',
     },
-}
+};

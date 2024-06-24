@@ -1,7 +1,7 @@
 // noinspection DuplicatedCode
 
-import type {Meta, StoryObj} from '@storybook/react'
-import InputComponent from "./inputComponent";
+import type {Meta, StoryObj} from '@storybook/react';
+import InputComponent from './inputComponent';
 
 export default {
     title: 'DForm/Fields/Input',
@@ -27,16 +27,16 @@ export default {
                         }
                     />
                     export default InputComponent
-                `
-            }
+                `,
+            },
             /* AUTO-SOURCE-INJECT-END */
-        }
+        },
     },
-} satisfies Meta<typeof InputComponent>
+} satisfies Meta<typeof InputComponent>;
 
 type Story = StoryObj<typeof InputComponent>;
 export const Playground: Story = {
     args: {
         label: 'Input field',
     },
-}
+};

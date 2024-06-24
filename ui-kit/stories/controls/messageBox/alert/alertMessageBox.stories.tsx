@@ -1,6 +1,6 @@
 // noinspection DuplicatedCode
 import type {Meta, StoryObj} from '@storybook/react';
-import AlertMessageBoxComponent from "./alertMessageBox";
+import AlertMessageBoxComponent from './alertMessageBox';
 
 export default {
     title: 'Controls/MessageBox/Alert',
@@ -52,8 +52,8 @@ export default {
                         );
                     };
                     export default AlertMessageBoxComponent;
-                `
-            }
+                `,
+            },
             /* AUTO-SOURCE-INJECT-END */
         },
     },
@@ -61,9 +61,8 @@ export default {
 
 type Story = StoryObj<typeof AlertMessageBoxComponent>;
 
-
 export const Alert: Story = {
     args: {
-        content:'Info'
+        content: 'Info',
     },
 };

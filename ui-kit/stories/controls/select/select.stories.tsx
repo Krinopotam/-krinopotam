@@ -4,8 +4,8 @@ import type {Meta, StoryObj} from '@storybook/react';
 import React from 'react';
 import type {CustomTagProps} from 'rc-select/lib/BaseSelect';
 import {Tag} from 'antd';
-import {SelectDataSet} from "../../datasets/select";
-import {Select} from "@src/select";
+import {SelectDataSet} from '../../datasets/select';
+import {Select} from '@src/select';
 
 export default {
     title: 'Controls/Select',
@@ -42,7 +42,7 @@ export const AllowClear: Story = {
 export const Preselect: Story = {
     args: {
         ...commonArgs,
-        value:'02',
+        value: '02',
     },
 };
 
@@ -59,7 +59,7 @@ export const MultiplePreselect: Story = {
         ...commonArgs,
         allowClear: true,
         mode: 'multiple',
-        value:[{id:'01'}, {id:'03'}]
+        value: [{id: '01'}, {id: '03'}],
     },
 };
 

@@ -1,5 +1,5 @@
 import type {Meta, StoryObj} from '@storybook/react';
-import SimpleForm from "./simpleForm";
+import SimpleForm from './simpleForm';
 
 export default {
     title: 'DFormModal/Examples/SimpleForm',
@@ -64,19 +64,17 @@ export default {
                         );
                     };
                     export default SimpleForm;
-                `
-            }
+                `,
+            },
             /* AUTO-SOURCE-INJECT-END */
-        }
+        },
     },
-
 } as Meta<typeof SimpleForm>;
 
 type Story = StoryObj<typeof SimpleForm>;
 
 export const Playground: Story = {
-    args:{
-        layout: "horizontal"
-    }
+    args: {
+        layout: 'horizontal',
+    },
 };
-

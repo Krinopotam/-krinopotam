@@ -1,7 +1,7 @@
 // noinspection DuplicatedCode
 
-import type {Meta, StoryObj} from '@storybook/react'
-import TreeSelectComponent from "./treeSelectComponent";
+import type {Meta, StoryObj} from '@storybook/react';
+import TreeSelectComponent from './treeSelectComponent';
 
 export default {
     title: 'DForm/Fields/TreeSelect',
@@ -28,16 +28,16 @@ export default {
                         }
                     />
                     export default TreeSelectComponent
-                `
-            }
+                `,
+            },
             /* AUTO-SOURCE-INJECT-END */
-        }
+        },
     },
-} satisfies Meta<typeof TreeSelectComponent>
+} satisfies Meta<typeof TreeSelectComponent>;
 
 type Story = StoryObj<typeof TreeSelectComponent>;
 export const Playground: Story = {
     args: {
         label: 'TreeSelect field',
     },
-}
+};
