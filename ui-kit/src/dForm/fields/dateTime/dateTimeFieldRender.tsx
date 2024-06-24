@@ -52,7 +52,6 @@ export const DateTimeFieldRender = ({field}: {field: DateTimeField}): React.JSX.
             onChange={onChange}
             onOk={value => fieldProps?.onOk?.(value, field)}
             onOpenChange={open => fieldProps?.onOpenChange?.(open, field)}
-            onSelect={value => fieldProps?.onSelect?.(value, field)}
             onPanelChange={(value, mode) => fieldProps?.onPanelChange?.(value, mode, field)}
             onMouseDown={e => fieldProps?.onMouseDown?.(e, field)}
         />

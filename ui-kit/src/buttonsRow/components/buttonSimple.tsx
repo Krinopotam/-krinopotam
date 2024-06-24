@@ -19,7 +19,7 @@ export const ButtonSimple = ({
         button.onClick?.(id, button, context);
     }, [button, context, id]);
 
-    const btnRef = useRef<HTMLElement>(null);
+    const btnRef = useRef<HTMLButtonElement>(null);
     useEffect(() => {
         if (button.active && componentProps.makeActivePrimary === false) btnRef.current?.focus();
     }, [button.active, componentProps.makeActivePrimary]);

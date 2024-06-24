@@ -5,7 +5,7 @@ const elVisible = function (el) {
 };
 
 const elOffset = function (el) {
-    var box = el.getBoundingClientRect();
+    let box = el.getBoundingClientRect();
 
     return {
         top: box.top + window.pageYOffset - document.documentElement.clientTop,
