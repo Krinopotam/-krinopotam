@@ -16,4 +16,7 @@ export type {IDateTimeFormatterParams} from './formatters/dateTime';
 export {DateTimeSorter} from './sorters/dateTime';
 export type {IDateTimeSorterParams} from './sorters/dateTime';
 
+export {DateTimeRangeHeaderFilter, DateTimeRangeHeaderFilterFunc} from './filters/dateTimeRangeHeaderFilter';
+export type {IDateTimeRangeHeaderFilterParams} from './filters/dateTimeRangeHeaderFilter';
+
 export {TabulatorLocaleRu} from '@src/tabulatorBase/locales/ru';

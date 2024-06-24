@@ -57,6 +57,18 @@ export interface ITabulator extends _ITabulator {
 }
 
 export interface ITabulatorColumn extends Omit<ColumnDefinition, 'headerPopup'> {
+    /** type patches */
+    headerFilterParams?:ColumnDefinition['headerFilterParams'] | Record<string, unknown>;
+    formatterParams?:ColumnDefinition['formatterParams'] | Record<string, unknown>;
+    sorterParams?:ColumnDefinition['sorterParams'] | Record<string, unknown>;
+    headerFilterFuncParams?:ColumnDefinition['headerFilterFuncParams'] | Record<string, unknown>;
+    editorParams?:ColumnDefinition['editorParams'] | Record<string, unknown>;
+    mutatorDataParams?:ColumnDefinition['mutatorDataParams'] | Record<string, unknown>;
+    mutatorEditParams?:ColumnDefinition['mutatorEditParams'] | Record<string, unknown>;
+    mutatorParams?:ColumnDefinition['mutatorParams'] | Record<string, unknown>;
+    titleFormatterParams?:ColumnDefinition['titleFormatterParams'] | Record<string, unknown>;
+    topCalcFormatterParams?:ColumnDefinition['topCalcFormatterParams'] | Record<string, unknown>;
+
     headerPopup?: ((e: MouseEvent, column: ColumnComponent, onRendered: EmptyCallback) => HTMLElement) | string | React.ReactNode;
 }
 

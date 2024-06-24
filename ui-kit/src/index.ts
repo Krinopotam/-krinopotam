@@ -124,7 +124,7 @@ export {Select} from '@src/select';
 export type {ISelectBaseProps, ISelectNode, ISelectLabeledValue, ISelectProps, ISelectOptions, ISelectValue} from '@src/select';
 
 /*************** TabulatorBase *******************/
-export {TabulatorBase, DateTimeFormatter, DateTimeSorter, TabulatorLocaleRu} from '@src/tabulatorBase';
+export {TabulatorBase, DateTimeFormatter, DateTimeSorter, DateTimeRangeHeaderFilter, DateTimeRangeHeaderFilterFunc, TabulatorLocaleRu} from '@src/tabulatorBase';
 export type {
     ITabulator,
     ITabulatorRow,
@@ -136,6 +136,7 @@ export type {
     ITabulatorColumn,
     IDateTimeFormatterParams,
     IDateTimeSorterParams,
+    IDateTimeRangeHeaderFilterParams
 } from '@src/tabulatorBase';
 
 /*************** TabulatorGrid *******************/

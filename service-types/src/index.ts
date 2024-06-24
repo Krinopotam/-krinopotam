@@ -1,3 +1,5 @@
+/** Any type */
+export type AnyType = any
 
 /** Type for promise with typed Resolve and Reject. F.e. TPromise<{data: Record<string, unknown>}, {message: string; code: number}>; */
 export type TPromise<T, F = unknown> = {
@@ -7,8 +9,8 @@ export type TPromise<T, F = unknown> = {
 /** Type of array element */
 export type ArrayElement<A> = A extends readonly (infer T)[] ? T : never
 
-/** Any type */
-export type AnyType = any
+/** Non-empty array */
+export type INonEmptyArray<T> = [T, ...T[]];
 
 /** Error type */
 export type IError = {
@@ -21,3 +23,15 @@ export type IError = {
     /** Stack trace */
     stack?: string;
 }
+
+export type IUnionToIntersection<T> = (T extends any ? (k: T) => void : never) extends (k: infer I) => void ? I : never;
+
+/*
+* Union Interfaces
+* example: type CombinedInterface = UnionInterfaces<[InterfaceA, InterfaceB]>;
+* CombinedInterface will be a unified type where required properties will remain required and optional properties will remain optional
+*/
+export type IUnionInterfaces<T extends { [key: string]: any }[]> = IUnionToIntersection<T[number]>;
+
+
+
