@@ -1,11 +1,11 @@
 import {IButtonRowProps, IFormButton} from '@src/buttonsRow';
 import {MenuProps} from 'antd';
 import React from 'react';
-import {ItemType, MenuDividerType, MenuItemGroupType} from 'antd/es/menu/hooks/useItems';
 import {ButtonDropdownClickable} from '@src/buttonsRow/components/buttonDropdownClickable';
 import {ButtonDropdownLink} from '@src/buttonsRow/components/buttonDropdownLink';
 import {ButtonDropdown} from '@src/buttonsRow/components/buttonDropdown';
 import {getSortedButtonsKeys} from '@src/buttonsRow/helpers/buttonMethods';
+import {ItemType, MenuDividerType, MenuItemGroupType} from "antd/es/menu/interface";
 
 export const RenderDropdown = ({id, button, context, componentProps}: {id: string; button: IFormButton; context: unknown; componentProps: IButtonRowProps}) => {
     const items: MenuProps['items'] = prepareDropdownItems(button.children, id, context);

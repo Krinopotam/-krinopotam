@@ -1,9 +1,8 @@
 // noinspection DuplicatedCode
 
-import type {Meta, StoryObj} from '@storybook/react'
-import CustomComponent from "./customComponent";
-import React from "react";
-
+import type {Meta, StoryObj} from '@storybook/react';
+import CustomComponent from './customComponent';
+import React from 'react';
 
 export default {
     title: 'DForm/Fields/Custom',
@@ -29,17 +28,21 @@ export default {
                         }
                     />
                     export default CustomComponent
-                `
-            }
+                `,
+            },
             /* AUTO-SOURCE-INJECT-END */
-        }
+        },
     },
-} satisfies Meta<typeof CustomComponent>
+} satisfies Meta<typeof CustomComponent>;
 
 type Story = StoryObj<typeof CustomComponent>;
 export const Playground: Story = {
     args: {
         label: 'Custom field',
-        value: <h3>Any <span style={{color:'red'}}>react</span> component or <span style={{color:'blue'}}>string</span> </h3>
+        value: (
+            <h3>
+                Any <span style={{color: 'red'}}>react</span> component or <span style={{color: 'blue'}}>string</span>{' '}
+            </h3>
+        ),
     },
-}
+};

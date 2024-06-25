@@ -1,5 +1,4 @@
-import {CellComponent, EmptyCallback, Filter, FilterType, ValueBooleanCallback, ValueVoidCallback} from 'tabulator-tables';
-import {AnyType} from '@krinopotam/service-types';
+import {CellComponent, EmptyCallback, FilterType, ValueBooleanCallback, ValueVoidCallback} from 'tabulator-tables';
 import dayjs from 'dayjs';
 
 export interface IDateTimeRangeHeaderFilterParams {
@@ -16,84 +15,6 @@ export interface IDateTimeRangeHeaderFilterParams {
     keepEmpty?: boolean;
 }
 
-export const DateTimeRangeHeaderFilter2 = (
-    cell: CellComponent,
-    _onRendered: EmptyCallback,
-    _success: ValueBooleanCallback,
-    _cancel: ValueVoidCallback,
-    params?: IDateTimeRangeHeaderFilterParams
-) => {
-    const table = cell.getColumn().getTable();
-    const field = cell.getColumn().getField();
-
-    const typingTimers = {} as Record<FilterType, ReturnType<typeof setTimeout>>;
-
-    const onChange = (e: Event, type: FilterType) => {
-        if (!(e.target instanceof HTMLInputElement)) return;
-        const curFilters: (
-            | Filter
-            | {
-                  field: (data: AnyType, filterParams: AnyType) => boolean;
-                  type?: AnyType;
-              }
-        )[] = table.getFilters(false);
-
-        const value = e.target.value;
-
-        let newFilters: typeof curFilters;
-        // --- remote mode ---
-        if (table.options.filterMode === 'remote') {
-            newFilters = curFilters.filter(filter => filter.field !== field || filter.type !== type); //-remove old filters
-            newFilters.push({field: field, type: type, value});
-        } else {
-            // --- local mode ---
-            newFilters = curFilters.filter(filter => filter.type.field !== field || filter.type.type !== type); //-remove old filters
-            newFilters.push({field: DateTimeRangeHeaderFilterFunc, type: {...params, field: field, filterValue: value, type: type}});
-        }
-
-        if (typingTimers[type]) clearTimeout(typingTimers[type]);
-
-        typingTimers[type] = setTimeout(() => {
-            table.setFilter(newFilters);
-        }, table.options.headerFilterLiveFilterDelay);
-    };
-
-    const filterDom = document.createElement('div');
-    filterDom.style.display = 'flex';
-    filterDom.style.flexDirection = 'row';
-
-    const fieldType = params?.filterType === 'datetime' ? 'datetime-local' : 'date';
-    const fieldStep = params?.filterType === 'datetime' && params?.showSeconds ? '1' : '';
-
-    const $inputFrom = document.createElement('input');
-    $inputFrom.type = fieldType;
-    $inputFrom.step = fieldStep;
-    $inputFrom.style.flex = '1';
-    $inputFrom.style.padding = '4px';
-    $inputFrom.style.marginLeft = '6px';
-    $inputFrom.style.marginRight = '6px';
-    $inputFrom.style.boxSizing = 'border-box';
-    $inputFrom.addEventListener('change', e => onChange(e, '>='));
-
-    const $inputTo = document.createElement('input');
-    $inputTo.type = fieldType;
-    $inputTo.step = fieldStep;
-    $inputTo.style.flex = '1';
-    $inputTo.style.padding = '4px';
-    $inputTo.style.marginLeft = '6px';
-    $inputTo.style.boxSizing = 'border-box';
-    $inputTo.addEventListener('change', e => onChange(e, '<='));
-
-    const $from = document.createTextNode('с');
-    const $to = document.createTextNode('по');
-    filterDom.appendChild($from);
-    filterDom.appendChild($inputFrom);
-    filterDom.appendChild($to);
-    filterDom.appendChild($inputTo);
-
-    return filterDom;
-};
-
 export const DateTimeRangeHeaderFilter = (
     cell: CellComponent,
     onRendered: EmptyCallback,
@@ -106,8 +27,8 @@ export const DateTimeRangeHeaderFilter = (
     const column = cell.getColumn();
     column.getDefinition().headerFilterLiveFilter = false;
 
-    const table = cell.getColumn().getTable();
-    const field = cell.getColumn().getField();
+    //const table = cell.getColumn().getTable();
+    //const field = cell.getColumn().getField();
 
     //create and style input
     let initialRowValue = cell.getValue();
@@ -133,12 +54,12 @@ export const DateTimeRangeHeaderFilter = (
             initialRowValue = rowVal; //persist value if successfully validated in case editor is used as header filter
         }
     };
-    const inputFromOnChange = () => {
+/*    const inputFromOnChange = () => {
         onChange(true);
     };
     const inputToOnChange = () => {
         onChange(false);
-    };
+    };*/
 
     const onBlur = (e: FocusEvent, from: boolean) => {
         if (e.relatedTarget) onChange(from); // only on a "true" blur; not when focusing browser's date/time picker
@@ -156,7 +77,6 @@ export const DateTimeRangeHeaderFilter = (
         switch (e.keyCode) {
             // case 9:
             case 13: //enter
-                console.log('111111')
                 onChange(from);
                 break;
             case 27: //Esc
@@ -233,7 +153,6 @@ export const DateTimeRangeHeaderFilterFunc = (
     rowData: Record<string, unknown>,
     filterParams: IDateTimeRangeHeaderFilterParams
 ) => {
-    console.log('fffffffffffffff')
     if (!headerValue) return true;
     if (!rowValue) return !!filterParams.keepEmpty;
 

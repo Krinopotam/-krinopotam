@@ -1,7 +1,7 @@
 // noinspection DuplicatedCode
 
 import type {Meta, StoryObj} from '@storybook/react';
-import QuillEditorComponent from "./quillEditorComponent";
+import QuillEditorComponent from './quillEditorComponent';
 
 export default {
     title: 'DForm/Fields/QuillEditor',
@@ -24,8 +24,8 @@ export default {
                         <DForm buttons={null} fieldsProps={{field1: {...props, component: QuillEditorField}}} />
                     );
                     export default QuillEditorComponent;
-                `
-            }
+                `,
+            },
             /* AUTO-SOURCE-INJECT-END */
         },
     },

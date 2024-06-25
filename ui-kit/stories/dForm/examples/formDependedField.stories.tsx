@@ -1,6 +1,6 @@
 import {DForm, IDFormProps} from '@src/dForm';
 import React from 'react';
-import {InputField} from "@src/dForm/fields/input/inputField";
+import {InputField} from '@src/dForm/fields/input/inputField';
 
 export default {
     title: 'Dform/Examples/FormDependedFields',
@@ -17,13 +17,13 @@ export const Default = () => {
                 label: 'Поле 2 (зависит от Поля 1)',
                 placeholder: 'Меня не видно, если поле 1 пусто. Введите что-нибудь',
                 dependsOn: ['field1'],
-            } ,
+            },
             field3: {
                 component: InputField,
                 label: 'Поле 3 (зависит от Поля 1 и 2)',
                 placeholder: 'Меня не видно, если поля 1 или 2 пусты',
                 dependsOn: ['field1', 'field2'],
-            } ,
+            },
         },
 
         buttons: {ok: {position: 'right'}},

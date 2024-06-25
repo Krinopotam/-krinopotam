@@ -3,7 +3,7 @@ import type {StorybookConfig} from '@storybook/react-vite';
 const config: StorybookConfig = {
     //stories: ["../src/**/*.mdx", "../src/**/*.stories.@(js|jsx|ts|tsx)"],
     //stories: ['../src/components/**/*.stories.@(js|jsx|ts|tsx)'],
-    stories: ['../stories/**/*.mdx', '../stories/**/*.stories.@(js|jsx|ts|tsx|mdx)'],
+    stories: ['../stories/**/*.mdx', '../stories/**/*.@(mdx|stories.@(js|jsx|ts|tsx))'],
     core: {
         disableTelemetry: true, // Disables telemetry
     },
@@ -15,14 +15,14 @@ const config: StorybookConfig = {
         '@storybook/addon-console',
         '@storybook/addon-storysource',
         '@storybook/addon-toolbars',
+        '@storybook/addon-mdx-gfm',
+        '@chromatic-com/storybook'
     ],
     framework: {
         name: '@storybook/react-vite',
         options: {},
     },
-    docs: {
-        autodocs: 'tag',
-    },
+    docs: {},
     typescript: {
         check: false,
         reactDocgen: 'react-docgen-typescript',

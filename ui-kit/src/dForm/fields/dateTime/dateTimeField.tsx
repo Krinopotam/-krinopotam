@@ -85,9 +85,6 @@ export interface IDateTimeFieldProps extends IBaseFieldProps<DateTimeField> {
     /** Callback function, can be executed whether the popup calendar is popped up or closed */
     onOpenChange?: (open: boolean, field: DateTimeField) => void;
 
-    /** */
-    onSelect?: (value: Dayjs, field: DateTimeField) => void;
-
     /** Callback function for panel changing */
     onPanelChange?: (value: Dayjs, mode: PanelMode, field: DateTimeField) => void;
 

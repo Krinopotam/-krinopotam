@@ -10,10 +10,8 @@ import {DatePicker as AntDatePicker} from 'antd';
 import {DatePickerProps as AntDatePickerProps} from "antd/lib/date-picker";
 import 'antd/es/date-picker/style/index';
 import dayjs, {Dayjs} from 'dayjs';
-import {SharedTimeProps} from 'rc-picker/lib/panels/TimePanel/index';
 import React from "react";
-import {DisabledTime} from 'rc-picker/lib/interface';
-
+import {DisabledTimes, SharedPickerProps} from "rc-picker/lib/interface";
 
 export type IDatePickerProps = Omit<AntDatePickerProps, 'mode' | 'picker' | 'showTime'> & {
     mode?: 'time' | 'date' | 'dateTime' | 'week' | 'month' | 'quarter' | 'year';
@@ -22,7 +20,7 @@ export type IDatePickerProps = Omit<AntDatePickerProps, 'mode' | 'picker' | 'sho
     format?: string;
     value?: string | Dayjs;
 
-    disabledTime?: DisabledTime<Dayjs>; //WORKAROUND: re-added type since AntDatePickerProps doesn't expose it
+    disabledTime?: (date: Dayjs) => DisabledTimes; //WORKAROUND: re-added type since AntDatePickerProps doesn't expose it
     showNow?: boolean; //WORKAROUND: re-added type since AntDatePickerProps doesn't expose it
     showToday?: boolean; //WORKAROUND: re-added type since AntDatePickerProps doesn't expose it
     popupClassName?: string; //WORKAROUND: re-added type since AntDatePickerProps doesn't expose it
@@ -66,7 +64,6 @@ export const DatePicker = ({
             format={fieldFormat}
             mode={fieldMode}
             picker={fieldPicker}
-
             value={fieldValue}
         />
         //<AntDatePicker {...props} />
@@ -76,7 +73,7 @@ export const DatePicker = ({
 type IDatePickerMode = "time" | "date" | "week" | "month" | "quarter" | "year" | undefined
 type IDatePickerPickerMode = "date" | "week" | "month" | "quarter" | "year" | undefined
 
-export const GetDatePickerParams = (mode: IDatePickerProps['mode'], timeMode: IDatePickerProps['timeMode'], format?: string): [IDatePickerMode, IDatePickerPickerMode, string, SharedTimeProps<Dayjs> | undefined] => {
+export const GetDatePickerParams = (mode: IDatePickerProps['mode'], timeMode: IDatePickerProps['timeMode'], format?: string): [IDatePickerMode, IDatePickerPickerMode, string, SharedPickerProps<Dayjs>['showTime'] | undefined] => {
     let fieldMode: IDatePickerMode
     let fieldPicker: IDatePickerPickerMode
 
@@ -86,7 +83,7 @@ export const GetDatePickerParams = (mode: IDatePickerProps['mode'], timeMode: ID
 
     const fieldFormat = GetDatePickerFormat(mode, timeMode, format);
 
-    let fieldShowTime: SharedTimeProps<Dayjs> | undefined
+    let fieldShowTime: SharedPickerProps<Dayjs>['showTime'] | undefined
     if (!mode || mode === 'date') {
         fieldMode = 'date';
     } else if (mode === 'time') {

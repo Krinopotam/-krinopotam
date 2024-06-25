@@ -1,7 +1,7 @@
 // noinspection DuplicatedCode
 
-import type {Meta, StoryObj} from '@storybook/react'
-import LinkComponent from "./linkComponent";
+import type {Meta, StoryObj} from '@storybook/react';
+import LinkComponent from './linkComponent';
 
 export default {
     title: 'DForm/Fields/Link',
@@ -22,12 +22,12 @@ export default {
                     /** DForm Link field */
                     export const LinkComponent = (props: IComponent): React.JSX.Element => <DForm buttons={null} fieldsProps={{field1: {...props, component: LinkField}}} />;
                     export default LinkComponent;
-                `
-            }
+                `,
+            },
             /* AUTO-SOURCE-INJECT-END */
-        }
+        },
     },
-} satisfies Meta<typeof LinkComponent>
+} satisfies Meta<typeof LinkComponent>;
 
 type Story = StoryObj<typeof LinkComponent>;
 export const Playground: Story = {
@@ -37,5 +37,4 @@ export const Playground: Story = {
         value: 'Click me',
         target: '_blank',
     },
-}
-
+};

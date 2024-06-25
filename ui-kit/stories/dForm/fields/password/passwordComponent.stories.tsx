@@ -1,7 +1,7 @@
 // noinspection DuplicatedCode
 
-import type {Meta, StoryObj} from '@storybook/react'
-import PasswordComponent from "./passwordComponent";
+import type {Meta, StoryObj} from '@storybook/react';
+import PasswordComponent from './passwordComponent';
 
 export default {
     title: 'DForm/Fields/Password',
@@ -26,12 +26,12 @@ export default {
                             {field1: {...props, component: PasswordField}}
                         }/>
                     export default PasswordComponent
-                `
-            }
+                `,
+            },
             /* AUTO-SOURCE-INJECT-END */
-        }
+        },
     },
-} satisfies Meta<typeof PasswordComponent>
+} satisfies Meta<typeof PasswordComponent>;
 
 type Story = StoryObj<typeof PasswordComponent>;
 
@@ -39,4 +39,4 @@ export const Playground: Story = {
     args: {
         label: 'Password field',
     },
-}
+};

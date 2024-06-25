@@ -1,13 +1,12 @@
 // noinspection DuplicatedCode
 
-import type {Meta, StoryObj} from '@storybook/react'
-import {ITreeSelectNode, TreeSelect} from "@src/treeSelect";
-import {UserOutlined} from "@ant-design/icons"
-import React from "react";
-import {CloneObject} from "@krinopotam/js-helpers";
-import {InputField} from "@src/dForm/fields/input/inputField";
-import {TreeSelectDataSet} from "../../datasets/treeSelect";
-
+import type {Meta, StoryObj} from '@storybook/react';
+import {ITreeSelectNode, TreeSelect} from '@src/treeSelect';
+import {UserOutlined} from '@ant-design/icons';
+import React from 'react';
+import {CloneObject} from '@krinopotam/js-helpers';
+import {InputField} from '@src/dForm/fields/input/inputField';
+import {TreeSelectDataSet} from '../../datasets/treeSelect';
 
 export default {
     title: 'Controls/TreeSelect',
@@ -17,9 +16,9 @@ export default {
         docs: {
             /* AUTO-SOURCE-INJECT-START */
             /* AUTO-SOURCE-INJECT-END */
-        }
+        },
     },
-} satisfies Meta<typeof TreeSelect>
+} satisfies Meta<typeof TreeSelect>;
 
 type Story = StoryObj<typeof TreeSelect>;
 
@@ -27,47 +26,46 @@ const commonArgs: Story['args'] = {
     dataSet: TreeSelectDataSet,
     style: {width: 400},
     placeholder: 'Select value',
-}
+};
 export const Simple: Story = {
     args: {
-        ...commonArgs
+        ...commonArgs,
     },
-}
+};
 
 export const AllowClear: Story = {
     args: {
         ...commonArgs,
-        allowClear: true
+        allowClear: true,
     },
-}
+};
 export const NoBorder: Story = {
     args: {
         ...commonArgs,
-        bordered: false
+        bordered: false,
     },
-}
+};
 
 export const Disabled: Story = {
     args: {
         ...commonArgs,
-        disabled: true
+        disabled: true,
     },
-}
+};
 
 export const ReadOnly: Story = {
     args: {
         ...commonArgs,
-        readOnly: true
+        readOnly: true,
     },
-}
+};
 
 export const DefaultValue: Story = {
     args: {
         ...commonArgs,
-        value:'03-03-01'
-
+        value: '03-03-01',
     },
-}
+};
 
 export const CustomRenders: Story = {
     args: {
@@ -77,8 +75,10 @@ export const CustomRenders: Story = {
             return (
                 <>
                     {treeNode.title}
-                    <br/>
-                    <small style={{color: '#808080'}}><UserOutlined/> {' ' + treeNode.head}</small>
+                    <br />
+                    <small style={{color: '#808080'}}>
+                        <UserOutlined /> {' ' + treeNode.head}
+                    </small>
                 </>
             );
         },
@@ -88,15 +88,15 @@ export const CustomRenders: Story = {
                 <>
                     {treeNode.title} <small style={{color: '#808080'}}>{' (' + treeNode.head + ')'}</small>
                 </>
-            )
+            );
         },
         /** custom filter */
         filterTreeNode: (inputValue: string, treeNode: ITreeSelectNode) => {
             const nodeString = (treeNode.title + ' (' + treeNode.head + ')').toLowerCase();
             return nodeString.indexOf(inputValue.toLowerCase()) >= 0;
-        }
+        },
     },
-}
+};
 
 export const AsyncFetch: Story = {
     args: {
@@ -113,7 +113,7 @@ export const AsyncFetch: Story = {
             });
         },
     },
-}
+};
 
 const filterDataSet = (nodes: ITreeSelectNode[], search: string) => {
     const result: ITreeSelectNode[] = [];
@@ -143,15 +143,15 @@ export const AsyncSearch: Story = {
         noCacheFetchedData: true,
         minSearchLength: 1,
         onDataFetch: (search: string) => {
-            return new Promise((resolve) => {
+            return new Promise(resolve => {
                 setTimeout(() => {
                     const result = filterDataSet(TreeSelectDataSet, search);
                     resolve({data: result});
                 }, 1000);
-            })
-        }
+            });
+        },
     },
-}
+};
 
 export const Editable: Story = {
     args: {
@@ -161,11 +161,11 @@ export const Editable: Story = {
             confirmChanges: true,
             bodyHeight: 100,
             fieldsProps: {
-                title: {component: InputField, label: 'Department'}
-            }
-        }
+                title: {component: InputField, label: 'Department'},
+            },
+        },
     },
-}
+};
 
 export const EditableAsync: Story = {
     args: {
@@ -192,8 +192,8 @@ export const EditableAsync: Story = {
                 });
             },
             fieldsProps: {
-                title: {component: InputField, label: 'Department'}
-            }
-        }
+                title: {component: InputField, label: 'Department'},
+            },
+        },
     },
-}
+};

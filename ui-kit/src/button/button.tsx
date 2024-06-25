@@ -20,7 +20,7 @@ export interface IButtonProps extends Omit<AntButtonProps, 'danger'> {
     squareSize?: boolean;
 }
 
-export const Button = React.forwardRef(({colorType, children, squareSize, ...props}: IButtonProps, ref: Ref<HTMLElement> | undefined) => {
+export const Button = React.forwardRef(({colorType, children, squareSize, ...props}: IButtonProps, ref: Ref<HTMLButtonElement> | undefined) => {
     const {token} = useToken();
 
     let colorPrimary = token.colorPrimary;

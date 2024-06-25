@@ -157,7 +157,7 @@ const useApiGetActiveNode = (gridApi: IGridApi): IGridApi['getActiveNode'] => {
 
 const useApiGetActiveRow = (gridApi: IGridApi): IGridApi['getActiveRow'] => {
     return useCallback(() => {
-        return gridApi.getActiveNode()?.getData();
+        return gridApi.getActiveNode()?.getData() as IGridRowData;
     }, [gridApi]);
 };
 
@@ -188,7 +188,7 @@ const useApiGetPrevRowKey = (gridApi: IGridApi): IGridApi['getPrevRowKey'] => {
             let curNode: RowComponent | undefined = gridApi.tableApi?.getRow(key);
             if (!curNode) return undefined;
             for (let i = 0; i < step; i++) {
-                const prevNode = curNode?.getPrevRow();
+                const prevNode = curNode?.getPrevRow() as RowComponent | false;
                 if (!prevNode) return curNode.getData().id;
                 curNode = prevNode;
             }
@@ -265,7 +265,7 @@ const useApiGetNodeByKey = (gridApi: IGridApi): IGridApi['getNodeByKey'] => {
 const useApiGetRowByKey = (gridApi: IGridApi): IGridApi['getRowByKey'] => {
     return useCallback(
         (key: IRowKey) => {
-            return gridApi.getNodeByKey(key)?.getData();
+            return gridApi.getNodeByKey(key)?.getData() as IGridRowData;
         },
         [gridApi]
     );

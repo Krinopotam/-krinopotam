@@ -1,8 +1,7 @@
 // noinspection DuplicatedCode
 
-import type {Meta, StoryObj} from '@storybook/react'
-import AutoUpdateCustomField from "./autoUpdateCustomField";
-
+import type {Meta, StoryObj} from '@storybook/react';
+import AutoUpdateCustomField from './autoUpdateCustomField';
 
 export default {
     title: 'DForm/Fields/Custom/Auto update custom field',
@@ -10,7 +9,6 @@ export default {
     tags: ['autodocs'],
     //excludeStories:/.*/,
     parameters: {
-
         docs: {
             /* AUTO-SOURCE-INJECT-START */
             source: {
@@ -49,15 +47,14 @@ export default {
                             </h3>
                         );
                     };
-                `
-            }
+                `,
+            },
             /* AUTO-SOURCE-INJECT-END */
-        }
+        },
     },
-} satisfies Meta<typeof AutoUpdateCustomField>
+} satisfies Meta<typeof AutoUpdateCustomField>;
 
 type Story = StoryObj<typeof AutoUpdateCustomField>;
 export const Playground: Story = {
-    args: {
-    },
-}
+    args: {},
+};

@@ -1,5 +1,5 @@
 import type {Meta, StoryObj} from '@storybook/react';
-import ModalComponent from "./modal";
+import ModalComponent from './modal';
 
 export default {
     title: 'Controls/Modal',
@@ -69,19 +69,15 @@ export default {
                         );
                     };
                     export default ModalComponent;
-                `
-            }
+                `,
+            },
             /* AUTO-SOURCE-INJECT-END */
-        }
+        },
     },
-
 } as Meta<typeof ModalComponent>;
 
 type Story = StoryObj<typeof ModalComponent>;
 
 export const Modal: Story = {
-    args:{
-
-    }
+    args: {},
 };
-

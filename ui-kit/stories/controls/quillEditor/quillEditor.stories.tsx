@@ -1,8 +1,7 @@
 // noinspection DuplicatedCode
 
-import type {Meta, StoryObj} from '@storybook/react'
-import {QuillEditor} from "@src/quillEditor";
-
+import type {Meta, StoryObj} from '@storybook/react';
+import {QuillEditor} from '@src/quillEditor';
 
 export default {
     title: 'Controls/QuillEditor',
@@ -12,21 +11,21 @@ export default {
         docs: {
             /* AUTO-SOURCE-INJECT-START */
             /* AUTO-SOURCE-INJECT-END */
-        }
+        },
     },
-} satisfies Meta<typeof QuillEditor>
+} satisfies Meta<typeof QuillEditor>;
 
 type Story = StoryObj<typeof QuillEditor>;
 
 export const Default: Story = {
     args: {
-        placeholder:'Input text',
+        placeholder: 'Input text',
     },
-}
+};
 
 export const ToolbarConfig: Story = {
     args: {
-        placeholder:'Input text',
-        toolbar:[['bold', 'italic', 'underline'], ['link']]
+        placeholder: 'Input text',
+        toolbar: [['bold', 'italic', 'underline'], ['link']],
     },
-}
+};

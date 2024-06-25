@@ -1,7 +1,7 @@
 // noinspection DuplicatedCode
 
-import type {Meta, StoryObj} from '@storybook/react'
-import UploadDraggerComponent from "./uploadDraggerComponent";
+import type {Meta, StoryObj} from '@storybook/react';
+import UploadDraggerComponent from './uploadDraggerComponent';
 
 export default {
     title: 'DForm/Fields/UploadDragger',
@@ -24,23 +24,23 @@ export default {
                         <DForm buttons={null} fieldsProps={{field1: {...props, component: UploadDraggerField}}} />
                     );
                     export default UploadDraggerComponent;
-                `
-            }
+                `,
+            },
             /* AUTO-SOURCE-INJECT-END */
-        }
+        },
     },
-} satisfies Meta<typeof UploadDraggerComponent>
+} satisfies Meta<typeof UploadDraggerComponent>;
 
 type Story = StoryObj<typeof UploadDraggerComponent>;
 
 const baseArgs: Story['args'] = {
-    label: 'Upload dragger field'
-}
+    label: 'Upload dragger field',
+};
 export const Default: Story = {
     args: {
         ...baseArgs,
     },
-}
+};
 
 export const DefaultValues: Story = {
     args: {
@@ -66,6 +66,6 @@ export const DefaultValues: Story = {
                 response: 'Server Error 500', // custom error message to show
                 url: 'http://www.baidu.com/zzz.png',
             },
-        ]
+        ],
     },
-}
+};

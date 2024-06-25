@@ -99,7 +99,7 @@ const propsToOptions = async (props: ITabulatorProps) => {
     output.dataTreeBranchElement = false;
 
     if (props.selectionMode) {
-        output.selectable = props.multiSelect === false ? 1 : true;
+        output.selectableRows = props.multiSelect === false ? 1 : true;
         output.columns = [
             {
                 title: '',
@@ -115,11 +115,11 @@ const propsToOptions = async (props: ITabulatorProps) => {
             ...columns,
         ];
     } else {
-        output.selectable = false; //We don't use built selectable mode. We use the custom selection algorithm
+        output.selectableRows = false; //We don't use built selectable mode. We use the custom selection algorithm
         output.columns = columns;
     }
 
-    output.selectableRangeMode = undefined;
+    output.selectableRowsRangeMode = undefined;
 
     output.dataTreeCollapseElement = props.dataTreeCollapseElement ?? collapseButton;
     output.dataTreeExpandElement = props.dataTreeExpandElement ?? expandButton;

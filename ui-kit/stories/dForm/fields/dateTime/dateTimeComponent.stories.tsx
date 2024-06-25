@@ -1,8 +1,7 @@
 // noinspection DuplicatedCode
 
-import type {Meta, StoryObj} from '@storybook/react'
-import DateTimeComponent from "./dateTimeComponent";
-
+import type {Meta, StoryObj} from '@storybook/react';
+import DateTimeComponent from './dateTimeComponent';
 
 export default {
     title: 'DForm/Fields/DateTime',
@@ -28,57 +27,57 @@ export default {
                         }
                     />
                     export default DateTimeComponent
-                `
-            }
+                `,
+            },
             /* AUTO-SOURCE-INJECT-END */
-        }
+        },
     },
-} satisfies Meta<typeof DateTimeComponent>
+} satisfies Meta<typeof DateTimeComponent>;
 
 type Story = StoryObj<typeof DateTimeComponent>;
 export const Date_: Story = {
     args: {
         label: 'Date field',
-        width: 200
+        width: 200,
     },
-}
+};
 
 export const Time: Story = {
     args: {
         label: 'Time field',
         mode: 'time',
-        width: 200
+        width: 200,
     },
-}
+};
 
 export const DateTime: Story = {
     args: {
         label: 'DateTime field',
-        mode:'dateTime',
-        width: 200
+        mode: 'dateTime',
+        width: 200,
     },
-}
+};
 
 export const Month: Story = {
     args: {
         label: 'Month field',
         mode: 'month',
-        width: 200
+        width: 200,
     },
-}
+};
 
 export const Quarter: Story = {
     args: {
         label: 'Decade field',
         mode: 'quarter',
-        width: 200
+        width: 200,
     },
-}
+};
 
 export const Year: Story = {
     args: {
         label: 'Year field',
         mode: 'year',
-        width: 200
+        width: 200,
     },
-}
+};
