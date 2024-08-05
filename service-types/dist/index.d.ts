@@ -6,6 +6,7 @@ export type ArrayElement<A> = A extends readonly (infer T)[] ? T : never;
 export type INonEmptyArray<T> = [T, ...T[]];
 export type IError = {
     code: number;
+    error: string;
     message: string;
     stack?: string;
 };

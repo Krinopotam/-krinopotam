@@ -3,6 +3,7 @@ import React, {useMemo} from 'react';
 import {MessageBox} from '@src/messageBox';
 import {IsDebugMode} from "@krinopotam/common-hooks";
 import {IDFormApi, IDFormDataSet, IDFormModelCallbacks, IDFormProps} from "@src/dForm";
+import {Collapse} from "antd";
 
 /**
  * Preparing callbacks for redirection to the model
@@ -33,7 +34,7 @@ export const useModelCallbacks = (formProps: IDFormProps, formApi: IDFormApi) =>
             },
 
             /** fires when the form values changed  */
-            onFormValuesChanged: (fieldName:string, values: Record<string, unknown>) => formProps?.onFormValuesChanged?.(fieldName, values, formApi),
+            onFormValuesChanged: (fieldName: string, values: Record<string, unknown>) => formProps?.onFormValuesChanged?.(fieldName, values, formApi),
 
             /** fires when the form validated */
             onFormValidated: (values: Record<string, unknown>, errors: Record<string, string>, isSubmit: boolean) =>
@@ -52,7 +53,7 @@ export const useModelCallbacks = (formProps: IDFormProps, formApi: IDFormApi) =>
             onDataFetch: () => formProps?.onDataFetch?.(formApi),
 
             /** fires when the form fetch success */
-            onDataFetchSuccess: (result: {data: Record<string, unknown>}) => {
+            onDataFetchSuccess: (result: { data: Record<string, unknown> }) => {
                 if (formProps?.onDataFetchSuccess?.(result, formApi) === false) return false;
                 //formApi.buttonsApi.disabled?.('ok', false)
             },
@@ -105,12 +106,15 @@ export const useModelCallbacks = (formProps: IDFormProps, formApi: IDFormApi) =>
             onSubmitError: (values: Record<string, unknown>, error) => {
                 if (formProps?.onSubmitError?.(values, error, formApi) === false) return false;
                 MessageBox.alert({
+                    title: 'Error',
                     content: (
                         <>
                             <p>
                                 <b>{error.message}</b>
                             </p>
-                            {error.stack && IsDebugMode() ? <p>{error.stack}</p> : ''}
+                            {error.stack && IsDebugMode() && <Collapse
+                                items={[{key: '1', label: 'Stack', children: <p>{error.stack}</p>}]}
+                            />}
                         </>
                     ),
                     colorType: 'danger',

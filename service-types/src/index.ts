@@ -14,12 +14,12 @@ export type INonEmptyArray<T> = [T, ...T[]];
 
 /** Error type */
 export type IError = {
-    /** Error  code */
+    /** Error code */
     code: number;
-
-    /** Error message*/
+    /** Internal error name */
+    error: string;
+    /** Error message */
     message: string;
-
     /** Stack trace */
     stack?: string;
 }

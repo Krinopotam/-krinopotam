@@ -3,7 +3,6 @@ import {IButtonsRowApi, IFormButton, IFormButtons} from '@src/buttonsRow';
 import {IDFormModalApi, IDFormModalProps} from '@src/dFormModal';
 import {IRequestProps, ITabulator, ITabulatorProps} from '@src/tabulatorBase';
 import {RowComponent, ScrollToRowPosition} from 'tabulator-tables';
-import {TPromise} from '@krinopotam/service-types';
 
 export interface IGridRowData extends Record<string, unknown> {
     /** Row id */
@@ -106,8 +105,8 @@ export interface IGridPropsCallbacks {
 }
 
 export type IGridProps = IGridPropsBase & IGridPropsCallbacks & Omit<ITabulatorProps, 'data' | 'ajaxURL' | 'ajaxRequestFunc' | 'ajaxResponse'>;
-export type IGridDataSourcePromise = TPromise<{data: IGridRowData[]; last_page?: number}, {message: string; code: number}>;
-export type IGridDeletePromise = TPromise<{data: boolean; last_page?: number}, {message: string; code: number}>;
+export type IGridDataSourcePromise = Promise<{data: IGridRowData[]; last_page?: number}>;
+export type IGridDeletePromise = Promise<{data: boolean; last_page?: number}>;
 
 export type IRowKey = IGridRowData['id'];
 export type IRowKeys = IRowKey | IRowKey[];

@@ -1,5 +1,5 @@
 import {IDFormDataSet, IDFormDataSourcePromise} from "@src/dForm/types/dFormTypes";
-import {IError, TPromise} from "@krinopotam/service-types";
+import {IError} from "@krinopotam/service-types";
 import {DModel} from "@src/dForm";
 
 export interface IDFormBaseCallbacks<T> {
@@ -67,5 +67,5 @@ export interface IDFormBaseCallbacks<T> {
 
 export type IDFormModelCallbacks = IDFormBaseCallbacks<DModel>;
 
-export type IDFormSubmitResultPromise = TPromise<{ data: Record<string, unknown> }, IError>;
+export type IDFormSubmitResultPromise = Promise<{ data: Record<string, unknown> } | void>;
 export type IDFormSubmitResultObject = { data?: Record<string, unknown>; error?: IError };

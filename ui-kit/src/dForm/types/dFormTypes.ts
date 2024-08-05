@@ -5,7 +5,6 @@ import {IColorType} from "@src/button";
 import {ColProps} from "antd";
 import {FormLabelAlign} from "antd/es/form/interface";
 import {RequiredMark} from "antd/es/form/Form";
-import {TPromise} from "@krinopotam/service-types";
 
 export type IDFormValidationRules = Record<string, IRuleType[]>;
 
@@ -101,7 +100,7 @@ export interface IDFormDataSet extends Record<string, unknown> {
     id?: string | number;
 }
 
-export type IDFormDataSourcePromise = TPromise<{ data: Record<string, unknown> }, { message: string; code: number }>;
+export type IDFormDataSourcePromise = Promise<{ data: Record<string, unknown> }>;
 
 export interface IDFormApi extends Record<string,unknown>{
     /** Form model instance */

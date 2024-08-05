@@ -6,7 +6,6 @@ import {TreeSelectRender} from '@src/treeSelect/renders/treeSelectRender';
 import {useEditableInit} from '@src/treeSelect/hooks/useEditForm';
 import {ITreeSelectApi, useInitApi} from '@src/treeSelect/hooks/api';
 import {useGetActualProps} from '@krinopotam/common-hooks';
-import {TPromise} from '@krinopotam/service-types';
 import {ButtonsRow, IButtonsRowApi, IFormButtons} from '@src/buttonsRow/buttonsRow';
 import {useInitButtons} from '@src/treeSelect/hooks/buttons';
 
@@ -144,8 +143,8 @@ export interface ITreeSelectBaseProps {
 
 export type ITreeSelectProps = ITreeSelectBaseProps & IAntTreeSelectProps;
 
-export type ITreeSelectSourcePromise = TPromise<{data: ITreeSelectNode[]}, {message: string; code: number}>;
-export type ITreeSelectDeletePromise = TPromise<{data: Record<string, unknown>}, {message: string; code: number}>;
+export type ITreeSelectSourcePromise = Promise<{data: ITreeSelectNode[]}>;
+export type ITreeSelectDeletePromise = Promise<{data: Record<string, unknown>}>;
 
 export type ITreeSelectPlainValue = string | number;
 
