@@ -6,6 +6,7 @@ export interface IWaiterProps {
     fullScreen?: boolean;
     showChildren?: boolean;
     showSpinner?: boolean;
+    style?: React.CSSProperties;
 }
 
 export const Waiter = (props: PropsWithChildren<IWaiterProps>) => {
@@ -20,7 +21,8 @@ export const Waiter = (props: PropsWithChildren<IWaiterProps>) => {
         justifyContent: 'center',
         zIndex: 2000,
         transition: 'all 0.2s',
-        backgroundColor: 'rgba(0, 0, 0, 0.45)',
+        backgroundColor: 'rgba(255, 255, 255, 0.5)',
+        ...props.style
     };
 
     return (
