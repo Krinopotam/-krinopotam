@@ -22,9 +22,12 @@ import {IColorType} from '@src/button/button';
 import {GetUuid} from '@krinopotam/js-helpers';
 
 export interface IModalProps
-    extends Omit<AntModalProps, 'afterOpenChange' | 'okButtonProps' | 'okType' | 'okText' | 'onOk' | 'cancelText' | 'cancelButtonProps'> {
-    /** the modal ID for form dispatcher */
+    extends Omit<AntModalProps, 'afterOpenChange' | 'okButtonProps' | 'okType' | 'okText' | 'onOk' | 'cancelText' | 'cancelButtonProps' | 'bodyStyle'> {
+    /** The modal ID for form dispatcher */
     modalId?: string;
+
+    /** The form body style */
+    bodyStyle?: CSSProperties
 
     /** The form body initial height */
     bodyHeight?: number;
@@ -65,11 +68,14 @@ export interface IModalProps
     /** Form footer style */
     footerStyle?: CSSProperties;
 
+    /** Is the form not draggable */
+    notDraggable?: boolean;
     /********** Callbacks *********/
 
     /** Callback when the animation ends when Modal is turned on and off */
     onAfterOpenChange?: (open: boolean) => void;
 }
+
 
 export const Modal = ({resizable = true, headerStyle, footerStyle, ...props}: IModalProps): React.JSX.Element => {
     const [modalId] = useState(props.modalId ?? 'modal-' + GetUuid());
@@ -133,7 +139,7 @@ export const Modal = ({resizable = true, headerStyle, footerStyle, ...props}: IM
             // no override section
             styles={{body: bodyStyleVal, footer: {margin: 0}}}
             className={classNames('custom-antd-modal', props.className)}
-            modalRender={node => ModalRender(node, draggableId, wrapperRemoteCallbacksRef)}
+            modalRender={node => ModalRender(node, draggableId, wrapperRemoteCallbacksRef, props.notDraggable)}
             //transitionName="zoom"
             title={<HeaderRender draggableId={draggableId} icon={props.headerIcon} title={props.title} colorType={props.colorType} style={_headerStyle}/>}
             footer={

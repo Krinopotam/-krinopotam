@@ -29,6 +29,9 @@ export interface IDModalProps {
     /** Content body wil not be scrollable */
     notScrollable?: boolean;
 
+    /** Is modal not draggable */
+    notDraggable?: boolean;
+
     /** Is modal can be resizable */
     resizable?: boolean;
 

@@ -5,7 +5,7 @@
 
 /* Override ant-modal-close button position */
 .custom-antd-modal .ant-modal-close {
-    top: 9px;
+    top: 4px;
     right: 9px;
 }
 

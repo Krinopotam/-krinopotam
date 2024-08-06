@@ -10,18 +10,42 @@ import React, {useCallback, useRef, useState} from 'react';
 import Draggable, {DraggableData} from 'react-draggable';
 import {IsDescendant} from '@krinopotam/js-helpers';
 
-export const DraggableRender = ({node, targetId, onStartCallback}: {node: React.ReactNode; targetId?: string; onStartCallback?: () => void}) => {
-    const draggableFieldRef = React.createRef<HTMLDivElement>();
+export const DraggableRender = ({node, targetId, onStartCallback}: { node: React.ReactNode; targetId?: string; onStartCallback?: () => void }) => {
+    const draggableNodeRef = React.createRef<HTMLDivElement>();
 
     const [dragDisabled, setDragDisabled] = useState(false);
     const [draggableStyle, setDraggableStyle] = useState({cursor: 'default'});
     const [bounds, setBounds] = useState({left: 0, top: 0, bottom: 0, right: 0});
 
-    const getTargetElement = useGetTargetElement(targetId);
+    const onMouseOver = useOnMouseOver(targetId, setDragDisabled, setDraggableStyle);
+    const onMouseOut = useOnMouseOut(setDragDisabled, setDraggableStyle);
 
-    const onStart = (uiData: DraggableData) => {
+    const onStart = useOnStart(draggableNodeRef, setBounds, onStartCallback);
+
+    return (
+        <Draggable nodeRef={draggableNodeRef} disabled={dragDisabled} bounds={bounds} onStart={(_event, uiData) => onStart(uiData)}>
+            <div
+                ref={draggableNodeRef}
+                style={draggableStyle}
+                onTouchStart={onMouseOver}
+                onTouchEnd={onMouseOut}
+                onMouseOver={onMouseOver}
+                onMouseOut={onMouseOut}
+            >
+                {node}
+            </div>
+        </Draggable>
+    );
+};
+
+const useOnStart = (
+    draggableNodeRef: React.RefObject<HTMLDivElement>,
+    setBounds: React.Dispatch<React.SetStateAction<{ left: number; top: number; bottom: number; right: number }>>,
+    onStartCallback?: () => void
+) => {
+    return useCallback((uiData: DraggableData) => {
         const {clientWidth, clientHeight} = window.document.documentElement;
-        const targetRect = draggableFieldRef.current?.getBoundingClientRect();
+        const targetRect = draggableNodeRef.current?.getBoundingClientRect();
         if (!targetRect) return;
         onStartCallback?.();
 
@@ -39,48 +63,12 @@ export const DraggableRender = ({node, targetId, onStartCallback}: {node: React.
             right: clientWidth - (targetRect.right - uiData.x) + (targetRect.width - 50),
             top: -targetRect.top + uiData.y,
             bottom: clientHeight - (targetRect.bottom - uiData.y) + (targetRect.height - 50),
-        });
-    };
-
-    return (
-        <Draggable disabled={dragDisabled} bounds={bounds} onStart={(_event, uiData) => onStart(uiData)}>
-            <div
-                ref={draggableFieldRef}
-                style={draggableStyle}
-                onMouseOver={e => {
-                    e.stopPropagation();
-
-                    if (!targetId) {
-                        setDragDisabled(false);
-                        setDraggableStyle({cursor: 'move'});
-                        return;
-                    }
-
-                    const targetElement = getTargetElement();
-
-                    if (IsDescendant(targetElement, e.target as Element, true)) {
-                        setDragDisabled(false);
-                        setDraggableStyle({cursor: 'move'});
-                        return;
-                    }
-
-                    setDragDisabled(true);
-                    setDraggableStyle({cursor: 'default'});
-                }}
-                onMouseOut={e => {
-                    e.stopPropagation();
-                    setDragDisabled(true);
-                    setDraggableStyle({cursor: 'default'});
-                }}
-            >
-                {node}
-            </div>
-        </Draggable>
-    );
+        })
+    }, [draggableNodeRef, onStartCallback, setBounds])
 };
 
 const useGetTargetElement = (elementId: string | undefined) => {
-    const targetElement = useRef<{element: HTMLElement | null; id?: string}>({element: null, id: elementId});
+    const targetElement = useRef<{ element: HTMLElement | null; id?: string }>({element: null, id: elementId});
 
     return useCallback(() => {
         if (!elementId) return null;
@@ -88,3 +76,72 @@ const useGetTargetElement = (elementId: string | undefined) => {
         return targetElement.current.element;
     }, [elementId]);
 };
+
+const useOnMouseOver = (
+    targetId: string | undefined,
+    setDragDisabled: React.Dispatch<React.SetStateAction<boolean>>,
+    setDraggableStyle: React.Dispatch<React.SetStateAction<{ cursor: string }>>
+) => {
+    const getTargetElement = useGetTargetElement(targetId);
+
+    return useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+        console.log('touch start')
+        e.stopPropagation();
+
+        if (!targetId) {
+            setDragDisabled(false);
+            setDraggableStyle({cursor: 'move'});
+            return;
+        }
+
+        const targetElement = getTargetElement();
+
+        if (IsDescendant(targetElement, e.target as Element, true)) {
+            setDragDisabled(false);
+            setDraggableStyle({cursor: 'move'});
+            return;
+        }
+
+        setDragDisabled(true);
+        setDraggableStyle({cursor: 'default'});
+    }, [getTargetElement, setDragDisabled, setDraggableStyle, targetId])
+}
+
+
+const useOnMouseOut = (
+    setDragDisabled: React.Dispatch<React.SetStateAction<boolean>>,
+    setDraggableStyle: React.Dispatch<React.SetStateAction<{ cursor: string }>>
+) => {
+    return useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+        e.stopPropagation();
+        console.log('touch end')
+        setDragDisabled(true);
+        setDraggableStyle({cursor: 'default'});
+    }, [setDragDisabled, setDraggableStyle]);
+}
+
+const useOnTouchStart = (
+    targetId: string | undefined,
+    setDragDisabled: React.Dispatch<React.SetStateAction<boolean>>,
+) => {
+    const getTargetElement = useGetTargetElement(targetId);
+
+    return useCallback((e: React.TouchEvent<HTMLDivElement>) => {
+        e.stopPropagation();
+
+        if (!targetId) {
+            setDragDisabled(false);
+            return;
+        }
+
+        const targetElement = getTargetElement();
+
+        if (IsDescendant(targetElement, e.target as Element, true)) {
+            setDragDisabled(false);
+            return;
+        }
+
+        setDragDisabled(true);
+    }, [getTargetElement, setDragDisabled, targetId]);
+}
+

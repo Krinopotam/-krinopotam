@@ -60,9 +60,6 @@ export const DFormModalRender = ({formId, buttons, buttonsApi, formApi, formProp
             footerStyle={modalFormProps.footerStyle}
             maskClosable={false}
             keyboard={false}
-            bodyHeight={modalFormProps.bodyHeight}
-            bodyMinHeight={modalFormProps.bodyMinHeight}
-            bodyMaxHeight={modalFormProps.bodyMaxHeight}
             width={modalFormProps.width}
             minWidth={modalFormProps.minWidth}
             maxWidth={modalFormProps.maxWidth}
@@ -72,6 +69,11 @@ export const DFormModalRender = ({formId, buttons, buttonsApi, formApi, formProp
             headerIcon={modalFormProps.headerIcon}
             headerStyle={modalFormProps.headerStyle}
             colorType={formProps.colorType}
+            bodyHeight={modalFormProps.bodyHeight}
+            bodyMinHeight={modalFormProps.bodyMinHeight}
+            bodyMaxHeight={modalFormProps.bodyMaxHeight}
+            bodyStyle={modalFormProps.bodyStyle}
+            notDraggable={modalFormProps.notDraggable}
         >
             {modalFormProps.isOpened ? (
                 <DForm
