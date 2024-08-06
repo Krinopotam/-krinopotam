@@ -52,8 +52,8 @@ export default {
                         );
                     };
                     export default AlertMessageBoxComponent;
-                `,
-            },
+                `
+            }
             /* AUTO-SOURCE-INJECT-END */
         },
     },

@@ -69,8 +69,8 @@ export default {
                         );
                     };
                     export default ModalComponent;
-                `,
-            },
+                `
+            }
             /* AUTO-SOURCE-INJECT-END */
         },
     },

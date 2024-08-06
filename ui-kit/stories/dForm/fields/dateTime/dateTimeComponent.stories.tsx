@@ -27,8 +27,8 @@ export default {
                         }
                     />
                     export default DateTimeComponent
-                `,
-            },
+                `
+            }
             /* AUTO-SOURCE-INJECT-END */
         },
     },

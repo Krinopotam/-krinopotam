@@ -26,8 +26,8 @@ export default {
                             {field1: {...props, component: NumberField} }
                         }/>
                     export default NumberComponent
-                `,
-            },
+                `
+            }
             /* AUTO-SOURCE-INJECT-END */
         },
     },

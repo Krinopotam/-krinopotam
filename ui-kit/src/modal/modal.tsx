@@ -26,8 +26,8 @@ export interface IModalProps
     /** The modal ID for form dispatcher */
     modalId?: string;
 
-    /** The form body style */
-    bodyStyle?: CSSProperties
+    /** The form body style. WORKAROUND: renamed from bodyStyle to bodyCss because of antd deprecation warnings */
+    bodyCss?: CSSProperties
 
     /** The form body initial height */
     bodyHeight?: number;
@@ -68,8 +68,8 @@ export interface IModalProps
     /** Form footer style */
     footerStyle?: CSSProperties;
 
-    /** Is the form not draggable */
-    notDraggable?: boolean;
+    /** Is the form draggable */
+    isDraggable?: boolean;
     /********** Callbacks *********/
 
     /** Callback when the animation ends when Modal is turned on and off */
@@ -77,7 +77,7 @@ export interface IModalProps
 }
 
 
-export const Modal = ({resizable = true, headerStyle, footerStyle, ...props}: IModalProps): React.JSX.Element => {
+export const Modal = ({resizable = true, isDraggable = true, headerStyle, footerStyle, ...props}: IModalProps): React.JSX.Element => {
     const [modalId] = useState(props.modalId ?? 'modal-' + GetUuid());
     useInitFormDispatcher(modalId, !!props.open);
 
@@ -110,7 +110,7 @@ export const Modal = ({resizable = true, headerStyle, footerStyle, ...props}: IM
     );
 
     const bodyStyleVal = useGetBodyStyle({
-        bodyStyle: props.bodyStyle,
+        bodyStyle: props.bodyCss,
         bodyHeight: formSize.bodyHeight,
         bodyMaxHeight: props.bodyMaxHeight,
         bodyMinHeight: props.bodyMinHeight,
@@ -139,7 +139,7 @@ export const Modal = ({resizable = true, headerStyle, footerStyle, ...props}: IM
             // no override section
             styles={{body: bodyStyleVal, footer: {margin: 0}}}
             className={classNames('custom-antd-modal', props.className)}
-            modalRender={node => ModalRender(node, draggableId, wrapperRemoteCallbacksRef, props.notDraggable)}
+            modalRender={node => ModalRender(node, draggableId, wrapperRemoteCallbacksRef, isDraggable)}
             //transitionName="zoom"
             title={<HeaderRender draggableId={draggableId} icon={props.headerIcon} title={props.title} colorType={props.colorType} style={_headerStyle}/>}
             footer={

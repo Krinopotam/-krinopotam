@@ -71,6 +71,7 @@ const useSeparateProps = (formModalProps: IDFormModalProps, formCallbacks: IDFor
             bodyMaxHeight: true,
             bodyStyle: true,
             notScrollable: true,
+            isDraggable: true,
             resizable: true,
             isOpened: true,
             headerStyle: true,

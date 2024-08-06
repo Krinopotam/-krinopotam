@@ -24,8 +24,8 @@ export default {
                         <DForm buttons={null} fieldsProps={{field1: {...props, component: QuillEditorField}}} />
                     );
                     export default QuillEditorComponent;
-                `,
-            },
+                `
+            }
             /* AUTO-SOURCE-INJECT-END */
         },
     },

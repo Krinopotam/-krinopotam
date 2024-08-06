@@ -11,7 +11,7 @@ import React from 'react';
 import {ButtonsRowWrapper} from "@src/buttonsRow";
 import {IButtonRowWrapperRemoteCallbacks} from "@src/buttonsRow/components/buttonsRowWrapper";
 
-export const ModalRender = (node: React.ReactNode, draggableId:string, inverseCallbacksRef?: React.RefObject<IButtonRowWrapperRemoteCallbacks>, notDraggable?: boolean): React.JSX.Element => {
-    if (notDraggable) return <ButtonsRowWrapper remoteCallbacksRef={inverseCallbacksRef}>{node}</ButtonsRowWrapper>
+export const ModalRender = (node: React.ReactNode, draggableId:string, inverseCallbacksRef?: React.RefObject<IButtonRowWrapperRemoteCallbacks>, isDraggable?: boolean): React.JSX.Element => {
+    if (!isDraggable) return <ButtonsRowWrapper remoteCallbacksRef={inverseCallbacksRef}>{node}</ButtonsRowWrapper>
     return <DraggableRender node={<ButtonsRowWrapper remoteCallbacksRef={inverseCallbacksRef}>{node}</ButtonsRowWrapper>} targetId={draggableId}/>;
 };

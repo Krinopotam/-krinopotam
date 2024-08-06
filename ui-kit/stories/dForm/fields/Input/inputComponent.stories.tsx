@@ -27,8 +27,8 @@ export default {
                         }
                     />
                     export default InputComponent
-                `,
-            },
+                `
+            }
             /* AUTO-SOURCE-INJECT-END */
         },
     },

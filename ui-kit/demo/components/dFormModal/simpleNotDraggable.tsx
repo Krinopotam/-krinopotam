@@ -15,7 +15,7 @@ const formProps: IDFormModalProps = {
     apiRef: formApi,
     confirmChanges: true,
     arrowsButtonsSelection: true,
-    notDraggable: true,
+    isDraggable: false,
     fieldsProps: {
         login: {component: InputField, label: 'Login'} as IInputFieldProps,
         password: {component: PasswordField, label: 'Password'} as IPasswordFieldProps

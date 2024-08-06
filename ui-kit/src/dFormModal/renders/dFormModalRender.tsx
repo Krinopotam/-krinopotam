@@ -72,8 +72,8 @@ export const DFormModalRender = ({formId, buttons, buttonsApi, formApi, formProp
             bodyHeight={modalFormProps.bodyHeight}
             bodyMinHeight={modalFormProps.bodyMinHeight}
             bodyMaxHeight={modalFormProps.bodyMaxHeight}
-            bodyStyle={modalFormProps.bodyStyle}
-            notDraggable={modalFormProps.notDraggable}
+            bodyCss={modalFormProps.bodyStyle}
+            isDraggable={modalFormProps.isDraggable}
         >
             {modalFormProps.isOpened ? (
                 <DForm

@@ -47,8 +47,8 @@ export default {
                             </h3>
                         );
                     };
-                `,
-            },
+                `
+            }
             /* AUTO-SOURCE-INJECT-END */
         },
     },

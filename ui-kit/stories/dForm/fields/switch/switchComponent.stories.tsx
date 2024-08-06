@@ -22,8 +22,8 @@ export default {
                     /** DForm Switch field */
                     export const SwitchComponent = (props: IComponent): React.JSX.Element => <DForm buttons={null} fieldsProps={{field1: {...props, component: SwitchField}}} />;
                     export default SwitchComponent;
-                `,
-            },
+                `
+            }
             /* AUTO-SOURCE-INJECT-END */
         },
     },

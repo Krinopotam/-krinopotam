@@ -28,8 +28,8 @@ export default {
                         }
                     />
                     export default SelectComponent
-                `,
-            },
+                `
+            }
             /* AUTO-SOURCE-INJECT-END */
         },
     },

@@ -29,8 +29,8 @@ export default {
                         }
                     />
                     export default TabulatorGridComponent
-                `,
-            },
+                `
+            }
             /* AUTO-SOURCE-INJECT-END */
         },
     },

@@ -28,8 +28,8 @@ export default {
                         }
                     />
                     export default CustomComponent
-                `,
-            },
+                `
+            }
             /* AUTO-SOURCE-INJECT-END */
         },
     },

@@ -26,8 +26,8 @@ export default {
                             {field1: {...props, component: PasswordField}}
                         }/>
                     export default PasswordComponent
-                `,
-            },
+                `
+            }
             /* AUTO-SOURCE-INJECT-END */
         },
     },

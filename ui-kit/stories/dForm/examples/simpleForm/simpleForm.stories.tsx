@@ -37,8 +37,8 @@ export default {
                         );
                     };
                     export default SimpleForm;
-                `,
-            },
+                `
+            }
             /* AUTO-SOURCE-INJECT-END */
         },
     },

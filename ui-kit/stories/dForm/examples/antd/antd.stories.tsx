@@ -41,8 +41,8 @@ export default {
                         );
                     };
                     export default App;
-                `,
-            },
+                `
+            }
             /* AUTO-SOURCE-INJECT-END */
         },
     },

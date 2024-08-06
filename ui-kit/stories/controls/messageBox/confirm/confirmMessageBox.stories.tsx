@@ -55,8 +55,8 @@ export default {
                         );
                     };
                     export default ConfirmMessageBoxComponent;
-                `,
-            },
+                `
+            }
             /* AUTO-SOURCE-INJECT-END */
         },
     },

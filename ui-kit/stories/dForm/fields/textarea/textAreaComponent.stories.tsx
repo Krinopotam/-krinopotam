@@ -27,8 +27,8 @@ export default {
                         }
                     />
                     export default TextAreaComponent
-                `,
-            },
+                `
+            }
             /* AUTO-SOURCE-INJECT-END */
         },
     },

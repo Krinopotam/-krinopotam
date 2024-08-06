@@ -24,8 +24,8 @@ export default {
                         <DForm buttons={null} fieldsProps={{field1: {...props, component: CheckboxField}}} />
                     );
                     export default CheckboxComponent;
-                `,
-            },
+                `
+            }
             /* AUTO-SOURCE-INJECT-END */
         },
     },

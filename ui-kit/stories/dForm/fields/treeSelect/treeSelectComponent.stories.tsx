@@ -28,8 +28,8 @@ export default {
                         }
                     />
                     export default TreeSelectComponent
-                `,
-            },
+                `
+            }
             /* AUTO-SOURCE-INJECT-END */
         },
     },

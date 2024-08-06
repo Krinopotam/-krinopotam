@@ -18,3 +18,5 @@ export {
     SplitObject,
 } from './helpersObjects';
 export {UpperFirstLetter, LowerFirstLetter, GetUuid, CamelCaseSplit, TrimFileExtension, GetRandomColor} from './helpersString';
+
+export {IsDebugMode, isMobileBrowser} from './helpersEnvironment';

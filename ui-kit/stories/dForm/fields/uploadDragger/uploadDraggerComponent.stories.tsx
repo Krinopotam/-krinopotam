@@ -24,8 +24,8 @@ export default {
                         <DForm buttons={null} fieldsProps={{field1: {...props, component: UploadDraggerField}}} />
                     );
                     export default UploadDraggerComponent;
-                `,
-            },
+                `
+            }
             /* AUTO-SOURCE-INJECT-END */
         },
     },

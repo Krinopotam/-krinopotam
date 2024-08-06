@@ -32,8 +32,8 @@ export default {
                         }
                     />
                     export default DividerComponent
-                `,
-            },
+                `
+            }
             /* AUTO-SOURCE-INJECT-END */
         },
     },
