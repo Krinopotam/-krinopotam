@@ -1,0 +1,1 @@
+import{j as e}from"./extends-CKwpSh1k.js";import{B as r,C as s}from"./tabulatorGrid-DCB4UOZd.js";class n extends r{render(){return e.jsx(s,{field:this})}renderField(){return this.render()}}export{n as C};
