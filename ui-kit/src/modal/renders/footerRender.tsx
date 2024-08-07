@@ -17,7 +17,7 @@ export const FooterRender = ({onMouseResize, resizable, children, style, colorTy
     const {token} = useToken();
     const color = useGetColor(token, colorType);
     if (isMobileBrowser()) resizable = false
-    
+
     return (
         <div>
             <div style={{borderTopWidth: 1, borderTopStyle: 'solid', borderTopColor: color, ...style}}>{children}</div>
