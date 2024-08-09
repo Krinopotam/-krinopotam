@@ -9,14 +9,15 @@
   "homepage": "https://krinopotam.github.io/-krinopotam/",
   "type": "module",
   "scripts": {
-    "build": "tsc -p tsconfig.json && tsc-alias",
+	"build": "tsc -p tsconfig.json && tsc-alias",
     "demo": "vite --mode demo",
     "build-demo": "node ./demo/.generator/generateDemo.js && tsc --noEmit && tsc-alias && vite build --mode demo",
     "preview-demo": "vite preview",
     "storybook": "storybook dev -p 6007",
     "build-storybook": "npx tsx ./stories/injectSources.ts && storybook build --output-dir deploy/ui-kit/storybook",
     "deploy": "gh-pages --nojekyll -d deploy",
-    "init-msw": "msw init public/"
+    "init-msw": "msw init public/",
+	"analyze": "vite-bundle-visualizer"
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^1.5.0",
@@ -58,6 +59,7 @@
     "tsx": "^4.15.7",
     "typescript": "^5.5.2",
     "vite": "^5.3.1",
+    "vite-bundle-visualizer": "^1.2.1",
     "vite-plugin-watch": "^0.3.1"
   },
   "dependencies": {
