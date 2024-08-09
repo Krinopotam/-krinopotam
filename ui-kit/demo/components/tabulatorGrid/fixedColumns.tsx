@@ -2,7 +2,7 @@
 
 import React from 'react';
 import {IGridProps, ITabulatorProps, TabulatorGrid} from '@src/tabulatorGrid';
-import {TabulatorBaseColumns, TabulatorBaseColumnsDef, TabulatorPlainData} from '../../data/tabulatorData';
+import {TabulatorBaseColumnsDef, TabulatorPlainData} from '../../data/tabulatorData';
 import {DateTimeFormatter, DateTimeSorter} from "@src/tabulatorBase";
 
 const columns: ITabulatorProps['columns'] = [

@@ -7,7 +7,8 @@ import {IDFormModalApi, DFormModal, IDFormModalProps} from '@src/dFormModal';
 import {IInputFieldProps, InputField} from '@src/dForm/fields/input/inputField';
 import {IPasswordFieldProps, PasswordField} from '@src/dForm/fields/password/passwordField';
 import {TabulatorBaseColumns, TabulatorBaseColumnsDef} from '../../data/tabulatorData';
-import {ITabulatorGridFieldProps, TabsField, TabulatorGridField} from '@src/dForm';
+import {TabsField} from '@src/dForm/fields/tabs';
+import {ITabulatorGridFieldProps, TabulatorGridField} from '@src/dForm/fields/tabulatorGrid';
 import {IGridRowData} from '@src/tabulatorGrid';
 import {FormLayoutSwitch} from "../../common/buttonsProps";
 

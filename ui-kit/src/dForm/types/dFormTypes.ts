@@ -1,10 +1,11 @@
-import {DModel, IDFormBaseCallbacks, IDFormFieldsProps, IRuleType} from "@src/dForm";
+import {DModel, IDFormBaseCallbacks, IRuleType} from "@src/dForm";
 import {IButtonsRowApi, IFormButtons} from "@src/buttonsRow";
 import React, {CSSProperties} from "react";
 import {IColorType} from "@src/button";
 import {ColProps} from "antd";
 import {FormLabelAlign} from "antd/es/form/interface";
 import {RequiredMark} from "antd/es/form/Form";
+import {IDFormFieldsProps} from "@src/dForm/fields";
 
 export type IDFormValidationRules = Record<string, IRuleType[]>;
 

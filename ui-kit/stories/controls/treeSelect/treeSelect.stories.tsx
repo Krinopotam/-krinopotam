@@ -7,6 +7,7 @@ import React from 'react';
 import {CloneObject} from '@krinopotam/js-helpers';
 import {InputField} from '@src/dForm/fields/input/inputField';
 import {TreeSelectDataSet} from '../../datasets/treeSelect';
+import {fn} from "@storybook/test";
 
 export default {
     title: 'Controls/TreeSelect',
@@ -26,6 +27,31 @@ const commonArgs: Story['args'] = {
     dataSet: TreeSelectDataSet,
     style: {width: 400},
     placeholder: 'Select value',
+    onChange:fn(),
+    onDataFetch: fn(),
+    onDataFetchSuccess: fn(),
+    onClear: fn(),
+    onDelete: fn(),
+    onDataFetchError: fn(),
+    onDataFetchComplete: fn(),
+    onReady: fn(),
+    onTreeLoad: fn(),
+    onTreeExpand: fn(),
+    onSearch: fn(),
+    onPopupScroll: fn(),
+    onMouseLeave: fn(),
+    onMouseEnter: fn(),
+    onMouseDown: fn(),
+    onKeyUp: fn(),
+    onKeyDown: fn(),
+    onClick: fn(),
+    onFocus: fn(),
+    onBlur: fn(),
+    onInputKeyDown: fn(),
+    onDropdownVisibleChange: fn(),
+    onDeselect: fn(),
+    onSelect: fn(),
+
 };
 export const Simple: Story = {
     args: {

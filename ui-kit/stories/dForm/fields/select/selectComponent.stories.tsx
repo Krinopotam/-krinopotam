@@ -2,6 +2,7 @@
 
 import type {Meta, StoryObj} from '@storybook/react';
 import SelectComponent from './selectComponent';
+import {fn} from "@storybook/test";
 
 export default {
     title: 'DForm/Fields/Select',
@@ -39,5 +40,6 @@ type Story = StoryObj<typeof SelectComponent>;
 export const Playground: Story = {
     args: {
         label: 'Select field',
+        onReadyStateChanged: fn()
     },
 };

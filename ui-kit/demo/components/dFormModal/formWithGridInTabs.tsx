@@ -7,7 +7,7 @@ import {ITabulatorGridFieldProps, TabulatorGridField} from '@src/dForm/fields/ta
 import {InputField} from '@src/dForm/fields/input/inputField';
 import {FormLayoutSwitch} from '../../common/buttonsProps';
 import {TabulatorBaseColumns, TabulatorBaseColumnsDef, TabulatorPlainData} from '../../data/tabulatorData';
-import {ITabsFieldProps, TabsField} from '@src/dForm';
+import {ITabsFieldProps, TabsField} from '@src/dForm/fields/tabs';
 
 const formApi = {} as IDFormModalApi;
 const editFormApi = {} as IDFormModalApi;

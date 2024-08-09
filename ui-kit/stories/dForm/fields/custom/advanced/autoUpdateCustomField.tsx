@@ -1,8 +1,8 @@
 import React from 'react';
 import {DForm} from '@src/dForm';
-import {IDFormFieldProps} from '@src/dForm';
 import {IInputFieldProps, InputField} from '@src/dForm/fields/input/inputField';
 import {CustomField} from '@src/dForm/fields/custom/customField';
+import {IDFormFieldProps} from "@src/dForm/fields";
 
 type IComponent = IDFormFieldProps;
 

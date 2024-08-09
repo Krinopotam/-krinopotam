@@ -2,6 +2,7 @@
 
 import type {Meta, StoryObj} from '@storybook/react';
 import DateTimeComponent from './dateTimeComponent';
+import {fn} from "@storybook/test";
 
 export default {
     title: 'DForm/Fields/DateTime',
@@ -39,6 +40,7 @@ export const Date_: Story = {
     args: {
         label: 'Date field',
         width: 200,
+        onReadyStateChanged: fn()
     },
 };
 
