@@ -1,6 +1,6 @@
 import React from "react";
 import {DForm} from "@src/dForm";
-import {ITabulatorGridFieldProps, TabulatorGridField} from "@src/dForm/fields/tabulatorGrid/tabulatorGridField";
+import {ITabulatorGridFieldProps, TabulatorGridField} from "@src/dForm/fields/tabulatorGrid";
 
 type IComponent = ITabulatorGridFieldProps
 

@@ -4,7 +4,7 @@ import React from 'react';
 import {IGridProps, TabulatorGrid} from '@src/tabulatorGrid';
 import {IDFormModalProps} from '@src/dFormModal';
 import {TabulatorBaseColumns, TabulatorBaseColumnsDef, TabulatorPlainData} from '../../data/tabulatorData';
-import {ITabulatorGridFieldProps, TabulatorGridField} from '@src/dForm';
+import {ITabulatorGridFieldProps, TabulatorGridField} from '@src/dForm/fields/tabulatorGrid';
 
 const selectionFormProps: IDFormModalProps = {
     title:'Please select',

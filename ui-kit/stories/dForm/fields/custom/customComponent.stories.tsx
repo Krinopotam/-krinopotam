@@ -3,6 +3,7 @@
 import type {Meta, StoryObj} from '@storybook/react';
 import CustomComponent from './customComponent';
 import React from 'react';
+import {fn} from "@storybook/test";
 
 export default {
     title: 'DForm/Fields/Custom',
@@ -44,5 +45,6 @@ export const Playground: Story = {
                 Any <span style={{color: 'red'}}>react</span> component or <span style={{color: 'blue'}}>string</span>{' '}
             </h3>
         ),
+        onRender: fn()
     },
 };

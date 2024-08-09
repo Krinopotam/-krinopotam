@@ -2,6 +2,7 @@
 
 import type {Meta, StoryObj} from '@storybook/react';
 import TreeSelectComponent from './treeSelectComponent';
+import {fn} from "@storybook/test";
 
 export default {
     title: 'DForm/Fields/TreeSelect',
@@ -39,5 +40,8 @@ type Story = StoryObj<typeof TreeSelectComponent>;
 export const Playground: Story = {
     args: {
         label: 'TreeSelect field',
+        onReadyStateChanged: fn(),
+        onChange: fn(),
+        onDataFetch: fn()
     },
 };

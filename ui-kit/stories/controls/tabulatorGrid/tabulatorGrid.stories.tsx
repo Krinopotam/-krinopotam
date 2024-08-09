@@ -4,6 +4,7 @@ import type {Meta, StoryObj} from '@storybook/react';
 import React from 'react';
 import {TabulatorGridColumns, TabulatorTreeDataset} from '../../datasets/tabulator';
 import {TabulatorGrid} from '@src/tabulatorGrid';
+import {fn} from "@storybook/test";
 
 export default {
     title: 'Controls/TabulatorGrid',
@@ -30,6 +31,7 @@ const baseArgs: Story['args'] = {
     movableColumns: true,
     onDataFetch: undefined, //manually set the callback values so that the storybook does not overwrite with its incorrect actions that cause tabulator errors
     onDataFetchResponse: undefined,
+    onMenuVisibilityChanged: fn(),
 };
 
 type Story = StoryObj<typeof TabulatorGrid>;

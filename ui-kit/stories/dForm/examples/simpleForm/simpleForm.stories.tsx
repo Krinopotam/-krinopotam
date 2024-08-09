@@ -1,5 +1,6 @@
 import type {Meta, StoryObj} from '@storybook/react';
 import SimpleForm from './simpleForm';
+import {fn} from "@storybook/test";
 
 export default {
     title: 'DForm/Examples/SimpleForm',
@@ -49,5 +50,7 @@ type Story = StoryObj<typeof SimpleForm>;
 export const Playground: Story = {
     args: {
         layout: 'horizontal',
+        onFormModelInitialized: fn(),
+        onFormInit: fn()
     },
 };

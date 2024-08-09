@@ -3,7 +3,7 @@
 import React, {useCallback} from 'react';
 import {Button} from '@src/button';
 import {DFormModal, IDFormModalApi, IDFormModalProps} from '@src/dFormModal';
-import {ITabulatorGridFieldProps, TabulatorGridField} from '@src/dForm/fields/tabulatorGrid/tabulatorGridField';
+import {TabulatorGridField} from '@src/dForm/fields/tabulatorGrid';
 import {InputField} from '@src/dForm/fields/input/inputField';
 import {FormLayoutSwitch} from '../../common/buttonsProps';
 import {GenerateDataSet, TabulatorBaseColumnsDef} from '../../data/tabulatorData';

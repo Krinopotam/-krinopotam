@@ -28,7 +28,7 @@ const formProps: IDFormModalProps = {
                                 subNameIn1: {component: InputField, label: 'Имя проходящего', inlineGroup:'row1'},
                                 subDateIn1: {component: DateTimeField, label: 'Дата прохода', inlineGroup:'row1', width: 150},
                             },
-                            ' Цходы ': {
+                            ' Уходы ': {
                                 subNameOut1: {component: InputField, label: 'Имя уходящего'},
                                 subDateOut1: {component: DateTimeField, label: 'Дата ухода', width: 150},
                             },
