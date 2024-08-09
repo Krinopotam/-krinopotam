@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect, useState} from 'react';
 
-import {Modal} from '@src/modal';
+import {Modal} from '@src/modal/modal';
 import {ButtonsRow} from '@src/buttonsRow';
 import {IGridApi, IGridProps} from '@src/tabulatorGrid';
 import {Tree, TreeProps} from 'antd';

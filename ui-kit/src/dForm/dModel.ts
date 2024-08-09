@@ -13,11 +13,12 @@ import {IsPromise} from '@krinopotam/js-helpers';
 import {BaseValidator} from './validators/baseValidator';
 import React from 'react';
 import {IAnyFieldProps, IBaseField} from '@src/dForm/fields/base/baseField';
-import {IDFormDataSet, IDFormFieldsProps, IDFormProps} from '@src/dForm/index';
+import {IDFormDataSet, IDFormProps} from '@src/dForm/index';
 import {IError} from '@krinopotam/service-types';
 import {InlineGroupField} from '@src/dForm/fields/inlineGroup/inlineGroupField';
 import {IDFormMode} from '@src/dForm/types/dFormTypes';
 import {IDFormModelCallbacks, IDFormSubmitResultObject, IDFormSubmitResultPromise} from '@src/dForm/types/dModelTypes';
+import {IDFormFieldsProps} from "@src/dForm/fields";
 
 export class DModel {
     //region Private properties

@@ -4,6 +4,7 @@ import type {Meta, StoryObj} from '@storybook/react';
 import TabulatorGridComponent from './tabulatorGridComponent';
 import {TabulatorGridColumns, TabulatorTreeDataset} from '../../../datasets/tabulator';
 import React from 'react';
+import {fn} from "@storybook/test";
 
 export default {
     title: 'DForm/Fields/TabulatorGrid',
@@ -19,7 +20,7 @@ export default {
                 code: `
                     import React from "react";
                     import {DForm} from @krinopotam/ui-kit/dForm";
-                    import {ITabulatorGridFieldProps, TabulatorGridField} from @krinopotam/ui-kit/dForm/fields/tabulatorGrid/tabulatorGridField";
+                    import {ITabulatorGridFieldProps, TabulatorGridField} from @krinopotam/ui-kit/dForm/fields/tabulatorGrid";
                     type IComponent = ITabulatorGridFieldProps
                     /** DForm TabulatorGrid field */
                     export const TabulatorGridComponent = (props: IComponent): React.JSX.Element => <DForm
@@ -47,6 +48,7 @@ const baseArgs: Story['args'] = {
     height: 500,
     layout: 'fitColumns',
     movableColumns: true,
+    onMenuVisibilityChanged: fn()
 };
 
 type Story = StoryObj<typeof TabulatorGridComponent>;
@@ -113,5 +115,6 @@ export const PaginationRemote: Story = {
             });
         },
         ajaxParams: {key1: 'value1', key2: 'value2'}, //any additional params (you can pass a callback)
+
     },
 };

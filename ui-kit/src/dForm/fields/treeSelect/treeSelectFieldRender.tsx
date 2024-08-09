@@ -2,7 +2,7 @@ import React, {CSSProperties, useCallback, useEffect, useMemo, useSyncExternalSt
 import {ITreeSelectFieldOnlyProps, TreeSelectField} from '@src/dForm/fields/treeSelect/treeSelectField';
 import {ITreeSelectProps, ITreeSelectValue, TreeSelect} from '@src/treeSelect';
 import {SplitObject} from '@krinopotam/js-helpers';
-import {IDFormFieldProps} from '@src/dForm';
+import {IDFormFieldProps} from '@src/dForm/fields';
 
 export const TreeSelectFieldRender = ({field}: {field: TreeSelectField}): React.JSX.Element => {
     useSyncExternalStore(field.subscribe.bind(field), field.getSnapshot.bind(field));

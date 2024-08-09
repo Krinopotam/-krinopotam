@@ -18,9 +18,9 @@ export default {
                 code: `
                     import React from 'react';
                     import {DForm} from @krinopotam/ui-kit/dForm';
-                    import {IDFormFieldProps} from @krinopotam/ui-kit/dForm';
                     import {IInputFieldProps, InputField} from @krinopotam/ui-kit/dForm/fields/input/inputField';
                     import {CustomField} from @krinopotam/ui-kit/dForm/fields/custom/customField';
+                    import {IDFormFieldProps} from @krinopotam/ui-kit/dForm/fields";
                     type IComponent = IDFormFieldProps;
                     /** DForm Custom field auto-updating */
                     export const AutoUpdateCustomField = (props: IComponent): React.JSX.Element => (

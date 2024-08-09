@@ -1,7 +1,8 @@
 import {DForm, IDFormMode, IDFormProps} from '@src/dForm';
 import {IButtonsRowApi, IFormButtons} from '@src/buttonsRow/buttonsRow';
 
-import {ButtonsRender, Modal} from '@src/modal';
+import {Modal} from '@src/modal/modal';
+import {ButtonsRender} from '@src/modal/renders/buttonsRender';
 import React, {useState} from 'react';
 import {GetUuid} from '@krinopotam/js-helpers';
 import {IDFormModalApi, IDFormModalProps} from "@src/dFormModal";

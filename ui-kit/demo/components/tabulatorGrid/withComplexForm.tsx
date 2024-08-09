@@ -4,11 +4,9 @@ import {ITabulatorColumn} from '@src/tabulatorBase';
 import {IDFormModalProps} from '@src/dFormModal';
 import {TabsField} from '@src/dForm/fields/tabs/tabsField';
 import {InputField} from '@src/dForm/fields/input/inputField';
-import {PasswordField} from '@src/dForm/fields/password/passwordField';
-import {ITextAreaFieldProps, TextAreaField} from '@src/dForm/fields/textArea/textAreaField';
+import { TextAreaField} from '@src/dForm/fields/textArea/textAreaField';
 import {ITabulatorGridFieldProps, TabulatorGridField} from '@src/dForm/fields/tabulatorGrid/tabulatorGridField';
-import {ISelectNode} from '@src/select';
-import {SelectField} from '@src/dForm';
+import {SelectField} from '@src/dForm/fields/select';
 
 export const TagsColumns: ITabulatorColumn[] = [
     {field: 'num', title: '№', formatter: 'rownum', width: 50},
