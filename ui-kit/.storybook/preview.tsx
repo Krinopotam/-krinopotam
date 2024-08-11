@@ -7,7 +7,7 @@ const preview:Preview = {
     globalTypes: {
         theme: {
             description: 'Global theme for components',
-            defaultValue: 'light',
+            value: 'light',
             toolbar: {
                 // The label to show for this toolbar item
                 title: 'Theme',
@@ -22,7 +22,7 @@ const preview:Preview = {
         },
     },
     parameters: {
-        actions: {argTypesRegex: "^on[A-Z].*"},
+        //actions: {argTypesRegex: "^on[A-Z].*"},
         controls: {
             matchers: {
                 color: /(background|color)$/i,

@@ -15,7 +15,6 @@ const config: StorybookConfig = {
         '@storybook/addon-console',
         '@storybook/addon-storysource',
         '@storybook/addon-toolbars',
-        '@storybook/addon-mdx-gfm',
         '@chromatic-com/storybook'
     ],
     framework: {

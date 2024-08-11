@@ -1,6 +1,6 @@
 {
   "name": "@krinopotam/ui-kit",
-  "version": "2.0.164",
+  "version": "2.0.165",
   "description": "UI kit for Krinopotam's projects",
   "private": false,
   "author": "Maxim Zaytsev",
@@ -9,7 +9,7 @@
   "homepage": "https://krinopotam.github.io/-krinopotam/",
   "type": "module",
   "scripts": {
-	"build": "tsc -p tsconfig.json && tsc-alias",
+    "build": "tsc -p tsconfig.json && tsc-alias",
     "demo": "vite --mode demo",
     "build-demo": "node ./demo/.generator/generateDemo.js && tsc --noEmit && tsc-alias && vite build --mode demo",
     "preview-demo": "vite preview",
@@ -17,7 +17,7 @@
     "build-storybook": "npx tsx ./stories/injectSources.ts && storybook build --output-dir deploy/ui-kit/storybook",
     "deploy": "gh-pages --nojekyll -d deploy",
     "init-msw": "msw init public/",
-	"analyze": "vite-bundle-visualizer"
+    "analyze": "vite-bundle-visualizer"
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^1.5.0",
@@ -26,7 +26,6 @@
     "@storybook/addon-essentials": "^8.1.10",
     "@storybook/addon-interactions": "^8.1.10",
     "@storybook/addon-links": "^8.1.10",
-    "@storybook/addon-mdx-gfm": "^8.1.10",
     "@storybook/addon-storysource": "^8.1.10",
     "@storybook/blocks": "^8.1.10",
     "@storybook/react": "^8.1.10",
