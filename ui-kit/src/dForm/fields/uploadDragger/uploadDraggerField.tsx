@@ -3,7 +3,7 @@ import React from 'react';
 import {RcFile, UploadChangeParam, UploadFile} from 'antd/es/upload';
 import type {UploadRequestOption} from 'rc-upload/lib/interface';
 import {HttpRequestHeader, ItemRender, ShowUploadListInterface, UploadListProgressProps, UploadListType, UploadType} from 'antd/es/upload/interface';
-import {UploadDraggerFieldRender} from '@src/dForm/fields/fileDrop/uploadDraggerFieldRender';
+import {UploadDraggerFieldRender} from '@src/dForm/fields/uploadDragger/uploadDraggerFieldRender';
 
 //TODO: Test component
 export interface IUploadDraggerFieldProps extends IBaseFieldProps<UploadDraggerField> {

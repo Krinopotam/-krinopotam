@@ -1,6 +1,6 @@
 import React, {CSSProperties, useCallback, useEffect, useSyncExternalStore} from 'react';
 import {Upload} from 'antd';
-import {UploadDraggerField} from '@src/dForm/fields/fileDrop/uploadDraggerField';
+import {UploadDraggerField} from '@src/dForm/fields/uploadDragger/uploadDraggerField';
 import {UploadChangeParam, UploadFile} from 'antd/es/upload';
 import {InboxOutlined} from '@ant-design/icons';
 

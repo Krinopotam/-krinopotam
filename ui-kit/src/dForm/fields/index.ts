@@ -9,7 +9,7 @@ import {IDividerFieldProps} from "@src/dForm/fields/divider";
 import {ILinkFieldProps} from "@src/dForm/fields/link";
 import {INumberFieldProps} from "@src/dForm/fields/number";
 import {IQuillEditorFieldProps} from "@src/dForm/fields/quillEditor";
-import {IUploadDraggerFieldProps} from "@src/dForm/fields/fileDrop";
+import {IUploadDraggerFieldProps} from "src/dForm/fields/uploadDragger";
 import {ISelectFieldProps} from "@src/dForm/fields/select";
 import {ITabulatorGridFieldProps} from "@src/dForm/fields/tabulatorGrid";
 import {ITextAreaFieldProps} from "@src/dForm/fields/textArea";
