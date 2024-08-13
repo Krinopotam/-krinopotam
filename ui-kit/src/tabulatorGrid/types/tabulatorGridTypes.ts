@@ -1,5 +1,5 @@
 import React from 'react';
-import {IButtonsRowApi, IFormButton, IFormButtons} from '@src/buttonsRow';
+import {IButtonsRowApi, IFormButton} from '@src/buttonsRow';
 import {IDFormModalApi, IDFormModalProps} from '@src/dFormModal';
 import {IRequestProps, ITabulator, ITabulatorProps} from '@src/tabulatorBase';
 import {RowComponent, ScrollToRowPosition} from 'tabulator-tables';
@@ -31,16 +31,16 @@ export interface IGridPropsBase {
     headerLabel?: React.ReactNode;
 
     /** Grid header buttons */
-    buttons?: Record<'view' | 'create' | 'clone' | 'update' | 'delete' | 'select' | 'filterToggle' | 'system', IFormButton | null> | IFormButtons;
+    buttons?: Record<'view' | 'create' | 'clone' | 'update' | 'delete' | 'select' | 'filterToggle' | 'system', ITabulatorButton | null> | ITabulatorButtons;
 
     /** Grid header buttons size. Default: 'small'*/
-    buttonsSize?: IFormButton['size'];
+    buttonsSize?: ITabulatorButton['size'];
 
     /** If true, only button icons will be displayed, without title */
     buttonsIconsOnly?: boolean;
 
     /** Grid header buttons size. Default: 'right'*/
-    buttonsPosition?: IFormButton['position'];
+    buttonsPosition?: ITabulatorButton['position'];
 
     /** Table can't be edited */
     readOnly?: boolean;
@@ -246,3 +246,13 @@ export interface IGridApi {
     /** Get current data fetch handler */
     getCurrentDataFetchHandler: () => [IGridProps['onDataFetch'], Record<string, unknown> | undefined];
 }
+
+export interface ITabulatorButton extends IFormButton {
+    /** if no row is selected in the grid, disable the button */
+    checkDisabled?: boolean;
+
+    /** if no row is selected in the grid, hide the button */
+    checkHidden?: boolean;
+}
+
+export type ITabulatorButtons = Record<string, ITabulatorButton | null>;

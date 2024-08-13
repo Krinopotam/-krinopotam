@@ -1,10 +1,10 @@
-import {IFormButton, IFormButtons} from '@src/buttonsRow/buttonsRow';
 import React, {useCallback, useMemo, useState} from 'react';
 import {CopyOutlined, DeleteOutlined, EditOutlined, EyeOutlined, FilterOutlined, MenuOutlined, PlusOutlined, PlusSquareOutlined} from '@ant-design/icons';
 import {MergeObjects} from '@krinopotam/js-helpers';
 import {IGridApi, IGridRowData, ITabulator} from '@src/tabulatorGrid';
+import {ITabulatorButton, ITabulatorButtons} from "@src/tabulatorGrid/types/tabulatorGridTypes";
 
-export const useInitButtons = (gridApi: IGridApi): IFormButtons => {
+export const useInitButtons = (gridApi: IGridApi): ITabulatorButtons => {
     const [, refreshButtons] = useState({});
     const buttons = gridApi.gridProps.buttons;
     const buttonsSize = gridApi.gridProps.buttonsSize ?? 'small';
@@ -36,7 +36,7 @@ export const useInitButtons = (gridApi: IGridApi): IFormButtons => {
             delete: deleteButton,
             filterToggle: filterToggleButton,
             system: systemButtons,
-        } as IFormButtons;
+        } as ITabulatorButtons;
 
         const resultButtons = MergeObjects(defaultButtons, buttons);
 
@@ -81,7 +81,7 @@ const useRefreshButtons = (refreshButtons: React.Dispatch<React.SetStateAction<R
 };
 
 /** Get label props */
-const useGetHeaderLabel = (gridApi: IGridApi): IFormButton | undefined => {
+const useGetHeaderLabel = (gridApi: IGridApi): ITabulatorButton | undefined => {
     return useMemo(() => {
         const gridProps = gridApi.gridProps;
         if (!gridProps.headerLabel) return undefined;
@@ -91,12 +91,12 @@ const useGetHeaderLabel = (gridApi: IGridApi): IFormButton | undefined => {
             title: gridProps.headerLabel,
             type: 'element',
             position: 'left',
-        } satisfies IFormButton;
+        } satisfies ITabulatorButton;
     }, [gridApi]);
 };
 
 /** Get view button props */
-const useGetViewButton = (gridApi: IGridApi, activeRow: IGridRowData | undefined, selectedRows: IGridRowData[]): IFormButton | undefined => {
+const useGetViewButton = (gridApi: IGridApi, activeRow: IGridRowData | undefined, selectedRows: IGridRowData[]): ITabulatorButton | undefined => {
     return useMemo(() => {
         const gridProps = gridApi.gridProps;
         const editFormApi = gridApi.editFormApi;
@@ -115,12 +115,12 @@ const useGetViewButton = (gridApi: IGridApi, activeRow: IGridRowData | undefined
                 const dataSet = getRowDataSet(gridApi, false);
                 editFormApi.open('view', dataSet);
             },
-        } satisfies IFormButton;
+        } satisfies ITabulatorButton;
     }, [activeRow, gridApi, selectedRows.length]);
 };
 
 /** Get create button props */
-const useGetCreateButton = (gridApi: IGridApi): IFormButton | undefined => {
+const useGetCreateButton = (gridApi: IGridApi): ITabulatorButton | undefined => {
     return useMemo(() => {
         const gridProps = gridApi.gridProps;
 
@@ -137,12 +137,12 @@ const useGetCreateButton = (gridApi: IGridApi): IFormButton | undefined => {
                 const dataSet = getRowDataSet(gridApi, true, true);
                 editFormApi.open('create', dataSet);
             },
-        } satisfies IFormButton;
+        } satisfies ITabulatorButton;
     }, [gridApi]);
 };
 
 /** Get clone button props */
-const useGetCloneButton = (gridApi: IGridApi, activeRow: IGridRowData | undefined, selectedRows: IGridRowData[]): IFormButton | undefined => {
+const useGetCloneButton = (gridApi: IGridApi, activeRow: IGridRowData | undefined, selectedRows: IGridRowData[]): ITabulatorButton | undefined => {
     return useMemo(() => {
         const gridProps = gridApi.gridProps;
         const editFormApi = gridApi.editFormApi;
@@ -161,12 +161,12 @@ const useGetCloneButton = (gridApi: IGridApi, activeRow: IGridRowData | undefine
                 const dataSet = getRowDataSet(gridApi, false);
                 editFormApi.open('clone', dataSet);
             },
-        } satisfies IFormButton;
+        } satisfies ITabulatorButton;
     }, [activeRow, gridApi, selectedRows.length]);
 };
 
 /** Get update button props */
-const useGetUpdateButton = (gridApi: IGridApi, activeRow: IGridRowData | undefined, selectedRows: IGridRowData[]): IFormButton | undefined => {
+const useGetUpdateButton = (gridApi: IGridApi, activeRow: IGridRowData | undefined, selectedRows: IGridRowData[]): ITabulatorButton | undefined => {
     return useMemo(() => {
         const gridProps = gridApi.gridProps;
         const editFormApi = gridApi.editFormApi;
@@ -185,12 +185,12 @@ const useGetUpdateButton = (gridApi: IGridApi, activeRow: IGridRowData | undefin
                 const dataSet = getRowDataSet(gridApi, false);
                 editFormApi.open('update', dataSet);
             },
-        } satisfies IFormButton;
+        } satisfies ITabulatorButton;
     }, [activeRow, gridApi, selectedRows.length]);
 };
 
 /** Get selection button props */
-const useGetSelectionButton = (gridApi: IGridApi): IFormButton | undefined => {
+const useGetSelectionButton = (gridApi: IGridApi): ITabulatorButton | undefined => {
     return useMemo(() => {
         const gridProps = gridApi.gridProps;
         const selectionFormApi = gridApi.selectionFormApi;
@@ -207,12 +207,12 @@ const useGetSelectionButton = (gridApi: IGridApi): IFormButton | undefined => {
                 const dataSet = gridApi.getDataSet();
                 selectionFormApi.open('update', {select: dataSet});
             },
-        } satisfies IFormButton;
+        } satisfies ITabulatorButton;
     }, [gridApi]);
 };
 
 /** Get delete button props */
-const useGetDeleteButton = (gridApi: IGridApi, selectedRows: IGridRowData[]): IFormButton | undefined => {
+const useGetDeleteButton = (gridApi: IGridApi, selectedRows: IGridRowData[]): ITabulatorButton | undefined => {
     return useMemo(() => {
         const gridProps = gridApi.gridProps;
         if ((!gridProps.editFormProps && !gridProps.selectionFormProps) || gridProps.readOnly || gridProps.buttons?.delete === null) return undefined;
@@ -230,12 +230,12 @@ const useGetDeleteButton = (gridApi: IGridApi, selectedRows: IGridRowData[]): IF
                 const selectedRows = gridApi.getSelectedRows();
                 gridApi.deleteRows(selectedRows);
             },
-        } satisfies IFormButton;
+        } satisfies ITabulatorButton;
     }, [gridApi, selectedRows]);
 };
 
 /** Get filter button props */
-const useGetFilterToggleButton = (gridApi: IGridApi, tableApi: ITabulator | undefined): IFormButton | undefined => {
+const useGetFilterToggleButton = (gridApi: IGridApi, tableApi: ITabulator | undefined): ITabulatorButton | undefined => {
     //a separate tableApi parameter is required for the memo field to be updated (initially tableApi is undefined)
     return useMemo(() => {
         const gridProps = gridApi.gridProps;
@@ -257,7 +257,7 @@ const useGetFilterToggleButton = (gridApi: IGridApi, tableApi: ITabulator | unde
                     },
                 });
             },
-        } satisfies IFormButton;
+        } satisfies ITabulatorButton;
     }, [gridApi.buttonsApi, gridApi.gridProps, gridApi.tableApi, tableApi]);
 };
 
@@ -267,7 +267,7 @@ const getRowDataSet = (gridApi: IGridApi, selfParent: boolean, parentOnly?: bool
 };
 
 /** Get system button props */
-const useGetSystemButton = (gridApi: IGridApi): IFormButton | undefined => {
+const useGetSystemButton = (gridApi: IGridApi): ITabulatorButton | undefined => {
     //a separate tableApi parameter is required for the memo field to be updated (initially tableApi is undefined)
     return useMemo(() => {
         const gridProps = gridApi.gridProps;
@@ -302,6 +302,6 @@ const useGetSystemButton = (gridApi: IGridApi): IFormButton | undefined => {
                     },
                 },
             },
-        } satisfies IFormButton;
+        } satisfies ITabulatorButton;
     }, [gridApi]);
 };

@@ -92,12 +92,6 @@ export interface IFormButton {
     /** Order weight (default 0) */
     weight?: number;
 
-    /** Service property, used in other components to disable a button depending on conditions (for example, if no row is selected in the grid, disable the button)*/
-    checkDisabled?: boolean;
-
-    /** Service property, used in other components to hide a button depending on conditions (for example, if no row is selected in the grid, hide the button)*/
-    checkHidden?: boolean;
-
     /************* Callbacks *************/
     /**Button onClick callback */
     onClick?: (buttonName: string, button: IFormButton, context?: AnyType) => void;
