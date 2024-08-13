@@ -17,7 +17,7 @@ export default {
                 code: `
                     import React from 'react';
                     import {DForm} from @krinopotam/ui-kit/dForm';
-                    import {IUploadDraggerFieldProps, UploadDraggerField} from @krinopotam/ui-kit/dForm/fields/fileDrop/uploadDraggerField';
+                    import {IUploadDraggerFieldProps, UploadDraggerField} from @krinopotam/ui-kit/dForm/fields/uploadDragger';
                     type IComponent = IUploadDraggerFieldProps;
                     /** DForm Input field */
                     export const UploadDraggerComponent = (props: IComponent): React.JSX.Element => (
