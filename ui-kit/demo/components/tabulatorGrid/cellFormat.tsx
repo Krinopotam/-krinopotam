@@ -2,12 +2,12 @@
 
 import React from 'react';
 
-import {ColumnDefinition} from 'tabulator-tables';
 import {TabulatorGrid, ITabulatorProps, IGridProps} from "@src/tabulatorGrid";
 import {DateTimeSorter} from "@src/tabulatorBase/sorters/dateTime";
 import {TabulatorNamesPlainData} from "../../data/tabulatorData";
+import {ITabulatorColumn} from "@src/tabulatorBase";
 
-const fioFormatter: ColumnDefinition['formatter'] = (cell) => {
+const fioFormatter: ITabulatorColumn['formatter'] = (cell) => {
     //cell - the cell component
     //formatterParams - parameters set for the column
     //onRendered - function to call when the formatter has been rendered
@@ -16,7 +16,7 @@ const fioFormatter: ColumnDefinition['formatter'] = (cell) => {
     return `<span>${rowData['surname']} ${rowData['name']} ${rowData['patronymic']}</span><br/><small style="color:#808080;">${rowData['email']}</small>`; //return the contents of the cell;
 };
 
-const fioFilter: ColumnDefinition['headerFilterFunc'] = (headerValue, _rowValue, rowData) => {
+const fioFilter: ITabulatorColumn['headerFilterFunc'] = (headerValue, _rowValue, rowData) => {
     //headerValue - the value of the header filter element
     //rowValue - the value of the column in this row
     //rowData - the data for the row being filtered
@@ -27,7 +27,7 @@ const fioFilter: ColumnDefinition['headerFilterFunc'] = (headerValue, _rowValue,
     return rowString.indexOf(headerValue.toLowerCase()) >= 0;
 };
 
-const fioSorter: ColumnDefinition['sorter'] = (_a, _b, aRow, bRow): number => {
+const fioSorter: ITabulatorColumn['sorter'] = (_a, _b, aRow, bRow): number => {
     //a, b - the two values being compared
     //aRow, bRow - the row components for the values being compared (useful if you need to access additional fields in the row data for the sort)
     //column - the column component for the column being sorted
