@@ -5,12 +5,12 @@ import {useInitButtons} from "../hooks/buttons";
 import {IGridApi} from "@src/tabulatorGrid";
 
 interface IGridMenuProps {
-    gridApi:IGridApi
+    gridApi: IGridApi
 }
 
 export const MenuRow = ({gridApi}: IGridMenuProps): React.JSX.Element | null => {
     const gridProps = gridApi.gridProps;
-    const buttons =  useInitButtons(gridApi)
+    const buttons = useInitButtons(gridApi)
 
     const [isMenuVisible, setIsMenuVisible] = useState<boolean | undefined>(undefined);
 
@@ -26,7 +26,7 @@ export const MenuRow = ({gridApi}: IGridMenuProps): React.JSX.Element | null => 
 
     return (
         <div style={{width: '100%', paddingBottom: 8, paddingTop: 8}}>
-            <ButtonsRow buttons={buttons} apiRef={gridApi.buttonsApi} context={gridApi} />
+            <ButtonsRow buttons={buttons} apiRef={gridApi.buttonsApi} context={gridApi} responsiveBreakpoint={gridProps.responsiveBreakpoint}/>
         </div>
     );
 };

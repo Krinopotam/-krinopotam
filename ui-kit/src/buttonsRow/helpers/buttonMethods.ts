@@ -1,4 +1,4 @@
-import {IFormButton, IFormButtons} from '@src/buttonsRow';
+import {IButtonRowProps, IFormButton, IFormButtons} from '@src/buttonsRow';
 import {IColorType} from '@src/button/button';
 
 export const prepareButtons = (buttons: IFormButtons | undefined, rowColorType?: IColorType) => {
@@ -40,29 +40,32 @@ export const getSortedButtonsKeys = (buttons: IFormButtons | undefined) => {
     return buttonsKeys;
 };
 
-export const getNextButtonName = (currentName: string, buttons: IFormButtons, direction: 'forward' | 'backward') => {
+export const getNextButtonName = (currentName: string, buttons: IFormButtons, direction: 'forward' | 'backward', props: IButtonRowProps) => {
     const keys = Object.keys(buttons);
 
     const currentIndex = keys.findIndex(name => name === currentName);
 
     if (direction === 'forward') {
         if (currentIndex >= keys.length) return currentName;
-        for (let i = currentIndex + 1; i < keys.length; i++) if (isButtonCanBeActive(buttons[keys[i]])) return keys[i];
+        for (let i = currentIndex + 1; i < keys.length; i++) if (isButtonCanBeActive(currentName, buttons[keys[i]], props)) return keys[i];
 
         return currentName;
     } else {
         if (currentIndex <= 0) return currentName;
-        for (let i = currentIndex - 1; i >= 0; i--) if (isButtonCanBeActive(buttons[keys[i]])) return keys[i];
+        for (let i = currentIndex - 1; i >= 0; i--) if (isButtonCanBeActive(currentName, buttons[keys[i]], props)) return keys[i];
     }
 
     return currentName;
 };
 
-const isButtonCanBeActive = (button: IFormButton | undefined | null) => {
-    return button && !button.disabled && !button.hidden && (!button.type || button.type === 'button' || button.type === 'link' || button.type === 'text');
+const isButtonCanBeActive = (buttonId: string, button: IFormButton | undefined | null, props: IButtonRowProps) => {
+    const disabled = (typeof button?.disabled === 'function') ? button.disabled(buttonId, button, props.context) : button?.disabled
+    const hidden = (typeof button?.hidden === 'function') ? button.hidden(buttonId, button, props.context) : button?.hidden
+    const loading = (typeof button?.loading === 'function') ? button.loading(buttonId, button, props.context) : button?.loading
+    return button && !disabled && !hidden && !loading && (!button.type || button.type === 'button' || button.type === 'link' || button.type === 'text');
 };
 
-export const changeActiveButton = (buttons: IFormButtons, direction: 'backward' | 'forward') => {
+export const changeActiveButton = (buttons: IFormButtons, direction: 'backward' | 'forward', props: IButtonRowProps) => {
     const _buttons = {...buttons};
     const keys = Object.keys(_buttons);
 
@@ -77,7 +80,7 @@ export const changeActiveButton = (buttons: IFormButtons, direction: 'backward' 
     const currentButton = _buttons[currentName];
     if (currentButton) currentButton.active = false;
 
-    const nextName = getNextButtonName(currentName, buttons, direction);
+    const nextName = getNextButtonName(currentName, buttons, direction, props);
     const nextButton = _buttons[nextName];
     if (nextButton) nextButton.active = true;
 

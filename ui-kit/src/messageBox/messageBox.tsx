@@ -50,7 +50,7 @@ class MessageBox {
         const config: IModalConfirmConfig = {...props};
         const buttons = MergeObjects(defaultButtons, config.buttons);
 
-        if (!props.onCrossClose) props.onCrossClose = () => this.triggerButtonClick('ok', buttons.ok);
+        if (!config.onCrossClose) config.onCrossClose = () => this.triggerButtonClick('ok', buttons.ok);
 
         const messageBox = this.modalBase({...config, buttons});
         return messageBox;
@@ -164,8 +164,12 @@ class MessageBox {
         return messageBoxApi;
     }
 
-    private triggerButtonClick(buttonName: string, button: IFormButton | undefined | null) {
-        if (button?.onClick && !button.disabled && !button.hidden) button.onClick(buttonName, button);
+    private triggerButtonClick(buttonId: string, button: IFormButton | undefined | null) {
+        const disabled = (typeof button?.disabled === 'function') ? button.disabled(buttonId, button, this) : !!button?.disabled;
+        const loading = (typeof button?.loading === 'function') ? button.loading(buttonId, button, this) : !!button?.loading;
+        const hidden = (typeof button?.hidden === 'function') ? button.hidden(buttonId, button, this) : !!button?.hidden;
+
+        if (button?.onClick && !disabled && !hidden && !loading) button.onClick(buttonId, button, this);
     }
 
     private generateModalConfig({

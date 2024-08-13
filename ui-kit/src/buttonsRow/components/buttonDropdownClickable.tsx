@@ -29,12 +29,15 @@ export const ButtonDropdownClickable = ({
     const style: CSSProperties = {...button.style};
     if (typeof button.width !== 'undefined') style.width = button.width;
 
+    const disabled = (typeof button.disabled === 'function') ? button.disabled(id, button, context) : button.disabled;
+    const loading = (typeof button.loading === 'function') ? button.loading(id, button, context) : button.loading;
+
     return (
         <Dropdown.Button
             type={type}
             href={button.href}
-            disabled={button.disabled}
-            loading={button.loading}
+            disabled={disabled}
+            loading={loading}
             danger={button.colorType === 'danger'}
             onClick={onClick}
             size={button.size}

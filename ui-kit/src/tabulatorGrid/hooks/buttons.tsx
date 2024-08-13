@@ -40,9 +40,9 @@ export const useInitButtons = (gridApi: IGridApi): IFormButtons => {
 
         const resultButtons = MergeObjects(defaultButtons, buttons);
 
-        for (const key in resultButtons) {
-            const btn = resultButtons[key];
-            if (!btn || key === 'headerLabel') continue;
+        for (const buttonId in resultButtons) {
+            const btn = resultButtons[buttonId];
+            if (!btn || buttonId === 'headerLabel') continue;
             btn.size = btn.size ?? buttonsSize;
             btn.position = btn.position ?? buttonsPos;
             if (iconsOnly) {

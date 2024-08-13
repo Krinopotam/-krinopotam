@@ -56,6 +56,7 @@ const useSplitTabulatorProps = (props: IGridProps) => {
             onSelectionChange: true,
             onDelete: true,
             resizeHeightWithParent: true,
+            responsiveBreakpoint: true,
         });
 
         return result[1];

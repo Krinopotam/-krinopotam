@@ -13,7 +13,7 @@ export const RenderDropdown = ({id, button, context, componentProps}: {id: strin
     const menuProps: MenuProps = {items};
 
     /** Dropdown link */
-    if (button.type === 'link') return <ButtonDropdownLink button={button} menuProps={menuProps} />;
+    if (button.type === 'link') return <ButtonDropdownLink button={button} menuProps={menuProps} componentProps={componentProps} />;
 
     /** Clickable dropdown button */
     if (button.onClick) return <ButtonDropdownClickable id={id} button={button} context={context} menuProps={menuProps} componentProps={componentProps} />;
@@ -38,6 +38,8 @@ const prepareDropdownItems = (buttons: IFormButton['children'], parentId: string
         const key = parentId + '_' + id;
 
         let item: ItemType;
+
+        const disabled = (typeof button.disabled === 'function') ? button.disabled(id, button, context) : button.disabled;
 
         if (button.type === 'divider') {
             item = {
@@ -69,7 +71,7 @@ const prepareDropdownItems = (buttons: IFormButton['children'], parentId: string
                     ),
                 icon: button.icon,
                 children: children,
-                disabled: button.disabled,
+                disabled: disabled,
                 style: button.type !== 'link' ? button.style : undefined,
                 className: button.className,
                 onClick: () => {

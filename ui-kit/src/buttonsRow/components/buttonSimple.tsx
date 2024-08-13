@@ -1,6 +1,7 @@
 import {IButtonRowProps, IFormButton} from '@src/buttonsRow';
-import React, {CSSProperties, useCallback, useEffect, useRef} from 'react';
+import React, {CSSProperties, useCallback, useEffect, useRef, useState} from 'react';
 import {Button, IButtonType} from '@src/button';
+import {useResponsive} from "@krinopotam/common-hooks";
 
 export const ButtonSimple = ({
     id,
@@ -24,6 +25,10 @@ export const ButtonSimple = ({
         if (button.active && componentProps.makeActivePrimary === false) btnRef.current?.focus();
     }, [button.active, componentProps.makeActivePrimary]);
 
+    const [collapseMode, setCollapseMode] = useState(false);
+    useResponsive(componentProps.responsiveBreakpoint, broken => setCollapseMode(broken));
+    const  title =(componentProps.responsiveBreakpoint && collapseMode && button.icon) ? undefined :  button.title
+
     let type: IButtonType | undefined;
     if (componentProps.makeActivePrimary !== false && button.active) type = 'primary';
     else if (button.type === 'text') type = 'text';
@@ -33,15 +38,18 @@ export const ButtonSimple = ({
     const style: CSSProperties = {...button.style};
     if (typeof button.width !== 'undefined') style.width = button.width;
 
+    const disabled = (typeof button.disabled === 'function') ? button.disabled(id, button, context) : button.disabled;
+    const loading = (typeof button.loading === 'function') ? button.loading(id, button, context) : button.loading;
+
     return (
         <Button
             ref={btnRef}
             type={type}
             href={button.href}
             target={button.target}
-            disabled={button.disabled}
+            disabled={disabled}
             ghost={button.ghost}
-            loading={button.loading}
+            loading={loading}
             colorType={button.colorType}
             onClick={onClick}
             size={button.size}
@@ -50,9 +58,10 @@ export const ButtonSimple = ({
             className={button.className}
             icon={button.icon}
             shape={button.shape}
-            squareSize={!button.title && ((!!button.icon && !button.expandIcon) || (!button.icon && !!button.expandIcon))}
+
+            squareSize={!title && ((!!button.icon && !button.expandIcon) || (!button.icon && !!button.expandIcon))}
         >
-            {children ?? button.title}
+            {children ?? title}
         </Button>
     );
 };

@@ -6,6 +6,8 @@ import {prepareButtons} from '@src/buttonsRow/helpers/buttonMethods';
 import {ButtonRowWrapperContext} from '@src/buttonsRow/components/buttonsRowWrapper';
 import {keyDownHandler} from '@src/buttonsRow/helpers/keypressProcessing';
 import {IButtonProps} from '@src/button';
+import {IBreakpoints} from "@krinopotam/common-hooks/useResponsive";
+import {AnyType} from "@krinopotam/service-types";
 
 //region Types
 
@@ -37,13 +39,13 @@ export interface IFormButton {
     dashed?: boolean;
 
     /** Is button disabled */
-    disabled?: boolean;
+    disabled?: boolean | ((buttonId: string, button: IFormButton, context?: AnyType) => boolean);
 
     /** Is button in loading mode */
-    loading?: boolean;
+    loading?: boolean | ((buttonId: string, button: IFormButton, context?: AnyType) => boolean);
 
     /** Is button hidden (not displayed) */
-    hidden?: boolean;
+    hidden?: boolean | ((buttonId: string, button: IFormButton, context?: AnyType) => boolean);
 
     /** Button position */
     position?: 'center' | 'left' | 'right';
@@ -98,7 +100,7 @@ export interface IFormButton {
 
     /************* Callbacks *************/
     /**Button onClick callback */
-    onClick?: (buttonName: string, button: IFormButton, context?: unknown) => void;
+    onClick?: (buttonName: string, button: IFormButton, context?: AnyType) => void;
 }
 
 export type IFormButtons = Record<string, IFormButton | null>;
@@ -127,18 +129,22 @@ export interface IButtonRowProps {
 
     /** When button arrowSelection mode the active button will be of type Primary. Otherwise, the active button will have focus */
     makeActivePrimary?: boolean;
+
+    /** Breakpoint for responsive design. If the screen decreases below the specified value, the names of the buttons will be hidden, only the icons will remain */
+    responsiveBreakpoint?: IBreakpoints
 }
 
 export interface IButtonsRowApi {
     buttons: (buttons?: IFormButtons) => IFormButtons;
     updateButtons: (buttons: IFormButtons) => IFormButtons;
     setNextActive: (direction: 'forward' | 'backward') => void;
-    setActive: (name: string, active?: boolean) => void;
-    loading: (name: string, loading?: boolean) => boolean;
-    disabled: (name: string, disabled?: boolean) => boolean;
-    hidden: (name: string, hidden?: boolean) => boolean;
-    triggerClick: (name: string) => void;
+    setActive: (buttonId: string, active?: boolean) => void;
+    loading: (buttonId: string, loading?: boolean) => boolean;
+    disabled: (buttonId: string, disabled?: boolean) => boolean;
+    hidden: (buttonId: string, hidden?: boolean) => boolean;
+    triggerClick: (buttonId: string) => void;
     activeTriggerClick: () => void;
+    getProps: () => IButtonRowProps
 }
 
 //endregion
@@ -156,13 +162,13 @@ export const ButtonsRow = (props: IButtonRowProps): React.JSX.Element => {
         <div style={{display: 'block', ...props.style}} className={'controls-buttons-dynamic-row ' + props.className}>
             <Row wrap={false}>
                 <Col flex="auto" style={{textAlign: 'left'}}>
-                    <RenderButtonGroup key="leftButtons" buttons={curButtons} position="left" context={props.context} componentProps={props} />
+                    <RenderButtonGroup key="leftButtons" buttons={curButtons} position="left" context={props.context} componentProps={props}/>
                 </Col>
                 <Col flex="auto" style={{textAlign: 'center'}}>
-                    <RenderButtonGroup key="centerButtons" buttons={curButtons} position="center" context={props.context} componentProps={props} />
+                    <RenderButtonGroup key="centerButtons" buttons={curButtons} position="center" context={props.context} componentProps={props}/>
                 </Col>
                 <Col flex="auto" style={{textAlign: 'right'}}>
-                    <RenderButtonGroup key="rightButtons" buttons={curButtons} position="right" context={props.context} componentProps={props} />
+                    <RenderButtonGroup key="rightButtons" buttons={curButtons} position="right" context={props.context} componentProps={props}/>
                 </Col>
             </Row>
         </div>
@@ -182,7 +188,7 @@ const useSubscribeToKeyDownEvent = (props: IButtonRowProps, api: IButtonsRowApi)
         if (!wrapperContext.wrapperRef?.current) return;
         const wrapperElement = wrapperContext.wrapperRef.current;
 
-        const onKeyDown = (e: KeyboardEvent) => keyDownHandler(e, propsRef, api, wrapperContext.wrapperId);
+        const onKeyDown = (e: KeyboardEvent) => keyDownHandler(e, propsRef, api, wrapperContext.wrapperId, props);
         wrapperElement.addEventListener('keydown', onKeyDown);
         return () => wrapperElement.removeEventListener('keydown', onKeyDown);
 
@@ -194,8 +200,7 @@ const usePrepareButtons = (props: IButtonRowProps): [IFormButtons, (buttons: IFo
 
     const setTimeoutCurButtons = (buttons: IFormButtons) => {
         setTimeout(() => {
-            //Workaround to avoid error: Cannot update a component while rendering a different component.
-            setCurButtons(buttons);
+            setCurButtons(buttons); //Workaround to avoid error: Cannot update a component while rendering a different component.
         }, 0);
     };
 

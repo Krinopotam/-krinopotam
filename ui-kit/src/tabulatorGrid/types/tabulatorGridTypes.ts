@@ -3,6 +3,7 @@ import {IButtonsRowApi, IFormButton, IFormButtons} from '@src/buttonsRow';
 import {IDFormModalApi, IDFormModalProps} from '@src/dFormModal';
 import {IRequestProps, ITabulator, ITabulatorProps} from '@src/tabulatorBase';
 import {RowComponent, ScrollToRowPosition} from 'tabulator-tables';
+import {IBreakpoints} from "@krinopotam/common-hooks/useResponsive";
 
 export interface IGridRowData extends Record<string, unknown> {
     /** Row id */
@@ -67,6 +68,9 @@ export interface IGridPropsBase {
 
     /** Selector of parent container (.className or #id). Tabulator Grid will resize height on container height change */
     resizeHeightWithParent?: string;
+
+    /** Breakpoint for responsive design */
+    responsiveBreakpoint?: IBreakpoints
 }
 
 export interface IGridPropsCallbacks {
@@ -105,8 +109,8 @@ export interface IGridPropsCallbacks {
 }
 
 export type IGridProps = IGridPropsBase & IGridPropsCallbacks & Omit<ITabulatorProps, 'data' | 'ajaxURL' | 'ajaxRequestFunc' | 'ajaxResponse'>;
-export type IGridDataSourcePromise = Promise<{data: IGridRowData[]; last_page?: number}>;
-export type IGridDeletePromise = Promise<{data: boolean; last_page?: number}>;
+export type IGridDataSourcePromise = Promise<{ data: IGridRowData[]; last_page?: number }>;
+export type IGridDeletePromise = Promise<{ data: boolean; last_page?: number }>;
 
 export type IRowKey = IGridRowData['id'];
 export type IRowKeys = IRowKey | IRowKey[];
@@ -228,7 +232,7 @@ export interface IGridApi {
     selectionFormApi: IDFormModalApi;
 
     /** Buttons api */
-    buttonsApi: IButtonsRowApi & {refreshButtons: () => void};
+    buttonsApi: IButtonsRowApi & { refreshButtons: () => void };
 
     /** Fetch data. If onDataFetch callback  is undefined,the request will use the previously set onDataFetch callback  */
     fetchData: (onDataFetch?: IGridProps['onDataFetch'], params?: Record<string, unknown>) => void;
