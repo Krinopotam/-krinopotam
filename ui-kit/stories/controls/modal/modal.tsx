@@ -4,7 +4,7 @@ import React, {useCallback, useState} from 'react';
 import {Button} from '@src/button';
 import {Space} from 'antd';
 import {IColorType} from '@src/button/button';
-import {IModalProps, Modal} from '@src/modal';
+import {IModalProps, Modal} from '@src/modal/modal';
 import {ButtonsRow} from '@src/buttonsRow';
 
 /** Modal component */

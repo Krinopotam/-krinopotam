@@ -12,7 +12,9 @@ import './css/messageBox.css';
 import {IFormButton, IFormButtons} from '@src/buttonsRow/buttonsRow';
 import {Modal, ModalFuncProps, Spin} from 'antd';
 
-import {ButtonsRender, HeaderRender, ModalRender} from '../modal';
+import {ModalRender} from '@src/modal/renders/modalRender';
+import {HeaderRender,} from '@src/modal/renders/headerRender';
+import {ButtonsRender} from '@src/modal/renders/buttonsRender';
 import {ContentRender} from './renders/contentRender';
 import {MessageBoxApi} from './messageBoxApi';
 import React from 'react';
@@ -78,7 +80,7 @@ class MessageBox {
         };
 
         const props: IModalConfirmConfig = {
-            icon: <QuestionCircleOutlined />,
+            icon: <QuestionCircleOutlined/>,
             ...otherProps,
         };
 
@@ -99,7 +101,7 @@ class MessageBox {
         if (typeof waitTitle === 'string') {
             waitContent = (
                 <div style={{height: 22}}>
-                    <Spin key={'waitSpinner'} /> {waitContent ?? 'Пожалуйста, подождите...'}
+                    <Spin key={'waitSpinner'}/> {waitContent ?? 'Пожалуйста, подождите...'}
                 </div>
             );
         }
@@ -166,7 +168,18 @@ class MessageBox {
         if (button?.onClick && !button.disabled && !button.hidden) button.onClick(buttonName, button);
     }
 
-    private generateModalConfig({title, icon, content, onAfterClose, buttons, centered = true, closable = true, maskClosable = true, colorType, onCrossClose}: IModalBaseConfig, draggableId:string): ModalFuncProps {
+    private generateModalConfig({
+                                    title,
+                                    icon,
+                                    content,
+                                    onAfterClose,
+                                    buttons,
+                                    centered = true,
+                                    closable = true,
+                                    maskClosable = true,
+                                    colorType,
+                                    onCrossClose
+                                }: IModalBaseConfig, draggableId: string): ModalFuncProps {
         const paddingBottom = 20;
         const paddingLeft = 24;
         const paddingRight = 24;
@@ -174,7 +187,8 @@ class MessageBox {
             className: 'custom-antd-message-box',
 
             icon: null,
-            title: <HeaderRender draggableId={draggableId} icon={icon} title={title ?? 'Внимание'} colorType={colorType} style={{paddingLeft: 24, paddingRight: paddingRight, paddingTop: 3, paddingBottom: 3}} />,
+            title: <HeaderRender draggableId={draggableId} icon={icon} title={title ?? 'Внимание'} colorType={colorType}
+                                 style={{paddingLeft: 24, paddingRight: paddingRight, paddingTop: 3, paddingBottom: 3}}/>,
             content: (
                 <ContentRender paddingLeft={paddingLeft} paddingRight={paddingRight}>
                     {content}
@@ -195,7 +209,7 @@ class MessageBox {
             keyboard: false, //close by keyboard
             maskClosable: maskClosable, //the form will close when you click on the mask layout
             onCancel: () => onCrossClose, // fires when you click on the cross to close the form
-            modalRender: (node)=>{return ModalRender(node, draggableId)},
+            modalRender: (node) => {return ModalRender(node, draggableId)},
             afterClose: () => onAfterClose?.(),
         };
     }
