@@ -114,7 +114,7 @@ export const Modal = ({resizable = true, isDraggable = true, headerStyle, footer
         bodyHeight: formSize.bodyHeight,
         bodyMaxHeight: props.bodyMaxHeight,
         bodyMinHeight: props.bodyMinHeight,
-        notScrollable: props.notScrollable,
+        notScrollable: props.notScrollable
     });
 
     const paddingLeft = 24;
@@ -137,6 +137,7 @@ export const Modal = ({resizable = true, isDraggable = true, headerStyle, footer
             {...props}
             width={formSize.width || undefined}
             // no override section
+            style={{maxWidth: props.maxWidth, minWidth: props.minWidth}}
             styles={{body: bodyStyleVal, footer: {margin: 0}}}
             className={classNames('custom-antd-modal', props.className)}
             modalRender={node => ModalRender(node, draggableId, wrapperRemoteCallbacksRef, isDraggable)}
