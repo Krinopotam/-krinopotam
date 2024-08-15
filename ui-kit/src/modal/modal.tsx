@@ -77,7 +77,7 @@ export interface IModalProps
 }
 
 
-export const Modal = ({resizable = true, isDraggable = true, headerStyle, footerStyle, ...props}: IModalProps): React.JSX.Element => {
+export const Modal = ({resizable = true, isDraggable = true,   ...props}: IModalProps): React.JSX.Element => {
     const [modalId] = useState(props.modalId ?? 'modal-' + GetUuid());
     useInitFormDispatcher(modalId, !!props.open);
 
@@ -109,26 +109,10 @@ export const Modal = ({resizable = true, isDraggable = true, headerStyle, footer
         props.bodyMaxHeight ?? 5000
     );
 
-    const bodyStyleVal = useGetBodyStyle({
-        bodyStyle: props.bodyCss,
-        bodyHeight: formSize.bodyHeight,
-        bodyMaxHeight: props.bodyMaxHeight,
-        bodyMinHeight: props.bodyMinHeight,
-        notScrollable: props.notScrollable
-    });
-
-    const paddingLeft = 24;
-    const paddingRight = 24;
-
-    const _headerStyle = {
-        paddingLeft: paddingLeft,
-        paddingRight: paddingRight,
-        paddingTop: 5,
-        paddingBottom: 5,
-        ...headerStyle,
-    };
-
-    const _footerStyle = {paddingTop: 20, paddingLeft: paddingLeft, paddingRight: paddingRight, paddingBottom: 20, ...footerStyle};
+    const paddingHorizontal = 24;
+    const headerStyle = useHeaderStyle(props, paddingHorizontal)
+    const bodyStyle = useBodyStyle(props, formSize.bodyHeight, paddingHorizontal)
+    const footerStyle = useFooterStyle(props, paddingHorizontal)
 
     const [draggableId] = useState('draggable-' + GetUuid());
 
@@ -138,13 +122,13 @@ export const Modal = ({resizable = true, isDraggable = true, headerStyle, footer
             width={formSize.width || undefined}
             // no override section
             style={{maxWidth: props.maxWidth, minWidth: props.minWidth}}
-            styles={{body: bodyStyleVal, footer: {margin: 0}}}
+            styles={{body: bodyStyle, footer: {margin: 0}}}
             className={classNames('custom-antd-modal', props.className)}
             modalRender={node => ModalRender(node, draggableId, wrapperRemoteCallbacksRef, isDraggable)}
             //transitionName="zoom"
-            title={<HeaderRender draggableId={draggableId} icon={props.headerIcon} title={props.title} colorType={props.colorType} style={_headerStyle}/>}
+            title={<HeaderRender draggableId={draggableId} icon={props.headerIcon} title={props.title} colorType={props.colorType} style={headerStyle}/>}
             footer={
-                <FooterRender onMouseResize={onMouseResize} resizable={resizable} style={_footerStyle} colorType={props.colorType}>
+                <FooterRender onMouseResize={onMouseResize} resizable={resizable} style={footerStyle} colorType={props.colorType}>
                     {props.footer}
                 </FooterRender>
             }
@@ -153,28 +137,27 @@ export const Modal = ({resizable = true, isDraggable = true, headerStyle, footer
     );
 };
 
-const useGetBodyStyle = ({
-                             bodyStyle,
-                             bodyHeight,
-                             bodyMaxHeight,
-                             bodyMinHeight,
-                             notScrollable,
-                         }: {
-    bodyStyle?: React.CSSProperties;
-    bodyHeight?: number;
-    bodyMaxHeight?: number;
-    bodyMinHeight?: number;
-    notScrollable?: boolean;
-}) => {
-    const newStyle: React.CSSProperties = {
-        ...bodyStyle,
-        padding: '0 24px 0 24px',
-        overflowY: notScrollable ? 'hidden' : 'auto',
-    };
+const useBodyStyle = (props: IModalProps, curBodyHeight:string|number, paddingHorizontal: number) => {
+    const style: React.CSSProperties =  {
+        padding: `0 ${paddingHorizontal}px 0 ${paddingHorizontal}px`,
+        ...props.styles?.body,
+        overflowY: props.notScrollable ? 'hidden' : 'auto',
+    } ;
 
-    if (bodyHeight) newStyle.height = bodyHeight;
-    if (bodyMaxHeight) newStyle.maxHeight = bodyMaxHeight;
-    if (bodyMinHeight) newStyle.minHeight = bodyMinHeight;
-
-    return newStyle;
+    if (curBodyHeight) style.height = curBodyHeight
+    return style
 };
+
+const useFooterStyle = (props: IModalProps, paddingHorizontal: number) => {
+    return {
+        padding: `20px ${paddingHorizontal}px 20px ${paddingHorizontal}px`,
+        ...props.styles?.footer,
+    } satisfies React.CSSProperties;
+};
+
+const useHeaderStyle = (props: IModalProps, paddingHorizontal: number) => {
+    return {
+        padding: `5px ${paddingHorizontal}px 5px ${paddingHorizontal}px`,
+        ...props.styles?.header,
+    } satisfies React.CSSProperties;
+}
