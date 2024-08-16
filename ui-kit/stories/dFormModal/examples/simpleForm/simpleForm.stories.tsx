@@ -55,7 +55,7 @@ export default {
                                 </Space>
                                 <DFormModal
                                     {...compProps}
-                                    isOpened={open}
+                                    open={open}
                                     onClosed={() => {
                                         setOpen(false);
                                     }}

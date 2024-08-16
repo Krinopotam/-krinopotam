@@ -17,7 +17,7 @@ export default {
                     import {Button} from @krinopotam/ui-kit/button';
                     import {Space} from 'antd';
                     import {IColorType} from @krinopotam/ui-kit/button/button';
-                    import {IModalProps, Modal} from @krinopotam/ui-kit/modal/modal';
+                    import {IExtendedModalProps, Modal} from @krinopotam/ui-kit/modal/modal';
                     import {ButtonsRow} from @krinopotam/ui-kit/buttonsRow';
                     /** Modal component */
                     export const ModalComponent = (props?: IModalProps): React.JSX.Element => {

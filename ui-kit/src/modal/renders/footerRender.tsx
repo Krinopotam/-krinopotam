@@ -20,7 +20,7 @@ export const FooterRender = ({onMouseResize, resizable, children, style, colorTy
 
     return (
         <>
-            <div style={{borderTopWidth: 1, borderTopStyle: 'solid', borderTopColor: color, ...style}}>{children}</div>
+            {!children ? null : <div style={{borderTopWidth: 1, borderTopStyle: 'solid', borderTopColor: color, ...style}}>{children}</div>}
             {resizable ? <ResizeHandle onMouseDown={onMouseResize}/> : null}
         </>
     );
