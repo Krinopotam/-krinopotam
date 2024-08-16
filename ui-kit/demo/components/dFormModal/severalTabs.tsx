@@ -25,8 +25,8 @@ const formProps: IDFormModalProps = {
                         component: TabsField,
                         tabs: {
                             ' Проходы ': {
-                                subNameIn1: {component: InputField, label: 'Имя проходящего', inlineGroup:'row1'},
-                                subDateIn1: {component: DateTimeField, label: 'Дата прохода', inlineGroup:'row1', width: 150},
+                                subNameIn1: {component: InputField, label: 'Имя проходящего', inlineGroup: 'row1'},
+                                subDateIn1: {component: DateTimeField, label: 'Дата прохода', inlineGroup: 'row1', width: 150},
                             },
                             ' Уходы ': {
                                 subNameOut1: {component: InputField, label: 'Имя уходящего'},
@@ -55,7 +55,8 @@ const formProps: IDFormModalProps = {
             },
         },
     },
-    bodyHeight: 250,
+    height: 250,
+    modalStyle: {maxWidth: 500, maxHeight: 500},
     buttons: FormLayoutSwitch(formApi),
 };
 
@@ -64,10 +65,11 @@ export const SeveralTabs = (): React.JSX.Element => {
         formApi.open('create');
     }, []);
 
+
     return (
         <div style={{maxWidth: 500}}>
             <Button onClick={onClick}>Open form</Button>
-            <DFormModal {...formProps} />
+            <DFormModal  {...formProps} />
         </div>
     );
 };

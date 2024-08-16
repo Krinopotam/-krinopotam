@@ -3,11 +3,8 @@
 import React, {useCallback} from 'react';
 
 import {Button} from '@src/button';
-import {IModalProps, Modal} from "@src/modal2";
-
-const modalProps: IModalProps = {
-
-}
+import {Modal} from "@src/modal";
+import {MessageBox} from "@src/messageBox";
 
 export const Simple = (): React.JSX.Element => {
     const [open, setOpen] = React.useState(false);
@@ -15,6 +12,10 @@ export const Simple = (): React.JSX.Element => {
     const onClick = useCallback(() => {
         setOpen(true)
     }, []);
+
+    const onMessageClick = useCallback(() => {
+        MessageBox.alert({content: 'My message content example', colorType: 'danger'});
+    }, [])
 
     return (
         <>
@@ -24,11 +25,13 @@ export const Simple = (): React.JSX.Element => {
             {/*Description End*/}
             <div style={{maxWidth: 500}}>
                 <Button onClick={onClick}>Open form</Button>
-                <Modal {...modalProps} open={open} title={<p>WeryWeryLongLongLongLongTytle</p>}>
+                <Modal open={open} title={'My modal title example'} maskClosable onCancel={() => setOpen(false)} style={{minHeight: 200, minWidth: 300}}>
                     <p>Bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla </p>
                     <p>Bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla </p>
 
                 </Modal>
+
+                <Button onClick={onMessageClick}>Open Message</Button>
             </div>
         </>
     );

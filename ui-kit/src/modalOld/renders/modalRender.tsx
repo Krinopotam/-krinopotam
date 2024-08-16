@@ -6,7 +6,7 @@
  * @license MIT
  */
 
-import {DraggableRender} from '@src/modal2';
+import {DraggableRender} from '@src/modal';
 import React from 'react';
 import {ButtonsRowWrapper} from "@src/buttonsRow";
 import {IButtonRowWrapperRemoteCallbacks} from "@src/buttonsRow/components/buttonsRowWrapper";

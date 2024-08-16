@@ -3,9 +3,10 @@ import {IButtonsRowApi, IFormButtons} from '@src/buttonsRow/buttonsRow';
 
 import {Modal} from '@src/modal/modal';
 import {ButtonsRender} from '@src/modal/renders/buttonsRender';
-import React, {useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import {GetUuid} from '@krinopotam/js-helpers';
 import {IDFormModalApi, IDFormModalProps} from "@src/dFormModal";
+import {IExtendedModalOwnProps} from "@src/dFormModal/types/dFormModalTypes";
 
 interface IDFormModalRenderProps {
     /** the form ID */
@@ -23,10 +24,13 @@ interface IDFormModalRenderProps {
     /** form api */
     formApi: IDFormModalApi;
 
+    /** Modal component props */
+    modalProps: IExtendedModalOwnProps
+
     /** Child dynamic form props only */
     formProps: IDFormProps;
 
-    /** Dynamic modal form props (contains formProps values)  */
+    /** Full DFormModal props (contains formProps and modalProps values)  */
     modalFormProps: IDFormModalProps;
 
     /** On submit button click callback */
@@ -36,19 +40,25 @@ interface IDFormModalRenderProps {
     onCancel?: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
-export const DFormModalRender = ({formId, buttons, buttonsApi, formApi, formProps, modalFormProps}: IDFormModalRenderProps): React.JSX.Element => {
+export const DFormModalRender = ({formId, buttons, buttonsApi, formApi, formProps, modalProps, modalFormProps}: IDFormModalRenderProps): React.JSX.Element => {
     const [formIdVal] = useState(formId ?? 'dFormModal-' + GetUuid());
     const formMode = modalFormProps.formMode ?? 'create'; //The form model has not yet been initialized
     const modalTitle = useFormTitle(formMode, modalFormProps.title);
 
     return (
         <Modal
+            {...modalProps}
+            // no override section
             modalId={formIdVal}
-            open={modalFormProps.isOpened}
-            //onOk={formApi.submitForm} // Not required, as separate parameters for buttons are used
+            style={modalFormProps.modalStyle}
+            styles={modalFormProps.modalStyles}
             onCancel={formApi.close}
-            centered
+
+            centered={typeof modalProps.centered === 'undefined' ? true : modalProps.centered}
+            maskClosable={false}
+            keyboard={false}
             destroyOnClose={true}
+
             footer={
                 <ButtonsRender
                     buttons={buttons}
@@ -58,29 +68,14 @@ export const DFormModalRender = ({formId, buttons, buttonsApi, formApi, formProp
                     context={formApi}
                 />
             }
-            footerStyle={modalFormProps.footerStyle}
-            maskClosable={false}
-            keyboard={false}
-            width={modalFormProps.width}
-            minWidth={modalFormProps.minWidth}
-            maxWidth={modalFormProps.maxWidth}
-            notScrollable={modalFormProps.notScrollable}
-            resizable={modalFormProps.resizable !== false}
+
             title={modalTitle}
-            headerIcon={modalFormProps.headerIcon}
-            headerStyle={modalFormProps.headerStyle}
-            colorType={formProps.colorType}
-            bodyHeight={modalFormProps.bodyHeight}
-            bodyMinHeight={modalFormProps.bodyMinHeight}
-            bodyMaxHeight={modalFormProps.bodyMaxHeight}
-            bodyCss={modalFormProps.bodyStyle}
-            isDraggable={modalFormProps.isDraggable}
         >
-            {modalFormProps.isOpened ? (
+            {modalFormProps.open ? (
                 <DForm
                     apiRef={formApi}
                     {...formProps}
-                    formStyle={{height: '100%', ...formProps.formStyle}}
+                    formStyle={{height: '100%', width: '100%', ...formProps.formStyle}}
                     containerStyle={{height: '100%', ...formProps.containerStyle}}
                 />
             ) : null}
