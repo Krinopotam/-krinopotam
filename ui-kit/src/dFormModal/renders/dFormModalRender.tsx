@@ -3,7 +3,7 @@ import {IButtonsRowApi, IFormButtons} from '@src/buttonsRow/buttonsRow';
 
 import {Modal} from '@src/modal/modal';
 import {ButtonsRender} from '@src/modal/renders/buttonsRender';
-import React, {useCallback, useState} from 'react';
+import React, {useState} from 'react';
 import {GetUuid} from '@krinopotam/js-helpers';
 import {IDFormModalApi, IDFormModalProps} from "@src/dFormModal";
 import {IExtendedModalOwnProps} from "@src/dFormModal/types/dFormModalTypes";

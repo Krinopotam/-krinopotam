@@ -26,6 +26,10 @@ export const Modal = (props: IExtendedModalProps): React.JSX.Element => {
         modalId, resizable = true, isDraggable = true,
         colorType,
         headerIcon,
+        maxHeight,
+        minHeight,
+        minWidth,
+        maxWidth,
         ...modalProps
     } = props
 
@@ -55,10 +59,10 @@ export const Modal = (props: IExtendedModalProps): React.JSX.Element => {
     const paddingHorizontal = 24;
     const baseMinWidth = 250; //If you make the minimums lower, then there may be problems with the dimensions when resizing
     const baseMinHeight = 130;
-    const modalStyle = useModalStyle(modalProps, modalSize.height, baseMinWidth, baseMinHeight)
+    const modalStyle = useModalStyle({props: modalProps, height: modalSize.height, minWidth, maxWidth, minHeight, maxHeight, baseMinWidth, baseMinHeight})
     const headerStyle = useHeaderStyle(modalProps, paddingHorizontal)
     const bodyStyle = useBodyStyle(modalProps, paddingHorizontal)
-    const contentStyle = useContentStyle(modalProps, baseMinHeight)
+    const contentStyle = useContentStyle(modalProps)
     const footerStyle = useFooterStyle(modalProps, paddingHorizontal)
 
     const [draggableId] = useState('draggable-' + GetUuid());
@@ -85,13 +89,23 @@ export const Modal = (props: IExtendedModalProps): React.JSX.Element => {
     );
 };
 
-const useModalStyle = (props: IExtendedModalProps, height: React.CSSProperties['height'], baseMinWidth: React.CSSProperties['minWidth'], baseMinHeight: React.CSSProperties['minHeight']) => {
+const useModalStyle = (params: {
+    props: IExtendedModalProps,
+    height: React.CSSProperties['height'],
+    minWidth: React.CSSProperties['minWidth'],
+    maxWidth: React.CSSProperties['maxWidth'],
+    minHeight: React.CSSProperties['minHeight'],
+    maxHeight: React.CSSProperties['maxHeight'],
+    baseMinWidth: React.CSSProperties['minWidth'],
+    baseMinHeight: React.CSSProperties['minHeight']
+}) => {
     const style: React.CSSProperties = {
-        height: height,
-        minWidth: baseMinWidth,
-        minHeight: baseMinHeight,
-        border:'solid 5px red',
-        ...props.style,
+        height: params.height,
+        minWidth: params.minWidth ?? params.baseMinWidth,
+        maxWidth: params.maxWidth,
+        minHeight: params.minHeight ?? params.baseMinHeight,
+        maxHeight: params.maxHeight,
+        ...params.props.style,
     };
     return style
 };
@@ -106,10 +120,8 @@ const useBodyStyle = (props: IExtendedModalProps, paddingHorizontal: number) => 
     return style
 };
 
-const useContentStyle = (props: IExtendedModalProps, baseMinHeight: string | number | undefined) => {
+const useContentStyle = (props: IExtendedModalProps) => {
     const style: React.CSSProperties = {
-        minHeight: props.style?.minHeight ?? baseMinHeight ?? 0, //WORKAROUND: content min-height must be equal to modal min-height
-        maxHeight: props.style?.maxHeight,
         ...props.styles?.content,
     };
 

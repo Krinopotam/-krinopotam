@@ -106,6 +106,10 @@ const useSeparateModalPropsFromFormProps = (formModalProps: IDFormModalProps) =>
             wrapProps: true,
             wrapStyle: true,
             zIndex: true,
+            maxHeight: true,
+            minHeight: true,
+            minWidth: true,
+            maxWidth: true,
         });
 
         return [modalProps, formProps];
@@ -118,7 +122,7 @@ const useSeparateProps = (formModalProps: IDFormModalWithoutModalProps, formCall
         const [formModalOwnProps, formProps] = SplitObject<IDFormModalOwnProps, IDFormProps>(formModalProps, {
             closeFormConfirmMessage: true,
             modalStyle: true,
-            modalStyles:true,
+            modalStyles: true,
             onClosed: true,
             onClosing: true,
             onDataFetch: true,

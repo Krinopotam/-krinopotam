@@ -31,7 +31,7 @@ const formProps: IDFormModalProps = {
     apiRef: formApi,
     confirmChanges: true,
     arrowsButtonsSelection: true,
-    bodyHeight:500,
+    height:500,
     width:750,
     fieldsProps: {
         login: {

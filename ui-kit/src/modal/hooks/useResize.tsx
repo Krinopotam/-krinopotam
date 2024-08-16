@@ -11,7 +11,7 @@ interface IInitialDragState {
 
 export const useResize = (
     props: IExtendedModalProps,
-    modalSize: { width: number | undefined; height: number | undefined },
+    modalSize: { width: React.CSSProperties['width']; height: React.CSSProperties['height'] },
     setModalSize: (size: { width: number | undefined; height: number | undefined }) => void,
 ): ((e: React.MouseEvent) => void) => {
     const [dragging, setDragging] = useState(false);
@@ -32,8 +32,9 @@ export const useResize = (
             const $modal = e.target.closest('.custom-antd-modal .ant-modal');
             if (!$modal) return
 
-            const width = modalSize.width ?? $modal.getBoundingClientRect().width;
-            const height = modalSize.height ?? $modal.getBoundingClientRect().height;
+            const width = convertToPixels("width", modalSize.width, $modal) || $modal.getBoundingClientRect().width;
+            const height = convertToPixels("height", modalSize.height, $modal) || $modal.getBoundingClientRect().height;
+
             setInitialDragState({initWidth: width, initHeight: height, mouseDownX: e.clientX, mouseDownY: e.clientY, element: $modal});
             setDragging(true);
 
@@ -60,7 +61,7 @@ export const useResize = (
     useEffect(() => {
         const onMouseUp = (): void => {
             if (dragging) {
-                /** WORKAROUND: Несмотря на установку размера окна, родительские элементы могут не сжаться из-за своего содержимого. Устанавливаем размер окна не меньше, чем размер контента*/
+                /** WORKAROUND: Despite setting the window size, parent elements may not shrink due to their content. Set the window size to be no smaller than the content size */
                 const $modal = initialDragState.element;
                 const $contentModal = initialDragState.element?.querySelector('.custom-antd-modal .ant-modal-content');
 
@@ -81,3 +82,27 @@ export const useResize = (
 
     return onMouseDown;
 };
+
+
+const convertToPixels = (name: keyof DOMRect, val: number | string | undefined, el?: Element) => {
+    if (!val) return 0;
+    if (typeof val === 'number') return val;
+
+
+    const match = RegExp(/^(\d+(?:\.\d+)?)(px|%)$/).exec(val);
+    if (!match) return 0
+
+    const value = parseFloat(match[1]);
+    const unit = match[2];
+    if (unit === 'px') return value;
+
+    if (unit === '%' && el?.parentElement) {
+        const rect = el.parentElement.getBoundingClientRect();
+        const parentDim = rect[name] as number;
+
+        return (value / 100) * parentDim;
+    }
+
+    return 0
+}
+

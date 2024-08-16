@@ -19,9 +19,17 @@ export interface IExtendedModalProps
     /** Is the form draggable */
     isDraggable?: boolean;
     /** initial form width */
-    width?:number;
+    width?: number | string;
+    /** Maximum form width */
+    maxWidth?: number | string;
+    /** Minimum form width */
+    minWidth?: number | string;
     /** Initial form height */
-    height?:number;
+    height?: number | string;
+    /** Minimum form height */
+    minHeight?: number | string;
+    /** Maximum form height */
+    maxHeight?: number | string;
 
     /********** Callbacks *********/
     /** Callback when the animation ends when Modal is turned on and off */
