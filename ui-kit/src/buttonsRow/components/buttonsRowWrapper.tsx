@@ -23,6 +23,8 @@ export const ButtonsRowWrapper = (props: IButtonRowWrapperProps): React.JSX.Elem
     const defStyle: CSSProperties = {
         outline: 'none',
         height: '100%',
+        width: '100%',
+        flex:1
 
         /** for debug  */
         /*

@@ -44,7 +44,7 @@ export const TabulatorGridFieldRender = ({field, gridApi: gridApiBase}: {field: 
     }, [fieldProps.autoHeightResize]);
 
     return (
-        <div style={containerStyle}>
+        <div  style={containerStyle}>
             <TabulatorGrid
                 {...tabulatorProps}
                 {...callbacks}

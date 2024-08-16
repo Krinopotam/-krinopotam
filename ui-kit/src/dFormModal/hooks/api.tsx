@@ -59,7 +59,7 @@ const useApiFormOpen = (formApi: IDFormModalApi) => {
             if (modalFormProps.onOpen?.(formApi, clonedDataSet) === false) return;
 
             formApi.setFormProps({
-                isOpened: true,
+                open: true,
                 formMode: formMode,
                 dataSet: clonedDataSet,
             });
@@ -77,7 +77,7 @@ const useApiFormForceClose = (formApi: IDFormModalApi) => {
 
         if (modalFormProps.onClosing?.(formApi) === false) return false;
 
-        formApi.setFormProps({isOpened: false});
+        formApi.setFormProps({open: false});
         modalFormProps.onClosed?.(formApi);
     }, [formApi]);
 };

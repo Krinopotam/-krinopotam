@@ -50,14 +50,12 @@ export const HeaderRender = (props: IHeaderRenderProps): React.JSX.Element => {
     }
 
     const defaultStyle: React.CSSProperties = {
-        display: 'flex',
-        alignItems: 'center',
+        display: 'block',
         backgroundColor: backgroundColor,
         color: color,
         borderTopLeftRadius: token.borderRadius,
         borderTopRightRadius: token.borderRadius,
-        minHeight: 33,
-        padding:'3px 24px 3px 24px',
+        minHeight: 27,
     };
 
     const style = {...defaultStyle, ...props.style};

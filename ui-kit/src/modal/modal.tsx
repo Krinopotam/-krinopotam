@@ -8,8 +8,8 @@
 
 import './css/modal.scss';
 
-import {Modal as AntModal, ModalProps as AntModalProps} from 'antd';
-import React, {CSSProperties, useCallback, useEffect, useRef, useState} from 'react';
+import {Modal as AntModal} from 'antd';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 
 import {FooterRender} from './renders/footerRender';
 import {HeaderRender} from './renders/headerRender';
@@ -18,134 +18,70 @@ import classNames from 'classnames';
 import {useInitFormDispatcher} from './hooks/useInitFormDispatcher';
 import {useResize} from './hooks/useResize';
 import {IButtonRowWrapperRemoteCallbacks} from '@src/buttonsRow/components/buttonsRowWrapper';
-import {IColorType} from '@src/button/button';
 import {GetUuid} from '@krinopotam/js-helpers';
+import {IExtendedModalProps} from "@src/modal/types/types";
 
-export interface IModalProps
-    extends Omit<AntModalProps, 'afterOpenChange' | 'okButtonProps' | 'okType' | 'okText' | 'onOk' | 'cancelText' | 'cancelButtonProps' | 'bodyStyle'> {
-    /** The modal ID for form dispatcher */
-    modalId?: string;
+export const Modal = (props: IExtendedModalProps): React.JSX.Element => {
+    const {
+        modalId, resizable = true, isDraggable = true,
+        colorType,
+        headerIcon,
+        maxHeight,
+        minHeight,
+        minWidth,
+        maxWidth,
+        ...modalProps
+    } = props
 
-    /** The form body style. WORKAROUND: renamed from bodyStyle to bodyCss because of antd deprecation warnings */
-    bodyCss?: CSSProperties
-
-    /** The form body initial height */
-    bodyHeight?: number;
-
-    /** The form body min height */
-    bodyMinHeight?: number;
-
-    /** The form body max height */
-    bodyMaxHeight?: number;
-
-    /** The form initial width */
-    width?: number;
-
-    /** The form min width */
-    minWidth?: number;
-
-    /** The form max width */
-    maxWidth?: number;
-
-    /** Is the form body not scrollable */
-    notScrollable?: boolean;
-
-    /** Is the for can be resized (show the resize handler). Default: true */
-    resizable?: boolean;
-
-    /** Form color type */
-    colorType?: IColorType;
-
-    /** Form header style */
-    headerStyle?: CSSProperties;
-
-    /**Form header icon */
-    headerIcon?: React.ReactNode;
-
-    /** Footer content */
-    footer?: React.ReactNode;
-
-    /** Form footer style */
-    footerStyle?: CSSProperties;
-
-    /** Is the form draggable */
-    isDraggable?: boolean;
-    /********** Callbacks *********/
-
-    /** Callback when the animation ends when Modal is turned on and off */
-    onAfterOpenChange?: (open: boolean) => void;
-}
-
-
-export const Modal = ({resizable = true, isDraggable = true, headerStyle, footerStyle, ...props}: IModalProps): React.JSX.Element => {
-    const [modalId] = useState(props.modalId ?? 'modal-' + GetUuid());
-    useInitFormDispatcher(modalId, !!props.open);
+    const [id] = useState(modalId ?? 'modal-' + GetUuid());
+    useInitFormDispatcher(id, !!modalProps.open);
 
     const wrapperRemoteCallbacksRef = useRef<IButtonRowWrapperRemoteCallbacks>({});
 
     const prevFocusedRef = useRef<Element | null>();
 
     useEffect(() => {
-        if (props.open) prevFocusedRef.current = document.activeElement;
-    }, [props.open]);
+        if (modalProps.open) prevFocusedRef.current = document.activeElement;
+    }, [modalProps.open]);
 
     const onAfterOpenChange = useCallback(
         (open: boolean) => {
             if (open) wrapperRemoteCallbacksRef.current?.onParentComponentRendered?.();
             else (prevFocusedRef.current as HTMLElement)?.focus();
-            props.onAfterOpenChange?.(open);
+            modalProps.onAfterOpenChange?.(open);
         },
-        [props]
+        [modalProps]
     );
 
-    const [formSize, setFormSize] = useState({width: props.width ?? 0, bodyHeight: props.bodyHeight ?? 0});
-    const onMouseResize = useResize(
-        formSize.width,
-        formSize.bodyHeight,
-        setFormSize,
-        props.minWidth ?? 200,
-        props.maxWidth ?? 5000,
-        props.bodyMinHeight ?? 50,
-        props.bodyMaxHeight ?? 5000
-    );
+    const [modalSize, setModalSize] = useState({width: modalProps.width ?? undefined, height: modalProps.height ?? undefined});
+    const onMouseResize = useResize(modalProps, modalSize, setModalSize);
 
-    const bodyStyleVal = useGetBodyStyle({
-        bodyStyle: props.bodyCss,
-        bodyHeight: formSize.bodyHeight,
-        bodyMaxHeight: props.bodyMaxHeight,
-        bodyMinHeight: props.bodyMinHeight,
-        notScrollable: props.notScrollable
-    });
-
-    const paddingLeft = 24;
-    const paddingRight = 24;
-
-    const _headerStyle = {
-        paddingLeft: paddingLeft,
-        paddingRight: paddingRight,
-        paddingTop: 5,
-        paddingBottom: 5,
-        ...headerStyle,
-    };
-
-    const _footerStyle = {paddingTop: 20, paddingLeft: paddingLeft, paddingRight: paddingRight, paddingBottom: 20, ...footerStyle};
+    const paddingHorizontal = 24;
+    const baseMinWidth = 250; //If you make the minimums lower, then there may be problems with the dimensions when resizing
+    const baseMinHeight = 130;
+    const modalStyle = useModalStyle({props: modalProps, height: modalSize.height, minWidth, maxWidth, minHeight, maxHeight, baseMinWidth, baseMinHeight})
+    const headerStyle = useHeaderStyle(modalProps, paddingHorizontal)
+    const bodyStyle = useBodyStyle(modalProps, paddingHorizontal)
+    const contentStyle = useContentStyle(modalProps)
+    const footerStyle = useFooterStyle(modalProps, paddingHorizontal)
 
     const [draggableId] = useState('draggable-' + GetUuid());
 
     return (
         <AntModal
-            {...props}
-            width={formSize.width || undefined}
+            {...modalProps}
             // no override section
-            style={{maxWidth: props.maxWidth, minWidth: props.minWidth}}
-            styles={{body: bodyStyleVal, footer: {margin: 0}}}
-            className={classNames('custom-antd-modal', props.className)}
+            width={modalSize.width}
+            height={modalSize.height}
+            style={modalStyle}
+            styles={{body: bodyStyle, footer: {margin: 0}, content: contentStyle}}
+            rootClassName={classNames('custom-antd-modal', modalProps.rootClassName)}
             modalRender={node => ModalRender(node, draggableId, wrapperRemoteCallbacksRef, isDraggable)}
-            //transitionName="zoom"
-            title={<HeaderRender draggableId={draggableId} icon={props.headerIcon} title={props.title} colorType={props.colorType} style={_headerStyle}/>}
+            //transitionName="fade"
+            title={<HeaderRender draggableId={draggableId} icon={headerIcon} title={modalProps.title} colorType={colorType} style={headerStyle}/>}
             footer={
-                <FooterRender onMouseResize={onMouseResize} resizable={resizable} style={_footerStyle} colorType={props.colorType}>
-                    {props.footer}
+                <FooterRender onMouseResize={onMouseResize} resizable={resizable} style={footerStyle} colorType={colorType}>
+                    {modalProps.footer}
                 </FooterRender>
             }
             afterOpenChange={onAfterOpenChange}
@@ -153,28 +89,56 @@ export const Modal = ({resizable = true, isDraggable = true, headerStyle, footer
     );
 };
 
-const useGetBodyStyle = ({
-                             bodyStyle,
-                             bodyHeight,
-                             bodyMaxHeight,
-                             bodyMinHeight,
-                             notScrollable,
-                         }: {
-    bodyStyle?: React.CSSProperties;
-    bodyHeight?: number;
-    bodyMaxHeight?: number;
-    bodyMinHeight?: number;
-    notScrollable?: boolean;
+const useModalStyle = (params: {
+    props: IExtendedModalProps,
+    height: React.CSSProperties['height'],
+    minWidth: React.CSSProperties['minWidth'],
+    maxWidth: React.CSSProperties['maxWidth'],
+    minHeight: React.CSSProperties['minHeight'],
+    maxHeight: React.CSSProperties['maxHeight'],
+    baseMinWidth: React.CSSProperties['minWidth'],
+    baseMinHeight: React.CSSProperties['minHeight']
 }) => {
-    const newStyle: React.CSSProperties = {
-        ...bodyStyle,
-        padding: '0 24px 0 24px',
-        overflowY: notScrollable ? 'hidden' : 'auto',
+    const style: React.CSSProperties = {
+        height: params.height,
+        minWidth: params.minWidth ?? params.baseMinWidth,
+        maxWidth: params.maxWidth,
+        minHeight: params.minHeight ?? params.baseMinHeight,
+        maxHeight: params.maxHeight,
+        ...params.props.style,
+    };
+    return style
+};
+
+const useBodyStyle = (props: IExtendedModalProps, paddingHorizontal: number) => {
+    const style: React.CSSProperties = {
+        padding: `0 ${paddingHorizontal}px 0 ${paddingHorizontal}px`,
+        ...props.styles?.body,
+        overflowY: props.notScrollable ? 'hidden' : 'auto',
     };
 
-    if (bodyHeight) newStyle.height = bodyHeight;
-    if (bodyMaxHeight) newStyle.maxHeight = bodyMaxHeight;
-    if (bodyMinHeight) newStyle.minHeight = bodyMinHeight;
-
-    return newStyle;
+    return style
 };
+
+const useContentStyle = (props: IExtendedModalProps) => {
+    const style: React.CSSProperties = {
+        ...props.styles?.content,
+    };
+
+    return style
+};
+
+const useFooterStyle = (props: IExtendedModalProps, paddingHorizontal: number) => {
+    return {
+        padding: `20px ${paddingHorizontal}px 20px ${paddingHorizontal}px`,
+        ...props.styles?.footer,
+    } satisfies React.CSSProperties;
+};
+
+const useHeaderStyle = (props: IExtendedModalProps, paddingHorizontal: number) => {
+    const crossPadding = (props.closable === false || props.closeIcon === null) ? 0 : 14;
+    return {
+        padding: `3px ${paddingHorizontal + crossPadding}px 3px ${paddingHorizontal}px`,
+        ...props.styles?.header,
+    } satisfies React.CSSProperties;
+}

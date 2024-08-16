@@ -1,13 +1,50 @@
 .custom-antd-modal {
-  /* Override ant-modal-content style */
+  .ant-modal {
+    max-width: none;
+    transform-origin: 50% 50% !important;
+  }
+
+  .ant-modal > * {
+    height: 100%;
+    width: 100%;
+  }
+
+  .react-draggable {
+    height: 100%;
+    width: 100%;
+    flex: 1;
+  }
+
   .ant-modal-content {
+    height: 100%;
+    width: 100%;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+  }
+
+  .ant-modal-header {
+    flex: 0;
+    padding: 0;
+  }
+
+  .ant-modal-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+  }
+
+  .ant-modal-footer {
+    flex: 0;
+    margin: 0;
+
     padding: 0;
   }
 
   /* Override ant-modal-close button position */
   .ant-modal-close {
     top: 4px;
-    right: 9px;
   }
 
   /* Size changer handler style */
@@ -30,6 +67,7 @@
     height: 30px;
     position: absolute;
   }
+
+
 }
 
-/*--------------------------------------------*/

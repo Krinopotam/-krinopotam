@@ -19,16 +19,16 @@ export const FooterRender = ({onMouseResize, resizable, children, style, colorTy
     if (isMobileBrowser()) resizable = false
 
     return (
-        <>
+        <div>
             <div style={{borderTopWidth: 1, borderTopStyle: 'solid', borderTopColor: color, ...style}}>{children}</div>
             {resizable ? <ResizeHandle onMouseDown={onMouseResize}/> : null}
-        </>
+        </div>
     );
 };
 
 const ResizeHandle = (props: React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>): React.ReactElement => (
-    <div className={"resize-handle"} {...props}>
-        <div className={"resize-handle-inner"}/>
+    <div className="resize-handle" {...props}>
+        <div className="resize-handle-inner"/>
     </div>
 );
 

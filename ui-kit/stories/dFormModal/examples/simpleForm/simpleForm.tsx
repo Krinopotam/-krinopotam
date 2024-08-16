@@ -48,7 +48,7 @@ export const SimpleForm = (props?: IDFormModalProps): React.JSX.Element => {
 
             <DFormModal
                 {...compProps}
-                isOpened={open}
+                open={open}
                 onClosed={() => {
                     setOpen(false);
                 }}

@@ -43,7 +43,8 @@ const formProps: IDFormModalProps = {
             confirmDelete: true,
         },
     },
-    width: 900,
+
+    width: '70%',
     buttons: FormLayoutSwitch(formApi),
 };
 
