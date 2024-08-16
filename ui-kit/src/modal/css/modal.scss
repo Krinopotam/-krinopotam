@@ -6,17 +6,19 @@
   }
 
   .ant-modal > * {
-    display: flex;
     height: 100%;
     width: 100%;
   }
 
   .react-draggable {
-    display: flex;
+    height: 100%;
+    width: 100%;
     flex: 1;
   }
 
   .ant-modal-content {
+    height: 100%;
+    width: 100%;
     flex: 1;
     display: flex;
     flex-direction: column;

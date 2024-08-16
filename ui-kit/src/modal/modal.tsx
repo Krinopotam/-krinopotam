@@ -53,8 +53,8 @@ export const Modal = (props: IExtendedModalProps): React.JSX.Element => {
     const onMouseResize = useResize(modalProps, modalSize, setModalSize);
 
     const paddingHorizontal = 24;
-    const baseMinWidth = 100; //If you make the minimums lower, then there may be problems with the dimensions when resizing
-    const baseMinHeight = 80;
+    const baseMinWidth = 250; //If you make the minimums lower, then there may be problems with the dimensions when resizing
+    const baseMinHeight = 130;
     const modalStyle = useModalStyle(modalProps, modalSize.height, baseMinWidth, baseMinHeight)
     const headerStyle = useHeaderStyle(modalProps, paddingHorizontal)
     const bodyStyle = useBodyStyle(modalProps, paddingHorizontal)
