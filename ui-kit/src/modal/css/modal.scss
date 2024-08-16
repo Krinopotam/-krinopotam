@@ -1,16 +1,17 @@
-/* Override ant-modal-content style */
-.custom-antd-modal .ant-modal-content {
+.custom-antd-modal {
+  /* Override ant-modal-content style */
+  .ant-modal-content {
     padding: 0;
-}
+  }
 
-/* Override ant-modal-close button position */
-.custom-antd-modal .ant-modal-close {
+  /* Override ant-modal-close button position */
+  .ant-modal-close {
     top: 4px;
     right: 9px;
-}
+  }
 
-/* Size changer handler style */
-.custom-antd-modal .resize-handle-inner {
+  /* Size changer handler style */
+  .resize-handle-inner {
     width: 12px;
     right: 14px;
     border: 2px solid grey;
@@ -19,15 +20,16 @@
     position: absolute;
     border-top: 0;
     border-left: 0;
-}
+  }
 
-.custom-antd-modal .resize-handle {
+  .resize-handle {
     right: -10px;
     width: 30px;
     bottom: -10px;
     cursor: se-resize;
     height: 30px;
     position: absolute;
+  }
 }
 
 /*--------------------------------------------*/

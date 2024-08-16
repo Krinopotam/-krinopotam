@@ -6,7 +6,7 @@
  * @license MIT
  */
 
-import './css/modal.css';
+import './css/modal.scss';
 
 import {Modal as AntModal, ModalProps as AntModalProps} from 'antd';
 import React, {CSSProperties, useCallback, useEffect, useRef, useState} from 'react';
