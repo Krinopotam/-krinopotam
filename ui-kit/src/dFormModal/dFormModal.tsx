@@ -146,7 +146,8 @@ const useSeparateProps = (formModalProps: IDFormModalWithoutModalProps, formCall
             onSubmitComplete: true,
             onSubmitError: true,
             onSubmitSuccess: true,
-            onSubmitValidation: true
+            onSubmitValidation: true,
+            onCancel: true,
         });
 
         formProps.buttons = null; //clear form buttons because the modal form has it own buttons

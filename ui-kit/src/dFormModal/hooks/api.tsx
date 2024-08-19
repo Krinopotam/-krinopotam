@@ -94,6 +94,7 @@ const useApiTryToCloseForm = (formApi: IDFormModalApi) => {
                 okText: 'Да',
                 cancelText: 'Нет',
                 onOk: () => {
+                    modalFormProps.onCancel?.(formApi);
                     formApi.forceClose();
                 },
             });
@@ -101,6 +102,7 @@ const useApiTryToCloseForm = (formApi: IDFormModalApi) => {
             return;
         }
 
+        modalFormProps.onCancel?.(formApi);
         formApi.forceClose();
     }, [formApi]);
 };

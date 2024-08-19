@@ -20,6 +20,9 @@ const formProps: IDFormModalProps = {
         password: {component: PasswordField, label: 'Password'} as IPasswordFieldProps
     },
     buttons: FormLayoutSwitch(formApi),
+    onCancel: () => {
+        console.log('cancel');
+    },
 }
 
 export const Simple = (): React.JSX.Element => {

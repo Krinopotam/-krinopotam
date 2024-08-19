@@ -5,13 +5,19 @@ import {IExtendedModalProps} from "@src/modal";
 export interface IExtendedModalOwnProps extends Omit<IExtendedModalProps, 'modalId' | 'style' | 'styles' | 'footer' | 'onCancel' | 'maskClosable' | 'keyboard' | 'destroyOnClose'> {}
 
 export interface IDFormModalCallbacks extends IDFormBaseCallbacks<IDFormModalApi> {
+    /** Fires when the form is opening */
     onOpen?: (
         formApi: IDFormModalApi,
         dataSet: IDFormDataSet | undefined,
     ) => boolean | void;
+    /** Fires when the form is opened */
     onOpened?: (formApi: IDFormModalApi, dataSet: IDFormDataSet | undefined) => void;
+    /** Fires when the form is closing */
     onClosing?: (formApi: IDFormModalApi) => boolean | void;
+    /** Fires when the form is closed */
     onClosed?: (formApi: IDFormModalApi) => void;
+    /** Fires when the form is canceled */
+    onCancel?: (formApi: IDFormModalApi) => void;
 }
 
 export type IDFormModalOwnProps = IDFormModalCallbacks & {
