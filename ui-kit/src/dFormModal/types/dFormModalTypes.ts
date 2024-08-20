@@ -32,7 +32,7 @@ export type IDFormModalOwnProps = IDFormModalCallbacks & {
     closeFormConfirmMessage?: React.ReactNode;
 
     /** Language */
-    language?: keyof typeof translations | string;
+    language?: keyof typeof translations;
 
     /** Custom translation */
     translation?: Partial<typeof translations.en>

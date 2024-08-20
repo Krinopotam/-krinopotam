@@ -74,7 +74,7 @@ export interface IGridPropsBase {
     responsiveBreakpoint?: IBreakpoints;
 
     /** Language */
-    language?: keyof typeof translations | string;
+    language?: keyof typeof translations;
 
     /** Custom translation */
     translation?: Partial<typeof translations.en>

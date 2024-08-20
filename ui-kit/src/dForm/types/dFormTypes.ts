@@ -96,7 +96,7 @@ export interface IDFormProps extends IDFormCallbacks {
 
 
     /** Language */
-    language?: keyof typeof translations | string;
+    language?: keyof typeof translations;
 
     /** Custom translation */
     translation?: Partial<typeof translations.en>
