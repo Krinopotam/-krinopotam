@@ -3,6 +3,7 @@ import {IColorType} from "@src/button";
 import {IFormButtons} from "@src/buttonsRow";
 import {MessageBoxApi} from "@src/messageBox";
 import {ModalStaticFunctions} from "antd/es/modal/confirm";
+import {translations} from "@src/messageBox/translations/translations";
 
 export interface IModalBaseConfig {
     /** Form id */
@@ -27,6 +28,10 @@ export interface IModalBaseConfig {
     onAfterClose?: () => void;
     /** On form close by close cross pressed callback */
     onCrossClose?: () => void;
+    /** Language */
+    language?: keyof typeof translations;
+    /** Custom translation */
+    translation?: Partial<typeof translations.en>
 }
 
 export type IModalConfig = Omit<IModalBaseConfig, 'formId'>;

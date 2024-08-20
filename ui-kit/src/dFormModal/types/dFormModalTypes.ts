@@ -1,6 +1,7 @@
 import React from "react";
 import {IDFormApi, IDFormBaseCallbacks, IDFormCallbacks, IDFormDataSet, IDFormProps} from "@src/dForm";
 import {IExtendedModalProps} from "@src/modal";
+import {translations} from "@src/dFormModal/translations/translations";
 
 export interface IExtendedModalOwnProps extends Omit<IExtendedModalProps, 'modalId' | 'style' | 'styles' | 'footer' | 'onCancel' | 'maskClosable' | 'keyboard' | 'destroyOnClose'> {}
 
@@ -29,6 +30,12 @@ export type IDFormModalOwnProps = IDFormModalCallbacks & {
 
     /** Confirm message before the form closing, if form is dirty */
     closeFormConfirmMessage?: React.ReactNode;
+
+    /** Language */
+    language?: keyof typeof translations;
+
+    /** Custom translation */
+    translation?: Partial<typeof translations.en>
 }
 
 export type IDFormModalWithoutModalProps = IDFormModalOwnProps & Exclude<IDFormProps, keyof IDFormCallbacks>

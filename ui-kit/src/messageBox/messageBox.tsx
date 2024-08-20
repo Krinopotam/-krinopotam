@@ -22,6 +22,7 @@ import dispatcher from '../formsDispatcher';
 import {GetUuid, MergeObjects} from '@krinopotam/js-helpers';
 import {QuestionCircleOutlined} from '@ant-design/icons';
 import {IModalAlertConfig, IModalBaseConfig, IModalConfig, IModalConfirmConfig, IModalConfirmWaiterConfig, ModalType} from "@src/messageBox/types/messageBoxTypes";
+import {translations} from "@src/messageBox/translations/translations";
 
 class MessageBox {
     private static _instance: MessageBox; //singleton instance
@@ -34,11 +35,13 @@ class MessageBox {
     }
 
     public alert({okText, onOk, ...props}: IModalAlertConfig): MessageBoxApi {
+        const t = this.getTranslator(props.language, props.translation)
+
         const defaultButtons: IFormButtons = {
             ok: {
                 position: 'right',
                 active: true,
-                title: okText ?? 'ОК',
+                title: okText ?? t('ok'),
                 hotKeys: [{key: 'escape'}, {key: 'enter', ctrl: true}],
                 onClick: () => {
                     if (onOk?.(messageBox) === false) return;
@@ -57,11 +60,13 @@ class MessageBox {
     }
 
     public confirm({okText, cancelText, onOk, onCancel, ...otherProps}: IModalConfirmConfig): MessageBoxApi {
+        const t = this.getTranslator(otherProps.language, otherProps.translation)
+
         const defaultButtons: IFormButtons = {
             ok: {
                 position: 'right',
                 active: true,
-                title: okText ?? 'ОК',
+                title: okText ?? t('ok'),
                 hotKeys: [{key: 'enter', ctrl: true}],
                 onClick: () => {
                     if (onOk?.(messageBox) === false) return;
@@ -70,7 +75,7 @@ class MessageBox {
             },
             cancel: {
                 position: 'right',
-                title: cancelText ?? 'Отмена',
+                title: cancelText ?? t('cancel'),
                 hotKeys: [{key: 'escape'}],
                 onClick: () => {
                     if (onCancel?.(messageBox) === false) return;
@@ -97,11 +102,13 @@ class MessageBox {
     }
 
     public confirmWaiter({okText, cancelText, onOk, onCancel, waitTitle, waitContent, ...otherProps}: IModalConfirmWaiterConfig): MessageBoxApi {
-        waitTitle = waitTitle ?? 'Обработка';
+        const t = this.getTranslator(otherProps.language, otherProps.translation)
+
+        waitTitle = waitTitle ?? t('processing');
         if (typeof waitTitle === 'string') {
             waitContent = (
                 <div style={{height: 22}}>
-                    <Spin key={'waitSpinner'}/> {waitContent ?? 'Пожалуйста, подождите...'}
+                    <Spin key={'waitSpinner'}/> {waitContent ?? t('pleaseWait')}
                 </div>
             );
         }
@@ -109,7 +116,7 @@ class MessageBox {
             ok: {
                 position: 'right',
                 active: true,
-                title: okText ?? 'ОК',
+                title: okText ?? t('ok'),
                 hotKeys: [{key: 'enter', ctrl: true}],
                 onClick: () => {
                     if (onOk?.(messageBox) === false) return;
@@ -118,7 +125,7 @@ class MessageBox {
             },
             cancel: {
                 position: 'right',
-                title: cancelText ?? 'Отмена',
+                title: cancelText ?? t('cancel'),
                 hotKeys: [{key: 'escape'}],
                 onClick: () => {
                     if (onCancel?.(messageBox) === false) return;
@@ -141,16 +148,16 @@ class MessageBox {
         return messageBox;
     }
 
-    private modalBase({...otherProps}: IModalConfig): MessageBoxApi {
-        const props: IModalConfig = {...otherProps};
-
+    private modalBase(cfg: IModalConfig): MessageBoxApi {
+        const t = this.getTranslator(cfg.language, cfg.translation)
+        const title = cfg.title ?? t('attention')
         const formId = GetUuid();
-        const config: IModalBaseConfig = {...props, formId: formId};
+        const config: IModalBaseConfig = {...cfg, formId, title};
 
         const prevFocused = document.activeElement;
         config.onAfterClose = () => {
             (prevFocused as HTMLElement)?.focus();
-            props.onAfterClose?.();
+            cfg.onAfterClose?.();
         };
 
         const draggableId = 'draggable-' + GetUuid();
@@ -182,16 +189,17 @@ class MessageBox {
                                     closable = true,
                                     maskClosable = true,
                                     colorType,
-                                    onCrossClose
+                                    onCrossClose,
                                 }: IModalBaseConfig, draggableId: string): ModalFuncProps {
         const paddingBottom = 20;
         const paddingLeft = 24;
         const paddingRight = 24;
+
         return {
             className: 'custom-antd-message-box',
 
             icon: null,
-            title: <HeaderRender draggableId={draggableId} icon={icon} title={title ?? 'Внимание'} colorType={colorType}
+            title: <HeaderRender draggableId={draggableId} icon={icon} title={title} colorType={colorType}
                                  style={{paddingLeft: 24, paddingRight: paddingRight, paddingTop: 3, paddingBottom: 3}}/>,
             content: (
                 <ContentRender paddingLeft={paddingLeft} paddingRight={paddingRight}>
@@ -220,6 +228,15 @@ class MessageBox {
 
     public updateThemedModal(modal: ModalType) {
         this._themedModalInstance = modal;
+    }
+
+    private getTranslator(language: IModalConfig['language'], extTranslation: IModalConfig['translation']) {
+        return (val: keyof typeof translations.en) => {
+            const lang = language ?? 'en'
+            const builtInTranslation = translations[lang] ?? translations.en
+            const translation = {...builtInTranslation, ...extTranslation}
+            return translation[val] ?? translations.en[val] ?? val
+        }
     }
 }
 

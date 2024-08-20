@@ -5,6 +5,7 @@ import {CloneObject} from "@krinopotam/js-helpers";
 import {useCallback} from 'react';
 import {IsDebugMode} from "@krinopotam/common-hooks";
 import {IDFormModalApi, IDFormModalProps} from "@src/dFormModal";
+import {useTranslate} from "@src/dFormModal/hooks/translate";
 
 export const useInitModalFormApi = (
     formId: string,
@@ -18,7 +19,7 @@ export const useInitModalFormApi = (
     formApi.getFormProps = useApiGetModalFormProps(modalFormProps);
     formApi.setFormProps = useApiSetModalFormProps(modalFormProps, updateFormProps);
     formApi.open = useApiFormOpen(formApi);
-    formApi.close = useApiTryToCloseForm(formApi);
+    formApi.close = useApiTryToCloseForm(formApi, modalFormProps);
     formApi.forceClose = useApiFormForceClose(formApi);
 };
 
@@ -83,18 +84,19 @@ const useApiFormForceClose = (formApi: IDFormModalApi) => {
 };
 
 /** Api method: try to close modal form */
-const useApiTryToCloseForm = (formApi: IDFormModalApi) => {
+const useApiTryToCloseForm = (formApi: IDFormModalApi, formProps: IDFormModalProps) => {
+    const t = useTranslate(formProps)
     return useCallback(() => {
-        const modalFormProps = formApi.getFormProps();
-        if (modalFormProps.onClosing?.(formApi) === false) return;
+        if (formProps.onClosing?.(formApi) === false) return;
 
-        if (formApi.model.isFormDirty() && modalFormProps.confirmChanges) {
+        if (formApi.model.isFormDirty() && formProps.confirmChanges) {
             MessageBox.confirm({
-                content: modalFormProps.closeFormConfirmMessage ?? 'Отменить сделанные изменения?',
-                okText: 'Да',
-                cancelText: 'Нет',
+                language:formProps.language,
+                content: formProps.closeFormConfirmMessage ?? t('cancelChangesQn'),
+                okText: t('yes'),
+                cancelText: t('no'),
                 onOk: () => {
-                    modalFormProps.onCancel?.(formApi);
+                    formProps.onCancel?.(formApi);
                     formApi.forceClose();
                 },
             });
@@ -102,8 +104,8 @@ const useApiTryToCloseForm = (formApi: IDFormModalApi) => {
             return;
         }
 
-        modalFormProps.onCancel?.(formApi);
+        formProps.onCancel?.(formApi);
         formApi.forceClose();
-    }, [formApi]);
+    }, [formApi, formProps, t]);
 };
 

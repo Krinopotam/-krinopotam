@@ -6,6 +6,7 @@ import {ColProps} from "antd";
 import {FormLabelAlign} from "antd/es/form/interface";
 import {RequiredMark} from "antd/es/form/Form";
 import {IDFormFieldsProps} from "@src/dForm/fields";
+import {translations} from "@src/dForm/translations/translations";
 
 export type IDFormValidationRules = Record<string, IRuleType[]>;
 
@@ -92,6 +93,13 @@ export interface IDFormProps extends IDFormCallbacks {
 
     /** allow select buttons using arrows keys */
     arrowsButtonsSelection?: boolean;
+
+
+    /** Language */
+    language?: keyof typeof translations;
+
+    /** Custom translation */
+    translation?: Partial<typeof translations.en>
 }
 
 export type IDFormCallbacks = IDFormBaseCallbacks<IDFormApi>

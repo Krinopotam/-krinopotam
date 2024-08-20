@@ -4,6 +4,7 @@ import dispatcher from '@src/formsDispatcher';
 import {useEvents} from '../hooks/events';
 import {GenerateAjaxRequestFunc} from '@src/tabulatorGrid/helpers/fetchHelpers';
 import {IGridApi, IGridProps, IGridRowData} from "@src/tabulatorGrid";
+import {useTranslate} from "@src/tabulatorGrid/hooks/translate";
 
 export const GridRender = ({
     tableRef,
@@ -16,7 +17,7 @@ export const GridRender = ({
     gridProps: IGridProps;
     tabulatorProps: ITabulatorProps;
 }): React.JSX.Element => {
-    const events = useEvents(gridApi, gridProps.events);
+    const events = useEvents(gridApi, gridProps);
     const resizeObserverRef = useRef<ResizeObserver | undefined>(undefined);
     const onTableRef = useCallback(
         (tabulatorRef: React.MutableRefObject<ITabulator>) => {
@@ -27,6 +28,7 @@ export const GridRender = ({
         [gridApi, gridProps.resizeHeightWithParent, tableRef]
     );
 
+    const t = useTranslate(gridProps)
     useEffect(() => {
         return () => {
             resizeObserverRef.current?.disconnect();
@@ -60,7 +62,7 @@ export const GridRender = ({
             ajaxRequestFunc={!gridProps.onDataFetch ? undefined : (ajaxRequestFunc as ITabulator['options']['ajaxRequestFunc'])}
             ajaxResponse={!gridProps.onDataFetchResponse ? undefined : onAjaxResponse}
             containerClassName={gridProps.className}
-            placeholder={gridProps.placeholder ?? 'Строки отсутствуют'}
+            placeholder={gridProps.placeholder ?? t('noRows')}
             events={events}
         />
     );

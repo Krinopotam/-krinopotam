@@ -23,8 +23,8 @@ export const ContainerRender = ({
     tabulatorProps: ITabulatorProps;
     columnsDialog: boolean;
 }): React.JSX.Element => {
-    const editFormProps = usePrepareEditFormProps(gridApi);
-    const selectionFormProps = usePrepareSelectionFormProps(gridApi);
+    const editFormProps = usePrepareEditFormProps(gridApi, gridProps);
+    const selectionFormProps = usePrepareSelectionFormProps(gridApi, gridProps);
 
     // Even though gridProps can be obtained from gridApi, we still separately pass gridProps to GridRender
     // Since GridRender is memoized, this is done so that the GridRender component is updated when gridProps changes

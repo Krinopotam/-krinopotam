@@ -3,6 +3,7 @@ import {MessageBox} from '@src/messageBox';
 import {IsDebugMode} from "@krinopotam/common-hooks";
 import {IDFormCallbacks, IDFormDataSet} from "@src/dForm/types/dFormTypes";
 import {IDFormModalApi, IDFormModalProps} from "@src/dFormModal";
+import {useTranslate} from "@src/dFormModal/hooks/translate";
 
 /**
  * Preparing callbacks for redirection to the form
@@ -10,6 +11,7 @@ import {IDFormModalApi, IDFormModalProps} from "@src/dFormModal";
  * @param modalFormProps
  */
 export const useFormCallbacks = (formModalApi: IDFormModalApi, modalFormProps: IDFormModalProps) => {
+    const t = useTranslate(modalFormProps)
     return useMemo((): IDFormCallbacks => {
         return {
             // Form callbacks
@@ -53,13 +55,14 @@ export const useFormCallbacks = (formModalApi: IDFormModalApi, modalFormProps: I
                 if (modalFormProps?.onDataFetchError?.(error, formModalApi) === false) return false;
 
                 const box = MessageBox.confirm({
+                    language:modalFormProps.language,
                     content: (
                         <>
                             <p>
                                 <b>{error.message}</b>
                             </p>
                             {error.stack && IsDebugMode() ? <p>{error.stack}</p> : ''}
-                            <p>{'Попробовать снова?'}</p>
+                            <p>{t('tryAgainQt')}</p>
                         </>
                     ),
                     colorType: 'danger',

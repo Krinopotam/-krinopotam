@@ -120,6 +120,7 @@ const useSeparateModalPropsFromFormProps = (formModalProps: IDFormModalProps) =>
 const useSeparateProps = (formModalProps: IDFormModalWithoutModalProps, formCallbacks: IDFormCallbacks) => {
     return useMemo((): [IDFormModalOwnProps, IDFormProps] => {
         const [formModalOwnProps, formProps] = SplitObject<IDFormModalOwnProps, IDFormProps>(formModalProps, {
+            /** these properties will be in formModalOwnProps, rest in formProps */
             closeFormConfirmMessage: true,
             modalStyle: true,
             modalStyles: true,
@@ -148,11 +149,13 @@ const useSeparateProps = (formModalProps: IDFormModalWithoutModalProps, formCall
             onSubmitSuccess: true,
             onSubmitValidation: true,
             onCancel: true,
+            language: true, //common property
+            translation: true, //common property
         });
 
         formProps.buttons = null; //clear form buttons because the modal form has it own buttons
 
-        return [formModalOwnProps, {...formProps, ...formCallbacks}];
+        return [formModalOwnProps, {...formProps, ...formCallbacks, language: formModalProps.language, translation: formModalProps.translation}];
     }, [formCallbacks, formModalProps]);
 };
 

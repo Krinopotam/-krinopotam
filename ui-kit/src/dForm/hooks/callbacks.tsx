@@ -4,6 +4,7 @@ import {MessageBox} from '@src/messageBox';
 import {IsDebugMode} from "@krinopotam/common-hooks";
 import {IDFormApi, IDFormDataSet, IDFormModelCallbacks, IDFormProps} from "@src/dForm";
 import {Collapse} from "antd";
+import {useTranslate} from "@src/dForm/hooks/translate";
 
 /**
  * Preparing callbacks for redirection to the model
@@ -11,6 +12,7 @@ import {Collapse} from "antd";
  * @param formApi
  */
 export const useModelCallbacks = (formProps: IDFormProps, formApi: IDFormApi) => {
+    const t = useTranslate(formProps)
     return useMemo((): IDFormModelCallbacks => {
         return {
             // The form callback
@@ -63,13 +65,14 @@ export const useModelCallbacks = (formProps: IDFormProps, formApi: IDFormApi) =>
                 if (formProps?.onDataFetchError?.(error, formApi) === false) return false;
 
                 const box = MessageBox.confirm({
+                    language: formProps.language,
                     content: (
                         <>
                             <p>
                                 <b>{error.message}</b>
                             </p>
                             {error.stack && IsDebugMode() ? <p>{error.stack}</p> : ''}
-                            <p>{'Попробовать снова?'}</p>
+                            <p>{t('tryAgainQt')}</p>
                         </>
                     ),
                     colorType: 'danger',
@@ -106,7 +109,8 @@ export const useModelCallbacks = (formProps: IDFormProps, formApi: IDFormApi) =>
             onSubmitError: (values: Record<string, unknown>, error) => {
                 if (formProps?.onSubmitError?.(values, error, formApi) === false) return false;
                 MessageBox.alert({
-                    title: 'Error',
+                    language: formProps.language,
+                    title: t('error'),
                     content: (
                         <>
                             <p>
@@ -131,5 +135,5 @@ export const useModelCallbacks = (formProps: IDFormProps, formApi: IDFormApi) =>
             /** fires, when the form dataSet changed. Unlike onFormValuesChanged, it is triggered only when a new dataSet is set via setFormValues and is not called when the user changes the field values */
             onDataSetChange: (dataSet: IDFormDataSet | undefined) => formProps?.onDataSetChange?.(dataSet, formApi),
         };
-    }, [formProps, formApi]);
+    }, [formProps, formApi, t]);
 };

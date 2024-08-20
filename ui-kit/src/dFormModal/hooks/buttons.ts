@@ -2,16 +2,18 @@ import {IFormButtons} from '@src/buttonsRow/buttonsRow';
 import {MergeObjects} from "@krinopotam/js-helpers";
 import {useMemo} from "react";
 import {IDFormModalApi, IDFormModalProps} from "@src/dFormModal";
+import {useTranslate} from "@src/dFormModal/hooks/translate";
 
 /** Generate buttons */
 export const useInitButtons = (formApi: IDFormModalApi, props: IDFormModalProps) => {
+    const t = useTranslate(props)
     return useMemo((): IFormButtons => {
         const defaultButtons: IFormButtons = {
             ok: {
                 position: 'right',
                 active: props.formMode !== 'view',
                 hidden: props.formMode === 'view',
-                title: 'ОК',
+                title: t('ok'),
                 hotKeys: [
                     {key: 'enter', ctrl: true},
                     {key: 's', ctrl: true},
@@ -23,7 +25,7 @@ export const useInitButtons = (formApi: IDFormModalApi, props: IDFormModalProps)
             },
             cancel: {
                 position: 'right',
-                title: 'Отмена',
+                title: t('cancel'),
                 hotKeys: [{key: 'escape'}],
                 active: props.formMode === 'view',
                 onClick: () => {
@@ -33,5 +35,5 @@ export const useInitButtons = (formApi: IDFormModalApi, props: IDFormModalProps)
         };
 
         return MergeObjects(defaultButtons, props.buttons);
-    }, [formApi, props.buttons, props.formMode]);
+    }, [formApi, props.buttons, props.formMode, t]);
 };

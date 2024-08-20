@@ -10,16 +10,17 @@ import {IsDebugMode} from '@krinopotam/common-hooks';
 import {IGridDeletePromise, IGridProps, IGridRowData} from '@src/tabulatorGrid';
 import {IGridApi, IRowKey, IRowKeys} from '@src/tabulatorGrid/types/tabulatorGridTypes';
 import {useUnmountedRef} from "ahooks";
+import {useTranslate} from "@src/tabulatorGrid/hooks/translate";
 
 export const useInitGridApi = ({
-    gridApi,
-    props,
-    tableRef,
-    editFormApi,
-    selectionFormApi,
-    buttonsApi,
-    setColumnsDialog,
-}: {
+                                   gridApi,
+                                   props,
+                                   tableRef,
+                                   editFormApi,
+                                   selectionFormApi,
+                                   buttonsApi,
+                                   setColumnsDialog,
+                               }: {
     gridApi: IGridApi;
     props: IGridApi['gridProps'];
     tableRef: MutableRefObject<Tabulator | undefined>;
@@ -65,7 +66,7 @@ export const useInitGridApi = ({
     gridApi.updateRows = useApiUpdateRows(dataSetRef, gridApi);
     gridApi.removeRowsByKeys = useApiRemoveRowsByKeys(dataSetRef, gridApi);
     gridApi.removeRows = useApiRemoveRows(gridApi);
-    gridApi.deleteRows = useApiDeleteRows(gridApi);
+    gridApi.deleteRows = useApiDeleteRows(gridApi, props);
     gridApi.fetchData = useApiFetchData(gridApi);
     gridApi.retryFetchData = useApiRetryFetchData(gridApi);
     gridApi.setCurrentDataFetchHandler = useSetCurrentDataFetchHandler(curDataFetchHandler, curDataFetchParams);
@@ -468,12 +469,12 @@ const useApiRemoveRows = (gridApi: IGridApi): IGridApi['removeRows'] => {
     );
 };
 
-const useApiDeleteRows = (gridApi: IGridApi): IGridApi['deleteRows'] => {
+const useApiDeleteRows = (gridApi: IGridApi, gridProps:IGridProps): IGridApi['deleteRows'] => {
+    const t = useTranslate(gridProps)
     return useCallback(
         (rows: IGridRowData | IGridRowData[] | undefined) => {
             if (!rows) return;
             const rowsData = Array.isArray(rows) ? rows : [rows];
-            const gridProps = gridApi.gridProps;
             let messageBox: MessageBoxApi;
             const removeRows = () => {
                 const deletePromise = gridProps?.onDelete?.(rowsData, gridApi);
@@ -493,6 +494,7 @@ const useApiDeleteRows = (gridApi: IGridApi): IGridApi['deleteRows'] => {
                             if (!gridProps.confirmDelete) gridApi.setIsLoading(false);
                             else messageBox?.destroy();
                             MessageBox.alert({
+                                language: gridProps.language,
                                 content: (
                                     <>
                                         <p>
@@ -513,7 +515,8 @@ const useApiDeleteRows = (gridApi: IGridApi): IGridApi['deleteRows'] => {
 
             if (gridProps.confirmDelete) {
                 messageBox = MessageBox.confirmWaiter({
-                    content: gridProps.rowDeleteMessage ?? 'Удалить выбранные строки?',
+                    language: gridProps.language,
+                    content: gridProps.rowDeleteMessage ?? t('deleteSelectedRecordsQt'),
                     onOk: removeRows,
                 });
             } else {

@@ -1,4 +1,4 @@
-import {DForm, IDFormMode, IDFormProps} from '@src/dForm';
+import {DForm, IDFormProps} from '@src/dForm';
 import {IButtonsRowApi, IFormButtons} from '@src/buttonsRow/buttonsRow';
 
 import {Modal} from '@src/modal/modal';
@@ -7,6 +7,7 @@ import React, {useState} from 'react';
 import {GetUuid} from '@krinopotam/js-helpers';
 import {IDFormModalApi, IDFormModalProps} from "@src/dFormModal";
 import {IExtendedModalOwnProps} from "@src/dFormModal/types/dFormModalTypes";
+import {useTranslate} from "@src/dFormModal/hooks/translate";
 
 interface IDFormModalRenderProps {
     /** the form ID */
@@ -42,8 +43,8 @@ interface IDFormModalRenderProps {
 
 export const DFormModalRender = ({formId, buttons, buttonsApi, formApi, formProps, modalProps, modalFormProps}: IDFormModalRenderProps): React.JSX.Element => {
     const [formIdVal] = useState(formId ?? 'dFormModal-' + GetUuid());
-    const formMode = modalFormProps.formMode ?? 'create'; //The form model has not yet been initialized
-    const modalTitle = useFormTitle(formMode, modalFormProps.title);
+
+    const modalTitle = useFormTitle(modalFormProps);
 
     return (
         <Modal
@@ -83,11 +84,14 @@ export const DFormModalRender = ({formId, buttons, buttonsApi, formApi, formProp
     );
 };
 
-const useFormTitle = (formMode: IDFormMode, title?: React.ReactNode) => {
+const useFormTitle = (modalFormProps: IDFormModalProps) => {
+    const formMode = modalFormProps.formMode ?? 'create'; //The form model has not yet been initialized
+    const title = modalFormProps.title
+    const t = useTranslate(modalFormProps)
     if (title) return title;
-    if (formMode === 'view') return 'Просмотр';
-    if (formMode === 'create') return 'Создание';
-    if (formMode === 'clone') return 'Клонирование';
-    if (formMode === 'update') return 'Редактирование';
+    if (formMode === 'view') return t('viewing');
+    if (formMode === 'create') return t('creating');
+    if (formMode === 'clone') return t('cloning');
+    if (formMode === 'update') return t('editing');
     return '&nbsp;';
 };

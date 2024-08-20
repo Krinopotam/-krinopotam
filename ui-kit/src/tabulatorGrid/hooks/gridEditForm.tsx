@@ -1,14 +1,15 @@
 import {useMemo} from 'react';
 import {IDFormApi} from '@src/dForm';
 import {GetUuid} from "@krinopotam/js-helpers";
-import {IGridApi, IGridRowData} from "@src/tabulatorGrid";
+import {IGridApi, IGridProps, IGridRowData} from "@src/tabulatorGrid";
 
-export const usePrepareEditFormProps = (gridApi: IGridApi) => {
+export const usePrepareEditFormProps = (gridApi: IGridApi, gridProps: IGridProps) => {
     return useMemo(() => {
-        const editFormProps = gridApi.gridProps?.editFormProps;
+        const editFormProps = gridProps?.editFormProps;
         if (!editFormProps) return undefined;
 
         const formProps = {...editFormProps};
+        if (gridProps.language && !formProps.language) formProps.language = gridProps.language
 
         const prevOnSubmitSuccess = editFormProps?.onSubmitSuccess;
 
@@ -28,5 +29,5 @@ export const usePrepareEditFormProps = (gridApi: IGridApi) => {
         };
 
         return formProps;
-    }, [gridApi]);
+    }, [gridApi, gridProps?.editFormProps, gridProps.language]);
 };

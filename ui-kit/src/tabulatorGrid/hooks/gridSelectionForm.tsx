@@ -1,13 +1,14 @@
 import {useMemo} from 'react';
 import {IDFormApi} from '@src/dForm';
-import {IGridApi, IGridRowData} from "@src/tabulatorGrid";
+import {IGridApi, IGridProps, IGridRowData} from "@src/tabulatorGrid";
 
-export const usePrepareSelectionFormProps = (gridApi: IGridApi) => {
+export const usePrepareSelectionFormProps = (gridApi: IGridApi, gridProps: IGridProps) => {
     return useMemo(() => {
         const selectionFormProps = gridApi.gridProps?.selectionFormProps;
         if (!selectionFormProps) return undefined;
 
         const formProps = {...selectionFormProps};
+        if (gridProps.language && !formProps.language) formProps.language = gridProps.language
 
         const prevOnSubmitSuccess = selectionFormProps?.onSubmitSuccess;
 
@@ -15,7 +16,6 @@ export const usePrepareSelectionFormProps = (gridApi: IGridApi) => {
             if (prevOnSubmitSuccess && prevOnSubmitSuccess(values, resultValues, formApi) === false) return false;
             const formValues = {...formApi.model.getFormDataSet(), ...resultValues};
 
-            const gridProps = gridApi.gridProps;
             const selectedRows = (formValues.select as IGridRowData[]) ?? [];
 
             if (!gridProps.appendSelection) return gridApi.setDataSet(selectedRows);
@@ -35,5 +35,5 @@ export const usePrepareSelectionFormProps = (gridApi: IGridApi) => {
         };
 
         return formProps;
-    }, [gridApi]);
+    }, [gridApi, gridProps.appendSelection, gridProps.language]);
 };

@@ -29,6 +29,7 @@ const props: IGridProps = {
     confirmDelete: true,
     height: '100%',
     layout: 'fitColumns',
+    language: 'en',
 };
 export const WithForm = (): React.JSX.Element => {
     return (

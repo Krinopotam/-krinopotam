@@ -4,6 +4,7 @@ import {IButtonsRowApi} from '@src/buttonsRow';
 import {MessageBox} from '@src/messageBox';
 import {IDFormProps} from "@src/dForm";
 import {IDFormApi} from "@src/dForm/types/dFormTypes";
+import {useTranslate} from "@src/dForm/hooks/translate";
 
 export const useInitFormApi = (
     formApi: IDFormApi,
@@ -13,8 +14,8 @@ export const useInitFormApi = (
 ) => {
     const apiGetFormProps = useApiGetFormProps(formProps);
     const apiSetFormProps = useApiSetFormProps(formProps, updateFormProps);
-    const apiValidateForm = useApiValidateForm(formApi);
-    const apiSubmitForm = useApiSubmitForm(formApi);
+    const apiValidateForm = useApiValidateForm(formApi, formProps);
+    const apiSubmitForm = useApiSubmitForm(formApi, formProps);
     if (!formApi.buttonsApi) formApi.buttonsApi = buttonsApi; //The parent can already have this API.Do not reload
     if (!formApi.getFormProps) formApi.getFormProps = apiGetFormProps;
     if (!formApi.setFormProps) formApi.setFormProps = apiSetFormProps;
@@ -39,7 +40,8 @@ const useApiSetFormProps = (formProps: IDFormProps, setFormProps: (props: IDForm
     );
 };
 
-const useApiValidateForm = (formApi: IDFormApi) => {
+const useApiValidateForm = (formApi: IDFormApi, formProps: IDFormProps) => {
+    const t = useTranslate(formProps)
     return useCallback(
         (showAlert?: boolean) => {
             const errors = formApi.model.validateForm();
@@ -47,7 +49,7 @@ const useApiValidateForm = (formApi: IDFormApi) => {
 
             if (Object.keys(errors).length === 0 || !showAlert) return errors;
 
-            let messageContent: React.ReactNode = 'Необходимо исправить ошибки';
+            let messageContent: React.ReactNode = t('fixError');
             messageContent = (
                 <span>
                     {messageContent}:
@@ -65,15 +67,16 @@ const useApiValidateForm = (formApi: IDFormApi) => {
                 </span>
             );
 
-            MessageBox.alert({content: messageContent, colorType: 'danger'});
+            MessageBox.alert({language: formProps.language, content: messageContent, colorType: 'danger'});
 
             return errors;
         },
-        [formApi]
+        [formApi.buttonsApi, formApi.model, formProps.language, t]
     );
 };
 
-const useApiSubmitForm = (formApi: IDFormApi) => {
+const useApiSubmitForm = (formApi: IDFormApi, formProps: IDFormProps) => {
+    const t = useTranslate(formProps)
     return useCallback(() => {
         formApi.model.incrementSubmitCount();
 
@@ -89,9 +92,10 @@ const useApiSubmitForm = (formApi: IDFormApi) => {
         }
 
         const waiter = MessageBox.confirmWaiter({
-            content: formProps.submitConfirmMessage ?? 'Сохранить сделанные изменения?',
-            okText: 'Да',
-            cancelText: 'Отмена',
+            language: formProps.language,
+            content: formProps.submitConfirmMessage ?? t('confirmChangesQs'),
+            okText: t('yes'),
+            cancelText: t('cancel'),
             onOk: () => {
                 formApi.model.submit(undefined, undefined, onComplete);
             },
@@ -100,5 +104,5 @@ const useApiSubmitForm = (formApi: IDFormApi) => {
         const onComplete = () => {
             waiter.destroy();
         };
-    }, [formApi]);
+    }, [formApi, t]);
 };

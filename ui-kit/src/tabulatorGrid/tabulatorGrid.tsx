@@ -12,13 +12,13 @@ export const TabulatorGrid = (props: IGridProps): React.JSX.Element => {
     const tableRef = useRef<ITabulator>();
     const [editFormApi] = useState<IDFormModalApi>((props.editFormProps?.apiRef ?? {}) as IDFormModalApi);
     const [selectionFormApi] = useState<IDFormModalApi>((props.selectionFormProps?.apiRef ?? {}) as IDFormModalApi);
-    const [buttonsApi] = useState({} as IButtonsRowApi & {refreshButtons: () => void});
+    const [buttonsApi] = useState({} as IButtonsRowApi & { refreshButtons: () => void });
     const [gridApi] = useState((props.apiRef || {}) as IGridApi);
 
     const [columnsDialog, setColumnsDialog] = useState(false);
     useInitGridApi({gridApi, props, tableRef, editFormApi, selectionFormApi, buttonsApi, setColumnsDialog});
 
-    return <ContainerRender tableRef={tableRef} gridApi={gridApi} gridProps={props} tabulatorProps={tabulatorProps} columnsDialog={columnsDialog} />;
+    return <ContainerRender tableRef={tableRef} gridApi={gridApi} gridProps={props} tabulatorProps={tabulatorProps} columnsDialog={columnsDialog}/>;
 };
 
 export default TabulatorGrid;
@@ -31,7 +31,7 @@ const useSplitTabulatorProps = (props: IGridProps) => {
             gridMode: true,
             dataSet: true,
             className: true,
-            headerLabel:true,
+            headerLabel: true,
             buttons: true,
             buttonsSize: true,
             buttonsPosition: true,
@@ -39,7 +39,7 @@ const useSplitTabulatorProps = (props: IGridProps) => {
             readOnly: true,
             editFormProps: true,
             selectionFormProps: true,
-            appendSelection:true,
+            appendSelection: true,
             noHover: true,
             rowDeleteMessage: true,
             confirmDelete: true,
@@ -49,14 +49,16 @@ const useSplitTabulatorProps = (props: IGridProps) => {
             onDataLoadError: true,
             onDataLoaded: true,
             onDataChanged: true,
-            onDataProcessed:true,
+            onDataProcessed: true,
             onDataFetch: true,
-            onDataFetching:true,
+            onDataFetching: true,
             onDataFetchResponse: true,
             onSelectionChange: true,
             onDelete: true,
             resizeHeightWithParent: true,
             responsiveBreakpoint: true,
+            translation: true,
+            language: true
         });
 
         return result[1];

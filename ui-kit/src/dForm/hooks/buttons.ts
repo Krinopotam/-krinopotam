@@ -2,15 +2,17 @@ import {IFormButtons} from '@src/buttonsRow/buttonsRow';
 import {MergeObjects} from "@krinopotam/js-helpers";
 import {useMemo} from "react";
 import {IDFormApi, IDFormProps} from "@src/dForm";
+import {useTranslate} from "@src/dForm/hooks/translate";
 
 export const useGetButtons = (formProps: IDFormProps, formApi: IDFormApi): IFormButtons => {
+    const t = useTranslate(formProps)
     return useMemo(() => {
         if (formProps.buttons === null) return {};
         const defaultButtons: IFormButtons = {
             ok: {
                 position: 'left',
                 active: true,
-                title: 'Сохранить',
+                title: t('confirm'),
                 hotKeys: [
                     {key: 'enter', ctrl: true},
                     {key: 's', ctrl: true},
@@ -23,5 +25,5 @@ export const useGetButtons = (formProps: IDFormProps, formApi: IDFormApi): IForm
         };
 
         return MergeObjects(defaultButtons, formProps.buttons);
-    }, [formProps.buttons, formApi]);
+    }, [formProps.buttons, t, formApi]);
 };

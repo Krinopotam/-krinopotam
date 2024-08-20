@@ -24,12 +24,6 @@ interface IFormRenderProps {
 
     /** form buttons collection */
     formButtons: IFormButtons;
-
-    /** is form loading status */
-    isLoading?: boolean;
-
-    /** is form in submitting process */
-    isSubmitting?: boolean;
 }
 
 export const FormRender = ({formProps, formApi, formButtons}: IFormRenderProps): React.JSX.Element => {

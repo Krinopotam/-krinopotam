@@ -1,10 +1,13 @@
-import {ITabulatorEvents, ITabulatorProps} from '@src/tabulatorBase';
+import {ITabulatorProps} from '@src/tabulatorBase';
 import React, {useMemo} from 'react';
 import {MessageBox} from '@src/messageBox';
 import {IsDebugMode} from "@krinopotam/common-hooks";
-import {IGridApi} from "@src/tabulatorGrid";
+import {IGridApi, IGridProps} from "@src/tabulatorGrid";
+import {useTranslate} from "@src/tabulatorGrid/hooks/translate";
 
-export const useEvents = (gridApi: IGridApi, events: ITabulatorEvents | undefined): ITabulatorProps['events'] => {
+export const useEvents = (gridApi: IGridApi, gridProps: IGridProps): ITabulatorProps['events'] => {
+    const events = gridProps.events
+    const t = useTranslate(gridProps)
     return useMemo(() => {
         return {
             tableBuilt: () => {
@@ -24,7 +27,7 @@ export const useEvents = (gridApi: IGridApi, events: ITabulatorEvents | undefine
 
                 if (!gridApi.gridProps.progressiveLoad) gridApi.setIsLoading(false);
             },
-            dataProcessed: data=>{
+            dataProcessed: data => {
                 events?.dataProcessed?.(data);
                 gridApi.gridProps.onDataProcessed?.(data, gridApi);
 
@@ -33,19 +36,20 @@ export const useEvents = (gridApi: IGridApi, events: ITabulatorEvents | undefine
             },
             dataLoadError: error => {
                 events?.dataLoadError?.(error);
-                const err = error as unknown as {message: string; code: number};
+                const err = error as unknown as { message: string; code: number };
                 gridApi.gridProps.onDataLoadError?.(err.message, err.code, gridApi);
 
                 if (!gridApi.getIsMounted()) return;
                 gridApi.setIsLoading(false);
                 const message = MessageBox.confirm({
+                    language: gridApi.gridProps.language,
                     content: (
                         <div>
                             <p>
                                 <b>{error.message}</b>
                             </p>
                             {error.stack && IsDebugMode() ? <p>{error.stack}</p> : ''}
-                            <p>{'Попробовать снова?'}</p>
+                            <p>{t('tryAgainQt')}</p>
                         </div>
                     ),
                     colorType: 'danger',
@@ -72,5 +76,5 @@ export const useEvents = (gridApi: IGridApi, events: ITabulatorEvents | undefine
                 gridApi.gridProps.onSelectionChange?.(data, rows, selectedRows, deselectedRows, gridApi);
             },
         };
-    }, [events, gridApi]);
+    }, [events, gridApi, t]);
 };

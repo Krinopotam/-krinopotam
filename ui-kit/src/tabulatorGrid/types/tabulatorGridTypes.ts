@@ -4,6 +4,7 @@ import {IDFormModalApi, IDFormModalProps} from '@src/dFormModal';
 import {IRequestProps, ITabulator, ITabulatorProps} from '@src/tabulatorBase';
 import {RowComponent, ScrollToRowPosition} from 'tabulator-tables';
 import {IBreakpoints} from "@krinopotam/common-hooks/useResponsive";
+import {translations} from "@src/tabulatorGrid/translations/translations";
 
 export interface IGridRowData extends Record<string, unknown> {
     /** Row id */
@@ -70,7 +71,13 @@ export interface IGridPropsBase {
     resizeHeightWithParent?: string;
 
     /** Breakpoint for responsive design */
-    responsiveBreakpoint?: IBreakpoints
+    responsiveBreakpoint?: IBreakpoints;
+
+    /** Language */
+    language?: keyof typeof translations;
+
+    /** Custom translation */
+    translation?: Partial<typeof translations.en>
 }
 
 export interface IGridPropsCallbacks {

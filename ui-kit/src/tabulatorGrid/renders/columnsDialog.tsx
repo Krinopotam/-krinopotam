@@ -8,6 +8,7 @@ import type {DataNode} from 'antd/es/tree';
 import {ColumnComponent, ColumnDefinition} from 'tabulator-tables';
 import {FolderOutlined} from '@ant-design/icons';
 import {IsDebugMode} from '@krinopotam/common-hooks';
+import {useTranslate} from "@src/tabulatorGrid/hooks/translate";
 
 //region Types
 export interface IColumnsDialogProps {
@@ -31,22 +32,23 @@ interface IColumnsDialogApi {
 //region Components
 export const ColumnsDialog = (props: IColumnsDialogProps): React.JSX.Element => {
     const [dialogApi] = useState<IColumnsDialogApi>({} as IColumnsDialogApi);
-
+    const gridProps = props.gridApi.gridProps
+    const t = useTranslate(gridProps)
     return (
         <Modal
-            title="Столбцы"
+            title={t('columns')}
             destroyOnClose={true}
             centered
             open={props.open}
             onCancel={() => props.gridApi.openColumnDialog(false)}
-            footer={<Footer formProps={props} dialogApi={dialogApi} />}
+            footer={<Footer formProps={props} dialogApi={dialogApi}/>}
         >
-            {props.open && <DialogBody dialogProps={props} dialogApi={dialogApi} />}
+            {props.open && <DialogBody dialogProps={props} dialogApi={dialogApi}/>}
         </Modal>
     );
 };
 
-const DialogBody = ({dialogProps, dialogApi}: {dialogProps: IColumnsDialogProps; dialogApi: IColumnsDialogApi}): React.JSX.Element => {
+const DialogBody = ({dialogProps, dialogApi}: { dialogProps: IColumnsDialogProps; dialogApi: IColumnsDialogApi }): React.JSX.Element => {
     const tableApi = dialogProps.gridApi.tableApi!;
     const [checked, setChecked] = useState<React.Key[]>([]);
     const [expanded, setExpanded] = useState<React.Key[]>([]);
@@ -89,25 +91,28 @@ const DialogBody = ({dialogProps, dialogApi}: {dialogProps: IColumnsDialogProps;
     );
 };
 
-const Footer = ({formProps, dialogApi}: {formProps: IColumnsDialogProps; dialogApi: IColumnsDialogApi}): React.JSX.Element => {
+const Footer = ({formProps, dialogApi}: { formProps: IColumnsDialogProps; dialogApi: IColumnsDialogApi }): React.JSX.Element => {
+    const gridProps = dialogApi.gridApi.gridProps
+    const t = useTranslate(gridProps)
+
     return (
         <ButtonsRow
             arrowsSelection={true}
             buttons={{
                 ok: {
-                    title: 'OK',
+                    title: t('ok'),
                     position: 'right',
                     active: true,
                     onClick: () => onSubmitClick(formProps, dialogApi),
                 },
                 cancel: {
-                    title: 'Отмена',
+                    title: t('cancel'),
                     position: 'right',
                     onClick: () => {
                         formProps.gridApi.openColumnDialog(false);
                     },
                 },
-                default: {title: 'По умолчанию', position: 'left', onClick: () => onResetClick(formProps, dialogApi)},
+                default: {title: t('reset'), position: 'left', onClick: () => onResetClick(formProps, dialogApi)},
             }}
         />
     );
@@ -118,7 +123,7 @@ const Footer = ({formProps, dialogApi}: {formProps: IColumnsDialogProps; dialogA
 const generateNodes = (dialogApi: IColumnsDialogApi, columnsDefs: ColumnDefinition[]) => {
     dialogApi.columnsDefsMap = {};
 
-    const recursive = (colDefs: ColumnDefinition[], colKey?: {val: number}): [DataNode[], string[]] => {
+    const recursive = (colDefs: ColumnDefinition[], colKey?: { val: number }): [DataNode[], string[]] => {
         if (!colKey) colKey = {val: 0};
         let checkedKeys: string[] = [];
 
@@ -136,7 +141,7 @@ const generateNodes = (dialogApi: IColumnsDialogApi, columnsDefs: ColumnDefiniti
             let checked = colDef.visible !== false;
 
             if (colDef.columns?.length) {
-                node.icon = <FolderOutlined />;
+                node.icon = <FolderOutlined/>;
                 const [childrenNodes, childrenCheckedKeys] = recursive(colDef.columns, colKey);
                 node.children = childrenNodes;
                 checkedKeys = [...checkedKeys, ...childrenCheckedKeys];
@@ -397,7 +402,7 @@ const useOnDrop = (dialogApi: IColumnsDialogApi) => {
 //region Callbacks
 const useOnCheck = (dialogApi: IColumnsDialogApi, setChecked: React.Dispatch<React.SetStateAction<React.Key[]>>) => {
     return useCallback(
-        (keys: React.Key[] | {checked: React.Key[]; halfChecked: React.Key[]}) => {
+        (keys: React.Key[] | { checked: React.Key[]; halfChecked: React.Key[] }) => {
             let checkedKeys: React.Key[];
             if (Array.isArray(keys)) checkedKeys = keys;
             else checkedKeys = [...keys.checked, ...keys.halfChecked];
