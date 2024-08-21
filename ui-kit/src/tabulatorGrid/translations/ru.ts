@@ -22,4 +22,5 @@ export const ru = {
     noRows:'Строки отсутствуют',
     tryAgainQt: 'Попробовать снова?',
     deleteSelectedRecordsQt: 'Удалить выбранные строки?',
+    error:'Ошибка',
 }

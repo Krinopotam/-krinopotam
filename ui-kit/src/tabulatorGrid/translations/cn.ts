@@ -22,4 +22,5 @@ export const cn = {
     noRows: '无行',
     tryAgainQt: '再试一次?',
     deleteSelectedRecordsQt: '删除选定的记录?',
+    error: '错误',
 }

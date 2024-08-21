@@ -22,4 +22,5 @@ export const en = {
     noRows: 'No rows',
     tryAgainQt: 'Try again?',
     deleteSelectedRecordsQt: 'Delete selected record(s)?',
+    error:'Error',
 }

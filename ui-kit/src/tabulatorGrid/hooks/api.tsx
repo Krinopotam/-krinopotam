@@ -495,6 +495,7 @@ const useApiDeleteRows = (gridApi: IGridApi, gridProps:IGridProps): IGridApi['de
                             else messageBox?.destroy();
                             MessageBox.alert({
                                 language: gridProps.language,
+                                title:t('error'),
                                 content: (
                                     <>
                                         <p>
