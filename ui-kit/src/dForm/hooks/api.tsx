@@ -49,25 +49,21 @@ const useApiValidateForm = (formApi: IDFormApi, formProps: IDFormProps) => {
 
             if (Object.keys(errors).length === 0 || !showAlert) return errors;
 
-            let messageContent: React.ReactNode = t('fixError');
-            messageContent = (
-                <span>
-                    {messageContent}:
-                    <Space direction="vertical" size={0}>
-                        {Object.keys(errors).map((key) => {
-                            const field = formApi.model.getField(key);
-                            const fieldLabel = field?.getLabel() || key;
-                            return (
-                                <Typography.Text key={key} style={{fontSize: 12}} type="secondary">
-                                    {fieldLabel}: {errors[key]}
-                                </Typography.Text>
-                            );
-                        })}
-                    </Space>
-                </span>
+            const messageContent = (
+                <Space style={{marginLeft: 5}} direction="vertical" size={0}>
+                    {Object.keys(errors).map((key) => {
+                        const field = formApi.model.getField(key);
+                        const fieldLabel = field?.getLabel() || key;
+                        return (
+                            <Typography.Text key={key} style={{fontSize: 12}} type="secondary">
+                                {fieldLabel}: {errors[key]}
+                            </Typography.Text>
+                        );
+                    })}
+                </Space>
             );
 
-            MessageBox.alert({language: formProps.language, content: messageContent, colorType: 'danger'});
+            MessageBox.alert({language: formProps.language, title: t('fixError'), content: messageContent, colorType: 'danger'});
 
             return errors;
         },
