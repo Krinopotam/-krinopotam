@@ -8,7 +8,7 @@ import {ITabulatorGridFieldProps, TabulatorGridField} from '@src/dForm/fields/ta
 
 const selectionFormProps: IDFormModalProps = {
     title:'Please select',
-    bodyHeight:300,
+    height:300,
     fieldsProps: {
         select: {
             component: TabulatorGridField,

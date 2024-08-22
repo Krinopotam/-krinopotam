@@ -9,13 +9,13 @@ import {ITabulatorGridFieldProps, TabulatorGridField} from '@src/dForm/fields/ta
 import {SelectField} from '@src/dForm/fields/select';
 
 export const TagsColumns: ITabulatorColumn[] = [
-    {field: 'num', title: '№', formatter: 'rownum', width: 50},
+    {field: 'num', title: '№', formatter: 'rownum', accessor: 'rownum', width: 50},
     {field: 'name', title: 'Наименование', headerFilter: true, headerFilterFunc: 'like'},
     {field: 'format.label', title: 'Формат', headerFilter: true, headerFilterFunc: 'like'},
 ];
 
 const columns: ITabulatorColumn[] = [
-    {field: 'num', title: '№', formatter: 'rownum', width: 50},
+    {field: 'num', title: '№', formatter: 'rownum', accessor: 'rownum', width: 50},
     {field: 'name', title: 'Наименование', headerFilter: true, headerFilterFunc: 'like'},
     {field: 'shortName', title: 'Краткое наименование', headerFilter: true, headerFilterFunc: 'like'},
     {field: 'code', title: 'Код', headerFilter: true, headerFilterFunc: 'like'},
@@ -60,7 +60,7 @@ const FormatsList = [
 
 const inputsFormProps: IDFormModalProps = {
     confirmChanges: true,
-    bodyHeight: 300,
+    height: 300,
     fieldsProps: {
         name: {component: InputField, label: 'Наименование'},
         shortName: {component: InputField, label: 'Краткое наименование'},
@@ -71,7 +71,7 @@ const inputsFormProps: IDFormModalProps = {
 
 const editFormProps: IDFormModalProps = {
     confirmChanges: true,
-    bodyHeight: 400,
+    height: 400,
     width: 600,
     fieldsProps: {
         tabs1: {

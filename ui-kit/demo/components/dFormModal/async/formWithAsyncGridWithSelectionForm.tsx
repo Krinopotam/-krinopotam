@@ -13,7 +13,7 @@ const formApi = {} as IDFormModalApi;
 /*Tabulator selection form props*/
 const selectionFormProps: IDFormModalProps = {
     title: 'Please select',
-    bodyHeight: 300,
+    height: 300,
     fieldsProps: {
         select: {
             component: TabulatorGridField,

@@ -8,6 +8,7 @@ export const TabulatorBaseColumnsDef: ITabulatorProps['columnDefaults'] = {
 };
 
 export const TabulatorBaseColumns: ITabulatorProps['columns'] = [
+    {field: 'num', title: '№', formatter: 'rownum', accessor: 'rownum',headerSort: false, vertAlign: 'middle'},
     {title: 'Name', field: 'name', headerFilter: true},
     {title: 'Age', field: 'age', hozAlign: 'left', formatter: 'progress'},
     {title: 'Favourite Color', field: 'col'},

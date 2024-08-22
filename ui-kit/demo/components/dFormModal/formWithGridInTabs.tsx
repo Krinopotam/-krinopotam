@@ -31,7 +31,7 @@ const formProps: IDFormModalProps = {
     formId: 'Test form',
     apiRef: formApi,
     confirmChanges: true,
-    bodyHeight:300,
+    height:300,
     fieldsProps: {
         tabs: {
             component: TabsField,

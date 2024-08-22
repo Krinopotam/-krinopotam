@@ -185,7 +185,7 @@ export const Editable: Story = {
         confirmDelete: true,
         editFormProps: {
             confirmChanges: true,
-            bodyHeight: 100,
+            height: 100,
             fieldsProps: {
                 title: {component: InputField, label: 'Department'},
             },
@@ -207,7 +207,7 @@ export const EditableAsync: Story = {
         },
         editFormProps: {
             confirmChanges: true,
-            bodyHeight: 100,
+            height: 100,
 
             onSubmit: (values: Record<string, unknown>) => {
                 return new Promise((resolve, reject) => {

@@ -32,7 +32,7 @@ const formProps: IDFormModalProps = {
             },
         },
     },
-    bodyHeight: 330,
+    height: 330,
     buttons: FormLayoutSwitch(formApi),
 };
 

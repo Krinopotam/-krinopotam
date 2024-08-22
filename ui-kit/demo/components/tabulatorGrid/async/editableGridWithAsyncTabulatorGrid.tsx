@@ -11,7 +11,7 @@ const editFormApi = {} as IDFormModalApi;
 const editFormProps: IDFormModalProps = {
     apiRef: editFormApi,
     confirmChanges: true,
-    bodyHeight: 400,
+    height: 400,
     width: 600,
     fieldsProps: {
         inputs: {
