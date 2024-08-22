@@ -1,1 +1,0 @@
-import{j as o,br as r}from"./index-OT-fUFlw.js";const n=t=>({layout:{type:"element",title:o.jsx(r,{checkedChildren:"hor",unCheckedChildren:"ver",onChange:e=>{t.setFormProps({layout:e?"horizontal":"vertical"})}}),position:"left"}});export{n as F};
