@@ -22,7 +22,7 @@ export const DemoApp = (): React.JSX.Element => {
             }}
         >
             {/** antd context for static Modal (form MessageBox). Should use in root component */}
-            <App>
+            <App style={{height: '100%'}}>
                 <RouterProvider router={demoRoutes} />
             </App>
         </ConfigProvider>

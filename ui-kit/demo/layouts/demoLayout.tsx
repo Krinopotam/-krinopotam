@@ -19,45 +19,46 @@ export const DemoLayout = (props: { setDarkMode: (mode: boolean) => void }): Rea
     );
 
     return (
-        <>
-            <Layout>
-                <Space style={{height: 50, background: '#222222', color: '#FFFFFF', padding: 10}} align="center" split={<Divider type="vertical"/>}>
-                    <div>
-                        <h1>Примеры компонентов</h1>
-                    </div>
-                    <div>
-                        Тема: <Switch onChange={onChange}/>
-                    </div>
-                </Space>
-                <Layout>
-                    <Sider width={400} style={{background: colorBgContainer}}>
-                        <Menu
-                            mode="inline"
-                            defaultSelectedKeys={['1']}
-                            defaultOpenKeys={['baseExamples']}
-                            style={{height: '100%', borderRight: 0}}
-                            items={menuItems}
-                        />
-                    </Sider>
-                    <Layout style={{paddingLeft: 25, paddingRight: 24}}>
-                        {/*breadcrumb */}
+        <Layout style={{height:'100%'}}>
+            <Space style={{height: 50, background: '#222222', color: '#FFFFFF', padding: 10}} align="center" split={<Divider type="vertical"/>}>
+                <div>
+                    <h1>Примеры компонентов</h1>
+                </div>
+                <div>
+                    Тема: <Switch onChange={onChange}/>
+                </div>
+            </Space>
+            <Layout style={{height:'100%', paddingBottom:24}}>
+                <Sider width={400} style={{background: colorBgContainer, overflow: 'auto', height: '100%', scrollbarWidth:'thin'}}>
+                    <Menu
+                        mode="inline"
+                        defaultSelectedKeys={['1']}
+                        defaultOpenKeys={['baseExamples']}
+                        style={{height: '100%', borderRight: 0}}
+                        items={menuItems}
+                    />
+                </Sider>
+                <Layout style={{paddingLeft: 24, paddingRight: 24}}>
+                    {/*breadcrumb */}
 
-                        <Content
-                            style={{
-                                padding: 24,
-                                margin: 0,
-                                minHeight: 280,
-                                background: colorBgContainer,
-                            }}
-                        >
-                            {/* eslint-disable-next-line react/jsx-no-undef */}
-                            <Suspense fallback={<div>Loading...</div>}>
-                                <Outlet/>
-                            </Suspense>
-                        </Content>
-                    </Layout>
+                    <Content
+                        style={{
+                            padding: 24,
+                            margin: 0,
+                            minHeight: 280,
+                            background: colorBgContainer,
+                            overflow: 'auto',
+                            height: '100%',
+                            scrollbarWidth:'thin'
+                        }}
+                    >
+                        {/* eslint-disable-next-line react/jsx-no-undef */}
+                        <Suspense fallback={<div>Loading...</div>}>
+                            <Outlet/>
+                        </Suspense>
+                    </Content>
                 </Layout>
             </Layout>
-        </>
+        </Layout>
     );
 };
