@@ -18,7 +18,6 @@ import {ButtonsRender} from '@src/modal/renders/buttonsRender';
 import {ContentRender} from './renders/contentRender';
 import {MessageBoxApi} from './messageBoxApi';
 import React from 'react';
-import dispatcher from '../formsDispatcher';
 import {GetUuid, MergeObjects} from '@krinopotam/js-helpers';
 import {QuestionCircleOutlined} from '@ant-design/icons';
 import {IModalAlertConfig, IModalBaseConfig, IModalConfig, IModalConfirmConfig, IModalConfirmWaiterConfig, ModalType} from "@src/messageBox/types/messageBoxTypes";
@@ -32,6 +31,11 @@ class MessageBox {
     /** singleton implementation  */
     public static get Instance() {
         return this._instance || (this._instance = new this()); // Do you need arguments? Make it a regular static method instead.
+    }
+
+    /** Destroy all message boxes */
+    public destroyAll() {
+        Modal.destroyAll()
     }
 
     public alert({okText, onOk, ...props}: IModalAlertConfig): MessageBoxApi {
@@ -165,10 +169,7 @@ class MessageBox {
         if (this._themedModalInstance && Object.keys(this._themedModalInstance).length > 0) modal = this._themedModalInstance;
         const modalInst = modal.info(this.generateModalConfig(config, draggableId));
 
-        const messageBoxApi = new MessageBoxApi(formId, draggableId, modalInst, config, this.generateModalConfig, document.activeElement);
-
-        dispatcher.pushToStack(messageBoxApi.id);
-        return messageBoxApi;
+        return new MessageBoxApi(formId, draggableId, modalInst, config, this.generateModalConfig, document.activeElement);
     }
 
     private triggerButtonClick(buttonId: string, button: IFormButton | undefined | null) {

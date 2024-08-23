@@ -1,5 +1,3 @@
-import dispatcher, {FormsDispatcher} from '../formsDispatcher';
-
 import {IFormButton} from '@src/buttonsRow/buttonsRow';
 import {ModalFuncProps} from 'antd';
 import {MergeObjects} from '@krinopotam/js-helpers';
@@ -11,7 +9,6 @@ export class MessageBoxApi {
     private readonly _draggableId;
     private readonly _modalConfigGenerator;
     private _currentConfig: IModalBaseConfig;
-    private readonly _formsDispatcher: FormsDispatcher | undefined;
     private readonly _id: string;
     private readonly _prevFocusedElement: Element | null;
 
@@ -25,7 +22,6 @@ export class MessageBoxApi {
     ) {
         this._modal = modal;
         this._currentConfig = config;
-        this._formsDispatcher = dispatcher;
         this._modalConfigGenerator = modalConfigGenerator;
         this._id = id;
         this._draggableId = draggableId;
@@ -37,7 +33,6 @@ export class MessageBoxApi {
     }
 
     public destroy() {
-        if (this._formsDispatcher) this._formsDispatcher.removeFromStack(this._id);
         this._modal.destroy();
     }
 

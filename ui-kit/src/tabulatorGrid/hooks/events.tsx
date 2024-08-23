@@ -41,6 +41,8 @@ export const useEvents = (gridApi: IGridApi, gridProps: IGridProps): ITabulatorP
 
                 if (!gridApi.getIsMounted()) return;
                 gridApi.setIsLoading(false);
+
+                MessageBox.destroyAll()
                 const message = MessageBox.confirm({
                     language: gridApi.gridProps.language,
                     content: (

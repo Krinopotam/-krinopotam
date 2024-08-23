@@ -1,6 +1,5 @@
 import React, {useCallback, useEffect, useMemo, useRef} from 'react';
 import {TabulatorBase, ITabulator, ITabulatorProps, IRequestProps} from '@src/tabulatorBase';
-import dispatcher from '@src/formsDispatcher';
 import {useEvents} from '../hooks/events';
 import {GenerateAjaxRequestFunc} from '@src/tabulatorGrid/helpers/fetchHelpers';
 import {IGridApi, IGridProps, IGridRowData} from "@src/tabulatorGrid";
@@ -34,10 +33,6 @@ export const GridRender = ({
             resizeObserverRef.current?.disconnect();
         };
     }, []);
-
-    useEffect(() => {
-        dispatcher.pushToStack(gridApi.getId());
-    }, [gridApi]);
 
     const ajaxRequestFunc = useMemo(() => GenerateAjaxRequestFunc(gridApi, gridProps?.onDataFetch), [gridApi, gridProps.onDataFetch]);
 

@@ -469,7 +469,7 @@ const useApiRemoveRows = (gridApi: IGridApi): IGridApi['removeRows'] => {
     );
 };
 
-const useApiDeleteRows = (gridApi: IGridApi, gridProps:IGridProps): IGridApi['deleteRows'] => {
+const useApiDeleteRows = (gridApi: IGridApi, gridProps: IGridProps): IGridApi['deleteRows'] => {
     const t = useTranslate(gridProps)
     return useCallback(
         (rows: IGridRowData | IGridRowData[] | undefined) => {
@@ -495,7 +495,7 @@ const useApiDeleteRows = (gridApi: IGridApi, gridProps:IGridProps): IGridApi['de
                             else messageBox?.destroy();
                             MessageBox.alert({
                                 language: gridProps.language,
-                                title:t('error'),
+                                title: t('error'),
                                 content: (
                                     <>
                                         <p>
@@ -515,6 +515,7 @@ const useApiDeleteRows = (gridApi: IGridApi, gridProps:IGridProps): IGridApi['de
             };
 
             if (gridProps.confirmDelete) {
+                MessageBox.destroyAll()
                 messageBox = MessageBox.confirmWaiter({
                     language: gridProps.language,
                     content: gridProps.rowDeleteMessage ?? t('deleteSelectedRecordsQt'),

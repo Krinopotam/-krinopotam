@@ -15,7 +15,6 @@ import {FooterRender} from './renders/footerRender';
 import {HeaderRender} from './renders/headerRender';
 import {ModalRender} from './renders/modalRender';
 import classNames from 'classnames';
-import {useInitFormDispatcher} from './hooks/useInitFormDispatcher';
 import {useResize} from './hooks/useResize';
 import {IButtonRowWrapperRemoteCallbacks} from '@src/buttonsRow/components/buttonsRowWrapper';
 import {GetUuid} from '@krinopotam/js-helpers';
@@ -23,7 +22,8 @@ import {IExtendedModalProps} from "@src/modal/types/types";
 
 export const Modal = (props: IExtendedModalProps): React.JSX.Element => {
     const {
-        modalId, resizable = true, isDraggable = true,
+        resizable = true,
+        isDraggable = true,
         colorType,
         headerIcon,
         maxHeight,
@@ -32,9 +32,6 @@ export const Modal = (props: IExtendedModalProps): React.JSX.Element => {
         maxWidth,
         ...modalProps
     } = props
-
-    const [id] = useState(modalId ?? 'modal-' + GetUuid());
-    useInitFormDispatcher(id, !!modalProps.open);
 
     const wrapperRemoteCallbacksRef = useRef<IButtonRowWrapperRemoteCallbacks>({});
 
