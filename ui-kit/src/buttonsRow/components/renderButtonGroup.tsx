@@ -20,7 +20,7 @@ export const RenderButtonGroup = ({
         <Space wrap>
             {Object.keys(buttons).map((id) => {
                 const button = buttons?.[id];
-                if (!button || (position && button.position !== position)) return null;
+                if (!button || button.type==='hotkey' || (position && button.position !== position)) return null;
                 return <RenderButton key={id} id={id} button={button} context={context} componentProps={componentProps}/>;
             })}
         </Space>

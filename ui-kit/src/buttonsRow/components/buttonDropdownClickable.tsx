@@ -4,12 +4,12 @@ import {Dropdown, MenuProps} from 'antd';
 import {IButtonRowProps, IFormButton} from '@src/buttonsRow';
 
 export const ButtonDropdownClickable = ({
-    id,
-    button,
-    context,
-    menuProps,
-    componentProps,
-}: {
+                                            id,
+                                            button,
+                                            context,
+                                            menuProps,
+                                            componentProps,
+                                        }: {
     id: string;
     button: IFormButton;
     context: unknown;

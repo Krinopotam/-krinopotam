@@ -15,7 +15,7 @@ export const RenderButton = ({
     context?: unknown;
     componentProps: IButtonRowProps;
 }): React.JSX.Element | null => {
-    if (!button || button.hidden) return null;
+    if (!button || button.hidden || button.type==='hotkey') return null;
 
     /******** Custom element *******/
     if (button.type === 'element') {

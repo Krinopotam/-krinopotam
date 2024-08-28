@@ -24,7 +24,16 @@ export interface IFormButton {
     title?: React.ReactNode;
 
     /** Component type */
-    type?: 'button' | 'link' | 'text' | 'divider' | 'group' | 'element';
+    /**
+     * - `button`: A standard button
+     * - `link`: A hyperlink styled as a button
+     * - `text`: A text element
+     * - `divider`: A divider line
+     * - `group`: A group of buttons
+     * - `element`: A custom element
+     * - `hotkey`: not displaying button working like a hotkey
+     */
+    type?: 'button' | 'link' | 'text' | 'divider' | 'group' | 'element' | 'hotkey';
 
     /** Color type*/
     colorType?: IButtonProps['colorType'];

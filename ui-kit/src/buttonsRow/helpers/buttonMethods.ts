@@ -40,22 +40,22 @@ export const getSortedButtonsKeys = (buttons: IFormButtons | undefined) => {
     return buttonsKeys;
 };
 
-export const getNextButtonName = (currentName: string, buttons: IFormButtons, direction: 'forward' | 'backward', props: IButtonRowProps) => {
+export const getNextButtonName = (currentId: string, buttons: IFormButtons, direction: 'forward' | 'backward', props: IButtonRowProps) => {
     const keys = Object.keys(buttons);
 
-    const currentIndex = keys.findIndex(name => name === currentName);
+    const currentIndex = keys.findIndex(id => id === currentId);
 
     if (direction === 'forward') {
-        if (currentIndex >= keys.length) return currentName;
-        for (let i = currentIndex + 1; i < keys.length; i++) if (isButtonCanBeActive(currentName, buttons[keys[i]], props)) return keys[i];
+        if (currentIndex >= keys.length) return currentId;
+        for (let i = currentIndex + 1; i < keys.length; i++) if (isButtonCanBeActive(currentId, buttons[keys[i]], props)) return keys[i];
 
-        return currentName;
+        return currentId;
     } else {
-        if (currentIndex <= 0) return currentName;
-        for (let i = currentIndex - 1; i >= 0; i--) if (isButtonCanBeActive(currentName, buttons[keys[i]], props)) return keys[i];
+        if (currentIndex <= 0) return currentId;
+        for (let i = currentIndex - 1; i >= 0; i--) if (isButtonCanBeActive(currentId, buttons[keys[i]], props)) return keys[i];
     }
 
-    return currentName;
+    return currentId;
 };
 
 const isButtonCanBeActive = (buttonId: string, button: IFormButton | undefined | null, props: IButtonRowProps) => {
