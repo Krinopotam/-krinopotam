@@ -1,6 +1,6 @@
 import {Col, Row, TreeSelect as AntdTreeSelect} from 'antd';
 import {DFormModal, IDFormModalProps} from '@src/dFormModal';
-import React, {ComponentProps, useEffect, useMemo, useState} from 'react';
+import React, {ComponentProps, Key, useEffect, useMemo, useState} from 'react';
 import {GetUuid, SplitObject} from '@krinopotam/js-helpers';
 import {TreeSelectRender} from '@src/treeSelect/renders/treeSelectRender';
 import {useEditableInit} from '@src/treeSelect/hooks/useEditForm';
@@ -14,7 +14,7 @@ import './css/index.scss';
 //region Types
 interface ITreeSelectNodeBase extends Record<string, unknown> {
     /** Node id */
-    id?: string | number;
+    id?: Key;
     /** Node value (same as id, used to avoid antd bug) */
     value?: string | number;
     // defaultValueCallback?: (data: ITreeSelectNode[]) => ITreeSelectNode | ITreeSelectNode[];
