@@ -1,6 +1,6 @@
 import {DModel, IDFormBaseCallbacks, IRuleType} from "@src/dForm";
 import {IButtonsRowApi, IFormButtons} from "@src/buttonsRow";
-import React, {CSSProperties} from "react";
+import React, {CSSProperties, Key} from "react";
 import {IColorType} from "@src/button";
 import {ColProps} from "antd";
 import {FormLabelAlign} from "antd/es/form/interface";
@@ -118,7 +118,7 @@ export type IDFormCallbacks = IDFormBaseCallbacks<IDFormApi>
 
 /** Form data set type */
 export interface IDFormDataSet extends Record<string, unknown> {
-    id?: string | number;
+    id?: Key;
 }
 
 export type IDFormDataSourcePromise = Promise<{ data: Record<string, unknown> }>;
