@@ -48,7 +48,7 @@ export const DForm = (props: IDFormProps): React.JSX.Element => {
 
 const useInitFormModel = (formId: string, formApi:IDFormApi, formProps: IDFormProps, callbacks: IDFormModelCallbacks) => {
     const modelRef = useRef<DModel>();
-    if (!modelRef.current) modelRef.current = new DModel(formId);
+    if (!modelRef.current) modelRef.current = new DModel(formId, formApi);
     formApi.model = modelRef.current;
     modelRef.current.initModel(formProps, callbacks);
 

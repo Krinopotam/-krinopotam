@@ -57,4 +57,10 @@ export interface IDFormModalApi extends IDFormApi {
 
     /** Close controls without confirmation*/
     forceClose: () => void;
+
+    /** Get modal title */
+    getTitle: () => IDFormModalProps['title']
+
+    /** Set modal title */
+    setTitle: (title: IDFormModalProps['title']) => void
 }

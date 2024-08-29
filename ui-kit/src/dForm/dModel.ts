@@ -13,7 +13,7 @@ import {IsPromise} from '@krinopotam/js-helpers';
 import {BaseValidator} from './validators/baseValidator';
 import React from 'react';
 import {IAnyFieldProps, IBaseField} from '@src/dForm/fields/base/baseField';
-import {IDFormDataSet, IDFormProps} from '@src/dForm/index';
+import {IDFormApi, IDFormDataSet, IDFormProps} from '@src/dForm/index';
 import {IError} from '@krinopotam/service-types';
 import {InlineGroupField} from '@src/dForm/fields/inlineGroup/inlineGroupField';
 import {IDFormMode} from '@src/dForm/types/dFormTypes';
@@ -24,6 +24,9 @@ export class DModel {
     //region Private properties
     /** Form ID */
     private readonly _formId: string;
+
+    /** Form API instance */
+    private readonly _formApi:IDFormApi
 
     /** form properties (immutable clone) */
     private _formProps: IDFormProps = {};
@@ -114,9 +117,10 @@ export class DModel {
     //endregion
 
     //region Init class
-    constructor(formId: string) {
+    constructor(formId: string, formApi:IDFormApi) {
         this._formId = formId;
         this._validator = new BaseValidator();
+        this._formApi = formApi;
     }
 
     initModel(formProps: IDFormProps, callbacks: IDFormModelCallbacks) {
@@ -421,6 +425,11 @@ export class DModel {
     /**@return model callbacks collection */
     getModelCallbacks() {
         return this._callbacks;
+    }
+
+    /** @return form API instance */
+    getFormApi() {
+        return this._formApi;
     }
 
     // Dirty

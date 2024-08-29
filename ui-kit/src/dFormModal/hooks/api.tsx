@@ -2,7 +2,7 @@ import {IButtonsRowApi} from '@src/buttonsRow';
 import {IDFormProps} from '@src/dForm';
 import {MessageBox} from '@src/messageBox';
 import {CloneObject} from "@krinopotam/js-helpers";
-import {useCallback} from 'react';
+import {useCallback, useState} from 'react';
 import {IsDebugMode} from "@krinopotam/common-hooks";
 import {IDFormModalApi, IDFormModalProps} from "@src/dFormModal";
 import {useTranslate} from "@src/dFormModal/hooks/translate";
@@ -14,6 +14,9 @@ export const useInitModalFormApi = (
     buttonsApi: IButtonsRowApi,
     updateFormProps: (props: IDFormModalProps) => void
 ) => {
+    const getDefaultTitle = useGetDefaultTitle(modalFormProps);
+    const [title, setTitle] = useState(getDefaultTitle())
+
     formApi.getFormId = useApiGetFormId(formId)
     formApi.buttonsApi = buttonsApi;
     formApi.getFormProps = useApiGetModalFormProps(modalFormProps);
@@ -21,6 +24,8 @@ export const useInitModalFormApi = (
     formApi.open = useApiFormOpen(formApi);
     formApi.close = useApiTryToCloseForm(formApi, modalFormProps);
     formApi.forceClose = useApiFormForceClose(formApi);
+    formApi.getTitle = useApiGetTitle(title);
+    formApi.setTitle = useApiSetTitle(setTitle);
 };
 
 /** Get the current form ID */
@@ -44,6 +49,30 @@ const useApiSetModalFormProps = (modalFormProps: IDFormModalProps, setModalFormP
         },
         [modalFormProps, setModalFormProps]
     );
+};
+
+const useGetDefaultTitle = (modalFormProps: IDFormModalProps) => {
+    const t = useTranslate(modalFormProps)
+    return useCallback<() => IDFormModalProps['title']>(() => {
+        const formMode = modalFormProps.formMode ?? 'create';
+        const title = modalFormProps.title
+        if (title) return title;
+        if (formMode === 'view') return t('viewing');
+        if (formMode === 'create') return t('creating');
+        if (formMode === 'clone') return t('cloning');
+        if (formMode === 'update') return t('editing');
+        return '&nbsp;';
+    }, [modalFormProps.formMode, modalFormProps.title, t])
+}
+
+const useApiGetTitle = (title: IDFormModalProps['title']) => {
+    return useCallback(() => title, [title]);
+};
+
+const useApiSetTitle = (setTitle: (title: IDFormModalProps['title']) => void) => {
+    return useCallback((title: IDFormModalProps['title']) => {
+        setTitle(title)
+    }, [setTitle]);
 };
 
 const useApiFormOpen = (formApi: IDFormModalApi) => {
@@ -91,7 +120,7 @@ const useApiTryToCloseForm = (formApi: IDFormModalApi, formProps: IDFormModalPro
 
         if (formApi.model.isFormDirty() && formProps.confirmChanges) {
             MessageBox.confirm({
-                language:formProps.language,
+                language: formProps.language,
                 content: formProps.closeFormConfirmMessage ?? t('cancelChangesQn'),
                 okText: t('yes'),
                 cancelText: t('no'),
