@@ -325,7 +325,7 @@ export class DModel {
      */
     private isFieldMustBeLocked(field: IBaseField) {
         const fieldProps = field.getProps();
-        if (!fieldProps.dependsOn?.length) return !!fieldProps.hidden;
+        if (!fieldProps.dependsOn?.length) return field.isHidden() //return unchanged if there are no dependent fields
 
         for (const parentName of fieldProps.dependsOn) {
             const parentField = this._fieldsMap[parentName];

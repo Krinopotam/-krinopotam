@@ -41,16 +41,23 @@ const onClick2 = () => {
     })
 }
 
-const onClick3 = () => {
-    api.model.getField('field1').setDisabled(true)
+let disabled = false
+const disableHandle = () => {
+    disabled=!disabled
+    api.model.getField('field1').setDisabled(disabled)
 }
 
-let layout = 0
+let show = true
+const hideHandle = () => {
+    show=!show
+    api.model.getField('field1').setHidden(!show)
+}
+
+let layout = false
 const changeLayout = () => {
-    layout = layout == 0 ? 1 : 0
-    console.log(api.getFormProps())
+    layout = !layout
     api.setFormProps({
-        layout: layout == 0 ? 'vertical' : 'horizontal',
+        layout: !layout ? 'vertical' : 'horizontal',
     })
 }
 
@@ -65,7 +72,8 @@ export const FormSimple = (): React.JSX.Element => {
                 <Space>
                     <Button type="primary" onClick={onClick1}>Набор полей 1</Button>
                     <Button type="primary" onClick={onClick2}>Набор полей 2</Button>
-                    <Button type="primary" onClick={onClick3}>Заблокировать поле 1</Button>
+                    <Switch checkedChildren={'Enable'} unCheckedChildren={'Disable'} defaultChecked onChange={disableHandle}/>
+                    <Switch checkedChildren={'Show'} unCheckedChildren={'Hide'} defaultChecked onChange={hideHandle}/>
                     <Switch checkedChildren={'Horizontal'} unCheckedChildren={'Vertical'} onChange={changeLayout}/>
                 </Space>
                 <DForm {...formProps} formStyle={{marginTop: 15}}/>
