@@ -11,7 +11,7 @@ import {DModel} from './dModel';
 import {IDFormModelCallbacks} from "@src/dForm/types/dModelTypes";
 import {IButtonsRowApi} from 'src/buttonsRow';
 import {useInitFormApi} from './hooks/api';
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useMemo, useRef, useState} from 'react';
 import {FormRender} from './renders/formRender';
 import {GetUuid} from '@krinopotam/js-helpers';
 import {useModelCallbacks} from './hooks/callbacks';
@@ -48,11 +48,15 @@ export const DForm = (props: IDFormProps): React.JSX.Element => {
 
 const useInitFormModel = (formId: string, formApi:IDFormApi, formProps: IDFormProps, callbacks: IDFormModelCallbacks) => {
     const modelRef = useRef<DModel>();
-    if (!modelRef.current) modelRef.current = new DModel(formId, formApi);
-    formApi.model = modelRef.current;
-    modelRef.current.initModel(formProps, callbacks);
+    return useMemo(()=>{
+        if (!modelRef.current) modelRef.current = new DModel(formId, formApi);
+        if (!formProps._overriddenApi?.model) formApi.model = modelRef.current;
+        modelRef.current.initModel(formProps, callbacks);
 
-    return modelRef.current;
+        return modelRef.current;
+        
+    }, [callbacks, formApi, formId, formProps])
+    
 };
 
 const useFormMounted = (formApi: IDFormApi) => {

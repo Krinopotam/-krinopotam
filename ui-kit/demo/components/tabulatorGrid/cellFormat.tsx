@@ -79,7 +79,7 @@ export const CellFormat = (): React.JSX.Element => {
             {/*Description Start*/}
             <h1>Пример грида Tabulator с настраиваемым отображением ячеек</h1>
             <p>В данном примере в ячейке столбца ФИО отображаются данные из полей surname, name, patronymic и email</p>
-            <p>Фильтр и сортировка расчитываются по каждому из этих полей</p>
+            <p>Фильтр и сортировка производятся по каждому из этих полей</p>
             {/*Description End*/}
             <TabulatorGrid {...props}/>
         </>

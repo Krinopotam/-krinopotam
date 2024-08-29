@@ -116,7 +116,7 @@ const useGetViewButton = (gridApi: IGridApi, activeRow: IGridRowData | undefined
             onClick: () => {
                 if (!gridApi.getActiveRow()) return;
                 const dataSet = getRowDataSet(gridApi, false);
-                editFormApi.open('view', dataSet);
+                editFormApi.open('view', {dataSet: dataSet});
             },
         } satisfies ITabulatorButton;
     }, [activeRow, gridApi, gridProps.buttons?.view, gridProps.editFormProps, gridProps.readOnly, selectedRows.length, t]);
@@ -139,7 +139,7 @@ const useGetCreateButton = (gridApi: IGridApi): ITabulatorButton | undefined => 
             hotKeys: [{key: 'Insert'}],
             onClick: () => {
                 const dataSet = getRowDataSet(gridApi, true, true);
-                editFormApi.open('create', dataSet);
+                editFormApi.open('create', {dataSet: dataSet});
             },
         } satisfies ITabulatorButton;
     }, [gridApi, gridProps.buttons?.create, gridProps.editFormProps, gridProps.readOnly, t]);
@@ -165,7 +165,7 @@ const useGetCloneButton = (gridApi: IGridApi, activeRow: IGridRowData | undefine
             onClick: () => {
                 if (!gridApi.getActiveRow()) return;
                 const dataSet = getRowDataSet(gridApi, false);
-                editFormApi.open('clone', dataSet);
+                editFormApi.open('clone', {dataSet: dataSet});
             },
         } satisfies ITabulatorButton;
     }, [activeRow, gridApi, gridProps.buttons?.clone, gridProps.editFormProps, gridProps.readOnly, selectedRows.length, t]);
@@ -191,7 +191,7 @@ const useGetUpdateButton = (gridApi: IGridApi, activeRow: IGridRowData | undefin
             onClick: () => {
                 if (!gridApi.getActiveRow()) return;
                 const dataSet = getRowDataSet(gridApi, false);
-                editFormApi.open('update', dataSet);
+                editFormApi.open('update', {dataSet: dataSet});
             },
         } satisfies ITabulatorButton;
     }, [activeRow, gridApi, gridProps.buttons?.update, gridProps.editFormProps, gridProps.readOnly, selectedRows.length, t]);
@@ -215,7 +215,7 @@ const useGetSelectionButton = (gridApi: IGridApi): ITabulatorButton | undefined 
             hotKeys: [{key: 'Insert'}],
             onClick: () => {
                 const dataSet = gridApi.getDataSet();
-                selectionFormApi.open('update', {select: dataSet});
+                selectionFormApi.open('update', {dataSet: {select: dataSet}});
             },
         } satisfies ITabulatorButton;
     }, [gridApi, gridProps.buttons?.select, gridProps.readOnly, gridProps.selectionFormProps, t]);

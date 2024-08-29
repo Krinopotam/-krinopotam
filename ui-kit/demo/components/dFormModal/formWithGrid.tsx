@@ -50,7 +50,7 @@ const formProps: IDFormModalProps = {
 
 export const FormWithGrid = (): React.JSX.Element => {
     const onClick = useCallback(() => {
-        formApi.open('update', {users: TabulatorPlainData});
+        formApi.open('update', {dataSet: {users: TabulatorPlainData}});
     }, []);
 
     return (

@@ -72,7 +72,7 @@ const formProps: IDFormModalProps = {
 
 export const FormWithGridInTabs = (): React.JSX.Element => {
     const onClick = useCallback(() => {
-        formApi.open('update', {users1: TabulatorPlainData, users2: TabulatorPlainData});
+        formApi.open('update', {dataSet: {users1: TabulatorPlainData, users2: TabulatorPlainData}});
     }, []);
 
     return (

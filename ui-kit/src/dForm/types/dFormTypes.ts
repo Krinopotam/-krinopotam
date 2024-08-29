@@ -26,13 +26,13 @@ export interface IDFormProps extends IDFormCallbacks {
     className?: string;
 
     /** Form style */
-    formStyle?:CSSProperties;
+    formStyle?: CSSProperties;
 
     /** Form container class name */
     containerClassName?: string;
 
     /** Form container style*/
-    containerStyle?:CSSProperties
+    containerStyle?: CSSProperties
 
     /** Indent from the beginning of the controls (default 12)  */
     contentIndent?: number;
@@ -94,12 +94,24 @@ export interface IDFormProps extends IDFormCallbacks {
     /** allow select buttons using arrows keys */
     arrowsButtonsSelection?: boolean;
 
+    /**  If specified, additional values will be added to the resulting form data depending on the form mode
+     *  @example {create:'isNew', clone?:'clonedFrom', update?:'isUpdating'}
+    */
+    assignExtraValues?: {
+        create?: string,
+        clone?: string,
+        update?: string,
+    }
 
     /** Language */
     language?: keyof typeof translations;
 
     /** Custom translation */
     translation?: Partial<typeof translations.en>
+
+    /** @private O A service property meaning that the form is used in another component that overrides the api part (for example DModalForm)  */
+    _overriddenApi?: { [K in keyof IDFormApi as string extends K ? never : K]?: boolean; }
+
 }
 
 export type IDFormCallbacks = IDFormBaseCallbacks<IDFormApi>
@@ -111,7 +123,7 @@ export interface IDFormDataSet extends Record<string, unknown> {
 
 export type IDFormDataSourcePromise = Promise<{ data: Record<string, unknown> }>;
 
-export interface IDFormApi extends Record<string,unknown>{
+export interface IDFormApi extends Record<string, unknown> {
     /** Form model instance */
     model: DModel;
 
@@ -129,7 +141,4 @@ export interface IDFormApi extends Record<string,unknown>{
 
     /** Submit form */
     submitForm: () => void;
-
-    /** force render update method */
-    forceUpdate: () => void;
 }

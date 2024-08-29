@@ -26,7 +26,7 @@ export class DModel {
     private readonly _formId: string;
 
     /** Form API instance */
-    private readonly _formApi:IDFormApi
+    private readonly _formApi: IDFormApi
 
     /** form properties (immutable clone) */
     private _formProps: IDFormProps = {};
@@ -117,7 +117,7 @@ export class DModel {
     //endregion
 
     //region Init class
-    constructor(formId: string, formApi:IDFormApi) {
+    constructor(formId: string, formApi: IDFormApi) {
         this._formId = formId;
         this._validator = new BaseValidator();
         this._formApi = formApi;
@@ -138,12 +138,16 @@ export class DModel {
         [this._fieldsMap, this._rootFields] = this.prepareFieldCollection(formProps.fieldsProps);
 
         const oldDataSet = this.getFormDataSet();
-        [this._labels, this._values, this._hidden, this._readOnly, this._disabled] = this.initFieldsParameters(
-            this._fieldsMap,
-            prevFieldsMap,
-            this._values,
-            oldDataSet !== formProps.dataSet ? formProps.dataSet : undefined,
-            formProps.formMode ?? 'create'
+        [this._labels, this._values, this._hidden, this._readOnly, this._disabled] = this.initFieldsParameters({
+                fieldsMap: this._fieldsMap,
+                prevFieldsMap: prevFieldsMap,
+                curValues: this._values,
+                curDisabled: this._disabled,
+                curReadOnly: this._readOnly,
+                curHidden: this._hidden,
+                dataSet: oldDataSet !== formProps.dataSet ? formProps.dataSet : undefined,
+                mode: formProps.formMode ?? 'create'
+            }
         );
 
         this._dataSet = formProps.dataSet;
@@ -152,7 +156,6 @@ export class DModel {
         else this._disabled = this.calculateLockedFields();
 
         this._callbacks.onFormModelInitialized?.(this);
-
         //const endTime = new Date().getTime();
         //console.log(`dModel init: ${endTime - startTime}ms`);
     }
@@ -221,16 +224,31 @@ export class DModel {
 
     /** Init fields parameters (keep fields values if field components still the same) */
     private initFieldsParameters(
-        fieldsMap: DModel['_fieldsMap'],
-        prevFieldsMap: DModel['_fieldsMap'],
-        curValues: DModel['_values'],
-        dataSet: IDFormDataSet | undefined,
-        mode: IDFormMode
-    ): [Record<string, React.ReactNode | undefined>, Record<string, unknown>, Record<string, boolean>, Record<string, boolean>, Record<string, boolean>] {
+        {
+            fieldsMap,
+            prevFieldsMap,
+            curValues,
+            curDisabled,
+            curReadOnly,
+            curHidden,
+            dataSet,
+            mode
+        }:
+            {
+                fieldsMap: DModel['_fieldsMap'],
+                prevFieldsMap: DModel['_fieldsMap'],
+                curValues: DModel['_values'],
+                curDisabled: DModel['_disabled'],
+                curReadOnly: DModel['_readOnly'],
+                curHidden: DModel['_hidden'],
+                dataSet: IDFormDataSet | undefined,
+                mode: IDFormMode
+            }
+    ): [Record<string, React.ReactNode | undefined>, Record<string, unknown>, Record<string, boolean | undefined>, Record<string, boolean | undefined>, Record<string, boolean | undefined>] {
         const values: Record<string, unknown> = {};
-        const hidden: Record<string, boolean> = {};
-        const readOnly: Record<string, boolean> = {};
-        const disabled: Record<string, boolean> = {};
+        const hidden: Record<string, boolean | undefined> = {};
+        const readOnly: Record<string, boolean | undefined> = {};
+        const disabled: Record<string, boolean | undefined> = {};
         const labels: Record<string, React.ReactNode> = {};
 
         for (const fieldName in fieldsMap) {
@@ -240,16 +258,24 @@ export class DModel {
             const fieldProps = field.getProps();
 
             labels[fieldName] = fieldProps.label;
-            hidden[fieldName] = !!fieldProps.hidden;
-            if (mode === 'view' || (fieldProps.nonEditable && mode === 'update')) readOnly[fieldName] = true;
-            else readOnly[fieldName] = !!fieldProps.readOnly;
-            disabled[fieldName] = !!fieldProps.disabled;
 
             if (oldField && field.constructor.name === oldField.constructor.name) {
                 //if the field type has not changed, then keep values
                 values[fieldName] = curValues[fieldName];
+                hidden[fieldName] = typeof curHidden[fieldName] === 'boolean' ? curHidden[fieldName] : fieldProps.hidden;
+                disabled[fieldName] = typeof curDisabled[fieldName] === 'boolean' ? curDisabled[fieldName] : fieldProps.disabled;
+
+                if (mode === 'view' || (fieldProps.nonEditable && mode === 'update')) readOnly[fieldName] = true;
+                else readOnly[fieldName] = typeof curReadOnly[fieldName] === 'boolean' ? curReadOnly[fieldName] : fieldProps.readOnly;
+
                 continue;
             }
+
+            hidden[fieldName] = !!fieldProps.hidden;
+            disabled[fieldName] = !!fieldProps.disabled;
+
+            if (mode === 'view' || (fieldProps.nonEditable && mode === 'update')) readOnly[fieldName] = true;
+            else readOnly[fieldName] = !!fieldProps.readOnly;
 
             if (!field.canHaveValue()) continue;
 
@@ -662,7 +688,7 @@ export class DModel {
         if (!dataSource) return;
 
         dataSource.then(
-            (result: {data: Record<string, unknown>}) => {
+            (result: { data: Record<string, unknown> }) => {
                 if (!this.isFormMounted()) return;
                 this.setFormFetching(false);
                 this.setFormFetchingFailed(false);
@@ -700,6 +726,7 @@ export class DModel {
         onSubmitComplete?: (values: Record<string, unknown>, errors: Record<string, string | undefined>, model: DModel) => void
     ) {
         if (this.isFormSubmitting()) return;
+
         this.incrementSubmitCount();
 
         this.setFormSubmitting(true);
@@ -708,10 +735,12 @@ export class DModel {
         const dataSet = this.getFormDataSet();
         const values = {...dataSet, ...formValues}; // merge dataSet and values
 
-        if (this._formMode === 'clone') values['_clonedFrom'] = values.id;
+        if (this._formMode === 'clone' && this._formProps.assignExtraValues?.clone) values[this._formProps.assignExtraValues.clone] = values.id;
+
+        if (this._formMode === 'update' && this._formProps.assignExtraValues?.update) values[this._formProps.assignExtraValues.update] = true;
 
         if (this._formMode === 'create' || this._formMode === 'clone') {
-            values['_isNew'] = true;
+            if (this._formProps.assignExtraValues?.create) values[this._formProps.assignExtraValues.create] = true;
             delete values.id;
         }
 
@@ -728,9 +757,9 @@ export class DModel {
 
         if (!this._callbacks?.onSubmit) {
             this.setFormSubmitting(false);
-            onSubmitError?.(values, {message: 'The onSubmit callback not specified', error:'ERR_SUBMIT_NOT_SPECIFIED', code: 405, stack: Error().stack}, this);
+            onSubmitError?.(values, {message: 'The onSubmit callback not specified', error: 'ERR_SUBMIT_NOT_SPECIFIED', code: 405, stack: Error().stack}, this);
             onSubmitComplete?.(values, validationErrors, this);
-            this._callbacks?.onSubmitError?.(values, {message: 'The onSubmit callback not specified', error:'ERR_SUBMIT_NOT_SPECIFIED', code: 405, stack: Error().stack}, this);
+            this._callbacks?.onSubmitError?.(values, {message: 'The onSubmit callback not specified', error: 'ERR_SUBMIT_NOT_SPECIFIED', code: 405, stack: Error().stack}, this);
             this._callbacks?.onSubmitComplete?.(values, validationErrors, this);
             return;
         }
@@ -764,8 +793,8 @@ export class DModel {
             this.setFormSubmitting(false);
             const objectResult = result as IDFormSubmitResultObject;
             if (objectResult.error?.message) {
-                onSubmitError?.(values, {message: objectResult.error.message || '', error:objectResult.error.error, code: objectResult.error.code || 400}, this);
-                this._callbacks?.onSubmitError?.(values, {message: objectResult.error.message || '', error:objectResult.error.error, code: objectResult.error.code || 400}, this);
+                onSubmitError?.(values, {message: objectResult.error.message || '', error: objectResult.error.error, code: objectResult.error.code || 400}, this);
+                this._callbacks?.onSubmitError?.(values, {message: objectResult.error.message || '', error: objectResult.error.error, code: objectResult.error.code || 400}, this);
             } else {
                 onSubmitSuccess?.(values, objectResult.data ?? values, this);
                 this._callbacks?.onSubmitSuccess?.(values, objectResult.data ?? values, this);
@@ -783,8 +812,8 @@ export class DModel {
                 onSubmitSuccess?.(values, values, this);
                 this._callbacks?.onSubmitSuccess?.(values, values, this);
             } else {
-                onSubmitError?.(values, {message: 'Неизвестная ошибка', error:'ERR_UNKNOWN', code: 520, stack: Error().stack}, this);
-                this._callbacks?.onSubmitError?.(values, {message: 'Неизвестная ошибка', error:'ERR_UNKNOWN', code: 520, stack: Error().stack}, this);
+                onSubmitError?.(values, {message: 'Неизвестная ошибка', error: 'ERR_UNKNOWN', code: 520, stack: Error().stack}, this);
+                this._callbacks?.onSubmitError?.(values, {message: 'Неизвестная ошибка', error: 'ERR_UNKNOWN', code: 520, stack: Error().stack}, this);
             }
 
             onSubmitComplete?.(values, validationErrors, this);

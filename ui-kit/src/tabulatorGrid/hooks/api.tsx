@@ -525,7 +525,7 @@ const useApiDeleteRows = (gridApi: IGridApi, gridProps: IGridProps): IGridApi['d
                 removeRows();
             }
         },
-        [gridApi]
+        [gridApi, gridProps, t]
     );
 };
 

@@ -75,6 +75,7 @@ export const DFormModalRender = ({formId, buttons, buttonsApi, formApi, formProp
                     {...formProps}
                     formStyle={{height: '100%', width: '100%', ...formProps.formStyle}}
                     containerStyle={{height: '100%', ...formProps.containerStyle}}
+                    _overriddenApi={{buttonsApi: true, getFormProps: true, setFormProps: true}}
                 />
             ) : null}
         </Modal>

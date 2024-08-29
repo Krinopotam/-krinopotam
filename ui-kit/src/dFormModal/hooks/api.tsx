@@ -2,7 +2,7 @@ import {IButtonsRowApi} from '@src/buttonsRow';
 import {IDFormProps} from '@src/dForm';
 import {MessageBox} from '@src/messageBox';
 import {CloneObject} from "@krinopotam/js-helpers";
-import {useCallback, useState} from 'react';
+import {useCallback, useEffect, useState} from 'react';
 import {IsDebugMode} from "@krinopotam/common-hooks";
 import {IDFormModalApi, IDFormModalProps} from "@src/dFormModal";
 import {useTranslate} from "@src/dFormModal/hooks/translate";
@@ -16,11 +16,18 @@ export const useInitModalFormApi = (
 ) => {
     const getDefaultTitle = useGetDefaultTitle(modalFormProps);
     const [title, setTitle] = useState(getDefaultTitle())
+    useEffect(() => {
+        setTitle(getDefaultTitle())
+    }, [getDefaultTitle, modalFormProps]);
 
     formApi.getFormId = useApiGetFormId(formId)
+
+    /** overridden api */
     formApi.buttonsApi = buttonsApi;
     formApi.getFormProps = useApiGetModalFormProps(modalFormProps);
     formApi.setFormProps = useApiSetModalFormProps(modalFormProps, updateFormProps);
+    /** --------------*/
+
     formApi.open = useApiFormOpen(formApi);
     formApi.close = useApiTryToCloseForm(formApi, modalFormProps);
     formApi.forceClose = useApiFormForceClose(formApi);
@@ -28,7 +35,6 @@ export const useInitModalFormApi = (
     formApi.setTitle = useApiSetTitle(setTitle);
 };
 
-/** Get the current form ID */
 const useApiGetFormId = (formId: string) => {
     return useCallback(() => {
         return formId;
@@ -36,15 +42,15 @@ const useApiGetFormId = (formId: string) => {
 };
 
 
-const useApiGetModalFormProps = (modalFormProps: IDFormModalProps) => {
+const useApiGetModalFormProps = (modalFormProps: IDFormModalProps):IDFormModalApi['getFormProps'] => {
     return useCallback(() => {
         return modalFormProps;
     }, [modalFormProps]);
 };
 
-const useApiSetModalFormProps = (modalFormProps: IDFormModalProps, setModalFormProps: (props: IDFormModalProps) => void) => {
+const useApiSetModalFormProps = (modalFormProps: IDFormModalProps, setModalFormProps: (props: IDFormModalProps) => void):IDFormModalApi['setFormProps'] => {
     return useCallback(
-        (props: Partial<Omit<IDFormModalProps, 'fieldsProps'>>) => {
+        (props: Partial<IDFormModalProps>) => {
             setModalFormProps({...modalFormProps, ...props});
         },
         [modalFormProps, setModalFormProps]
@@ -62,46 +68,49 @@ const useGetDefaultTitle = (modalFormProps: IDFormModalProps) => {
         if (formMode === 'clone') return t('cloning');
         if (formMode === 'update') return t('editing');
         return '&nbsp;';
-    }, [modalFormProps.formMode, modalFormProps.title, t])
+    }, [modalFormProps, t])
 }
 
-const useApiGetTitle = (title: IDFormModalProps['title']) => {
+const useApiGetTitle = (title: IDFormModalProps['title']):IDFormModalApi['getTitle'] => {
     return useCallback(() => title, [title]);
 };
 
-const useApiSetTitle = (setTitle: (title: IDFormModalProps['title']) => void) => {
+const useApiSetTitle = (setTitle: (title: IDFormModalProps['title']) => void):IDFormModalApi['setTitle'] => {
     return useCallback((title: IDFormModalProps['title']) => {
         setTitle(title)
     }, [setTitle]);
 };
 
-const useApiFormOpen = (formApi: IDFormModalApi) => {
+const useApiFormOpen = (formApi: IDFormModalApi):IDFormModalApi['open'] => {
     return useCallback(
-        (formMode: IDFormProps['formMode'], dataSet?: IDFormProps['dataSet']) => {
+        (formMode: IDFormProps['formMode'],  extraProps?: Partial<IDFormModalProps>) => {
             if (!formMode) {
                 if (IsDebugMode()) console.warn('The form mode is not set');
                 return;
             }
 
-            const newDataSet = dataSet ?? formApi.getFormProps().dataSet;
+            const newDataSet = extraProps?.dataSet ?? formApi.getFormProps().dataSet;
             const clonedDataSet = newDataSet ? CloneObject(newDataSet) : undefined;
             const modalFormProps = formApi.getFormProps();
             if (modalFormProps.onOpen?.(formApi, clonedDataSet) === false) return;
+            if (extraProps?.onOpen?.(formApi, clonedDataSet) === false) return;
 
             formApi.setFormProps({
                 open: true,
                 formMode: formMode,
                 dataSet: clonedDataSet,
+                ...extraProps
             });
 
             modalFormProps.onOpened?.(formApi, clonedDataSet);
+            extraProps?.onOpened?.(formApi, clonedDataSet);
         },
         [formApi]
     );
 };
 
 /** Api method: force close form. Form will be closed without confirmation  */
-const useApiFormForceClose = (formApi: IDFormModalApi) => {
+const useApiFormForceClose = (formApi: IDFormModalApi):IDFormModalApi['close'] => {
     return useCallback(() => {
         const modalFormProps = formApi.getFormProps();
 

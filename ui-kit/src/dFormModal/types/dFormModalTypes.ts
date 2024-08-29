@@ -47,10 +47,10 @@ export interface IDFormModalApi extends IDFormApi {
     getFormProps: () => IDFormModalProps;
 
     /** Update the current modal form props (will cause rerender of the modal form). Can't update field props, because it is used in form model */
-    setFormProps: (formProps: Partial<Omit<IDFormModalProps, 'fieldsProps'>>) => void;
+    setFormProps: (formProps: Partial<IDFormModalProps>) => void;
 
     /** Open controls */
-    open: (formMode: IDFormProps['formMode'], dataSet?: IDFormProps['dataSet']) => void;
+    open: (formMode: IDFormProps['formMode'], extraProps?: Partial<Omit<IDFormModalProps, 'formMode' | 'open'>>) => void;
 
     /** Close controls with confirmation*/
     close: () => void;

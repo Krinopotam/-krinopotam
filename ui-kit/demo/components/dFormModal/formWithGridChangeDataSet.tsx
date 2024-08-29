@@ -94,7 +94,7 @@ const formProps: IDFormModalProps = {
 
 export const FormWithGridChangeDataSet = (): React.JSX.Element => {
     const onClick = useCallback(() => {
-        formApi.open('update', {grid: GenerateDataSet(1000, 'Initial ')});
+        formApi.open('update', {dataSet: {grid: GenerateDataSet(1000, 'Initial ')}});
     }, []);
 
     return (

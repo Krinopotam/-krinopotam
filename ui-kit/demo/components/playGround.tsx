@@ -180,7 +180,7 @@ const formProps: IDFormModalProps = {
 
 export const PlayGround = (): React.JSX.Element => {
     const showModal = useCallback(() => {
-        formModalApi.open('update', formData);
+        formModalApi.open('update', {dataSet: formData});
     }, []);
 
     return (

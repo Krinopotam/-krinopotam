@@ -30,7 +30,7 @@ export const useInitButtons = (api: ITreeSelectApi, formApi: IDFormModalApi) => 
                 onClick: () => {
                     const values = api.getValues();
                     if (values.length !== 1) return;
-                    formApi.open('update', values[0]);
+                    formApi.open('update', {dataSet: values[0]});
                 },
             },
             delete: {

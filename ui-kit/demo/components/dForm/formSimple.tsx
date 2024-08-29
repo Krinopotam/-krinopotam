@@ -20,7 +20,7 @@ export const FormSimple = (): React.JSX.Element => {
     return (
         <>
             {/*Description Start*/}
-            <h1>Пример простой формы с вертикальным расположением подписей полей1</h1>
+            <h1>Пример простой формы с вертикальным расположением подписей полей</h1>
             {/*Description End*/}
             <div style={{maxWidth: 500}}>
                 <DForm {...formProps} />

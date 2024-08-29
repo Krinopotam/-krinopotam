@@ -120,5 +120,5 @@ export const useFormCallbacks = (formModalApi: IDFormModalApi, modalFormProps: I
             /** fires, when the form dataSet changed. Unlike onFormValuesChanged, it is triggered only when a new dataSet is set via setFormValues and is not called when the user changes the field values */
             onDataSetChange: (dataSet: IDFormDataSet | undefined) => modalFormProps?.onDataSetChange?.(dataSet, formModalApi),
         } as IDFormCallbacks;
-    }, [formModalApi, modalFormProps]);
+    }, [formModalApi, modalFormProps, t]);
 };

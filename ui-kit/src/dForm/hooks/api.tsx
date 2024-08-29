@@ -16,11 +16,12 @@ export const useInitFormApi = (
     const apiSetFormProps = useApiSetFormProps(formProps, updateFormProps);
     const apiValidateForm = useApiValidateForm(formApi, formProps);
     const apiSubmitForm = useApiSubmitForm(formApi, formProps);
-    if (!formApi.buttonsApi) formApi.buttonsApi = buttonsApi; //The parent can already have this API.Do not reload
-    if (!formApi.getFormProps) formApi.getFormProps = apiGetFormProps;
-    if (!formApi.setFormProps) formApi.setFormProps = apiSetFormProps;
-    if (!formApi.validateForm) formApi.validateForm = apiValidateForm;
-    if (!formApi.submitForm) formApi.submitForm = apiSubmitForm;
+
+    if (!formProps._overriddenApi?.buttonsApi) formApi.buttonsApi = buttonsApi;
+    if (!formProps._overriddenApi?.getFormProps) formApi.getFormProps = apiGetFormProps;
+    if (!formProps._overriddenApi?.setFormProps) formApi.setFormProps = apiSetFormProps;
+    if (!formProps._overriddenApi?.validateForm) formApi.validateForm = apiValidateForm;
+    if (!formProps._overriddenApi?.submitForm) formApi.submitForm = apiSubmitForm;
 };
 
 /** Get the current form props */
