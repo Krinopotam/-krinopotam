@@ -6,13 +6,18 @@ import {translations} from "@src/dFormModal/translations/translations";
 export interface IExtendedModalOwnProps extends Omit<IExtendedModalProps, 'modalId' | 'style' | 'styles' | 'footer' | 'onCancel' | 'maskClosable' | 'keyboard' | 'destroyOnClose'> {}
 
 export interface IDFormModalCallbacks extends IDFormBaseCallbacks<IDFormModalApi> {
-    /** Fires when the form is opening */
+    /** Fires when the form is opening.
+     * Don't use formApi.getFormProps() because by the time the form is opened, they have not yet had time to update.
+     * Use the newProps parameter instead */
     onOpen?: (
         formApi: IDFormModalApi,
         dataSet: IDFormDataSet | undefined,
+        newProps: IDFormModalProps
     ) => boolean | void;
-    /** Fires when the form is opened */
-    onOpened?: (formApi: IDFormModalApi, dataSet: IDFormDataSet | undefined) => void;
+    /** Fires when the form is opened
+     * Don't use formApi.getFormProps() because by the time the form is opened, they have not yet had time to update.
+     * Use the newProps parameter instead */
+    onOpened?: (formApi: IDFormModalApi, dataSet: IDFormDataSet | undefined, newProps: IDFormModalProps) => void;
     /** Fires when the form is closing */
     onClosing?: (formApi: IDFormModalApi) => boolean | void;
     /** Fires when the form is closed */

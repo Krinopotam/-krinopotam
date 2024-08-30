@@ -280,7 +280,7 @@ export class DModel {
             if (!field.canHaveValue()) continue;
 
             let fieldValue: unknown = undefined;
-            if (mode === 'create') fieldValue = fieldProps.value;
+            if (mode === 'create') fieldValue = fieldProps.value ?? this._formProps.defaultValues?.[fieldName];
             else fieldValue = dataSet?.[fieldName];
             values[fieldName] = fieldValue;
         }
@@ -757,9 +757,19 @@ export class DModel {
 
         if (!this._callbacks?.onSubmit) {
             this.setFormSubmitting(false);
-            onSubmitError?.(values, {message: 'The onSubmit callback not specified', error: 'ERR_SUBMIT_NOT_SPECIFIED', code: 405, stack: Error().stack}, this);
+            onSubmitError?.(values, {
+                message: 'The onSubmit callback not specified',
+                error: 'ERR_SUBMIT_NOT_SPECIFIED',
+                code: 405,
+                stack: Error().stack
+            }, this);
             onSubmitComplete?.(values, validationErrors, this);
-            this._callbacks?.onSubmitError?.(values, {message: 'The onSubmit callback not specified', error: 'ERR_SUBMIT_NOT_SPECIFIED', code: 405, stack: Error().stack}, this);
+            this._callbacks?.onSubmitError?.(values, {
+                message: 'The onSubmit callback not specified',
+                error: 'ERR_SUBMIT_NOT_SPECIFIED',
+                code: 405,
+                stack: Error().stack
+            }, this);
             this._callbacks?.onSubmitComplete?.(values, validationErrors, this);
             return;
         }
@@ -793,8 +803,16 @@ export class DModel {
             this.setFormSubmitting(false);
             const objectResult = result as IDFormSubmitResultObject;
             if (objectResult.error?.message) {
-                onSubmitError?.(values, {message: objectResult.error.message || '', error: objectResult.error.error, code: objectResult.error.code || 400}, this);
-                this._callbacks?.onSubmitError?.(values, {message: objectResult.error.message || '', error: objectResult.error.error, code: objectResult.error.code || 400}, this);
+                onSubmitError?.(values, {
+                    message: objectResult.error.message || '',
+                    error: objectResult.error.error,
+                    code: objectResult.error.code || 400
+                }, this);
+                this._callbacks?.onSubmitError?.(values, {
+                    message: objectResult.error.message || '',
+                    error: objectResult.error.error,
+                    code: objectResult.error.code || 400
+                }, this);
             } else {
                 onSubmitSuccess?.(values, objectResult.data ?? values, this);
                 this._callbacks?.onSubmitSuccess?.(values, objectResult.data ?? values, this);
@@ -812,8 +830,18 @@ export class DModel {
                 onSubmitSuccess?.(values, values, this);
                 this._callbacks?.onSubmitSuccess?.(values, values, this);
             } else {
-                onSubmitError?.(values, {message: 'Неизвестная ошибка', error: 'ERR_UNKNOWN', code: 520, stack: Error().stack}, this);
-                this._callbacks?.onSubmitError?.(values, {message: 'Неизвестная ошибка', error: 'ERR_UNKNOWN', code: 520, stack: Error().stack}, this);
+                onSubmitError?.(values, {
+                    message: 'Неизвестная ошибка',
+                    error: 'ERR_UNKNOWN',
+                    code: 520,
+                    stack: Error().stack
+                }, this);
+                this._callbacks?.onSubmitError?.(values, {
+                    message: 'Неизвестная ошибка',
+                    error: 'ERR_UNKNOWN',
+                    code: 520,
+                    stack: Error().stack
+                }, this);
             }
 
             onSubmitComplete?.(values, validationErrors, this);

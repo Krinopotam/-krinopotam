@@ -37,7 +37,11 @@ export interface IDFormProps extends IDFormCallbacks {
     /** Indent from the beginning of the controls (default 12)  */
     contentIndent?: number;
 
-    /** Form data */
+    /** Form default values. Unlike dataSet, defaultValues sets field values in Create form mode.
+     * Has a priority lower than the field's set value */
+    defaultValues?: Record<string, unknown>
+
+    /** Form data (are not set in Create form mode) */
     dataSet?: IDFormDataSet;
 
     /** Parent form data */
