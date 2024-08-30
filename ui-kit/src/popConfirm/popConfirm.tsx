@@ -1,7 +1,7 @@
 import {ButtonsRow, IFormButton, IFormButtons} from '@src/buttonsRow/buttonsRow';
 import {PopconfirmProps, Popover} from 'antd';
 import React, {useEffect, useRef, useState} from 'react';
-import {GetUuid, MergeObjects} from '@krinopotam/js-helpers';
+import {GetNanoId, MergeObjects} from '@krinopotam/js-helpers';
 import {ButtonsRowWrapper} from "@src/buttonsRow";
 import {IColorType} from "@src/button/button";
 
@@ -13,7 +13,7 @@ export interface IPopConfirmProps extends Omit<PopconfirmProps, 'okType' | 'okBu
 }
 
 export const PopConfirm = ({content, ...props}: IPopConfirmProps): React.JSX.Element => {
-    const [formId] = useState(GetUuid());
+    const [formId] = useState(GetNanoId());
 
     const buttons = useInitButtons(props);
 

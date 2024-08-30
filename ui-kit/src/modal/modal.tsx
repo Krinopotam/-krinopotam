@@ -17,7 +17,7 @@ import {ModalRender} from './renders/modalRender';
 import classNames from 'classnames';
 import {useResize} from './hooks/useResize';
 import {IButtonRowWrapperRemoteCallbacks} from '@src/buttonsRow/components/buttonsRowWrapper';
-import {GetUuid} from '@krinopotam/js-helpers';
+import {GetNanoId} from '@krinopotam/js-helpers';
 import {IExtendedModalProps} from "@src/modal/types/types";
 
 export const Modal = (props: IExtendedModalProps): React.JSX.Element => {
@@ -62,7 +62,7 @@ export const Modal = (props: IExtendedModalProps): React.JSX.Element => {
     const contentStyle = useContentStyle(modalProps)
     const footerStyle = useFooterStyle(modalProps, paddingHorizontal)
 
-    const [draggableId] = useState('draggable-' + GetUuid());
+    const [draggableId] = useState('draggable-' + GetNanoId());
 
     return (
         <AntModal

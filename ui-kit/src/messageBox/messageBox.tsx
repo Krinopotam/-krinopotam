@@ -18,7 +18,7 @@ import {ButtonsRender} from '@src/modal/renders/buttonsRender';
 import {ContentRender} from './renders/contentRender';
 import {MessageBoxApi} from './messageBoxApi';
 import React from 'react';
-import {GetUuid, MergeObjects} from '@krinopotam/js-helpers';
+import {GetNanoId, MergeObjects} from '@krinopotam/js-helpers';
 import {QuestionCircleOutlined} from '@ant-design/icons';
 import {IModalAlertConfig, IModalBaseConfig, IModalConfig, IModalConfirmConfig, IModalConfirmWaiterConfig, ModalType} from "@src/messageBox/types/messageBoxTypes";
 import {translations} from "@src/messageBox/translations/translations";
@@ -155,7 +155,7 @@ class MessageBox {
     private modalBase(cfg: IModalConfig): MessageBoxApi {
         const t = this.getTranslator(cfg.language, cfg.translation)
         const title = cfg.title ?? t('attention')
-        const formId = GetUuid();
+        const formId = GetNanoId();
         const config: IModalBaseConfig = {...cfg, formId, title};
 
         const prevFocused = document.activeElement;
@@ -164,7 +164,7 @@ class MessageBox {
             cfg.onAfterClose?.();
         };
 
-        const draggableId = 'draggable-' + GetUuid();
+        const draggableId = 'draggable-' + GetNanoId();
         let modal: ModalType = Modal;
         if (this._themedModalInstance && Object.keys(this._themedModalInstance).length > 0) modal = this._themedModalInstance;
         const modalInst = modal.info(this.generateModalConfig(config, draggableId));

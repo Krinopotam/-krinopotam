@@ -1,7 +1,7 @@
 import 'tabulator-tables/dist/css/tabulator_simple.css';
 import React, {useCallback, useRef} from 'react';
 import {useInit} from './hooks/init';
-import {GetUuid} from '@krinopotam/js-helpers';
+import {GetNanoId} from '@krinopotam/js-helpers';
 import {Stylization} from '@src/tabulatorBase/stylization';
 import {ITabulator, ITabulatorProps} from '@src/tabulatorBase/types/tabulatorBaseTypes';
 
@@ -9,7 +9,7 @@ const TabulatorBase_ = ({onTableRef, events, containerClassName, width, minWidth
     const containerRef = React.useRef<HTMLDivElement>(null);
     const tableRef = React.useRef<ITabulator>();
 
-    const [newId] = React.useState(props.id ?? GetUuid());
+    const [newId] = React.useState(props.id ?? GetNanoId());
 
     useInit({props, events, containerRef, tableRef, onTableRef});
 

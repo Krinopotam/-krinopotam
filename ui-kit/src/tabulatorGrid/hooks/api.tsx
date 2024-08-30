@@ -1,5 +1,5 @@
 import React, {MutableRefObject, useCallback, useRef, useState} from 'react';
-import {GetUuid, IsArray, IsPromise} from '@krinopotam/js-helpers';
+import {GetNanoId, IsArray, IsPromise} from '@krinopotam/js-helpers';
 
 import {RowComponent, ScrollToRowPosition, TabulatorFull as Tabulator} from 'tabulator-tables';
 import {ITabulator} from '@src/tabulatorBase';
@@ -89,7 +89,7 @@ const useUpdateDataSetFromProps = (curDataSetRef: MutableRefObject<IGridProps['d
 };
 
 const useApiGetId = (gridApi: IGridApi): IGridApi['getId'] => {
-    const [gridId] = useState(gridApi.gridProps.id ?? 'grid-' + GetUuid());
+    const [gridId] = useState(gridApi.gridProps.id ?? 'grid-' + GetNanoId());
     return useCallback(() => gridId, [gridId]);
 };
 

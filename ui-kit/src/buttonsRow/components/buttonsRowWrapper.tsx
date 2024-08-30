@@ -1,5 +1,5 @@
 import React, {CSSProperties, useMemo, useRef, useState} from 'react';
-import {GetUuid, IsDescendant} from '@krinopotam/js-helpers';
+import {GetNanoId, IsDescendant} from '@krinopotam/js-helpers';
 
 export interface IButtonRowWrapperContext {
     wrapperId: string;
@@ -18,7 +18,7 @@ export interface IButtonRowWrapperProps extends React.HTMLAttributes<HTMLDivElem
 }
 
 export const ButtonsRowWrapper = (props: IButtonRowWrapperProps): React.JSX.Element => {
-    const [wrapperId] = useState(GetUuid());
+    const [wrapperId] = useState(GetNanoId());
 
     const defStyle: CSSProperties = {
         outline: 'none',

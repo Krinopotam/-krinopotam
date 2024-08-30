@@ -12,7 +12,7 @@ import React, {useEffect, useMemo, useState} from 'react';
 
 import {DFormModalRender} from './renders/dFormModalRender';
 import {IButtonsRowApi} from '@src/buttonsRow/buttonsRow';
-import {GetUuid, SplitObject} from "@krinopotam/js-helpers";
+import {GetNanoId, SplitObject} from "@krinopotam/js-helpers";
 import {useFormCallbacks} from './hooks/callbacks';
 import {useInitButtons} from './hooks/buttons';
 import {useUpdateMessageBoxTheme} from '@src/messageBox';
@@ -23,7 +23,7 @@ import {IDFormModalApi, IDFormModalProps, IDFormModalOwnProps, IExtendedModalOwn
 export const DFormModal = (props: IDFormModalProps): React.JSX.Element => {
     useUpdateMessageBoxTheme(); //set current theme to messageBox
 
-    const [formId] = useState(props.formId ?? 'dFormModal-' + GetUuid());
+    const [formId] = useState(props.formId ?? 'dFormModal-' + GetNanoId());
     const [allProps, updateModalFormProps] = useGetActualProps(props); //props can be set both by parent component and via api
 
     /** Separating props related to the Modal component from props directly related to the DFormModal component */

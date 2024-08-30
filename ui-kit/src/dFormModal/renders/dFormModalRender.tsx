@@ -3,14 +3,13 @@ import {IButtonsRowApi, IFormButtons} from '@src/buttonsRow/buttonsRow';
 
 import {Modal} from '@src/modal/modal';
 import {ButtonsRender} from '@src/modal/renders/buttonsRender';
-import React, {useState} from 'react';
-import {GetUuid} from '@krinopotam/js-helpers';
+import React from 'react';
 import {IDFormModalApi, IDFormModalProps} from "@src/dFormModal";
 import {IExtendedModalOwnProps} from "@src/dFormModal/types/dFormModalTypes";
 
 interface IDFormModalRenderProps {
     /** the form ID */
-    formId?: string;
+    formId: string;
 
     /** form buttons collection */
     buttons?: IFormButtons;
@@ -41,13 +40,11 @@ interface IDFormModalRenderProps {
 }
 
 export const DFormModalRender = ({formId, buttons, buttonsApi, formApi, formProps, modalProps, modalFormProps}: IDFormModalRenderProps): React.JSX.Element => {
-    const [formIdVal] = useState(formId ?? 'dFormModal-' + GetUuid());
-
     return (
         <Modal
             {...modalProps}
             // no override section
-            modalId={formIdVal}
+            modalId={formId}
             style={modalFormProps.modalStyle}
             styles={modalFormProps.modalStyles}
             onCancel={formApi.close}
