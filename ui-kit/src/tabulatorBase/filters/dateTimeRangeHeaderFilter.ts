@@ -1,5 +1,6 @@
 import {CellComponent, EmptyCallback, FilterType, ValueBooleanCallback, ValueVoidCallback} from 'tabulator-tables';
 import dayjs from 'dayjs';
+import {IKeyboardKey} from "@krinopotam/service-types";
 
 export interface IDateTimeRangeHeaderFilterParams {
     /** Filter type */
@@ -74,16 +75,16 @@ export const DateTimeRangeHeaderFilter = (
     };
 
     const onKeyDown = (e: KeyboardEvent, from: boolean) => {
-        switch (e.keyCode) {
+        switch (e.key as IKeyboardKey) {
             // case 9:
-            case 13: //enter
+            case 'Enter':
                 onChange(from);
                 break;
-            case 27: //Esc
+            case 'Escape':
                 cancel(undefined);
                 break;
-            case 35: //home
-            case 36: //end
+            case 'Home':
+            case 'End':
                 e.stopPropagation();
                 break;
         }

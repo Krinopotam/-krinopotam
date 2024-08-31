@@ -23,9 +23,7 @@ const editFormProps: IDFormModalProps = {
             height: '100%',
             resizeHeightWithForm: true,
             layout: 'fitColumns',
-            onDataFetch: (params, gridApi, field) => {
-                console.log('form data set', field.getModel().getFormDataSet());
-                console.log('params', params);
+            onDataFetch: () => {
                 return new Promise((resolve, reject) => {
                     setTimeout(() => {
                         const random = Math.random();

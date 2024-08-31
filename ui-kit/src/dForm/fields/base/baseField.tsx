@@ -415,9 +415,10 @@ export class BaseField<TFieldProps extends IAnyFieldProps> {
         if (!noEvents) {
             this.getProps()?.onErrorChanged?.(value, this);
             const modelCallbacks = this.model.getModelCallbacks();
-
-            if (this.model.isFormHasError()) modelCallbacks.onFormHasErrors?.(this.model.getFormValues(), errors, this.model);
-            else modelCallbacks.onFormHasNoErrors?.(this.model.getFormValues(), this.model);
+            const values = this.model.getFormValues();
+            const dataSet = this.model.getFormDataSet();
+            if (this.model.isFormHasError()) modelCallbacks.onFormHasErrors?.(values, dataSet, errors, this.model);
+            else modelCallbacks.onFormHasNoErrors?.(values, dataSet, this.model);
         }
 
         if (!noRerender) this.emitRender();

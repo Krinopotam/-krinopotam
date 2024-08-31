@@ -1,4 +1,4 @@
-//import {setScrollToRowPatch} from './scrollToRowPositionPatсh';
+//import {setScrollToRowPatch} from './scrollToRowPositionPatch';
 import {setFindRowPatch} from './findRowPatch';
 import {setDisableErrorOverlayPatch} from "@src/tabulatorBase/patches/disableErrorOverlay";
 import {setAjaxRequestDataCheckPatch} from "@src/tabulatorBase/patches/ajaxRequestDataCheck";

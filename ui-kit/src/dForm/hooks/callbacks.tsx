@@ -39,15 +39,15 @@ export const useModelCallbacks = (formProps: IDFormProps, formApi: IDFormApi) =>
             onFormValuesChanged: (fieldName: string, values: Record<string, unknown>) => formProps?.onFormValuesChanged?.(fieldName, values, formApi),
 
             /** fires when the form validated */
-            onFormValidated: (values: Record<string, unknown>, errors: Record<string, string>, isSubmit: boolean) =>
-                formProps?.onFormValidated?.(values, errors, isSubmit, formApi),
+            onFormValidated: (values: Record<string, unknown>, dataSet:IDFormDataSet, errors: Record<string, string>, isSubmit: boolean) =>
+                formProps?.onFormValidated?.(values, dataSet, errors, isSubmit, formApi),
 
             /** fires when the form has errors */
-            onFormHasErrors: (values: Record<string, unknown>, errors: Record<string, unknown>) => formProps?.onFormHasErrors?.(values, errors, formApi),
+            onFormHasErrors: (values: Record<string, unknown>, dataSet: IDFormDataSet, errors: Record<string, unknown>) => formProps?.onFormHasErrors?.(values, dataSet, errors, formApi),
 
             /** fires when the form has no errors */
-            onFormHasNoErrors: (values: Record<string, unknown>) => {
-                if (formProps?.onFormHasNoErrors?.(values, formApi) === false) return false;
+            onFormHasNoErrors: (values: Record<string, unknown>, dataSet: IDFormDataSet) => {
+                if (formProps?.onFormHasNoErrors?.(values, dataSet, formApi) === false) return false;
                 formApi.buttonsApi.disabled?.('ok', false);
             },
 
@@ -91,23 +91,23 @@ export const useModelCallbacks = (formProps: IDFormProps, formApi: IDFormApi) =>
             onDataFetchComplete: () => formProps?.onDataFetchComplete?.(formApi),
 
             /** fires on submit validation */
-            onSubmitValidation: (values: Record<string, unknown>, errors: Record<string, string | undefined>) =>
-                formProps?.onSubmitValidation?.(values, errors, formApi),
+            onSubmitValidation: (values: Record<string, unknown>, dataSet:IDFormDataSet, errors: Record<string, string | undefined>) =>
+                formProps?.onSubmitValidation?.(values, dataSet, errors, formApi),
 
             /** fires on submitting the form */
-            onSubmit: (values: Record<string, unknown>) => {
+            onSubmit: (values: Record<string, unknown>, dataSet:IDFormDataSet) => {
                 formApi.buttonsApi.disabled?.('ok', true);
                 if (!formProps.confirmChanges) formApi.buttonsApi.loading?.('ok', true);
-                return formProps?.onSubmit?.(values, formApi);
+                return formProps?.onSubmit?.(values, dataSet, formApi);
             },
 
             /** fires on submit success */
-            onSubmitSuccess: (values: Record<string, unknown>, resultValues: Record<string, unknown> | undefined) =>
-                formProps?.onSubmitSuccess?.(values, resultValues, formApi),
+            onSubmitSuccess: (values: Record<string, unknown>, dataSet:IDFormDataSet, resultData: Record<string, unknown> | undefined) =>
+                formProps?.onSubmitSuccess?.(values, dataSet, resultData, formApi),
 
             /** fires on submit error */
-            onSubmitError: (values: Record<string, unknown>, error) => {
-                if (formProps?.onSubmitError?.(values, error, formApi) === false) return false;
+            onSubmitError: (values: Record<string, unknown>, dataSet:IDFormDataSet, error) => {
+                if (formProps?.onSubmitError?.(values, dataSet, error, formApi) === false) return false;
                 MessageBox.alert({
                     language: formProps.language,
                     title: t('error'),
@@ -126,8 +126,8 @@ export const useModelCallbacks = (formProps: IDFormProps, formApi: IDFormApi) =>
             },
 
             /** fires after the completion of sending the form, regardless of the result */
-            onSubmitComplete: (values: Record<string, unknown>, errors: Record<string, string | undefined>) => {
-                if (formProps?.onSubmitComplete?.(values, errors, formApi) === false) return false;
+            onSubmitComplete: (values: Record<string, unknown>, dataSet: IDFormDataSet, errors: Record<string, string | undefined>) => {
+                if (formProps?.onSubmitComplete?.(values, dataSet, errors, formApi) === false) return false;
                 formApi.buttonsApi.disabled?.('ok', false);
                 formApi.buttonsApi.loading?.('ok', false);
             },

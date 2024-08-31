@@ -1,18 +1,20 @@
-import { useLayoutEffect} from 'react';
+import {useLayoutEffect} from 'react';
 import {IGridApi} from "@src/tabulatorGrid";
+import {IKeyboardKey} from "@krinopotam/service-types";
 
-export const useKeyboardSelection = (tableContainer:HTMLElement, gridApi: IGridApi) => {
+
+export const useKeyboardSelection = (tableContainer: HTMLElement, gridApi: IGridApi) => {
     useLayoutEffect(() => {
         if (!tableContainer) return;
         tableContainer.tabIndex = 0;
         tableContainer.style.outline = 'none';
 
         tableContainer.addEventListener('keydown', function (e: KeyboardEvent) {
-            switch (e.keyCode) {
-                case 40: // down arrow
+            switch (e.key as IKeyboardKey) {
+                case 'ArrowDown':
                     onKeyDownDown(e, gridApi);
                     break;
-                case 38: // up arrow
+                case 'ArrowUp':
                     onKeyDownUp(e, gridApi);
                     break;
             }

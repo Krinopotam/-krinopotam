@@ -34,15 +34,15 @@ export const useFormCallbacks = (formModalApi: IDFormModalApi, modalFormProps: I
             onFormValuesChanged: (fieldName:string, values: Record<string, unknown>) => modalFormProps?.onFormValuesChanged?.(fieldName, values, formModalApi),
 
             /** fires when the form validated */
-            onFormValidated: (values: Record<string, unknown>, errors: Record<string, string>, isSubmit: boolean) =>
-                modalFormProps?.onFormValidated?.(values, errors, isSubmit, formModalApi),
+            onFormValidated: (values: Record<string, unknown>, dataSet:IDFormDataSet, errors: Record<string, string>, isSubmit: boolean) =>
+                modalFormProps?.onFormValidated?.(values, dataSet, errors, isSubmit, formModalApi),
 
             /** fires when the form has errors */
-            onFormHasErrors: (values: Record<string, unknown>, errors: Record<string, unknown>) =>
-                modalFormProps?.onFormHasErrors?.(values, errors, formModalApi),
+            onFormHasErrors: (values: Record<string, unknown>, dataSet:IDFormDataSet, errors: Record<string, unknown>) =>
+                modalFormProps?.onFormHasErrors?.(values, dataSet, errors, formModalApi),
 
             /** fires when the form has no errors */
-            onFormHasNoErrors: (values: Record<string, unknown>) => modalFormProps?.onFormHasNoErrors?.(values, formModalApi),
+            onFormHasNoErrors: (values: Record<string, unknown>, dataSet:IDFormDataSet) => modalFormProps?.onFormHasNoErrors?.(values, dataSet, formModalApi),
 
             /** fires when the form trying to fetch data */
             onDataFetch: () => modalFormProps?.onDataFetch?.(formModalApi),
@@ -89,29 +89,29 @@ export const useFormCallbacks = (formModalApi: IDFormModalApi, modalFormProps: I
             onDataFetchComplete: () => modalFormProps?.onDataFetchComplete?.(formModalApi),
 
             /** fires on submit validation */
-            onSubmitValidation: (values: Record<string, unknown>, errors: Record<string, string | undefined>) =>
-                modalFormProps?.onSubmitValidation?.(values, errors, formModalApi),
+            onSubmitValidation: (values: Record<string, unknown>, dataSet:IDFormDataSet, errors: Record<string, string | undefined>) =>
+                modalFormProps?.onSubmitValidation?.(values, dataSet, errors, formModalApi),
 
             /** fires on submitting the form */
-            onSubmit: (values: Record<string, unknown>) => {
+            onSubmit: (values: Record<string, unknown>, dataSet:IDFormDataSet) => {
                 formModalApi.buttonsApi.disabled?.('ok', true);
                 formModalApi.buttonsApi.disabled?.('cancel', true);
                 if (!modalFormProps.confirmChanges) formModalApi.buttonsApi.loading?.('ok', true);
-                return modalFormProps?.onSubmit?.(values, formModalApi);
+                return modalFormProps?.onSubmit?.(values, dataSet, formModalApi);
             },
 
             /** fires on submit success */
-            onSubmitSuccess: (values: Record<string, unknown>, resultValues: Record<string, unknown> | undefined) => {
-                if (modalFormProps?.onSubmitSuccess?.(values, resultValues, formModalApi) === false) return false;
+            onSubmitSuccess: (values: Record<string, unknown>, dataSet:IDFormDataSet, resultData: Record<string, unknown> | undefined) => {
+                if (modalFormProps?.onSubmitSuccess?.(values, dataSet, resultData, formModalApi) === false) return false;
                 formModalApi.forceClose();
             },
 
             /** fires on submit error */
-            onSubmitError: (values: Record<string, unknown>, error) => modalFormProps?.onSubmitError?.(values, error, formModalApi),
+            onSubmitError: (values: Record<string, unknown>, dataSet:IDFormDataSet, error) => modalFormProps?.onSubmitError?.(values, dataSet, error, formModalApi),
 
             /** fires after the completion of sending the form, regardless of the result */
-            onSubmitComplete: (values: Record<string, unknown>, errors: Record<string, string | undefined>) => {
-                if (modalFormProps?.onSubmitComplete?.(values, errors, formModalApi) === false) return false;
+            onSubmitComplete: (values: Record<string, unknown>, dataSet:IDFormDataSet, errors: Record<string, string | undefined>) => {
+                if (modalFormProps?.onSubmitComplete?.(values, dataSet, errors, formModalApi) === false) return false;
                 formModalApi.buttonsApi.disabled?.('ok', false);
                 formModalApi.buttonsApi.disabled?.('cancel', false);
                 formModalApi.buttonsApi.loading?.('ok', false);

@@ -21,7 +21,8 @@ export const LoadingError = ({errorMessage, children, retryHandler, style}: ILoa
     return (
         <Row justify="center" align="middle" style={{height: '100%', ...style}}>
             <Col>
-                <Card role="alert" title={<div>Ошибка загрузки данных</div>} headStyle={{backgroundColor: '#ff7875', textAlign: 'center'}}>
+                <Card role="alert" title={<div>Ошибка загрузки данных</div>}
+                      styles={{header: {backgroundColor: '#ff7875', textAlign: 'center'}}}>
                     <Row justify="center" align="middle">
                         <Col>
                             <Text type="danger">{errorMessage}</Text>

@@ -14,7 +14,7 @@ export const TabulatorLocaleRu = {
         },
         pagination: {
             page_size: 'Строк на странице', //label for the page size select element
-            page_title: 'Показать страницу', //tooltip text for the numeric page button, appears in front of the page number (eg. "Show Page" will result in a tool tip of "Show Page 1" on the page 1 button)
+            page_title: 'Показать страницу', //tooltip text for the numeric page button, appears in front of the page number (e.g. "Show Page" will result in a tool tip of "Show Page 1" on the page 1 button)
             first: 'Перв.', //text for the first page button
             first_title: 'Первая страница', //tooltip text for the first page button
             last: 'Послед.',

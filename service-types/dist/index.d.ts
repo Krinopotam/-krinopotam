@@ -14,3 +14,4 @@ export type IUnionToIntersection<T> = (T extends any ? (k: T) => void : never) e
 export type IUnionInterfaces<T extends {
     [key: string]: any;
 }[]> = IUnionToIntersection<T[number]>;
+export type { IKeyboardKey, IKeyboardCode } from "./keys";

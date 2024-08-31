@@ -2,6 +2,7 @@ import {useMemo, useState} from 'react';
 import {GetNanoId} from "@krinopotam/js-helpers";
 import {ITreeSelectNode, ITreeSelectApi} from '@src/treeSelect';
 import {IDFormModalProps, IDFormModalApi} from '@src/dFormModal';
+import {IDFormDataSet} from "@src/dForm";
 
 export const useEditableInit = (api: ITreeSelectApi): [typeof formProps, typeof formApi] => {
     const treeProps = api.getProps();
@@ -19,13 +20,13 @@ export const useEditableInit = (api: ITreeSelectApi): [typeof formProps, typeof 
             bodyMinHeight: 40,
         };
 
-        const props:IDFormModalProps = {...defaultProps, ...treeFormProps, ...{apiRef: formApi, formId: formId}};
+        const props: IDFormModalProps = {...defaultProps, ...treeFormProps, ...{apiRef: formApi, formId: formId}};
 
-        const userOnSubmitSuccess =  props?.onSubmitSuccess
-        props.onSubmitSuccess = (values, resultVal, formApi) => {
-            if (!resultVal || userOnSubmitSuccess?.(values, resultVal, formApi) === false) return;
+        const userOnSubmitSuccess = props?.onSubmitSuccess
+        props.onSubmitSuccess = (values, dataSet: IDFormDataSet, resultData, formApi) => {
+            if (!resultData || userOnSubmitSuccess?.(values, dataSet, resultData, formApi) === false) return;
 
-            const resultNode = {...(formApi.model.getFormDataSet() ?? {}), ...resultVal};
+            const resultNode = {...(formApi.model.getFormDataSet() ?? {}), ...resultData};
 
             const formProps = formApi.getFormProps();
             if (formProps.formMode === 'update') api.updateNodes(resultNode);

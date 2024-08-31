@@ -91,7 +91,7 @@ const useApiFormOpen = (formApi: IDFormModalApi): IDFormModalApi['open'] => {
 
             const newDataSet = extraProps?.dataSet ?? formApi.getFormProps().dataSet;
             const clonedDataSet = newDataSet ? CloneObject(newDataSet) : undefined;
-            const modalFormProps = formApi.getFormProps();
+            const formProps = formApi.getFormProps();
 
             const newProps = {
                 open: true,
@@ -100,13 +100,17 @@ const useApiFormOpen = (formApi: IDFormModalApi): IDFormModalApi['open'] => {
                 ...extraProps
             }
 
-            if (modalFormProps.onOpen?.(formApi, clonedDataSet, newProps) === false) return;
-            if (extraProps?.onOpen?.(formApi, clonedDataSet, newProps) === false) return;
+            if (formProps.onOpen?.(formApi, clonedDataSet) === false) return;
+            if (extraProps?.onOpen?.(formApi, clonedDataSet) === false) return;
 
             formApi.setFormProps(newProps);
 
-            modalFormProps.onOpened?.(formApi, clonedDataSet, newProps);
-            extraProps?.onOpened?.(formApi, clonedDataSet, newProps);
+            setTimeout(() => {
+                /** Should have time to set props */
+                const props = formApi.getFormProps();
+                props.onOpened?.(formApi, props.dataSet);
+            }, 0)
+
         },
         [formApi]
     );
