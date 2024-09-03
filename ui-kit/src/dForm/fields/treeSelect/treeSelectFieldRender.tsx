@@ -1,29 +1,29 @@
-import React, {CSSProperties, useCallback, useEffect, useMemo, useState, useSyncExternalStore} from 'react';
+import React, {CSSProperties, Key, useCallback, useEffect, useMemo, useState, useSyncExternalStore} from 'react';
 import {ITreeSelectFieldOnlyProps, TreeSelectField} from '@src/dForm/fields/treeSelect/treeSelectField';
-import {IAntTreeSelectProps, ITreeSelectApi, ITreeSelectProps, ITreeSelectValues, TreeSelect} from '@src/treeSelect';
+import {IAntTreeSelectProps, ITreeSelectApi, ITreeSelectProps, ITreeSelectValue, TreeSelect} from '@src/treeSelect';
 import {SplitObject} from '@krinopotam/js-helpers';
 import {IDFormFieldProps} from '@src/dForm/fields';
 
-export const TreeSelectFieldRender = ({field}: {field: TreeSelectField}): React.JSX.Element => {
+export const TreeSelectFieldRender = ({field}: { field: TreeSelectField }): React.JSX.Element => {
     useSyncExternalStore(field.subscribe.bind(field), field.getSnapshot.bind(field));
 
     const [api] = useState({} as ITreeSelectApi);
 
     const fieldProps = field.getProps();
 
-    const value = field.getValue() as ITreeSelectValues | string;
+    const value = field.getValue() as ITreeSelectValue | string;
     const treeProps = useSplitTreeSelectProps(fieldProps);
 
-    const onChange = useCallback<NonNullable< IAntTreeSelectProps['onChange']>>(
+    const onChange = useCallback<NonNullable<IAntTreeSelectProps['onChange']>>(
         (value, label, extra) => {
             if (field.isReady()) {
-                const nodes =api.getSelectedNodes()
+                const nodes = api.getNodes(value as Key|Key[])
                 field.setValue(value ?? null);
                 field.setDirty(true);
             }
             fieldProps.onChange?.(value, label, extra);
         },
-        [field, fieldProps]
+        [api, field, fieldProps]
     );
     const onBlur = useCallback(() => {
         field.setTouched(true);
@@ -41,6 +41,7 @@ export const TreeSelectFieldRender = ({field}: {field: TreeSelectField}): React.
 
     const style: CSSProperties = {width: fieldProps.width ?? '100%', ...fieldProps.style};
 
+    console.log(treeProps)
     return (
         <TreeSelect
             apiRef={api}
@@ -101,9 +102,9 @@ const useSplitTreeSelectProps = (props: IDFormFieldProps) => {
             disabled: true,
             requiredMark: true,
             readOnly: true,
-            nonEditable:true,
+            nonEditable: true,
             rowStyle: true,
-            autoHeightResize:true,
+            autoHeightResize: true,
             onDirtyStateChanged: true,
             onReady: true,
             onDisabledStateChanged: true,
@@ -118,6 +119,6 @@ const useSplitTreeSelectProps = (props: IDFormFieldProps) => {
             rules: true,
         });
 
-        return result[1] as ITreeSelectProps;
+        return result[1];
     }, [props]);
 };

@@ -136,14 +136,14 @@ const formProps: IDFormProps = {
             component: TreeSelectField, label: 'Управления', fetchMode: 'onUse', dependsOn: ['department'], noCacheFetchedData: true, onDataFetch: () => {
                 return new Promise((resolve) => {
                     setTimeout(() => {
-                        const departmentValue = formApi.model.getField('department').getValue() as Record<'id', unknown>; //we can get the current department value and use it for server request
+                        const departmentValue = formApi.model.getField('department').getValue(); //we can get the current department value and use it for server request
 
                         /** the server request imitation */
                         let newDataSet: ITreeSelectFieldProps['dataSet'];
                         if (!departmentValue) newDataSet = [];
-                        else if (departmentValue.id === '01') newDataSet = divisions1;
-                        else if (departmentValue.id === '02') newDataSet = divisions2;
-                        else if (departmentValue.id === '03') newDataSet = divisions3;
+                        else if (departmentValue === '01') newDataSet = divisions1;
+                        else if (departmentValue === '02') newDataSet = divisions2;
+                        else if (departmentValue === '03') newDataSet = divisions3;
                         else newDataSet = [];
 
                         resolve({data: newDataSet});

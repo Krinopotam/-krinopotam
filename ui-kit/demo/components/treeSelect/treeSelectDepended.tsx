@@ -117,13 +117,12 @@ const formProps: IDFormProps = {
             component: TreeSelectField,
             label: 'Департамент',
             dataSet: departments,
-            onValueChanged: (value, prevValue, field) => {
-                const departmentValue = value as Record<'id', unknown>;
+            onValueChanged: (value, _prevValue, field) => {
                 let newDataSet: ITreeSelectFieldProps['dataSet'];
-                if (!departmentValue) newDataSet = [];
-                else if (departmentValue.id === '01') newDataSet = divisions1;
-                else if (departmentValue.id === '02') newDataSet = divisions2;
-                else if (departmentValue.id === '03') newDataSet = divisions3;
+                if (!value) newDataSet = [];
+                else if (value=== '01') newDataSet = divisions1;
+                else if (value === '02') newDataSet = divisions2;
+                else if (value === '03') newDataSet = divisions3;
                 else newDataSet = [];
 
                 const model = field.getModel();

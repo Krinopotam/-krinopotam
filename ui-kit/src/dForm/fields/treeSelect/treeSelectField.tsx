@@ -1,12 +1,13 @@
 import {BaseField, IBaseFieldProps,} from "@src/dForm/fields/base/baseField";
 import React from "react";
 import {TreeSelectFieldRender} from "@src/dForm/fields/treeSelect/treeSelectFieldRender";
-import {ITreeSelectProps, ITreeSelectValues} from "@src/treeSelect";
+import {ITreeSelectProps, ITreeSelectValue} from "@src/treeSelect";
 
 export interface ITreeSelectFieldOnlyProps extends IBaseFieldProps<TreeSelectField> {
     /** Default value */
-    value?: ITreeSelectValues | string;
+    value?: ITreeSelectValue | string;
 
+    /** Callback for onReady event */
     onReady?: (field: TreeSelectField) => void;
 }
 

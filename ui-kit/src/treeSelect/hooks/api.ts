@@ -1,4 +1,4 @@
-import {ITreeSelectNode, ITreeSelectProps, ITreeSelectValues} from '@src/treeSelect';
+import {ITreeSelectNode, ITreeSelectProps, ITreeSelectValue} from '@src/treeSelect';
 import React, {Key, useCallback, useEffect, useState} from 'react';
 import {useIsMountedRef} from '@krinopotam/common-hooks';
 import {useDataFetcher} from '@src/treeSelect/hooks/dataFetcher';
@@ -29,12 +29,10 @@ export const useInitApi = ({
     const [minSymbols, setMinSymbols] = useState(0); //show min symbols error
     const dataMutator = usePrepareData(props);
 
-    const [values, setValues] = useState<ITreeSelectValues>(undefined);
+    const [values, setValues] = useState<ITreeSelectValue>(transformValue(props.value));
     /** Set value if props changed*/
     useEffect(() => {
-        let values = undefined;
-        if (props.value) values = Array.isArray(props.value) ? props.value : [props.value];
-        api.setValues(values);
+        api.setValue(transformValue(props.value));
     }, [api, props.value]);
 
     const [dataSet, setDataSet] = useState(dataMutator(props.dataSet));
@@ -52,11 +50,11 @@ export const useInitApi = ({
     api.updateProps = useApiUpdateProps(props, setProps);
     api.getDataSet = useApiGetDataSet(dataSet);
     api.setDataSet = useApiSetDataSet(setDataSet);
-    api.getValues = useApiGetValues(values);
-    api.setValues = useApiSetValue(setValues);
+    api.getValue = useApiGetValue(values);
+    api.setValue = useApiSetValue(setValues);
     api.getNode = useApiGetNode(api);
+    api.getNodes = useApiGetNodes(api);
     api.getSelectedNodes = useApiGetSelectedNodes(api);
-
     api.getIsReady = useApiGetIsReady(isReady);
     api.setIsReady = useApiSetIsReady(setIsReady);
     api.getIsFetching = useApiGetIsFetching(fetching);
@@ -88,7 +86,12 @@ const useApiIsMounted = (isMountedRef: React.MutableRefObject<boolean>) => {
 };
 
 const useApiGetFieldNames = (props: ITreeSelectProps): ITreeSelectApi['getFieldNames'] => {
-    return useCallback(() => ({value: 'value', label: 'label', children: 'children', ...props.fieldNames}), [props.fieldNames]);
+    return useCallback(() => ({
+        key: 'id',
+        title: 'title',
+        children: 'children',
+        ...props.fieldNames
+    }), [props.fieldNames]);
 };
 
 const useApiGetProps = (props: ITreeSelectProps) => {
@@ -130,7 +133,10 @@ export const useApiPrepareNode = (treeProps: ITreeSelectProps): ITreeSelectApi['
     return useCallback(
         node => {
             let mutatedNode = {...node};
+            if (treeProps.titleRender) mutatedNode.__title = treeProps.titleRender(mutatedNode);
+            if (treeProps.labelRender) mutatedNode.__label = treeProps.labelRender(mutatedNode);
             if (treeProps.dataMutator) mutatedNode = treeProps.dataMutator(mutatedNode);
+            mutatedNode.originalData = node;
             return mutatedNode;
         },
         [treeProps]
@@ -138,11 +144,11 @@ export const useApiPrepareNode = (treeProps: ITreeSelectProps): ITreeSelectApi['
 };
 
 
-const useApiGetValues = (values: ITreeSelectValues): ITreeSelectApi['getValues'] => {
-    return useCallback(() => values, [values]);
+const useApiGetValue = (value: ITreeSelectValue): ITreeSelectApi['getValue'] => {
+    return useCallback(() => value, [value]);
 };
 
-const useApiSetValue = (setValue: (value: ITreeSelectValues) => void): ITreeSelectApi['setValues'] => {
+const useApiSetValue = (setValue: (value: ITreeSelectValue) => void): ITreeSelectApi['setValue'] => {
     return useCallback(
         (value) => {
             setValue(value);
@@ -158,7 +164,24 @@ const useApiGetNode = (api: ITreeSelectApi): ITreeSelectApi['getNode'] => {
             if (!key) return undefined;
             const data = externalDataset ?? api.getDataSet();
             const {idx, nodes} = findNodeIndex(data, key, fieldNames);
-            return idx > -1 ? nodes![idx] : undefined;
+            return idx > -1 ? nodes[idx] : undefined;
+        },
+        [api]
+    );
+};
+
+const useApiGetNodes = (api: ITreeSelectApi): ITreeSelectApi['getNodes'] => {
+    return useCallback(
+        (keys, externalDataset) => {
+            if (!keys) return undefined;
+            if (!Array.isArray(keys)) keys = [keys]
+            const result = [] as ITreeSelectNode[];
+            for (const key of keys) {
+                const node = api.getNode(key, externalDataset);
+                if (node) result.push(node);
+            }
+
+            return result
         },
         [api]
     );
@@ -167,8 +190,10 @@ const useApiGetNode = (api: ITreeSelectApi): ITreeSelectApi['getNode'] => {
 const useApiGetSelectedNodes = (api: ITreeSelectApi): ITreeSelectApi['getSelectedNodes'] => {
     return useCallback(
         (externalDataset) => {
-            const keys = api.getValues();
+            let keys = api.getValue();
             if (!keys) return undefined;
+            if (!Array.isArray(keys)) keys = [keys]
+
             const fieldNames = api.getFieldNames();
             const data = externalDataset ?? api.getDataSet();
 
@@ -266,9 +291,9 @@ const useAddNodes = (api: ITreeSelectApi) => {
     return useCallback(
         (parentNode: ITreeSelectNode | undefined, newNodes: ITreeSelectNode | ITreeSelectNode[]) => {
             const _newNodes = IsArray(newNodes) ? (newNodes as ITreeSelectNode[]) : [newNodes as ITreeSelectNode];
-            const treeProps = api.getProps();
-            const keyField = treeProps.fieldNames?.value ?? 'id';
-            const childrenField = treeProps.fieldNames?.children ?? 'children';
+            const fieldNames = api.getFieldNames();
+            const keyField = fieldNames.key;
+            const childrenField = fieldNames.children;
             const recursive = (nodes: ITreeSelectNode[], parent: ITreeSelectNode | undefined, newNodes: ITreeSelectNode[]) => {
                 if (!parent) {
                     for (const newNode of newNodes) nodes.push(newNode);
@@ -309,9 +334,9 @@ const useUpdateNodes = (api: ITreeSelectApi) => {
     return useCallback(
         (updatedNodes: ITreeSelectNode | ITreeSelectNode[]) => {
             const _updatedNodes = IsArray(updatedNodes) ? (updatedNodes as ITreeSelectNode[]) : [updatedNodes as ITreeSelectNode];
-            const treeProps = api.getProps();
-            const keyField = treeProps.fieldNames?.value ?? 'id';
-            const childrenField = treeProps.fieldNames?.children ?? 'children';
+            const fieldNames = api.getFieldNames();
+            const keyField = fieldNames.key;
+            const childrenField = fieldNames.children;
             const recursive = (nodes: ITreeSelectNode[], updatedNode: ITreeSelectNode) => {
                 for (const node of nodes) {
                     if (!node[keyField]) continue;
@@ -341,9 +366,9 @@ const useDeleteNodes = (api: ITreeSelectApi) => {
     return useCallback(
         (removeNodes: ITreeSelectNode | ITreeSelectNode[]) => {
             const _removeNodes = IsArray(removeNodes) ? (removeNodes as ITreeSelectNode[]) : [removeNodes as ITreeSelectNode];
-            const treeProps = api.getProps();
-            const keyField = treeProps.fieldNames?.value ?? 'id';
-            const childrenField = treeProps.fieldNames?.children ?? 'children';
+            const fieldNames = api.getFieldNames();
+            const keyField = fieldNames.key;
+            const childrenField = fieldNames.children;
             const recursive = (nodes: ITreeSelectNode[], removeNode: ITreeSelectNode) => {
                 for (let i = nodes.length - 1; i >= 0; i--) {
                     const node = nodes[i];
@@ -376,12 +401,12 @@ const findNodeIndex = (
     idx: number;
     nodes: ITreeSelectNode['dataSet'];
 } => {
-    const valueField = fieldNames.value;
+    const keyField = fieldNames.key;
     const recursive = (nodes: ITreeSelectNode['dataSet']): { idx: number; nodes: ITreeSelectProps['dataSet'] } => {
         if (!nodes || !key) return {idx: -1, nodes: undefined};
         for (let i = 0; i < nodes.length; i++) {
             const node = nodes[i];
-            if (node[valueField] === key) return {idx: i, nodes};
+            if (node[keyField] === key) return {idx: i, nodes};
 
             const childInfo = recursive(node.children);
             if (childInfo.idx > -1) return childInfo;
@@ -392,4 +417,10 @@ const findNodeIndex = (
 
     return recursive(dataSet);
 };
+
+const transformValue = (val: unknown) => {
+    let values = undefined;
+    if (val) values = Array.isArray(val) ? val : [val];
+    return values
+}
 //endregion

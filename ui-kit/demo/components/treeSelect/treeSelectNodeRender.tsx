@@ -132,6 +132,7 @@ const labelRender: ITreeSelectFieldProps['labelRender'] = (treeNode: ITreeSelect
     );
 };
 
+
 const filterTreeNode: ITreeSelectFieldProps['filterTreeNode'] = (inputValue: string, treeNode: ITreeSelectNode) => {
     const nodeString = (treeNode.title + ' (' + treeNode.head + ')').toLowerCase();
     return nodeString.indexOf(inputValue.toLowerCase()) >= 0;
@@ -145,11 +146,11 @@ const formProps: IDFormProps = {
             component: TreeSelectField,
             label: 'Подразделения',
             dataSet: dataSet,
-            plainList:true,
             titleRender: titleRender, //node title render
-            labelRender: labelRender, //selected value render
+            labelRender: labelRender, //node label render
             filterTreeNode: filterTreeNode, //custom filter
-        } ,
+            plainList: true,
+        } satisfies ITreeSelectFieldProps,
     },
     buttons: null,
 };

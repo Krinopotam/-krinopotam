@@ -14,11 +14,10 @@ interface ITreeSelectNodeBase extends Omit<DefaultOptionType, 'children'> {
     children?: ITreeSelectNode[];
 }
 
-export type ITreeSelectNode<T = object> = ITreeSelectNodeBase & { payload?: T };
-//export type ITreeSelectValue = ITreeSelectNode | ITreeSelectNode[] | undefined;
+export type ITreeSelectNode<T = object> = ITreeSelectNodeBase & { originalData?: T };
 
 type IAntTreeSelectComponentProps = GetProps<typeof TreeSelect>
-export type IAntTreeSelectProps = Omit<IAntTreeSelectComponentProps, 'labelInValue' | 'treeData'>;
+export type IAntTreeSelectProps = Omit<IAntTreeSelectComponentProps, 'labelInValue' | 'treeData' | 'fieldNames' | 'treeTitleRender'>;
 
 export interface ITreeSelectBaseProps {
     /** A mutable object to merge with these controls api */
@@ -27,8 +26,17 @@ export interface ITreeSelectBaseProps {
     /** Tree TreeSelect id */
     componentId?: string;
 
+    /** TreeSelect field names
+     * There is confusion in the Antd treeSelect props between label and title.
+     * For clarity, we mean title is the name of the node, and label is a display of the selected node
+     **/
+    fieldNames?: Partial<IFieldNames>;
+
     /** Customize tree node title render */
-    treeTitleRender?: (treeNode: ITreeSelectNode) => React.ReactNode;
+    titleRender?: (treeNode: ITreeSelectNode) => React.ReactNode;
+
+    /** Customize selected node label render */
+    labelRender?: (treeNode: ITreeSelectNode) => React.ReactNode;
 
     /** Is TreeSelect read only  */
     readOnly?: boolean; //TODO: Make readonly
@@ -68,7 +76,7 @@ export interface ITreeSelectBaseProps {
     /**---unchecked -----*/
 
     /** Value */
-    value?: ITreeSelectValues | string;
+    value?: ITreeSelectValue | string;
 
     /** Value ??????????? */
     defaultValueCallback?: (data: ITreeSelectNode[]) => ITreeSelectNode | ITreeSelectNode[];
@@ -113,9 +121,9 @@ export type ITreeSelectSourcePromise = Promise<{ data: ITreeSelectNode[] }>;
 export type ITreeSelectDeletePromise = Promise<{ data: Record<string, unknown> }>;
 export type ITreeSelectPlainValue = string | number;
 
-export type ITreeSelectValues = Key[] | undefined
+export type ITreeSelectValue = Key | Key[] | undefined
 
-export type IFieldNames = { value: string; label: string; children: string }
+export type IFieldNames = { key: string; title: string; children: string }
 
 export interface ITreeSelectApi {
     /** Get the TreeSelect id */
@@ -140,16 +148,23 @@ export interface ITreeSelectApi {
     updateProps: (props: Partial<Omit<ITreeSelectProps, 'fieldsProps'>>) => void;
 
     /** Get the TreeSelect selected nodes */
-    getValues: () => ITreeSelectValues;
+    getValue: () => ITreeSelectValue;
 
     /** Set the TreeSelect selected nodes*/
-    setValues: (values: ITreeSelectValues) => void;
+    setValue: (value: ITreeSelectValue) => void;
 
     /**
      * Get the TreeSelect node by key value
      * @param extDataSet - external data set. If set, search nodes in this data set, not current dataSet
      */
-    getNode: (key: Key, extDataSet?: ITreeSelectNode[]) => ITreeSelectNode[] | undefined;
+    getNode: (key: Key, extDataSet?: ITreeSelectNode[]) => ITreeSelectNode | undefined;
+
+    /**
+     * Get the TreeSelect node by key value
+     * @param keys - array of key values
+     * @param extDataSet - external data set. If set, search nodes in this data set, not current dataSet
+     */
+    getNodes: (key: ITreeSelectValue, extDataSet?: ITreeSelectNode[]) => ITreeSelectNode[] | undefined;
 
     /**
      * Get the TreeSelect selected nodes

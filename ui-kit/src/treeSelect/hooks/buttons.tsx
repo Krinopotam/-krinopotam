@@ -10,7 +10,7 @@ import {IsDebugMode} from "@krinopotam/common-hooks";
 
 /** Generate buttons */
 export const useInitButtons = (api: ITreeSelectApi, formApi: IDFormModalApi) => {
-    const selectedNodes = api.getValues();
+    const selectedNodes = api.getSelectedNodes();
     const treeProps = api.getProps();
     return useMemo((): IFormButtons => {
         const defaultButtons: IFormButtons = {
@@ -68,7 +68,7 @@ const deleteHandler = (api: ITreeSelectApi) => {
                 .then(() => {
                     if (!api.isMounted()) return;
                     api.deleteNodes(selectedNodes);
-                    api.setValues(undefined);
+                    api.setValue(undefined);
                     if (!treeProps.confirmDelete) {
                         api.buttonsApi.loading('delete', false);
                         api.buttonsApi.disabled('delete', true);
@@ -98,7 +98,7 @@ const deleteHandler = (api: ITreeSelectApi) => {
         }
 
         api.deleteNodes(selectedNodes);
-        api.setValues(undefined);
+        api.setValue(undefined);
         if (messageBox) messageBox.destroy();
     };
 

@@ -9,7 +9,6 @@ import {useGetActualProps} from '@krinopotam/common-hooks';
 import {ButtonsRow, IButtonsRowApi} from '@src/buttonsRow/buttonsRow';
 import {useInitButtons} from '@src/treeSelect/hooks/buttons';
 
-import './css/index.scss';
 import {IAntTreeSelectProps, ITreeSelectApi, ITreeSelectBaseProps, ITreeSelectProps} from "@src/treeSelect/types/types";
 
 //endregion
@@ -56,7 +55,6 @@ const useSplitProps = (props: ITreeSelectProps) => {
             readOnly: true,
             value: true,
             defaultValueCallback: true,
-            treeTitleRender: true,
             filterTreeNode: true,
             dataSet: true,
             fetchMode: true,
@@ -74,6 +72,9 @@ const useSplitProps = (props: ITreeSelectProps) => {
             onDataFetchError: true,
             onDataFetchComplete: true,
             onDelete: true,
+            fieldNames: true,
+            titleRender: true,
+            labelRender: true,
         });
 
         return result[1];

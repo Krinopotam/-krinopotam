@@ -7,7 +7,7 @@ export type {
     ITreeSelectProps,
     ITreeSelectBaseProps,
     IAntTreeSelectProps,
-    ITreeSelectValues,
+    ITreeSelectValue,
     ITreeSelectNode,
     ITreeSelectApi
 } from "@src/treeSelect/types/types";

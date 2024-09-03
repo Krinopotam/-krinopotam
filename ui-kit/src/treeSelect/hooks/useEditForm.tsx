@@ -31,12 +31,12 @@ export const useEditableInit = (api: ITreeSelectApi): [typeof formProps, typeof 
             const formProps = formApi.getFormProps();
             if (formProps.formMode === 'update') api.updateNodes(resultNode);
             else {
-                const parents = api.getValues();
+                const parents = api.getValue();
                 const parent = parents && parents.length > 0 ? parents[0] : undefined;
                 api.addNodes(parent, resultNode);
             }
 
-            api.setValues([resultNode as ITreeSelectNode]);
+            api.setValue([resultNode as ITreeSelectNode]);
         };
 
         return props;

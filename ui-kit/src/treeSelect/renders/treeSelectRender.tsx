@@ -1,11 +1,15 @@
 import {TreeSelect as AntdTreeSelect} from 'antd';
 import React, {useCallback, useMemo} from 'react';
-import {IAntTreeSelectProps, ITreeSelectApi, ITreeSelectProps, ITreeSelectValues} from '@src/treeSelect';
+import {IAntTreeSelectProps, ITreeSelectApi, ITreeSelectProps, ITreeSelectValue} from '@src/treeSelect';
 import {useDropdownStyle} from '@src/treeSelect/hooks/dropdownStyle';
 import {useDefaultDropdownRender} from '@src/treeSelect/hooks/defaultDropdownRender';
 import {useDefaultFilter} from '@src/treeSelect/hooks/filter';
 import {NotFound} from '@src/treeSelect/renders/dropdownStatus';
 import {DefaultOptionType} from "rc-tree-select/es/TreeSelect";
+
+// For clarity. Antd has labels for a node(1) and for the selected value(2). fieldNames.label property sets the node label(1) and treeNodeLabelProp sets the selected value label(2)
+// In order not to get confused, we will consider Node's label is title(1), and Label of the selected value is label(2)
+// For the implementation of the capabilities of the Title & Labels  renders, we add to dataSet 2 service fields: __title & __label
 
 export const TreeSelectRender = ({
                                      api,
@@ -18,14 +22,10 @@ export const TreeSelectRender = ({
 }): React.JSX.Element => {
 
     const dropdownStyle = useDropdownStyle(allProps.dropdownStyle);
-    const defaultDropdownRender = useDefaultDropdownRender({
-        fetchError: api.getFetchError(),
-        fetching: api.getIsFetching(),
-        minSymbols: api.getMinSymbols(),
-        plainList: allProps.plainList,
-    });
-
+    const defaultDropdownRender = useDefaultDropdownRender({api});
     const value = useValue(api);
+    const fieldNames = useFieldNames(api);
+    const treeNodeLabelProp = useTreeNodeLabelProp(api);
     const onClear = useOnClear(api)
     const onChange = useOnChange(api)
     const onDropdownVisibleChange = useOnDropdownVisibleChange(api)
@@ -34,15 +34,18 @@ export const TreeSelectRender = ({
 
     return (
         <AntdTreeSelect
-            fieldNames={{value: 'id', label: 'title', children: 'children'}}
             showSearch // shows search field by default
             treeDefaultExpandAll // expands all nodes by default
+            treeNodeFilterProp={fieldNames.label} //Field to be  used for filtering if filterTreeNode returns true. Default: title (getting from api.fieldNames)
             dropdownRender={defaultDropdownRender}
-            treeNodeFilterProp={treeSelectProps.fieldNames?.label ?? 'label'} //Field to be  used for filtering if filterTreeNode returns true. Default: label
-            notFoundContent={(<NotFound fetching={api.getIsFetching()} error={api.getFetchError()} minSymbols={api.getMinSymbols()} plainList={allProps.plainList}/>)}
+            notFoundContent={(
+                <NotFound fetching={api.getIsFetching()} error={api.getFetchError()} minSymbols={api.getMinSymbols()}
+                          plainList={allProps.plainList}/>)}
 
             {...treeSelectProps}
             /************ no override ****************/
+            fieldNames={fieldNames}
+            treeNodeLabelProp={treeNodeLabelProp} //Selected value label. Will render as content of select. Default: title
             treeData={api.getDataSet()}
             value={value}
             disabled={allProps.disabled || allProps.readOnly} //TODO: implement true readOnly
@@ -63,19 +66,14 @@ export const TreeSelectRender = ({
 
 const useValue = (api: ITreeSelectApi) => {
     return useMemo(() => {
-        const props = api.getProps();
-        const values = api.getValues()
-        if (!values) return undefined
-        console.log(props.multiple ? values : values[0])
-        return props.multiple ? values : values[0]
-
+        return api.getValue()
     }, [api])
 
 }
 
 const useOnClear = (api: ITreeSelectApi) => {
     return useCallback(() => {
-        api.setValues(undefined);
+        api.setValue(undefined);
         const props = api.getProps();
         props.onClear?.();
     }, [api])
@@ -84,9 +82,9 @@ const useOnClear = (api: ITreeSelectApi) => {
 const useOnChange = (api: ITreeSelectApi) => {
     return useCallback<NonNullable<IAntTreeSelectProps['onChange']>>((value, label, extra) => {
         const props = api.getProps();
-        let values: ITreeSelectValues = undefined;
+        let values: ITreeSelectValue = undefined;
         if (value) values = Array.isArray(value) ? value : [value];
-        api.setValues(values);
+        api.setValue(values);
         props.onChange?.(value, label, extra);
     }, [api])
 }
@@ -120,3 +118,24 @@ const useOnFilterTreeNode = (api: ITreeSelectApi) => {
     }, [api, defaultFilter])
 }
 
+const useFieldNames = (api: ITreeSelectApi) => {
+    return useMemo(() => {
+        const props = api.getProps()
+        const fieldNames = api.getFieldNames()
+        const value = fieldNames.key
+        const label = props.titleRender ? '__title' : fieldNames.title;
+        const children = fieldNames.children
+        return {value, label, children}
+    }, [api])
+
+}
+
+const useTreeNodeLabelProp = (api: ITreeSelectApi) => {
+    return useMemo(() => {
+        const props = api.getProps()
+        const fieldNames = api.getFieldNames()
+        if (props.treeNodeLabelProp) return props.treeNodeLabelProp
+        return props.labelRender ? '__label' : fieldNames.title
+    }, [api])
+
+}
