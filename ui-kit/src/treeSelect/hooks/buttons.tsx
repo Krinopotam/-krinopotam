@@ -28,9 +28,9 @@ export const useInitButtons = (api: ITreeSelectApi, formApi: IDFormModalApi) => 
                 position: 'center',
                 disabled: !selectedNodes || selectedNodes.length !== 1,
                 onClick: () => {
-                    const values = api.getValues();
-                    if (values.length !== 1) return;
-                    formApi.open('update', {dataSet: values[0]});
+                    const nodes = api.getSelectedNodes();
+                    if (nodes?.length !== 1) return;
+                    formApi.open('update', {dataSet: nodes[0]});
                 },
             },
             delete: {
@@ -50,8 +50,8 @@ export const useInitButtons = (api: ITreeSelectApi, formApi: IDFormModalApi) => 
 
 const deleteHandler = (api: ITreeSelectApi) => {
     const treeProps = api.getProps();
-    const selectedNodes = api.getValues();
-    if (selectedNodes.length < 1) return;
+    const selectedNodes = api.getSelectedNodes();
+    if (!selectedNodes?.length) return;
 
     let messageBox: MessageBoxApi;
     const removeRows = () => {
@@ -68,7 +68,7 @@ const deleteHandler = (api: ITreeSelectApi) => {
                 .then(() => {
                     if (!api.isMounted()) return;
                     api.deleteNodes(selectedNodes);
-                    api.setValues(null);
+                    api.setValues(undefined);
                     if (!treeProps.confirmDelete) {
                         api.buttonsApi.loading('delete', false);
                         api.buttonsApi.disabled('delete', true);
@@ -98,7 +98,7 @@ const deleteHandler = (api: ITreeSelectApi) => {
         }
 
         api.deleteNodes(selectedNodes);
-        api.setValues(null);
+        api.setValues(undefined);
         if (messageBox) messageBox.destroy();
     };
 

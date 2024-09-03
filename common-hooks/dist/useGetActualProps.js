@@ -3,18 +3,18 @@ export const useGetActualProps = (props) => {
     const curPropsRef = useRef(props);
     const curExtPropsRef = useRef(props);
     const rerender = useGetRerender();
-    const updateProps = (props) => {
+    const setProps = (props) => {
         curExtPropsRef.current = props;
         rerender();
     };
     if (curPropsRef.current !== props) {
         curPropsRef.current = props;
         curExtPropsRef.current = props;
-        return [curPropsRef.current, updateProps];
+        return [curPropsRef.current, setProps];
     }
-    return [curExtPropsRef.current, updateProps];
+    return [curExtPropsRef.current, setProps];
 };
 const useGetRerender = () => {
-    const [, setUpdateModal] = useState({});
-    return () => setUpdateModal({});
+    const [, setUpdateComponent] = useState({});
+    return () => setUpdateComponent({});
 };

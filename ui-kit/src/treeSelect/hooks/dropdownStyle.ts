@@ -1,12 +1,12 @@
 import {CSSProperties, useMemo} from 'react';
 
-export const useDropdownStyle = (dropdownStyle: CSSProperties|undefined) => {
+export const useDropdownStyle = (dropdownStyle: CSSProperties | undefined) => {
     return useMemo(() => {
         const defaultStyle = {
             maxHeight: 400,
             overflow: 'auto',
         };
 
-        return {...defaultStyle, ...(dropdownStyle || {})};
+        return {...defaultStyle, ...dropdownStyle};
     }, [dropdownStyle]);
 };

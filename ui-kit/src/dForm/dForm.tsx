@@ -26,7 +26,7 @@ import './css/antdAnimation.css';
 export const DForm = (props: IDFormProps): React.JSX.Element => {
     useUpdateMessageBoxTheme(); //set current theme to messageBox
 
-    const [formProps, updateFormProps] = useGetActualProps(props); //props can be set both by parent component and via api
+    const [formProps, setFormProps] = useGetActualProps(props); //props can be set both by parent component and via api
 //
     //region Common component states
     const [formId] = useState(formProps.formId ?? 'dForm-' + GetNanoId());
@@ -37,7 +37,7 @@ export const DForm = (props: IDFormProps): React.JSX.Element => {
 
     const modelCallbacks = useModelCallbacks(formProps, formApi);
     useInitFormModel(formId, formApi, formProps, modelCallbacks);
-    useInitFormApi(formApi, formProps, buttonsApi, updateFormProps);
+    useInitFormApi(formApi, formProps, buttonsApi, setFormProps);
 
     useInitialFetchData(formApi);
 

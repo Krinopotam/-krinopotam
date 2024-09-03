@@ -1,135 +1,61 @@
-import {ITreeSelectNode, ITreeSelectPlainValue, ITreeSelectProps, ITreeSelectValue} from '@src/treeSelect';
-import React, {useCallback, useState} from 'react';
-import  {useIsMountedRef} from '@krinopotam/common-hooks';
+import {ITreeSelectNode, ITreeSelectProps, ITreeSelectValues} from '@src/treeSelect';
+import React, {Key, useCallback, useEffect, useState} from 'react';
+import {useIsMountedRef} from '@krinopotam/common-hooks';
 import {useDataFetcher} from '@src/treeSelect/hooks/dataFetcher';
 import runDebounce from 'lodash.debounce';
-import {ITreeSelectInternalValue, usePlainValuesToNodes, useValueConvertor} from '@src/treeSelect/hooks/valueConvertor';
 import {IButtonsRowApi} from '@src/buttonsRow';
 import {GetUuid, IsArray} from "@krinopotam/js-helpers";
-import {useDataSet} from "@src/treeSelect/hooks/dataSet";
-
-export interface ITreeSelectApi {
-    /** Get the TreeSelect id */
-    getId: () => string;
-
-    /** Is component mounted status */
-    isMounted: () => boolean;
-
-    /** Edit mode buttons api */
-    buttonsApi: IButtonsRowApi;
-
-    /** Get current TreeSelect props */
-    getProps: () => ITreeSelectProps;
-
-    /** Set current TreeSelect props */
-    setProps: (props: ITreeSelectProps) => void;
-
-    /** Get the TreeSelect selected nodes */
-    getValues: () => ITreeSelectNode[];
-
-    /** Set the TreeSelect selected nodes*/
-    setValues: (values: ITreeSelectValue | string | null) => void;
-
-    /** Get internal TreeSelect value (like {value: string | number; label: React.ReactNode}) */
-    getInternalValue: () => ITreeSelectInternalValue | ITreeSelectInternalValue[] | null | undefined;
-
-    /** Get current data set */
-    getDataSet: () => ITreeSelectNode[] | undefined;
-
-    /** Update data set*/
-    setDataSet: (dataSet: ITreeSelectNode[] | undefined | null) => void;
-
-    /** Get the TreeSelect ready to user input status (data is fetched) */
-    getIsReady: () => boolean;
-
-    /** Set the TreeSelect ready to user input status (data is fetched) */
-    setIsReady: (value: boolean) => void;
-
-    /** Get the TreeSelect fetching status (is fetching now) */
-    getIsFetching: () => boolean;
-
-    /** Set the TreeSelect fetching status (is fetching now) */
-    setIsFetching: (value: boolean) => void;
-
-    /** Get the TreeSelect fetch error */
-    getFetchError: () => string;
-
-    /** Set the TreeSelect fetch error */
-    setSetFetchError: (value: string | null) => void;
-
-    /** Get the TreeSelect all fetched status (full data set completely fetched) */
-    getIsAllFetched: () => boolean;
-
-    /** Set the TreeSelect all fetched status (full data set completely fetched) */
-    setIsAllFetched: (value: boolean) => void;
-
-    /** Get the TreeSelect min symbols input length status to show/hide error */
-    getMinSymbols: () => number;
-
-    /** Set the TreeSelect min symbols input status to show/hide error */
-    setSetMynSymbols: (value: number) => void;
-
-    /** Fetch data */
-    fetchData: (search: string, debounce?: boolean) => void;
-
-    /** Convert plain value like string|number to row node
-     * When passing a value of type string|number, there is not enough data for direct conversion to a node.
-     * Therefore, we'll try to find a node with such a key value in the dataSet, and then in the list of selected nodes
-     */
-    plainValueToNodes: (plainValues: ITreeSelectPlainValue | ITreeSelectPlainValue[] | null | undefined) => ITreeSelectNode[] | undefined;
-
-    /** Add nodes to current dataset*/
-    addNodes: (parentNode: ITreeSelectNode | undefined, newNodes: ITreeSelectNode | ITreeSelectNode[]) => void;
-
-    /** Update nodes content in dataset */
-    updateNodes: (nodes: ITreeSelectNode | ITreeSelectNode[]) => void;
-
-    /** Delete node from dataSet */
-    deleteNodes: (nodes: ITreeSelectNode | ITreeSelectNode[]) => void;
-}
+import {IFieldNames, ITreeSelectApi} from "@src/treeSelect/types/types";
+import {usePrepareData} from "@src/treeSelect/hooks/prepareData";
 
 export const useInitApi = ({
-    api,
-    componentId,
-    treeProps,
-    updateProps,
-    buttonsApi,
-}: {
+                               api,
+                               componentId,
+                               props,
+                               setProps,
+                               buttonsApi,
+                           }: {
     api: ITreeSelectApi;
     componentId: string;
-    treeProps: ITreeSelectProps;
-    updateProps: (props: ITreeSelectProps) => void;
+    props: ITreeSelectProps;
+    setProps: (props: ITreeSelectProps) => void;
     buttonsApi: IButtonsRowApi;
 }) => {
     const isMountedRef = useIsMountedRef();
-    const [dataSet, setDataSet] = useDataSet(treeProps.titleRender, treeProps.labelRender, isMountedRef);
     const [isReady, setIsReady] = useState(false);
-    const [fetching, setFetching] = React.useState(false); //is fetching now
-    const [fetchError, setFetchError] = React.useState(''); //has fetching error
-    const [allFetched, setAllFetched] = React.useState(false); //is all fetched
-    const [minSymbols, setMinSymbols] = React.useState(0); //show min symbols error
+    const [fetching, setFetching] = useState(false); //is fetching now
+    const [fetchError, setFetchError] = useState(''); //has fetching error
+    const [allFetched, setAllFetched] = useState(false); //is all fetched
+    const [minSymbols, setMinSymbols] = useState(0); //show min symbols error
+    const dataMutator = usePrepareData(props);
 
-    const [internalValue, selectedNodesRef, setValue] = useValueConvertor(
-        treeProps.fieldNames,
-        treeProps.labelRender,
-        treeProps.titleRender,
-        treeProps.multiple
-    );
+    const [values, setValues] = useState<ITreeSelectValues>(undefined);
+    /** Set value if props changed*/
+    useEffect(() => {
+        let values = undefined;
+        if (props.value) values = Array.isArray(props.value) ? props.value : [props.value];
+        api.setValues(values);
+    }, [api, props.value]);
+
+    const [dataSet, setDataSet] = useState(dataMutator(props.dataSet));
+    /** Set dataSet if props changed */
+    useEffect(() => {
+        setDataSet(dataMutator(props.dataSet)); //user can set dataSet in props
+    }, [dataMutator, props.dataSet]);
 
     api.buttonsApi = buttonsApi;
     api.getId = useApiGetId(componentId);
     api.isMounted = useApiIsMounted(isMountedRef);
-    api.getProps = useApiGetProps(treeProps);
-    api.setProps = useApiSetProps(treeProps, updateProps);
-
-    api.getInternalValue = useApiGetInternalValue(internalValue);
-    api.getValues = useApiGetValues(selectedNodesRef);
-    api.setValues = useApiSetValue(setValue, api);
-
+    api.getFieldNames = useApiGetFieldNames(props);
+    api.getProps = useApiGetProps(props);
+    api.setProps = useApiSetProps(setProps);
+    api.updateProps = useApiUpdateProps(props, setProps);
     api.getDataSet = useApiGetDataSet(dataSet);
     api.setDataSet = useApiSetDataSet(setDataSet);
-
-    api.plainValueToNodes = usePlainValuesToNodes(api);
+    api.getValues = useApiGetValues(values);
+    api.setValues = useApiSetValue(setValues);
+    api.getNode = useApiGetNode(api);
+    api.getSelectedNodes = useApiGetSelectedNodes(api);
 
     api.getIsReady = useApiGetIsReady(isReady);
     api.setIsReady = useApiSetIsReady(setIsReady);
@@ -161,67 +87,104 @@ const useApiIsMounted = (isMountedRef: React.MutableRefObject<boolean>) => {
     return useCallback(() => isMountedRef.current, [isMountedRef]);
 };
 
-const useApiGetProps = (treeSelectProps: ITreeSelectProps) => {
-    return useCallback(() => treeSelectProps, [treeSelectProps]);
+const useApiGetFieldNames = (props: ITreeSelectProps): ITreeSelectApi['getFieldNames'] => {
+    return useCallback(() => ({value: 'value', label: 'label', children: 'children', ...props.fieldNames}), [props.fieldNames]);
 };
 
-const useApiSetProps = (treeSelectProps: ITreeSelectProps, setTreeSelectProps: (props: ITreeSelectProps) => void) => {
+const useApiGetProps = (props: ITreeSelectProps) => {
+    return useCallback(() => props, [props]);
+};
+
+const useApiSetProps = (setProps: (props: ITreeSelectProps) => void): ITreeSelectApi['setProps'] => {
     return useCallback(
-        (props: Partial<Omit<ITreeSelectProps, 'fieldsProps'>>) => {
-            setTreeSelectProps({...treeSelectProps, ...props});
+        (props) => {
+            setProps(props);
         },
-        [treeSelectProps, setTreeSelectProps]
+        [setProps]
     );
 };
 
-const useApiGetInternalValue = (internalValue: ITreeSelectInternalValue | ITreeSelectInternalValue[] | null | undefined) => {
-    return useCallback(() => internalValue, [internalValue]);
-};
-
-const useApiGetValues = (selectedNodesRef: React.MutableRefObject<ITreeSelectNode[]>) => {
-    return useCallback(() => selectedNodesRef.current, [selectedNodesRef]);
-};
-
-const useApiSetValue = (setValue: (value: ITreeSelectValue | null) => void, api: ITreeSelectApi) => {
+const useApiUpdateProps = (curProps: ITreeSelectProps, setProps: (props: ITreeSelectProps) => void): ITreeSelectApi['updateProps'] => {
     return useCallback(
-        (value: ITreeSelectValue | string | null) => {
-            const treeProps = api.getProps();
-            const keyField = treeProps.fieldNames?.value ?? 'id';
-            let newVal: ITreeSelectValue | null;
-            if (typeof value !== 'string') newVal = value;
-            else {
-                newVal = {} as ITreeSelectNode;
-                newVal[keyField] = value;
-            }
-
-            setValue(newVal ?? []);
-
-            if (!newVal) {
-                treeProps?.onChange?.(null);
-            } else if (!treeProps.multiple) {
-                treeProps?.onChange?.(
-                    IsArray(newVal) && (newVal as ITreeSelectNode[]).length > 0 ? (newVal as ITreeSelectNode[])[0] : (newVal as ITreeSelectNode)
-                );
-            } else {
-                treeProps?.onChange?.(newVal || []);
-            }
+        (props) => {
+            setProps({...curProps, ...props});
         },
-        [api, setValue]
+        [curProps, setProps]
     );
 };
 
-const useApiGetDataSet = (dataSet: ITreeSelectNode[] | undefined) => {
+const useApiGetDataSet = (dataSet: ITreeSelectNode[] | undefined): ITreeSelectApi['getDataSet'] => {
     return useCallback(() => dataSet, [dataSet]);
 };
 
-const useApiSetDataSet = (setDataSet: (newDataSet: ITreeSelectNode[] | undefined) => void) => {
+const useApiSetDataSet = (setDataSet: (newDataSet: ITreeSelectNode[] | undefined) => void): ITreeSelectApi['setDataSet'] => {
     return useCallback(
-        (dataSet: ITreeSelectNode[] | undefined | null) => {
+        (dataSet) => {
             setDataSet(dataSet ?? []);
         },
         [setDataSet]
     );
 };
+
+export const useApiPrepareNode = (treeProps: ITreeSelectProps): ITreeSelectApi['prepareNode'] => {
+    return useCallback(
+        node => {
+            let mutatedNode = {...node};
+            if (treeProps.dataMutator) mutatedNode = treeProps.dataMutator(mutatedNode);
+            return mutatedNode;
+        },
+        [treeProps]
+    );
+};
+
+
+const useApiGetValues = (values: ITreeSelectValues): ITreeSelectApi['getValues'] => {
+    return useCallback(() => values, [values]);
+};
+
+const useApiSetValue = (setValue: (value: ITreeSelectValues) => void): ITreeSelectApi['setValues'] => {
+    return useCallback(
+        (value) => {
+            setValue(value);
+        },
+        [setValue]
+    );
+};
+
+const useApiGetNode = (api: ITreeSelectApi): ITreeSelectApi['getNode'] => {
+    return useCallback(
+        (key, externalDataset) => {
+            const fieldNames = api.getFieldNames();
+            if (!key) return undefined;
+            const data = externalDataset ?? api.getDataSet();
+            const {idx, nodes} = findNodeIndex(data, key, fieldNames);
+            return idx > -1 ? nodes![idx] : undefined;
+        },
+        [api]
+    );
+};
+
+const useApiGetSelectedNodes = (api: ITreeSelectApi): ITreeSelectApi['getSelectedNodes'] => {
+    return useCallback(
+        (externalDataset) => {
+            const keys = api.getValues();
+            if (!keys) return undefined;
+            const fieldNames = api.getFieldNames();
+            const data = externalDataset ?? api.getDataSet();
+
+            const result = [] as ITreeSelectNode[];
+            for (const key of keys) {
+                const {idx, nodes} = findNodeIndex(data, key, fieldNames);
+                if (idx > -1) result.push(nodes![idx]);
+            }
+
+            return result
+
+        },
+        [api]
+    );
+};
+
 
 const useApiGetIsReady = (isReady: boolean) => {
     return useCallback(() => isReady, [isReady]);
@@ -403,3 +366,30 @@ const useDeleteNodes = (api: ITreeSelectApi) => {
         [api]
     );
 };
+
+//region Service methods
+const findNodeIndex = (
+    dataSet: ITreeSelectNode['dataSet'],
+    key: Key,
+    fieldNames: IFieldNames
+): {
+    idx: number;
+    nodes: ITreeSelectNode['dataSet'];
+} => {
+    const valueField = fieldNames.value;
+    const recursive = (nodes: ITreeSelectNode['dataSet']): { idx: number; nodes: ITreeSelectProps['dataSet'] } => {
+        if (!nodes || !key) return {idx: -1, nodes: undefined};
+        for (let i = 0; i < nodes.length; i++) {
+            const node = nodes[i];
+            if (node[valueField] === key) return {idx: i, nodes};
+
+            const childInfo = recursive(node.children);
+            if (childInfo.idx > -1) return childInfo;
+        }
+
+        return {idx: -1, nodes: undefined};
+    };
+
+    return recursive(dataSet);
+};
+//endregion

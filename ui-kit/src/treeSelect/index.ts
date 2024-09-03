@@ -1,14 +1,14 @@
 export {TreeSelect} from '@src/treeSelect/treeSelect';
 
 export type {
-    ITreeSelectNode,
     ITreeSelectPlainValue,
-    ITreeSelectProps,
-    ITreeSelectValue,
-    IAntTreeSelectProps,
     ITreeSelectDeletePromise,
     ITreeSelectSourcePromise,
+    ITreeSelectProps,
     ITreeSelectBaseProps,
-} from '@src/treeSelect/treeSelect';
+    IAntTreeSelectProps,
+    ITreeSelectValues,
+    ITreeSelectNode,
+    ITreeSelectApi
+} from "@src/treeSelect/types/types";
 
-export type {ITreeSelectApi} from '@src/treeSelect/hooks/api';

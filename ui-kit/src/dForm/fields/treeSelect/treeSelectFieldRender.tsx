@@ -1,24 +1,27 @@
-import React, {CSSProperties, useCallback, useEffect, useMemo, useSyncExternalStore} from 'react';
+import React, {CSSProperties, useCallback, useEffect, useMemo, useState, useSyncExternalStore} from 'react';
 import {ITreeSelectFieldOnlyProps, TreeSelectField} from '@src/dForm/fields/treeSelect/treeSelectField';
-import {ITreeSelectProps, ITreeSelectValue, TreeSelect} from '@src/treeSelect';
+import {IAntTreeSelectProps, ITreeSelectApi, ITreeSelectProps, ITreeSelectValues, TreeSelect} from '@src/treeSelect';
 import {SplitObject} from '@krinopotam/js-helpers';
 import {IDFormFieldProps} from '@src/dForm/fields';
 
 export const TreeSelectFieldRender = ({field}: {field: TreeSelectField}): React.JSX.Element => {
     useSyncExternalStore(field.subscribe.bind(field), field.getSnapshot.bind(field));
 
+    const [api] = useState({} as ITreeSelectApi);
+
     const fieldProps = field.getProps();
 
-    const value = field.getValue() as ITreeSelectValue | string;
+    const value = field.getValue() as ITreeSelectValues | string;
     const treeProps = useSplitTreeSelectProps(fieldProps);
 
-    const onChange = useCallback(
-        (value: ITreeSelectValue) => {
+    const onChange = useCallback<NonNullable< IAntTreeSelectProps['onChange']>>(
+        (value, label, extra) => {
             if (field.isReady()) {
+                const nodes =api.getSelectedNodes()
                 field.setValue(value ?? null);
                 field.setDirty(true);
             }
-            fieldProps.onChange?.(value);
+            fieldProps.onChange?.(value, label, extra);
         },
         [field, fieldProps]
     );
@@ -40,6 +43,7 @@ export const TreeSelectFieldRender = ({field}: {field: TreeSelectField}): React.
 
     return (
         <TreeSelect
+            apiRef={api}
             style={style}
             {...treeProps}
             autoFocus={fieldProps.autoFocus}
