@@ -30,19 +30,21 @@ export const TreeSelectRender = ({
     const value = useValue(treeApi);
     const fieldNames = useFieldNames(treeApi);
     const treeNodeLabelProp = useTreeNodeLabelProp(treeApi);
+    const expandedKeys = treeApi.getExpandedKeys()
+    const onExpand = useOnExpand(treeApi);
     const onClear = useOnClear(treeApi);
     const onChange = useOnChange(treeApi);
     const onDropdownVisibleChange = useOnDropdownVisibleChange(treeApi);
     const onSearch = useOnSearch(treeApi);
     const filterTreeNode = useOnFilterTreeNode(treeApi);
     const plainList = treeApi.isDataPlainList();
-
+    console.log(expandedKeys)
     return (
         <>
             <AntdTreeSelect
                 ref={treeApi.treeSelectRef}
                 showSearch // shows search field by default
-                treeDefaultExpandAll // expands all nodes by default
+                //treeDefaultExpandAll // expands all nodes by default
                 allowClear // allows to clear the selected value by default
                 treeNodeFilterProp={fieldNames.label} //Field to be  used for filtering if filterTreeNode returns true. Default: title (getting from api.fieldNames)
                 dropdownRender={defaultDropdownRender}
@@ -57,11 +59,12 @@ export const TreeSelectRender = ({
                 value={value}
                 disabled={allProps.disabled || allProps.readOnly} //TODO: implement true readOnly
                 //labelInValue // We do not use this mode, as it is useless. In this mode, onChange will return an object containing value and label, but you still can’t build a full node
-
+                treeExpandedKeys={expandedKeys}
                 //loadData={onLoadData}
                 dropdownStyle={dropdownStyle}
                 /** --- Callbacks --------------- */
                 filterTreeNode={filterTreeNode}
+                onTreeExpand={onExpand}
                 onClear={onClear}
                 onChange={onChange}
                 onDropdownVisibleChange={onDropdownVisibleChange}
@@ -154,4 +157,15 @@ const useTreeNodeLabelProp = (api: ITreeSelectApi) => {
         if (props.treeNodeLabelProp) return props.treeNodeLabelProp;
         return !props.treeTitleRender && props.labelRender ? '__label' : fieldNames.title;
     }, [api]);
+};
+
+const useOnExpand = (treeApi: ITreeSelectApi) => {
+    return useCallback<NonNullable<ITreeSelectProps['onTreeExpand']>>(
+        (keys) => {
+            const props = treeApi.getProps();
+            treeApi.setExpandedKeys(keys);
+            props.onTreeExpand?.(keys);
+        },
+        [treeApi]
+    );
 };

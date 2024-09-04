@@ -2,7 +2,7 @@
 
 import React from 'react';
 import {DForm, IDFormProps} from '@src/dForm';
-import {TreeSelectField} from "@src/dForm/fields/treeSelect/treeSelectField";
+import {ITreeSelectFieldProps, TreeSelectField} from "@src/dForm/fields/treeSelect/treeSelectField";
 
 const dataSet = [
     {
@@ -110,7 +110,7 @@ const formProps: IDFormProps = {
     formId: 'Test form',
     confirmChanges: true,
     fieldsProps: {
-        departments: {component: TreeSelectField, label: 'Подразделения', dataSet: dataSet},
+        departments: {component: TreeSelectField, label: 'Подразделения', treeDefaultExpandAll: true, dataSet: dataSet} satisfies ITreeSelectFieldProps,
     },
     buttons: null,
 };

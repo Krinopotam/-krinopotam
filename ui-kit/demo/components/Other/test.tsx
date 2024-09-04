@@ -83,6 +83,7 @@ export const Test: React.FC = () => {
             onDeselect={onSelect}
             treeData={treeData}
             onPopupScroll={onPopupScroll}
+            onTreeExpand={console.log}
         />
     );
 };

@@ -1,16 +1,16 @@
 import React, {useLayoutEffect, useState} from 'react';
-import {ObjectKeysLength} from "@krinopotam/js-helpers";
+import {ObjectKeysLength} from '@krinopotam/js-helpers';
 import {ButtonsRow} from '@src/buttonsRow/buttonsRow';
-import {useInitButtons} from "../hooks/buttons";
-import {IGridApi} from "@src/tabulatorGrid";
+import {useInitButtons} from '../hooks/buttons';
+import {IGridApi} from '@src/tabulatorGrid';
 
 interface IGridMenuProps {
-    gridApi: IGridApi
+    gridApi: IGridApi;
 }
 
 export const MenuRow = ({gridApi}: IGridMenuProps): React.JSX.Element | null => {
     const gridProps = gridApi.gridProps;
-    const buttons = useInitButtons(gridApi)
+    const buttons = useInitButtons(gridApi);
 
     const [isMenuVisible, setIsMenuVisible] = useState<boolean | undefined>(undefined);
 
@@ -26,7 +26,13 @@ export const MenuRow = ({gridApi}: IGridMenuProps): React.JSX.Element | null => 
 
     return (
         <div style={{paddingBottom: 8, paddingTop: 8}}>
-            <ButtonsRow buttons={buttons} apiRef={gridApi.buttonsApi} context={gridApi} responsiveBreakpoint={gridProps.responsiveBreakpoint}/>
+            <ButtonsRow
+                buttons={buttons}
+                apiRef={gridApi.buttonsApi}
+                context={gridApi}
+                responsiveBreakpoint={gridProps.responsiveBreakpoint}
+                iconsOnly={gridProps.buttonsIconsOnly}
+            />
         </div>
     );
 };

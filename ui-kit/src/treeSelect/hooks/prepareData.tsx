@@ -1,41 +1,49 @@
-import {useCallback, useRef} from 'react';
-import {ITreeSelectNode, ITreeSelectProps} from "@src/treeSelect";
-import {useApiPrepareNode} from "@src/treeSelect/hooks/api";
+import React, {useCallback, useRef} from 'react';
+import {ITreeSelectNode, ITreeSelectProps} from '@src/treeSelect';
+import {useApiPrepareNode} from '@src/treeSelect/hooks/api';
 
 /** Converts the given data by applying the dataMutator function to each node in the tree. */
-export const usePrepareData = (treeProps: ITreeSelectProps, setIsDataPlain: (isDataPlain: boolean) => void) => {
+export const usePrepareData = (
+    treeProps: ITreeSelectProps,
+    setIsDataPlain: (isDataPlain: boolean) => void,
+    setExpandedKeys: React.Dispatch<React.SetStateAction<React.Key[] | undefined>>
+) => {
     const prevDataSetRef = useRef<ITreeSelectProps['dataSet']>(undefined);
-    const prevMutatedDataSetRef = useRef<ITreeSelectProps['dataSet']>(undefined);
-    const mutateNode = useApiPrepareNode(treeProps);
+    const prevUpdatedDataSetRef = useRef<ITreeSelectProps['dataSet']>(undefined);
+    const prepareNode = useApiPrepareNode(treeProps);
     return useCallback(
         (dataSet: ITreeSelectProps['dataSet']) => {
-            if (prevDataSetRef.current === dataSet) return prevMutatedDataSetRef.current;
+            if (prevDataSetRef.current === dataSet) return prevUpdatedDataSetRef.current;
             prevDataSetRef.current = dataSet;
 
             let isDataPlain = true;
+            const expandedKeys: ITreeSelectProps['treeExpandedKeys'] = [];
 
-            const mutateRecursive = (data: ITreeSelectProps['dataSet']) => {
+            const recursive = (data: ITreeSelectProps['dataSet']) => {
                 const result: ITreeSelectNode[] = [];
                 if (!data) return result;
                 for (const node of data) {
-                    const mutatedNode = mutateNode(node);
-                    if (mutatedNode.children?.length) {
+                    const preparedNode = prepareNode(node);
+                    if (treeProps.treeDefaultExpandAll &&  preparedNode.children) expandedKeys.push(preparedNode.key);
+
+                    if (preparedNode.children?.length) {
                         isDataPlain = false;
-                        mutatedNode.children = mutateRecursive(mutatedNode.children);
+                        preparedNode.children = recursive(preparedNode.children);
                     }
 
-                    result.push(mutatedNode);
+                    result.push(preparedNode);
                 }
                 return result;
             };
 
-
-            const mutatedDataSet = mutateRecursive(dataSet);
-            setIsDataPlain(isDataPlain)
-            prevMutatedDataSetRef.current = mutatedDataSet;
-            return mutatedDataSet;
+            console.log(22222222222222)
+            const updatedDataSet = recursive(dataSet);
+            setIsDataPlain(isDataPlain);
+            if (treeProps.treeDefaultExpandAll) setExpandedKeys(expandedKeys);
+            console.log( '44444444', treeProps.treeDefaultExpandAll,expandedKeys  )
+            prevUpdatedDataSetRef.current = updatedDataSet;
+            return updatedDataSet;
         },
-        [mutateNode]
+        [prepareNode, setExpandedKeys, setIsDataPlain, treeProps.treeDefaultExpandAll]
     );
 };
-

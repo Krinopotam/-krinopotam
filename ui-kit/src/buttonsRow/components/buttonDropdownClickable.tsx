@@ -8,16 +8,16 @@ export const ButtonDropdownClickable = ({
                                             button,
                                             context,
                                             menuProps,
-                                            componentProps,
+                                            rowProps,
                                         }: {
     id: string;
     button: IFormButton;
     context: unknown;
     menuProps: MenuProps;
-    componentProps: IButtonRowProps;
+    rowProps: IButtonRowProps;
 }): React.JSX.Element => {
     let type: IButtonType = 'default';
-    if (componentProps.makeActivePrimary !== false && button.active) type = 'primary';
+    if (rowProps.makeActivePrimary !== false && button.active) type = 'primary';
     else if (button.type === 'text') type = 'text';
     else if (button.type === 'link') type = 'link';
     else if (button.dashed) type = 'dashed';

@@ -1,20 +1,21 @@
 import {IButtonRowProps, IFormButton} from '@src/buttonsRow';
-import React, {CSSProperties, useCallback, useEffect, useRef, useState} from 'react';
+import React, {CSSProperties, useCallback, useEffect, useRef} from 'react';
 import {Button, IButtonType} from '@src/button';
-import {useResponsive} from "@krinopotam/common-hooks";
 
 export const ButtonSimple = ({
     id,
     button,
     context,
-    componentProps,
+    rowProps,
     children,
+    iconOnly,
 }: {
     id: string;
     button: IFormButton;
     context: unknown;
-    componentProps: IButtonRowProps;
+    rowProps: IButtonRowProps;
     children?: React.ReactNode;
+    iconOnly?: boolean;
 }) => {
     const onClick = useCallback(() => {
         button.onClick?.(id, button, context);
@@ -22,15 +23,11 @@ export const ButtonSimple = ({
 
     const btnRef = useRef<HTMLButtonElement>(null);
     useEffect(() => {
-        if (button.active && componentProps.makeActivePrimary === false) btnRef.current?.focus();
-    }, [button.active, componentProps.makeActivePrimary]);
-
-    const [collapseMode, setCollapseMode] = useState(false);
-    useResponsive(componentProps.responsiveBreakpoint, broken => setCollapseMode(broken));
-    const  title =(componentProps.responsiveBreakpoint && collapseMode && button.icon) ? undefined :  button.title
+        if (button.active && rowProps.makeActivePrimary === false) btnRef.current?.focus();
+    }, [button.active, rowProps.makeActivePrimary]);
 
     let type: IButtonType | undefined;
-    if (componentProps.makeActivePrimary !== false && button.active) type = 'primary';
+    if (rowProps.makeActivePrimary !== false && button.active) type = 'primary';
     else if (button.type === 'text') type = 'text';
     else if (button.type === 'link') type = 'link';
     else if (button.dashed) type = 'dashed';
@@ -38,8 +35,9 @@ export const ButtonSimple = ({
     const style: CSSProperties = {...button.style};
     if (typeof button.width !== 'undefined') style.width = button.width;
 
-    const disabled = (typeof button.disabled === 'function') ? button.disabled(id, button, context) : button.disabled;
-    const loading = (typeof button.loading === 'function') ? button.loading(id, button, context) : button.loading;
+    const disabled = typeof button.disabled === 'function' ? button.disabled(id, button, context) : button.disabled;
+    const loading = typeof button.loading === 'function' ? button.loading(id, button, context) : button.loading;
+    const title = !iconOnly ?  button.title : '';
 
     return (
         <Button
@@ -58,7 +56,6 @@ export const ButtonSimple = ({
             className={button.className}
             icon={button.icon}
             shape={button.shape}
-
             squareSize={!title && ((!!button.icon && !button.expandIcon) || (!button.icon && !!button.expandIcon))}
         >
             {children ?? title}

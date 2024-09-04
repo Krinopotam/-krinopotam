@@ -5,9 +5,11 @@ import {useDataFetcher} from '@src/treeSelect/hooks/dataFetcher';
 import runDebounce from 'lodash.debounce';
 import {IButtonsRowApi} from '@src/buttonsRow';
 import {GetUuid, IsArray} from '@krinopotam/js-helpers';
-import {IFieldNames, ITreeSelectApi} from '@src/treeSelect/types/types';
+import {ITreeSelectApi} from '@src/treeSelect/types/types';
 import {usePrepareData} from '@src/treeSelect/hooks/prepareData';
-import {IDFormModalApi} from "@src/dFormModal";
+import {IDFormModalApi} from '@src/dFormModal';
+import {findNodeIndex} from '@src/_shared/tools/nodesMethods/findNodeIndex';
+import {findNextNodeKey, findPrevNodeKey} from '@src/_shared/tools/nodesMethods/findeNextNodeKey';
 
 export const useInitApi = ({
     api,
@@ -22,8 +24,8 @@ export const useInitApi = ({
     componentId: string;
     props: ITreeSelectProps;
     setProps: (props: ITreeSelectProps) => void;
-    buttonsApi: IButtonsRowApi;
-    editFormApi:IDFormModalApi;
+    buttonsApi: IButtonsRowApi & {refreshButtons: () => void};
+    editFormApi: IDFormModalApi;
     editGroupFormApi: IDFormModalApi;
 }) => {
     const isMountedRef = useIsMountedRef();
@@ -34,7 +36,8 @@ export const useInitApi = ({
     const [minSymbols, setMinSymbols] = useState(0); //show min symbols error
     const [values, setValues] = useValue(props); //value
     const [isDataPlain, setIsDataPlain] = useState(false); //is dataSet plain (without children)
-    const [dataSet, setDataSet] = useDataSet(props, setIsDataPlain); //current dataSet
+    const [expandedKeys, setExpandedKeys] = useApiExpandedKeys(props); //expanded keys
+    const [dataSet, setDataSet] = useDataSet(props, setIsDataPlain, setExpandedKeys); //current dataSet
 
     api.treeSelectRef = useRef(null);
     api.getId = useApiGetId(componentId);
@@ -50,6 +53,14 @@ export const useInitApi = ({
     api.setDataSet = useApiSetDataSet(setDataSet);
     api.getValue = useApiGetValue(values);
     api.setValue = useApiSetValue(setValues);
+    api.getExpandedKeys = useApiGetExpandedKeys(expandedKeys);
+    api.setExpandedKeys = useApiSetExpandedKeys(setExpandedKeys);
+    api.getExpandedNodes = useApiGetExpandedNodes(api);
+    api.isNodeExpanded = useApiIsNodeExpanded(api);
+    api.expandNode = useApiExpandNode(api);
+    api.collapseNode = useApiCollapseNode(api);
+    api.toggleNode = useApiToggleNode(api);
+    api.expandParentNodes = useApiExpandParentNodes(api);
     api.getNode = useApiGetNode(api);
     api.getNodes = useApiGetNodes(api);
     api.getSelectedNodes = useApiGetSelectedNodes(api);
@@ -64,6 +75,10 @@ export const useInitApi = ({
     api.getMinSymbols = useApiGetMinSymbols(minSymbols);
     api.setSetMynSymbols = useApiSetMinSymbols(setMinSymbols);
     api.isDataPlainList = useApiIsDataPlainList(isDataPlain);
+    api.getNextNodeKey = useApiGetNextNodeKey(api);
+    api.getPrevNodeKey = useApiGetPrevNodeKey(api);
+    api.getNextNode = useApiGetNextNode(api);
+    api.getPrevNode = useApiGetPrevNode(api);
 
     const dataFetcher = useDataFetcher(api);
     api.fetchData = useFetchData(dataFetcher, api);
@@ -81,7 +96,7 @@ const useApiGetId = (componentId: string) => {
 };
 
 /** Get the buttonsApi */
-const useApiGetButtonsApi = (buttonsApi: IButtonsRowApi) => {
+const useApiGetButtonsApi = (buttonsApi: IButtonsRowApi & {refreshButtons: () => void}) => {
     return useCallback(() => buttonsApi, [buttonsApi]);
 };
 
@@ -107,9 +122,10 @@ const useValue = (props: ITreeSelectProps): [value: ITreeSelectValue, setValue: 
 
 const useDataSet = (
     props: ITreeSelectProps,
-    setIsDataPlain: React.Dispatch<React.SetStateAction<boolean>>
+    setIsDataPlain: React.Dispatch<React.SetStateAction<boolean>>,
+    setExpandedKeys: React.Dispatch<React.SetStateAction<React.Key[] | undefined>>
 ): [ITreeSelectNode[] | undefined, React.Dispatch<React.SetStateAction<ITreeSelectNode[] | undefined>>] => {
-    const prepareData = usePrepareData(props, setIsDataPlain);
+    const prepareData = usePrepareData(props, setIsDataPlain, setExpandedKeys);
 
     const [dataSet, setDataSet] = useState(prepareData(props.dataSet));
     /** Set dataSet if props changed */
@@ -198,14 +214,88 @@ const useApiSetValue = (setValue: (value: ITreeSelectValue) => void): ITreeSelec
     );
 };
 
+const useApiExpandedKeys = (props: ITreeSelectProps): [React.Key[] | undefined,  React.Dispatch<React.SetStateAction<React.Key[] | undefined>>] => {
+    const [expandedKeys, setExpandedKeys] = useState(props.treeExpandedKeys ?? props.treeDefaultExpandedKeys);
+    useEffect(() => {
+        setExpandedKeys(props.treeExpandedKeys); //user can set treeExpandedKeys in props
+    }, [props.treeExpandedKeys]);
+    return [expandedKeys, setExpandedKeys];
+};
+
+
+const useApiGetExpandedKeys = (expandedKeys: ITreeSelectProps['treeExpandedKeys']): ITreeSelectApi['getExpandedKeys'] => {
+    return useCallback(() => expandedKeys, [expandedKeys]);
+};
+
+const useApiSetExpandedKeys = (setExpandedKeys: React.Dispatch<React.SetStateAction<ITreeSelectProps['treeExpandedKeys']>>): ITreeSelectApi['setExpandedKeys'] => {
+    return useCallback(
+        keys => {
+            setExpandedKeys(keys);
+        },
+        [setExpandedKeys]
+    );
+};
+
+const useApiGetExpandedNodes = (api: ITreeSelectApi): ITreeSelectApi['getExpandedNodes'] => {
+    return useCallback(() => {
+        const expandedKeys = api.getExpandedKeys();
+        if (!expandedKeys) return undefined;
+
+        const result: ITreeSelectNode[] = [];
+        for (const key of expandedKeys) {
+            const foundNode = api.getNode(key);
+            if (foundNode) result.push(foundNode);
+        }
+        return result;
+    }, [api]);
+};
+
+const useApiIsNodeExpanded = (api: ITreeSelectApi): ITreeSelectApi['isNodeExpanded'] => {
+    return useCallback((key: Key) => api.getExpandedKeys()?.includes(key) ?? false, [api]);
+};
+
+const useApiExpandNode = (api: ITreeSelectApi): ITreeSelectApi['expandNode'] => {
+    return useCallback(
+        key => {
+            const expandedKeys = api.getExpandedKeys();
+            if (expandedKeys?.includes(key)) return;
+            api.setExpandedKeys([...(expandedKeys ?? []), key]);
+        },
+        [api]
+    );
+};
+
+const useApiCollapseNode = (api: ITreeSelectApi): ITreeSelectApi['collapseNode'] => {
+    return useCallback(
+        key => {
+            const expandedKeys = api.getExpandedKeys();
+            if (!expandedKeys?.includes(key)) return;
+            api.setExpandedKeys(expandedKeys?.filter(curKey => curKey !== key));
+        },
+        [api]
+    );
+};
+
+const useApiToggleNode = (api: ITreeSelectApi): ITreeSelectApi['toggleNode'] => {
+    return useCallback(
+        key => {
+            const expandedKeys = api.getExpandedKeys();
+            if (expandedKeys?.includes(key)) api.setExpandedKeys(expandedKeys?.filter(curKey => curKey !== key));
+            else api.setExpandedKeys([...(expandedKeys ?? []), key]);
+        },
+        [api]
+    );
+};
+
+
 const useApiGetNode = (api: ITreeSelectApi): ITreeSelectApi['getNode'] => {
     return useCallback(
         (key, externalDataset) => {
             const fieldNames = api.getFieldNames();
             if (!key) return undefined;
             const data = externalDataset ?? api.getDataSet();
-            const {idx, nodes} = findNodeIndex(data, key, fieldNames);
-            return idx > -1 ? nodes[idx] : undefined;
+            const {idx, nodes} = findNodeIndex(data, key, fieldNames.key, fieldNames.children);
+            return idx > -1 ? nodes![idx] : undefined;
         },
         [api]
     );
@@ -240,7 +330,7 @@ const useApiGetSelectedNodes = (api: ITreeSelectApi): ITreeSelectApi['getSelecte
 
             const result = [] as ITreeSelectNode[];
             for (const key of keys) {
-                const {idx, nodes} = findNodeIndex(data, key, fieldNames);
+                const {idx, nodes} = findNodeIndex(data, key, fieldNames.key, fieldNames.children);
                 if (idx > -1) result.push(nodes![idx]);
             }
 
@@ -435,29 +525,82 @@ const useApiIsDataPlainList = (isDataPlain: boolean) => {
     return useCallback(() => isDataPlain, [isDataPlain]);
 };
 
-//region Service methods
-const findNodeIndex = (
-    dataSet: ITreeSelectNode['dataSet'],
-    key: Key,
-    fieldNames: IFieldNames
-): {
-    idx: number;
-    nodes: ITreeSelectNode['dataSet'];
-} => {
-    const keyField = fieldNames.key;
-    const recursive = (nodes: ITreeSelectNode['dataSet']): {idx: number; nodes: ITreeSelectProps['dataSet']} => {
-        if (!nodes || !key) return {idx: -1, nodes: undefined};
-        for (let i = 0; i < nodes.length; i++) {
-            const node = nodes[i];
-            if (node[keyField] === key) return {idx: i, nodes};
+const useApiExpandParentNodes = (api: ITreeSelectApi): ITreeSelectApi['expandParentNodes'] => {
+    return useCallback(
+        (key, externalDataset) => {
+            const recursive = (nodes: ITreeSelectNode[]) => {
+                for (const node of nodes) {
+                    if (node[keyField] === key) return true;
 
-            const childInfo = recursive(node.children);
-            if (childInfo.idx > -1) return childInfo;
-        }
+                    if (node[childrenField]) {
+                        const founded = recursive(node[childrenField] as ITreeSelectNode[]);
 
-        return {idx: -1, nodes: undefined};
-    };
+                        if (founded) {
+                            api.expandNode(node[keyField] as Key);
+                            return true;
+                        }
+                    }
+                }
+            };
 
-    return recursive(dataSet);
+            const fieldNames = api.getFieldNames();
+            const keyField = fieldNames.key;
+            const childrenField = fieldNames.children;
+            const dataSet = externalDataset ?? api.getDataSet();
+
+            if (!dataSet) return;
+            recursive(dataSet);
+        },
+        [api]
+    );
 };
-//endregion
+
+const useApiGetNextNodeKey = (api: ITreeSelectApi): ITreeSelectApi['getNextNodeKey'] => {
+    return useCallback(
+        (key, opts, externalDataset) => {
+            const fieldNames = api.getFieldNames();
+            const keyField = fieldNames.key;
+            const childrenField = fieldNames.children;
+            return findNextNodeKey(externalDataset ?? api.getDataSet(), key, api.getExpandedKeys(), keyField, childrenField, opts);
+        },
+        [api]
+    );
+};
+
+const useApiGetPrevNodeKey = (api: ITreeSelectApi): ITreeSelectApi['getPrevNodeKey'] => {
+    return useCallback(
+        (key, opts, externalDataset) => {
+            const fieldNames = api.getFieldNames();
+            const keyField = fieldNames.key;
+            const childrenField = fieldNames.children;
+            return findPrevNodeKey(externalDataset ?? api.getDataSet(), key, api.getExpandedKeys(), keyField, childrenField, opts);
+        },
+        [api]
+    );
+};
+
+const useApiGetNextNode = (api: ITreeSelectApi): ITreeSelectApi['getNextNode'] => {
+    return useCallback(
+        (node, opts, externalDataset) => {
+            const fieldNames = api.getFieldNames();
+            const keyField = fieldNames.key;
+            const childrenField = fieldNames.children;
+            const nextKey = findNextNodeKey(externalDataset ?? api.getDataSet(), node[keyField] as Key, api.getExpandedKeys(), keyField, childrenField, opts);
+            return nextKey ? api.getNode(nextKey, externalDataset) : undefined;
+        },
+        [api]
+    );
+};
+
+const useApiGetPrevNode = (api: ITreeSelectApi): ITreeSelectApi['getPrevNode'] => {
+    return useCallback(
+        (node, opts, externalDataset) => {
+            const fieldNames = api.getFieldNames();
+            const keyField = fieldNames.key;
+            const childrenField = fieldNames.children;
+            const prevKey = findPrevNodeKey(externalDataset ?? api.getDataSet(), node[keyField] as Key, api.getExpandedKeys(), keyField, childrenField, opts);
+            return prevKey ? api.getNode(prevKey, externalDataset) : undefined;
+        },
+        [api]
+    );
+};

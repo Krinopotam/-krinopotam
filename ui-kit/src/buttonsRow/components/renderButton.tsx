@@ -1,25 +1,32 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Divider, Tooltip} from 'antd';
 import {IButtonRowProps, IFormButton} from '@src/buttonsRow';
 import {ButtonSimple} from '@src/buttonsRow/components/buttonSimple';
 import {RenderDropdown} from '@src/buttonsRow/components/renderDropdown';
+import {useResponsive} from '@krinopotam/common-hooks';
 
 export const RenderButton = ({
     id,
     button,
     context,
-    componentProps,
+    rowProps,
 }: {
     id: string;
     button: IFormButton;
     context?: unknown;
-    componentProps: IButtonRowProps;
+    rowProps: IButtonRowProps;
 }): React.JSX.Element | null => {
-    if (!button || button.hidden || button.type==='hotkey') return null;
+    const [collapseMode, setCollapseMode] = useState(false);
+    useResponsive(rowProps.responsiveBreakpoint, broken => setCollapseMode(broken));
+
+    if (!button || button.hidden || button.type === 'hotkey') return null;
+
+    const iconOnly = !!button.icon && (!!rowProps.iconsOnly || collapseMode);
+    const tooltip = button.tooltip ?? (iconOnly ? button.title : undefined);
 
     /******** Custom element *******/
     if (button.type === 'element') {
-        if (button.tooltip) return <Tooltip title={button.tooltip}>{button.title}</Tooltip>;
+        if (tooltip) return <Tooltip title={tooltip}>{button.title}</Tooltip>;
         else return <>{button.title}</>;
     }
 
@@ -28,26 +35,26 @@ export const RenderButton = ({
 
     /******** Dropdown button ******/
     if (button.children && Object.keys(button.children).length) {
-        if (button.tooltip)
+        if (tooltip)
             return (
-                <Tooltip title={button.tooltip}>
+                <Tooltip title={tooltip}>
                     <>
                         {/*Popover and tooltip has a bug: they are not displayed for custom components if they are not in a frame (<></>) */}
-                        <RenderDropdown id={id} button={button} context={context} componentProps={componentProps} />
+                        <RenderDropdown id={id} button={button} context={context} rowProps={rowProps} iconOnly={iconOnly} />
                     </>
                 </Tooltip>
             );
-        else return <RenderDropdown id={id} button={button} context={context} componentProps={componentProps} />;
+        else return <RenderDropdown id={id} button={button} context={context} rowProps={rowProps} iconOnly={iconOnly} />;
     }
 
     /******** Simple button ********/
-    if (!button.tooltip) return <ButtonSimple id={id} button={button} context={context} componentProps={componentProps} />;
+    if (!tooltip) return <ButtonSimple id={id} button={button} context={context} rowProps={rowProps} iconOnly={iconOnly} />;
 
     return (
-        <Tooltip title={button.tooltip}>
+        <Tooltip title={tooltip}>
             <>
                 {/*Popover and tooltip has a bug: they are not displayed for custom components if they are not in a frame (<></>) */}
-                <ButtonSimple id={id} button={button} context={context} componentProps={componentProps} />
+                <ButtonSimple id={id} button={button} context={context} rowProps={rowProps} iconOnly={iconOnly} />
             </>
         </Tooltip>
     );

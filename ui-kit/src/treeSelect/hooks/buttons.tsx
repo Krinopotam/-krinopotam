@@ -14,7 +14,6 @@ export const useInitButtons = (api: ITreeSelectApi, treeProps: ITreeSelectProps)
     const buttons = treeProps.editButtons;
     const buttonsSize = treeProps.buttonsSize ?? 'small';
     const buttonsPos = treeProps.buttonsPosition ?? 'right';
-    const iconsOnly = treeProps.buttonsIconsOnly;
     const activeItem = '0'; //api.getActiveRow();
     const selectedNodes = api.getSelectedNodes();
 
@@ -45,11 +44,6 @@ export const useInitButtons = (api: ITreeSelectApi, treeProps: ITreeSelectProps)
             if (!btn || buttonId === 'headerLabel' || btn.type === 'hotkey') continue;
             btn.size = btn.size ?? buttonsSize;
             btn.position = btn.position ?? buttonsPos;
-            if (iconsOnly) {
-                btn.tooltip = btn.tooltip ?? btn.title?.toString();
-                btn.title = undefined;
-            }
-
             if (btn.checkDisabled) btn.disabled = !activeItem;
             if (btn.checkHidden) btn.hidden = !activeItem;
         }
@@ -66,7 +60,6 @@ export const useInitButtons = (api: ITreeSelectApi, treeProps: ITreeSelectProps)
         buttons,
         buttonsSize,
         buttonsPos,
-        iconsOnly,
     ]);
 };
 

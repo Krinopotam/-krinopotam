@@ -135,6 +135,9 @@ export interface IButtonRowProps {
 
     /** Breakpoint for responsive design. If the screen decreases below the specified value, the names of the buttons will be hidden, only the icons will remain */
     responsiveBreakpoint?: IBreakpoints;
+
+    /** Show icons only */
+    iconsOnly?: boolean;
 }
 
 export interface IButtonsRowApi {
@@ -165,13 +168,13 @@ export const ButtonsRow = (props: IButtonRowProps): React.JSX.Element => {
         <div style={{display: 'block', ...props.style}} className={'controls-buttons-dynamic-row ' + (props.className ?? '')}>
             <Row wrap={false}>
                 <Col flex="auto" style={{textAlign: 'left'}}>
-                    <RenderButtonGroup key="leftButtons" buttons={curButtons} position="left" context={props.context} componentProps={props} />
+                    <RenderButtonGroup key="leftButtons" buttons={curButtons} position="left" context={props.context} props={props} />
                 </Col>
                 <Col flex="auto" style={{textAlign: 'center'}}>
-                    <RenderButtonGroup key="centerButtons" buttons={curButtons} position="center" context={props.context} componentProps={props} />
+                    <RenderButtonGroup key="centerButtons" buttons={curButtons} position="center" context={props.context} props={props} />
                 </Col>
                 <Col flex="auto" style={{textAlign: 'right'}}>
-                    <RenderButtonGroup key="rightButtons" buttons={curButtons} position="right" context={props.context} componentProps={props} />
+                    <RenderButtonGroup key="rightButtons" buttons={curButtons} position="right" context={props.context} props={props} />
                 </Col>
             </Row>
         </div>

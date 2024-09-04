@@ -5,21 +5,33 @@ import {ButtonDropdownClickable} from '@src/buttonsRow/components/buttonDropdown
 import {ButtonDropdownLink} from '@src/buttonsRow/components/buttonDropdownLink';
 import {ButtonDropdown} from '@src/buttonsRow/components/buttonDropdown';
 import {getSortedButtonsKeys} from '@src/buttonsRow/helpers/buttonMethods';
-import {ItemType, MenuDividerType, MenuItemGroupType} from "antd/es/menu/interface";
+import {ItemType, MenuDividerType, MenuItemGroupType} from 'antd/es/menu/interface';
 
-export const RenderDropdown = ({id, button, context, componentProps}: {id: string; button: IFormButton; context: unknown; componentProps: IButtonRowProps}) => {
+export const RenderDropdown = ({
+    id,
+    button,
+    context,
+    rowProps,
+    iconOnly,
+}: {
+    id: string;
+    button: IFormButton;
+    context: unknown;
+    rowProps: IButtonRowProps;
+    iconOnly?: boolean;
+}) => {
     const items: MenuProps['items'] = prepareDropdownItems(button.children, id, context);
 
     const menuProps: MenuProps = {items};
 
     /** Dropdown link */
-    if (button.type === 'link') return <ButtonDropdownLink button={button} menuProps={menuProps} componentProps={componentProps} />;
+    if (button.type === 'link') return <ButtonDropdownLink button={button} menuProps={menuProps} rowProps={rowProps} iconOnly={iconOnly} />;
 
     /** Clickable dropdown button */
-    if (button.onClick) return <ButtonDropdownClickable id={id} button={button} context={context} menuProps={menuProps} componentProps={componentProps} />;
+    if (button.onClick) return <ButtonDropdownClickable id={id} button={button} context={context} menuProps={menuProps} rowProps={rowProps} />;
 
     /** Not clickable dropdown button */
-    return <ButtonDropdown id={id} button={button} context={context} menuProps={menuProps} componentProps={componentProps} />;
+    return <ButtonDropdown id={id} button={button} context={context} menuProps={menuProps} rowProps={rowProps} iconOnly={iconOnly} />;
 };
 
 const prepareDropdownItems = (buttons: IFormButton['children'], parentId: string, context: unknown) => {
@@ -39,7 +51,7 @@ const prepareDropdownItems = (buttons: IFormButton['children'], parentId: string
 
         let item: ItemType;
 
-        const disabled = (typeof button.disabled === 'function') ? button.disabled(id, button, context) : button.disabled;
+        const disabled = typeof button.disabled === 'function' ? button.disabled(id, button, context) : button.disabled;
 
         if (button.type === 'divider') {
             item = {
