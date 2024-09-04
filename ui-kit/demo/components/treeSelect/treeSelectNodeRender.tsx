@@ -149,7 +149,6 @@ const formProps: IDFormProps = {
             titleRender: titleRender, //node title render
             labelRender: labelRender, //node label render
             filterTreeNode: filterTreeNode, //custom filter
-            plainList: true,
         } satisfies ITreeSelectFieldProps,
     },
     buttons: null,

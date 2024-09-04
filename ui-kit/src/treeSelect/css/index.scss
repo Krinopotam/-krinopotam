@@ -1,0 +1,14 @@
+
+.tree-select-plain {
+  .ant-select-tree {
+    .ant-select-tree-treenode {
+      span.ant-select-tree-switcher {
+        display: none !important;
+      }
+
+      .ant-select-tree-node-content-wrapper {
+        padding-left: 8px;
+      }
+    }
+  }
+}

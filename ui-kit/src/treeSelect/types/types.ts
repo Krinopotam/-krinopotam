@@ -66,10 +66,6 @@ export interface ITreeSelectBaseProps {
     /** Should confirm before delete */
     confirmDelete?: boolean;
 
-
-    /** If true, the component is expected to contain a flat list (no children). In this case, the space for the expand/collapse icon will be hidden*/
-    plainList?: boolean;
-
     /** Data mutator function (mutates original data) */
     dataMutator?: <T extends object>(node: T) => ITreeSelectNode;
 
@@ -226,4 +222,6 @@ export interface ITreeSelectApi {
     /** Mutate node supplementing it with the necessary properties specified in the component parameters */
     prepareNode: (node: ITreeSelectNode) => ITreeSelectNode;
 
+    /** Check if data set is plain list (has no children) */
+    isDataPlainList: () => boolean;
 }

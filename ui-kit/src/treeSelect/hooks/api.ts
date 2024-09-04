@@ -27,7 +27,8 @@ export const useInitApi = ({
     const [fetchError, setFetchError] = useState(''); //has fetching error
     const [allFetched, setAllFetched] = useState(false); //is all fetched
     const [minSymbols, setMinSymbols] = useState(0); //show min symbols error
-    const dataMutator = usePrepareData(props);
+    const [isDataPlain, setIsDataPlain] = useState(false); //is dataSet plain
+    const dataMutator = usePrepareData(props, setIsDataPlain);
 
     const [values, setValues] = useState<ITreeSelectValue>(transformValue(props.value));
     /** Set value if props changed*/
@@ -65,6 +66,7 @@ export const useInitApi = ({
     api.setIsAllFetched = useApiSetIsAllFetched(setAllFetched);
     api.getMinSymbols = useApiGetMinSymbols(minSymbols);
     api.setSetMynSymbols = useApiSetMinSymbols(setMinSymbols);
+    api.isDataPlainList = useApiIsDataPlainList(isDataPlain);
 
     const dataFetcher = useDataFetcher(api);
     api.fetchData = useFetchData(dataFetcher, api);
@@ -391,6 +393,10 @@ const useDeleteNodes = (api: ITreeSelectApi) => {
         [api]
     );
 };
+
+const useApiIsDataPlainList = (isDataPlain: boolean) => {
+    return useCallback(() => isDataPlain, [isDataPlain]);
+}
 
 //region Service methods
 const findNodeIndex = (

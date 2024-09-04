@@ -31,6 +31,7 @@ export const TreeSelectRender = ({
     const onDropdownVisibleChange = useOnDropdownVisibleChange(api)
     const onSearch = useOnSearch(api)
     const filterTreeNode = useOnFilterTreeNode(api)
+    const plainList = api.isDataPlainList();
 
     return (
         <AntdTreeSelect
@@ -40,7 +41,7 @@ export const TreeSelectRender = ({
             dropdownRender={defaultDropdownRender}
             notFoundContent={(
                 <NotFound fetching={api.getIsFetching()} error={api.getFetchError()} minSymbols={api.getMinSymbols()}
-                          plainList={allProps.plainList}/>)}
+                          plainList={plainList}/>)}
 
             {...treeSelectProps}
             /************ no override ****************/

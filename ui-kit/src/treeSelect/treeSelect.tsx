@@ -65,7 +65,6 @@ const useSplitProps = (props: ITreeSelectProps) => {
             nodeDeleteMessage: true,
             confirmDelete: true,
             editButtons: true,
-            plainList: true,
             onReady: true,
             onDataFetch: true,
             onDataFetchSuccess: true,

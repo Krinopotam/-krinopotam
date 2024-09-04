@@ -75,6 +75,7 @@ export const Test: React.FC = () => {
             dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
             placeholder="Please select"
             allowClear
+
             treeDefaultExpandAll
             fieldNames={{ label: 'title', value: 'key', children: 'children' }}
             onChange={onChange}
