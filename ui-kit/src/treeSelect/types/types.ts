@@ -1,9 +1,10 @@
 //region Types
-import React, {Key} from "react";
-import {GetProps, TreeSelect} from "antd";
-import {IDFormModalProps} from "@src/dFormModal";
-import {IButtonsRowApi, IFormButtons} from "@src/buttonsRow";
-import {DefaultOptionType} from "rc-tree-select/es/TreeSelect";
+import React, {Key} from 'react';
+import {GetProps, GetRef, TreeSelect} from 'antd';
+import {IDFormModalApi, IDFormModalProps} from '@src/dFormModal';
+import {IButtonsRowApi, IFormButton, IFormButtons} from '@src/buttonsRow';
+import {DefaultOptionType} from 'rc-tree-select/es/TreeSelect';
+import {translations} from '@src/tabulatorGrid/translations/translations';
 
 interface ITreeSelectNodeBase extends Omit<DefaultOptionType, 'children'> {
     /** Node id */
@@ -14,10 +15,20 @@ interface ITreeSelectNodeBase extends Omit<DefaultOptionType, 'children'> {
     children?: ITreeSelectNode[];
 }
 
-export type ITreeSelectNode<T = object> = ITreeSelectNodeBase & { originalData?: T };
+export type ITreeSelectNode<T = object> = ITreeSelectNodeBase & {originalData?: T};
 
-type IAntTreeSelectComponentProps = GetProps<typeof TreeSelect>
-export type IAntTreeSelectProps = Omit<IAntTreeSelectComponentProps, 'labelInValue' | 'treeData' | 'fieldNames' | 'treeTitleRender'>;
+type IAntTreeSelectComponentProps = GetProps<typeof TreeSelect>;
+export type IAntTreeSelectProps = Omit<IAntTreeSelectComponentProps, 'labelInValue' | 'treeData' | 'fieldNames'>;
+
+export interface ITreeSelectButton extends IFormButton {
+    /** if no node is selected in the tree, disable the button */
+    checkDisabled?: boolean;
+
+    /** if no item is selected in the treeSelect, hide the button */
+    checkHidden?: boolean;
+}
+
+export type ITreeSelectButtons = Record<string, ITreeSelectButton | null>;
 
 export interface ITreeSelectBaseProps {
     /** A mutable object to merge with these controls api */
@@ -32,7 +43,11 @@ export interface ITreeSelectBaseProps {
      **/
     fieldNames?: Partial<IFieldNames>;
 
-    /** Customize tree node title render */
+    /** Customize tree node title render
+     * You can use the built-in treeNodeLabelProp method, but it has a significant drawback:
+     * - one render used for renders nodes list and selected value together. This behavior cannot be changed
+     * If you want different renders, use labelRender and titleRender
+     */
     titleRender?: (treeNode: ITreeSelectNode) => React.ReactNode;
 
     /** Customize selected node label render */
@@ -59,40 +74,67 @@ export interface ITreeSelectBaseProps {
     /**  debounce in ms */
     debounce?: number;
 
+    /** Data mutator function (mutates original data) */
+    dataMutator?: <T extends object>(node: T) => ITreeSelectNode;
+
+    /** Language */
+    language?: keyof typeof translations;
+
+    /** Custom translation */
+    translation?: Partial<typeof translations.en>;
+
+    //region Edit module
+    /** Label in header buttons row */
+    headerLabel?: React.ReactNode;
+
+    /** Header editor buttons */
+    editButtons?:
+        | Record<'view' | 'create' | 'createGroup' | 'clone' | 'update' | 'delete' | 'arrowUp' | 'arrowDown', ITreeSelectButton | null>
+        | ITreeSelectButtons;
+
+    /** Header buttons size. Default: 'small'*/
+    buttonsSize?: ITreeSelectButton['size'];
+
+    /** If true, only button icons will be displayed, without title */
+    buttonsIconsOnly?: boolean;
+
+    /** Header buttons size. Default: 'right'*/
+    buttonsPosition?: ITreeSelectButton['position'];
+
+    /** Buttons row wrapper style */
+    buttonsRowWrapperStyle?: React.CSSProperties;
+
+    /** Buttons row style */
+    buttonsRowStyle?: React.CSSProperties;
+
     /** Edit item controls props. If not set then component not editable */
     editFormProps?: IDFormModalProps;
+
+    /** Edit item group controls props. If not set then component not editable */
+    editGroupFormProps?: IDFormModalProps;
 
     /** Confirm message before node delete */
     nodeDeleteMessage?: React.ReactNode;
 
-
     /** Should confirm before delete */
     confirmDelete?: boolean;
-
-    /** Data mutator function (mutates original data) */
-    dataMutator?: <T extends object>(node: T) => ITreeSelectNode;
+    //endregion
 
     /**---unchecked -----*/
 
     /**  Loaded data without parameters (like searchString) will not be cached */
     noCacheFetchedData?: boolean;
 
-
-    /** Edit buttons*/
-    editButtons?: IFormButtons;
-
-
     /** --- Callbacks --------------- */
 
     /** Fires when the component is ready for use (when it fully downloaded all the data, if necessary) */
     onReady?: () => void;
 
-
     /** fires when the TreeSelect trying to fetch data */
     onDataFetch?: (search: string, api: ITreeSelectApi) => ITreeSelectSourcePromise | undefined;
 
     /** fires when the TreeSelect fetch success */
-    onDataFetchSuccess?: (result: { data: ITreeSelectNode[] }, api: ITreeSelectApi) => boolean | void;
+    onDataFetchSuccess?: (result: {data: ITreeSelectNode[]}, api: ITreeSelectApi) => boolean | void;
 
     /** fires when the TreeSelect fetch failed */
     onDataFetchError?: (message: string, code: number, api: ITreeSelectApi) => boolean | void;
@@ -105,23 +147,32 @@ export interface ITreeSelectBaseProps {
 }
 
 export type ITreeSelectProps = ITreeSelectBaseProps & IAntTreeSelectProps;
-export type ITreeSelectSourcePromise = Promise<{ data: ITreeSelectNode[] }>;
-export type ITreeSelectDeletePromise = Promise<{ data: Record<string, unknown> }>;
+export type ITreeSelectSourcePromise = Promise<{data: ITreeSelectNode[]}>;
+export type ITreeSelectDeletePromise = Promise<{data: Record<string, unknown>}>;
 export type ITreeSelectPlainValue = string | number;
 
-export type ITreeSelectValue = Key | Key[] | null
+export type ITreeSelectValue = Key | Key[] | null;
 
-export type IFieldNames = { key: string; title: string; children: string }
+export type IFieldNames = {key: string; title: string; children: string};
 
 export interface ITreeSelectApi {
+    /** Tree ref */
+    treeSelectRef: React.RefObject<GetRef<typeof TreeSelect>>;
+
     /** Get the TreeSelect id */
     getId: () => string;
 
     /** Is component mounted status */
     isMounted: () => boolean;
 
-    /** Edit mode buttons api */
-    buttonsApi: IButtonsRowApi;
+    /** Get edit form api */
+    getEditFormApi: () => IDFormModalApi;
+
+    /** Get edit group form api */
+    getEditGroupFormApi: () => IDFormModalApi;
+
+    /** Get edit mode buttons row api */
+    getButtonsApi: () => IButtonsRowApi & {refreshButtons: () => void};
 
     /** Get node fields names */
     getFieldNames: () => IFieldNames;

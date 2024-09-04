@@ -6,8 +6,8 @@ import {prepareButtons} from '@src/buttonsRow/helpers/buttonMethods';
 import {ButtonRowWrapperContext} from '@src/buttonsRow/components/buttonsRowWrapper';
 import {keyDownHandler} from '@src/buttonsRow/helpers/keypressProcessing';
 import {IButtonProps} from '@src/button';
-import {IBreakpoints} from "@krinopotam/common-hooks/useResponsive";
-import {AnyType} from "@krinopotam/service-types";
+import {IBreakpoints} from '@krinopotam/common-hooks/useResponsive';
+import {AnyType} from '@krinopotam/service-types';
 
 //region Types
 
@@ -134,7 +134,7 @@ export interface IButtonRowProps {
     makeActivePrimary?: boolean;
 
     /** Breakpoint for responsive design. If the screen decreases below the specified value, the names of the buttons will be hidden, only the icons will remain */
-    responsiveBreakpoint?: IBreakpoints
+    responsiveBreakpoint?: IBreakpoints;
 }
 
 export interface IButtonsRowApi {
@@ -147,7 +147,7 @@ export interface IButtonsRowApi {
     hidden: (buttonId: string, hidden?: boolean) => boolean;
     triggerClick: (buttonId: string) => void;
     activeTriggerClick: () => void;
-    getProps: () => IButtonRowProps
+    getProps: () => IButtonRowProps;
 }
 
 //endregion
@@ -162,16 +162,16 @@ export const ButtonsRow = (props: IButtonRowProps): React.JSX.Element => {
     if (!curButtons) return <></>;
 
     return (
-        <div style={{display: 'block', ...props.style}} className={'controls-buttons-dynamic-row ' + props.className}>
+        <div style={{display: 'block', ...props.style}} className={'controls-buttons-dynamic-row ' + (props.className ?? '')}>
             <Row wrap={false}>
                 <Col flex="auto" style={{textAlign: 'left'}}>
-                    <RenderButtonGroup key="leftButtons" buttons={curButtons} position="left" context={props.context} componentProps={props}/>
+                    <RenderButtonGroup key="leftButtons" buttons={curButtons} position="left" context={props.context} componentProps={props} />
                 </Col>
                 <Col flex="auto" style={{textAlign: 'center'}}>
-                    <RenderButtonGroup key="centerButtons" buttons={curButtons} position="center" context={props.context} componentProps={props}/>
+                    <RenderButtonGroup key="centerButtons" buttons={curButtons} position="center" context={props.context} componentProps={props} />
                 </Col>
                 <Col flex="auto" style={{textAlign: 'right'}}>
-                    <RenderButtonGroup key="rightButtons" buttons={curButtons} position="right" context={props.context} componentProps={props}/>
+                    <RenderButtonGroup key="rightButtons" buttons={curButtons} position="right" context={props.context} componentProps={props} />
                 </Col>
             </Row>
         </div>

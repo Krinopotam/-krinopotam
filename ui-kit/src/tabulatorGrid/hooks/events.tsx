@@ -3,11 +3,12 @@ import React, {useMemo} from 'react';
 import {MessageBox} from '@src/messageBox';
 import {IsDebugMode} from "@krinopotam/common-hooks";
 import {IGridApi, IGridProps} from "@src/tabulatorGrid";
-import {useTranslate} from "@src/tabulatorGrid/hooks/translate";
+import {useTranslate} from "@src/_shared/hooks/useTranslate";
+import {translations} from "@src/tabulatorGrid/translations/translations";
 
 export const useEvents = (gridApi: IGridApi, gridProps: IGridProps): ITabulatorProps['events'] => {
     const events = gridProps.events
-    const t = useTranslate(gridProps)
+    const t = useTranslate(gridProps.language, translations, gridProps.translation);
     return useMemo(() => {
         return {
             tableBuilt: () => {

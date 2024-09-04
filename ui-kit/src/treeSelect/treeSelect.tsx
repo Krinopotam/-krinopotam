@@ -1,5 +1,5 @@
 import {Col, Row} from 'antd';
-import {DFormModal} from '@src/dFormModal';
+import {DFormModal, IDFormModalApi} from '@src/dFormModal';
 import React, {useEffect, useMemo, useState} from 'react';
 import {GetNanoId, SplitObject} from '@krinopotam/js-helpers';
 import {TreeSelectRender} from '@src/treeSelect/renders/treeSelectRender';
@@ -7,9 +7,9 @@ import {useEditableInit} from '@src/treeSelect/hooks/useEditForm';
 import {useInitApi} from '@src/treeSelect/hooks/api';
 import {useGetActualProps} from '@krinopotam/common-hooks';
 import {ButtonsRow, IButtonsRowApi} from '@src/buttonsRow/buttonsRow';
-import {useInitButtons} from '@src/treeSelect/hooks/buttons';
+import {useInitButtons} from '@src/treeSelect/hooks/buttons2';
 
-import {IAntTreeSelectProps, ITreeSelectApi, ITreeSelectBaseProps, ITreeSelectProps} from "@src/treeSelect/types/types";
+import {IAntTreeSelectProps, ITreeSelectApi, ITreeSelectBaseProps, ITreeSelectProps} from '@src/treeSelect/types/types';
 
 //endregion
 
@@ -19,8 +19,12 @@ export const TreeSelect = (props: ITreeSelectProps): React.JSX.Element => {
 
     const [componentId] = useState(allProps.componentId ?? 'treeSelect-' + GetNanoId());
     const [api] = useState((allProps.apiRef ?? {}) as ITreeSelectApi);
+    const [editFormApi] = useState((props.editFormProps?.apiRef ?? {}) as IDFormModalApi);
+    const [editGroupFormApi] = useState((props.editGroupFormProps?.apiRef ?? {}) as IDFormModalApi);
     const [buttonsApi] = useState({} as IButtonsRowApi);
-    useInitApi({api, componentId, props: allProps, setProps: setAllProps, buttonsApi});
+
+    useInitApi({api, componentId, props: allProps, setProps: setAllProps, buttonsApi, editFormApi, editGroupFormApi});
+
     const [editFormProps, formApi] = useEditableInit(api);
     const buttons = useInitButtons(api, formApi); //init buttons
 
@@ -30,20 +34,21 @@ export const TreeSelect = (props: ITreeSelectProps): React.JSX.Element => {
         else if (!api.getIsReady()) allProps?.onReady?.();
     }, [api, allProps, allProps.fetchMode, allProps.minSearchLength]);
 
+    return <TreeSelectRender treeApi={api} allProps={props} treeSelectProps={treeSelectProps} />;
+    /**
+     if (!editFormProps || allProps.readOnly || allProps.disabled)
+     return <TreeSelectRender api={api} allProps={props} treeSelectProps={treeSelectProps}/>;
 
-    if (!editFormProps || allProps.readOnly || allProps.disabled)
-        return <TreeSelectRender api={api} allProps={props} treeSelectProps={treeSelectProps}/>;
-
-    return (
-        <Row wrap={false}>
-            {/*<Col flex="auto">{treeSelect}</Col> */}
-            <TreeSelectRender api={api} allProps={props} treeSelectProps={treeSelectProps}/>
-            <Col>
-                <ButtonsRow buttons={buttons} apiRef={buttonsApi} context={api}/>
-            </Col>
-            <DFormModal {...editFormProps} />
-        </Row>
-    );
+     return (
+     <Row wrap={false}>
+     <TreeSelectRender api={api} allProps={props} treeSelectProps={treeSelectProps}/>
+     <Col>
+     <ButtonsRow buttons={buttons} apiRef={buttonsApi} context={api}/>
+     </Col>
+     <DFormModal {...editFormProps} />
+     </Row>
+     );
+     */
 };
 
 const useSplitProps = (props: ITreeSelectProps) => {
@@ -73,6 +78,9 @@ const useSplitProps = (props: ITreeSelectProps) => {
             fieldNames: true,
             titleRender: true,
             labelRender: true,
+            editGroupFormProps: true,
+            language: true,
+            translation: true,
         });
 
         return result[1];

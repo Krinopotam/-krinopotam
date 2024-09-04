@@ -10,7 +10,8 @@ import {IsDebugMode} from '@krinopotam/common-hooks';
 import {IGridDeletePromise, IGridProps, IGridRowData} from '@src/tabulatorGrid';
 import {IGridApi, IRowKey, IRowKeys} from '@src/tabulatorGrid/types/tabulatorGridTypes';
 import {useUnmountedRef} from "ahooks";
-import {useTranslate} from "@src/tabulatorGrid/hooks/translate";
+import {useTranslate} from "@src/_shared/hooks/useTranslate";
+import {translations} from "@src/tabulatorGrid/translations/translations";
 
 export const useInitGridApi = ({
                                    gridApi,
@@ -470,7 +471,7 @@ const useApiRemoveRows = (gridApi: IGridApi): IGridApi['removeRows'] => {
 };
 
 const useApiDeleteRows = (gridApi: IGridApi, gridProps: IGridProps): IGridApi['deleteRows'] => {
-    const t = useTranslate(gridProps)
+    const t = useTranslate(gridProps.language, translations, gridProps.translation);
     return useCallback(
         (rows: IGridRowData | IGridRowData[] | undefined) => {
             if (!rows) return;

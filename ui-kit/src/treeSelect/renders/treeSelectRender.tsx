@@ -2,135 +2,156 @@ import {TreeSelect as AntdTreeSelect} from 'antd';
 import React, {useCallback, useMemo} from 'react';
 import {IAntTreeSelectProps, ITreeSelectApi, ITreeSelectProps, ITreeSelectValue} from '@src/treeSelect';
 import {useDropdownStyle} from '@src/treeSelect/hooks/dropdownStyle';
-import {useDefaultDropdownRender} from '@src/treeSelect/hooks/defaultDropdownRender';
 import {useDefaultFilter} from '@src/treeSelect/hooks/filter';
 import {NotFound} from '@src/treeSelect/renders/dropdownStatus';
-import {DefaultOptionType} from "rc-tree-select/es/TreeSelect";
+import {DefaultOptionType} from 'rc-tree-select/es/TreeSelect';
+import {DefaultDropdownRender} from '@src/treeSelect/renders/defaultDropdownRender';
+import {usePrepareEditFormProps} from '@src/treeSelect/hooks/prepareEditForm';
+import {DFormModal} from '@src/dFormModal';
 
 // For clarity. Antd has labels for a node(1) and for the selected value(2). fieldNames.label property sets the node label(1) and treeNodeLabelProp sets the selected value label(2)
 // In order not to get confused, we will consider Node's label is title(1), and Label of the selected value is label(2)
 // For the implementation of the capabilities of the Title & Labels  renders, we add to dataSet 2 service fields: __title & __label
 
 export const TreeSelectRender = ({
-                                     api,
-                                     allProps,
-                                     treeSelectProps,
-                                 }: {
-    api: ITreeSelectApi;
+    treeApi,
+    allProps,
+    treeSelectProps,
+}: {
+    treeApi: ITreeSelectApi;
     allProps: ITreeSelectProps;
     treeSelectProps: IAntTreeSelectProps;
 }): React.JSX.Element => {
+    const editFormProps = usePrepareEditFormProps(treeApi, allProps, false);
+    const editGroupFormProps = usePrepareEditFormProps(treeApi, allProps, true);
 
     const dropdownStyle = useDropdownStyle(allProps.dropdownStyle);
-    const defaultDropdownRender = useDefaultDropdownRender({api});
-    const value = useValue(api);
-    const fieldNames = useFieldNames(api);
-    const treeNodeLabelProp = useTreeNodeLabelProp(api);
-    const onClear = useOnClear(api)
-    const onChange = useOnChange(api)
-    const onDropdownVisibleChange = useOnDropdownVisibleChange(api)
-    const onSearch = useOnSearch(api)
-    const filterTreeNode = useOnFilterTreeNode(api)
-    const plainList = api.isDataPlainList();
+    const defaultDropdownRender = useDefaultDropdownRender({treeApi: treeApi});
+    const value = useValue(treeApi);
+    const fieldNames = useFieldNames(treeApi);
+    const treeNodeLabelProp = useTreeNodeLabelProp(treeApi);
+    const onClear = useOnClear(treeApi);
+    const onChange = useOnChange(treeApi);
+    const onDropdownVisibleChange = useOnDropdownVisibleChange(treeApi);
+    const onSearch = useOnSearch(treeApi);
+    const filterTreeNode = useOnFilterTreeNode(treeApi);
+    const plainList = treeApi.isDataPlainList();
 
     return (
-        <AntdTreeSelect
-            showSearch // shows search field by default
-            treeDefaultExpandAll // expands all nodes by default
-            allowClear // allows to clear the selected value by default
-            treeNodeFilterProp={fieldNames.label} //Field to be  used for filtering if filterTreeNode returns true. Default: title (getting from api.fieldNames)
-            dropdownRender={defaultDropdownRender}
-            notFoundContent={(
-                <NotFound fetching={api.getIsFetching()} error={api.getFetchError()} minSymbols={api.getMinSymbols()}
-                          plainList={plainList}/>)}
+        <>
+            <AntdTreeSelect
+                ref={treeApi.treeSelectRef}
+                showSearch // shows search field by default
+                treeDefaultExpandAll // expands all nodes by default
+                allowClear // allows to clear the selected value by default
+                treeNodeFilterProp={fieldNames.label} //Field to be  used for filtering if filterTreeNode returns true. Default: title (getting from api.fieldNames)
+                dropdownRender={defaultDropdownRender}
+                notFoundContent={
+                    <NotFound fetching={treeApi.getIsFetching()} error={treeApi.getFetchError()} minSymbols={treeApi.getMinSymbols()} plainList={plainList} />
+                }
+                {...treeSelectProps}
+                /************ no override ****************/
+                fieldNames={fieldNames}
+                treeNodeLabelProp={treeNodeLabelProp} //Selected value label. Will render as content of select. Default: title
+                treeData={treeApi.getDataSet()}
+                value={value}
+                disabled={allProps.disabled || allProps.readOnly} //TODO: implement true readOnly
+                //labelInValue // We do not use this mode, as it is useless. In this mode, onChange will return an object containing value and label, but you still can’t build a full node
 
-            {...treeSelectProps}
-            /************ no override ****************/
-            fieldNames={fieldNames}
-            treeNodeLabelProp={treeNodeLabelProp} //Selected value label. Will render as content of select. Default: title
-            treeData={api.getDataSet()}
-            value={value}
-            disabled={allProps.disabled || allProps.readOnly} //TODO: implement true readOnly
-            //labelInValue // We do not use this mode, as it is useless. In this mode, onChange will return an object containing value and label, but you still can’t build a full node
-
-            //loadData={onLoadData}
-            dropdownStyle={dropdownStyle}
-
-            /** --- Callbacks --------------- */
-            filterTreeNode={filterTreeNode}
-            onClear={onClear}
-            onChange={onChange}
-            onDropdownVisibleChange={onDropdownVisibleChange}
-            onSearch={onSearch}
-        />
+                //loadData={onLoadData}
+                dropdownStyle={dropdownStyle}
+                /** --- Callbacks --------------- */
+                filterTreeNode={filterTreeNode}
+                onClear={onClear}
+                onChange={onChange}
+                onDropdownVisibleChange={onDropdownVisibleChange}
+                onSearch={onSearch}
+            />
+            {editFormProps && !allProps.readOnly ? <DFormModal {...editFormProps} apiRef={treeApi.getEditFormApi()} /> : null}
+            {editGroupFormProps && !allProps.readOnly ? <DFormModal {...editGroupFormProps} apiRef={treeApi.getEditGroupFormApi()} /> : null}
+        </>
     );
 };
 
-const useValue = (api: ITreeSelectApi) => api.getValue()
+const useValue = (api: ITreeSelectApi) => api.getValue();
+
+const useDefaultDropdownRender = ({treeApi}: {treeApi: ITreeSelectApi}) => {
+    return useCallback((menu: React.ReactNode) => <DefaultDropdownRender treeApi={treeApi}>{menu}</DefaultDropdownRender>, [treeApi]);
+};
 
 const useOnClear = (api: ITreeSelectApi) => {
     return useCallback(() => {
         api.setValue(null);
         const props = api.getProps();
         props.onClear?.();
-    }, [api])
-}
+    }, [api]);
+};
 
 const useOnChange = (api: ITreeSelectApi) => {
-    return useCallback<NonNullable<IAntTreeSelectProps['onChange']>>((value, label, extra) => {
-        const props = api.getProps();
-        api.setValue(value as ITreeSelectValue);
-        props.onChange?.(value, label, extra);
-    }, [api])
-}
+    return useCallback<NonNullable<IAntTreeSelectProps['onChange']>>(
+        (value, label, extra) => {
+            const props = api.getProps();
+            api.setValue(value as ITreeSelectValue);
+            props.onChange?.(value, label, extra);
+        },
+        [api]
+    );
+};
 
 const useOnDropdownVisibleChange = (api: ITreeSelectApi) => {
-    return useCallback<NonNullable<IAntTreeSelectProps['onDropdownVisibleChange']>>((open) => {
-        const props = api.getProps();
-        if (open && (props.fetchMode === 'onUse' || props.fetchMode === 'onUseForce')) api.fetchData('');
-        props.onDropdownVisibleChange?.(open);
-    }, [api])
-}
+    return useCallback<NonNullable<IAntTreeSelectProps['onDropdownVisibleChange']>>(
+        open => {
+            const props = api.getProps();
+            if (open && (props.fetchMode === 'onUse' || props.fetchMode === 'onUseForce')) api.fetchData('');
+            props.onDropdownVisibleChange?.(open);
+        },
+        [api]
+    );
+};
 
 const useOnSearch = (api: ITreeSelectApi) => {
-    return useCallback<NonNullable<IAntTreeSelectProps['onSearch']>>((searchStr) => {
-        api.fetchData(searchStr, true);
-        const props = api.getProps();
-        props.onSearch?.(searchStr);
-    }, [api])
-}
+    return useCallback<NonNullable<IAntTreeSelectProps['onSearch']>>(
+        searchStr => {
+            api.fetchData(searchStr, true);
+            const props = api.getProps();
+            props.onSearch?.(searchStr);
+        },
+        [api]
+    );
+};
 
 const useOnFilterTreeNode = (api: ITreeSelectApi) => {
     const defaultFilter = useDefaultFilter(api);
-    return useCallback<(inputValue: string, treeNode: DefaultOptionType) => boolean>((inputValue, treeNode) => {
-        //Whether to filter treeNodes by input value. The value of treeNodeFilterProp is used for filtering by default
-        if (!api.getIsAllFetched()) return true; //Data filtration when requested from the server is carried out by a server
-        const props = api.getProps();
-        if (!props.filterTreeNode) return defaultFilter(inputValue, treeNode);
+    return useCallback<(inputValue: string, treeNode: DefaultOptionType) => boolean>(
+        (inputValue, treeNode) => {
+            //Whether to filter treeNodes by input value. The value of treeNodeFilterProp is used for filtering by default
+            if (!api.getIsAllFetched()) return true; //Data filtration when requested from the server is carried out by a server
+            const props = api.getProps();
+            if (!props.filterTreeNode) return defaultFilter(inputValue, treeNode);
 
-        if (typeof props.filterTreeNode === 'function') return props.filterTreeNode(inputValue, treeNode);
-        else return props.filterTreeNode;
-    }, [api, defaultFilter])
-}
+            if (typeof props.filterTreeNode === 'function') return props.filterTreeNode(inputValue, treeNode);
+            else return props.filterTreeNode;
+        },
+        [api, defaultFilter]
+    );
+};
 
 const useFieldNames = (api: ITreeSelectApi) => {
     return useMemo(() => {
-        const props = api.getProps()
-        const fieldNames = api.getFieldNames()
-        const value = fieldNames.key
-        const label = props.titleRender ? '__title' : fieldNames.title;
-        const children = fieldNames.children
-        return {value, label, children}
-    }, [api])
-
-}
+        const props = api.getProps();
+        const fieldNames = api.getFieldNames();
+        const value = fieldNames.key;
+        const label = !props.treeTitleRender && props.titleRender ? '__title' : fieldNames.title;
+        const children = fieldNames.children;
+        return {value, label, children};
+    }, [api]);
+};
 
 const useTreeNodeLabelProp = (api: ITreeSelectApi) => {
     return useMemo(() => {
-        const props = api.getProps()
-        const fieldNames = api.getFieldNames()
-        if (props.treeNodeLabelProp) return props.treeNodeLabelProp
-        return props.labelRender ? '__label' : fieldNames.title
-    }, [api])
-
-}
+        const props = api.getProps();
+        const fieldNames = api.getFieldNames();
+        if (props.treeNodeLabelProp) return props.treeNodeLabelProp;
+        return !props.treeTitleRender && props.labelRender ? '__label' : fieldNames.title;
+    }, [api]);
+};

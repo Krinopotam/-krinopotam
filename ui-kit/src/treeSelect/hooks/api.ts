@@ -1,25 +1,30 @@
 import {ITreeSelectNode, ITreeSelectProps, ITreeSelectValue} from '@src/treeSelect';
-import React, {Key, useCallback, useEffect, useState} from 'react';
+import React, {Key, useCallback, useEffect, useRef, useState} from 'react';
 import {useIsMountedRef} from '@krinopotam/common-hooks';
 import {useDataFetcher} from '@src/treeSelect/hooks/dataFetcher';
 import runDebounce from 'lodash.debounce';
 import {IButtonsRowApi} from '@src/buttonsRow';
-import {GetUuid, IsArray} from "@krinopotam/js-helpers";
-import {IFieldNames, ITreeSelectApi} from "@src/treeSelect/types/types";
-import {usePrepareData} from "@src/treeSelect/hooks/prepareData";
+import {GetUuid, IsArray} from '@krinopotam/js-helpers';
+import {IFieldNames, ITreeSelectApi} from '@src/treeSelect/types/types';
+import {usePrepareData} from '@src/treeSelect/hooks/prepareData';
+import {IDFormModalApi} from "@src/dFormModal";
 
 export const useInitApi = ({
-                               api,
-                               componentId,
-                               props,
-                               setProps,
-                               buttonsApi,
-                           }: {
+    api,
+    componentId,
+    props,
+    setProps,
+    buttonsApi,
+    editFormApi,
+    editGroupFormApi,
+}: {
     api: ITreeSelectApi;
     componentId: string;
     props: ITreeSelectProps;
     setProps: (props: ITreeSelectProps) => void;
     buttonsApi: IButtonsRowApi;
+    editFormApi:IDFormModalApi;
+    editGroupFormApi: IDFormModalApi;
 }) => {
     const isMountedRef = useIsMountedRef();
     const [isReady, setIsReady] = useState(false);
@@ -31,8 +36,11 @@ export const useInitApi = ({
     const [isDataPlain, setIsDataPlain] = useState(false); //is dataSet plain (without children)
     const [dataSet, setDataSet] = useDataSet(props, setIsDataPlain); //current dataSet
 
-    api.buttonsApi = buttonsApi;
+    api.treeSelectRef = useRef(null);
     api.getId = useApiGetId(componentId);
+    api.getButtonsApi = useApiGetButtonsApi(buttonsApi);
+    api.getEditFormApi = useApiGetEditFormApi(editFormApi);
+    api.getEditGroupFormApi = useApiGetEditGroupFormApi(editGroupFormApi);
     api.isMounted = useApiIsMounted(isMountedRef);
     api.getFieldNames = useApiGetFieldNames(props);
     api.getProps = useApiGetProps(props);
@@ -72,6 +80,21 @@ const useApiGetId = (componentId: string) => {
     }, [componentId]);
 };
 
+/** Get the buttonsApi */
+const useApiGetButtonsApi = (buttonsApi: IButtonsRowApi) => {
+    return useCallback(() => buttonsApi, [buttonsApi]);
+};
+
+/** Get the editFormApi */
+const useApiGetEditFormApi = (editFormApi: IDFormModalApi) => {
+    return useCallback(() => editFormApi, [editFormApi]);
+};
+
+/** Get the editGroupFormApi */
+const useApiGetEditGroupFormApi = (editGroupFormApi: IDFormModalApi) => {
+    return useCallback(() => editGroupFormApi, [editGroupFormApi]);
+};
+
 const useValue = (props: ITreeSelectProps): [value: ITreeSelectValue, setValue: React.Dispatch<React.SetStateAction<ITreeSelectValue>>] => {
     const [value, setValue] = useState<ITreeSelectValue>(props.value ?? null);
     /** Set value if props changed*/
@@ -79,10 +102,13 @@ const useValue = (props: ITreeSelectProps): [value: ITreeSelectValue, setValue: 
         setValue(props.value ?? null);
     }, [props.value]);
 
-    return [value, setValue]
+    return [value, setValue];
 };
 
-const useDataSet = (props: ITreeSelectProps, setIsDataPlain: React.Dispatch<React.SetStateAction<boolean>>): [ITreeSelectNode[] | undefined, React.Dispatch<React.SetStateAction<ITreeSelectNode[] | undefined>>] => {
+const useDataSet = (
+    props: ITreeSelectProps,
+    setIsDataPlain: React.Dispatch<React.SetStateAction<boolean>>
+): [ITreeSelectNode[] | undefined, React.Dispatch<React.SetStateAction<ITreeSelectNode[] | undefined>>] => {
     const prepareData = usePrepareData(props, setIsDataPlain);
 
     const [dataSet, setDataSet] = useState(prepareData(props.dataSet));
@@ -91,20 +117,23 @@ const useDataSet = (props: ITreeSelectProps, setIsDataPlain: React.Dispatch<Reac
         setDataSet(prepareData(props.dataSet)); //user can set dataSet in props
     }, [prepareData, props.dataSet]);
 
-    return [dataSet, setDataSet]
-}
+    return [dataSet, setDataSet];
+};
 
 const useApiIsMounted = (isMountedRef: React.MutableRefObject<boolean>) => {
     return useCallback(() => isMountedRef.current, [isMountedRef]);
 };
 
 const useApiGetFieldNames = (props: ITreeSelectProps): ITreeSelectApi['getFieldNames'] => {
-    return useCallback(() => ({
-        key: 'id',
-        title: 'title',
-        children: 'children',
-        ...props.fieldNames
-    }), [props.fieldNames]);
+    return useCallback(
+        () => ({
+            key: 'id',
+            title: 'title',
+            children: 'children',
+            ...props.fieldNames,
+        }),
+        [props.fieldNames]
+    );
 };
 
 const useApiGetProps = (props: ITreeSelectProps) => {
@@ -113,7 +142,7 @@ const useApiGetProps = (props: ITreeSelectProps) => {
 
 const useApiSetProps = (setProps: (props: ITreeSelectProps) => void): ITreeSelectApi['setProps'] => {
     return useCallback(
-        (props) => {
+        props => {
             setProps(props);
         },
         [setProps]
@@ -122,7 +151,7 @@ const useApiSetProps = (setProps: (props: ITreeSelectProps) => void): ITreeSelec
 
 const useApiUpdateProps = (curProps: ITreeSelectProps, setProps: (props: ITreeSelectProps) => void): ITreeSelectApi['updateProps'] => {
     return useCallback(
-        (props) => {
+        props => {
             setProps({...curProps, ...props});
         },
         [curProps, setProps]
@@ -135,7 +164,7 @@ const useApiGetDataSet = (dataSet: ITreeSelectNode[] | undefined): ITreeSelectAp
 
 const useApiSetDataSet = (setDataSet: (newDataSet: ITreeSelectNode[] | undefined) => void): ITreeSelectApi['setDataSet'] => {
     return useCallback(
-        (dataSet) => {
+        dataSet => {
             setDataSet(dataSet ?? []);
         },
         [setDataSet]
@@ -156,14 +185,13 @@ export const useApiPrepareNode = (treeProps: ITreeSelectProps): ITreeSelectApi['
     );
 };
 
-
 const useApiGetValue = (value: ITreeSelectValue): ITreeSelectApi['getValue'] => {
     return useCallback(() => value, [value]);
 };
 
 const useApiSetValue = (setValue: (value: ITreeSelectValue) => void): ITreeSelectApi['setValue'] => {
     return useCallback(
-        (value) => {
+        value => {
             setValue(value);
         },
         [setValue]
@@ -187,14 +215,14 @@ const useApiGetNodes = (api: ITreeSelectApi): ITreeSelectApi['getNodes'] => {
     return useCallback(
         (keys, externalDataset) => {
             if (!keys) return undefined;
-            if (!Array.isArray(keys)) keys = [keys]
+            if (!Array.isArray(keys)) keys = [keys];
             const result = [] as ITreeSelectNode[];
             for (const key of keys) {
                 const node = api.getNode(key, externalDataset);
                 if (node) result.push(node);
             }
 
-            return result
+            return result;
         },
         [api]
     );
@@ -202,10 +230,10 @@ const useApiGetNodes = (api: ITreeSelectApi): ITreeSelectApi['getNodes'] => {
 
 const useApiGetSelectedNodes = (api: ITreeSelectApi): ITreeSelectApi['getSelectedNodes'] => {
     return useCallback(
-        (externalDataset) => {
+        externalDataset => {
             let keys = api.getValue();
             if (!keys) return undefined;
-            if (!Array.isArray(keys)) keys = [keys]
+            if (!Array.isArray(keys)) keys = [keys];
 
             const fieldNames = api.getFieldNames();
             const data = externalDataset ?? api.getDataSet();
@@ -216,13 +244,11 @@ const useApiGetSelectedNodes = (api: ITreeSelectApi): ITreeSelectApi['getSelecte
                 if (idx > -1) result.push(nodes![idx]);
             }
 
-            return result
-
+            return result;
         },
         [api]
     );
 };
-
 
 const useApiGetIsReady = (isReady: boolean) => {
     return useCallback(() => isReady, [isReady]);
@@ -407,7 +433,7 @@ const useDeleteNodes = (api: ITreeSelectApi) => {
 
 const useApiIsDataPlainList = (isDataPlain: boolean) => {
     return useCallback(() => isDataPlain, [isDataPlain]);
-}
+};
 
 //region Service methods
 const findNodeIndex = (
@@ -419,7 +445,7 @@ const findNodeIndex = (
     nodes: ITreeSelectNode['dataSet'];
 } => {
     const keyField = fieldNames.key;
-    const recursive = (nodes: ITreeSelectNode['dataSet']): { idx: number; nodes: ITreeSelectProps['dataSet'] } => {
+    const recursive = (nodes: ITreeSelectNode['dataSet']): {idx: number; nodes: ITreeSelectProps['dataSet']} => {
         if (!nodes || !key) return {idx: -1, nodes: undefined};
         for (let i = 0; i < nodes.length; i++) {
             const node = nodes[i];

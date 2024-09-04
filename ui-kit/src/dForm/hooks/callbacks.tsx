@@ -1,10 +1,11 @@
 import React, {useMemo} from 'react';
 
 import {MessageBox} from '@src/messageBox';
-import {IsDebugMode} from "@krinopotam/common-hooks";
-import {IDFormApi, IDFormDataSet, IDFormModelCallbacks, IDFormProps} from "@src/dForm";
-import {Collapse} from "antd";
-import {useTranslate} from "@src/dForm/hooks/translate";
+import {IsDebugMode} from '@krinopotam/common-hooks';
+import {IDFormApi, IDFormDataSet, IDFormModelCallbacks, IDFormProps} from '@src/dForm';
+import {Collapse} from 'antd';
+import {translations} from '@src/dForm/translations/translations';
+import {useTranslate} from '@src/_shared/hooks/useTranslate';
 
 /**
  * Preparing callbacks for redirection to the model
@@ -12,7 +13,7 @@ import {useTranslate} from "@src/dForm/hooks/translate";
  * @param formApi
  */
 export const useModelCallbacks = (formProps: IDFormProps, formApi: IDFormApi) => {
-    const t = useTranslate(formProps)
+    const t = useTranslate(formProps.language, translations, formProps.translation);
     return useMemo((): IDFormModelCallbacks => {
         return {
             // The form callback
@@ -39,11 +40,12 @@ export const useModelCallbacks = (formProps: IDFormProps, formApi: IDFormApi) =>
             onFormValuesChanged: (fieldName: string, values: Record<string, unknown>) => formProps?.onFormValuesChanged?.(fieldName, values, formApi),
 
             /** fires when the form validated */
-            onFormValidated: (values: Record<string, unknown>, dataSet:IDFormDataSet, errors: Record<string, string>, isSubmit: boolean) =>
+            onFormValidated: (values: Record<string, unknown>, dataSet: IDFormDataSet, errors: Record<string, string>, isSubmit: boolean) =>
                 formProps?.onFormValidated?.(values, dataSet, errors, isSubmit, formApi),
 
             /** fires when the form has errors */
-            onFormHasErrors: (values: Record<string, unknown>, dataSet: IDFormDataSet, errors: Record<string, unknown>) => formProps?.onFormHasErrors?.(values, dataSet, errors, formApi),
+            onFormHasErrors: (values: Record<string, unknown>, dataSet: IDFormDataSet, errors: Record<string, unknown>) =>
+                formProps?.onFormHasErrors?.(values, dataSet, errors, formApi),
 
             /** fires when the form has no errors */
             onFormHasNoErrors: (values: Record<string, unknown>, dataSet: IDFormDataSet) => {
@@ -55,7 +57,7 @@ export const useModelCallbacks = (formProps: IDFormProps, formApi: IDFormApi) =>
             onDataFetch: () => formProps?.onDataFetch?.(formApi),
 
             /** fires when the form fetch success */
-            onDataFetchSuccess: (result: { data: Record<string, unknown> }) => {
+            onDataFetchSuccess: (result: {data: Record<string, unknown>}) => {
                 if (formProps?.onDataFetchSuccess?.(result, formApi) === false) return false;
                 //formApi.buttonsApi.disabled?.('ok', false)
             },
@@ -91,22 +93,22 @@ export const useModelCallbacks = (formProps: IDFormProps, formApi: IDFormApi) =>
             onDataFetchComplete: () => formProps?.onDataFetchComplete?.(formApi),
 
             /** fires on submit validation */
-            onSubmitValidation: (values: Record<string, unknown>, dataSet:IDFormDataSet, errors: Record<string, string | undefined>) =>
+            onSubmitValidation: (values: Record<string, unknown>, dataSet: IDFormDataSet, errors: Record<string, string | undefined>) =>
                 formProps?.onSubmitValidation?.(values, dataSet, errors, formApi),
 
             /** fires on submitting the form */
-            onSubmit: (values: Record<string, unknown>, dataSet:IDFormDataSet) => {
+            onSubmit: (values: Record<string, unknown>, dataSet: IDFormDataSet) => {
                 formApi.buttonsApi.disabled?.('ok', true);
                 if (!formProps.confirmChanges) formApi.buttonsApi.loading?.('ok', true);
                 return formProps?.onSubmit?.(values, dataSet, formApi);
             },
 
             /** fires on submit success */
-            onSubmitSuccess: (values: Record<string, unknown>, dataSet:IDFormDataSet, resultData: Record<string, unknown> | undefined) =>
+            onSubmitSuccess: (values: Record<string, unknown>, dataSet: IDFormDataSet, resultData: Record<string, unknown> | undefined) =>
                 formProps?.onSubmitSuccess?.(values, dataSet, resultData, formApi),
 
             /** fires on submit error */
-            onSubmitError: (values: Record<string, unknown>, dataSet:IDFormDataSet, error) => {
+            onSubmitError: (values: Record<string, unknown>, dataSet: IDFormDataSet, error) => {
                 if (formProps?.onSubmitError?.(values, dataSet, error, formApi) === false) return false;
                 MessageBox.alert({
                     language: formProps.language,
@@ -116,9 +118,7 @@ export const useModelCallbacks = (formProps: IDFormProps, formApi: IDFormApi) =>
                             <p>
                                 <b>{error.message}</b>
                             </p>
-                            {error.stack && IsDebugMode() && <Collapse
-                                items={[{key: '1', label: 'Stack', children: <p>{error.stack}</p>}]}
-                            />}
+                            {error.stack && IsDebugMode() && <Collapse items={[{key: '1', label: 'Stack', children: <p>{error.stack}</p>}]} />}
                         </>
                     ),
                     colorType: 'danger',

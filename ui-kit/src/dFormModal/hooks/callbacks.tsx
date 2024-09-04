@@ -3,7 +3,8 @@ import {MessageBox} from '@src/messageBox';
 import {IsDebugMode} from "@krinopotam/common-hooks";
 import {IDFormCallbacks, IDFormDataSet} from "@src/dForm/types/dFormTypes";
 import {IDFormModalApi, IDFormModalProps} from "@src/dFormModal";
-import {useTranslate} from "@src/dFormModal/hooks/translate";
+import {useTranslate} from "@src/_shared/hooks/useTranslate";
+import {translations} from "@src/dFormModal/translations/translations";
 
 /**
  * Preparing callbacks for redirection to the form
@@ -11,7 +12,8 @@ import {useTranslate} from "@src/dFormModal/hooks/translate";
  * @param modalFormProps
  */
 export const useFormCallbacks = (formModalApi: IDFormModalApi, modalFormProps: IDFormModalProps) => {
-    const t = useTranslate(modalFormProps)
+    const t = useTranslate(modalFormProps.language, translations, modalFormProps.translation);
+
     return useMemo((): IDFormCallbacks => {
         return {
             // Form callbacks

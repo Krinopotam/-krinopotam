@@ -2,16 +2,12 @@ import React, {useCallback} from 'react';
 import {Space, Typography} from 'antd';
 import {IButtonsRowApi} from '@src/buttonsRow';
 import {MessageBox} from '@src/messageBox';
-import {IDFormProps} from "@src/dForm";
-import {IDFormApi} from "@src/dForm/types/dFormTypes";
-import {useTranslate} from "@src/dForm/hooks/translate";
+import {IDFormProps} from '@src/dForm';
+import {IDFormApi} from '@src/dForm/types/dFormTypes';
+import {useTranslate} from '@src/_shared/hooks/useTranslate';
+import {translations} from '@src/dForm/translations/translations';
 
-export const useInitFormApi = (
-    formApi: IDFormApi,
-    formProps: IDFormProps,
-    buttonsApi: IButtonsRowApi,
-    updateFormProps: (props: IDFormProps) => void
-) => {
+export const useInitFormApi = (formApi: IDFormApi, formProps: IDFormProps, buttonsApi: IButtonsRowApi, updateFormProps: (props: IDFormProps) => void) => {
     const apiGetFormProps = useApiGetFormProps(formProps);
     const apiSetFormProps = useApiSetFormProps(formProps, updateFormProps);
     const apiValidateForm = useApiValidateForm(formApi, formProps);
@@ -42,7 +38,8 @@ const useApiSetFormProps = (formProps: IDFormProps, setFormProps: (props: IDForm
 };
 
 const useApiValidateForm = (formApi: IDFormApi, formProps: IDFormProps) => {
-    const t = useTranslate(formProps)
+    const t = useTranslate(formProps.language, translations, formProps.translation);
+
     return useCallback(
         (showAlert?: boolean) => {
             const errors = formApi.model.validateForm();
@@ -52,7 +49,7 @@ const useApiValidateForm = (formApi: IDFormApi, formProps: IDFormProps) => {
 
             const messageContent = (
                 <Space style={{marginLeft: 5}} direction="vertical" size={0}>
-                    {Object.keys(errors).map((key) => {
+                    {Object.keys(errors).map(key => {
                         const field = formApi.model.getField(key);
                         const fieldLabel = field?.getLabel() || key;
                         return (
@@ -73,7 +70,8 @@ const useApiValidateForm = (formApi: IDFormApi, formProps: IDFormProps) => {
 };
 
 const useApiSubmitForm = (formApi: IDFormApi, formProps: IDFormProps) => {
-    const t = useTranslate(formProps)
+    const t = useTranslate(formProps.language, translations, formProps.translation);
+
     return useCallback(() => {
         formApi.model.incrementSubmitCount();
 

@@ -2,11 +2,13 @@ import {IFormButtons} from '@src/buttonsRow/buttonsRow';
 import {MergeObjects} from "@krinopotam/js-helpers";
 import {useMemo} from "react";
 import {IDFormModalApi, IDFormModalProps} from "@src/dFormModal";
-import {useTranslate} from "@src/dFormModal/hooks/translate";
+import {useTranslate} from "@src/_shared/hooks/useTranslate";
+import {translations} from "@src/dFormModal/translations/translations";
+
 
 /** Generate buttons */
 export const useInitButtons = (formApi: IDFormModalApi, props: IDFormModalProps) => {
-    const t = useTranslate(props)
+    const t = useTranslate(props.language, translations, props.translation);
     return useMemo((): IFormButtons => {
         const defaultButtons: IFormButtons = {
             ok: {

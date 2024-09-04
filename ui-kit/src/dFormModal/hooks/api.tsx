@@ -5,7 +5,8 @@ import {CloneObject} from "@krinopotam/js-helpers";
 import {useCallback, useEffect, useState} from 'react';
 import {IsDebugMode} from "@krinopotam/common-hooks";
 import {IDFormModalApi, IDFormModalProps} from "@src/dFormModal";
-import {useTranslate} from "@src/dFormModal/hooks/translate";
+import {useTranslate} from "@src/_shared/hooks/useTranslate";
+import {translations} from "@src/dFormModal/translations/translations";
 
 export const useInitModalFormApi = (
     formId: string,
@@ -57,18 +58,18 @@ const useApiSetModalFormProps = (modalFormProps: IDFormModalProps, setModalFormP
     );
 };
 
-const useGetDefaultTitle = (modalFormProps: IDFormModalProps) => {
-    const t = useTranslate(modalFormProps)
+const useGetDefaultTitle = (formProps: IDFormModalProps) => {
+    const t = useTranslate(formProps.language, translations, formProps.translation);
     return useCallback<() => IDFormModalProps['title']>(() => {
-        const formMode = modalFormProps.formMode ?? 'create';
-        const title = modalFormProps.title
+        const formMode = formProps.formMode ?? 'create';
+        const title = formProps.title
         if (title) return title;
         if (formMode === 'view') return t('viewing');
         if (formMode === 'create') return t('creating');
         if (formMode === 'clone') return t('cloning');
         if (formMode === 'update') return t('editing');
         return '&nbsp;';
-    }, [modalFormProps, t])
+    }, [formProps, t])
 }
 
 const useApiGetTitle = (title: IDFormModalProps['title']): IDFormModalApi['getTitle'] => {
@@ -130,7 +131,7 @@ const useApiFormForceClose = (formApi: IDFormModalApi): IDFormModalApi['close'] 
 
 /** Api method: try to close modal form */
 const useApiTryToCloseForm = (formApi: IDFormModalApi, formProps: IDFormModalProps) => {
-    const t = useTranslate(formProps)
+    const t = useTranslate(formProps.language, translations, formProps.translation);
     return useCallback(() => {
         if (formProps.onClosing?.(formApi) === false) return;
 

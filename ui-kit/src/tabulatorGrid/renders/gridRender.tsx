@@ -3,7 +3,8 @@ import {TabulatorBase, ITabulator, ITabulatorProps, IRequestProps} from '@src/ta
 import {useEvents} from '../hooks/events';
 import {GenerateAjaxRequestFunc} from '@src/tabulatorGrid/helpers/fetchHelpers';
 import {IGridApi, IGridProps, IGridRowData} from "@src/tabulatorGrid";
-import {useTranslate} from "@src/tabulatorGrid/hooks/translate";
+import {translations} from "@src/tabulatorGrid/translations/translations";
+import {useTranslate} from "@src/_shared/hooks/useTranslate";
 
 export const GridRender = ({
     tableRef,
@@ -27,7 +28,8 @@ export const GridRender = ({
         [gridApi, gridProps.resizeHeightWithParent, tableRef]
     );
 
-    const t = useTranslate(gridProps)
+    const t = useTranslate(gridProps.language, translations, gridProps.translation);
+
     useEffect(() => {
         return () => {
             resizeObserverRef.current?.disconnect();

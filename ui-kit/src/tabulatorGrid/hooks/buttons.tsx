@@ -3,7 +3,8 @@ import {CopyOutlined, DeleteOutlined, EditOutlined, EyeOutlined, FilterOutlined,
 import {MergeObjects} from '@krinopotam/js-helpers';
 import {IGridApi, IGridRowData, ITabulator} from '@src/tabulatorGrid';
 import {ITabulatorButton, ITabulatorButtons} from "@src/tabulatorGrid/types/tabulatorGridTypes";
-import {useTranslate} from "@src/tabulatorGrid/hooks/translate";
+import {translations} from "@src/tabulatorGrid/translations/translations";
+import {useTranslate} from "@src/_shared/hooks/useTranslate";
 
 export const useInitButtons = (gridApi: IGridApi): ITabulatorButtons => {
     const [, refreshButtons] = useState({});
@@ -99,7 +100,7 @@ const useGetHeaderLabel = (gridApi: IGridApi): ITabulatorButton | undefined => {
 /** Get view button props */
 const useGetViewButton = (gridApi: IGridApi, activeRow: IGridRowData | undefined, selectedRows: IGridRowData[]): ITabulatorButton | undefined => {
     const gridProps = gridApi.gridProps;
-    const t = useTranslate(gridProps)
+    const t = useTranslate(gridProps.language, translations, gridProps.translation);
     
     return useMemo(() => {
         const editFormApi = gridApi.editFormApi;
@@ -125,7 +126,7 @@ const useGetViewButton = (gridApi: IGridApi, activeRow: IGridRowData | undefined
 /** Get create button props */
 const useGetCreateButton = (gridApi: IGridApi): ITabulatorButton | undefined => {
     const gridProps = gridApi.gridProps;
-    const t = useTranslate(gridProps)
+    const t = useTranslate(gridProps.language, translations, gridProps.translation);
     
     return useMemo(() => {
         const editFormApi = gridApi.editFormApi;
@@ -148,7 +149,7 @@ const useGetCreateButton = (gridApi: IGridApi): ITabulatorButton | undefined => 
 /** Get clone button props */
 const useGetCloneButton = (gridApi: IGridApi, activeRow: IGridRowData | undefined, selectedRows: IGridRowData[]): ITabulatorButton | undefined => {
     const gridProps = gridApi.gridProps;
-    const t = useTranslate(gridProps)
+    const t = useTranslate(gridProps.language, translations, gridProps.translation);
     
     return useMemo(() => {
         const editFormApi = gridApi.editFormApi;
@@ -174,7 +175,7 @@ const useGetCloneButton = (gridApi: IGridApi, activeRow: IGridRowData | undefine
 /** Get update button props */
 const useGetUpdateButton = (gridApi: IGridApi, activeRow: IGridRowData | undefined, selectedRows: IGridRowData[]): ITabulatorButton | undefined => {
     const gridProps = gridApi.gridProps;
-    const t = useTranslate(gridProps)
+    const t = useTranslate(gridProps.language, translations, gridProps.translation);
     
     return useMemo(() => {
         const editFormApi = gridApi.editFormApi;
@@ -200,7 +201,7 @@ const useGetUpdateButton = (gridApi: IGridApi, activeRow: IGridRowData | undefin
 /** Get selection button props */
 const useGetSelectionButton = (gridApi: IGridApi): ITabulatorButton | undefined => {
     const gridProps = gridApi.gridProps;
-    const t = useTranslate(gridProps)
+    const t = useTranslate(gridProps.language, translations, gridProps.translation);
     
     return useMemo(() => {
         const selectionFormApi = gridApi.selectionFormApi;
@@ -224,7 +225,7 @@ const useGetSelectionButton = (gridApi: IGridApi): ITabulatorButton | undefined 
 /** Get delete button props */
 const useGetDeleteButton = (gridApi: IGridApi, selectedRows: IGridRowData[]): ITabulatorButton | undefined => {
     const gridProps = gridApi.gridProps;
-    const t = useTranslate(gridProps)
+    const t = useTranslate(gridProps.language, translations, gridProps.translation);
     
     return useMemo(() => {
         if ((!gridProps.editFormProps && !gridProps.selectionFormProps) || gridProps.readOnly || gridProps.buttons?.delete === null) return undefined;
@@ -249,7 +250,7 @@ const useGetDeleteButton = (gridApi: IGridApi, selectedRows: IGridRowData[]): IT
 /** Get filter button props */
 const useGetFilterToggleButton = (gridApi: IGridApi, tableApi: ITabulator | undefined): ITabulatorButton | undefined => {
     const gridProps = gridApi.gridProps;
-    const t = useTranslate(gridProps)
+    const t = useTranslate(gridProps.language, translations, gridProps.translation);
     
     //a separate tableApi parameter is required for the memo field to be updated (initially tableApi is undefined)
     return useMemo(() => {
@@ -283,7 +284,7 @@ const getRowDataSet = (gridApi: IGridApi, selfParent: boolean, parentOnly?: bool
 /** Get system button props */
 const useGetSystemButton = (gridApi: IGridApi): ITabulatorButton | undefined => {
     const gridProps = gridApi.gridProps;
-    const t = useTranslate(gridProps)
+    const t = useTranslate(gridProps.language, translations, gridProps.translation);
 
     return useMemo(() => {
         if (gridProps.buttons?.filterToggle === null) return undefined;
