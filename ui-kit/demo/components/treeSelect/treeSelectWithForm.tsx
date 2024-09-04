@@ -111,15 +111,16 @@ const dataSet = [
 const editForm: IDFormModalProps = {
     formId: 'EditForm',
     confirmChanges: true,
-    height: 100,
+    height: 200,
     fieldsProps: {
         title: {component: InputField, label: 'Подразделение'},
     },
 };
 
-const formProps: IDFormProps = {
+const formProps: IDFormModalProps = {
     formId: 'Test form',
     confirmChanges: true,
+
     fieldsProps: {
         departments: {component: TreeSelectField, label: 'Подразделения', editFormProps: editForm, confirmDelete: true, dataSet: dataSet},
     },

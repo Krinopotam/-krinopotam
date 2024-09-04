@@ -54,7 +54,6 @@ const useSplitProps = (props: ITreeSelectProps) => {
             dataMutator: true,
             readOnly: true,
             value: true,
-            defaultValueCallback: true,
             filterTreeNode: true,
             dataSet: true,
             fetchMode: true,

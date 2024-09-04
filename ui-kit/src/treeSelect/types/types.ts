@@ -38,6 +38,9 @@ export interface ITreeSelectBaseProps {
     /** Customize selected node label render */
     labelRender?: (treeNode: ITreeSelectNode) => React.ReactNode;
 
+    /** Value */
+    value?: ITreeSelectValue;
+
     /** Is TreeSelect read only  */
     readOnly?: boolean; //TODO: Make readonly
 
@@ -70,17 +73,6 @@ export interface ITreeSelectBaseProps {
     dataMutator?: <T extends object>(node: T) => ITreeSelectNode;
 
     /**---unchecked -----*/
-
-    /** Value */
-    value?: ITreeSelectValue | string;
-
-    /** Value ??????????? */
-    defaultValueCallback?: (data: ITreeSelectNode[]) => ITreeSelectNode | ITreeSelectNode[];
-
-
-    /**  Selected value abel renderer */
-    //selectedLabelRender?: (treeNode: ITreeSelectNode | Record<string, unknown>) => React.ReactNode;
-
 
     /**  Loaded data without parameters (like searchString) will not be cached */
     noCacheFetchedData?: boolean;
@@ -117,7 +109,7 @@ export type ITreeSelectSourcePromise = Promise<{ data: ITreeSelectNode[] }>;
 export type ITreeSelectDeletePromise = Promise<{ data: Record<string, unknown> }>;
 export type ITreeSelectPlainValue = string | number;
 
-export type ITreeSelectValue = Key | Key[] | undefined
+export type ITreeSelectValue = Key | Key[] | null
 
 export type IFieldNames = { key: string; title: string; children: string }
 

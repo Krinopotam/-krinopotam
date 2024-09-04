@@ -37,6 +37,7 @@ export const TreeSelectRender = ({
         <AntdTreeSelect
             showSearch // shows search field by default
             treeDefaultExpandAll // expands all nodes by default
+            allowClear // allows to clear the selected value by default
             treeNodeFilterProp={fieldNames.label} //Field to be  used for filtering if filterTreeNode returns true. Default: title (getting from api.fieldNames)
             dropdownRender={defaultDropdownRender}
             notFoundContent={(
@@ -65,16 +66,11 @@ export const TreeSelectRender = ({
     );
 };
 
-const useValue = (api: ITreeSelectApi) => {
-    return useMemo(() => {
-        return api.getValue()
-    }, [api])
-
-}
+const useValue = (api: ITreeSelectApi) => api.getValue()
 
 const useOnClear = (api: ITreeSelectApi) => {
     return useCallback(() => {
-        api.setValue(undefined);
+        api.setValue(null);
         const props = api.getProps();
         props.onClear?.();
     }, [api])
@@ -83,9 +79,7 @@ const useOnClear = (api: ITreeSelectApi) => {
 const useOnChange = (api: ITreeSelectApi) => {
     return useCallback<NonNullable<IAntTreeSelectProps['onChange']>>((value, label, extra) => {
         const props = api.getProps();
-        let values: ITreeSelectValue = undefined;
-        if (value) values = Array.isArray(value) ? value : [value];
-        api.setValue(values);
+        api.setValue(value as ITreeSelectValue);
         props.onChange?.(value, label, extra);
     }, [api])
 }

@@ -27,20 +27,9 @@ export const useInitApi = ({
     const [fetchError, setFetchError] = useState(''); //has fetching error
     const [allFetched, setAllFetched] = useState(false); //is all fetched
     const [minSymbols, setMinSymbols] = useState(0); //show min symbols error
-    const [isDataPlain, setIsDataPlain] = useState(false); //is dataSet plain
-    const dataMutator = usePrepareData(props, setIsDataPlain);
-
-    const [values, setValues] = useState<ITreeSelectValue>(transformValue(props.value));
-    /** Set value if props changed*/
-    useEffect(() => {
-        api.setValue(transformValue(props.value));
-    }, [api, props.value]);
-
-    const [dataSet, setDataSet] = useState(dataMutator(props.dataSet));
-    /** Set dataSet if props changed */
-    useEffect(() => {
-        setDataSet(dataMutator(props.dataSet)); //user can set dataSet in props
-    }, [dataMutator, props.dataSet]);
+    const [values, setValues] = useValue(props); //value
+    const [isDataPlain, setIsDataPlain] = useState(false); //is dataSet plain (without children)
+    const [dataSet, setDataSet] = useDataSet(props, setIsDataPlain); //current dataSet
 
     api.buttonsApi = buttonsApi;
     api.getId = useApiGetId(componentId);
@@ -77,11 +66,33 @@ export const useInitApi = ({
 };
 
 /** Get the current TreeSelect id */
-export const useApiGetId = (componentId: string) => {
+const useApiGetId = (componentId: string) => {
     return useCallback(() => {
         return componentId;
     }, [componentId]);
 };
+
+const useValue = (props: ITreeSelectProps): [value: ITreeSelectValue, setValue: React.Dispatch<React.SetStateAction<ITreeSelectValue>>] => {
+    const [value, setValue] = useState<ITreeSelectValue>(props.value ?? null);
+    /** Set value if props changed*/
+    useEffect(() => {
+        setValue(props.value ?? null);
+    }, [props.value]);
+
+    return [value, setValue]
+};
+
+const useDataSet = (props: ITreeSelectProps, setIsDataPlain: React.Dispatch<React.SetStateAction<boolean>>): [ITreeSelectNode[] | undefined, React.Dispatch<React.SetStateAction<ITreeSelectNode[] | undefined>>] => {
+    const prepareData = usePrepareData(props, setIsDataPlain);
+
+    const [dataSet, setDataSet] = useState(prepareData(props.dataSet));
+    /** Set dataSet if props changed */
+    useEffect(() => {
+        setDataSet(prepareData(props.dataSet)); //user can set dataSet in props
+    }, [prepareData, props.dataSet]);
+
+    return [dataSet, setDataSet]
+}
 
 const useApiIsMounted = (isMountedRef: React.MutableRefObject<boolean>) => {
     return useCallback(() => isMountedRef.current, [isMountedRef]);
@@ -423,10 +434,4 @@ const findNodeIndex = (
 
     return recursive(dataSet);
 };
-
-const transformValue = (val: unknown) => {
-    let values = undefined;
-    if (val) values = Array.isArray(val) ? val : [val];
-    return values
-}
 //endregion
