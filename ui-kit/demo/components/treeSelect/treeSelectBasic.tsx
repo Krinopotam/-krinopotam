@@ -110,7 +110,7 @@ const formProps: IDFormProps = {
     formId: 'Test form',
     confirmChanges: true,
     fieldsProps: {
-        departments: {component: TreeSelectField, label: 'Подразделения', treeDefaultExpandAll: true, dataSet: dataSet} satisfies ITreeSelectFieldProps,
+        departments: {component: TreeSelectField, label: 'Подразделения', defaultExpandAll: true, dataSet: dataSet} satisfies ITreeSelectFieldProps,
     },
     buttons: null,
 };

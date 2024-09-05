@@ -5,7 +5,7 @@ import {IDFormModalApi, IDFormModalProps} from '@src/dFormModal';
 import {IButtonsRowApi, IFormButton} from '@src/buttonsRow';
 import {DefaultOptionType} from 'rc-tree-select/es/TreeSelect';
 import {translations} from '@src/tabulatorGrid/translations/translations';
-import {IFindNodeOptions} from "@src/_shared/tools/nodesMethods/findeNextNodeKey";
+import {IFindNodeOptions, INodePosition} from '@src/_shared/@types/nodes';
 
 interface ITreeSelectNodeBase extends Omit<DefaultOptionType, 'children'> {
     /** Node id */
@@ -19,7 +19,7 @@ interface ITreeSelectNodeBase extends Omit<DefaultOptionType, 'children'> {
 export type ITreeSelectNode<T = object> = ITreeSelectNodeBase & {originalData?: T};
 
 type IAntTreeSelectComponentProps = GetProps<typeof TreeSelect>;
-export type IAntTreeSelectProps = Omit<IAntTreeSelectComponentProps, 'labelInValue' | 'treeData' | 'fieldNames'>;
+export type IAntTreeSelectProps = Omit<IAntTreeSelectComponentProps, 'labelInValue' | 'treeData' | 'fieldNames' | 'treeDefaultExpandAll' | 'treeExpandedKeys'>;
 
 export interface ITreeSelectButton extends IFormButton {
     /** if no node is selected in the tree, disable the button */
@@ -77,6 +77,11 @@ export interface ITreeSelectBaseProps {
 
     /** Data mutator function (mutates original data) */
     dataMutator?: <T extends object>(node: T) => ITreeSelectNode;
+
+    /**  Expand all nodes by default */
+    defaultExpandAll?: boolean;
+
+    expandedKeys?: React.Key[];
 
     /** Language */
     language?: keyof typeof translations;
@@ -187,17 +192,40 @@ export interface ITreeSelectApi {
     /** Partial update current TreeSelect props */
     updateProps: (props: Partial<Omit<ITreeSelectProps, 'fieldsProps'>>) => void;
 
-    /** Get the TreeSelect selected nodes */
-    getValue: () => ITreeSelectValue;
+    /** Get selected keys */
+    getSelectedKeys: () => Key[] | undefined;
 
-    /** Set the TreeSelect selected nodes*/
-    setValue: (value: ITreeSelectValue) => void;
+    /** Set selected keys */
+    setSelectedKeys: (keys: Key | Key[] | undefined) => void;
+
+    /**
+     * Get the TreeSelect selected nodes
+     * @param extDataSet - external data set. If set, search nodes in this data set, not current dataSet
+     */
+    getSelectedNodes: (extDataSet?: ITreeSelectNode[]) => ITreeSelectNode[] | undefined;
+
+    /**
+     * Select node
+     * @param key - node key
+     * @param select - if true, node will be selected (default true)
+     */
+    selectNode: (key: Key, select?: boolean) => void;
+
+    /**
+     * Get active node
+     * By default, active node is last selected node.
+     * @param singleOnly - component have active node if only one node is selected
+     */
+    getActiveNode: (singleOnly?:boolean) => ITreeSelectNode | undefined;
+
+    /** Get active node key (last selected) */
+    getActiveNodeKey: (singleOnly?:boolean) => Key | undefined;
 
     /** Get expanded keys */
-    getExpandedKeys: () => ITreeSelectProps['treeExpandedKeys'] | undefined;
+    getExpandedKeys: () => ITreeSelectProps['expandedKeys'] | undefined;
 
     /** Set expanded keys */
-    setExpandedKeys: (keys: ITreeSelectProps['treeExpandedKeys']) => void;
+    setExpandedKeys: (keys: ITreeSelectProps['expandedKeys']) => void;
 
     /** Get expanded nodes */
     getExpandedNodes: () => ITreeSelectNode[] | undefined;
@@ -212,14 +240,14 @@ export interface ITreeSelectApi {
     collapseNode: (key: Key) => void;
 
     /** Toggle node (expand if collapsed, collapse if expanded) */
-    toggleNode: (key: Key) => void;
+    toggleNode: (key: Key) => boolean;
 
     /**
      * Expand parent nodes
      * @param key - node key
      * @param externalDataset - if not set, node will be expanded in current data set. If set - in this data set, component will not be updated
      */
-    expandParentNodes: (key: Key, externalDataset?: ITreeSelectProps['dataSet']) => void
+    expandParentNodes: (key: Key, externalDataset?: ITreeSelectProps['dataSet']) => void;
 
     /**
      * Get the TreeSelect node by key value
@@ -233,12 +261,6 @@ export interface ITreeSelectApi {
      * @param extDataSet - external data set. If set, search nodes in this data set, not current dataSet
      */
     getNodes: (key: ITreeSelectValue, extDataSet?: ITreeSelectNode[]) => ITreeSelectNode[] | undefined;
-
-    /**
-     * Get the TreeSelect selected nodes
-     * @param extDataSet - external data set. If set, search nodes in this data set, not current dataSet
-     */
-    getSelectedNodes: (extDataSet?: ITreeSelectNode[]) => ITreeSelectNode[] | undefined;
 
     /** Get current data set */
     getDataSet: () => ITreeSelectNode[] | undefined;
@@ -282,6 +304,28 @@ export interface ITreeSelectApi {
      */
     fetchData: (search: string, debounce?: boolean) => void;
 
+    /** Add node */
+    /**
+     *
+     * @param node - node to add
+     * @param targetKey - target node key
+     * @param position - node position: below target, above target, insideTop - first position inside target, insideBottom -  last position inside target
+     * @param opts - options {ensureVisible - if true, node will be visible after adding (expanded parent nodes), select - if true, node will be selected after adding}
+     * @param externalDataset - if not set, node will be added to current data set. If set - to this data set, component will not be updated
+     * @returns changed data set
+     */
+    addNode: (
+        node: ITreeSelectNode,
+        targetKey?: Key,
+        position?: INodePosition,
+        opts?: {
+            ensureVisible?: boolean;
+            select?: boolean;
+        },
+        externalDataset?: ITreeSelectProps['dataSet']
+    ) => ITreeSelectProps['dataSet'];
+
+    //TODO:remove after testing
     /** Add nodes to current dataset*/
     addNodes: (parentNode: ITreeSelectNode | undefined, newNodes: ITreeSelectNode | ITreeSelectNode[]) => void;
 
@@ -298,9 +342,16 @@ export interface ITreeSelectApi {
     isDataPlainList: () => boolean;
 
     /**
+     * Get parent node
+     * @param key - node key
+     * @param externalDataset - if not set, search will be performed in current data set. If set - in this data set
+     */
+    getParentNode: (key: Key, externalDataset?: ITreeSelectNode[]) => ITreeSelectNode | undefined;
+
+    /**
      * Get next node key
-     * @param key
-     * @param opts
+     * @param key - node key
+     * @param opts - search options
      * @param externalDataset - if not set, search will be performed in current data set. If set - in this data set
      */
     getNextNodeKey: (key: Key | undefined, opts?: IFindNodeOptions, externalDataset?: ITreeSelectNode[]) => Key | undefined;

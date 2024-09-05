@@ -1,15 +1,5 @@
-type IKey = string | number | bigint;
+import {IFieldNames, IFindNodeOptions, IKey} from "@src/_shared/@types/nodes";
 
-export interface IFindNodeOptions {
-    /** If true, search will be performed only in the same level */
-    sameLevelOnly?: boolean;
-    /** If true, search will be performed only in the expanded nodes (default true) */
-    expandedOnly?: boolean;
-    /** If true, search will be performed only in the selectable nodes (default true) */
-    selectableOnly?: boolean;
-    /** If true, search will be performed only in the not disabled nodes (default true) */
-    notDisabled?: boolean;
-}
 
 /**
  * Find next node key in data set by display order.
@@ -18,16 +8,14 @@ export interface IFindNodeOptions {
  * @param dataSet - hierarchy collection of nodes
  * @param key - node key
  * @param expandedKeys - keys of expanded nodes
- * @param keyField - field name of node key
- * @param childrenField - field name of node children
+ * @param fieldNames - field names
  * @param opts - search options
  */
 export const findNextNodeKey = <T extends Record<string, unknown>>(
     dataSet: T[] | undefined,
     key: IKey | undefined,
     expandedKeys: IKey[] | undefined,
-    keyField: string,
-    childrenField: string,
+    fieldNames: IFieldNames,
     opts?: IFindNodeOptions
 ): IKey | undefined => {
     let curFound = !key;
@@ -36,12 +24,12 @@ export const findNextNodeKey = <T extends Record<string, unknown>>(
     const recursive = (nodes: T[]): IKey | undefined => {
         for (const node of nodes) {
             if (breakSearch) return undefined;
-            if (curFound && isNodeCanBeSelected(node, opts)) return node[keyField] as IKey;
+            if (curFound && isNodeCanBeSelected(node, opts)) return node[fieldNames.key] as IKey;
 
-            if (typeof key === 'undefined' || node[keyField] === key) curFound = true;
+            if (typeof key === 'undefined' || node[fieldNames.key] === key) curFound = true;
 
-            if (node[childrenField] && (!curFound || shouldSearchInChildren(node, expandedKeys, keyField, opts))) {
-                const childResult = recursive(node[childrenField] as T[]);
+            if (node[fieldNames.children] && (!curFound || shouldSearchInChildren(node, expandedKeys, fieldNames, opts))) {
+                const childResult = recursive(node[fieldNames.children] as T[]);
                 if (childResult) return childResult;
             }
         }
@@ -55,22 +43,20 @@ export const findNextNodeKey = <T extends Record<string, unknown>>(
 };
 
 /**
- * Find зкум node key in data set by display order.
+ * Find prev node key in data set by display order.
  * If no node on same level found, returns parent node key.
  * If the parent has children nodes, then we return the last one
  * @param dataSet - hierarchy collection of nodes
  * @param key - node key
  * @param expandedKeys - keys of expanded nodes
- * @param keyField - field name of node key
- * @param childrenField - field name of node children
+ * @param fieldNames - field names
  * @param opts - search options
  */
 export const findPrevNodeKey = <T extends Record<string, unknown>>(
     dataSet: T[] | undefined,
     key: IKey | undefined,
     expandedKeys: IKey[] | undefined,
-    keyField: string,
-    childrenField: string,
+    fieldNames: IFieldNames,
     opts?: IFindNodeOptions
 ): IKey | undefined => {
     let curFound = !key;
@@ -81,14 +67,14 @@ export const findPrevNodeKey = <T extends Record<string, unknown>>(
             const node = nodes[i];
             if (breakSearch) return undefined;
 
-            if (node[childrenField] && (!curFound || shouldSearchInChildren(node, expandedKeys, keyField, opts))) {
-                const childResult = recursive(node[childrenField] as T[]);
+            if (node[fieldNames.children] && (!curFound || shouldSearchInChildren(node, expandedKeys, fieldNames, opts))) {
+                const childResult = recursive(node[fieldNames.children] as T[]);
                 if (childResult) return childResult;
             }
 
-            if (curFound && isNodeCanBeSelected(node, opts)) return node[keyField] as IKey;
+            if (curFound && isNodeCanBeSelected(node, opts)) return node[fieldNames.key] as IKey;
 
-            if (typeof key === 'undefined' || node[keyField] === key) curFound = true;
+            if (typeof key === 'undefined' || node[fieldNames.key] === key) curFound = true;
         }
 
         if (curFound && opts?.sameLevelOnly) breakSearch = true;
@@ -102,6 +88,6 @@ export const findPrevNodeKey = <T extends Record<string, unknown>>(
 const isNodeCanBeSelected = (node: Record<string, unknown>, opts?: IFindNodeOptions) =>
     (opts?.notDisabled === false || node.disabled !== true) && (opts?.selectableOnly === false || node.selectable !== false);
 
-const shouldSearchInChildren = (node: Record<string, unknown>, expandedKeys: IKey[] | undefined, keyField: string, opts?: IFindNodeOptions) => {
-    return !opts?.sameLevelOnly && (opts?.expandedOnly === false || expandedKeys?.includes(node[keyField] as IKey));
+const shouldSearchInChildren = (node: Record<string, unknown>, expandedKeys: IKey[] | undefined, fieldNames: IFieldNames, opts?: IFindNodeOptions) => {
+    return !opts?.sameLevelOnly && (opts?.expandedOnly === false || expandedKeys?.includes(node[fieldNames.key] as IKey));
 };

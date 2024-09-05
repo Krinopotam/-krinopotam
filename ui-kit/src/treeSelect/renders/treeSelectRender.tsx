@@ -8,6 +8,7 @@ import {DefaultOptionType} from 'rc-tree-select/es/TreeSelect';
 import {DefaultDropdownRender} from '@src/treeSelect/renders/defaultDropdownRender';
 import {usePrepareEditFormProps} from '@src/treeSelect/hooks/prepareEditForm';
 import {DFormModal} from '@src/dFormModal';
+import {useWhyDidYouUpdate} from "ahooks";
 
 // For clarity. Antd has labels for a node(1) and for the selected value(2). fieldNames.label property sets the node label(1) and treeNodeLabelProp sets the selected value label(2)
 // In order not to get confused, we will consider Node's label is title(1), and Label of the selected value is label(2)
@@ -22,6 +23,9 @@ export const TreeSelectRender = ({
     allProps: ITreeSelectProps;
     treeSelectProps: IAntTreeSelectProps;
 }): React.JSX.Element => {
+    useWhyDidYouUpdate('treeSelect', { treeApi,
+        allProps,
+        treeSelectProps,});
     const editFormProps = usePrepareEditFormProps(treeApi, allProps, false);
     const editGroupFormProps = usePrepareEditFormProps(treeApi, allProps, true);
 
@@ -44,7 +48,6 @@ export const TreeSelectRender = ({
             <AntdTreeSelect
                 ref={treeApi.treeSelectRef}
                 showSearch // shows search field by default
-                //treeDefaultExpandAll // expands all nodes by default
                 allowClear // allows to clear the selected value by default
                 treeNodeFilterProp={fieldNames.label} //Field to be  used for filtering if filterTreeNode returns true. Default: title (getting from api.fieldNames)
                 dropdownRender={defaultDropdownRender}
@@ -53,6 +56,7 @@ export const TreeSelectRender = ({
                 }
                 {...treeSelectProps}
                 /************ no override ****************/
+                treeDefaultExpandAll={allProps.defaultExpandAll}
                 fieldNames={fieldNames}
                 treeNodeLabelProp={treeNodeLabelProp} //Selected value label. Will render as content of select. Default: title
                 treeData={treeApi.getDataSet()}
@@ -76,7 +80,12 @@ export const TreeSelectRender = ({
     );
 };
 
-const useValue = (api: ITreeSelectApi) => api.getValue();
+const useValue = (api: ITreeSelectApi) => {
+    const props = api.getProps()
+    const keys = api.getSelectedKeys();
+    if (props.multiple) return keys ?? null
+    else return keys?.[0] ?? null
+}
 
 const useDefaultDropdownRender = ({treeApi}: {treeApi: ITreeSelectApi}) => {
     return useCallback((menu: React.ReactNode) => <DefaultDropdownRender treeApi={treeApi}>{menu}</DefaultDropdownRender>, [treeApi]);
@@ -84,7 +93,7 @@ const useDefaultDropdownRender = ({treeApi}: {treeApi: ITreeSelectApi}) => {
 
 const useOnClear = (api: ITreeSelectApi) => {
     return useCallback(() => {
-        api.setValue(null);
+        api.setSelectedKeys(undefined);
         const props = api.getProps();
         props.onClear?.();
     }, [api]);
@@ -94,7 +103,7 @@ const useOnChange = (api: ITreeSelectApi) => {
     return useCallback<NonNullable<IAntTreeSelectProps['onChange']>>(
         (value, label, extra) => {
             const props = api.getProps();
-            api.setValue(value as ITreeSelectValue);
+            api.setSelectedKeys((value as ITreeSelectValue) ?? undefined);
             props.onChange?.(value, label, extra);
         },
         [api]

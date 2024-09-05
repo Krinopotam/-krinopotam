@@ -1,3 +1,5 @@
+import {IKey} from "@src/_shared/@types/nodes";
+
 /**
  * Find node by node key
  * @param dataSet - hierarchy collection of nodes
@@ -8,7 +10,7 @@
  */
 export const findNodeIndex = <T extends Record<string, unknown>>(
     dataSet: T[] | undefined,
-    key: string | number | bigint,
+    key: IKey,
     keyField: string,
     childrenField: string
 ): {

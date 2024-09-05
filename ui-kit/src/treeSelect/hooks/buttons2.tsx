@@ -69,7 +69,7 @@ const deleteHandler = (api: ITreeSelectApi) => {
                 .then(() => {
                     if (!api.isMounted()) return;
                     api.deleteNodes(selectedNodes);
-                    api.setValue(null);
+                    api.setSelectedKeys(undefined);
                     if (!treeProps.confirmDelete) {
                         buttonsApi.loading('delete', false);
                         buttonsApi.disabled('delete', true);
@@ -99,7 +99,7 @@ const deleteHandler = (api: ITreeSelectApi) => {
         }
 
         api.deleteNodes(selectedNodes);
-        api.setValue(null);
+        api.setSelectedKeys(undefined);
         if (messageBox) messageBox.destroy();
     };
 

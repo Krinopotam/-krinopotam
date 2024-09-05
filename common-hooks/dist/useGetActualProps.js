@@ -4,7 +4,10 @@ export const useGetActualProps = (props) => {
     const curExtPropsRef = useRef(props);
     const rerender = useGetRerender();
     const setProps = (props) => {
-        curExtPropsRef.current = props;
+        if (typeof props === 'function')
+            curExtPropsRef.current = props(curExtPropsRef.current);
+        else
+            curExtPropsRef.current = props;
         rerender();
     };
     if (curPropsRef.current !== props) {

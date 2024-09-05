@@ -1,12 +1,11 @@
-import {Col, Row} from 'antd';
-import {DFormModal, IDFormModalApi} from '@src/dFormModal';
+import {IDFormModalApi} from '@src/dFormModal';
 import React, {useEffect, useMemo, useState} from 'react';
 import {GetNanoId, SplitObject} from '@krinopotam/js-helpers';
 import {TreeSelectRender} from '@src/treeSelect/renders/treeSelectRender';
 import {useEditableInit} from '@src/treeSelect/hooks/useEditForm';
 import {useInitApi} from '@src/treeSelect/hooks/api';
 import {useGetActualProps} from '@krinopotam/common-hooks';
-import {ButtonsRow, IButtonsRowApi} from '@src/buttonsRow/buttonsRow';
+import {IButtonsRowApi} from '@src/buttonsRow/buttonsRow';
 import {useInitButtons} from '@src/treeSelect/hooks/buttons2';
 
 import {IAntTreeSelectProps, ITreeSelectApi, ITreeSelectBaseProps, ITreeSelectProps} from '@src/treeSelect/types/types';
@@ -21,7 +20,7 @@ export const TreeSelect = (props: ITreeSelectProps): React.JSX.Element => {
     const [api] = useState((allProps.apiRef ?? {}) as ITreeSelectApi);
     const [editFormApi] = useState((props.editFormProps?.apiRef ?? {}) as IDFormModalApi);
     const [editGroupFormApi] = useState((props.editGroupFormProps?.apiRef ?? {}) as IDFormModalApi);
-    const [buttonsApi] = useState({} as IButtonsRowApi);
+    const [buttonsApi] = useState({} as IButtonsRowApi & {refreshButtons: () => void});
 
     useInitApi({api, componentId, props: allProps, setProps: setAllProps, buttonsApi, editFormApi, editGroupFormApi});
 
@@ -79,6 +78,14 @@ const useSplitProps = (props: ITreeSelectProps) => {
             titleRender: true,
             labelRender: true,
             editGroupFormProps: true,
+            defaultExpandAll: true,
+            expandedKeys: true,
+            buttonsRowStyle: true,
+            buttonsRowWrapperStyle: true,
+            buttonsIconsOnly: true,
+            buttonsPosition: true,
+            buttonsSize: true,
+            headerLabel: true,
             language: true,
             translation: true,
         });

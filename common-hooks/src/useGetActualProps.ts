@@ -6,13 +6,15 @@ import {useRef, useState} from "react";
  * @returns
  */
 
-export const useGetActualProps = <T,>(props: T): [T, (props: T) => void] => {
+export const useGetActualProps = <T, >(props: T): [T, (props: T | ((prevValue: T) => T)) => void] => {
     const curPropsRef = useRef<T>(props); // props, changed by parent component
     const curExtPropsRef = useRef<T>(props); // props, changed setProps function
 
     const rerender = useGetRerender();
-    const setProps = (props: T) => {
-        curExtPropsRef.current = props;
+    const setProps = (props: T | ((prevValue: T) => T)) => {
+        if (typeof props === 'function') curExtPropsRef.current = (props as (prevValue: T) => T)(curExtPropsRef.current);
+        else curExtPropsRef.current = props;
+
         rerender();
     };
 
