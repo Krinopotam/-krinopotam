@@ -44,15 +44,19 @@ export const useInitGridApi = ({
 
     useUpdateDataSetFromProps(dataSetRef, props.dataSet);
 
-    gridApi.tableApi = tableRef.current as ITabulator;
-    gridApi.editFormApi = editFormApi;
-    gridApi.selectionFormApi = selectionFormApi;
+    /** Component Api methods*/
+    gridApi.getId = useApiGetId(props.id ?? 'grid-' + GetNanoId());
     gridApi.getProps = useApiGetProps(props);
     gridApi.setProps = useApiSetProps(setProps);
     gridApi.updateProps = useApiUpdateProps(props, setProps);
-    gridApi.getButtonsApi = useApiGetButtonsApi<IButtonsRowApi & {refreshButtons: () => void}>();
     gridApi.getIsMounted = useApiIsMounted();
-    gridApi.getId = useApiGetId(props.id ?? 'grid-' + GetNanoId());
+
+    /** Component own api methods */
+    gridApi.tableApi = tableRef.current as ITabulator;
+    gridApi.editFormApi = editFormApi;
+    gridApi.selectionFormApi = selectionFormApi;
+
+    gridApi.getButtonsApi = useApiGetButtonsApi<IButtonsRowApi & {refreshButtons: () => void}>();
     gridApi.getDataSet = useApiGetDataSet(dataSetRef, gridApi);
     gridApi.setDataSet = useApiSetDataSet(dataSetRef, gridApi);
     gridApi.getIsLoading = useApiGetIsLoading(isLoading);

@@ -78,10 +78,6 @@ export const useInitApi = ({
     api.updateProps = useApiUpdateProps(props, setProps);
     api.getIsMounted = useApiIsMounted();
 
-    /** Component own api methods */
-    api.treeSelectRef = useRef(null);
-    api.getButtonsApi = useApiGetButtonsApi<IButtonsRowApi & {refreshButtons: () => void}>();
-
     /** Tree component Api methods */
     api.getDataSet = useApiGetDataSet(dataSet);
     api.setDataSet = useApiSetDataset(setDataset);
@@ -117,6 +113,9 @@ export const useInitApi = ({
     //api.deleteNode = useApiDeleteNode(api);
     api.ensureNodeVisible = useApiEnsureNodeVisible(api);
 
+    /** Component own api methods */
+    api.treeSelectRef = useRef(null);
+    api.getButtonsApi = useApiGetButtonsApi<IButtonsRowApi & {refreshButtons: () => void}>();
     api.getIsReady = useApiGetIsReady(isReady);
     api.setIsReady = useApiSetIsReady(setIsReady);
     api.getIsFetching = useApiGetIsFetching(fetching);
