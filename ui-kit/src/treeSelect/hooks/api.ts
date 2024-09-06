@@ -70,7 +70,7 @@ export const useInitApi = ({
     const prepareNode = usePrepareNode(props);
 
     const [dataSet, setDataset, isDataPlain, parentKeys] = useApiDataSetState(props.dataSet, fieldNames, prepareNode); //current dataSet
-    const [expandedKeys, setExpandedKeys] = useApiExpandedKeysState(props.expandedKeys, props.treeDefaultExpandedKeys, props.defaultExpandAll, parentKeys); //expanded keys
+    const [expandedKeys, setExpandedKeys] = useApiExpandedKeysState(props.expandedKeys, props.defaultExpandedKeys, props.defaultExpandAll, parentKeys); //expanded keys
 
     api.treeSelectRef = useRef(null);
     api.getId = useApiGetId(componentId);

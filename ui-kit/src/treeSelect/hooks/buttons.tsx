@@ -1,12 +1,19 @@
 import React, {Key, useCallback, useMemo, useState} from 'react';
-import {CopyOutlined, DeleteOutlined, EditOutlined, EyeOutlined, PlusOutlined, FolderAddOutlined} from '@ant-design/icons';
 import {MergeObjects} from '@krinopotam/js-helpers';
-import {ITreeSelectApi, ITreeSelectNode, ITreeSelectProps} from "@src/treeSelect";
-import {ITreeSelectButton, ITreeSelectButtons} from "@src/treeSelect/types/types";
-import {IDFormDataSet} from "@src/dForm";
-import {useTranslate} from "@src/_shared/hooks/useTranslate";
-import {translations} from "@src/treeSelect/translations/translations";
-
+import {ITreeSelectApi, ITreeSelectNode, ITreeSelectProps} from '@src/treeSelect';
+import {ITreeSelectButton, ITreeSelectButtons} from '@src/treeSelect/types/types';
+import {IDFormDataSet} from '@src/dForm';
+import {useTranslate} from '@src/_shared/hooks/useTranslate';
+import {translations} from '@src/treeSelect/translations/translations';
+import {
+    defaultButtonClone,
+    defaultButtonCreate,
+    defaultButtonCreateGroup,
+    defaultButtonDelete,
+    defaultButtonUpdate,
+    defaultButtonView,
+    defaultHeaderLabel,
+} from '@src/_shared/hooks/treeComponentApiMethods/buttons/defaultButtonsProps';
 
 export const useInitButtons = (api: ITreeSelectApi, treeProps: ITreeSelectProps) => {
     const [, refreshButtons] = useState({});
@@ -49,18 +56,7 @@ export const useInitButtons = (api: ITreeSelectApi, treeProps: ITreeSelectProps)
         }
 
         return resultButtons;
-    }, [
-        headerLabel,
-        viewButton,
-        createButton,
-        createGroupButton,
-        cloneButton,
-        updateButton,
-        deleteButton,
-        buttons,
-        buttonsSize,
-        buttonsPos,
-    ]);
+    }, [headerLabel, viewButton, createButton, createGroupButton, cloneButton, updateButton, deleteButton, buttons, buttonsSize, buttonsPos]);
 };
 
 const useRefreshButtons = (refreshButtons: React.Dispatch<React.SetStateAction<Record<string, unknown>>>) => {
@@ -75,10 +71,8 @@ const useGetHeaderLabel = (api: ITreeSelectProps): ITreeSelectButton | undefined
         if (!api.headerLabel) return undefined;
 
         return {
-            weight: 1,
+            ...defaultHeaderLabel,
             title: api.headerLabel,
-            type: 'element',
-            position: 'left',
         } satisfies ITreeSelectButton;
     }, [api.headerLabel]);
 };
@@ -91,13 +85,10 @@ const useGetViewButton = (api: ITreeSelectApi, treeProps: ITreeSelectProps, sele
         if (!treeProps.editFormProps || !treeProps.readOnly || treeProps.editButtons?.view === null) return undefined;
 
         return {
-            weight: 100,
+            ...defaultButtonView,
             title: t('view'),
             tooltip: t('viewRecord'),
-            icon: <EyeOutlined />,
-            position: 'right',
             disabled: selectedNodes?.length !== 1,
-            hotKeys: [{key: 'Enter'}],
             onClick: () => {
                 const nodes = api.getSelectedNodes();
                 if (nodes?.length !== 1) return;
@@ -115,12 +106,9 @@ const useGetCreateButton = (api: ITreeSelectApi, treeProps: ITreeSelectProps): I
     return useMemo(() => {
         if (!treeProps.editFormProps || treeProps.readOnly || treeProps.editButtons?.create === null) return undefined;
         return {
-            weight: 110,
+            ...defaultButtonCreate,
             title: t('create'),
             tooltip: t('createRecord'),
-            icon: <PlusOutlined />,
-            position: 'right',
-            hotKeys: [{key: 'Insert'}],
             onClick: () => {
                 const fieldNames = api.getFieldNames();
                 const activeNode = api.getActiveNode();
@@ -142,11 +130,9 @@ const useGetCreateGroupButton = (api: ITreeSelectApi, treeProps: ITreeSelectProp
     return useMemo(() => {
         if (!treeProps.editGroupFormProps || treeProps.readOnly || treeProps.editButtons?.createGroup === null) return undefined;
         return {
-            weight: 115,
+            ...defaultButtonCreateGroup,
             title: t('createGroup'),
             tooltip: t('createRecordsGroup'),
-            icon: <FolderAddOutlined />,
-            position: 'right',
             onClick: () => {
                 const fieldNames = api.getFieldNames();
                 const activeNode = api.getActiveNode();
@@ -173,20 +159,17 @@ const useGetCloneButton = (api: ITreeSelectApi, treeProps: ITreeSelectProps, sel
         const isGroup = nodes?.length === 1 && !nodes[0].isLeaf;
 
         return {
-            weight: 120,
+            ...defaultButtonClone,
             title: isGroup && editGroupFormProps ? t('cloneGroup') : t('clone'),
             tooltip: isGroup && editGroupFormProps ? t('cloneRecordsGroup') : t('cloneRecord'),
-            icon: <CopyOutlined />,
-            position: 'right',
             disabled: selectedNodes?.length !== 1,
-            hotKeys: [{key: 'F9'}],
             onClick: () => {
                 const nodes = api.getSelectedNodes();
                 if (nodes?.length !== 1) return;
                 const node = nodes[0];
 
                 if (node.isLeaf || !editGroupFormProps) api.getEditFormApi().open('clone', {dataSet: getDataSet(node)});
-                else  api.getEditGroupFormApi().open('clone', {dataSet: getDataSet(node)});
+                else api.getEditGroupFormApi().open('clone', {dataSet: getDataSet(node)});
             },
         } satisfies ITreeSelectButton;
     }, [api, treeProps.editGroupFormProps, treeProps.editFormProps, treeProps.readOnly, treeProps.editButtons?.clone, t, selectedNodes?.length]);
@@ -204,13 +187,10 @@ const useGetUpdateButton = (api: ITreeSelectApi, treeProps: ITreeSelectProps, se
         const isGroup = nodes?.length === 1 && !nodes[0].isLeaf;
 
         return {
-            weight: 130,
+            ...defaultButtonUpdate,
             title: isGroup && editGroupFormProps ? t('editGroup') : t('edit'),
             tooltip: isGroup && editGroupFormProps ? t('editRecordsGroup') : t('editRecord'),
-            icon: <EditOutlined />,
-            position: 'right',
             disabled: selectedNodes?.length !== 1,
-            hotKeys: [{key: 'Enter'}, {key: 'F2'}],
             onClick: () => {
                 const nodes = api.getSelectedNodes();
                 if (nodes?.length !== 1) return;
@@ -234,14 +214,10 @@ const useGetDeleteButton = (api: ITreeSelectApi, treeProps: ITreeSelectProps, ac
         const isGroup = nodes?.length === 1 && !nodes[0].isLeaf;
         const keyField = treeProps.fieldNames?.key ?? 'id';
         return {
-            weight: 140,
+            ...defaultButtonDelete,
             title: isGroup ? t('deleteGroup') : t('delete'),
             tooltip: isGroup ? t('deleteRecordsGroup') : t('deleteRecord'),
-            icon: <DeleteOutlined />,
-            position: 'right',
-            colorType: 'danger',
             disabled: !activeItem,
-            hotKeys: [{key: 'Delete', ctrl: true}],
             onClick: () => {
                 const nodes = api.getSelectedNodes();
                 if (nodes?.length !== 1) return;
@@ -251,7 +227,6 @@ const useGetDeleteButton = (api: ITreeSelectApi, treeProps: ITreeSelectProps, ac
         } satisfies ITreeSelectButton;
     }, [treeProps.editFormProps, treeProps.readOnly, treeProps.editButtons?.delete, treeProps.fieldNames?.key, api, t, activeItem]);
 };
-
 
 const getDataSet = (node: ITreeSelectNode) => {
     const dataSet = {...node};

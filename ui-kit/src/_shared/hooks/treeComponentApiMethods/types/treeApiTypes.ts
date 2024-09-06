@@ -1,4 +1,3 @@
-import * as React from 'react';
 import {Key} from 'react';
 import {IBaseComponentApi} from '@src/_shared/hooks/componentApiMethods/types/apiTypes';
 
@@ -15,21 +14,11 @@ export interface IFindNodeOptions {
 
 export type IFieldNames = {key: string; title: string; children: string};
 
-export interface IBaseTreeComponentProps<T extends Record<string, unknown> = Record<string, unknown>> {
-    dataSet?: T[];
-    defaultExpandAll?: boolean;
-    fieldNames?: Partial<IFieldNames>;
-    expandedKeys?: React.Key[];
-    defaultExpandedKeys?: React.Key[];
-    multiple?: boolean;
-    [key: `aria-${string}`]: string | number | boolean | undefined ;
-}
-
 export type INodePosition = 'below' | 'above' | 'insideTop' | 'insideBottom';
 
 export interface ITreeComponentApi<
     TNode extends Record<string, unknown> = Record<string, unknown>,
-    TProps extends IBaseTreeComponentProps<TNode> = IBaseTreeComponentProps<TNode>,
+    TProps extends object = object,
 > extends IBaseComponentApi<TProps> {
     /** Get node fields names */
     getFieldNames: () => {key: string; children: string; title: string};

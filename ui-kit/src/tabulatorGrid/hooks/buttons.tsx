@@ -230,7 +230,7 @@ const useGetDeleteButton = (gridApi: IGridApi, selectedRows: IGridRowData[]): IT
             icon: <DeleteOutlined />,
             position: 'right',
             colorType: 'danger',
-            disabled: !selectedRows || selectedRows.length === 0,
+            disabled: !!selectedRows?.length,
             hotKeys: [{key: 'Delete', ctrl: true}],
             onClick: () => {
                 const selectedRows = gridApi.getSelectedRows();
