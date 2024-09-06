@@ -28,7 +28,7 @@ export const AsyncProgressive = (): React.JSX.Element => {
             return new Promise((resolve, reject) => {
                 setTimeout(() => {
                     const page = params?.page ?? 1;
-                    const size = params?.size ?? gridApi.gridProps.paginationSize ?? 5;
+                    const size = params?.size ?? gridApi.getProps().paginationSize ?? 5;
                     const lastPage = Math.ceil(dataSet.length / size);
                     const slicedDataSet = dataSet.slice((page - 1) * size, page * size); //remote fetch imitation
                     resolve({data: slicedDataSet, last_page: lastPage});

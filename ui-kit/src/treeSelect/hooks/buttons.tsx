@@ -13,7 +13,7 @@ import {
     defaultButtonUpdate,
     defaultButtonView,
     defaultHeaderLabel,
-} from '@src/_shared/hooks/treeComponentApiMethods/buttons/defaultButtonsProps';
+} from '@src/_shared/hooks/buttons/defaultButtonsProps';
 
 export const useInitButtons = (api: ITreeSelectApi, treeProps: ITreeSelectProps) => {
     api.getButtonsApi().refreshButtons = useRefreshButtons();

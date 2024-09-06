@@ -55,7 +55,6 @@ export const useInitApi = ({
     props: ITreeSelectProps;
     setProps: (props: ITreeSelectProps | ((prevValue: ITreeSelectProps) => ITreeSelectProps)) => void;
 }) => {
-    const [componentId] = useState(props.componentId ?? 'treeSelect-' + GetNanoId());
     const [editFormApi] = useState((props.editFormProps?.apiRef ?? {}) as IDFormModalApi);
     const [editGroupFormApi] = useState((props.editGroupFormProps?.apiRef ?? {}) as IDFormModalApi);
     const [isReady, setIsReady] = useState(false);
@@ -73,7 +72,7 @@ export const useInitApi = ({
     const [expandedKeys, setExpandedKeys] = useApiExpandedKeysState(props.expandedKeys, props.defaultExpandedKeys, props.defaultExpandAll, parentKeys); //expanded keys
 
     /** Component Api methods*/
-    api.getId = useApiGetId(componentId);
+    api.getId = useApiGetId(props.componentId ?? 'treeSelect-' + GetNanoId());
     api.getProps = useApiGetProps(props);
     api.setProps = useApiSetProps(setProps);
     api.updateProps = useApiUpdateProps(props, setProps);

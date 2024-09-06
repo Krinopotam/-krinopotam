@@ -9,22 +9,28 @@ import {IError} from '@krinopotam/service-types';
 import {IsDebugMode} from '@krinopotam/common-hooks';
 import {IGridDeletePromise, IGridProps, IGridRowData} from '@src/tabulatorGrid';
 import {IGridApi, IRowKey, IRowKeys} from '@src/tabulatorGrid/types/tabulatorGridTypes';
-import {useUnmountedRef} from "ahooks";
-import {useTranslate} from "@src/_shared/hooks/useTranslate";
-import {translations} from "@src/tabulatorGrid/translations/translations";
-import {IButtonsRowApi} from "@src/buttonsRow";
-import {useApiGetButtonsApi} from "@src/_shared/hooks/componentApiMethods/useApiGetButtonsApi";
+import {useTranslate} from '@src/_shared/hooks/useTranslate';
+import {translations} from '@src/tabulatorGrid/translations/translations';
+import {IButtonsRowApi} from '@src/buttonsRow';
+import {useApiGetButtonsApi} from '@src/_shared/hooks/componentApiMethods/useApiGetButtonsApi';
+import {useApiGetId} from '@src/_shared/hooks/componentApiMethods/useApiGetId';
+import {useApiIsMounted} from '@src/_shared/hooks/componentApiMethods/useApiIsMointed';
+import {useApiGetProps} from '@src/_shared/hooks/componentApiMethods/useApiGetProps';
+import {useApiSetProps} from '@src/_shared/hooks/componentApiMethods/useApiSetProps';
+import {useApiUpdateProps} from '@src/_shared/hooks/componentApiMethods/useApiUpdateProps';
 
 export const useInitGridApi = ({
-                                   gridApi,
-                                   props,
-                                   tableRef,
-                                   editFormApi,
-                                   selectionFormApi,
-                                   setColumnsDialog,
-                               }: {
+    gridApi,
+    props,
+    setProps,
+    tableRef,
+    editFormApi,
+    selectionFormApi,
+    setColumnsDialog,
+}: {
     gridApi: IGridApi;
-    props: IGridApi['gridProps'];
+    props: IGridProps;
+    setProps: (props: IGridProps | ((prevValue: IGridProps) => IGridProps)) => void;
     tableRef: MutableRefObject<Tabulator | undefined>;
     editFormApi: IGridApi['editFormApi'];
     selectionFormApi: IGridApi['selectionFormApi'];
@@ -35,17 +41,18 @@ export const useInitGridApi = ({
     const curDataFetchParams = useRef<Record<string, unknown> | undefined>();
 
     const [isLoading, setIsLoading] = useState(false);
-    const unmountRef = useUnmountedRef();
 
     useUpdateDataSetFromProps(dataSetRef, props.dataSet);
 
-    gridApi.gridProps = props;
     gridApi.tableApi = tableRef.current as ITabulator;
     gridApi.editFormApi = editFormApi;
     gridApi.selectionFormApi = selectionFormApi;
-    gridApi.getButtonsApi = useApiGetButtonsApi<IButtonsRowApi & { refreshButtons: () => void }>();
-    gridApi.getIsMounted = useApiIsMounted(unmountRef);
-    gridApi.getId = useApiGetId(gridApi);
+    gridApi.getProps = useApiGetProps(props);
+    gridApi.setProps = useApiSetProps(setProps);
+    gridApi.updateProps = useApiUpdateProps(props, setProps);
+    gridApi.getButtonsApi = useApiGetButtonsApi<IButtonsRowApi & {refreshButtons: () => void}>();
+    gridApi.getIsMounted = useApiIsMounted();
+    gridApi.getId = useApiGetId(props.id ?? 'grid-' + GetNanoId());
     gridApi.getDataSet = useApiGetDataSet(dataSetRef, gridApi);
     gridApi.setDataSet = useApiSetDataSet(dataSetRef, gridApi);
     gridApi.getIsLoading = useApiGetIsLoading(isLoading);
@@ -89,15 +96,6 @@ const useUpdateDataSetFromProps = (curDataSetRef: MutableRefObject<IGridProps['d
     curDataSetRef.current = propsDataSet;
 };
 
-const useApiGetId = (gridApi: IGridApi): IGridApi['getId'] => {
-    const [gridId] = useState(gridApi.gridProps.id ?? 'grid-' + GetNanoId());
-    return useCallback(() => gridId, [gridId]);
-};
-
-const useApiIsMounted = (unmountRef: React.MutableRefObject<boolean>): IGridApi['getIsMounted'] => {
-    return useCallback(() => !unmountRef.current, [unmountRef]);
-};
-
 const useApiGetDataSet = (curDataSetRef: React.MutableRefObject<IGridProps['dataSet'] | undefined>, gridApi: IGridApi): IGridApi['getDataSet'] => {
     return useCallback(() => {
         if (!gridApi.tableApi) return curDataSetRef.current ?? undefined;
@@ -116,7 +114,7 @@ const useApiSetDataSet = (curDataSetRef: React.MutableRefObject<IGridProps['data
             gridApi.tableApi?.clearData();
             if (curDataSetRef.current?.length) gridApi.tableApi?.setData(curDataSetRef.current);
 
-            gridApi.gridProps.onDataChanged?.(curDataSetRef.current, gridApi);
+            gridApi.getProps().onDataChanged?.(curDataSetRef.current, gridApi);
         },
         [curDataSetRef, gridApi]
     );
@@ -279,7 +277,7 @@ const useApiInsertRows = (dataSetRef: React.MutableRefObject<IGridProps['dataSet
             const tableApi = gridApi.tableApi;
             if (!tableApi) return;
 
-            const dataTree = gridApi.gridProps.dataTree;
+            const dataTree = gridApi.getProps().dataTree;
 
             const above = place === 'above';
 
@@ -291,7 +289,7 @@ const useApiInsertRows = (dataSetRef: React.MutableRefObject<IGridProps['dataSet
             }
 
             dataSetRef.current = tableApi.getData() || [];
-            gridApi.gridProps.onDataChanged?.(dataSetRef.current, gridApi);
+            gridApi.getProps().onDataChanged?.(dataSetRef.current, gridApi);
 
             if (updateActiveRow && _rows[0]) gridApi.setActiveRowKey(_rows[0].id, true, 'center');
 
@@ -305,7 +303,7 @@ const useApiUpdateRows = (dataSetRef: React.MutableRefObject<IGridProps['dataSet
     return useCallback(
         (rows: IGridRowData[] | IGridRowData, updateActiveRow?: boolean) => {
             if (!gridApi.tableApi) return;
-            const dataTree = gridApi.gridProps.dataTree;
+            const dataTree = gridApi.getProps().dataTree;
 
             const _rows: IGridRowData[] = IsArray(rows) ? [...(rows as IGridRowData[])] : [rows as IGridRowData];
 
@@ -315,7 +313,7 @@ const useApiUpdateRows = (dataSetRef: React.MutableRefObject<IGridProps['dataSet
             }
 
             dataSetRef.current = gridApi.tableApi?.getData() || [];
-            gridApi.gridProps.onDataChanged?.(dataSetRef.current, gridApi);
+            gridApi.getProps().onDataChanged?.(dataSetRef.current, gridApi);
 
             if (updateActiveRow && _rows[0]) gridApi.setActiveRowKey(_rows[0].id, true, 'center');
             gridApi.tableApi.setTableBodyFocus();
@@ -340,7 +338,7 @@ const findParentNode = (gridApi: IGridApi, row: IGridRowData) => {
 
 const addTreeRows = (gridApi: IGridApi, rows: IGridRowData[] | IGridRowData, place?: 'above' | 'below', key?: IRowKey) => {
     if (!gridApi.tableApi) return;
-    if (!gridApi.gridProps.dataTree) {
+    if (!gridApi.getProps().dataTree) {
         console.warn('TreeData mode is disabled. Tree row updating not available');
         return;
     }
@@ -361,7 +359,7 @@ const addTreeRows = (gridApi: IGridApi, rows: IGridRowData[] | IGridRowData, pla
 
 const updateTreeRows = (gridApi: IGridApi, rows: IGridRowData[] | IGridRowData) => {
     if (!gridApi.tableApi) return;
-    if (!gridApi.gridProps.dataTree) {
+    if (!gridApi.getProps().dataTree) {
         console.warn('TreeData mode is disabled. Tree row updating not available');
         return;
     }
@@ -450,7 +448,7 @@ const useApiRemoveRowsByKeys = (dataSetRef: React.MutableRefObject<IGridProps['d
 
             dataSetRef.current = table?.getData() ?? [];
 
-            gridApi.gridProps.onDataChanged?.(dataSetRef.current, gridApi);
+            gridApi.getProps().onDataChanged?.(dataSetRef.current, gridApi);
 
             table.setTableBodyFocus();
         },
@@ -516,7 +514,7 @@ const useApiDeleteRows = (gridApi: IGridApi, gridProps: IGridProps): IGridApi['d
             };
 
             if (gridProps.confirmDelete) {
-                MessageBox.destroyAll()
+                MessageBox.destroyAll();
                 messageBox = MessageBox.confirmWaiter({
                     language: gridProps.language,
                     content: gridProps.rowDeleteMessage ?? t('deleteSelectedRecordsQt'),

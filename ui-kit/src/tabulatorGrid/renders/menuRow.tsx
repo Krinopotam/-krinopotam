@@ -9,7 +9,7 @@ interface IGridMenuProps {
 }
 
 export const MenuRow = ({gridApi}: IGridMenuProps): React.JSX.Element | null => {
-    const gridProps = gridApi.gridProps;
+    const gridProps = gridApi.getProps();
     const buttons = useInitButtons(gridApi);
 
     const [isMenuVisible, setIsMenuVisible] = useState<boolean | undefined>(undefined);

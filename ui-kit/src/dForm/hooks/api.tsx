@@ -11,19 +11,18 @@ import {useApiUpdateProps} from '@src/_shared/hooks/componentApiMethods/useApiUp
 import {useApiGetId} from '@src/_shared/hooks/componentApiMethods/useApiGetId';
 import {useApiIsMounted} from '@src/_shared/hooks/componentApiMethods/useApiIsMointed';
 import {useApiGetButtonsApi} from "@src/_shared/hooks/componentApiMethods/useApiGetButtonsApi";
+import {GetNanoId} from "@krinopotam/js-helpers";
 
 export const useInitFormApi = ({
-    formId,
     formApi,
     props,
     setProps,
 }: {
-    formId: string;
     formApi: IDFormApi;
     props: IDFormProps;
     setProps: React.Dispatch<React.SetStateAction<IDFormProps>>;
 }) => {
-    const apiGetId = useApiGetId(formId);
+    const apiGetId = useApiGetId(props.formId ?? 'dForm-' + GetNanoId());
     const getButtonsApi = useApiGetButtonsApi();
     const apiGetProps = useApiGetProps(props);
     const apiSetProps = useApiSetProps(setProps);

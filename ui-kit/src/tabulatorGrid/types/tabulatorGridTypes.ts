@@ -3,8 +3,9 @@ import {IButtonsRowApi, IFormButton} from '@src/buttonsRow';
 import {IDFormModalApi, IDFormModalProps} from '@src/dFormModal';
 import {IRequestProps, ITabulator, ITabulatorProps} from '@src/tabulatorBase';
 import {RowComponent, ScrollToRowPosition} from 'tabulator-tables';
-import {IBreakpoints} from "@krinopotam/common-hooks/useResponsive";
-import {translations} from "@src/tabulatorGrid/translations/translations";
+import {IBreakpoints} from '@krinopotam/common-hooks/useResponsive';
+import {translations} from '@src/tabulatorGrid/translations/translations';
+import {IBaseComponentApi} from "@src/_shared/hooks/componentApiMethods/types/apiTypes";
 
 export interface IGridRowData extends Record<string, unknown> {
     /** Row id */
@@ -122,18 +123,9 @@ export type IGridDeletePromise = Promise<{ data: boolean; last_page?: number }>;
 export type IRowKey = IGridRowData['id'];
 export type IRowKeys = IRowKey | IRowKey[];
 
-export interface IGridApi {
-    /** Get grid ID */
-    getId: () => string;
-
-    /** Current grid props */
-    gridProps: IGridProps;
-
+export interface IGridApi extends IBaseComponentApi<IGridProps>{
     /** Component table instance (Tabulator) */
     tableApi: ITabulator | undefined;
-
-    /** Get grid mounted state */
-    getIsMounted: () => boolean;
 
     /** Get current data set*/
     getDataSet: () => IGridRowData[] | undefined;

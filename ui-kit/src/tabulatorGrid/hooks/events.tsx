@@ -17,20 +17,20 @@ export const useEvents = (gridApi: IGridApi, gridProps: IGridProps): ITabulatorP
             },
             dataLoading: data => {
                 events?.dataLoading?.(data);
-                gridApi.gridProps.onDataLoading?.(data, gridApi);
+                gridApi.getProps().onDataLoading?.(data, gridApi);
 
-                if (!gridApi.gridProps.progressiveLoad) gridApi.setIsLoading(true);
+                if (!gridApi.getProps().progressiveLoad) gridApi.setIsLoading(true);
             },
             dataLoaded: data => {
                 events?.dataLoaded?.(data);
-                gridApi.gridProps.onDataLoaded?.(data, gridApi);
+                gridApi.getProps().onDataLoaded?.(data, gridApi);
                 if (!gridApi.getIsMounted()) return;
 
-                if (!gridApi.gridProps.progressiveLoad) gridApi.setIsLoading(false);
+                if (!gridApi.getProps().progressiveLoad) gridApi.setIsLoading(false);
             },
             dataProcessed: data => {
                 events?.dataProcessed?.(data);
-                gridApi.gridProps.onDataProcessed?.(data, gridApi);
+                gridApi.getProps().onDataProcessed?.(data, gridApi);
 
                 //console.log(data)
                 //gridApi.setSelectedRowKeys([1,2,3])
@@ -38,14 +38,14 @@ export const useEvents = (gridApi: IGridApi, gridProps: IGridProps): ITabulatorP
             dataLoadError: error => {
                 events?.dataLoadError?.(error);
                 const err = error as unknown as { message: string; code: number };
-                gridApi.gridProps.onDataLoadError?.(err.message, err.code, gridApi);
+                gridApi.getProps().onDataLoadError?.(err.message, err.code, gridApi);
 
                 if (!gridApi.getIsMounted()) return;
                 gridApi.setIsLoading(false);
 
                 MessageBox.destroyAll()
                 const message = MessageBox.confirm({
-                    language: gridApi.gridProps.language,
+                    language: gridApi.getProps().language,
                     content: (
                         <div>
                             <p>
@@ -76,7 +76,7 @@ export const useEvents = (gridApi: IGridApi, gridProps: IGridProps): ITabulatorP
             },
             rowSelectionChanged: (data, rows, selectedRows, deselectedRows) => {
                 events?.rowSelectionChanged?.(data, rows, selectedRows, deselectedRows);
-                gridApi.gridProps.onSelectionChange?.(data, rows, selectedRows, deselectedRows, gridApi);
+                gridApi.getProps().onSelectionChange?.(data, rows, selectedRows, deselectedRows, gridApi);
             },
         };
     }, [events, gridApi, t]);

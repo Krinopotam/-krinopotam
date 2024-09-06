@@ -27,7 +27,6 @@ import {
 export const DFormModal = (props: IDFormModalProps): React.JSX.Element => {
     useUpdateMessageBoxTheme(); //set current theme to messageBox
 
-    const [formId] = useState(props.formId ?? 'dFormModal-' + GetNanoId());
     const [allProps, setAllProps] = useGetActualProps(props); //props can be set both by parent component and via api
 
     /** Separating props related to the Modal component from props directly related to the DFormModal component */
@@ -35,8 +34,8 @@ export const DFormModal = (props: IDFormModalProps): React.JSX.Element => {
 
     //region Init api
     const [formApi, setFormApi] = useState((allProps.apiRef || {}) as IDFormModalApi);
+    useInitModalFormApi({formApi, props: allProps, setProps: setAllProps});
     const buttons = useInitButtons(formApi, allProps);
-    useInitModalFormApi({formId, formApi, props: allProps, setProps: setAllProps});
     //endregion
 
     const formCallbacks = useFormCallbacks(formApi, allProps);
@@ -54,7 +53,6 @@ export const DFormModal = (props: IDFormModalProps): React.JSX.Element => {
 
     return (
         <DFormModalRender
-            formId={formId}
             formApi={formApi}
             modalFormProps={allProps}
             modalProps={modalProps}

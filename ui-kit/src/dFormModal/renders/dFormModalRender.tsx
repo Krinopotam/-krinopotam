@@ -8,9 +8,6 @@ import {IDFormModalApi, IDFormModalProps} from '@src/dFormModal';
 import {IExtendedModalOwnProps} from '@src/dFormModal/types/dFormModalTypes';
 
 interface IDFormModalRenderProps {
-    /** the form ID */
-    formId: string;
-
     /** form buttons collection */
     buttons?: IFormButtons;
 
@@ -36,12 +33,12 @@ interface IDFormModalRenderProps {
     onCancel?: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
-export const DFormModalRender = ({formId, buttons, formApi, formProps, modalProps, modalFormProps}: IDFormModalRenderProps): React.JSX.Element => {
+export const DFormModalRender = ({buttons, formApi, formProps, modalProps, modalFormProps}: IDFormModalRenderProps): React.JSX.Element => {
     return (
         <Modal
             {...modalProps}
             // no override section
-            modalId={formId}
+            modalId={formApi.getId()}
             style={modalFormProps.modalStyle}
             styles={modalFormProps.modalStyles}
             onCancel={formApi.close}

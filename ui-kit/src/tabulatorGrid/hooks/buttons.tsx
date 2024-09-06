@@ -1,15 +1,24 @@
 import React, {useCallback, useMemo, useState} from 'react';
-import {CopyOutlined, DeleteOutlined, EditOutlined, EyeOutlined, FilterOutlined, MenuOutlined, PlusOutlined, PlusSquareOutlined} from '@ant-design/icons';
+import {FilterOutlined, MenuOutlined} from '@ant-design/icons';
 import {MergeObjects} from '@krinopotam/js-helpers';
 import {IGridApi, IGridRowData, ITabulator} from '@src/tabulatorGrid';
 import {ITabulatorButton, ITabulatorButtons} from '@src/tabulatorGrid/types/tabulatorGridTypes';
 import {translations} from '@src/tabulatorGrid/translations/translations';
 import {useTranslate} from '@src/_shared/hooks/useTranslate';
+import {
+    defaultButtonClone,
+    defaultButtonCreate,
+    defaultButtonDelete,
+    defaultButtonSelect,
+    defaultButtonUpdate,
+    defaultButtonView,
+    defaultHeaderLabel,
+} from '@src/_shared/hooks/buttons/defaultButtonsProps';
 
 export const useInitButtons = (gridApi: IGridApi): ITabulatorButtons => {
-    const buttons = gridApi.gridProps.buttons;
-    const buttonsSize = gridApi.gridProps.buttonsSize ?? 'small';
-    const buttonsPos = gridApi.gridProps.buttonsPosition ?? 'right';
+    const buttons = gridApi.getProps().buttons;
+    const buttonsSize = gridApi.getProps().buttonsSize ?? 'small';
+    const buttonsPos = gridApi.getProps().buttonsPosition ?? 'right';
     const activeRow = gridApi.getActiveRow();
     const selectedRows = gridApi.getSelectedRows();
 
@@ -78,21 +87,19 @@ const useRefreshButtons = () => {
 /** Get label props */
 const useGetHeaderLabel = (gridApi: IGridApi): ITabulatorButton | undefined => {
     return useMemo(() => {
-        const gridProps = gridApi.gridProps;
+        const gridProps = gridApi.getProps();
         if (!gridProps.headerLabel) return undefined;
 
         return {
-            weight: 1,
+            ...defaultHeaderLabel,
             title: gridProps.headerLabel,
-            type: 'element',
-            position: 'left',
         } satisfies ITabulatorButton;
     }, [gridApi]);
 };
 
 /** Get view button props */
 const useGetViewButton = (gridApi: IGridApi, activeRow: IGridRowData | undefined, selectedRows: IGridRowData[]): ITabulatorButton | undefined => {
-    const gridProps = gridApi.gridProps;
+    const gridProps = gridApi.getProps();
     const t = useTranslate(gridProps.language, translations, gridProps.translation);
 
     return useMemo(() => {
@@ -100,13 +107,10 @@ const useGetViewButton = (gridApi: IGridApi, activeRow: IGridRowData | undefined
         if (!gridProps.editFormProps || !gridProps.readOnly || gridProps.buttons?.view === null) return undefined;
 
         return {
-            weight: 100,
+            ...defaultButtonView,
             title: t('view'),
             tooltip: t('viewRecord'),
-            icon: <EyeOutlined />,
-            position: 'right',
             disabled: !activeRow || selectedRows.length !== 1,
-            hotKeys: [{key: 'Enter'}],
             onClick: () => {
                 if (!gridApi.getActiveRow()) return;
                 const dataSet = getRowDataSet(gridApi, false);
@@ -118,19 +122,16 @@ const useGetViewButton = (gridApi: IGridApi, activeRow: IGridRowData | undefined
 
 /** Get create button props */
 const useGetCreateButton = (gridApi: IGridApi): ITabulatorButton | undefined => {
-    const gridProps = gridApi.gridProps;
+    const gridProps = gridApi.getProps();
     const t = useTranslate(gridProps.language, translations, gridProps.translation);
 
     return useMemo(() => {
         const editFormApi = gridApi.editFormApi;
         if (!gridProps.editFormProps || gridProps.readOnly || gridProps.buttons?.create === null) return undefined;
         return {
-            weight: 110,
+            ...defaultButtonCreate,
             title: t('create'),
             tooltip: t('createNewRecord'),
-            icon: <PlusOutlined />,
-            position: 'right',
-            hotKeys: [{key: 'Insert'}],
             onClick: () => {
                 const dataSet = getRowDataSet(gridApi, true, true);
                 editFormApi.open('create', {dataSet: dataSet});
@@ -141,7 +142,7 @@ const useGetCreateButton = (gridApi: IGridApi): ITabulatorButton | undefined => 
 
 /** Get clone button props */
 const useGetCloneButton = (gridApi: IGridApi, activeRow: IGridRowData | undefined, selectedRows: IGridRowData[]): ITabulatorButton | undefined => {
-    const gridProps = gridApi.gridProps;
+    const gridProps = gridApi.getProps();
     const t = useTranslate(gridProps.language, translations, gridProps.translation);
 
     return useMemo(() => {
@@ -149,13 +150,10 @@ const useGetCloneButton = (gridApi: IGridApi, activeRow: IGridRowData | undefine
         if (!gridProps.editFormProps || gridProps.readOnly || gridProps.buttons?.clone === null) return undefined;
 
         return {
-            weight: 120,
+            ...defaultButtonClone,
             title: t('clone'),
             tooltip: t('cloneRecord'),
-            icon: <CopyOutlined />,
-            position: 'right',
             disabled: !activeRow || selectedRows.length !== 1,
-            hotKeys: [{key: 'F9'}],
             onClick: () => {
                 if (!gridApi.getActiveRow()) return;
                 const dataSet = getRowDataSet(gridApi, false);
@@ -167,7 +165,7 @@ const useGetCloneButton = (gridApi: IGridApi, activeRow: IGridRowData | undefine
 
 /** Get update button props */
 const useGetUpdateButton = (gridApi: IGridApi, activeRow: IGridRowData | undefined, selectedRows: IGridRowData[]): ITabulatorButton | undefined => {
-    const gridProps = gridApi.gridProps;
+    const gridProps = gridApi.getProps();
     const t = useTranslate(gridProps.language, translations, gridProps.translation);
 
     return useMemo(() => {
@@ -175,13 +173,10 @@ const useGetUpdateButton = (gridApi: IGridApi, activeRow: IGridRowData | undefin
         if (!gridProps.editFormProps || gridProps.readOnly || gridProps.buttons?.update === null) return undefined;
 
         return {
-            weight: 130,
+            ...defaultButtonUpdate,
             title: t('edit'),
             tooltip: t('editRecord'),
-            icon: <EditOutlined />,
-            position: 'right',
             disabled: !activeRow || selectedRows.length !== 1,
-            hotKeys: [{key: 'Enter'}, {key: 'F2'}],
             onClick: () => {
                 if (!gridApi.getActiveRow()) return;
                 const dataSet = getRowDataSet(gridApi, false);
@@ -193,7 +188,7 @@ const useGetUpdateButton = (gridApi: IGridApi, activeRow: IGridRowData | undefin
 
 /** Get selection button props */
 const useGetSelectionButton = (gridApi: IGridApi): ITabulatorButton | undefined => {
-    const gridProps = gridApi.gridProps;
+    const gridProps = gridApi.getProps();
     const t = useTranslate(gridProps.language, translations, gridProps.translation);
 
     return useMemo(() => {
@@ -201,12 +196,9 @@ const useGetSelectionButton = (gridApi: IGridApi): ITabulatorButton | undefined 
         if (!gridProps.selectionFormProps || gridProps.readOnly || gridProps.buttons?.select === null) return undefined;
 
         return {
-            weight: 130,
+            ...defaultButtonSelect,
             title: t('select'),
             tooltip: t('selectRecord'),
-            icon: <PlusSquareOutlined />,
-            position: 'right',
-            hotKeys: [{key: 'Insert'}],
             onClick: () => {
                 const dataSet = gridApi.getDataSet();
                 selectionFormApi.open('update', {dataSet: {select: dataSet}});
@@ -217,21 +209,17 @@ const useGetSelectionButton = (gridApi: IGridApi): ITabulatorButton | undefined 
 
 /** Get delete button props */
 const useGetDeleteButton = (gridApi: IGridApi, selectedRows: IGridRowData[]): ITabulatorButton | undefined => {
-    const gridProps = gridApi.gridProps;
+    const gridProps = gridApi.getProps();
     const t = useTranslate(gridProps.language, translations, gridProps.translation);
 
     return useMemo(() => {
         if ((!gridProps.editFormProps && !gridProps.selectionFormProps) || gridProps.readOnly || gridProps.buttons?.delete === null) return undefined;
 
         return {
-            weight: 140,
+            ...defaultButtonDelete,
             title: t('delete'),
             tooltip: t('deleteRecord'),
-            icon: <DeleteOutlined />,
-            position: 'right',
-            colorType: 'danger',
             disabled: !selectedRows?.length,
-            hotKeys: [{key: 'Delete', ctrl: true}],
             onClick: () => {
                 const selectedRows = gridApi.getSelectedRows();
                 gridApi.deleteRows(selectedRows);
@@ -242,7 +230,7 @@ const useGetDeleteButton = (gridApi: IGridApi, selectedRows: IGridRowData[]): IT
 
 /** Get filter button props */
 const useGetFilterToggleButton = (gridApi: IGridApi, tableApi: ITabulator | undefined): ITabulatorButton | undefined => {
-    const gridProps = gridApi.gridProps;
+    const gridProps = gridApi.getProps();
     const t = useTranslate(gridProps.language, translations, gridProps.translation);
 
     //a separate tableApi parameter is required for the memo field to be updated (initially tableApi is undefined)
@@ -276,7 +264,7 @@ const getRowDataSet = (gridApi: IGridApi, selfParent: boolean, parentOnly?: bool
 
 /** Get system button props */
 const useGetSystemButton = (gridApi: IGridApi): ITabulatorButton | undefined => {
-    const gridProps = gridApi.gridProps;
+    const gridProps = gridApi.getProps();
     const t = useTranslate(gridProps.language, translations, gridProps.translation);
 
     return useMemo(() => {

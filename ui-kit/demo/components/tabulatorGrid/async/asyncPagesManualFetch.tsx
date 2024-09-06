@@ -25,7 +25,7 @@ export const AsyncPagesManualFetch = (): React.JSX.Element => {
                         const random = Math.random();
                         if (random < 0.5) reject({message: 'Loading error', code: 400});
                         const page = params?.page ?? 1;
-                        const size = params?.size ?? gridApi.gridProps.paginationSize ?? 10;
+                        const size = params?.size ?? gridApi.getProps().paginationSize ?? 10;
                         const lastPage = Math.ceil(dataSet.length / size);
                         const slicedDataSet = dataSet.slice((page - 1) * size, page * size); //remote fetch imitation
                         resolve({data: slicedDataSet, last_page: lastPage});
@@ -55,7 +55,7 @@ export const AsyncPagesManualFetch = (): React.JSX.Element => {
                     const random = Math.random();
                     if (random < 0.5) reject({message: 'Loading error', code: 400});
                     const page = params?.page ?? 1;
-                    const size = params?.size ?? gridApi.gridProps.paginationSize ?? 10;
+                    const size = params?.size ?? gridApi.getProps().paginationSize ?? 10;
                     const lastPage = Math.ceil(dataSet.length / size);
                     const slicedDataSet = dataSet.slice((page - 1) * size, page * size); //remote fetch imitation
                     resolve({data: slicedDataSet, last_page: lastPage});

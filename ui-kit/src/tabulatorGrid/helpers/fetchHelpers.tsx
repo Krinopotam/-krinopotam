@@ -4,7 +4,7 @@ import {IsArray, IsPromise} from '@krinopotam/js-helpers';
 
 export const GenerateAjaxRequestFunc = (gridApi: IGridApi, onDataFetch: IGridProps['onDataFetch'], extraParams?: Record<string, unknown>) => {
     if (!onDataFetch) return undefined;
-    const gridProps = gridApi.gridProps;
+    const gridProps = gridApi.getProps();
     gridApi.setCurrentDataFetchHandler(onDataFetch, extraParams);
     return (_url: string, _config: IAjaxConfig, params: IRequestProps) => {
         return new Promise((resolve, reject) => {

@@ -9,11 +9,9 @@
 import {IDFormApi, IDFormProps} from "@src/dForm/types/dFormTypes";
 import {DModel} from './dModel';
 import {IDFormModelCallbacks} from "@src/dForm/types/dModelTypes";
-import {IButtonsRowApi} from 'src/buttonsRow';
 import {useInitFormApi} from './hooks/api';
 import React, {useEffect, useMemo, useRef, useState} from 'react';
 import {FormRender} from './renders/formRender';
-import {GetNanoId} from '@krinopotam/js-helpers';
 import {useModelCallbacks} from './hooks/callbacks';
 import {useGetButtons} from './hooks/buttons';
 import {useUpdateMessageBoxTheme} from '@src/messageBox';
@@ -27,16 +25,13 @@ export const DForm = (props: IDFormProps): React.JSX.Element => {
     useUpdateMessageBoxTheme(); //set current theme to messageBox
 
     const [formProps, setFormProps] = useGetActualProps(props); //props can be set both by parent component and via api
-//
-    //region Common component states
-    const [formId] = useState(formProps.formId ?? 'dForm-' + GetNanoId());
-    const [formApi] = useState((formProps.apiRef || {}) as IDFormApi);
-    const formButtons = useGetButtons(formProps, formApi); //init buttons
-    //endregion
 
+    const [formApi] = useState((formProps.apiRef || {}) as IDFormApi);
+    useInitFormApi({formApi, props: formProps, setProps: setFormProps});
     const modelCallbacks = useModelCallbacks(formProps, formApi);
-    useInitFormModel(formId, formApi, formProps, modelCallbacks);
-    useInitFormApi({formId, formApi, props: formProps, setProps: setFormProps});
+    useInitFormModel(formApi, formProps, modelCallbacks);
+
+    const formButtons = useGetButtons(formProps, formApi); //init buttons
 
     useInitialFetchData(formApi);
 
@@ -45,16 +40,16 @@ export const DForm = (props: IDFormProps): React.JSX.Element => {
     return <FormRender formProps={formProps} formApi={formApi} formButtons={formButtons}/>;
 };
 
-const useInitFormModel = (formId: string, formApi:IDFormApi, formProps: IDFormProps, callbacks: IDFormModelCallbacks) => {
+const useInitFormModel = (formApi:IDFormApi, formProps: IDFormProps, callbacks: IDFormModelCallbacks) => {
     const modelRef = useRef<DModel>();
     return useMemo(()=>{
-        if (!modelRef.current) modelRef.current = new DModel(formId, formApi);
+        if (!modelRef.current) modelRef.current = new DModel(formApi);
         if (!formProps._overriddenApi?.model) formApi.model = modelRef.current;
         modelRef.current.initModel(formProps, callbacks);
 
         return modelRef.current;
         
-    }, [callbacks, formApi, formId, formProps])
+    }, [callbacks, formApi, formProps])
     
 };
 

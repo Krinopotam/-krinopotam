@@ -1,7 +1,6 @@
-import {IButtonsRowApi} from '@src/buttonsRow';
 import {IDFormProps} from '@src/dForm';
 import {MessageBox} from '@src/messageBox';
-import {CloneObject} from '@krinopotam/js-helpers';
+import {CloneObject, GetNanoId} from '@krinopotam/js-helpers';
 import React, {useCallback, useEffect, useState} from 'react';
 import {IsDebugMode} from '@krinopotam/common-hooks';
 import {IDFormModalApi, IDFormModalProps} from '@src/dFormModal';
@@ -12,15 +11,13 @@ import {useApiGetProps} from '@src/_shared/hooks/componentApiMethods/useApiGetPr
 import {useApiSetProps} from '@src/_shared/hooks/componentApiMethods/useApiSetProps';
 import {useApiUpdateProps} from '@src/_shared/hooks/componentApiMethods/useApiUpdateProps';
 import {useApiIsMounted} from '@src/_shared/hooks/componentApiMethods/useApiIsMointed';
-import {useApiGetButtonsApi} from "@src/_shared/hooks/componentApiMethods/useApiGetButtonsApi";
+import {useApiGetButtonsApi} from '@src/_shared/hooks/componentApiMethods/useApiGetButtonsApi';
 
 export const useInitModalFormApi = ({
-    formId,
     formApi,
     props,
     setProps,
 }: {
-    formId: string;
     formApi: IDFormModalApi;
     props: IDFormModalProps;
     setProps: React.Dispatch<React.SetStateAction<IDFormModalProps>>;
@@ -32,7 +29,7 @@ export const useInitModalFormApi = ({
     }, [getDefaultTitle, props]);
 
     /** overridden api */
-    formApi.getId = useApiGetId(formId);
+    formApi.getId = useApiGetId(props.formId ?? 'dFormModal-' + GetNanoId());
     formApi.getButtonsApi = useApiGetButtonsApi();
     formApi.getProps = useApiGetProps(props);
     formApi.setProps = useApiSetProps(setProps);

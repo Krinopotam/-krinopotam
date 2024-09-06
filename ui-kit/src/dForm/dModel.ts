@@ -22,9 +22,6 @@ import {IDFormFieldsProps} from "@src/dForm/fields";
 
 export class DModel {
     //region Private properties
-    /** Form ID */
-    private readonly _formId: string;
-
     /** Form API instance */
     private readonly _formApi: IDFormApi
 
@@ -117,8 +114,7 @@ export class DModel {
     //endregion
 
     //region Init class
-    constructor(formId: string, formApi: IDFormApi) {
-        this._formId = formId;
+    constructor(formApi: IDFormApi) {
         this._validator = new BaseValidator();
         this._formApi = formApi;
     }
@@ -369,7 +365,7 @@ export class DModel {
     //region Form methods
     /** Get form ID */
     getFormId() {
-        return this._formId;
+        return this._formApi.getId();
     }
 
     /** @return form properties collection */

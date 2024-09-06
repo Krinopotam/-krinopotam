@@ -5,18 +5,20 @@ import {useInitGridApi} from './hooks/api';
 import {ContainerRender} from './renders/containerRender';
 import {SplitObject} from '@krinopotam/js-helpers';
 import {IGridApi, IGridProps, IGridPropsBase, IGridPropsCallbacks} from "@src/tabulatorGrid/types/tabulatorGridTypes";
+import {useGetActualProps} from "@krinopotam/common-hooks";
 
 export const TabulatorGrid = (props: IGridProps): React.JSX.Element => {
-    const tabulatorProps = useSplitTabulatorProps(props);
+    const [allProps, setAllProps] = useGetActualProps(props); //props can be set both by parent component and via api
+    const tabulatorProps = useSplitTabulatorProps(allProps);
     const tableRef = useRef<ITabulator>();
-    const [editFormApi] = useState<IDFormModalApi>((props.editFormProps?.apiRef ?? {}) as IDFormModalApi);
-    const [selectionFormApi] = useState<IDFormModalApi>((props.selectionFormProps?.apiRef ?? {}) as IDFormModalApi);
-    const [gridApi] = useState((props.apiRef || {}) as IGridApi);
+    const [editFormApi] = useState<IDFormModalApi>((allProps.editFormProps?.apiRef ?? {}) as IDFormModalApi);
+    const [selectionFormApi] = useState<IDFormModalApi>((allProps.selectionFormProps?.apiRef ?? {}) as IDFormModalApi);
+    const [gridApi] = useState((allProps.apiRef || {}) as IGridApi);
 
     const [columnsDialog, setColumnsDialog] = useState(false);
-    useInitGridApi({gridApi, props, tableRef, editFormApi, selectionFormApi, setColumnsDialog});
+    useInitGridApi({gridApi, props: allProps, setProps: setAllProps, tableRef, editFormApi, selectionFormApi, setColumnsDialog});
 
-    return <ContainerRender tableRef={tableRef} gridApi={gridApi} gridProps={props} tabulatorProps={tabulatorProps} columnsDialog={columnsDialog}/>;
+    return <ContainerRender tableRef={tableRef} gridApi={gridApi} gridProps={allProps} tabulatorProps={tabulatorProps} columnsDialog={columnsDialog}/>;
 };
 
 export default TabulatorGrid;

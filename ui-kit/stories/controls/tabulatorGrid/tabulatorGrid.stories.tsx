@@ -91,7 +91,7 @@ export const PaginationRemote: Story = {
                 setTimeout(() => {
                     //make any remote fetch
                     const page = params?.page ?? 1;
-                    const size = params?.size ?? gridApi.gridProps.paginationSize ?? 5;
+                    const size = params?.size ?? gridApi.getProps().paginationSize ?? 5;
                     const lastPage = 4;
                     const dataSet = TabulatorTreeDataset.slice((page - 1) * size, page * size); //remote fetch imitation
                     resolve({data: dataSet, last_page: lastPage});

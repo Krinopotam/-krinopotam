@@ -57,7 +57,7 @@ type ISelectMode = 'select' | 'deselect' | 'invert';
 //endregion
 
 export class ActiveSelectionModule extends Module {
-    static moduleName = "activeSelection"; //module name
+    static readonly moduleName = 'activeSelection'; //module name
     public table: IActiveSelectionTabulator;
     private activeRow: RowComponent | undefined = undefined;
 
@@ -129,7 +129,7 @@ export class ActiveSelectionModule extends Module {
         if (prevActiveRow !== this.activeRow) {
             if (clearSelection || !row) this.table.deselectRow();
             prevActiveRow?.reformat();
-            if (row !==false) {
+            if (row !== false) {
                 row?.reformat();
                 row?.select();
                 row?.getElement()?.classList?.add('tabulator-active');

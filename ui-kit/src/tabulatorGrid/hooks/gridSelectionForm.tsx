@@ -4,7 +4,7 @@ import {IGridApi, IGridProps, IGridRowData} from "@src/tabulatorGrid";
 
 export const usePrepareSelectionFormProps = (gridApi: IGridApi, gridProps: IGridProps) => {
     return useMemo(() => {
-        const selectionFormProps = gridApi.gridProps?.selectionFormProps;
+        const selectionFormProps = gridApi.getProps()?.selectionFormProps;
         if (!selectionFormProps) return undefined;
 
         const formProps = {...selectionFormProps};
