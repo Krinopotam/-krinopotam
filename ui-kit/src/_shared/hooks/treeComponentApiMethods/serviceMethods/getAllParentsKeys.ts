@@ -1,4 +1,4 @@
-import {IKey} from '@src/_shared/@types/nodes';
+import {Key} from "react";
 
 /**
  * Get all parents keys
@@ -7,12 +7,12 @@ import {IKey} from '@src/_shared/@types/nodes';
  * @param childrenField - field name of node children
  */
 export const getAllParentsKeys = <T extends Record<string, unknown>>(dataSet: T[] | undefined, keyField: string, childrenField: string) => {
-    const parentsKeys: IKey[] = [];
+    const parentsKeys: Key[] = [];
 
     const recursive = (data: T[]) => {
         for (const node of data) {
             if (!node[childrenField]) continue
-            parentsKeys.push(node[keyField] as IKey);
+            parentsKeys.push(node[keyField] as Key);
             recursive(node[childrenField] as T[])
         }
     };

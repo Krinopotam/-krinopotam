@@ -67,7 +67,7 @@ const deleteHandler = (api: ITreeSelectApi) => {
             const promiseResult = deletePromise as ITreeSelectDeletePromise;
             promiseResult
                 .then(() => {
-                    if (!api.isMounted()) return;
+                    if (!api.getIsMounted()) return;
                     api.deleteNodes(selectedNodes);
                     api.setSelectedKeys(undefined);
                     if (!treeProps.confirmDelete) {
@@ -77,7 +77,7 @@ const deleteHandler = (api: ITreeSelectApi) => {
                     } else messageBox?.destroy();
                 })
                 .catch((error: IError) => {
-                    if (!api.isMounted()) return;
+                    if (!api.getIsMounted()) return;
                     if (!treeProps.confirmDelete) {
                         buttonsApi.loading('delete', false);
                         buttonsApi.disabled('add', false);

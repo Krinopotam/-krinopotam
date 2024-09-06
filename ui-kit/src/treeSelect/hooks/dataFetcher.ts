@@ -4,7 +4,7 @@ import {useCallback} from 'react';
 export const useDataFetcher = (api: ITreeSelectApi) => {
     return useCallback(
         (searchString: string) => {
-            if (!api.isMounted()) return;
+            if (!api.getIsMounted()) return;
             const treeProps = api.getProps();
 
             if (!treeProps.noCacheFetchedData && api.getIsAllFetched()) return;
@@ -25,11 +25,11 @@ export const useDataFetcher = (api: ITreeSelectApi) => {
             }
 
             api.setIsFetching(true);
-            if (!searchString) api.setDataSet(null);
+            if (!searchString) api.setDataSet(undefined);
 
             dataSource.then(
                 (result: { data: ITreeSelectNode[] }) => {
-                    if (!api.isMounted()) return;
+                    if (!api.getIsMounted()) return;
 
                     api.setDataSet(result.data);
                     api.setIsAllFetched(api.getIsAllFetched() || !searchString);
@@ -45,7 +45,7 @@ export const useDataFetcher = (api: ITreeSelectApi) => {
                     treeProps?.onDataFetchComplete?.(api);
                 },
                 (error: { message: string }) => {
-                    if (!api.isMounted()) return;
+                    if (!api.getIsMounted()) return;
                     api.setSetFetchError(error.message);
                     api.setDataSet(undefined);
                     api.setIsFetching(false);

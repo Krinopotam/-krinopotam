@@ -2,9 +2,9 @@
 
 import React from 'react';
 import {DForm, IDFormProps} from '@src/dForm';
-import {IDFormModalProps} from "@src/dFormModal";
-import {InputField} from "@src/dForm/fields/input/inputField";
-import {TreeSelectField} from "@src/dForm/fields/treeSelect/treeSelectField";
+import {IDFormModalProps} from '@src/dFormModal';
+import {InputField} from '@src/dForm/fields/input/inputField';
+import {ITreeSelectFieldProps, TreeSelectField} from '@src/dForm/fields/treeSelect/treeSelectField';
 
 const dataSet = [
     {
@@ -122,7 +122,13 @@ const formProps: IDFormModalProps = {
     confirmChanges: true,
 
     fieldsProps: {
-        departments: {component: TreeSelectField, label: 'Подразделения', editFormProps: editForm, confirmDelete: true, dataSet: dataSet},
+        departments: {
+            component: TreeSelectField,
+            label: 'Подразделения',
+            editFormProps: editForm,
+            confirmDelete: true,
+            dataSet: dataSet,
+        } satisfies ITreeSelectFieldProps,
     },
     buttons: null,
 };

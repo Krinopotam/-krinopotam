@@ -4,94 +4,114 @@ import {useIsMountedRef} from '@krinopotam/common-hooks';
 import {useDataFetcher} from '@src/treeSelect/hooks/dataFetcher';
 import runDebounce from 'lodash.debounce';
 import {IButtonsRowApi} from '@src/buttonsRow';
-import {GetUuid, IsArray} from '@krinopotam/js-helpers';
+import {GetNanoId, GetUuid, IsArray} from '@krinopotam/js-helpers';
 import {ITreeSelectApi} from '@src/treeSelect/types/types';
 import {IDFormModalApi} from '@src/dFormModal';
-import {useFieldNames, useGetFieldNames} from '@src/_shared/hooks/treeComponentApiMethods/useGetFieldNames';
-import {useDataSet, useGetDataSet, useIsDataPlainList, useSetDataSet} from '@src/_shared/hooks/treeComponentApiMethods/useDataSet';
-import {
-    useCollapseNode,
-    useExpandedKeys,
-    useExpandNode,
-    useExpandParentNodes,
-    useGetExpandedKeys,
-    useGetExpandedNodes,
-    useIsNodeExpanded,
-    useSetExpandedKeys,
-    useToggleNode,
-} from '@src/_shared/hooks/treeComponentApiMethods/useExpand';
-import {useGetNode, useGetNodes} from '@src/_shared/hooks/treeComponentApiMethods/useGetNode';
-import {useGetProps, useSetProps, useUpdateProps} from '@src/_shared/hooks/componentApiMethods/useProps';
-import {useGetNextNode, useGetNextNodeKey, useGetPrevNode, useGetPrevNodeKey} from '@src/_shared/hooks/treeComponentApiMethods/useGetNextNode';
-import {useGetParentNode} from '@src/_shared/hooks/treeComponentApiMethods/getParentNode';
-import {useGetSelectedKeys, useGetSelectedNodes, useSelectNode, useSetSelectedKeys} from '@src/_shared/hooks/treeComponentApiMethods/useSelected';
-import {useAddNode} from '@src/_shared/hooks/treeComponentApiMethods/addNode';
-import {useGetActiveNode, useGetActiveNodeKey} from '@src/_shared/hooks/treeComponentApiMethods/useActiveNode';
+import {useApiDataSetState} from '@src/_shared/hooks/treeComponentApiMethods/useApiDataSetState';
+
+import {useApiGetNode} from '@src/_shared/hooks/treeComponentApiMethods/useApiGetNode';
+import {useApiAddNode} from '@src/_shared/hooks/treeComponentApiMethods/useApiAddNode';
+import {useApiUpdateNode} from '@src/_shared/hooks/treeComponentApiMethods/useApiUpdateNode';
+import {useApiGetNodes} from '@src/_shared/hooks/treeComponentApiMethods/useApiGetNodes';
+import {useApiGetActiveNodeKey} from '@src/_shared/hooks/treeComponentApiMethods/useApiGetActiveNodeKey';
+import {useApiGetActiveNode} from '@src/_shared/hooks/treeComponentApiMethods/useApiGetActiveNode';
+import {useApiGetParentNode} from '@src/_shared/hooks/treeComponentApiMethods/ueApiGetParentNode';
+import {useApiGetNextNodeKey} from '@src/_shared/hooks/treeComponentApiMethods/useApiGetNextNodeKey';
+import {useApiGetPrevNodeKey} from '@src/_shared/hooks/treeComponentApiMethods/useApiGetPrevNodeKey';
+import {useApiGetNextNode} from '@src/_shared/hooks/treeComponentApiMethods/useApiGetNextNode';
+import {useApiGetPrevNode} from '@src/_shared/hooks/treeComponentApiMethods/useApiGetPrevNode';
+import {useApiGetFieldNames} from '@src/_shared/hooks/treeComponentApiMethods/useApiGetFieldNames';
+import {useApiGetSelectedKeys} from '@src/_shared/hooks/treeComponentApiMethods/useApiGetSelectedKeys';
+import {useApiSetSelectedKeys} from '@src/_shared/hooks/treeComponentApiMethods/useApiSetSelectedKeys';
+import {useApiGetSelectedNodes} from '@src/_shared/hooks/treeComponentApiMethods/useApiGetSelectedNodes';
+import {useApiSelectNode} from '@src/_shared/hooks/treeComponentApiMethods/useApiSelectNode';
+import {useApiGetProps} from '@src/_shared/hooks/componentApiMethods/useApiGetProps';
+import {useApiSetProps} from '@src/_shared/hooks/componentApiMethods/useApiSetProps';
+import {useApiUpdateProps} from '@src/_shared/hooks/componentApiMethods/useApiUpdateProps';
+import {useApiEnsureNodeVisible} from '@src/_shared/hooks/treeComponentApiMethods/useApiEnsureNodeVisible';
+import {useApiExpandedKeysState} from '@src/_shared/hooks/treeComponentApiMethods/useApiExpandedKeysState';
+import {useApiGetExpandedKeys} from '@src/_shared/hooks/treeComponentApiMethods/useApiGetExpandedKeys';
+import {useApiGetExpandedNodes} from '@src/_shared/hooks/treeComponentApiMethods/useApiGetExpandedNodes';
+import {useApiIsNodeExpanded} from '@src/_shared/hooks/treeComponentApiMethods/useApiIsNodeExpanded';
+import {useApiExpandNode} from '@src/_shared/hooks/treeComponentApiMethods/useApiExpandNode';
+import {useApiCollapseNode} from '@src/_shared/hooks/treeComponentApiMethods/useApiCollapseNode';
+import {useApiToggleNode} from '@src/_shared/hooks/treeComponentApiMethods/useApiToggleNode';
+import {useApiExpandParentNodes} from '@src/_shared/hooks/treeComponentApiMethods/useApiExpandParentNodes';
+import {useApiSetExpandedKeys} from '@src/_shared/hooks/treeComponentApiMethods/useApiSetExpandedKeys';
+import {useApiGetIsDataPlain} from '@src/_shared/hooks/treeComponentApiMethods/useApiGetIsDataPlain';
+import {useApiSetDataset} from '@src/_shared/hooks/treeComponentApiMethods/useApiSetDataset';
+import {useApiGetDataSet} from '@src/_shared/hooks/treeComponentApiMethods/useApiGetDataSet';
+import {useApiRemoveNode} from '@src/_shared/hooks/treeComponentApiMethods/useApiRemoveNode';
+import {useApiMoveNode} from '@src/_shared/hooks/treeComponentApiMethods/useApiMoveNode';
 
 export const useInitApi = ({
     api,
-    componentId,
     props,
     setProps,
-    buttonsApi,
-    editFormApi,
-    editGroupFormApi,
 }: {
     api: ITreeSelectApi;
-    componentId: string;
     props: ITreeSelectProps;
     setProps: (props: ITreeSelectProps | ((prevValue: ITreeSelectProps) => ITreeSelectProps)) => void;
-    buttonsApi: IButtonsRowApi & {refreshButtons: () => void};
-    editFormApi: IDFormModalApi;
-    editGroupFormApi: IDFormModalApi;
 }) => {
     const isMountedRef = useIsMountedRef();
+    const [componentId] = useState(props.componentId ?? 'treeSelect-' + GetNanoId());
+    const [buttonsApi] = useState({} as IButtonsRowApi & {refreshButtons: () => void});
+    const [editFormApi] = useState((props.editFormProps?.apiRef ?? {}) as IDFormModalApi);
+    const [editGroupFormApi] = useState((props.editGroupFormProps?.apiRef ?? {}) as IDFormModalApi);
     const [isReady, setIsReady] = useState(false);
     const [fetching, setFetching] = useState(false); //is fetching now
     const [fetchError, setFetchError] = useState(''); //has fetching error
     const [allFetched, setAllFetched] = useState(false); //is all fetched
     const [minSymbols, setMinSymbols] = useState(0); //show min symbols error
     const [selectedKeys, setSelectedKeys] = useSelected(props);
-    const [isDataPlain, setIsDataPlain] = useState(false); //is dataSet plain (without children)
-    const [expandedKeys, setExpandedKeys] = useExpandedKeys(props); //expanded keys
-    const [dataSet, setDataSet] = useDataSet(props, setIsDataPlain, setExpandedKeys, prepareNode); //current dataSet
-    const fieldNames = useFieldNames(props);
+
+    api.getFieldNames = useApiGetFieldNames(props.fieldNames);
+    const fieldNames = api.getFieldNames();
+    const prepareNode = usePrepareNode(props);
+
+    const [dataSet, setDataset, isDataPlain, parentKeys] = useApiDataSetState(props.dataSet, fieldNames, prepareNode); //current dataSet
+    const [expandedKeys, setExpandedKeys] = useApiExpandedKeysState(props.expandedKeys, props.treeDefaultExpandedKeys, props.defaultExpandAll, parentKeys); //expanded keys
 
     api.treeSelectRef = useRef(null);
-    api.getFieldNames = useGetFieldNames(props);
-
     api.getId = useApiGetId(componentId);
+    api.getProps = useApiGetProps(props);
+    api.setProps = useApiSetProps(setProps);
+    api.getDataSet = useApiGetDataSet(dataSet);
+    api.setDataSet = useApiSetDataset(setDataset);
+    api.isDataPlainList = useApiGetIsDataPlain(isDataPlain);
+    api.updateProps = useApiUpdateProps(props, setProps);
+    api.prepareNode = usePrepareNode(props);
     api.getButtonsApi = useApiGetButtonsApi(buttonsApi);
     api.getEditFormApi = useApiGetEditFormApi(editFormApi);
     api.getEditGroupFormApi = useApiGetEditGroupFormApi(editGroupFormApi);
-    api.isMounted = useApiIsMounted(isMountedRef);
-
-    api.getSelectedKeys = useGetSelectedKeys(selectedKeys);
-    api.setSelectedKeys = useSetSelectedKeys(setSelectedKeys);
-    api.getSelectedNodes = useGetSelectedNodes(dataSet, fieldNames, selectedKeys);
-    api.selectNode = useSelectNode(selectedKeys, setSelectedKeys, props.multiple);
-    api.getActiveNodeKey = useGetActiveNodeKey(selectedKeys);
-    api.getActiveNode = useGetActiveNode(dataSet, fieldNames, selectedKeys);
-    api.getProps = useGetProps(props);
-    api.setProps = useSetProps(setProps);
-    api.updateProps = useUpdateProps(props, setProps);
-    api.getDataSet = useGetDataSet(dataSet);
-    api.setDataSet = useSetDataSet(setDataSet);
-    api.getExpandedKeys = useGetExpandedKeys(expandedKeys);
-    api.setExpandedKeys = useSetExpandedKeys(setExpandedKeys);
-    api.getExpandedNodes = useGetExpandedNodes(dataSet, expandedKeys, fieldNames);
-    api.isNodeExpanded = useIsNodeExpanded(expandedKeys);
-    api.expandNode = useExpandNode(expandedKeys, setExpandedKeys);
-    api.collapseNode = useCollapseNode(expandedKeys, setExpandedKeys);
-    api.toggleNode = useToggleNode(expandedKeys, setExpandedKeys);
-    api.expandParentNodes = useExpandParentNodes(dataSet, fieldNames, expandedKeys, setExpandedKeys);
-    api.getNode = useGetNode(dataSet, fieldNames);
-    api.getNodes = useGetNodes(dataSet, fieldNames);
-    api.getNextNodeKey = useGetNextNodeKey(dataSet, fieldNames, expandedKeys);
-    api.getPrevNodeKey = useGetPrevNodeKey(dataSet, fieldNames, expandedKeys);
-    api.getNextNode = useGetNextNode(dataSet, fieldNames, expandedKeys);
-    api.getPrevNode = useGetPrevNode(dataSet, fieldNames, expandedKeys);
-    api.getParentNode = useGetParentNode(dataSet, fieldNames);
+    api.getIsMounted = useApiIsMounted(isMountedRef);
+    api.getSelectedKeys = useApiGetSelectedKeys(selectedKeys);
+    api.setSelectedKeys = useApiSetSelectedKeys(setSelectedKeys);
+    api.getSelectedNodes = useApiGetSelectedNodes(api);
+    api.selectNode = useApiSelectNode(api, props.multiple);
+    api.getActiveNodeKey = useApiGetActiveNodeKey(api);
+    api.getActiveNode = useApiGetActiveNode(api);
+    api.getExpandedKeys = useApiGetExpandedKeys(expandedKeys);
+    api.setExpandedKeys = useApiSetExpandedKeys(setExpandedKeys);
+    api.getExpandedNodes = useApiGetExpandedNodes(api);
+    api.isNodeExpanded = useApiIsNodeExpanded(api);
+    api.expandNode = useApiExpandNode(api);
+    api.collapseNode = useApiCollapseNode(api);
+    api.toggleNode = useApiToggleNode(api);
+    api.expandParentNodes = useApiExpandParentNodes(api);
+    api.getNode = useApiGetNode(api);
+    api.getNodes = useApiGetNodes(api);
+    api.getNextNodeKey = useApiGetNextNodeKey(api);
+    api.getPrevNodeKey = useApiGetPrevNodeKey(api);
+    api.getNextNode = useApiGetNextNode(api);
+    api.getPrevNode = useApiGetPrevNode(api);
+    api.getParentNode = useApiGetParentNode(api);
+    api.addNode = useApiAddNode(api);
+    api.updateNode = useApiUpdateNode(api);
+    api.removeNode = useApiRemoveNode(api);
+    api.moveNode = useApiMoveNode(api);
+    //api.deleteNode = useApiDeleteNode(api);
+    api.ensureNodeVisible = useApiEnsureNodeVisible(api);
 
     api.getIsReady = useApiGetIsReady(isReady);
     api.setIsReady = useApiSetIsReady(setIsReady);
@@ -103,22 +123,9 @@ export const useInitApi = ({
     api.setIsAllFetched = useApiSetIsAllFetched(setAllFetched);
     api.getMinSymbols = useApiGetMinSymbols(minSymbols);
     api.setSetMynSymbols = useApiSetMinSymbols(setMinSymbols);
-    api.isDataPlainList = useIsDataPlainList(isDataPlain);
 
     const dataFetcher = useDataFetcher(api);
     api.fetchData = useFetchData(dataFetcher, api);
-
-    api.addNode = useAddNode({
-        dataSet,
-        fieldNames,
-        props,
-        setDataSet,
-        selectedKeys,
-        setSelectedKeys,
-        expandedKeys,
-        setExpandedKeys,
-        prepareNodeFn: prepareNode,
-    });
 
     api.addNodes = useAddNodes(api);
     api.updateNodes = useUpdateNodes(api);
@@ -167,13 +174,18 @@ const useApiIsMounted = (isMountedRef: React.MutableRefObject<boolean>) => {
     return useCallback(() => isMountedRef.current, [isMountedRef]);
 };
 
-const prepareNode = (node: ITreeSelectNode, treeProps: ITreeSelectProps) => {
-    let nodeClone = {...node};
-    if (treeProps.titleRender) nodeClone.__title = treeProps.titleRender(nodeClone);
-    if (treeProps.labelRender) nodeClone.__label = treeProps.labelRender(nodeClone);
-    if (treeProps.dataMutator) nodeClone = treeProps.dataMutator(nodeClone);
-    nodeClone.originalData = node;
-    return nodeClone;
+const usePrepareNode = (props: ITreeSelectProps) => {
+    return useCallback(
+        (node: ITreeSelectNode) => {
+            let nodeClone = {...node};
+            if (props.titleRender) nodeClone.__title = props.titleRender(nodeClone);
+            if (props.labelRender) nodeClone.__label = props.labelRender(nodeClone);
+            if (props.dataMutator) nodeClone = props.dataMutator(nodeClone);
+            nodeClone.originalData = node;
+            return nodeClone;
+        },
+        [props]
+    );
 };
 
 const useApiGetIsReady = (isReady: boolean) => {

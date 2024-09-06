@@ -26,7 +26,7 @@ export const MenuRow = ({treeApi, treeProps}: {treeApi: ITreeSelectApi; treeProp
                 apiRef={treeApi.getButtonsApi()}
                 style={treeProps.buttonsRowStyle}
                 context={treeApi}
-                iconsOnly={treeProps.buttonsIconsOnly}
+                iconsOnly={treeProps.buttonsIconsOnly !== false}
             />
         </div>
     );

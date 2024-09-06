@@ -1,4 +1,5 @@
-import {IFieldNames, IFindNodeOptions, IKey} from "@src/_shared/@types/nodes";
+import {IFieldNames, IFindNodeOptions} from "@src/_shared/hooks/treeComponentApiMethods/types/treeApiTypes";
+import {Key} from "react";
 
 
 /**
@@ -13,18 +14,18 @@ import {IFieldNames, IFindNodeOptions, IKey} from "@src/_shared/@types/nodes";
  */
 export const findNextNodeKey = <T extends Record<string, unknown>>(
     dataSet: T[] | undefined,
-    key: IKey | undefined,
-    expandedKeys: IKey[] | undefined,
+    key: Key | undefined,
+    expandedKeys: Key[] | undefined,
     fieldNames: IFieldNames,
     opts?: IFindNodeOptions
-): IKey | undefined => {
+): Key | undefined => {
     let curFound = !key;
     let breakSearch = false;
 
-    const recursive = (nodes: T[]): IKey | undefined => {
+    const recursive = (nodes: T[]): Key | undefined => {
         for (const node of nodes) {
             if (breakSearch) return undefined;
-            if (curFound && isNodeCanBeSelected(node, opts)) return node[fieldNames.key] as IKey;
+            if (curFound && isNodeCanBeSelected(node, opts)) return node[fieldNames.key] as Key;
 
             if (typeof key === 'undefined' || node[fieldNames.key] === key) curFound = true;
 
@@ -54,15 +55,15 @@ export const findNextNodeKey = <T extends Record<string, unknown>>(
  */
 export const findPrevNodeKey = <T extends Record<string, unknown>>(
     dataSet: T[] | undefined,
-    key: IKey | undefined,
-    expandedKeys: IKey[] | undefined,
+    key: Key | undefined,
+    expandedKeys: Key[] | undefined,
     fieldNames: IFieldNames,
     opts?: IFindNodeOptions
-): IKey | undefined => {
+): Key | undefined => {
     let curFound = !key;
     let breakSearch = false;
 
-    const recursive = (nodes: T[]): IKey | undefined => {
+    const recursive = (nodes: T[]): Key | undefined => {
         for (let i = nodes.length - 1; i >= 0; i--) {
             const node = nodes[i];
             if (breakSearch) return undefined;
@@ -72,7 +73,7 @@ export const findPrevNodeKey = <T extends Record<string, unknown>>(
                 if (childResult) return childResult;
             }
 
-            if (curFound && isNodeCanBeSelected(node, opts)) return node[fieldNames.key] as IKey;
+            if (curFound && isNodeCanBeSelected(node, opts)) return node[fieldNames.key] as Key;
 
             if (typeof key === 'undefined' || node[fieldNames.key] === key) curFound = true;
         }
@@ -88,6 +89,6 @@ export const findPrevNodeKey = <T extends Record<string, unknown>>(
 const isNodeCanBeSelected = (node: Record<string, unknown>, opts?: IFindNodeOptions) =>
     (opts?.notDisabled === false || node.disabled !== true) && (opts?.selectableOnly === false || node.selectable !== false);
 
-const shouldSearchInChildren = (node: Record<string, unknown>, expandedKeys: IKey[] | undefined, fieldNames: IFieldNames, opts?: IFindNodeOptions) => {
-    return !opts?.sameLevelOnly && (opts?.expandedOnly === false || expandedKeys?.includes(node[fieldNames.key] as IKey));
+const shouldSearchInChildren = (node: Record<string, unknown>, expandedKeys: Key[] | undefined, fieldNames: IFieldNames, opts?: IFindNodeOptions) => {
+    return !opts?.sameLevelOnly && (opts?.expandedOnly === false || expandedKeys?.includes(node[fieldNames.key] as Key));
 };

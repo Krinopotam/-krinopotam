@@ -8,7 +8,7 @@ import {DefaultOptionType} from 'rc-tree-select/es/TreeSelect';
 import {DefaultDropdownRender} from '@src/treeSelect/renders/defaultDropdownRender';
 import {usePrepareEditFormProps} from '@src/treeSelect/hooks/prepareEditForm';
 import {DFormModal} from '@src/dFormModal';
-import {useWhyDidYouUpdate} from "ahooks";
+import {useWhyDidYouUpdate} from 'ahooks';
 
 // For clarity. Antd has labels for a node(1) and for the selected value(2). fieldNames.label property sets the node label(1) and treeNodeLabelProp sets the selected value label(2)
 // In order not to get confused, we will consider Node's label is title(1), and Label of the selected value is label(2)
@@ -23,9 +23,11 @@ export const TreeSelectRender = ({
     allProps: ITreeSelectProps;
     treeSelectProps: IAntTreeSelectProps;
 }): React.JSX.Element => {
-    useWhyDidYouUpdate('treeSelect', { treeApi,
+    useWhyDidYouUpdate('treeSelect', {
+        treeApi,
         allProps,
-        treeSelectProps,});
+        treeSelectProps,
+    });
     const editFormProps = usePrepareEditFormProps(treeApi, allProps, false);
     const editGroupFormProps = usePrepareEditFormProps(treeApi, allProps, true);
 
@@ -34,7 +36,7 @@ export const TreeSelectRender = ({
     const value = useValue(treeApi);
     const fieldNames = useFieldNames(treeApi);
     const treeNodeLabelProp = useTreeNodeLabelProp(treeApi);
-    const expandedKeys = treeApi.getExpandedKeys()
+    const expandedKeys = treeApi.getExpandedKeys();
     const onExpand = useOnExpand(treeApi);
     const onClear = useOnClear(treeApi);
     const onChange = useOnChange(treeApi);
@@ -42,7 +44,7 @@ export const TreeSelectRender = ({
     const onSearch = useOnSearch(treeApi);
     const filterTreeNode = useOnFilterTreeNode(treeApi);
     const plainList = treeApi.isDataPlainList();
-    console.log(expandedKeys)
+    console.log(expandedKeys);
     return (
         <>
             <AntdTreeSelect
@@ -56,13 +58,14 @@ export const TreeSelectRender = ({
                 }
                 {...treeSelectProps}
                 /************ no override ****************/
-                treeDefaultExpandAll={allProps.defaultExpandAll}
                 fieldNames={fieldNames}
                 treeNodeLabelProp={treeNodeLabelProp} //Selected value label. Will render as content of select. Default: title
                 treeData={treeApi.getDataSet()}
                 value={value}
                 disabled={allProps.disabled || allProps.readOnly} //TODO: implement true readOnly
                 //labelInValue // We do not use this mode, as it is useless. In this mode, onChange will return an object containing value and label, but you still can’t build a full node
+                treeDefaultExpandAll={allProps.defaultExpandAll}
+                treeDefaultExpandedKeys={allProps.defaultExpandedKeys}
                 treeExpandedKeys={expandedKeys}
                 //loadData={onLoadData}
                 dropdownStyle={dropdownStyle}
@@ -81,11 +84,11 @@ export const TreeSelectRender = ({
 };
 
 const useValue = (api: ITreeSelectApi) => {
-    const props = api.getProps()
+    const props = api.getProps();
     const keys = api.getSelectedKeys();
-    if (props.multiple) return keys ?? null
-    else return keys?.[0] ?? null
-}
+    if (props.multiple) return keys ?? null;
+    else return keys?.[0] ?? null;
+};
 
 const useDefaultDropdownRender = ({treeApi}: {treeApi: ITreeSelectApi}) => {
     return useCallback((menu: React.ReactNode) => <DefaultDropdownRender treeApi={treeApi}>{menu}</DefaultDropdownRender>, [treeApi]);
@@ -170,7 +173,7 @@ const useTreeNodeLabelProp = (api: ITreeSelectApi) => {
 
 const useOnExpand = (treeApi: ITreeSelectApi) => {
     return useCallback<NonNullable<ITreeSelectProps['onTreeExpand']>>(
-        (keys) => {
+        keys => {
             const props = treeApi.getProps();
             treeApi.setExpandedKeys(keys);
             props.onTreeExpand?.(keys);
