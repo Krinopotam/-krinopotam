@@ -44,13 +44,7 @@ export type IDFormModalWithoutModalProps = IDFormModalOwnProps & Exclude<IDFormP
 
 export type IDFormModalProps = IExtendedModalOwnProps & IDFormModalWithoutModalProps
 
-export interface IDFormModalApi extends IDFormApi {
-    /** Get the current modal form props */
-    getFormProps: () => IDFormModalProps;
-
-    /** Update the current modal form props (will cause rerender of the modal form). Can't update field props, because it is used in form model */
-    setFormProps: (formProps: Partial<IDFormModalProps>) => void;
-
+export interface IDFormModalApi extends IDFormApi<IDFormModalProps> {
     /** Open controls */
     open: (formMode: IDFormProps['formMode'], extraProps?: Partial<Omit<IDFormModalProps, 'formMode' | 'open'>>) => void;
 

@@ -32,8 +32,8 @@ export const useModelCallbacks = (formProps: IDFormProps, formApi: IDFormApi) =>
             /** fires when a form ready state changed */
             onFormReadyStateChanged: (state: boolean) => {
                 if (formProps?.onFormReadyStateChanged?.(state, formApi) === false) return false;
-                if (state) formApi.buttonsApi.disabled?.('ok', false);
-                else formApi.buttonsApi.disabled?.('ok', true);
+                if (state) formApi.getButtonsApi().disabled?.('ok', false);
+                else formApi.getButtonsApi().disabled?.('ok', true);
             },
 
             /** fires when the form values changed  */
@@ -50,7 +50,7 @@ export const useModelCallbacks = (formProps: IDFormProps, formApi: IDFormApi) =>
             /** fires when the form has no errors */
             onFormHasNoErrors: (values: Record<string, unknown>, dataSet: IDFormDataSet) => {
                 if (formProps?.onFormHasNoErrors?.(values, dataSet, formApi) === false) return false;
-                formApi.buttonsApi.disabled?.('ok', false);
+                formApi.getButtonsApi().disabled?.('ok', false);
             },
 
             /** fires when the form trying to fetch data */
@@ -98,8 +98,8 @@ export const useModelCallbacks = (formProps: IDFormProps, formApi: IDFormApi) =>
 
             /** fires on submitting the form */
             onSubmit: (values: Record<string, unknown>, dataSet: IDFormDataSet) => {
-                formApi.buttonsApi.disabled?.('ok', true);
-                if (!formProps.confirmChanges) formApi.buttonsApi.loading?.('ok', true);
+                formApi.getButtonsApi().disabled?.('ok', true);
+                if (!formProps.confirmChanges) formApi.getButtonsApi().loading?.('ok', true);
                 return formProps?.onSubmit?.(values, dataSet, formApi);
             },
 
@@ -128,8 +128,8 @@ export const useModelCallbacks = (formProps: IDFormProps, formApi: IDFormApi) =>
             /** fires after the completion of sending the form, regardless of the result */
             onSubmitComplete: (values: Record<string, unknown>, dataSet: IDFormDataSet, errors: Record<string, string | undefined>) => {
                 if (formProps?.onSubmitComplete?.(values, dataSet, errors, formApi) === false) return false;
-                formApi.buttonsApi.disabled?.('ok', false);
-                formApi.buttonsApi.loading?.('ok', false);
+                formApi.getButtonsApi().disabled?.('ok', false);
+                formApi.getButtonsApi().loading?.('ok', false);
             },
 
             /** fires, when the form dataSet changed. Unlike onFormValuesChanged, it is triggered only when a new dataSet is set via setFormValues and is not called when the user changes the field values */

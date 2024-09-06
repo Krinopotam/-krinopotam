@@ -12,7 +12,7 @@ export const FormLayoutSwitch = (formApi: IDFormApi): {layout: IFormButton} => {
                     checkedChildren={'hor'}
                     unCheckedChildren={'ver'}
                     onChange={val => {
-                        formApi.setFormProps({layout: val ? 'horizontal' : 'vertical'});
+                        formApi.updateProps({layout: val ? 'horizontal' : 'vertical'});
                     }}
                 />
             ),

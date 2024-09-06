@@ -96,9 +96,9 @@ export const useFormCallbacks = (formModalApi: IDFormModalApi, modalFormProps: I
 
             /** fires on submitting the form */
             onSubmit: (values: Record<string, unknown>, dataSet:IDFormDataSet) => {
-                formModalApi.buttonsApi.disabled?.('ok', true);
-                formModalApi.buttonsApi.disabled?.('cancel', true);
-                if (!modalFormProps.confirmChanges) formModalApi.buttonsApi.loading?.('ok', true);
+                formModalApi.getButtonsApi().disabled?.('ok', true);
+                formModalApi.getButtonsApi().disabled?.('cancel', true);
+                if (!modalFormProps.confirmChanges) formModalApi.getButtonsApi().loading?.('ok', true);
                 return modalFormProps?.onSubmit?.(values, dataSet, formModalApi);
             },
 
@@ -114,9 +114,9 @@ export const useFormCallbacks = (formModalApi: IDFormModalApi, modalFormProps: I
             /** fires after the completion of sending the form, regardless of the result */
             onSubmitComplete: (values: Record<string, unknown>, dataSet:IDFormDataSet, errors: Record<string, string | undefined>) => {
                 if (modalFormProps?.onSubmitComplete?.(values, dataSet, errors, formModalApi) === false) return false;
-                formModalApi.buttonsApi.disabled?.('ok', false);
-                formModalApi.buttonsApi.disabled?.('cancel', false);
-                formModalApi.buttonsApi.loading?.('ok', false);
+                formModalApi.getButtonsApi().disabled?.('ok', false);
+                formModalApi.getButtonsApi().disabled?.('cancel', false);
+                formModalApi.getButtonsApi().loading?.('ok', false);
             },
 
             /** fires, when the form dataSet changed. Unlike onFormValuesChanged, it is triggered only when a new dataSet is set via setFormValues and is not called when the user changes the field values */

@@ -23,7 +23,7 @@ const formProps: IDFormProps = {
 let num = 0
 const onClick1 = () => {
     num++
-    api.setFormProps({
+    api.updateProps({
         fieldsProps: {
             field1: {component: InputField, label: `Поле 1 (${num})`},
             field2: {component: InputField, label: `Поле 2 (${num})`, autoFocus: true},
@@ -33,7 +33,7 @@ const onClick1 = () => {
 
 const onClick2 = () => {
     num++
-    api.setFormProps({
+    api.updateProps({
         fieldsProps: {
             field1: {component: InputField, label: `Поле 1 (${num})`},
             field3: {component: InputField, label: `Поле 3 (${num})`, autoFocus: true},
@@ -56,7 +56,7 @@ const hideHandle = () => {
 let layout = false
 const changeLayout = () => {
     layout = !layout
-    api.setFormProps({
+    api.updateProps({
         layout: !layout ? 'vertical' : 'horizontal',
     })
 }

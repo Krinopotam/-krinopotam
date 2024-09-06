@@ -11,29 +11,32 @@ import {useInitModalFormApi} from './hooks/api';
 import React, {useEffect, useMemo, useState} from 'react';
 
 import {DFormModalRender} from './renders/dFormModalRender';
-import {IButtonsRowApi} from '@src/buttonsRow/buttonsRow';
-import {GetNanoId, SplitObject} from "@krinopotam/js-helpers";
+import {GetNanoId, SplitObject} from '@krinopotam/js-helpers';
 import {useFormCallbacks} from './hooks/callbacks';
 import {useInitButtons} from './hooks/buttons';
 import {useUpdateMessageBoxTheme} from '@src/messageBox';
 import {useGetActualProps} from '@krinopotam/common-hooks';
-import {IDFormModalApi, IDFormModalProps, IDFormModalOwnProps, IExtendedModalOwnProps, IDFormModalWithoutModalProps} from "@src/dFormModal/types/dFormModalTypes";
-
+import {
+    IDFormModalApi,
+    IDFormModalProps,
+    IDFormModalOwnProps,
+    IExtendedModalOwnProps,
+    IDFormModalWithoutModalProps,
+} from '@src/dFormModal/types/dFormModalTypes';
 
 export const DFormModal = (props: IDFormModalProps): React.JSX.Element => {
     useUpdateMessageBoxTheme(); //set current theme to messageBox
 
     const [formId] = useState(props.formId ?? 'dFormModal-' + GetNanoId());
-    const [allProps, updateModalFormProps] = useGetActualProps(props); //props can be set both by parent component and via api
+    const [allProps, setAllProps] = useGetActualProps(props); //props can be set both by parent component and via api
 
     /** Separating props related to the Modal component from props directly related to the DFormModal component */
     const [modalProps, formModalProps] = useSeparateModalPropsFromFormProps(allProps);
 
     //region Init api
     const [formApi, setFormApi] = useState((allProps.apiRef || {}) as IDFormModalApi);
-    const [buttonsApi] = useState({} as IButtonsRowApi);
     const buttons = useInitButtons(formApi, allProps);
-    useInitModalFormApi(formId, formApi, allProps, buttonsApi, updateModalFormProps);
+    useInitModalFormApi({formId, formApi, props: allProps, setProps: setAllProps});
     //endregion
 
     const formCallbacks = useFormCallbacks(formApi, allProps);
@@ -57,7 +60,6 @@ export const DFormModal = (props: IDFormModalProps): React.JSX.Element => {
             modalProps={modalProps}
             formProps={formProps}
             buttons={buttons}
-            buttonsApi={buttonsApi}
         />
     );
 };
@@ -153,7 +155,14 @@ const useSeparateProps = (formModalProps: IDFormModalWithoutModalProps, formCall
 
         formProps.buttons = null; //clear form buttons because the modal form has it own buttons
 
-        return [formModalOwnProps, {...formProps, ...formCallbacks, language: formModalProps.language, translation: formModalProps.translation}];
+        return [
+            formModalOwnProps,
+            {
+                ...formProps,
+                ...formCallbacks,
+                language: formModalProps.language,
+                translation: formModalProps.translation,
+            },
+        ];
     }, [formCallbacks, formModalProps]);
 };
-

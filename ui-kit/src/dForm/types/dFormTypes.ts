@@ -7,6 +7,7 @@ import {FormLabelAlign} from "antd/es/form/interface";
 import {RequiredMark} from "antd/es/form/Form";
 import {IDFormFieldsProps} from "@src/dForm/fields";
 import {translations} from "@src/dForm/translations/translations";
+import {IBaseComponentApi} from "@src/_shared/hooks/componentApiMethods/types/apiTypes";
 
 export type IDFormValidationRules = Record<string, IRuleType[]>;
 
@@ -127,18 +128,12 @@ export interface IDFormDataSet extends Record<string, unknown> {
 
 export type IDFormDataSourcePromise = Promise<{ data: Record<string, unknown> }>;
 
-export interface IDFormApi extends Record<string, unknown> {
+export interface IDFormApi<TProps extends object = IDFormProps> extends IBaseComponentApi<TProps> {
     /** Form model instance */
     model: DModel;
 
-    /** Buttons row API */
-    buttonsApi: IButtonsRowApi;
-
-    /** Get the current form props */
-    getFormProps: () => IDFormProps;
-
-    /** Update the current form props (will cause rerender of the form) */
-    setFormProps: (formProps: Partial<IDFormProps>) => void;
+    /** Get buttons row api */
+    getButtonsApi: () => IButtonsRowApi;
 
     /** Validate form */
     validateForm: (showAlert: boolean) => Record<string, string | undefined>;

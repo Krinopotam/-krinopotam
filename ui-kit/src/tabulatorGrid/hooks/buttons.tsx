@@ -7,14 +7,13 @@ import {translations} from '@src/tabulatorGrid/translations/translations';
 import {useTranslate} from '@src/_shared/hooks/useTranslate';
 
 export const useInitButtons = (gridApi: IGridApi): ITabulatorButtons => {
-    const [, refreshButtons] = useState({});
     const buttons = gridApi.gridProps.buttons;
     const buttonsSize = gridApi.gridProps.buttonsSize ?? 'small';
     const buttonsPos = gridApi.gridProps.buttonsPosition ?? 'right';
     const activeRow = gridApi.getActiveRow();
     const selectedRows = gridApi.getSelectedRows();
 
-    gridApi.buttonsApi.refreshButtons = useRefreshButtons(refreshButtons);
+    gridApi.getButtonsApi().refreshButtons = useRefreshButtons();
 
     const headerLabel = useGetHeaderLabel(gridApi);
     const viewButton = useGetViewButton(gridApi, activeRow, selectedRows);
@@ -69,7 +68,8 @@ export const useInitButtons = (gridApi: IGridApi): ITabulatorButtons => {
     ]);
 };
 
-const useRefreshButtons = (refreshButtons: React.Dispatch<React.SetStateAction<Record<string, unknown>>>) => {
+const useRefreshButtons = () => {
+    const [, refreshButtons] = useState({});
     return useCallback(() => {
         refreshButtons({});
     }, [refreshButtons]);
@@ -230,7 +230,7 @@ const useGetDeleteButton = (gridApi: IGridApi, selectedRows: IGridRowData[]): IT
             icon: <DeleteOutlined />,
             position: 'right',
             colorType: 'danger',
-            disabled: !!selectedRows?.length,
+            disabled: !selectedRows?.length,
             hotKeys: [{key: 'Delete', ctrl: true}],
             onClick: () => {
                 const selectedRows = gridApi.getSelectedRows();
@@ -259,14 +259,14 @@ const useGetFilterToggleButton = (gridApi: IGridApi, tableApi: ITabulator | unde
             onClick: () => {
                 const show = tableApi?.toggleHeaderFilter();
 
-                gridApi.buttonsApi.updateButtons({
+                gridApi.getButtonsApi().updateButtons({
                     filterToggle: {
                         active: show,
                     },
                 });
             },
         } satisfies ITabulatorButton;
-    }, [gridApi.buttonsApi, gridProps.buttons?.filterToggle, t, tableApi]);
+    }, [gridApi, gridProps.buttons?.filterToggle, t, tableApi]);
 };
 
 const getRowDataSet = (gridApi: IGridApi, selfParent: boolean, parentOnly?: boolean) => {

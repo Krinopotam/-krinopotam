@@ -28,7 +28,7 @@ export const MenuRow = ({gridApi}: IGridMenuProps): React.JSX.Element | null => 
         <div style={{paddingBottom: 8, paddingTop: 8}}>
             <ButtonsRow
                 buttons={buttons}
-                apiRef={gridApi.buttonsApi}
+                apiRef={gridApi.getButtonsApi()}
                 context={gridApi}
                 responsiveBreakpoint={gridProps.responsiveBreakpoint}
                 iconsOnly={gridProps.buttonsIconsOnly}

@@ -16,8 +16,7 @@ import {
 } from '@src/_shared/hooks/treeComponentApiMethods/buttons/defaultButtonsProps';
 
 export const useInitButtons = (api: ITreeSelectApi, treeProps: ITreeSelectProps) => {
-    const [, refreshButtons] = useState({});
-    api.getButtonsApi().refreshButtons = useRefreshButtons(refreshButtons);
+    api.getButtonsApi().refreshButtons = useRefreshButtons();
     const buttons = treeProps.editButtons;
     const buttonsSize = treeProps.buttonsSize ?? 'small';
     const buttonsPos = treeProps.buttonsPosition ?? 'right';
@@ -59,7 +58,8 @@ export const useInitButtons = (api: ITreeSelectApi, treeProps: ITreeSelectProps)
     }, [headerLabel, viewButton, createButton, createGroupButton, cloneButton, updateButton, deleteButton, buttons, buttonsSize, buttonsPos]);
 };
 
-const useRefreshButtons = (refreshButtons: React.Dispatch<React.SetStateAction<Record<string, unknown>>>) => {
+const useRefreshButtons = () => {
+    const [, refreshButtons] = useState({});
     return useCallback(() => {
         refreshButtons({});
     }, [refreshButtons]);

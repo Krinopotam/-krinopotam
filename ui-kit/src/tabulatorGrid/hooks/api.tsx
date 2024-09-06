@@ -12,6 +12,8 @@ import {IGridApi, IRowKey, IRowKeys} from '@src/tabulatorGrid/types/tabulatorGri
 import {useUnmountedRef} from "ahooks";
 import {useTranslate} from "@src/_shared/hooks/useTranslate";
 import {translations} from "@src/tabulatorGrid/translations/translations";
+import {IButtonsRowApi} from "@src/buttonsRow";
+import {useApiGetButtonsApi} from "@src/_shared/hooks/componentApiMethods/useApiGetButtonsApi";
 
 export const useInitGridApi = ({
                                    gridApi,
@@ -19,7 +21,6 @@ export const useInitGridApi = ({
                                    tableRef,
                                    editFormApi,
                                    selectionFormApi,
-                                   buttonsApi,
                                    setColumnsDialog,
                                }: {
     gridApi: IGridApi;
@@ -27,7 +28,6 @@ export const useInitGridApi = ({
     tableRef: MutableRefObject<Tabulator | undefined>;
     editFormApi: IGridApi['editFormApi'];
     selectionFormApi: IGridApi['selectionFormApi'];
-    buttonsApi: IGridApi['buttonsApi'];
     setColumnsDialog: React.Dispatch<React.SetStateAction<boolean>>;
 }): IGridApi => {
     const dataSetRef = useRef<IGridProps['dataSet']>(undefined);
@@ -43,7 +43,7 @@ export const useInitGridApi = ({
     gridApi.tableApi = tableRef.current as ITabulator;
     gridApi.editFormApi = editFormApi;
     gridApi.selectionFormApi = selectionFormApi;
-    gridApi.buttonsApi = buttonsApi;
+    gridApi.getButtonsApi = useApiGetButtonsApi<IButtonsRowApi & { refreshButtons: () => void }>();
     gridApi.getIsMounted = useApiIsMounted(unmountRef);
     gridApi.getId = useApiGetId(gridApi);
     gridApi.getDataSet = useApiGetDataSet(dataSetRef, gridApi);

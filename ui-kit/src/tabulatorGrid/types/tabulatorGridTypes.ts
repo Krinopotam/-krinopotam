@@ -238,8 +238,8 @@ export interface IGridApi {
     /** selection form api */
     selectionFormApi: IDFormModalApi;
 
-    /** Buttons api */
-    buttonsApi: IButtonsRowApi & { refreshButtons: () => void };
+    /** Get buttons api */
+    getButtonsApi: () => IButtonsRowApi & { refreshButtons: () => void };
 
     /** Fetch data. If onDataFetch callback  is undefined,the request will use the previously set onDataFetch callback  */
     fetchData: (onDataFetch?: IGridProps['onDataFetch'], params?: Record<string, unknown>) => void;

@@ -1,9 +1,7 @@
 import {ITreeSelectNode, ITreeSelectProps, ITreeSelectValue} from '@src/treeSelect';
 import React, {Key, useCallback, useEffect, useRef, useState} from 'react';
-import {useIsMountedRef} from '@krinopotam/common-hooks';
 import {useDataFetcher} from '@src/treeSelect/hooks/dataFetcher';
 import runDebounce from 'lodash.debounce';
-import {IButtonsRowApi} from '@src/buttonsRow';
 import {GetNanoId, GetUuid, IsArray} from '@krinopotam/js-helpers';
 import {ITreeSelectApi} from '@src/treeSelect/types/types';
 import {IDFormModalApi} from '@src/dFormModal';
@@ -43,6 +41,10 @@ import {useApiSetDataset} from '@src/_shared/hooks/treeComponentApiMethods/useAp
 import {useApiGetDataSet} from '@src/_shared/hooks/treeComponentApiMethods/useApiGetDataSet';
 import {useApiRemoveNode} from '@src/_shared/hooks/treeComponentApiMethods/useApiRemoveNode';
 import {useApiMoveNode} from '@src/_shared/hooks/treeComponentApiMethods/useApiMoveNode';
+import {useApiGetId} from "@src/_shared/hooks/componentApiMethods/useApiGetId";
+import {useApiIsMounted} from "@src/_shared/hooks/componentApiMethods/useApiIsMointed";
+import {useApiGetButtonsApi} from "@src/_shared/hooks/componentApiMethods/useApiGetButtonsApi";
+import {IButtonsRowApi} from "@src/buttonsRow";
 
 export const useInitApi = ({
     api,
@@ -53,9 +55,7 @@ export const useInitApi = ({
     props: ITreeSelectProps;
     setProps: (props: ITreeSelectProps | ((prevValue: ITreeSelectProps) => ITreeSelectProps)) => void;
 }) => {
-    const isMountedRef = useIsMountedRef();
     const [componentId] = useState(props.componentId ?? 'treeSelect-' + GetNanoId());
-    const [buttonsApi] = useState({} as IButtonsRowApi & {refreshButtons: () => void});
     const [editFormApi] = useState((props.editFormProps?.apiRef ?? {}) as IDFormModalApi);
     const [editGroupFormApi] = useState((props.editGroupFormProps?.apiRef ?? {}) as IDFormModalApi);
     const [isReady, setIsReady] = useState(false);
@@ -72,19 +72,24 @@ export const useInitApi = ({
     const [dataSet, setDataset, isDataPlain, parentKeys] = useApiDataSetState(props.dataSet, fieldNames, prepareNode); //current dataSet
     const [expandedKeys, setExpandedKeys] = useApiExpandedKeysState(props.expandedKeys, props.defaultExpandedKeys, props.defaultExpandAll, parentKeys); //expanded keys
 
-    api.treeSelectRef = useRef(null);
+    /** Component Api methods*/
     api.getId = useApiGetId(componentId);
     api.getProps = useApiGetProps(props);
     api.setProps = useApiSetProps(setProps);
+    api.updateProps = useApiUpdateProps(props, setProps);
+    api.getIsMounted = useApiIsMounted();
+
+    /** Component own api methods */
+    api.treeSelectRef = useRef(null);
+    api.getButtonsApi = useApiGetButtonsApi<IButtonsRowApi & {refreshButtons: () => void}>();
+
+    /** Tree component Api methods */
     api.getDataSet = useApiGetDataSet(dataSet);
     api.setDataSet = useApiSetDataset(setDataset);
     api.isDataPlainList = useApiGetIsDataPlain(isDataPlain);
-    api.updateProps = useApiUpdateProps(props, setProps);
     api.prepareNode = usePrepareNode(props);
-    api.getButtonsApi = useApiGetButtonsApi(buttonsApi);
     api.getEditFormApi = useApiGetEditFormApi(editFormApi);
     api.getEditGroupFormApi = useApiGetEditGroupFormApi(editGroupFormApi);
-    api.getIsMounted = useApiIsMounted(isMountedRef);
     api.getSelectedKeys = useApiGetSelectedKeys(selectedKeys);
     api.setSelectedKeys = useApiSetSelectedKeys(setSelectedKeys);
     api.getSelectedNodes = useApiGetSelectedNodes(api);
@@ -132,18 +137,6 @@ export const useInitApi = ({
     api.deleteNodes = useDeleteNodes(api);
 };
 
-/** Get the current TreeSelect id */
-const useApiGetId = (componentId: string) => {
-    return useCallback(() => {
-        return componentId;
-    }, [componentId]);
-};
-
-/** Get the buttonsApi */
-const useApiGetButtonsApi = (buttonsApi: IButtonsRowApi & {refreshButtons: () => void}) => {
-    return useCallback(() => buttonsApi, [buttonsApi]);
-};
-
 /** Get the editFormApi */
 const useApiGetEditFormApi = (editFormApi: IDFormModalApi) => {
     return useCallback(() => editFormApi, [editFormApi]);
@@ -168,10 +161,6 @@ const valueToArray = (value: ITreeSelectValue | undefined) => {
     if (!value) return undefined;
     if (!Array.isArray(value)) return [value];
     return value;
-};
-
-const useApiIsMounted = (isMountedRef: React.MutableRefObject<boolean>) => {
-    return useCallback(() => isMountedRef.current, [isMountedRef]);
 };
 
 const usePrepareNode = (props: ITreeSelectProps) => {

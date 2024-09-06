@@ -1,40 +1,45 @@
 import React, {useCallback} from 'react';
 import {Space, Typography} from 'antd';
-import {IButtonsRowApi} from '@src/buttonsRow';
 import {MessageBox} from '@src/messageBox';
 import {IDFormProps} from '@src/dForm';
 import {IDFormApi} from '@src/dForm/types/dFormTypes';
 import {useTranslate} from '@src/_shared/hooks/useTranslate';
 import {translations} from '@src/dForm/translations/translations';
+import {useApiGetProps} from '@src/_shared/hooks/componentApiMethods/useApiGetProps';
+import {useApiSetProps} from '@src/_shared/hooks/componentApiMethods/useApiSetProps';
+import {useApiUpdateProps} from '@src/_shared/hooks/componentApiMethods/useApiUpdateProps';
+import {useApiGetId} from '@src/_shared/hooks/componentApiMethods/useApiGetId';
+import {useApiIsMounted} from '@src/_shared/hooks/componentApiMethods/useApiIsMointed';
+import {useApiGetButtonsApi} from "@src/_shared/hooks/componentApiMethods/useApiGetButtonsApi";
 
-export const useInitFormApi = (formApi: IDFormApi, formProps: IDFormProps, buttonsApi: IButtonsRowApi, updateFormProps: (props: IDFormProps) => void) => {
-    const apiGetFormProps = useApiGetFormProps(formProps);
-    const apiSetFormProps = useApiSetFormProps(formProps, updateFormProps);
-    const apiValidateForm = useApiValidateForm(formApi, formProps);
-    const apiSubmitForm = useApiSubmitForm(formApi, formProps);
+export const useInitFormApi = ({
+    formId,
+    formApi,
+    props,
+    setProps,
+}: {
+    formId: string;
+    formApi: IDFormApi;
+    props: IDFormProps;
+    setProps: React.Dispatch<React.SetStateAction<IDFormProps>>;
+}) => {
+    const apiGetId = useApiGetId(formId);
+    const getButtonsApi = useApiGetButtonsApi();
+    const apiGetProps = useApiGetProps(props);
+    const apiSetProps = useApiSetProps(setProps);
+    const apiUpdateProps = useApiUpdateProps(props, setProps);
+    const apiValidateForm = useApiValidateForm(formApi, props);
+    const apiSubmitForm = useApiSubmitForm(formApi, props);
+    const apiGetIsMounted = useApiIsMounted();
 
-    if (!formProps._overriddenApi?.buttonsApi) formApi.buttonsApi = buttonsApi;
-    if (!formProps._overriddenApi?.getFormProps) formApi.getFormProps = apiGetFormProps;
-    if (!formProps._overriddenApi?.setFormProps) formApi.setFormProps = apiSetFormProps;
-    if (!formProps._overriddenApi?.validateForm) formApi.validateForm = apiValidateForm;
-    if (!formProps._overriddenApi?.submitForm) formApi.submitForm = apiSubmitForm;
-};
-
-/** Get the current form props */
-const useApiGetFormProps = (formProps: IDFormProps) => {
-    return useCallback(() => {
-        return formProps;
-    }, [formProps]);
-};
-
-/** Update the current form props (will cause rerender of the form) */
-const useApiSetFormProps = (formProps: IDFormProps, setFormProps: (props: IDFormProps) => void) => {
-    return useCallback(
-        (props: Partial<IDFormProps>) => {
-            setFormProps({...formProps, ...props});
-        },
-        [formProps, setFormProps]
-    );
+    if (!props._overriddenApi?.getId) formApi.getId = apiGetId;
+    if (!props._overriddenApi?.getButtonsApi) formApi.getButtonsApi = getButtonsApi
+    if (!props._overriddenApi?.getProps) formApi.getProps = apiGetProps;
+    if (!props._overriddenApi?.setProps) formApi.setProps = apiSetProps;
+    if (!props._overriddenApi?.updateProps) formApi.updateProps = apiUpdateProps;
+    if (!props._overriddenApi?.validateForm) formApi.validateForm = apiValidateForm;
+    if (!props._overriddenApi?.submitForm) formApi.submitForm = apiSubmitForm;
+    if (!props._overriddenApi?.getIsMounted) formApi.getIsMounted = apiGetIsMounted;
 };
 
 const useApiValidateForm = (formApi: IDFormApi, formProps: IDFormProps) => {
@@ -43,7 +48,7 @@ const useApiValidateForm = (formApi: IDFormApi, formProps: IDFormProps) => {
     return useCallback(
         (showAlert?: boolean) => {
             const errors = formApi.model.validateForm();
-            formApi.buttonsApi.disabled('ok', Object.keys(errors).length > 0);
+            formApi.getButtonsApi().disabled('ok', Object.keys(errors).length > 0);
 
             if (Object.keys(errors).length === 0 || !showAlert) return errors;
 
@@ -61,11 +66,16 @@ const useApiValidateForm = (formApi: IDFormApi, formProps: IDFormProps) => {
                 </Space>
             );
 
-            MessageBox.alert({language: formProps.language, title: t('fixError'), content: messageContent, colorType: 'danger'});
+            MessageBox.alert({
+                language: formProps.language,
+                title: t('fixError'),
+                content: messageContent,
+                colorType: 'danger',
+            });
 
             return errors;
         },
-        [formApi.buttonsApi, formApi.model, formProps.language, t]
+        [formApi, formProps.language, t]
     );
 };
 
@@ -81,7 +91,7 @@ const useApiSubmitForm = (formApi: IDFormApi, formProps: IDFormProps) => {
         const formProps = formApi.model.getFormProps();
 
         if (!formProps.confirmChanges) {
-            formApi.buttonsApi.loading('ok', true);
+            formApi.getButtonsApi().loading('ok', true);
             formApi.model.submit();
             return;
         }

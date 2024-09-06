@@ -59,7 +59,7 @@ export const FormRender = ({formProps, formApi, formButtons}: IFormRenderProps):
                         <ButtonsRender
                             buttons={formButtons}
                             colorType={formProps.colorType}
-                            buttonsApi={formApi.buttonsApi}
+                            buttonsApi={formApi.getButtonsApi()}
                             arrowsSelection={formProps.arrowsButtonsSelection}
                             context={formApi}
                         />

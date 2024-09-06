@@ -13,7 +13,7 @@ export const useEvents = (gridApi: IGridApi, gridProps: IGridProps): ITabulatorP
         return {
             tableBuilt: () => {
                 events?.tableBuilt?.();
-                gridApi.buttonsApi.refreshButtons();
+                gridApi.getButtonsApi().refreshButtons();
             },
             dataLoading: data => {
                 events?.dataLoading?.(data);
@@ -68,11 +68,11 @@ export const useEvents = (gridApi: IGridApi, gridProps: IGridProps): ITabulatorP
             },
             rowDblClick: (event, row) => {
                 events?.rowDblClick?.(event, row);
-                gridApi.buttonsApi.triggerClick('update');
+                gridApi.getButtonsApi().triggerClick('update');
             },
             activeRowChanged: row => {
                 events?.activeRowChanged?.(row);
-                gridApi.buttonsApi.refreshButtons();
+                gridApi.getButtonsApi().refreshButtons();
             },
             rowSelectionChanged: (data, rows, selectedRows, deselectedRows) => {
                 events?.rowSelectionChanged?.(data, rows, selectedRows, deselectedRows);

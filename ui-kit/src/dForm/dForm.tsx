@@ -31,13 +31,12 @@ export const DForm = (props: IDFormProps): React.JSX.Element => {
     //region Common component states
     const [formId] = useState(formProps.formId ?? 'dForm-' + GetNanoId());
     const [formApi] = useState((formProps.apiRef || {}) as IDFormApi);
-    const [buttonsApi] = useState({} as IButtonsRowApi);
     const formButtons = useGetButtons(formProps, formApi); //init buttons
     //endregion
 
     const modelCallbacks = useModelCallbacks(formProps, formApi);
     useInitFormModel(formId, formApi, formProps, modelCallbacks);
-    useInitFormApi(formApi, formProps, buttonsApi, setFormProps);
+    useInitFormApi({formId, formApi, props: formProps, setProps: setFormProps});
 
     useInitialFetchData(formApi);
 
