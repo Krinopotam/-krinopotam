@@ -16,10 +16,8 @@ export type IFieldNames = {key: string; title: string; children: string};
 
 export type INodePosition = 'below' | 'above' | 'insideTop' | 'insideBottom';
 
-export interface ITreeComponentApi<
-    TNode extends Record<string, unknown> = Record<string, unknown>,
-    TProps extends object = object,
-> extends IBaseComponentApi<TProps> {
+export interface ITreeComponentApi<TNode extends Record<string, unknown> = Record<string, unknown>, TProps extends object = object>
+    extends IBaseComponentApi<TProps> {
     /** Get node fields names */
     getFieldNames: () => {key: string; children: string; title: string};
 
@@ -33,7 +31,7 @@ export interface ITreeComponentApi<
     getSelectedKeys: () => Key[] | undefined;
 
     /** Set selected keys */
-    setSelectedKeys: (keys: Key | Key[] | null| undefined) => void;
+    setSelectedKeys: (keys: Key | Key[] | null | undefined) => void;
 
     /** Get selected nodes
      * @param externalDataset - if not set, current data set will be used, if set, node will be searched in this data set
@@ -42,10 +40,10 @@ export interface ITreeComponentApi<
 
     /**
      * Select node
-     * @param key - node key
+     * @param node - node or key
      * @param select - if true, node will be selected (default true)
      */
-    selectNode: (key: Key, select?: boolean) => void;
+    selectNode: (node: Key | TNode, select?: boolean) => void;
 
     /**
      * Get active node
@@ -68,16 +66,16 @@ export interface ITreeComponentApi<
     getExpandedNodes: () => TNode[] | undefined;
 
     /** Check if node is expanded */
-    isNodeExpanded: (key: Key) => boolean;
+    isNodeExpanded: (key: Key | TNode) => boolean;
 
     /** Expand node */
-    expandNode: (key: Key) => void;
+    expandNode: (key: Key | TNode) => void;
 
     /** Collapse node */
-    collapseNode: (key: Key) => void;
+    collapseNode: (key: Key | TNode) => void;
 
     /** Toggle node (expand if collapsed, collapse if expanded) */
-    toggleNode: (key: Key) => void;
+    toggleNode: (key: Key | TNode) => void;
 
     /**
      * Get node
@@ -95,16 +93,16 @@ export interface ITreeComponentApi<
 
     /**
      * Get parent node
-     * @param key - node key
+     * @param node - node or key
      * @param externalDataset - if not set, current data set will be used, if set, node will be searched in this data set
      */
-    getParentNode: (key: Key, externalDataset?: TNode[]) => TNode | undefined;
+    getParentNode: (node: Key | TNode, externalDataset?: TNode[]) => TNode | undefined;
 
     /** Add node */
     /**
      *
      * @param node - node to add
-     * @param targetKey - target node key
+     * @param target- target node or key
      * @param position - node position: below target, above target, insideTop - first position inside target, insideBottom -  last position inside target
      * @param opts - options {ensureVisible - if true, node will be visible after adding (expanded parent nodes), select - if true, node will be selected after adding}
      * @param externalDataset - if not set, node will be added to current data set. If set - to this data set, component will not be updated
@@ -112,7 +110,7 @@ export interface ITreeComponentApi<
      */
     addNode: (
         node: TNode,
-        targetKey?: Key,
+        target?: Key | TNode,
         position?: INodePosition,
         opts?: {
             ensureVisible?: boolean;
@@ -124,14 +122,14 @@ export interface ITreeComponentApi<
     /** Update node */
     /**
      *
-     * @param node
-     * @param targetKey
+     * @param node updated node
+     * @param target node or key
      * @param opts
      * @param externalDataset - if not set, node will be updated in current data set. If set - in this data set, component will not be updated
      */
     updateNode: (
         node: TNode,
-        targetKey?: Key,
+        target?: Key | TNode,
         opts?: {
             ensureVisible?: boolean;
             select?: boolean;
@@ -141,16 +139,16 @@ export interface ITreeComponentApi<
 
     /**
      * Move node to target node
-     * @param key - node key
-     * @param targetKey - target node key
+     * @param source - node or key
+     * @param target - target node or key
      * @param position - move position: below target, above target, insideTop - first position inside target, insideBottom -  last position inside target
      * @param opts - options
      * @param externalDataset - if not set, node will be moved in current data set. If set - in this data set, component will not be updated
      * @returns changed data set
      */
     moveNode: (
-        key: Key,
-        targetKey: Key,
+        source: Key | TNode,
+        target: Key | TNode,
         position?: INodePosition,
         opts?: {
             ensureVisible?: boolean;
@@ -161,12 +159,18 @@ export interface ITreeComponentApi<
 
     /**
      * Remove node from data set
-     * @param key - node key
+     * @param node - node or key
      * @param opts - options
      * @param externalDataset - if not set, node will be deleted in current data set. If set -  in this data set, component will not be updated
      * @returns changed data set
      */
-    removeNode: (key: Key, opts?: {select?: 'prev' | 'next'}, externalDataset?: TNode[]) => TNode[] | undefined;
+    removeNode: (
+        node: Key | TNode,
+        opts?: {
+            select?: 'prev' | 'next';
+        },
+        externalDataset?: TNode[]
+    ) => TNode[] | undefined;
 
     /**
      * Delete node from database and  data set
@@ -174,21 +178,27 @@ export interface ITreeComponentApi<
      * @param opts  - options
      * @param externalDataset - if not set, node will be deleted in current data set. If set -  in this data set, component will not be updated
      */
-    deleteNode: (key: Key, opts?: {select?: 'prev' | 'next'}, externalDataset?: TNode[]) => TNode[] | undefined;
+    deleteNode: (
+        key: Key | TNode,
+        opts?: {
+            select?: 'prev' | 'next';
+        },
+        externalDataset?: TNode[]
+    ) => TNode[] | undefined;
 
     /**
      * Expand parent nodes
-     * @param key - node key
+     * @param node - node pr key
      * @param externalDataset - if not set, node will be expanded in current data set. If set - in this data set, component will not be updated
      */
-    expandParentNodes: (key: Key, externalDataset?: TNode[]) => void;
+    expandParentNodes: (node: Key | TNode, externalDataset?: TNode[]) => void;
 
     /**
      * Ensure node visible
-     * @param key - node key
+     * @param node - node or key
      * @param externalDataset - if not set, node will be made visible in current data set. If set - in this data set, component will not be updated
      */
-    ensureNodeVisible: (key: Key, externalDataset?: TNode[]) => void;
+    ensureNodeVisible: (node: Key | TNode, externalDataset?: TNode[]) => void;
 
     /**
      * Get next node key

@@ -1,6 +1,6 @@
-import {Key, useCallback} from "react";
-import {CloneObject} from "@krinopotam/js-helpers";
-import {ITreeComponentApi} from "@src/_shared/hooks/treeComponentApiMethods/types/treeApiTypes";
+import {Key, useCallback} from 'react';
+import {CloneObject} from '@krinopotam/js-helpers';
+import {ITreeComponentApi} from '@src/_shared/hooks/treeComponentApiMethods/types/treeApiTypes';
 
 export const useApiRemoveNode = (api: {
     getDataSet: ITreeComponentApi['getDataSet'];
@@ -12,25 +12,10 @@ export const useApiRemoveNode = (api: {
     setSelectedKeys: ITreeComponentApi['setSelectedKeys'];
 }): ITreeComponentApi['removeNode'] => {
     return useCallback(
-        (key, opts, externalDataSet) => {
-            const recursive = (nodes: Record<string, unknown>[]) => {
-                for (let i = 0; i < nodes.length; i++) {
-                    const node = nodes[i];
-                    if (node[keyField] === key) {
-                        nodes.splice(i, 1);
-                        return true;
-                    }
-
-                    if (node[childrenField]) {
-                        const result = recursive(node[childrenField] as Record<string, unknown>[]);
-                        if (result) return true;
-                    }
-                }
-            };
-
+        (node, opts, externalDataSet) => {
             const fieldNames = api.getFieldNames();
-            const keyField = fieldNames.key;
-            const childrenField = fieldNames.children;
+            const key: Key = typeof node === 'object' ? (node[fieldNames.key] as Key) : node;
+
             const dataSet = externalDataSet ?? CloneObject(api.getDataSet());
             if (!dataSet) return;
 
@@ -44,6 +29,21 @@ export const useApiRemoveNode = (api: {
                 //for last key search for next
                 if (!selectKey) selectKey = api.getNextNodeKey(key, undefined, dataSet);
             }
+
+            const recursive = (nodes: Record<string, unknown>[]) => {
+                for (let i = 0; i < nodes.length; i++) {
+                    const node = nodes[i];
+                    if (node[fieldNames.key] === key) {
+                        nodes.splice(i, 1);
+                        return true;
+                    }
+
+                    if (node[fieldNames.children]) {
+                        const result = recursive(node[fieldNames.children] as Record<string, unknown>[]);
+                        if (result) return true;
+                    }
+                }
+            };
 
             recursive(dataSet);
 

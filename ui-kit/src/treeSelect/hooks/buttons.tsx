@@ -1,4 +1,4 @@
-import React, {Key, useCallback, useMemo, useState} from 'react';
+import {Key, useCallback, useMemo, useState} from 'react';
 import {MergeObjects} from '@krinopotam/js-helpers';
 import {ITreeSelectApi, ITreeSelectNode, ITreeSelectProps} from '@src/treeSelect';
 import {ITreeSelectButton, ITreeSelectButtons} from '@src/treeSelect/types/types';
@@ -17,6 +17,10 @@ import {
 
 export const useInitButtons = (api: ITreeSelectApi, treeProps: ITreeSelectProps) => {
     api.getButtonsApi().refreshButtons = useRefreshButtons();
+
+    const activeNode = api.getActiveNode(true);
+    const isGroup = treeProps.groupsMode && !activeNode?.isLeaf;
+
     const buttons = treeProps.editButtons;
     const buttonsSize = treeProps.buttonsSize ?? 'small';
     const buttonsPos = treeProps.buttonsPosition ?? 'right';
@@ -30,7 +34,7 @@ export const useInitButtons = (api: ITreeSelectApi, treeProps: ITreeSelectProps)
 
     const cloneButton = useGetCloneButton(api, treeProps, selectedNodes);
     const updateButton = useGetUpdateButton(api, treeProps, selectedNodes);
-    const deleteButton = useGetDeleteButton(api, treeProps, activeItem);
+    const deleteButton = useGetDeleteButton(api, treeProps, activeNode, isGroup);
 
     return useMemo(() => {
         const defaultButtons = {
@@ -205,27 +209,27 @@ const useGetUpdateButton = (api: ITreeSelectApi, treeProps: ITreeSelectProps, se
 };
 
 /** Get delete button props */
-const useGetDeleteButton = (api: ITreeSelectApi, treeProps: ITreeSelectProps, activeItem: any): ITreeSelectButton | undefined => {
-    const t = useTranslate(treeProps.language, translations, treeProps.translation);
+const useGetDeleteButton = (
+    api: ITreeSelectApi,
+    treeProps: ITreeSelectProps,
+    activeNode: ITreeSelectNode | undefined,
+    isGroup?: boolean
+): ITreeSelectButton | undefined => {
+    const t = useT(api);
 
     return useMemo(() => {
         if (!treeProps.editFormProps || treeProps.readOnly || treeProps.editButtons?.delete === null) return undefined;
-        const nodes = api.getSelectedNodes();
-        const isGroup = nodes?.length === 1 && !nodes[0].isLeaf;
-        const keyField = treeProps.fieldNames?.key ?? 'id';
         return {
             ...defaultButtonDelete,
             title: isGroup ? t('deleteGroup') : t('delete'),
             tooltip: isGroup ? t('deleteRecordsGroup') : t('deleteRecord'),
-            disabled: !activeItem,
+            disabled: !activeNode,
             onClick: () => {
-                const nodes = api.getSelectedNodes();
-                if (nodes?.length !== 1) return;
-                const node = nodes[0];
-                api.removeNode(node[keyField] as Key, {select: 'next'});
+                if (!activeNode) return;
+                api.removeNode(activeNode, {select: 'next'});
             },
         } satisfies ITreeSelectButton;
-    }, [treeProps.editFormProps, treeProps.readOnly, treeProps.editButtons?.delete, treeProps.fieldNames?.key, api, t, activeItem]);
+    }, [treeProps.editFormProps, treeProps.readOnly, treeProps.editButtons?.delete, isGroup, t, activeNode, api]);
 };
 
 const getDataSet = (node: ITreeSelectNode) => {
@@ -233,4 +237,12 @@ const getDataSet = (node: ITreeSelectNode) => {
     delete dataSet.icon;
     delete dataSet.isLeaf;
     return dataSet as IDFormDataSet;
+};
+
+const useT = (api: ITreeSelectApi) => {
+    const treeProps = api.getProps();
+    const t = useTranslate(treeProps.language, translations, treeProps.translation);
+    t('cream')
+    t('create')
+    return useMemo(() => t, [t]);
 };

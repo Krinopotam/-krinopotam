@@ -2,7 +2,7 @@ import {Key, useCallback} from 'react';
 import {CloneObject} from '@krinopotam/js-helpers';
 import {findNodeIndex} from '@src/_shared/hooks/treeComponentApiMethods/serviceMethods/findNodeIndex';
 
-import {ITreeComponentApi} from "@src/_shared/hooks/treeComponentApiMethods/types/treeApiTypes";
+import {ITreeComponentApi} from '@src/_shared/hooks/treeComponentApiMethods/types/treeApiTypes';
 
 export const useApiUpdateNode = (api: {
     getNode: ITreeComponentApi['getNode'];
@@ -16,7 +16,7 @@ export const useApiUpdateNode = (api: {
     prepareNode: ITreeComponentApi['prepareNode'];
 }): ITreeComponentApi['updateNode'] => {
     return useCallback(
-        (node, targetKey, opts, externalDataset) => {
+        (node, target, opts, externalDataset) => {
             const fieldNames = api.getFieldNames();
             const keyField = fieldNames.key;
 
@@ -27,9 +27,9 @@ export const useApiUpdateNode = (api: {
             if (idx < 0 || !nodes) return;
             nodes[idx] = api.prepareNode(node);
 
-            const targetNode = api.getNode(targetKey, dataSet);
+            const targetNode = typeof target === 'object' ? target : api.getNode(target, dataSet);
             const parentNode = api.getParentNode(node[keyField] as Key, dataSet);
-            if (targetKey && targetNode !== parentNode) dataSet = api.moveNode(node[keyField] as Key, targetKey, 'insideBottom', opts, dataSet) ?? [];
+            if (target && targetNode !== parentNode) dataSet = api.moveNode(node[keyField] as Key, target, 'insideBottom', opts, dataSet) ?? [];
 
             if (!externalDataset) api.setDataSet(dataSet);
             if (opts?.ensureVisible) api.ensureNodeVisible(node[keyField] as Key, dataSet);

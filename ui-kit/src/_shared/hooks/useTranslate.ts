@@ -1,19 +1,30 @@
-import {useCallback} from 'react';
-interface ITranslations {
-    en: Record<string, string>;
-    [keyof: string]: Record<string, string>;
-}
+import {useCallback, useMemo} from 'react';
+import {translations} from '@src/treeSelect/translations/translations';
 
-export const useTranslate = (language: string|undefined, translations: ITranslations, extraTranslation?: Record<string, string>) => {
-    return useCallback(
-        (val: keyof typeof translations.en):string => {
-            const lang = language ?? 'en';
-            const builtInLocale = translations[lang] ?? translations.en;
-            const translation = {...builtInLocale, ...extraTranslation};
-            if (Object.prototype.hasOwnProperty.call(translation, val)) return translation[val];
-            if (Object.prototype.hasOwnProperty.call(translations.en, val)) return translations.en[val];
-            return val;
-        },
-        [translations, language, extraTranslation]
-    );
+export const useTranslate = <
+    T extends {
+        en: Record<string, string>;
+    },
+>(
+    language: keyof T | undefined,
+    translations: T,
+    extraTranslation?: Partial<T['en']>
+) => {
+    const lang = language ?? 'en';
+    const [locale, fallbackLocale] = useGetLocale(lang as string, translations, extraTranslation);
+    return useCallback((val: keyof T[typeof lang]): string => locale[val] ?? fallbackLocale[val] ?? (val as string), [locale, fallbackLocale]);
+};
+
+const t = useTranslate('ru1', translations);
+t('confirmChangesQs');
+t('confirmChangesQs1');
+
+export const useGetLocale = (language: string, translations: Record<string, Record<string, string>>, extraTranslation?: Partial<Record<string, string>>) => {
+    return useMemo(() => {
+        const lang = language ?? 'en';
+        const builtInLocale = translations[lang] ?? translations.en;
+        const locale = {...builtInLocale, ...extraTranslation};
+        const fallbackLocale = {...translations.en, ...extraTranslation};
+        return [locale, fallbackLocale];
+    }, [extraTranslation, language, translations]);
 };
