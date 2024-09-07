@@ -160,7 +160,7 @@ export interface ITreeSelectBaseProps {
     onDataFetchComplete?: (api: ITreeSelectApi) => boolean | void;
 
     /** Callback executed when selected node delete */
-    onDelete?: (selectedNodes: ITreeSelectNode[], api: ITreeSelectApi) => ITreeSelectDeletePromise | void | undefined;
+    onDelete?: (selectedNodes: ITreeSelectNode, api: ITreeSelectApi) => ITreeSelectDeletePromise | void | undefined;
 }
 
 export type ITreeSelectProps = ITreeSelectBaseProps & IAntTreeSelectProps;
@@ -187,6 +187,12 @@ export interface ITreeSelectApi extends ITreeComponentApi<ITreeSelectNode, ITree
 
     /** Get the TreeSelect ready to user input status (data is fetched) */
     getIsReady: () => boolean;
+
+    /** Get Dropdown list open/close status */
+    getIsOpen: () => boolean | undefined;
+
+    /** Set Dropdown list open/close status */
+    setIsOpen: (state: boolean|undefined) => void;
 
     /** Set the TreeSelect ready to user input status (data is fetched) */
     setIsReady: (value: boolean) => void;

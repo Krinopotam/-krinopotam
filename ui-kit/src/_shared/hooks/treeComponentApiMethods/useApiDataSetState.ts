@@ -1,37 +1,59 @@
-import React, {Key, useEffect, useMemo, useRef, useState} from 'react';
+import React, {Key, useCallback, useRef, useState} from 'react';
 
 export const useApiDataSetState = <T extends Record<string, unknown>>(
-    propsDataSet: T[] | undefined,
-    fieldNames: {key: string; children: string; title: string},
+    initialState: React.SetStateAction<T[] | undefined>,
+    fieldNames: {
+        key: string;
+        children: string;
+        title: string;
+    },
     prepareNodeFn?: (node: T) => T
 ): [T[] | undefined, React.Dispatch<React.SetStateAction<T[] | undefined>>, boolean, Key[]] => {
-    const [preparedDataSet, isPlain, parentKeys] = useGetPreparedDataSet(propsDataSet, fieldNames, prepareNodeFn);
+    const prepareDataSet = usePrepareDataSet<T>(fieldNames, prepareNodeFn);
 
-    const [dataSet, setDataSet] = useState(preparedDataSet);
+    const initialStateRef = useRef<[T[] | undefined, boolean, Key[]] | undefined>(undefined);
+    if (!initialStateRef.current) {
+        const initState = typeof initialState === 'function' ? initialState(undefined) : initialState;
+        initialStateRef.current = prepareDataSet(initState);
+    }
 
-    const isFirstRender = useRef(true);
+    const [initPrepData, initIsPlain, initParentKeys] = initialStateRef.current;
+    const [data, setData] = useState<T[] | undefined>(initPrepData);
+    const [isPlain, setIsPlain] = useState(initIsPlain);
+    const [parentKeys, setParentKeys] = useState<Key[]>(initParentKeys);
 
-    /** Set dataSet if props changed */
-    useEffect(() => {
-        if (isFirstRender.current) {
-            isFirstRender.current = false;
-            return;
-        }
+    const setDataSet = useCallback(
+        (newState: React.SetStateAction<T[] | undefined>) => {
+            setData(oldState => {
+                const state = typeof newState === 'function' ? newState(oldState) : newState;
+                const [data, isPlain, parentKeys] = prepareDataSet(state);
+                setIsPlain(isPlain);
+                setParentKeys(parentKeys);
+                return data;
+            });
+        },
+        [prepareDataSet]
+    );
 
-        setDataSet(preparedDataSet); //user can set dataSet in props
-    }, [preparedDataSet]);
-
-    return [dataSet, setDataSet, isPlain, parentKeys];
+    return [data, setDataSet, isPlain, parentKeys];
 };
 
 /** Converts the given data by applying the dataMutator function to each node in the tree. */
-const useGetPreparedDataSet = <T extends Record<string, unknown>>(
-    dataSet: T[] | undefined,
-    fieldNames: { key: string; children: string; title: string },
+const usePrepareDataSet = <T extends Record<string, unknown>>(
+    fieldNames: {
+        key: string;
+        children: string;
+        title: string;
+    },
     prepareNodeFn?: (node: T) => T
 ) => {
-    return useMemo(
-        (): [T[] | undefined, boolean, Key[]] => {
+    const prevDataRef = useRef<T[] | undefined>(undefined);
+    const cachedResultRef = useRef<[T[] | undefined, boolean, Key[]]>([undefined, true, []]);
+
+    return useCallback(
+        (dataSet: T[] | undefined): [T[] | undefined, boolean, Key[]] => {
+            if (prevDataRef.current === dataSet) return cachedResultRef.current;
+            prevDataRef.current = dataSet;
 
             let isDataPlain = true;
             const parentKeys: Key[] = [];
@@ -52,8 +74,10 @@ const useGetPreparedDataSet = <T extends Record<string, unknown>>(
             };
 
             const updatedDataSet = recursive(dataSet);
-            return [updatedDataSet, isDataPlain, parentKeys];
+            const result: [T[] | undefined, boolean, Key[]] = [updatedDataSet, isDataPlain, parentKeys];
+            cachedResultRef.current = result;
+            return result;
         },
-        [dataSet, prepareNodeFn, fieldNames.children, fieldNames.key]
+        [prepareNodeFn, fieldNames.children, fieldNames.key]
     );
 };

@@ -134,7 +134,7 @@ const formProps: IDFormProps = {
         department: {
             component: TreeSelectField,
             label: 'Подразделения',
-            confirmDelete: true,
+            confirmDelete: false,
             dataSet: dataSet,
             editFormProps: editForm,
             onDelete: () => {

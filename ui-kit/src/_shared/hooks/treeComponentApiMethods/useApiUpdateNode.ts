@@ -13,7 +13,6 @@ export const useApiUpdateNode = (api: {
     selectNode: ITreeComponentApi['selectNode'];
     ensureNodeVisible: ITreeComponentApi['ensureNodeVisible'];
     moveNode: ITreeComponentApi['moveNode'];
-    prepareNode: ITreeComponentApi['prepareNode'];
 }): ITreeComponentApi['updateNode'] => {
     return useCallback(
         (node, target, opts, externalDataset) => {
@@ -25,7 +24,7 @@ export const useApiUpdateNode = (api: {
 
             const {idx, nodes} = findNodeIndex(dataSet, node[keyField] as Key, fieldNames);
             if (idx < 0 || !nodes) return;
-            nodes[idx] = api.prepareNode(node);
+            nodes[idx] = node;
 
             const targetNode = typeof target === 'object' ? target : api.getNode(target, dataSet);
             const parentNode = api.getParentNode(node[keyField] as Key, dataSet);

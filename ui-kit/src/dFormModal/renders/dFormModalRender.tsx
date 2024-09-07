@@ -36,6 +36,12 @@ interface IDFormModalRenderProps {
 export const DFormModalRender = ({buttons, formApi, formProps, modalProps, modalFormProps}: IDFormModalRenderProps): React.JSX.Element => {
     return (
         <Modal
+            /**
+            By default, modal zIndex = 1000. 
+            But we need zIndex = 1060 to be form above treeSelect dropdown, whose zIndex at the first level is 1050, and then grows to 1150 if it is on the form 
+            */
+            maskProps={{style: {zIndex: 1060}}}
+            wrapProps={{style: {zIndex: 1060}}}
             {...modalProps}
             // no override section
             modalId={formApi.getId()}

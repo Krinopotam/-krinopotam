@@ -138,6 +138,9 @@ export interface IButtonRowProps {
 
     /** Show icons only */
     iconsOnly?: boolean;
+    
+    /** Disable all buttons */
+    disableAll?: boolean;
 }
 
 export interface IButtonsRowApi {
@@ -151,6 +154,7 @@ export interface IButtonsRowApi {
     triggerClick: (buttonId: string) => void;
     activeTriggerClick: () => void;
     getProps: () => IButtonRowProps;
+    disableAll: (state:boolean) => void;
 }
 
 //endregion
@@ -202,7 +206,7 @@ const useSubscribeToKeyDownEvent = (props: IButtonRowProps, api: IButtonsRowApi)
     }, []);
 };
 const usePrepareButtons = (props: IButtonRowProps): [IFormButtons, (buttons: IFormButtons) => void] => {
-    const [curButtons, setCurButtons] = useState(prepareButtons(props.buttons, props.colorType));
+    const [curButtons, setCurButtons] = useState(prepareButtons(props.buttons, props));
 
     const setTimeoutCurButtons = (buttons: IFormButtons) => {
         setTimeout(() => {
@@ -212,9 +216,9 @@ const usePrepareButtons = (props: IButtonRowProps): [IFormButtons, (buttons: IFo
 
     //useUpdateButtonProps(setCurButtons)
     useEffect(() => {
-        const _buttons = prepareButtons(props.buttons, props.colorType);
+        const _buttons = prepareButtons(props.buttons, props);
         setCurButtons(_buttons);
-    }, [props.buttons, props.colorType]);
+    }, [props, props.buttons]);
 
     return [curButtons, setTimeoutCurButtons];
 };

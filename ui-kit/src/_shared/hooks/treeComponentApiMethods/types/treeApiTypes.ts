@@ -38,6 +38,11 @@ export interface ITreeComponentApi<TNode extends Record<string, unknown> = Recor
      * */
     getSelectedNodes: (externalDataset?: TNode[]) => TNode[] | undefined;
 
+    /** Get node selected status
+     * @param externalDataset - if not set, current data set will be used, if set, node will be searched in this data set
+     * */
+    isNodeSelected: (node:Key | TNode | undefined) => boolean;
+
     /**
      * Select node
      * @param node - node or key
@@ -184,7 +189,7 @@ export interface ITreeComponentApi<TNode extends Record<string, unknown> = Recor
             select?: 'prev' | 'next';
         },
         externalDataset?: TNode[]
-    ) => TNode[] | undefined;
+    ) => void;
 
     /**
      * Expand parent nodes
@@ -231,9 +236,6 @@ export interface ITreeComponentApi<TNode extends Record<string, unknown> = Recor
      * @param externalDataset - if not set, search will be performed in current data set. If set - in this data set
      */
     getPrevNode: (node: TNode, opts?: IFindNodeOptions, externalDataset?: TNode[]) => TNode | undefined;
-
-    /** Mutate node supplementing it with the necessary properties specified in the component parameters */
-    prepareNode: (node: TNode) => TNode;
 
     /** Check if data set is plain list (has no children) */
     isDataPlainList: () => boolean;

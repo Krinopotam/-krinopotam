@@ -13,7 +13,7 @@ export const DefaultDropdownRender = ({treeApi, children}: {treeApi: ITreeSelect
 
     return (
         <div className={plainList ? 'tree-select-plain' : undefined}>
-            <ButtonsRowWrapper style={{display: 'flex', flexDirection: 'column', ...allProps.buttonsRowWrapperStyle}}>
+            <ButtonsRowWrapper style={{display: 'flex', flexDirection: 'column', ...allProps.buttonsRowWrapperStyle}} noKeepFocus>
                 <MenuRow treeApi={treeApi} treeProps={allProps} />
                 {children}
                 <DropdownStatus fetching={fetching} error={fetchError} minSymbols={minSymbols} plainList={plainList} />

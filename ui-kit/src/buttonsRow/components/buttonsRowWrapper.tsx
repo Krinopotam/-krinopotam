@@ -15,6 +15,8 @@ export interface IButtonRowWrapperRemoteCallbacks {
 
 export interface IButtonRowWrapperProps extends React.HTMLAttributes<HTMLDivElement> {
     remoteCallbacksRef?: React.RefObject<IButtonRowWrapperRemoteCallbacks>;
+    /** By default, button wrapper tries to keep focus. Set it to true to disable  */
+    noKeepFocus?: boolean
 }
 
 export const ButtonsRowWrapper = (props: IButtonRowWrapperProps): React.JSX.Element => {
@@ -35,11 +37,11 @@ export const ButtonsRowWrapper = (props: IButtonRowWrapperProps): React.JSX.Elem
     }
 
     if (props.remoteCallbacksRef?.current && typeof props.remoteCallbacksRef?.current === 'object') {
-        props.remoteCallbacksRef.current.onParentComponentRendered = () => ensureWrapperFocus(wrapperRef.current);
+        props.remoteCallbacksRef.current.onParentComponentRendered = () => ensureWrapperFocus(wrapperRef.current, props);
     }
 
     setTimeout(() => { //WORKAROUND: MessageBox cannot tell when it is open. But when opening the MessageBox we need to set focus to the Wrapper for the arrow controls to work
-        ensureWrapperFocus(wrapperRef.current);
+        ensureWrapperFocus(wrapperRef.current, props);
     }, 0)
 
     const wrapperRef = useRef<HTMLDivElement>(null)
@@ -64,8 +66,8 @@ export const ButtonsRowWrapper = (props: IButtonRowWrapperProps): React.JSX.Elem
 // noinspection JSUnusedGlobalSymbols
 export default ButtonsRowWrapper;
 
-const ensureWrapperFocus = (wrapper: HTMLElement | null) => {
-    if (!wrapper) return;
+const ensureWrapperFocus = (wrapper: HTMLElement | null, props: IButtonRowWrapperProps) => {
+    if (!wrapper || props.noKeepFocus) return;
     if (IsDescendant(wrapper, document.activeElement)) return;
     wrapper.focus();
 }

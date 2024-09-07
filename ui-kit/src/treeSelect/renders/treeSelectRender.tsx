@@ -44,7 +44,7 @@ export const TreeSelectRender = ({
     const onSearch = useOnSearch(treeApi);
     const filterTreeNode = useOnFilterTreeNode(treeApi);
     const plainList = treeApi.isDataPlainList();
-    console.log(expandedKeys);
+    console.log(expandedKeys, treeApi.getIsOpen());
     return (
         <>
             <AntdTreeSelect
@@ -67,6 +67,7 @@ export const TreeSelectRender = ({
                 treeDefaultExpandAll={allProps.defaultExpandAll}
                 treeDefaultExpandedKeys={allProps.defaultExpandedKeys}
                 treeExpandedKeys={expandedKeys}
+                open={treeApi.getIsOpen()}
                 //loadData={onLoadData}
                 dropdownStyle={dropdownStyle}
                 /** --- Callbacks --------------- */

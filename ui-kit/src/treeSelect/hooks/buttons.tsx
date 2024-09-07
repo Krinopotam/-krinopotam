@@ -4,7 +4,7 @@ import {ITreeSelectApi, ITreeSelectNode, ITreeSelectProps} from '@src/treeSelect
 import {ITreeSelectButton, ITreeSelectButtons} from '@src/treeSelect/types/types';
 import {IDFormDataSet} from '@src/dForm';
 import {useTranslate} from '@src/_shared/hooks/useTranslate';
-import {translations} from '@src/treeSelect/translations/translations';
+
 import {
     defaultButtonClone,
     defaultButtonCreate,
@@ -14,6 +14,7 @@ import {
     defaultButtonView,
     defaultHeaderLabel,
 } from '@src/_shared/hooks/buttons/defaultButtonsProps';
+import {translations} from '@src/treeSelect/translations/translations';
 
 export const useInitButtons = (api: ITreeSelectApi, treeProps: ITreeSelectProps) => {
     api.getButtonsApi().refreshButtons = useRefreshButtons();
@@ -226,7 +227,7 @@ const useGetDeleteButton = (
             disabled: !activeNode,
             onClick: () => {
                 if (!activeNode) return;
-                api.removeNode(activeNode, {select: 'next'});
+                api.deleteNode(activeNode);
             },
         } satisfies ITreeSelectButton;
     }, [treeProps.editFormProps, treeProps.readOnly, treeProps.editButtons?.delete, isGroup, t, activeNode, api]);
@@ -242,7 +243,5 @@ const getDataSet = (node: ITreeSelectNode) => {
 const useT = (api: ITreeSelectApi) => {
     const treeProps = api.getProps();
     const t = useTranslate(treeProps.language, translations, treeProps.translation);
-    t('cream')
-    t('create')
     return useMemo(() => t, [t]);
 };

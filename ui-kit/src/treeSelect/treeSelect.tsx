@@ -1,7 +1,7 @@
 import React, {useEffect, useMemo, useState} from 'react';
 import {SplitObject} from '@krinopotam/js-helpers';
 import {TreeSelectRender} from '@src/treeSelect/renders/treeSelectRender';
-import {useInitApi} from '@src/treeSelect/hooks/api';
+import {useInitApi} from '@src/treeSelect/hooks/api/api';
 import {useGetActualProps} from '@krinopotam/common-hooks';
 
 import {IAntTreeSelectProps, ITreeSelectApi, ITreeSelectBaseProps, ITreeSelectProps} from '@src/treeSelect/types/types';
@@ -61,6 +61,7 @@ const useSplitProps = (props: ITreeSelectProps) => {
             headerLabel: true,
             language: true,
             translation: true,
+            groupsMode: true,
         });
 
         return result[1];

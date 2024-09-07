@@ -1,7 +1,6 @@
 import {IButtonRowProps, IFormButton, IFormButtons} from '@src/buttonsRow';
-import {IColorType} from '@src/button/button';
 
-export const prepareButtons = (buttons: IFormButtons | undefined, rowColorType?: IColorType) => {
+export const prepareButtons = (buttons: IFormButtons | undefined, props: IButtonRowProps) => {
     const clonedButtons = buttons ? {...buttons} : {};
     const leftButtons: IFormButtons = {};
     const centerButtons: IFormButtons = {};
@@ -14,7 +13,8 @@ export const prepareButtons = (buttons: IFormButtons | undefined, rowColorType?:
         if (!button) continue;
         if (!button.type) button.type = 'button';
         if (!button.position) button.position = 'right';
-        if (rowColorType) button.colorType = rowColorType;
+        if (props.disableAll) button.disabled = true;
+        if (props.colorType) button.colorType = props.colorType;
 
         if (button.position === 'left') leftButtons[key] = button;
         else if (button.position === 'center') centerButtons[key] = button;

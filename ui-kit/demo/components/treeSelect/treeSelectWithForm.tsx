@@ -3,7 +3,7 @@
 import React from 'react';
 import {DForm, IDFormProps} from '@src/dForm';
 import {IDFormModalProps} from '@src/dFormModal';
-import {InputField} from '@src/dForm/fields/input/inputField';
+import {IInputFieldProps, InputField} from '@src/dForm/fields/input/inputField';
 import {ITreeSelectFieldProps, TreeSelectField} from '@src/dForm/fields/treeSelect/treeSelectField';
 
 const dataSet = [
@@ -113,7 +113,8 @@ const editForm: IDFormModalProps = {
     confirmChanges: true,
     height: 200,
     fieldsProps: {
-        title: {component: InputField, label: 'Подразделение'},
+        title: {component: InputField, label: 'Подразделение'} satisfies IInputFieldProps,
+        combo:{component: TreeSelectField, label: 'Combo'} satisfies ITreeSelectFieldProps,
     },
 };
 

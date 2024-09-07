@@ -8,7 +8,6 @@ export const useApiAddNode = (api: {
     getFieldNames: ITreeComponentApi['getFieldNames'];
     getNode: ITreeComponentApi['getNode'];
     getParentNode: ITreeComponentApi['getParentNode'];
-    prepareNode: ITreeComponentApi['prepareNode'];
     moveNode: ITreeComponentApi['moveNode'];
     ensureNodeVisible: ITreeComponentApi['ensureNodeVisible'];
     selectNode: ITreeComponentApi['selectNode'];
@@ -32,7 +31,7 @@ export const useApiAddNode = (api: {
                 if (!targetNode[childrenField]) targetNode[childrenField] = targetList;
                 else targetList = targetNode[childrenField] as Record<string, unknown>[];
                 const arrPos = position === 'insideTop' ? 'top' : 'bottom';
-                AddElementToArray(targetList, api.prepareNode(node), undefined, arrPos, false);
+                AddElementToArray(targetList, node, undefined, arrPos, false);
             } else {
                 if (targetNode) {
                     const parentNode = api.getParentNode(targetNode[keyField] as Key, dataSet);
@@ -40,8 +39,8 @@ export const useApiAddNode = (api: {
                     else targetList = dataSet;
                 }
 
-                if (position === 'above') AddElementToArray(targetList, api.prepareNode(node), targetNode, 'above', false);
-                else if (position === 'below') AddElementToArray(targetList, api.prepareNode(node), targetNode, 'below', false);
+                if (position === 'above') AddElementToArray(targetList, node, targetNode, 'above', false);
+                else if (position === 'below') AddElementToArray(targetList,node, targetNode, 'below', false);
             }
 
             if (!externalDataset) api.setDataSet(dataSet);

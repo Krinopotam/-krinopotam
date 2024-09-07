@@ -8,12 +8,12 @@ export const useApi = (props: IButtonRowProps, curButtons: IFormButtons, setCurB
     return useMemo(() => {
         api.buttons = buttons => {
             if (typeof buttons === 'undefined') return curButtons;
-            setCurButtons(prepareButtons(buttons, props.colorType));
+            setCurButtons(prepareButtons(buttons, props));
             return buttons;
         };
 
         api.updateButtons = buttons => {
-            const updatedButtons = prepareButtons(MergeObjects(curButtons, buttons), props.colorType);
+            const updatedButtons = prepareButtons(MergeObjects(curButtons, buttons), props);
             setCurButtons(updatedButtons);
             return updatedButtons;
         };
@@ -38,7 +38,7 @@ export const useApi = (props: IButtonRowProps, curButtons: IFormButtons, setCurB
                 setCurButtons({...buttons}); //Workaround to avoid error: Cannot update a component while rendering a different component.
             }
 
-            return (typeof button.loading === 'function') ? button.loading(buttonId, button, props.context) : !!button.loading;
+            return typeof button.loading === 'function' ? button.loading(buttonId, button, props.context) : !!button.loading;
         };
 
         api.disabled = (buttonId: string, disabled?: IFormButton['disabled']): boolean => {
@@ -46,12 +46,20 @@ export const useApi = (props: IButtonRowProps, curButtons: IFormButtons, setCurB
             const button = buttons[buttonId];
             if (!button) return false;
 
-            if (typeof disabled !== 'undefined') {
-                button.disabled = disabled;
-                setCurButtons({...buttons}); //Workaround to avoid error: Cannot update a component while rendering a different component.
-            }
+            if (typeof disabled === 'function') button.disabled = disabled;
+            else button.disabled = !!props.disableAll || disabled === true;
+            setCurButtons({...buttons}); //Workaround to avoid error: Cannot update a component while rendering a different component.
 
-            return (typeof button?.disabled === 'function') ? button.disabled(buttonId, button, props.context) : !!button.disabled;
+            return typeof button?.disabled === 'function' ? button.disabled(buttonId, button, props.context) : button.disabled;
+        };
+
+        api.disableAll = (state: boolean) => {
+            const buttons = {...curButtons};
+
+            for (const buttonId in buttons) {
+                buttons[buttonId]!.disabled = state;
+            }
+            setCurButtons({...buttons});
         };
 
         api.hidden = (buttonId: string, hidden?: IFormButton['hidden']): boolean => {
@@ -64,19 +72,19 @@ export const useApi = (props: IButtonRowProps, curButtons: IFormButtons, setCurB
                 setCurButtons({...buttons}); //Workaround to avoid error: Cannot update a component while rendering a different component.
             }
 
-            return (typeof button.hidden === 'function') ? button.hidden(buttonId, button, props.context) : !!button.hidden;
+            return typeof button.hidden === 'function' ? button.hidden(buttonId, button, props.context) : !!button.hidden;
         };
 
         api.triggerClick = (buttonId: string) => {
             const button = curButtons[buttonId];
-            const disabled = (typeof button?.disabled === 'function') ? button.disabled(buttonId, button, props.context) : !!button?.disabled;
-            const loading = (typeof button?.loading === 'function') ? button.loading(buttonId, button, props.context) : !!button?.loading;
-            const hidden = (typeof button?.hidden === 'function') ? button.hidden(buttonId, button, props.context) : !!button?.hidden;
+            const disabled = typeof button?.disabled === 'function' ? button.disabled(buttonId, button, props.context) : !!button?.disabled;
+            const loading = typeof button?.loading === 'function' ? button.loading(buttonId, button, props.context) : !!button?.loading;
+            const hidden = typeof button?.hidden === 'function' ? button.hidden(buttonId, button, props.context) : !!button?.hidden;
 
             if (!button || disabled || loading || hidden) return;
 
             if (button.type === 'link' && button.href) window.open(button.href, button.target ?? '_blank');
-            else if ((!button.type || button.type === 'button' || button.type==='hotkey') && button.onClick) button.onClick(buttonId, button, props.context);
+            else if ((!button.type || button.type === 'button' || button.type === 'hotkey') && button.onClick) button.onClick(buttonId, button, props.context);
         };
 
         api.activeTriggerClick = () => {
@@ -93,4 +101,3 @@ export const useApi = (props: IButtonRowProps, curButtons: IFormButtons, setCurB
         return api;
     }, [api, curButtons, setCurButtons, props]);
 };
-
