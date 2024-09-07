@@ -7,8 +7,12 @@ export const useApiExpandParentNodes = (api: {
     getFieldNames: ITreeComponentApi['getFieldNames'];
 }): ITreeComponentApi['expandParentNodes'] => {
     return useCallback(
-        (key, externalDataset) => {
+        (node, externalDataset) => {
+            const data = externalDataset ?? api.getDataSet();
+            if (!data) return;
             const fieldNames = api.getFieldNames();
+            const key:Key = typeof node === 'object' ? node[fieldNames.key] as Key : node;
+
             const recursive = (nodes: Record<string, unknown>[]) => {
                 for (const node of nodes) {
                     if (node[fieldNames.key] === key) return true;
@@ -23,10 +27,6 @@ export const useApiExpandParentNodes = (api: {
                     }
                 }
             };
-
-            const data = externalDataset ?? api.getDataSet();
-
-            if (!data) return;
             recursive(data);
         },
         [api]

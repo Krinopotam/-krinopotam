@@ -14,7 +14,7 @@ export const useApiAddNode = (api: {
     selectNode: ITreeComponentApi['selectNode'];
 }): ITreeComponentApi['addNode'] => {
     return useCallback(
-        (node, targetKey, position, opts, externalDataset) => {
+        (node, target, position, opts, externalDataset) => {
             if (!node) return;
 
             const fieldNames = api.getFieldNames();
@@ -22,7 +22,7 @@ export const useApiAddNode = (api: {
             const childrenField = fieldNames.children;
 
             const dataSet = externalDataset ?? CloneObject(api.getDataSet() ?? []);
-            const targetNode = api.getNode(targetKey, dataSet);
+            const targetNode = typeof target === 'object' ? target : api.getNode(target, dataSet);
             if (!targetNode || ((position === 'insideTop' || position === 'insideBottom') && targetNode?.isLeaf)) position = 'below'; //we can't add node into the leaf node or undefined node
 
             let targetList: Record<string, unknown>[] = [];

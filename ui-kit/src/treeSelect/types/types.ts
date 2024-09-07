@@ -58,6 +58,9 @@ export interface ITreeSelectBaseProps {
     /** Customize selected node label render */
     labelRender?: (treeNode: ITreeSelectNode) => React.ReactNode;
 
+    /** Groups only has children. Group is node which has no isLeaf:true property */
+    groupsMode?: boolean;
+
     /** Value */
     value?: ITreeSelectValue;
 
