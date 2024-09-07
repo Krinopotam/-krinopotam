@@ -1,3 +1,5 @@
+import {AnyType} from "@krinopotam/service-types";
+
 export {DForm} from './dForm';
 export type {IDFormValidationRules, IDFormMode, IDFormProps, IDFormDataSet, IDFormDataSourcePromise, IDFormCallbacks, IDFormApi} from './types/dFormTypes';
 
@@ -6,3 +8,10 @@ export type {IDFormBaseCallbacks, IDFormModelCallbacks, IDFormSubmitResultObject
 
 export {BaseValidator} from './validators/baseValidator';
 export type {IRuleType, IRuleCustom, IRuleDate, IRuleFile, IRuleNumber, IRuleString, IRuleObject} from './validators/baseValidator';
+
+/** Tool for getting field properties */
+export type IGetFieldProps<T> = T extends {
+        new (fieldName: string, fieldProps: infer P, model: AnyType, parent: AnyType): AnyType;
+    }
+    ? P
+    : never;
