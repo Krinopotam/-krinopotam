@@ -3,8 +3,7 @@
 import React from 'react';
 import {DForm, IDFormProps} from '@src/dForm';
 import {IDFormModalApi} from '@src/dFormModal';
-import {ITreeSelectFieldProps, TreeSelectField} from "@src/dForm/fields/treeSelect/treeSelectField";
-
+import {ITreeSelectFieldProps, TreeSelectField} from '@src/dForm/fields/treeSelect/treeSelectField';
 
 const departments = [
     {
@@ -118,23 +117,30 @@ const formProps: IDFormProps = {
     confirmChanges: true,
     fieldsProps: {
         department: {
-            component: TreeSelectField, label: 'Департамент', fetchMode: 'onUse', onDataFetch: () => {
+            component: TreeSelectField,
+            label: 'Департамент',
+            fetchMode: 'onUse',
+            onDataFetch: () => {
                 return new Promise((resolve, reject) => {
                     setTimeout(() => {
                         if (Math.random() < 0.0) reject({message: 'Ошибка загрузки данных', code: 400});
                         else resolve({data: departments});
                     }, 2000);
-                })
+                });
             },
-            onValueChanged:(value, prevValue, field)=>{
-                const division = field.getModel().getField('division')
-                division.setValue(null)
-
-            }
+            onValueChanged: (value, prevValue, field) => {
+                const division = field.getModel().getField('division');
+                division.setValue(null);
+            },
         } as ITreeSelectFieldProps,
         division: {
-            component: TreeSelectField, label: 'Управления', fetchMode: 'onUse', dependsOn: ['department'], noCacheFetchedData: true, onDataFetch: () => {
-                return new Promise((resolve) => {
+            component: TreeSelectField,
+            label: 'Управления',
+            fetchMode: 'onUse',
+            dependsOn: ['department'],
+            noCacheFetchedData: true,
+            onDataFetch: () => {
+                return new Promise(resolve => {
                     setTimeout(() => {
                         const departmentValue = formApi.model.getField('department').getValue(); //we can get the current department value and use it for server request
 
@@ -149,12 +155,11 @@ const formProps: IDFormProps = {
                         resolve({data: newDataSet});
                     }, 2000);
                 });
-            }
-        } ,
+            },
+        } satisfies ITreeSelectFieldProps,
     },
-    buttons: null
-}
-
+    buttons: null,
+};
 
 export const TreeSelectDependedAsync = (): React.JSX.Element => {
     return (

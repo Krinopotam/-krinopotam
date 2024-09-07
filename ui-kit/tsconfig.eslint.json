@@ -1,13 +1,15 @@
 {
   "compilerOptions": {
-    "types": ["@types/node"],
+    "types": [
+      "@types/node"
+    ],
     "noEmit": true,
     "allowJs": true
   },
-  
   "extends": "./tsconfig.json",
   "include": [
     "vite.config.ts",
-	"./demo/**/*"
+    "./demo/**/*",
+    "./stories/**/*"
   ]
 }

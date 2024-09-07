@@ -2,9 +2,9 @@ import React from 'react';
 import {DForm} from '@src/dForm';
 import {IInputFieldProps, InputField} from '@src/dForm/fields/input/inputField';
 import {CustomField} from '@src/dForm/fields/custom/customField';
-import {IDFormFieldProps} from "@src/dForm/fields";
+import {IAnyFieldProps} from "@src/dForm/fields/base";
 
-type IComponent = IDFormFieldProps;
+type IComponent = IAnyFieldProps;
 
 /** DForm Custom field auto-updating */
 export const AutoUpdateCustomField = (props: IComponent): React.JSX.Element => (

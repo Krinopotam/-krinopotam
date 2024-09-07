@@ -1,7 +1,7 @@
 import {BaseField, IBaseFieldProps} from '@src/dForm/fields/base/baseField';
 import React from 'react';
-import {IDFormFieldsProps} from '@src/dForm/fields';
 import {InlineGroupRender} from '@src/dForm/fields/inlineGroup/inlineGroupRender';
+import {IDFormFieldsProps} from "@src/dForm";
 
 export interface IInlineGroupFieldProps extends IBaseFieldProps<InlineGroupField> {
     /** Inline fields properties */

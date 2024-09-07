@@ -1,7 +1,8 @@
 import {BaseField, IBaseFieldProps} from '@src/dForm/fields/base/baseField';
 import {TabsFieldRender} from '@src/dForm/fields/tabs/tabsFieldRender';
 import React from 'react';
-import {IDFormFieldsProps} from '@src/dForm/fields';
+
+import {IDFormFieldsProps} from "@src/dForm";
 
 export interface ITabsFieldProps extends IBaseFieldProps<TabsField> {
     /** Tabs fields properties */

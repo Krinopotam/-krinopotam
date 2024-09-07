@@ -4,7 +4,7 @@ import React from 'react';
 import {DForm, IDFormProps} from '@src/dForm';
 import {ITreeSelectSourcePromise} from '@src/treeSelect'
 import {CloneObject} from "@krinopotam/js-helpers";
-import {TreeSelectField} from "@src/dForm/fields/treeSelect/treeSelectField";
+import {ITreeSelectFieldProps, TreeSelectField} from "@src/dForm/fields/treeSelect/treeSelectField";
 
 
 /*Description Start*/
@@ -157,7 +157,7 @@ const formProps: IDFormProps = {
             component: TreeSelectField, label: 'Подразделения', fetchMode: 'onUse', noCacheFetchedData: true, minSearchLength: 1, onDataFetch: (search:string) => {
                 return asyncFetch(search) as ITreeSelectSourcePromise;
             }
-        } ,
+        } satisfies ITreeSelectFieldProps,
     },
     buttons: null,
 };

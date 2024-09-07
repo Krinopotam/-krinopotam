@@ -1,17 +1,20 @@
-import {DModel, IDFormBaseCallbacks, IRuleType} from "@src/dForm";
-import {IButtonsRowApi, IFormButtons} from "@src/buttonsRow";
-import React, {CSSProperties, Key} from "react";
-import {IColorType} from "@src/button";
-import {ColProps} from "antd";
-import {FormLabelAlign} from "antd/es/form/interface";
-import {RequiredMark} from "antd/es/form/Form";
-import {IDFormFieldsProps} from "@src/dForm/fields";
-import {translations} from "@src/dForm/translations/translations";
-import {IBaseComponentApi} from "@src/_shared/hooks/componentApiMethods/types/apiTypes";
+import {DModel, IDFormBaseCallbacks, IRuleType} from '@src/dForm';
+import {IButtonsRowApi, IFormButtons} from '@src/buttonsRow';
+import React, {CSSProperties, Key} from 'react';
+import {IColorType} from '@src/button';
+import {ColProps} from 'antd';
+import {FormLabelAlign} from 'antd/es/form/interface';
+import {RequiredMark} from 'antd/es/form/Form';
+import {translations} from '@src/dForm/translations/translations';
+import {IBaseComponentApi} from '@src/_shared/hooks/componentApiMethods/types/apiTypes';
+import {IAnyFieldProps} from '@src/dForm/fields/base';
 
 export type IDFormValidationRules = Record<string, IRuleType[]>;
 
 export type IDFormMode = 'view' | 'create' | 'update' | 'clone' | 'delete';
+
+/** Fields properties collection */
+export type IDFormFieldsProps = Record<string, IAnyFieldProps>;
 
 export interface IDFormProps extends IDFormCallbacks {
     /** A mutable object to merge with these controls api */

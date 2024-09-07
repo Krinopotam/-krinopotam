@@ -120,7 +120,7 @@ const formProps: IDFormProps = {
             onValueChanged: (value, _prevValue, field) => {
                 let newDataSet: ITreeSelectFieldProps['dataSet'];
                 if (!value) newDataSet = [];
-                else if (value=== '01') newDataSet = divisions1;
+                else if (value === '01') newDataSet = divisions1;
                 else if (value === '02') newDataSet = divisions2;
                 else if (value === '03') newDataSet = divisions3;
                 else newDataSet = [];
@@ -130,8 +130,12 @@ const formProps: IDFormProps = {
                 division.updateProps({dataSet: newDataSet});
                 division.setValue(null);
             },
-        } as ITreeSelectFieldProps,
-        division: {component: TreeSelectField, label: 'Управления', dependsOn: ['department']},
+        } satisfies ITreeSelectFieldProps,
+        division: {
+            component: TreeSelectField,
+            label: 'Управления',
+            dependsOn: ['department'],
+        } satisfies ITreeSelectFieldProps,
     },
 
     buttons: null,

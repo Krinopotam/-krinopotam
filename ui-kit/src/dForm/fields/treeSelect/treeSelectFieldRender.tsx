@@ -2,7 +2,7 @@ import React, {CSSProperties, useCallback, useEffect, useMemo, useState, useSync
 import {ITreeSelectFieldOnlyProps, TreeSelectField} from '@src/dForm/fields/treeSelect/treeSelectField';
 import {IAntTreeSelectProps, ITreeSelectApi, ITreeSelectProps, ITreeSelectValue, TreeSelect} from '@src/treeSelect';
 import {SplitObject} from '@krinopotam/js-helpers';
-import {IDFormFieldProps} from '@src/dForm/fields';
+import {IAnyFieldProps} from "@src/dForm/fields/base";
 
 export const TreeSelectFieldRender = ({field}: { field: TreeSelectField }): React.JSX.Element => {
     useSyncExternalStore(field.subscribe.bind(field), field.getSnapshot.bind(field));
@@ -41,7 +41,7 @@ export const TreeSelectFieldRender = ({field}: { field: TreeSelectField }): Reac
     );
 };
 
-const useSplitTreeSelectProps = (props: IDFormFieldProps) => {
+const useSplitTreeSelectProps = (props: IAnyFieldProps) => {
     return useMemo((): ITreeSelectProps => {
         const result = SplitObject<ITreeSelectFieldOnlyProps, ITreeSelectProps>(props, {
             autoFocus: true,

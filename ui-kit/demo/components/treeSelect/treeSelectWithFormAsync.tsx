@@ -3,8 +3,8 @@
 import React from 'react';
 import {DForm, IDFormProps} from '@src/dForm';
 import {IDFormModalProps} from '@src/dFormModal';
-import {InputField} from "@src/dForm/fields/input/inputField";
-import {TreeSelectField} from "@src/dForm/fields/treeSelect/treeSelectField";
+import {InputField} from '@src/dForm/fields/input/inputField';
+import {ITreeSelectFieldProps, TreeSelectField} from '@src/dForm/fields/treeSelect/treeSelectField';
 
 const dataSet = [
     {
@@ -145,7 +145,7 @@ const formProps: IDFormProps = {
                     }, 2000);
                 });
             },
-        } ,
+        } satisfies ITreeSelectFieldProps,
     },
     buttons: null,
 };
