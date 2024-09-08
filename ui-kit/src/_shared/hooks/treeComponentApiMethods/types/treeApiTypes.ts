@@ -178,20 +178,6 @@ export interface ITreeComponentApi<TNode extends Record<string, unknown> = Recor
     ) => TNode[] | undefined;
 
     /**
-     * Delete node from database and  data set
-     * @param key - node key
-     * @param opts  - options
-     * @param externalDataset - if not set, node will be deleted in current data set. If set -  in this data set, component will not be updated
-     */
-    deleteNode: (
-        key: Key | TNode,
-        opts?: {
-            select?: 'prev' | 'next';
-        },
-        externalDataset?: TNode[]
-    ) => void;
-
-    /**
      * Expand parent nodes
      * @param node - node pr key
      * @param externalDataset - if not set, node will be expanded in current data set. If set - in this data set, component will not be updated

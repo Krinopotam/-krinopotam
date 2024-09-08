@@ -63,7 +63,6 @@ import {useApiSetIsAllFetched} from '@src/treeSelect/hooks/api/useApiSetIsAllFet
 import {useApiGetMinSymbols} from '@src/treeSelect/hooks/api/useApiGetMinSymbols';
 import {useApiSetMinSymbols} from '@src/treeSelect/hooks/api/useApiSetMinSymbols';
 import {useApiFetchData} from '@src/treeSelect/hooks/api/useApiFetchData';
-import {useApiDeleteNode} from '@src/treeSelect/hooks/api/useApiDeleteNode';
 
 export const useInitApi = ({
     props,
@@ -130,8 +129,6 @@ export const useInitApi = ({
     api.removeNode = useApiRemoveNode(api);
     api.moveNode = useApiMoveNode(api);
     api.ensureNodeVisible = useApiEnsureNodeVisible(api);
-
-    api.deleteNode = useApiDeleteNode(api);
 
     /** Component own api methods */
     api.treeSelectRef = useRef(null);

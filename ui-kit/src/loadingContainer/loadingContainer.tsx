@@ -31,7 +31,7 @@ export const LoadingContainer = ({
     errorStyle,
     noFullHeight,
 }: ILoadingContainerProps): React.JSX.Element => {
-    const tip = caption ?? 'Пожалуйста, подождите...';
+    const tip = caption ?? 'Please wait...';
     return (
         <LoadingError errorMessage={error?.message} retryHandler={retryHandler} style={errorStyle}>
             {

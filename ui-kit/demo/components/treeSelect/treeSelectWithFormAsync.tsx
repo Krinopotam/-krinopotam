@@ -134,13 +134,13 @@ const formProps: IDFormProps = {
         department: {
             component: TreeSelectField,
             label: 'Подразделения',
-            confirmDelete: false,
+            confirmDelete: true,
             dataSet: dataSet,
             editFormProps: editForm,
             onDelete: () => {
                 return new Promise((resolve, reject) => {
                     setTimeout(() => {
-                        if (Math.random() < 0.3) reject({message: 'Ошибка удаления строк', code: 400});
+                        if (Math.random() < 0.3) reject({message: 'Случайная ошибка удаления строк', code: 400});
                         else resolve({data: {result: 'OK'}});
                     }, 2000);
                 });

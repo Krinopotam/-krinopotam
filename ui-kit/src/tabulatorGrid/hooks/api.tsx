@@ -18,7 +18,8 @@ import {useApiIsMounted} from '@src/_shared/hooks/componentApiMethods/useApiIsMo
 import {useApiGetProps} from '@src/_shared/hooks/componentApiMethods/useApiGetProps';
 import {useApiSetProps} from '@src/_shared/hooks/componentApiMethods/useApiSetProps';
 import {useApiUpdateProps} from '@src/_shared/hooks/componentApiMethods/useApiUpdateProps';
-import {IDFormModalApi} from "@src/dFormModal";
+import {IDFormModalApi} from '@src/dFormModal';
+import {ErrorMessage} from '@src/errorMessage';
 
 export const useInitGridApi = ({
     props,
@@ -498,14 +499,7 @@ const useApiDeleteRows = (gridApi: IGridApi, gridProps: IGridProps): IGridApi['d
                             MessageBox.alert({
                                 language: gridProps.language,
                                 title: t('error'),
-                                content: (
-                                    <>
-                                        <p>
-                                            <b>{error.message}</b>
-                                        </p>
-                                        {error.stack && IsDebugMode() ? <p>{error.stack}</p> : ''}
-                                    </>
-                                ),
+                                content: <ErrorMessage error={error} />,
                                 colorType: 'danger',
                             });
                         });

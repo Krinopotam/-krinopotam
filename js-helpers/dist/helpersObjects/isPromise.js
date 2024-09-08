@@ -1,3 +1,6 @@
 export const IsPromise = (val) => {
-    return !!val && Object.prototype.toString.call(val) === '[object Promise]';
+    return !!val && (val instanceof Promise
+        || val.constructor === Promise
+        || Object.prototype.toString.call(val) === '[object Promise]'
+        || typeof val.then === 'function');
 };

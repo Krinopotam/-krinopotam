@@ -5,8 +5,9 @@ import {DeleteOutlined, EditOutlined, PlusOutlined} from '@ant-design/icons';
 import {IDFormModalApi} from '@src/dFormModal';
 import {MessageBoxApi, MessageBox} from '@src/messageBox';
 import {IError} from '@krinopotam/service-types';
-import {IsDebugMode} from "@krinopotam/common-hooks";
-import {IFormButtons} from "@src/buttonsRow";
+import {IsDebugMode} from '@krinopotam/common-hooks';
+import {IFormButtons} from '@src/buttonsRow';
+import {ErrorMessage} from '@src/errorMessage';
 
 /** Generate buttons */
 export const useInitButtons = (api: ITreeSelectApi, formApi: IDFormModalApi) => {
@@ -50,7 +51,7 @@ export const useInitButtons = (api: ITreeSelectApi, formApi: IDFormModalApi) => 
 
 const deleteHandler = (api: ITreeSelectApi) => {
     const treeProps = api.getProps();
-    const buttonsApi = api.getButtonsApi()
+    const buttonsApi = api.getButtonsApi();
     const selectedNodes = api.getSelectedNodes();
     if (!selectedNodes?.length) return;
 
@@ -84,14 +85,7 @@ const deleteHandler = (api: ITreeSelectApi) => {
                         buttonsApi.disabled('edit', false);
                     } else messageBox?.destroy();
                     MessageBox.alert({
-                        content: (
-                            <>
-                                <p>
-                                    <b>{error.message}</b>
-                                </p>
-                                {error.stack && IsDebugMode() ? <p>{error.stack}</p> : ''}
-                            </>
-                        ),
+                        content: <ErrorMessage error={error} />,
                         colorType: 'danger',
                     });
                 });

@@ -6,6 +6,7 @@ import {IDFormApi, IDFormDataSet, IDFormModelCallbacks, IDFormProps} from '@src/
 import {Collapse} from 'antd';
 import {translations} from '@src/dForm/translations/translations';
 import {useTranslate} from '@src/_shared/hooks/useTranslate';
+import {ErrorMessage} from '@src/errorMessage';
 
 /**
  * Preparing callbacks for redirection to the model
@@ -113,14 +114,7 @@ export const useModelCallbacks = (formProps: IDFormProps, formApi: IDFormApi) =>
                 MessageBox.alert({
                     language: formProps.language,
                     title: t('error'),
-                    content: (
-                        <>
-                            <p>
-                                <b>{error.message}</b>
-                            </p>
-                            {error.stack && IsDebugMode() && <Collapse items={[{key: '1', label: 'Stack', children: <p>{error.stack}</p>}]} />}
-                        </>
-                    ),
+                    content: <ErrorMessage error={error} />,
                     colorType: 'danger',
                 });
             },

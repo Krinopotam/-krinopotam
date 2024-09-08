@@ -1,1 +1,1 @@
-export declare const IsPromise: (val: unknown) => boolean;
+export declare const IsPromise: <T>(val: unknown) => val is Promise<T>;

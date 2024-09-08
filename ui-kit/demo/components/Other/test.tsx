@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useMemo, useState} from 'react';
 import { TreeSelect } from 'antd';
 import type { TreeSelectProps } from 'antd';
 
@@ -67,6 +67,7 @@ export const Test: React.FC = () => {
         console.log('onPopupScroll', e);
     };
 
+    console.log('Rernder')
     return (
         <TreeSelect
             //showSearch={true}
@@ -75,7 +76,7 @@ export const Test: React.FC = () => {
             dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
             placeholder="Please select"
             allowClear
-
+            dropdownRender={menu => <DropdownRender>{menu}</DropdownRender>}
             treeDefaultExpandAll
             fieldNames={{ label: 'title', value: 'key', children: 'children' }}
             onChange={onChange}
@@ -87,3 +88,10 @@ export const Test: React.FC = () => {
         />
     );
 };
+
+const DropdownRender = ({children}:{children:React.ReactNode}) => {
+    return useMemo(()=>{
+        console.log( 'DropdownRender')
+        return <div>{children}</div>;
+    }, [children])
+}
