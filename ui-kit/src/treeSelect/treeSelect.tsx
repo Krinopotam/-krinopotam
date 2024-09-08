@@ -1,17 +1,16 @@
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useEffect, useMemo} from 'react';
 import {SplitObject} from '@krinopotam/js-helpers';
 import {TreeSelectRender} from '@src/treeSelect/renders/treeSelectRender';
 import {useInitApi} from '@src/treeSelect/hooks/api/api';
 import {useGetActualProps} from '@krinopotam/common-hooks';
 
-import {IAntTreeSelectProps, ITreeSelectApi, ITreeSelectBaseProps, ITreeSelectProps} from '@src/treeSelect/types/types';
+import {IAntTreeSelectProps, ITreeSelectBaseProps, ITreeSelectProps} from '@src/treeSelect/types/types';
 
 export const TreeSelect = (props: ITreeSelectProps): React.JSX.Element => {
     const [allProps, setAllProps] = useGetActualProps(props); //props can be set both by parent component and via api
     const treeSelectProps = useSplitProps(allProps);
 
-    const [api] = useState((allProps.apiRef ?? {}) as ITreeSelectApi);
-    useInitApi({api, props: allProps, setProps: setAllProps});
+    const api = useInitApi({props: allProps, setProps: setAllProps});
 
     /** Fetch on load */
     useEffect(() => {

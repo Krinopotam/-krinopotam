@@ -20,7 +20,7 @@ export const RenderDropdown = ({
     rowProps: IButtonRowProps;
     iconOnly?: boolean;
 }) => {
-    const items: MenuProps['items'] = prepareDropdownItems(button.children, id, context);
+    const items: MenuProps['items'] = prepareDropdownItems(button.children, id, rowProps, context);
 
     const menuProps: MenuProps = {items};
 
@@ -34,7 +34,7 @@ export const RenderDropdown = ({
     return <ButtonDropdown id={id} button={button} context={context} menuProps={menuProps} rowProps={rowProps} iconOnly={iconOnly} />;
 };
 
-const prepareDropdownItems = (buttons: IFormButton['children'], parentId: string, context: unknown) => {
+const prepareDropdownItems = (buttons: IFormButton['children'], parentId: string,  rowProps: IButtonRowProps, context: unknown) => {
     const result: MenuProps['items'] = [];
     if (!buttons) return result;
 
@@ -45,13 +45,13 @@ const prepareDropdownItems = (buttons: IFormButton['children'], parentId: string
         if (!button) continue;
 
         let children: MenuProps['items'] | undefined;
-        if (button.children && Object.keys(button.children).length) children = prepareDropdownItems(button.children, id, context);
+        if (button.children && Object.keys(button.children).length) children = prepareDropdownItems(button.children, id, rowProps, context);
 
         const key = parentId + '_' + id;
 
         let item: ItemType;
 
-        const disabled = typeof button.disabled === 'function' ? button.disabled(id, button, context) : button.disabled;
+        const disabled = rowProps.disableAll || button.disabled;
 
         if (button.type === 'divider') {
             item = {

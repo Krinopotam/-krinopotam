@@ -66,14 +66,13 @@ import {useApiFetchData} from '@src/treeSelect/hooks/api/useApiFetchData';
 import {useApiDeleteNode} from '@src/treeSelect/hooks/api/useApiDeleteNode';
 
 export const useInitApi = ({
-    api,
     props,
     setProps,
 }: {
-    api: ITreeSelectApi;
     props: ITreeSelectProps;
     setProps: (props: ITreeSelectProps | ((prevValue: ITreeSelectProps) => ITreeSelectProps)) => void;
 }) => {
+    const [api] = useState((props.apiRef ?? {}) as ITreeSelectApi);
     const [editFormApi] = useState((props.editFormProps?.apiRef ?? {}) as IDFormModalApi);
     const [editGroupFormApi] = useState((props.editGroupFormProps?.apiRef ?? {}) as IDFormModalApi);
     const [isReady, setIsReady] = useState(false);
@@ -156,6 +155,8 @@ export const useInitApi = ({
     api.addNodes = useAddNodes(api);
     api.updateNodes = useUpdateNodes(api);
     api.deleteNodes = useDeleteNodes(api);
+
+    return api;
 };
 
 //todo remove

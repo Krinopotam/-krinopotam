@@ -6,10 +6,11 @@
  * @license MIT
  */
 
-import {ButtonsRow, IButtonsRowApi, IFormButtons} from '@src/buttonsRow/buttonsRow';
+import {ButtonsRow} from '@src/buttonsRow/buttonsRow';
 
 import React from 'react';
 import {IColorType} from "@src/button/button";
+import {IButtonsRowApi, IFormButtons} from "@src/buttonsRow";
 
 interface IFormButtonsRenderProps {
     /** form buttons collection */

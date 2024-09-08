@@ -1,9 +1,9 @@
-import {IFormButtons} from '@src/buttonsRow/buttonsRow';
 import {MergeObjects} from "@krinopotam/js-helpers";
 import {useMemo} from "react";
 import {IDFormModalApi, IDFormModalProps} from "@src/dFormModal";
 import {useTranslate} from "@src/_shared/hooks/useTranslate";
 import {translations} from "@src/dFormModal/translations/translations";
+import {IFormButtons} from "@src/buttonsRow";
 
 
 /** Generate buttons */

@@ -13,7 +13,6 @@ export const prepareButtons = (buttons: IFormButtons | undefined, props: IButton
         if (!button) continue;
         if (!button.type) button.type = 'button';
         if (!button.position) button.position = 'right';
-        if (props.disableAll) button.disabled = true;
         if (props.colorType) button.colorType = props.colorType;
 
         if (button.position === 'left') leftButtons[key] = button;
@@ -58,11 +57,15 @@ export const getNextButtonName = (currentId: string, buttons: IFormButtons, dire
     return currentId;
 };
 
-const isButtonCanBeActive = (buttonId: string, button: IFormButton | undefined | null, props: IButtonRowProps) => {
-    const disabled = (typeof button?.disabled === 'function') ? button.disabled(buttonId, button, props.context) : button?.disabled
-    const hidden = (typeof button?.hidden === 'function') ? button.hidden(buttonId, button, props.context) : button?.hidden
-    const loading = (typeof button?.loading === 'function') ? button.loading(buttonId, button, props.context) : button?.loading
-    return button && !disabled && !hidden && !loading && (!button.type || button.type === 'button' || button.type === 'link' || button.type === 'text');
+const isButtonCanBeActive = (_buttonId: string, button: IFormButton | undefined | null, props: IButtonRowProps) => {
+    return (
+        button &&
+        !props.disableAll &&
+        !button?.disabled &&
+        !button?.hidden &&
+        !button?.loading &&
+        (!button.type || button.type === 'button' || button.type === 'link' || button.type === 'text')
+    );
 };
 
 export const changeActiveButton = (buttons: IFormButtons, direction: 'backward' | 'forward', props: IButtonRowProps) => {

@@ -20,7 +20,7 @@ export const ButtonDropdown = ({
     iconOnly?: boolean;
 }): React.JSX.Element => {
     const dropDownIcon = button.expandIcon ?? <DownOutlined />;
-    const disabled = typeof button.disabled === 'function' ? button.disabled(id, button, context) : button.disabled;
+    const disabled = rowProps.disableAll || button.disabled;
 
     return (
         <Dropdown menu={menuProps} disabled={disabled}>

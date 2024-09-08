@@ -246,7 +246,6 @@ const useGetFilterToggleButton = (gridApi: IGridApi, tableApi: ITabulator | unde
             tooltip: t('filter'),
             onClick: () => {
                 const show = tableApi?.toggleHeaderFilter();
-
                 gridApi.getButtonsApi().updateButtons({
                     filterToggle: {
                         active: show,

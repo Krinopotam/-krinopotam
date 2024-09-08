@@ -1,7 +1,13 @@
 import React from 'react';
 import {IButtonRowProps, IButtonsRowApi} from '@src/buttonsRow';
 
-export const keyDownHandler = (e: KeyboardEvent, propsRef: React.MutableRefObject<IButtonRowProps>, api: IButtonsRowApi, wrapperId: string, props: IButtonRowProps) => {
+export const keyDownHandler = (
+    e: KeyboardEvent,
+    propsRef: React.MutableRefObject<IButtonRowProps>,
+    api: IButtonsRowApi,
+    wrapperId: string,
+    props: IButtonRowProps
+) => {
     const target = e.target as HTMLElement;
     //target.style.borderColor = GetRandomColor() //DEBUG: -----
 
@@ -51,13 +57,16 @@ const processHotKeys = (e: KeyboardEvent, api: IButtonsRowApi, props: IButtonRow
     for (const id in buttons) {
         const button = buttons[id];
 
-        const disabled = (typeof button?.disabled === 'function') ? button.disabled(id, button, props.context) : !!button?.disabled;
-        const hidden = (typeof button?.hidden === 'function') ? button.hidden(id, button, props.context) : !!button?.hidden;
-
-        if (!button?.hotKeys || disabled || hidden) continue;
+        if (!button?.hotKeys || props.disableAll || button?.disabled || button?.hidden) continue;
 
         for (const hotKey of button.hotKeys) {
-            if (!!hotKey.ctrl === e.ctrlKey && !!hotKey.alt === e.altKey && !!hotKey.shift === e.shiftKey && !!hotKey.meta === e.metaKey && hotKey.key.toLowerCase() === key) {
+            if (
+                !!hotKey.ctrl === e.ctrlKey &&
+                !!hotKey.alt === e.altKey &&
+                !!hotKey.shift === e.shiftKey &&
+                !!hotKey.meta === e.metaKey &&
+                hotKey.key.toLowerCase() === key
+            ) {
                 e.stopPropagation();
                 e.preventDefault();
                 //api.setActive(id);
@@ -66,5 +75,3 @@ const processHotKeys = (e: KeyboardEvent, api: IButtonsRowApi, props: IButtonRow
         }
     }
 };
-
-

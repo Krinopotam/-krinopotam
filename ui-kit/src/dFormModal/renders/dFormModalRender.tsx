@@ -1,11 +1,11 @@
 import {DForm, IDFormProps} from '@src/dForm';
-import {IFormButtons} from '@src/buttonsRow/buttonsRow';
 
 import {Modal} from '@src/modal/modal';
 import {ButtonsRender} from '@src/modal/renders/buttonsRender';
 import React from 'react';
 import {IDFormModalApi, IDFormModalProps} from '@src/dFormModal';
 import {IExtendedModalOwnProps} from '@src/dFormModal/types/dFormModalTypes';
+import {IFormButtons} from "@src/buttonsRow";
 
 interface IDFormModalRenderProps {
     /** form buttons collection */

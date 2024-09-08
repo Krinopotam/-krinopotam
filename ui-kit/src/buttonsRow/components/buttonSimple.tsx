@@ -35,9 +35,8 @@ export const ButtonSimple = ({
     const style: CSSProperties = {...button.style};
     if (typeof button.width !== 'undefined') style.width = button.width;
 
-    const disabled = typeof button.disabled === 'function' ? button.disabled(id, button, context) : button.disabled;
-    const loading = typeof button.loading === 'function' ? button.loading(id, button, context) : button.loading;
     const title = !iconOnly ?  button.title : '';
+    const disabled = rowProps.disableAll || button.disabled;
 
     return (
         <Button
@@ -47,7 +46,7 @@ export const ButtonSimple = ({
             target={button.target}
             disabled={disabled}
             ghost={button.ghost}
-            loading={loading}
+            loading={button.loading}
             colorType={button.colorType}
             onClick={onClick}
             size={button.size}
