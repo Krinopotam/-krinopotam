@@ -83,32 +83,6 @@ const useGetHeaderLabel = (api: ITreeSelectProps): ITreeSelectButton | undefined
     }, [api.headerLabel]);
 };
 
-/** Get view button props */
-const useGetViewButton = (
-    api: ITreeSelectApi,
-    props: ITreeSelectProps,
-    activeNode: ITreeSelectNode | undefined,
-    isGroup?: boolean
-): ITreeSelectButton | undefined => {
-    const t = useT(api);
-
-    return useMemo(() => {
-        if ((!isGroup && !props.editFormProps) || (isGroup && !props.editGroupFormProps) || props.readOnly || props.editButtons?.view === null)
-        return {
-            ...defaultButtonView,
-            title: t('view'),
-            tooltip: t('viewRecord'),
-            disabled: !activeNode,
-            onClick: () => {
-                if (!activeNode) return;
-                const parent = api.getParentNode(activeNode);
-                if (!isGroup) api.getEditFormApi().open('view', {dataSet: getDataSet(activeNode)});
-                else api.getEditGroupFormApi().open('view', {dataSet: {...getDataSet(activeNode), parent}});
-            },
-        } satisfies ITreeSelectButton;
-    }, [isGroup, props.editFormProps, props.editGroupFormProps, props.readOnly, props.editButtons?.view, t, activeNode, api]);
-};
-
 /** Get create button props */
 const useGetCreateButton = (api: ITreeSelectApi, props: ITreeSelectProps): ITreeSelectButton | undefined => {
     const t = useT(api);
@@ -156,6 +130,33 @@ const useGetCreateGroupButton = (api: ITreeSelectApi, props: ITreeSelectProps): 
     }, [api, props.editGroupFormProps, props.readOnly, props.editButtons?.createGroup, t]);
 };
 
+/** Get view button props */
+const useGetViewButton = (
+    api: ITreeSelectApi,
+    props: ITreeSelectProps,
+    activeNode: ITreeSelectNode | undefined,
+    isGroup?: boolean
+): ITreeSelectButton | undefined => {
+    const t = useT(api);
+
+    return useMemo(() => {
+        if ((!isGroup && !props.editFormProps) || (isGroup && !props.editGroupFormProps) || props.readOnly || props.editButtons?.view === null)
+            return undefined;
+        return {
+            ...defaultButtonView,
+            title: t('view'),
+            tooltip: t('viewRecord'),
+            disabled: !activeNode,
+            onClick: () => {
+                if (!activeNode) return;
+                const parent = api.getParentNode(activeNode);
+                if (!isGroup) api.getEditFormApi().open('view', {dataSet: {...getDataSet(activeNode), parent}});
+                else api.getEditGroupFormApi().open('view', {dataSet: {...getDataSet(activeNode), parent}});
+            },
+        } satisfies ITreeSelectButton;
+    }, [isGroup, props.editFormProps, props.editGroupFormProps, props.readOnly, props.editButtons?.view, t, activeNode, api]);
+};
+
 /** Get clone button props */
 const useGetCloneButton = (
     api: ITreeSelectApi,
@@ -179,7 +180,7 @@ const useGetCloneButton = (
             onClick: () => {
                 if (!activeNode) return;
                 const parent = api.getParentNode(activeNode);
-                if (!isGroup) api.getEditFormApi().open('clone', {dataSet: getDataSet(activeNode)});
+                if (!isGroup) api.getEditFormApi().open('clone', {dataSet: {...getDataSet(activeNode), parent}});
                 else api.getEditGroupFormApi().open('clone', {dataSet: {...getDataSet(activeNode), parent}});
             },
         } satisfies ITreeSelectButton;
@@ -209,7 +210,7 @@ const useGetUpdateButton = (
             onClick: () => {
                 if (!activeNode) return;
                 const parent = api.getParentNode(activeNode);
-                if (!isGroup) api.getEditFormApi().open('update', {dataSet: getDataSet(activeNode)});
+                if (!isGroup) api.getEditFormApi().open('update', {dataSet: {...getDataSet(activeNode), parent}});
                 else api.getEditGroupFormApi().open('update', {dataSet: {...getDataSet(activeNode), parent}});
             },
         } satisfies ITreeSelectButton;
