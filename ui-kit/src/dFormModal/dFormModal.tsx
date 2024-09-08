@@ -8,7 +8,7 @@
 
 import {IDFormCallbacks, IDFormProps} from '@src/dForm';
 import {useInitModalFormApi} from './hooks/api';
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useMemo} from 'react';
 
 import {DFormModalRender} from './renders/dFormModalRender';
 import {SplitObject} from '@krinopotam/js-helpers';
@@ -16,13 +16,7 @@ import {useFormCallbacks} from './hooks/callbacks';
 import {useInitButtons} from './hooks/buttons';
 import {useUpdateMessageBoxTheme} from '@src/messageBox';
 import {useGetActualProps} from '@krinopotam/common-hooks';
-import {
-    IDFormModalApi,
-    IDFormModalProps,
-    IDFormModalOwnProps,
-    IExtendedModalOwnProps,
-    IDFormModalWithoutModalProps,
-} from '@src/dFormModal/types/dFormModalTypes';
+import {IDFormModalOwnProps, IDFormModalProps, IDFormModalWithoutModalProps, IExtendedModalOwnProps} from '@src/dFormModal/types/dFormModalTypes';
 
 export const DFormModal = (props: IDFormModalProps): React.JSX.Element => {
     useUpdateMessageBoxTheme(); //set current theme to messageBox
@@ -33,33 +27,15 @@ export const DFormModal = (props: IDFormModalProps): React.JSX.Element => {
     const [modalProps, formModalProps] = useSeparateModalPropsFromFormProps(allProps);
 
     //region Init api
-    const [formApi, setFormApi] = useState((allProps.apiRef || {}) as IDFormModalApi);
-    useInitModalFormApi({formApi, props: allProps, setProps: setAllProps});
-    const buttons = useInitButtons(formApi, allProps);
+    const api = useInitModalFormApi({props: allProps, setProps: setAllProps});
+    const buttons = useInitButtons(api, allProps);
     //endregion
 
-    const formCallbacks = useFormCallbacks(formApi, allProps);
+    const formCallbacks = useFormCallbacks(api, allProps);
     /** Separating DForm props from pure DFormModal props */
     const [, formProps] = useSeparateProps(formModalProps, formCallbacks);
 
-    //region Destructor
-    useEffect(() => {
-        return () => {
-            setFormApi({} as IDFormModalApi); //clear api on component destroy
-        };
-    }, []);
-
-    //endregion
-
-    return (
-        <DFormModalRender
-            formApi={formApi}
-            modalFormProps={allProps}
-            modalProps={modalProps}
-            formProps={formProps}
-            buttons={buttons}
-        />
-    );
+    return <DFormModalRender formApi={api} modalFormProps={allProps} modalProps={modalProps} formProps={formProps} buttons={buttons} />;
 };
 
 /** Separating props related to the Modal component from props directly related to the DFormModal component */

@@ -1,4 +1,4 @@
-import React, {useLayoutEffect, useState} from 'react';
+import React, {useLayoutEffect, useMemo, useState} from 'react';
 import {ObjectKeysLength} from '@krinopotam/js-helpers';
 import {ButtonsRow} from '@src/buttonsRow/buttonsRow';
 import {useInitButtons} from '../hooks/buttons';
@@ -22,17 +22,19 @@ export const MenuRow = ({gridApi}: IGridMenuProps): React.JSX.Element | null => 
         }
     }, [buttons, gridApi, gridProps, gridProps?.onMenuVisibilityChanged, isMenuVisible]);
 
-    if (!buttons) return null;
+    return useMemo(() => {
+        if (!buttons) return null;
 
-    return (
-        <div style={{paddingBottom: 8, paddingTop: 8}}>
-            <ButtonsRow
-                buttons={buttons}
-                apiRef={gridApi.getButtonsApi()}
-                context={gridApi}
-                responsiveBreakpoint={gridProps.responsiveBreakpoint}
-                iconsOnly={gridProps.buttonsIconsOnly}
-            />
-        </div>
-    );
+        return (
+            <div style={{paddingBottom: 8, paddingTop: 8}}>
+                <ButtonsRow
+                    buttons={buttons}
+                    apiRef={gridApi.getButtonsApi()}
+                    context={gridApi}
+                    responsiveBreakpoint={gridProps.responsiveBreakpoint}
+                    iconsOnly={gridProps.buttonsIconsOnly}
+                />
+            </div>
+        );
+    }, [buttons, gridApi, gridProps.buttonsIconsOnly, gridProps.responsiveBreakpoint]);
 };

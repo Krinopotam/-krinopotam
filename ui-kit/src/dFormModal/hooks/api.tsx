@@ -13,15 +13,9 @@ import {useApiUpdateProps} from '@src/_shared/hooks/componentApiMethods/useApiUp
 import {useApiIsMounted} from '@src/_shared/hooks/componentApiMethods/useApiIsMointed';
 import {useApiGetButtonsApi} from '@src/_shared/hooks/componentApiMethods/useApiGetButtonsApi';
 
-export const useInitModalFormApi = ({
-    formApi,
-    props,
-    setProps,
-}: {
-    formApi: IDFormModalApi;
-    props: IDFormModalProps;
-    setProps: React.Dispatch<React.SetStateAction<IDFormModalProps>>;
-}) => {
+export const useInitModalFormApi = ({props, setProps}: {props: IDFormModalProps; setProps: React.Dispatch<React.SetStateAction<IDFormModalProps>>}) => {
+    const [api] = useState((props.apiRef || {}) as IDFormModalApi);
+
     const getDefaultTitle = useGetDefaultTitle(props);
     const [title, setTitle] = useState(getDefaultTitle());
     useEffect(() => {
@@ -29,19 +23,21 @@ export const useInitModalFormApi = ({
     }, [getDefaultTitle, props]);
 
     /** overridden api */
-    formApi.getId = useApiGetId(props.formId ?? 'dFormModal-' + GetNanoId());
-    formApi.getButtonsApi = useApiGetButtonsApi();
-    formApi.getProps = useApiGetProps(props);
-    formApi.setProps = useApiSetProps(setProps);
-    formApi.updateProps = useApiUpdateProps(props, setProps);
-    formApi.getIsMounted = useApiIsMounted();
+    api.getId = useApiGetId(props.formId ?? 'dFormModal-' + GetNanoId());
+    api.getButtonsApi = useApiGetButtonsApi();
+    api.getProps = useApiGetProps(props);
+    api.setProps = useApiSetProps(setProps);
+    api.updateProps = useApiUpdateProps(props, setProps);
+    api.getIsMounted = useApiIsMounted();
     /** --------------*/
 
-    formApi.open = useApiFormOpen(formApi);
-    formApi.close = useApiTryToCloseForm(formApi, props);
-    formApi.forceClose = useApiFormForceClose(formApi);
-    formApi.getTitle = useApiGetTitle(title);
-    formApi.setTitle = useApiSetTitle(setTitle);
+    api.open = useApiFormOpen(api);
+    api.close = useApiTryToCloseForm(api, props);
+    api.forceClose = useApiFormForceClose(api);
+    api.getTitle = useApiGetTitle(title);
+    api.setTitle = useApiSetTitle(setTitle);
+
+    return api;
 };
 
 const useGetDefaultTitle = (formProps: IDFormModalProps) => {

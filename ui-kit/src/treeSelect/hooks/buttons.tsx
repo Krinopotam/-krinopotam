@@ -16,6 +16,7 @@ import {
 } from '@src/_shared/hooks/buttons/defaultButtonsProps';
 import {translations} from '@src/treeSelect/translations/translations';
 
+let i = 0;
 export const useInitButtons = (api: ITreeSelectApi, treeProps: ITreeSelectProps) => {
     api.getButtonsApi().refreshButtons = useRefreshButtons();
 
@@ -46,6 +47,7 @@ export const useInitButtons = (api: ITreeSelectApi, treeProps: ITreeSelectProps)
             clone: cloneButton,
             update: updateButton,
             delete: deleteButton,
+            ver: {title: i++},
         } as ITreeSelectButtons;
 
         const resultButtons = MergeObjects(defaultButtons, buttons);

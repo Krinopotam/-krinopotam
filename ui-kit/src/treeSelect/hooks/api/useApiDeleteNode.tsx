@@ -52,10 +52,12 @@ const deleteNode = (node: Key | ITreeSelectNode, props: ITreeSelectProps, api: I
 
     if (!props.confirmDelete) {
         buttonsApi.loading('delete', true);
+        buttonsApi.disableAll(true)
+/*        buttonsApi.loading('delete', true);
         buttonsApi.disabled('create', true);
         buttonsApi.disabled('createGroup', true);
         buttonsApi.disabled('clone', true);
-        buttonsApi.disabled('update', true);
+        buttonsApi.disabled('update', true);*/
     }
 
     const promiseResult = onDelete as ITreeSelectDeletePromise;
@@ -66,6 +68,7 @@ const deleteNode = (node: Key | ITreeSelectNode, props: ITreeSelectProps, api: I
             api.setIsOpen(undefined);
             if (!props.confirmDelete) {
                 buttonsApi.loading('delete', false);
+                buttonsApi.disableAll(false)
                 //buttonsApi.disabled('delete', true);
                 //buttonsApi.disabled('create', false);
                 //buttonsApi.disabled('createGroup', false);
@@ -77,10 +80,11 @@ const deleteNode = (node: Key | ITreeSelectNode, props: ITreeSelectProps, api: I
             if (!api.getIsMounted()) return;
             if (!props.confirmDelete) {
                 buttonsApi.loading('delete', false);
-                buttonsApi.disabled('create', false);
+                buttonsApi.disableAll(false)
+/*                buttonsApi.disabled('create', false);
                 buttonsApi.disabled('createGroup', false);
                 buttonsApi.disabled('clone', false);
-                buttonsApi.disabled('update', false);
+                buttonsApi.disabled('update', false);*/
             } else messageBox?.destroy();
 
             MessageBox.alert({

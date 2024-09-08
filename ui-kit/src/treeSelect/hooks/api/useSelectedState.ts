@@ -1,7 +1,7 @@
 import {ITreeSelectProps, ITreeSelectValue} from '@src/treeSelect';
 import React, {Key, useEffect, useRef, useState} from 'react';
 
-export const useApiSelectedState = (
+export const useSelectedState = (
     props: ITreeSelectProps
 ): [selectedKeys: Key[] | undefined, setSelectedKeys: React.Dispatch<React.SetStateAction<Key[] | undefined>>] => {
     const [selectedKeys, setSelectedKeys] = useState(valueToArray(props.value));

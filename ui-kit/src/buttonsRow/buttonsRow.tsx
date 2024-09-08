@@ -10,25 +10,25 @@ import {useGetActualProps} from "@krinopotam/common-hooks";
 
 export const ButtonsRow = (props: IButtonRowProps): React.JSX.Element => {
     const [allProps, setAllProps] = useGetActualProps(props); //props can be set both by parent component and via api
-    const [curButtons, setCurButtons] = usePrepareButtons(props);
+    const [curButtons, setCurButtons] = usePrepareButtons(allProps);
 
     const api = useApi(allProps, setAllProps, curButtons, setCurButtons);
 
-    useSubscribeToKeyDownEvent(props, api);
+    useSubscribeToKeyDownEvent(allProps, api);
 
     if (!curButtons) return <></>;
 
     return (
-        <div style={{display: 'block', ...props.style}} className={'controls-buttons-dynamic-row ' + (props.className ?? '')}>
+        <div style={{display: 'block', ...allProps.style}} className={'controls-buttons-dynamic-row ' + (allProps.className ?? '')}>
             <Row wrap={false}>
                 <Col flex="auto" style={{textAlign: 'left'}}>
-                    <RenderButtonGroup key="leftButtons" buttons={curButtons} position="left" context={props.context} rowProps={props} />
+                    <RenderButtonGroup key="leftButtons" buttons={curButtons} position="left" context={allProps.context} rowProps={allProps} />
                 </Col>
                 <Col flex="auto" style={{textAlign: 'center'}}>
-                    <RenderButtonGroup key="centerButtons" buttons={curButtons} position="center" context={props.context} rowProps={props} />
+                    <RenderButtonGroup key="centerButtons" buttons={curButtons} position="center" context={allProps.context} rowProps={allProps} />
                 </Col>
                 <Col flex="auto" style={{textAlign: 'right'}}>
-                    <RenderButtonGroup key="rightButtons" buttons={curButtons} position="right" context={props.context} rowProps={props} />
+                    <RenderButtonGroup key="rightButtons" buttons={curButtons} position="right" context={allProps.context} rowProps={allProps} />
                 </Col>
             </Row>
         </div>

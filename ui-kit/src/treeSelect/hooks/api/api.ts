@@ -4,7 +4,7 @@ import {useDataFetcher} from '@src/treeSelect/hooks/dataFetcher';
 import {GetNanoId, GetUuid, IsArray} from '@krinopotam/js-helpers';
 import {ITreeSelectApi} from '@src/treeSelect/types/types';
 import {IDFormModalApi} from '@src/dFormModal';
-import {useApiDataSetState} from '@src/_shared/hooks/treeComponentApiMethods/useApiDataSetState';
+import {useDataSetState} from '@src/_shared/hooks/treeComponentApiMethods/useDataSetState';
 
 import {useApiGetNode} from '@src/_shared/hooks/treeComponentApiMethods/useApiGetNode';
 import {useApiAddNode} from '@src/_shared/hooks/treeComponentApiMethods/useApiAddNode';
@@ -26,7 +26,7 @@ import {useApiGetProps} from '@src/_shared/hooks/componentApiMethods/useApiGetPr
 import {useApiSetProps} from '@src/_shared/hooks/componentApiMethods/useApiSetProps';
 import {useApiUpdateProps} from '@src/_shared/hooks/componentApiMethods/useApiUpdateProps';
 import {useApiEnsureNodeVisible} from '@src/_shared/hooks/treeComponentApiMethods/useApiEnsureNodeVisible';
-import {useApiExpandedKeysState} from '@src/_shared/hooks/treeComponentApiMethods/useApiExpandedKeysState';
+import {useExpandedKeysState} from '@src/_shared/hooks/treeComponentApiMethods/useExpandedKeysState';
 import {useApiGetExpandedKeys} from '@src/_shared/hooks/treeComponentApiMethods/useApiGetExpandedKeys';
 import {useApiGetExpandedNodes} from '@src/_shared/hooks/treeComponentApiMethods/useApiGetExpandedNodes';
 import {useApiIsNodeExpanded} from '@src/_shared/hooks/treeComponentApiMethods/useApiIsNodeExpanded';
@@ -45,8 +45,8 @@ import {useApiIsMounted} from '@src/_shared/hooks/componentApiMethods/useApiIsMo
 import {useApiGetButtonsApi} from '@src/_shared/hooks/componentApiMethods/useApiGetButtonsApi';
 import {IButtonsRowApi} from '@src/buttonsRow';
 import {useApiIsNodeSelected} from '@src/_shared/hooks/treeComponentApiMethods/useApiIsNodeSelected';
-import {useApiSelectedState} from '@src/treeSelect/hooks/api/useApiSelectedState';
-import {useApiOpenState} from '@src/treeSelect/hooks/api/useApiOpenState';
+import {useSelectedState} from '@src/treeSelect/hooks/api/useSelectedState';
+import {useOpenState} from '@src/treeSelect/hooks/api/useOpenState';
 import {useApiGetIsOpen} from '@src/treeSelect/hooks/api/useApiGetIsOpen';
 import {useApiSetIsOpen} from '@src/treeSelect/hooks/api/useApiSetIsOpen';
 import {useApiPrepareNode} from '@src/treeSelect/hooks/api/useApiPrepareNode';
@@ -80,15 +80,15 @@ export const useInitApi = ({
     const [fetchError, setFetchError] = useState(''); //has fetching error
     const [allFetched, setAllFetched] = useState(false); //is all fetched
     const [minSymbols, setMinSymbols] = useState(0); //show min symbols error
-    const [selectedKeys, setSelectedKeys] = useApiSelectedState(props);
-    const [open, setOpen] = useApiOpenState(props);
+    const [selectedKeys, setSelectedKeys] = useSelectedState(props);
+    const [open, setOpen] = useOpenState(props);
 
     api.getFieldNames = useApiGetFieldNames(props.fieldNames);
     const fieldNames = api.getFieldNames();
     const prepareNode = useApiPrepareNode(props);
 
-    const [dataSet, setDataset, isDataPlain, parentKeys] = useApiDataSetState(props.dataSet, fieldNames, prepareNode); //current dataSet
-    const [expandedKeys, setExpandedKeys] = useApiExpandedKeysState(props.expandedKeys, props.defaultExpandedKeys, props.defaultExpandAll, parentKeys); //expanded keys
+    const [dataSet, setDataset, isDataPlain, parentKeys] = useDataSetState(props.dataSet, fieldNames, prepareNode); //current dataSet
+    const [expandedKeys, setExpandedKeys] = useExpandedKeysState(props.expandedKeys, props.defaultExpandedKeys, props.defaultExpandAll, parentKeys); //expanded keys
 
     /** Component Api methods*/
     api.getId = useApiGetId(props.componentId ?? 'treeSelect-' + GetNanoId());

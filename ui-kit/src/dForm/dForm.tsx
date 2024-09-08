@@ -25,19 +25,17 @@ export const DForm = (props: IDFormProps): React.JSX.Element => {
     useUpdateMessageBoxTheme(); //set current theme to messageBox
 
     const [formProps, setFormProps] = useGetActualProps(props); //props can be set both by parent component and via api
+    const api = useInitFormApi({props: formProps, setProps: setFormProps});
+    const modelCallbacks = useModelCallbacks(formProps, api);
+    useInitFormModel(api, formProps, modelCallbacks);
 
-    const [formApi] = useState((formProps.apiRef || {}) as IDFormApi);
-    useInitFormApi({formApi, props: formProps, setProps: setFormProps});
-    const modelCallbacks = useModelCallbacks(formProps, formApi);
-    useInitFormModel(formApi, formProps, modelCallbacks);
+    const formButtons = useGetButtons(formProps, api); //init buttons
 
-    const formButtons = useGetButtons(formProps, formApi); //init buttons
+    useInitialFetchData(api);
 
-    useInitialFetchData(formApi);
+    useFormMounted(api);
 
-    useFormMounted(formApi);
-
-    return <FormRender formProps={formProps} formApi={formApi} formButtons={formButtons}/>;
+    return <FormRender formProps={formProps} formApi={api} formButtons={formButtons}/>;
 };
 
 const useInitFormModel = (formApi:IDFormApi, formProps: IDFormProps, callbacks: IDFormModelCallbacks) => {

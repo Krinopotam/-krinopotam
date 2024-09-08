@@ -4,15 +4,16 @@ import React, {useCallback, useState} from 'react';
 import {Button} from '@src/button';
 import {Space} from 'antd';
 import {IColorType} from '@src/button/button';
-import {IExtendedModalProps, Modal} from '@src/modal/modal';
+import {Modal} from '@src/modal/modal';
 import {ButtonsRow} from '@src/buttonsRow';
+import {IExtendedModalProps} from "@src/modal";
 
 /** Modal component */
-export const ModalComponent = (props?: IModalProps): React.JSX.Element => {
+export const ModalComponent = (props?: IExtendedModalProps): React.JSX.Element => {
     const [open, setOpen] = useState(false);
     const [colorType, setColorType] = useState<IColorType | undefined>(undefined);
 
-    const defProps: IModalProps = {
+    const defProps: IExtendedModalProps = {
         modalId: 'testForm',
 
         colorType: colorType,

@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react';
 
-export const useApiExpandedKeysState = (
+export const useExpandedKeysState = (
     expandedKeys: React.Key[] | undefined,
     defaultExpandedKeys: React.Key[] | undefined,
     defaultExpandAll: boolean | undefined,

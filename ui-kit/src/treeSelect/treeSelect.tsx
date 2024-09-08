@@ -18,7 +18,7 @@ export const TreeSelect = (props: ITreeSelectProps): React.JSX.Element => {
         else if (!api.getIsReady()) allProps?.onReady?.();
     }, [api, allProps, allProps.fetchMode, allProps.minSearchLength]);
 
-    return <TreeSelectRender treeApi={api} allProps={props} treeSelectProps={treeSelectProps} />;
+    return <TreeSelectRender treeApi={api} allProps={allProps} treeSelectProps={treeSelectProps} />;
 };
 
 const useSplitProps = (props: ITreeSelectProps) => {

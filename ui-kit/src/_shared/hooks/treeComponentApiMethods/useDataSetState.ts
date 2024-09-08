@@ -1,7 +1,7 @@
-import React, {Key, useCallback, useRef, useState} from 'react';
+import React, {Key, useCallback, useEffect, useRef, useState} from 'react';
 
-export const useApiDataSetState = <T extends Record<string, unknown>>(
-    initialState: React.SetStateAction<T[] | undefined>,
+export const useDataSetState = <T extends Record<string, unknown>>(
+    propsDataSet: React.SetStateAction<T[] | undefined>,
     fieldNames: {
         key: string;
         children: string;
@@ -9,12 +9,12 @@ export const useApiDataSetState = <T extends Record<string, unknown>>(
     },
     prepareNodeFn?: (node: T) => T
 ): [T[] | undefined, React.Dispatch<React.SetStateAction<T[] | undefined>>, boolean, Key[]] => {
+    const propsState = typeof propsDataSet === 'function' ? propsDataSet(undefined) : propsDataSet;
     const prepareDataSet = usePrepareDataSet<T>(fieldNames, prepareNodeFn);
 
     const initialStateRef = useRef<[T[] | undefined, boolean, Key[]] | undefined>(undefined);
     if (!initialStateRef.current) {
-        const initState = typeof initialState === 'function' ? initialState(undefined) : initialState;
-        initialStateRef.current = prepareDataSet(initState);
+        initialStateRef.current = prepareDataSet(propsState);
     }
 
     const [initPrepData, initIsPlain, initParentKeys] = initialStateRef.current;
@@ -34,6 +34,16 @@ export const useApiDataSetState = <T extends Record<string, unknown>>(
         },
         [prepareDataSet]
     );
+
+    const isFirstRender = useRef(true);
+    useEffect(() => {
+        //allow to change dataset via props
+        if (isFirstRender.current) {
+            isFirstRender.current = false;
+            return;
+        }
+        setDataSet(propsState);
+    }, [propsState, setDataSet]);
 
     return [data, setDataSet, isPlain, parentKeys];
 };

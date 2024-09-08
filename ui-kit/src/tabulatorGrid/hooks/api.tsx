@@ -18,24 +18,23 @@ import {useApiIsMounted} from '@src/_shared/hooks/componentApiMethods/useApiIsMo
 import {useApiGetProps} from '@src/_shared/hooks/componentApiMethods/useApiGetProps';
 import {useApiSetProps} from '@src/_shared/hooks/componentApiMethods/useApiSetProps';
 import {useApiUpdateProps} from '@src/_shared/hooks/componentApiMethods/useApiUpdateProps';
+import {IDFormModalApi} from "@src/dFormModal";
 
 export const useInitGridApi = ({
-    gridApi,
     props,
     setProps,
     tableRef,
-    editFormApi,
-    selectionFormApi,
     setColumnsDialog,
 }: {
-    gridApi: IGridApi;
     props: IGridProps;
     setProps: (props: IGridProps | ((prevValue: IGridProps) => IGridProps)) => void;
     tableRef: MutableRefObject<Tabulator | undefined>;
-    editFormApi: IGridApi['editFormApi'];
-    selectionFormApi: IGridApi['selectionFormApi'];
     setColumnsDialog: React.Dispatch<React.SetStateAction<boolean>>;
 }): IGridApi => {
+    const [editFormApi] = useState<IDFormModalApi>((props.editFormProps?.apiRef ?? {}) as IDFormModalApi);
+    const [selectionFormApi] = useState<IDFormModalApi>((props.selectionFormProps?.apiRef ?? {}) as IDFormModalApi);
+    const [api] = useState((props.apiRef || {}) as IGridApi);
+
     const dataSetRef = useRef<IGridProps['dataSet']>(undefined);
     const curDataFetchHandler = useRef<IGridProps['onDataFetch'] | undefined>();
     const curDataFetchParams = useRef<Record<string, unknown> | undefined>();
@@ -45,48 +44,48 @@ export const useInitGridApi = ({
     useUpdateDataSetFromProps(dataSetRef, props.dataSet);
 
     /** Component Api methods*/
-    gridApi.getId = useApiGetId(props.id ?? 'grid-' + GetNanoId());
-    gridApi.getProps = useApiGetProps(props);
-    gridApi.setProps = useApiSetProps(setProps);
-    gridApi.updateProps = useApiUpdateProps(props, setProps);
-    gridApi.getIsMounted = useApiIsMounted();
+    api.getId = useApiGetId(props.id ?? 'grid-' + GetNanoId());
+    api.getProps = useApiGetProps(props);
+    api.setProps = useApiSetProps(setProps);
+    api.updateProps = useApiUpdateProps(props, setProps);
+    api.getIsMounted = useApiIsMounted();
 
     /** Component own api methods */
-    gridApi.tableApi = tableRef.current as ITabulator;
-    gridApi.editFormApi = editFormApi;
-    gridApi.selectionFormApi = selectionFormApi;
+    api.tableApi = tableRef.current as ITabulator;
+    api.editFormApi = editFormApi;
+    api.selectionFormApi = selectionFormApi;
 
-    gridApi.getButtonsApi = useApiGetButtonsApi<IButtonsRowApi & {refreshButtons: () => void}>();
-    gridApi.getDataSet = useApiGetDataSet(dataSetRef, gridApi);
-    gridApi.setDataSet = useApiSetDataSet(dataSetRef, gridApi);
-    gridApi.getIsLoading = useApiGetIsLoading(isLoading);
-    gridApi.setIsLoading = useApiSetIsLoading(setIsLoading);
-    gridApi.setActiveRowKey = useApiSetActiveRowKey(gridApi);
-    gridApi.getActiveRowKey = useApiGetActiveRowKey(gridApi);
-    gridApi.getActiveNode = useApiGetActiveNode(gridApi);
-    gridApi.getActiveRow = useApiGetActiveRow(gridApi);
-    gridApi.getNextRowKey = useApiGetNextRowKey(gridApi);
-    gridApi.getPrevRowKey = useApiGetPrevRowKey(gridApi);
-    gridApi.getSelectedRowKeys = useApiGetSelectedRowKeys(gridApi);
-    gridApi.getSelectedNodes = useApiGetSelectedNodes(gridApi);
-    gridApi.getSelectedRows = useApiGetSelectedRows(gridApi);
-    gridApi.setSelectedRowKeys = useApiSetSelectedRowsKeys(gridApi);
-    gridApi.setSelectedRows = useApiSetSelectedRows(gridApi);
-    gridApi.getNodeByKey = useApiGetNodeByKey(gridApi);
-    gridApi.getRowByKey = useApiGetRowByKey(gridApi);
-    gridApi.insertRows = useApiInsertRows(dataSetRef, gridApi);
-    gridApi.updateRows = useApiUpdateRows(dataSetRef, gridApi);
-    gridApi.removeRowsByKeys = useApiRemoveRowsByKeys(dataSetRef, gridApi);
-    gridApi.removeRows = useApiRemoveRows(gridApi);
-    gridApi.deleteRows = useApiDeleteRows(gridApi, props);
-    gridApi.fetchData = useApiFetchData(gridApi);
-    gridApi.retryFetchData = useApiRetryFetchData(gridApi);
-    gridApi.setCurrentDataFetchHandler = useSetCurrentDataFetchHandler(curDataFetchHandler, curDataFetchParams);
-    gridApi.getCurrentDataFetchHandler = useGetCurrentDataFetchHandler(curDataFetchHandler, curDataFetchParams);
-    gridApi.getRowData = useApiGetRowData(gridApi);
-    gridApi.openColumnDialog = useApiOpenColumnDialog(gridApi, setColumnsDialog);
+    api.getButtonsApi = useApiGetButtonsApi<IButtonsRowApi & {refreshButtons: () => void}>();
+    api.getDataSet = useApiGetDataSet(dataSetRef, api);
+    api.setDataSet = useApiSetDataSet(dataSetRef, api);
+    api.getIsLoading = useApiGetIsLoading(isLoading);
+    api.setIsLoading = useApiSetIsLoading(setIsLoading);
+    api.setActiveRowKey = useApiSetActiveRowKey(api);
+    api.getActiveRowKey = useApiGetActiveRowKey(api);
+    api.getActiveNode = useApiGetActiveNode(api);
+    api.getActiveRow = useApiGetActiveRow(api);
+    api.getNextRowKey = useApiGetNextRowKey(api);
+    api.getPrevRowKey = useApiGetPrevRowKey(api);
+    api.getSelectedRowKeys = useApiGetSelectedRowKeys(api);
+    api.getSelectedNodes = useApiGetSelectedNodes(api);
+    api.getSelectedRows = useApiGetSelectedRows(api);
+    api.setSelectedRowKeys = useApiSetSelectedRowsKeys(api);
+    api.setSelectedRows = useApiSetSelectedRows(api);
+    api.getNodeByKey = useApiGetNodeByKey(api);
+    api.getRowByKey = useApiGetRowByKey(api);
+    api.insertRows = useApiInsertRows(dataSetRef, api);
+    api.updateRows = useApiUpdateRows(dataSetRef, api);
+    api.removeRowsByKeys = useApiRemoveRowsByKeys(dataSetRef, api);
+    api.removeRows = useApiRemoveRows(api);
+    api.deleteRows = useApiDeleteRows(api, props);
+    api.fetchData = useApiFetchData(api);
+    api.retryFetchData = useApiRetryFetchData(api);
+    api.setCurrentDataFetchHandler = useSetCurrentDataFetchHandler(curDataFetchHandler, curDataFetchParams);
+    api.getCurrentDataFetchHandler = useGetCurrentDataFetchHandler(curDataFetchHandler, curDataFetchParams);
+    api.getRowData = useApiGetRowData(api);
+    api.openColumnDialog = useApiOpenColumnDialog(api, setColumnsDialog);
 
-    return gridApi;
+    return api;
 };
 
 /**

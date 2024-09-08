@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useState} from 'react';
 import {Space, Typography} from 'antd';
 import {MessageBox} from '@src/messageBox';
 import {IDFormProps} from '@src/dForm';
@@ -14,14 +14,14 @@ import {useApiGetButtonsApi} from "@src/_shared/hooks/componentApiMethods/useApi
 import {GetNanoId} from "@krinopotam/js-helpers";
 
 export const useInitFormApi = ({
-    formApi,
     props,
     setProps,
 }: {
-    formApi: IDFormApi;
     props: IDFormProps;
     setProps: React.Dispatch<React.SetStateAction<IDFormProps>>;
 }) => {
+    const [api] = useState((props.apiRef || {}) as IDFormApi);
+
     /** Component Api methods*/
     const apiGetId = useApiGetId(props.formId ?? 'dForm-' + GetNanoId());
     const apiGetProps = useApiGetProps(props);
@@ -31,17 +31,19 @@ export const useInitFormApi = ({
 
     /** Component owned Api methods*/
     const getButtonsApi = useApiGetButtonsApi();
-    const apiValidateForm = useApiValidateForm(formApi, props);
-    const apiSubmitForm = useApiSubmitForm(formApi, props);
+    const apiValidateForm = useApiValidateForm(api, props);
+    const apiSubmitForm = useApiSubmitForm(api, props);
 
-    if (!props._overriddenApi?.getId) formApi.getId = apiGetId;
-    if (!props._overriddenApi?.getButtonsApi) formApi.getButtonsApi = getButtonsApi
-    if (!props._overriddenApi?.getProps) formApi.getProps = apiGetProps;
-    if (!props._overriddenApi?.setProps) formApi.setProps = apiSetProps;
-    if (!props._overriddenApi?.updateProps) formApi.updateProps = apiUpdateProps;
-    if (!props._overriddenApi?.validateForm) formApi.validateForm = apiValidateForm;
-    if (!props._overriddenApi?.submitForm) formApi.submitForm = apiSubmitForm;
-    if (!props._overriddenApi?.getIsMounted) formApi.getIsMounted = apiGetIsMounted;
+    if (!props._overriddenApi?.getId) api.getId = apiGetId;
+    if (!props._overriddenApi?.getButtonsApi) api.getButtonsApi = getButtonsApi
+    if (!props._overriddenApi?.getProps) api.getProps = apiGetProps;
+    if (!props._overriddenApi?.setProps) api.setProps = apiSetProps;
+    if (!props._overriddenApi?.updateProps) api.updateProps = apiUpdateProps;
+    if (!props._overriddenApi?.validateForm) api.validateForm = apiValidateForm;
+    if (!props._overriddenApi?.submitForm) api.submitForm = apiSubmitForm;
+    if (!props._overriddenApi?.getIsMounted) api.getIsMounted = apiGetIsMounted;
+
+    return api;
 };
 
 const useApiValidateForm = (formApi: IDFormApi, formProps: IDFormProps) => {
