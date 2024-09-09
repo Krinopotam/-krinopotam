@@ -26,7 +26,7 @@ export const useInitButtons = (api: ITreeSelectApi, props: ITreeSelectProps) => 
     const activeNode = api.getActiveNode(true);
     const isGroup = props.groupsMode && !activeNode?.isLeaf;
 
-    const buttons = props.editButtons;
+    const propsButtons = props.editButtons;
     const buttonsSize = props.buttonsSize ?? 'small';
     const buttonsPos = props.buttonsPosition ?? 'right';
 
@@ -49,7 +49,7 @@ export const useInitButtons = (api: ITreeSelectApi, props: ITreeSelectProps) => 
             delete: deleteButton,
         } as ITreeSelectButtons;
 
-        const resultButtons = MergeObjects(defaultButtons, buttons);
+        const resultButtons = MergeObjects(defaultButtons, propsButtons);
 
         for (const buttonId in resultButtons) {
             const btn = resultButtons[buttonId];
@@ -61,7 +61,7 @@ export const useInitButtons = (api: ITreeSelectApi, props: ITreeSelectProps) => 
         }
 
         return resultButtons;
-    }, [headerLabel, viewButton, createButton, createGroupButton, cloneButton, updateButton, deleteButton, buttons, buttonsSize, buttonsPos, activeNode]);
+    }, [headerLabel, viewButton, createButton, createGroupButton, cloneButton, updateButton, deleteButton, propsButtons, buttonsSize, buttonsPos, activeNode]);
 };
 
 const useRefreshButtons = () => {
@@ -201,7 +201,6 @@ const useGetUpdateButton = (
 
         if ((!isGroup && !props.editFormProps) || (isGroup && !props.editGroupFormProps) || props.readOnly || props.editButtons?.update === null)
             return undefined;
-
         return {
             ...defaultButtonUpdate,
             title: isGroup && editGroupFormProps ? t('editGroup') : t('edit'),

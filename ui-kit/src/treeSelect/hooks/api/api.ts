@@ -63,6 +63,9 @@ import {useApiSetIsAllFetched} from '@src/treeSelect/hooks/api/useApiSetIsAllFet
 import {useApiGetMinSymbols} from '@src/treeSelect/hooks/api/useApiGetMinSymbols';
 import {useApiSetMinSymbols} from '@src/treeSelect/hooks/api/useApiSetMinSymbols';
 import {useApiFetchData} from '@src/treeSelect/hooks/api/useApiFetchData';
+import {useValuesState} from '@src/treeSelect/hooks/api/useValuesState';
+import {useApiGetValues} from '@src/treeSelect/hooks/api/useApiGetValues';
+import {useApiSetValues} from '@src/treeSelect/hooks/api/useApiSetValues';
 
 export const useInitApi = ({
     props,
@@ -79,6 +82,7 @@ export const useInitApi = ({
     const [fetchError, setFetchError] = useState(''); //has fetching error
     const [allFetched, setAllFetched] = useState(false); //is all fetched
     const [minSymbols, setMinSymbols] = useState(0); //show min symbols error
+    const [value, setValue] = useValuesState(props);
     const [selectedKeys, setSelectedKeys] = useSelectedState(props);
     const [open, setOpen] = useOpenState(props);
 
@@ -99,6 +103,8 @@ export const useInitApi = ({
     /** Tree component Api methods */
     api.getDataSet = useApiGetDataSet(dataSet);
     api.setDataSet = useApiSetDataset(setDataset);
+    api.getValues = useApiGetValues(value);
+    api.setValues = useApiSetValues(setValue);
     api.isDataPlainList = useApiGetIsDataPlain(isDataPlain);
     api.getEditFormApi = useApiGetEditFormApi(editFormApi);
     api.getEditGroupFormApi = useApiGetEditGroupFormApi(editGroupFormApi);

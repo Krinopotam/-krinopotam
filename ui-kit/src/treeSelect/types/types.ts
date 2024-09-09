@@ -168,13 +168,24 @@ export type ITreeSelectSourcePromise = Promise<{data: ITreeSelectNode[]}>;
 export type ITreeSelectDeletePromise = Promise<{data: Record<string, unknown>}>;
 export type ITreeSelectPlainValue = string | number;
 
-export type ITreeSelectValue = Key | Key[] | null;
+export interface IBaseValueWithLabel {
+    value: Key;
+    label?: React.ReactNode;
+}
+
+export type ITreeSelectValue = Key | Key[] | IBaseValueWithLabel | IBaseValueWithLabel[] | null | undefined;
 
 export type IFieldNames = {key: string; title: string; children: string};
 
 export interface ITreeSelectApi extends ITreeComponentApi<ITreeSelectNode, ITreeSelectProps> {
     /** Tree ref */
     treeSelectRef: React.RefObject<GetRef<typeof TreeSelect>>;
+
+    /** Get values (values always in IBaseValueWithLabel array) */
+    getValues:()=>IBaseValueWithLabel[] | undefined
+
+    /** Set values (values may be  as Key or IBaseValueWithLabel or array) */
+    setValues: (value: ITreeSelectValue) => void;
 
     /** Get edit form api */
     getEditFormApi: () => IDFormModalApi;
@@ -192,7 +203,7 @@ export interface ITreeSelectApi extends ITreeComponentApi<ITreeSelectNode, ITree
     getIsOpen: () => boolean | undefined;
 
     /** Set Dropdown list open/close status */
-    setIsOpen: (state: boolean|undefined) => void;
+    setIsOpen: (state: boolean | undefined) => void;
 
     /** Set the TreeSelect ready to user input status (data is fetched) */
     setIsReady: (value: boolean) => void;
