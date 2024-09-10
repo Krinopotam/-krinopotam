@@ -17,13 +17,14 @@ export default {
                     import {Button} from @krinopotam/ui-kit/button';
                     import {Space} from 'antd';
                     import {IColorType} from @krinopotam/ui-kit/button/button';
-                    import {IExtendedModalProps, Modal} from @krinopotam/ui-kit/modal/modal';
+                    import {Modal} from @krinopotam/ui-kit/modal/modal';
                     import {ButtonsRow} from @krinopotam/ui-kit/buttonsRow';
+                    import {IExtendedModalProps} from @krinopotam/ui-kit/modal";
                     /** Modal component */
-                    export const ModalComponent = (props?: IModalProps): React.JSX.Element => {
+                    export const ModalComponent = (props?: IExtendedModalProps): React.JSX.Element => {
                         const [open, setOpen] = useState(false);
                         const [colorType, setColorType] = useState<IColorType | undefined>(undefined);
-                        const defProps: IModalProps = {
+                        const defProps: IExtendedModalProps = {
                             modalId: 'testForm',
                             colorType: colorType,
                         };

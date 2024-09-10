@@ -20,8 +20,8 @@ export default {
                     import {DForm} from @krinopotam/ui-kit/dForm';
                     import {IInputFieldProps, InputField} from @krinopotam/ui-kit/dForm/fields/input/inputField';
                     import {CustomField} from @krinopotam/ui-kit/dForm/fields/custom/customField';
-                    import {IDFormFieldProps} from @krinopotam/ui-kit/dForm/fields";
-                    type IComponent = IDFormFieldProps;
+                    import {IAnyFieldProps} from @krinopotam/ui-kit/dForm/fields/base";
+                    type IComponent = IAnyFieldProps;
                     /** DForm Custom field auto-updating */
                     export const AutoUpdateCustomField = (props: IComponent): React.JSX.Element => (
                         <DForm
