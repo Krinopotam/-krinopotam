@@ -9,7 +9,6 @@ export const useApiRemoveNode = (api: {
     getPrevNodeKey: ITreeComponentApi['getPrevNodeKey'];
     selectNode: ITreeComponentApi['selectNode'];
     setDataSet: ITreeComponentApi['setDataSet'];
-    setSelectedKeys: ITreeComponentApi['setSelectedKeys'];
 }): ITreeComponentApi['removeNode'] => {
     return useCallback(
         (node, opts, externalDataSet) => {
@@ -50,7 +49,7 @@ export const useApiRemoveNode = (api: {
             if (!externalDataSet) api.setDataSet(dataSet);
 
             api.selectNode(key, false);
-            if (selectKey) api.setSelectedKeys([selectKey]);
+            if (selectKey) api.selectNode(selectKey, true);
 
             return dataSet;
         },

@@ -5,6 +5,7 @@ import {useInitApi} from '@src/treeSelect/hooks/api/api';
 import {useGetActualProps} from '@krinopotam/common-hooks';
 
 import {IAntTreeSelectProps, ITreeSelectBaseProps, ITreeSelectProps} from '@src/treeSelect/types/types';
+import {usePropsState} from "@src/_shared/hooks/componentApiMethods/usePropsState";
 
 export const TreeSelect = (props: ITreeSelectProps): React.JSX.Element => {
     const [allProps, setAllProps] = useGetActualProps(props); //props can be set both by parent component and via api
@@ -62,6 +63,7 @@ const useSplitProps = (props: ITreeSelectProps) => {
             translation: true,
             groupsMode: true,
             onChange: true,
+            onGetLabelCallback: true,
         });
 
         return result[1];

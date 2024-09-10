@@ -7,8 +7,8 @@ import {anyValueToValuesWithLabel} from "@src/treeSelect/tools/dataConvertors";
 
 export const useApiSelectNode = (
     api: {
-        getGetValues: ITreeSelectApi['getValues'];
-        setSetValues: ITreeSelectApi['setValues'];
+        getValues: ITreeSelectApi['getValues'];
+        setValues: ITreeSelectApi['setValues'];
         getFieldNames: ITreeComponentApi['getFieldNames'];
     },
     multiple: boolean | undefined
@@ -16,19 +16,18 @@ export const useApiSelectNode = (
     return useCallback(
         (node, isSelect = true) => {
             const fieldNames = api.getFieldNames();
-            const key: Key = typeof node === 'object' ? (node[fieldNames.key] as Key) : node;
-            const val = anyValueToValuesWithLabel(node, fieldNames)?.[0];
-            if (!val) return;
+            const newVal = anyValueToValuesWithLabel(node, fieldNames)?.[0];
+            if (!newVal) return;
 
-            const values = api.getGetValues();
+            const values = api.getValues();
             if (isSelect) {
-                if (isValuesIncludes(values, key)) return;
-                if (multiple) api.setSetValues([...(values ?? []), val]);
-                else api.setSetValues([val]);
+                if (isValuesIncludes(values, newVal.value)) return;
+                if (multiple) api.setValues([...(values ?? []), newVal]);
+                else api.setValues([newVal]);
             } else {
-                if (!isValuesIncludes(values, key)) return;
-                if (multiple) api.setSetValues(values?.filter(curKey => curKey !== key));
-                else api.setSetValues([]);
+                if (!isValuesIncludes(values, newVal.value)) return;
+                if (multiple) api.setValues(values?.filter(curValue => curValue.value !== newVal.value));
+                else api.setValues([]);
             }
         },
         [api, multiple]

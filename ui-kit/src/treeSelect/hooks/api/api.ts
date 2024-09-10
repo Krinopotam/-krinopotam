@@ -41,7 +41,7 @@ import {useApiIsMounted} from '@src/_shared/hooks/componentApiMethods/useApiIsMo
 import {useApiGetButtonsApi} from '@src/_shared/hooks/componentApiMethods/useApiGetButtonsApi';
 import {IButtonsRowApi} from '@src/buttonsRow';
 import {useApiIsNodeSelected} from '@src/_shared/hooks/treeComponentApiMethods/useApiIsNodeSelected';
-import {useSelectedState} from '@src/treeSelect/hooks/api/useSelectedState';
+import {useSelectedState} from '@src/_shared/hooks/treeComponentApiMethods/useSelectedState';
 import {useOpenState} from '@src/treeSelect/hooks/api/useOpenState';
 import {useApiGetIsOpen} from '@src/treeSelect/hooks/api/useApiGetIsOpen';
 import {useApiSetIsOpen} from '@src/treeSelect/hooks/api/useApiSetIsOpen';
@@ -62,9 +62,9 @@ import {useApiFetchData} from '@src/treeSelect/hooks/api/useApiFetchData';
 import {useValuesState} from '@src/treeSelect/hooks/api/useValuesState';
 import {useApiGetValues} from '@src/treeSelect/hooks/api/useApiGetValues';
 import {useApiSetValues} from '@src/treeSelect/hooks/api/useApiSetValues';
-import {useApiGetSelectedKeys} from "@src/treeSelect/hooks/api/useApiGetSelectedKeys";
-import {useApiGetSelectedNodes} from "@src/treeSelect/hooks/api/useApiGetSelectedNodes";
-import {useApiSelectNode} from "@src/treeSelect/hooks/api/useApiSelectNode";
+import {useApiGetSelectedKeys} from '@src/treeSelect/hooks/api/useApiGetSelectedKeys';
+import {useApiGetSelectedNodes} from '@src/treeSelect/hooks/api/useApiGetSelectedNodes';
+import {useApiSelectNode} from '@src/treeSelect/hooks/api/useApiSelectNode';
 
 export const useInitApi = ({
     props,
@@ -81,7 +81,7 @@ export const useInitApi = ({
     const [fetchError, setFetchError] = useState(''); //has fetching error
     const [allFetched, setAllFetched] = useState(false); //is all fetched
     const [minSymbols, setMinSymbols] = useState(0); //show min symbols error
-    const [selectedKeys, setSelectedKeys] = useSelectedState(props);
+    //const [selectedKeys, setSelectedKeys] = useSelectedState(props);
     const [open, setOpen] = useOpenState(props);
 
     api.getFieldNames = useApiGetFieldNames(props.fieldNames);
@@ -108,7 +108,7 @@ export const useInitApi = ({
     api.getEditFormApi = useApiGetEditFormApi(editFormApi);
     api.getEditGroupFormApi = useApiGetEditGroupFormApi(editGroupFormApi);
     api.getSelectedKeys = useApiGetSelectedKeys(value);
-    api.setSelectedKeys = useApiSetSelectedKeys(setSelectedKeys);
+    //api.setSelectedKeys = useApiSetSelectedKeys(setSelectedKeys);
     api.getSelectedNodes = useApiGetSelectedNodes(api);
     api.isNodeSelected = useApiIsNodeSelected(api);
     api.selectNode = useApiSelectNode(api, props.multiple);

@@ -1,17 +1,17 @@
 import React, {CSSProperties, useCallback, useEffect, useMemo, useState, useSyncExternalStore} from 'react';
 import {ITreeSelectFieldOnlyProps, TreeSelectField} from '@src/dForm/fields/treeSelect/treeSelectField';
-import {IAntTreeSelectProps, ITreeSelectApi, ITreeSelectProps, ITreeSelectValue, TreeSelect} from '@src/treeSelect';
+import {ITreeSelectApi, ITreeSelectProps, ITreeSelectValue, TreeSelect} from '@src/treeSelect';
 import {SplitObject} from '@krinopotam/js-helpers';
-import {IAnyFieldProps} from "@src/dForm/fields/base";
+import {IAnyFieldProps} from '@src/dForm/fields/base';
 
-export const TreeSelectFieldRender = ({field}: { field: TreeSelectField }): React.JSX.Element => {
+export const TreeSelectFieldRender = ({field}: {field: TreeSelectField}): React.JSX.Element => {
     useSyncExternalStore(field.subscribe.bind(field), field.getSnapshot.bind(field));
     const [api] = useState({} as ITreeSelectApi);
 
     const fieldProps = field.getProps();
     const value = field.getValue() as ITreeSelectValue | string;
     const onChange = useOnChange(field);
-    const onBlur = useOnBlur(field)
+    const onBlur = useOnBlur(field);
     const onClear = useOnClear(field);
 
     useEffect(() => {
@@ -81,28 +81,26 @@ const useSplitTreeSelectProps = (props: IAnyFieldProps) => {
     }, [props]);
 };
 
-
 const useOnChange = (field: TreeSelectField) => {
-    return useCallback<NonNullable<IAntTreeSelectProps['onChange']>>(
-        (value, label, extra) => {
+    return useCallback<NonNullable<ITreeSelectProps['onChange']>>(
+        (keys, nodes) => {
             if (field.isReady()) {
                 //const nodes = api.getNodes(value as Key|Key[])
-                field.setValue(value ?? null);
+                field.setValue(keys[0] ?? null);
                 field.setDirty(true);
             }
             const fieldProps = field.getProps();
-            fieldProps.onChange?.(value, label, extra);
+            fieldProps.onChange?.(keys, nodes);
         },
         [field]
     );
-}
+};
 
 const useOnBlur = (field: TreeSelectField) => {
     return useCallback(() => {
         field.setTouched(true);
     }, [field]);
-
-}
+};
 
 const useOnClear = (field: TreeSelectField) => {
     return useCallback(() => {
@@ -111,4 +109,4 @@ const useOnClear = (field: TreeSelectField) => {
         const fieldProps = field.getProps();
         fieldProps.onClear?.();
     }, [field]);
-}
+};

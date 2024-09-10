@@ -88,10 +88,11 @@ export const TreeSelectRender = ({
 };
 
 const useValue = (api: ITreeSelectApi) => {
+
+    const vals = api.getValues();
     const props = api.getProps();
-    const keys = api.getSelectedKeys();
-    if (props.multiple) return keys ?? null;
-    else return keys?.[0] ?? null;
+    if (props.multiple) return vals ?? null;
+    else return vals?.[0] ?? null;
 };
 
 const useDefaultDropdownRender = ({treeApi}: {treeApi: ITreeSelectApi}) => {

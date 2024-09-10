@@ -1,7 +1,6 @@
 export {TreeSelect} from '@src/treeSelect/treeSelect';
 
 export type {
-    ITreeSelectPlainValue,
     ITreeSelectDeletePromise,
     ITreeSelectSourcePromise,
     ITreeSelectProps,

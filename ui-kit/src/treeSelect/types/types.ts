@@ -164,26 +164,36 @@ export interface ITreeSelectBaseProps {
 
     /** Callback executed when selected node delete */
     onDelete?: (selectedNodes: ITreeSelectNode, api: ITreeSelectApi) => ITreeSelectDeletePromise | void | undefined;
+
+    /** Callback to get the label of the node's set value. Called when the value set in the TreeSelect is changed */
+    onGetLabelCallback?: (key: Key, dataSet: ITreeSelectNode[] | undefined) => React.ReactNode;
 }
 
 export type ITreeSelectProps = ITreeSelectBaseProps & IAntTreeSelectProps;
 export type ITreeSelectSourcePromise = Promise<{data: ITreeSelectNode[]}>;
 export type ITreeSelectDeletePromise = Promise<{data: Record<string, unknown>}>;
-export type ITreeSelectPlainValue = string | number;
 
 export interface IBaseValueWithLabel {
     value: Key;
     label?: React.ReactNode;
 }
 
-export type ITreeSelectValue = Key | Key[] | IBaseValueWithLabel | IBaseValueWithLabel[] | Record<string, unknown> | Record<string, unknown>[] | null | undefined;
+export type ITreeSelectValue =
+    | Key
+    | Key[]
+    | IBaseValueWithLabel
+    | IBaseValueWithLabel[]
+    | Record<string, unknown>
+    | Record<string, unknown>[]
+    | null
+    | undefined;
 
-export interface ITreeSelectApi extends ITreeComponentApi<ITreeSelectNode, ITreeSelectProps> {
+export interface ITreeSelectApi extends Omit<ITreeComponentApi<ITreeSelectNode, ITreeSelectProps>, 'setSelectedKeys'> {
     /** Tree ref */
     treeSelectRef: React.RefObject<GetRef<typeof TreeSelect>>;
 
     /** Get values (values always in IBaseValueWithLabel array) */
-    getValues:()=>IBaseValueWithLabel[] | undefined
+    getValues: () => IBaseValueWithLabel[] | undefined;
 
     /** Set values (values may be  as Key or IBaseValueWithLabel or array) */
     setValues: (value: ITreeSelectValue) => void;
