@@ -18,10 +18,6 @@ import {useApiGetPrevNodeKey} from '@src/_shared/hooks/treeComponentApiMethods/u
 import {useApiGetNextNode} from '@src/_shared/hooks/treeComponentApiMethods/useApiGetNextNode';
 import {useApiGetPrevNode} from '@src/_shared/hooks/treeComponentApiMethods/useApiGetPrevNode';
 import {useApiGetFieldNames} from '@src/_shared/hooks/treeComponentApiMethods/useApiGetFieldNames';
-import {useApiGetSelectedKeys} from '@src/_shared/hooks/treeComponentApiMethods/useApiGetSelectedKeys';
-import {useApiSetSelectedKeys} from '@src/_shared/hooks/treeComponentApiMethods/useApiSetSelectedKeys';
-import {useApiGetSelectedNodes} from '@src/_shared/hooks/treeComponentApiMethods/useApiGetSelectedNodes';
-import {useApiSelectNode} from '@src/_shared/hooks/treeComponentApiMethods/useApiSelectNode';
 import {useApiGetProps} from '@src/_shared/hooks/componentApiMethods/useApiGetProps';
 import {useApiSetProps} from '@src/_shared/hooks/componentApiMethods/useApiSetProps';
 import {useApiUpdateProps} from '@src/_shared/hooks/componentApiMethods/useApiUpdateProps';
@@ -66,6 +62,9 @@ import {useApiFetchData} from '@src/treeSelect/hooks/api/useApiFetchData';
 import {useValuesState} from '@src/treeSelect/hooks/api/useValuesState';
 import {useApiGetValues} from '@src/treeSelect/hooks/api/useApiGetValues';
 import {useApiSetValues} from '@src/treeSelect/hooks/api/useApiSetValues';
+import {useApiGetSelectedKeys} from "@src/treeSelect/hooks/api/useApiGetSelectedKeys";
+import {useApiGetSelectedNodes} from "@src/treeSelect/hooks/api/useApiGetSelectedNodes";
+import {useApiSelectNode} from "@src/treeSelect/hooks/api/useApiSelectNode";
 
 export const useInitApi = ({
     props,
@@ -82,7 +81,6 @@ export const useInitApi = ({
     const [fetchError, setFetchError] = useState(''); //has fetching error
     const [allFetched, setAllFetched] = useState(false); //is all fetched
     const [minSymbols, setMinSymbols] = useState(0); //show min symbols error
-    const [value, setValue] = useValuesState(props);
     const [selectedKeys, setSelectedKeys] = useSelectedState(props);
     const [open, setOpen] = useOpenState(props);
 
@@ -90,6 +88,7 @@ export const useInitApi = ({
     const fieldNames = api.getFieldNames();
     const prepareNode = useApiPrepareNode(props);
 
+    const [value, setValue] = useValuesState(props, fieldNames);
     const [dataSet, setDataset, isDataPlain, parentKeys] = useDataSetState(props.dataSet, fieldNames, prepareNode); //current dataSet
     const [expandedKeys, setExpandedKeys] = useExpandedKeysState(props.expandedKeys, props.defaultExpandedKeys, props.defaultExpandAll, parentKeys); //expanded keys
 
@@ -104,11 +103,11 @@ export const useInitApi = ({
     api.getDataSet = useApiGetDataSet(dataSet);
     api.setDataSet = useApiSetDataset(setDataset);
     api.getValues = useApiGetValues(value);
-    api.setValues = useApiSetValues(setValue);
+    api.setValues = useApiSetValues(setValue, fieldNames);
     api.isDataPlainList = useApiGetIsDataPlain(isDataPlain);
     api.getEditFormApi = useApiGetEditFormApi(editFormApi);
     api.getEditGroupFormApi = useApiGetEditGroupFormApi(editGroupFormApi);
-    api.getSelectedKeys = useApiGetSelectedKeys(selectedKeys);
+    api.getSelectedKeys = useApiGetSelectedKeys(value);
     api.setSelectedKeys = useApiSetSelectedKeys(setSelectedKeys);
     api.getSelectedNodes = useApiGetSelectedNodes(api);
     api.isNodeSelected = useApiIsNodeSelected(api);

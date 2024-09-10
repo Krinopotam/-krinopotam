@@ -6,7 +6,7 @@ import {IButtonsRowApi, IFormButton} from '@src/buttonsRow';
 import {DefaultOptionType} from 'rc-tree-select/es/TreeSelect';
 import {translations} from '@src/tabulatorGrid/translations/translations';
 
-import {ITreeComponentApi} from '@src/_shared/hooks/treeComponentApiMethods/types/treeApiTypes';
+import {IFieldNames, ITreeComponentApi} from '@src/_shared/hooks/treeComponentApiMethods/types/treeApiTypes';
 
 interface ITreeSelectNodeBase extends Omit<DefaultOptionType, 'children'> {
     /** Node id */
@@ -22,7 +22,7 @@ export type ITreeSelectNode<T = object> = ITreeSelectNodeBase & {originalData?: 
 type IAntTreeSelectComponentProps = GetProps<typeof TreeSelect>;
 export type IAntTreeSelectProps = Omit<
     IAntTreeSelectComponentProps,
-    'labelInValue' | 'treeData' | 'fieldNames' | 'treeDefaultExpandAll' | 'treeDefaultExpandedKeys' | 'treeExpandedKeys'
+    'labelInValue' | 'treeData' | 'fieldNames' | 'treeDefaultExpandAll' | 'treeDefaultExpandedKeys' | 'treeExpandedKeys' | 'onChange'
 >;
 
 export interface ITreeSelectButton extends IFormButton {
@@ -147,6 +147,9 @@ export interface ITreeSelectBaseProps {
     /** Fires when the component is ready for use (when it fully downloaded all the data, if necessary) */
     onReady?: () => void;
 
+    /** Fires when the TreeSelect value is changed */
+    onChange?: (keys: Key[], nodes: ITreeSelectNode[]) => void;
+
     /** fires when the TreeSelect trying to fetch data */
     onDataFetch?: (search: string, api: ITreeSelectApi) => ITreeSelectSourcePromise | undefined;
 
@@ -173,9 +176,7 @@ export interface IBaseValueWithLabel {
     label?: React.ReactNode;
 }
 
-export type ITreeSelectValue = Key | Key[] | IBaseValueWithLabel | IBaseValueWithLabel[] | null | undefined;
-
-export type IFieldNames = {key: string; title: string; children: string};
+export type ITreeSelectValue = Key | Key[] | IBaseValueWithLabel | IBaseValueWithLabel[] | Record<string, unknown> | Record<string, unknown>[] | null | undefined;
 
 export interface ITreeSelectApi extends ITreeComponentApi<ITreeSelectNode, ITreeSelectProps> {
     /** Tree ref */

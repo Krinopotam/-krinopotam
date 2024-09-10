@@ -1,6 +1,6 @@
 import {TreeSelect as AntdTreeSelect} from 'antd';
 import React, {useCallback, useMemo} from 'react';
-import {IAntTreeSelectProps, ITreeSelectApi, ITreeSelectProps, ITreeSelectValue} from '@src/treeSelect';
+import {IAntTreeSelectProps, ITreeSelectApi, ITreeSelectProps} from '@src/treeSelect';
 import {useDropdownStyle} from '@src/treeSelect/hooks/dropdownStyle';
 import {useDefaultFilter} from '@src/treeSelect/hooks/filter';
 import {NotFound} from '@src/treeSelect/renders/dropdownStatus';
@@ -9,6 +9,9 @@ import {DefaultDropdownRender} from '@src/treeSelect/renders/defaultDropdownRend
 import {usePrepareEditFormProps} from '@src/treeSelect/hooks/prepareEditForm';
 import {DFormModal} from '@src/dFormModal';
 import {useWhyDidYouUpdate} from 'ahooks';
+import {IBaseValueWithLabel} from '@src/treeSelect/types/types';
+import {useApiGetSelectedNodes} from '@src/treeSelect/hooks/api/useApiGetSelectedNodes';
+import {useApiGetSelectedKeys} from '@src/treeSelect/hooks/api/useApiGetSelectedKeys';
 
 // For clarity. Antd has labels for a node(1) and for the selected value(2). fieldNames.label property sets the node label(1) and treeNodeLabelProp sets the selected value label(2)
 // In order not to get confused, we will consider Node's label is title(1), and Label of the selected value is label(2)
@@ -58,12 +61,12 @@ export const TreeSelectRender = ({
                 }
                 {...treeSelectProps}
                 /************ no override ****************/
+                labelInValue
                 fieldNames={fieldNames}
                 treeNodeLabelProp={treeNodeLabelProp} //Selected value label. Will render as content of select. Default: title
                 treeData={treeApi.getDataSet()}
                 value={value}
                 disabled={allProps.disabled || allProps.readOnly} //TODO: implement true readOnly
-                labelInValue // We do not use this mode, as it is useless. In this mode, onChange will return an object containing value and label, but you still can’t build a full node
                 treeDefaultExpandAll={allProps.defaultExpandAll}
                 treeDefaultExpandedKeys={allProps.defaultExpandedKeys}
                 treeExpandedKeys={expandedKeys}
@@ -97,20 +100,23 @@ const useDefaultDropdownRender = ({treeApi}: {treeApi: ITreeSelectApi}) => {
 
 const useOnClear = (api: ITreeSelectApi) => {
     return useCallback(() => {
-        api.setSelectedKeys(undefined);
+        api.setValues(undefined);
         const props = api.getProps();
         props.onClear?.();
     }, [api]);
 };
 
 const useOnChange = (api: ITreeSelectApi) => {
-    return useCallback<NonNullable<IAntTreeSelectProps['onChange']>>(
-        (value, label, extra) => {
+    const valueToNodes = useApiGetSelectedNodes(api);
+    const valueToKeys = useApiGetSelectedKeys();
+    return useCallback<(value: unknown) => void>(
+        value => {
+            const val = value as IBaseValueWithLabel | IBaseValueWithLabel[];
+            api.setValues(val);
             const props = api.getProps();
-            api.setSelectedKeys((value as ITreeSelectValue) ?? undefined);
-            props.onChange?.(value, label, extra);
+            props.onChange?.(valueToKeys(val) ?? [], valueToNodes(undefined, val) ?? []);
         },
-        [api]
+        [api, valueToKeys, valueToNodes]
     );
 };
 

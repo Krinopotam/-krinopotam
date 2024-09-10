@@ -61,6 +61,7 @@ const useSplitProps = (props: ITreeSelectProps) => {
             language: true,
             translation: true,
             groupsMode: true,
+            onChange: true,
         });
 
         return result[1];
