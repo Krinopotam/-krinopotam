@@ -16,7 +16,7 @@ import {BaseFieldRender} from './baseFieldRender';
 import {DModel} from '@src/dForm';
 import {IRuleType} from '@src/dForm/validators/baseValidator';
 
-export interface IBaseFieldProps<TField extends IBaseField> extends Record<string, unknown> {
+export interface IBaseFieldProps<TField extends IBaseField, TValue> extends Record<string, unknown> {
     /** Field React component */
     component: new (fieldName: string, fieldProps: AnyType, model: DModel, parent?: IBaseField) => TField;
 
@@ -33,7 +33,7 @@ export interface IBaseFieldProps<TField extends IBaseField> extends Record<strin
     inlineGroup?: string;
 
     /** Field default value */
-    value?: AnyType;
+    value?: TValue;
 
     /** Whether the field default state is hidden */
     hidden?: boolean;
@@ -106,7 +106,7 @@ export interface IBaseFieldProps<TField extends IBaseField> extends Record<strin
     onValidated?: (value: unknown, error: string, isSubmit: boolean, field: TField) => void;
 }
 
-export type IAnyFieldProps = IBaseFieldProps<AnyType>;
+export type IAnyFieldProps = IBaseFieldProps<AnyType, AnyType>;
 
 export type IBaseField = BaseField<IAnyFieldProps>;
 

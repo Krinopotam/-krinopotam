@@ -84,7 +84,7 @@ export const useInitApi = ({
     //const [selectedKeys, setSelectedKeys] = useSelectedState(props);
     const [open, setOpen] = useOpenState(props);
 
-    api.getFieldNames = useApiGetFieldNames(props.fieldNames);
+    api.getFieldNames = useApiGetFieldNames(props);
     const fieldNames = api.getFieldNames();
     const prepareNode = useApiPrepareNode(props);
 

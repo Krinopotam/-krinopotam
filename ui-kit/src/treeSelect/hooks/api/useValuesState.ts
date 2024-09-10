@@ -1,16 +1,16 @@
-import {ITreeSelectProps} from '@src/treeSelect';
+import {ITreeSelectProps, ITreeSelectValue} from '@src/treeSelect';
 import React, {useEffect, useMemo, useRef, useState} from 'react';
 import {IBaseValueWithLabel} from '@src/treeSelect/types/types';
 import {IFieldNames} from '@src/_shared/hooks/treeComponentApiMethods/types/treeApiTypes';
-import {anyValueToValuesWithLabel} from "@src/treeSelect/tools/dataConvertors";
+import {anyValueToValuesWithLabel} from '@src/treeSelect/tools/dataConvertors';
 
 export const useValuesState = (
-    props: ITreeSelectProps,
+    {value}: ITreeSelectProps,
     fieldNames: IFieldNames
 ): [value: IBaseValueWithLabel[] | undefined, setValue: React.Dispatch<React.SetStateAction<IBaseValueWithLabel[] | undefined>>] => {
-    const valuesWithLabel = useValueWithLabel(props, fieldNames);
+    const valuesWithLabel = useValueWithLabel(value, fieldNames);
 
-    const [value, setValue] = useState(valuesWithLabel);
+    const [val, setVal] = useState(valuesWithLabel);
     const firstUpdate = useRef(true);
     /** Set value if props changed*/
     useEffect(() => {
@@ -18,14 +18,14 @@ export const useValuesState = (
             firstUpdate.current = false;
             return;
         }
-        setValue(valuesWithLabel);
-    }, [valuesWithLabel]);
+        setVal(valuesWithLabel);
+    }, [value, valuesWithLabel]);
 
-    return [value, setValue];
+    return [val, setVal];
 };
 
-const useValueWithLabel = (props: ITreeSelectProps, fieldNames: IFieldNames) => {
+const useValueWithLabel = (value: ITreeSelectValue, fieldNames: IFieldNames) => {
     return useMemo(() => {
-        return anyValueToValuesWithLabel(props.value, fieldNames);
-    }, [fieldNames, props.value]);
+        return anyValueToValuesWithLabel(value, fieldNames);
+    }, [fieldNames, value]);
 };
