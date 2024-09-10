@@ -1,64 +1,8 @@
 import {Select as AntdSelect} from 'antd';
-import React, {ComponentProps, useMemo} from 'react';
+import React, {useMemo} from 'react';
 import {SplitObject} from '@krinopotam/js-helpers';
 import {ArrayElement} from '@krinopotam/service-types';
-
-//region Types
-export type ISelectValue = string | number | ISelectLabeledValue | (string | number | ISelectLabeledValue)[];
-type ISelectBaseValue = string | number | ISelectBaseLabeledValue | (string | number | ISelectBaseLabeledValue)[];
-
-interface ISelectBaseLabeledValue extends Record<string, unknown> {
-    value: string | number;
-    label?: React.ReactNode;
-}
-
-export interface ISelectLabeledValue extends Record<string, unknown> {
-    id: string | number;
-    label?: React.ReactNode;
-}
-
-/**
- * Item of select control or enum table column
- */
-export interface ISelectNodeBase extends Record<string, unknown> {
-    id?: string | number;
-    label?: string | React.ReactNode;
-    disabled?: boolean;
-    icon?: React.ReactNode;
-    className?: string;
-    children?: Omit<ISelectNode, 'children'>;
-}
-
-export type ISelectNode<T extends Record<string, unknown> = Record<string, unknown>> = ISelectNodeBase & T;
-
-export type ISelectOptions = ISelectNode[];
-
-type IAntdSelectProps = ComponentProps<typeof AntdSelect>;
-
-export interface ISelectBaseProps extends Record<string, unknown> {
-    /** Select options list*/
-    dataSet?: ISelectOptions;
-
-    /** Selected values */
-    value?: ISelectValue;
-
-    /** Read only state */
-    readOnly?: boolean;
-
-    /********** Callbacks **********/
-    /** Fires when selection changed */
-    onChange?: (value: ISelectValue, option: ISelectNode | ISelectNode[]) => void;
-
-    /** Fires when item selected */
-    onSelect?: (value: ISelectValue, option: ISelectNode | ISelectNode[]) => void;
-
-    /** Fires when item deselected */
-    onDeselect?: (value: ISelectValue, option: ISelectNode | ISelectNode[]) => void;
-}
-
-export type ISelectProps = ISelectBaseProps & Omit<IAntdSelectProps, 'onChange' | 'onSelect' | 'onDeselect' | 'value'>;
-
-//endregion
+import {IAntdSelectProps, ISelectBaseProps, ISelectBaseValue, ISelectNode, ISelectProps, ISelectValue} from '@src/select/types/types';
 
 export const Select = (props: ISelectProps): React.JSX.Element => {
     const antdSelectProps = useSplitAntTreeSelectProps(props);
@@ -102,7 +46,7 @@ const useGetOptions = (props: ISelectProps) => {
     }, [props.dataSet]);
 };
 
-const useConvertToBaseVal = (props: ISelectProps, val: ISelectValue | undefined) => {
+const useConvertToBaseVal = (_props: ISelectProps, val: ISelectValue | undefined) => {
     return useMemo((): ISelectBaseValue | undefined => {
         if (typeof val === 'undefined') return undefined;
         if (!Array.isArray(val)) {

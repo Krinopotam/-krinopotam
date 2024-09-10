@@ -1,6 +1,6 @@
-import {ISelectOptions} from "@src/select";
+import {ISelectNode} from "@src/select";
 
-export const SelectDataSet: ISelectOptions = [
+export const SelectDataSet: ISelectNode[] = [
     {
         id: '01',
         label: 'Аналитика',

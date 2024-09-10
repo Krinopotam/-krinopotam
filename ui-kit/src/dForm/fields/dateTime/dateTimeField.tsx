@@ -1,81 +1,11 @@
-import {BaseField, IBaseFieldProps,} from "@src/dForm/fields/base/baseField";
-import React from "react";
-import {DateTimeFieldRender} from "@src/dForm/fields/dateTime/dateTimeFieldRender";
-import {IDatePickerProps} from "@src/datePicker";
-import {PanelMode} from "rc-picker/lib/interface";
-import {Dayjs} from "dayjs";
+import {BaseField, IBaseFieldProps} from '@src/dForm/fields/base/baseField';
+import React from 'react';
+import {DateTimeFieldRender} from '@src/dForm/fields/dateTime/dateTimeFieldRender';
+import {IDatePickerProps} from '@src/datePicker';
+import {PanelMode} from 'rc-picker/lib/interface';
+import {Dayjs} from 'dayjs';
 
-export interface IDateTimeFieldProps extends IBaseFieldProps<DateTimeField, IDatePickerProps['value']> {
-    /** Whether to show clear button */
-    allowClear?: IDatePickerProps['allowClear'];
-
-    /** The custom clear icon */
-    clearIcon?: IDatePickerProps['clearIcon'];
-
-    /** Custom rendering function for date cells */
-    dateRender?: IDatePickerProps['dateRender'];
-
-    /** To set default picker date */
-    defaultPickerValue?: IDatePickerProps['defaultPickerValue'];
-
-    /** Specify the date that cannot be selected */
-    disabledDate?: IDatePickerProps['disabledDate'];
-
-    /** To specify the time that cannot be selected */
-    disabledTime?: IDatePickerProps['disabledTime'];
-
-    /** To set the date format, refer to dayjs. Default DD.MM.YYYY HH:mm:ss */
-    format?: IDatePickerProps['format'];
-
-    /** The DatePicker mode */
-    mode?: IDatePickerProps['mode'];
-
-    /** The DatePicker time mode */
-    timeMode?: IDatePickerProps['timeMode'];
-
-    /** To customize the className of the popup calendar */
-    popupClassName?: IDatePickerProps['popupClassName'];
-
-    /** Make input readOnly to avoid popup keyboard in mobile */
-    inputReadOnly?: IDatePickerProps['inputReadOnly'];
-
-    /** The custom next icon */
-    nextIcon?: IDatePickerProps['nextIcon'];
-
-    /** Customize panel render */
-    panelRender?: IDatePickerProps['panelRender'];
-
-    /** The position where the selection box pops up (default bottomLeft) */
-    placement?: IDatePickerProps['placement'];
-
-    /** To customize the style of the popup calendar */
-    popupStyle?: IDatePickerProps['popupStyle'];
-
-    /** The preset ranges for quick selection */
-    presets?: IDatePickerProps['presets'];
-
-    /** The custom prev icon */
-    prevIcon?: IDatePickerProps['prevIcon'];
-
-    /** Render extra footer in panel */
-    renderExtraFooter?: IDatePickerProps['renderExtraFooter'];
-
-    /** Whether to show 'Now' button on panel when showTime is set */
-    showNow?: IDatePickerProps['showNow'];
-
-    /** Whether to show Today button (default true) */
-    showToday?: IDatePickerProps['showToday'];
-
-    /** The custom suffix icon */
-    //suffixIcon?: IDatePickerProps['suffixIcon'];
-
-    /** The custom super next icon */
-    superNextIcon?: IDatePickerProps['superNextIcon'];
-
-    /** The custom super prev icon */
-    superPrevIcon?: IDatePickerProps['superPrevIcon'];
-
-    /** --- Callbacks -----------*/
+interface IDateTimeFieldOwnProps extends IBaseFieldProps<DateTimeField, string> {
     /** Callback when click ok button */
     onOk?: (date: Dayjs, field: DateTimeField) => void;
 
@@ -89,8 +19,10 @@ export interface IDateTimeFieldProps extends IBaseFieldProps<DateTimeField, IDat
     onMouseDown?: (e: React.MouseEvent<HTMLDivElement>, field: DateTimeField) => void;
 }
 
+export type IDateTimeFieldProps = IDateTimeFieldOwnProps & IDatePickerProps;
+
 export class DateTimeField extends BaseField<IDateTimeFieldProps> {
     protected render() {
-        return <DateTimeFieldRender field={this} />
+        return <DateTimeFieldRender field={this} />;
     }
 }

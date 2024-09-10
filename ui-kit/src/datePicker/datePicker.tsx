@@ -6,51 +6,42 @@
  * @license MIT
  */
 
-import {DatePicker as AntDatePicker} from 'antd';
-import {DatePickerProps as AntDatePickerProps} from "antd/lib/date-picker";
+import {DatePicker as AntDatePicker, GetProps} from 'antd';
 import 'antd/es/date-picker/style/index';
 import dayjs, {Dayjs} from 'dayjs';
-import React from "react";
-import {DisabledTimes, SharedPickerProps} from "rc-picker/lib/interface";
+import React from 'react';
+import {SharedPickerProps} from 'rc-picker/lib/interface';
 
-export type IDatePickerProps = Omit<AntDatePickerProps, 'mode' | 'picker' | 'showTime'> & {
+export type IAntDatePicker = GetProps<typeof AntDatePicker>;
+
+export interface IDatePickerProps extends Omit<IAntDatePicker, 'mode' | 'picker' | 'showTime'> {
     mode?: 'time' | 'date' | 'dateTime' | 'week' | 'month' | 'quarter' | 'year';
-    timeMode?: 'seconds' | 'minutes' | 'hours'
+    timeMode?: 'seconds' | 'minutes' | 'hours';
     readOnly?: boolean;
     format?: string;
-    value?: string | Dayjs;
+    value?: string | dayjs.Dayjs;
+}
 
-    disabledTime?: (date: Dayjs) => DisabledTimes; //WORKAROUND: re-added type since AntDatePickerProps doesn't expose it
-    showNow?: boolean; //WORKAROUND: re-added type since AntDatePickerProps doesn't expose it
-    showToday?: boolean; //WORKAROUND: re-added type since AntDatePickerProps doesn't expose it
-    popupClassName?: string; //WORKAROUND: re-added type since AntDatePickerProps doesn't expose it
-};
-
-
-/*
-const dp = forwardRef<typeof AntDatePicker, AntDatePickerProps>(({...props}, ref)=>{
+/*const dp = forwardRef<typeof AntDatePicker, DatePickerProps>(({...props}, ref)=>{
     return  <AntDatePicker {...props} ref ={ref} />
 })
-dp.displayName = "DatePicker"
-*/
+dp.displayName = "DatePicker"*/
 
 export const DatePicker = ({
-                               mode,
-                               timeMode,
-                               readOnly,
-                               allowClear,
-                               open,
-                               inputReadOnly,
-                               panelRender,
-                               format,
-                               value,
-                               ...props
-                           }: IDatePickerProps): React.JSX.Element => {
+    mode,
+    timeMode,
+    readOnly,
+    allowClear,
+    open,
+    inputReadOnly,
+    panelRender,
+    format,
+    value,
+    ...props
+}: IDatePickerProps): React.JSX.Element => {
+    const [fieldMode, fieldPicker, fieldFormat, fieldShowTime] = GetDatePickerParams(mode, timeMode, format);
 
-
-    const [fieldMode, fieldPicker, fieldFormat, fieldShowTime] = GetDatePickerParams(mode, timeMode, format)
-
-    const fieldValue = value ? dayjs(value, fieldFormat) : undefined;
+    const fieldValue = typeof value === 'string' ? dayjs(value, fieldFormat) : value;
 
     return (
         <AntDatePicker
@@ -60,7 +51,6 @@ export const DatePicker = ({
             inputReadOnly={readOnly ? true : inputReadOnly}
             panelRender={readOnly ? () => null : panelRender}
             showTime={fieldShowTime}
-
             format={fieldFormat}
             mode={fieldMode}
             picker={fieldPicker}
@@ -70,20 +60,24 @@ export const DatePicker = ({
     );
 };
 
-type IDatePickerMode = "time" | "date" | "week" | "month" | "quarter" | "year" | undefined
-type IDatePickerPickerMode = "date" | "week" | "month" | "quarter" | "year" | undefined
+type IDatePickerMode = 'time' | 'date' | 'week' | 'month' | 'quarter' | 'year' | undefined;
+type IDatePickerPickerMode = 'date' | 'week' | 'month' | 'quarter' | 'year' | undefined;
 
-export const GetDatePickerParams = (mode: IDatePickerProps['mode'], timeMode: IDatePickerProps['timeMode'], format?: string): [IDatePickerMode, IDatePickerPickerMode, string, SharedPickerProps<Dayjs>['showTime'] | undefined] => {
-    let fieldMode: IDatePickerMode
-    let fieldPicker: IDatePickerPickerMode
+export const GetDatePickerParams = (
+    mode: IDatePickerProps['mode'],
+    timeMode: IDatePickerProps['timeMode'],
+    format?: string
+): [IDatePickerMode, IDatePickerPickerMode, string, SharedPickerProps<Dayjs>['showTime'] | undefined] => {
+    let fieldMode: IDatePickerMode;
+    let fieldPicker: IDatePickerPickerMode;
 
-    let timeFormat = "HH:mm:ss"
-    if (timeMode === 'minutes') timeFormat = "HH:mm"
-    else if (timeMode === 'hours') timeFormat = "HH"
+    let timeFormat = 'HH:mm:ss';
+    if (timeMode === 'minutes') timeFormat = 'HH:mm';
+    else if (timeMode === 'hours') timeFormat = 'HH';
 
     const fieldFormat = GetDatePickerFormat(mode, timeMode, format);
 
-    let fieldShowTime: SharedPickerProps<Dayjs>['showTime'] | undefined
+    let fieldShowTime: SharedPickerProps<Dayjs>['showTime'] | undefined;
     if (!mode || mode === 'date') {
         fieldMode = 'date';
     } else if (mode === 'time') {
@@ -93,7 +87,7 @@ export const GetDatePickerParams = (mode: IDatePickerProps['mode'], timeMode: ID
         fieldPicker = 'time';
     } else if (mode === 'dateTime') {
         fieldMode = 'date';
-        fieldShowTime = {format: timeFormat}
+        fieldShowTime = {format: timeFormat};
     } else if (mode === 'week') {
         fieldMode = 'week';
         fieldPicker = 'week';
@@ -108,40 +102,41 @@ export const GetDatePickerParams = (mode: IDatePickerProps['mode'], timeMode: ID
         fieldPicker = 'year';
     }
 
-    return [fieldMode, fieldPicker, fieldFormat, fieldShowTime]
-}
+    return [fieldMode, fieldPicker, fieldFormat, fieldShowTime];
+};
 
 export const GetDatePickerFormat = (mode: IDatePickerProps['mode'], timeMode: IDatePickerProps['timeMode'], format?: IDatePickerProps['format']) => {
-    let timeFormat = "HH:mm:ss"
-    if (timeMode === 'minutes') timeFormat = "HH:mm"
-    else if (timeMode === 'hours') timeFormat = "HH"
+    let timeFormat = 'HH:mm:ss';
+    if (timeMode === 'minutes') timeFormat = 'HH:mm';
+    else if (timeMode === 'hours') timeFormat = 'HH';
 
     let fieldFormat: string;
-
+    if (format) return format;
     switch (mode) {
         case 'time':
-            fieldFormat = format ?? timeFormat;
+            fieldFormat = timeFormat;
             break;
         case 'dateTime':
-            fieldFormat = format ?? 'DD.MM.YYYY ' + timeFormat
+            fieldFormat = 'DD.MM.YYYY ' + timeFormat;
             break;
         case 'week':
-            fieldFormat = format ?? 'YYYY-wo'
+            fieldFormat = 'YYYY-wo';
             break;
         case 'month':
-            fieldFormat = format ?? 'MMMM YYYY'
+            fieldFormat = 'MMMM YYYY';
             break;
         case 'quarter':
-            fieldFormat = format ?? 'Q кв'
+            //TODO: add internationalization
+            fieldFormat = 'Q кв';
             break;
         case 'year':
-            fieldFormat = format ?? 'YYYY'
+            fieldFormat = 'YYYY';
             break;
         case 'date':
         default:
-            fieldFormat = format ?? 'DD.MM.YYYY'
+            fieldFormat = 'DD.MM.YYYY';
             break;
     }
 
-    return fieldFormat
-}
+    return fieldFormat;
+};

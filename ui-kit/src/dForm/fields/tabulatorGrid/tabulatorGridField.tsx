@@ -81,21 +81,21 @@ export class TabulatorGridField extends BaseField<ITabulatorGridFieldProps> {
      * @param noRerender - do not emit re-rendering
      * @param noUpdateDataSet - do not update dataSet by inner grid method
      */
-    setValue(value: unknown, noEvents?: boolean, noRerender?: boolean, noUpdateDataSet?:boolean) {
+    setValue(value: IGridRowData[] | undefined, noEvents?: boolean, noRerender?: boolean, noUpdateDataSet?: boolean) {
         const gridProps = this.getProps();
         if (!noUpdateDataSet && !gridProps.selectionMode) this.gridApi.setDataSet(value as IGridRowData[]);
-        return super.setValue(value, noEvents, noRerender)
+        return super.setValue(value, noEvents, noRerender);
     }
 
     /** Set/update grid dataSet */
     setDataSet(dataSet: IGridRowData[] | undefined, noEvents?: boolean) {
         const gridProps = this.getProps();
-        if (!gridProps.selectionMode) this.setValue(dataSet, noEvents)
+        if (!gridProps.selectionMode) this.setValue(dataSet, noEvents);
         else this.gridApi.setDataSet(dataSet);
     }
 
     /** Get current grid dataSet */
     getDataSet() {
-        return this.gridApi.getDataSet()
+        return this.gridApi.getDataSet();
     }
 }

@@ -4,7 +4,7 @@ import React from 'react';
 
 import {IDFormFieldsProps} from "@src/dForm";
 
-export interface ITabsFieldProps extends IBaseFieldProps<TabsField, never> {
+export interface ITabsFieldProps extends IBaseFieldProps<TabsField, undefined> {
     /** Tabs fields properties */
     tabs: Record<string, IDFormFieldsProps>;
 

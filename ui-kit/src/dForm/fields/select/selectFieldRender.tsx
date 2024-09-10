@@ -1,6 +1,6 @@
 import React, {CSSProperties, useCallback, useEffect, useSyncExternalStore} from 'react';
-import {SelectField} from '@src/dForm/fields/select/selectField';
-import {ISelectNode, ISelectValue, Select} from '@src/select';
+import {ISelectFieldProps, SelectField} from '@src/dForm/fields/select/selectField';
+import {Select} from '@src/select';
 
 export const SelectFieldRender = ({field}: {field: SelectField}): React.JSX.Element => {
     useSyncExternalStore(field.subscribe.bind(field), field.getSnapshot.bind(field));
@@ -9,15 +9,15 @@ export const SelectFieldRender = ({field}: {field: SelectField}): React.JSX.Elem
 
     const value = field.getValue();
 
-    const onChange = useCallback(
-        (value: ISelectValue, options: ISelectNode | ISelectNode[]) => {
+    const onChange = useCallback<NonNullable<ISelectFieldProps['onChange']>>(
+        value => {
             if (!field.isReady()) return;
-            field.setValue(fieldProps.fullItemValue ? options: value);
+            field.setValue(value);
             field.setDirty(true);
         },
-        [field, fieldProps.fullItemValue]
+        [field]
     );
-    const onBlur = useCallback(() => {
+    const onBlur = useCallback<NonNullable<ISelectFieldProps['onBlur']>>(() => {
         field.setTouched(true);
     }, [field]);
 
@@ -34,44 +34,15 @@ export const SelectFieldRender = ({field}: {field: SelectField}): React.JSX.Elem
 
     return (
         <Select
-            dataSet={fieldProps.dataSet}
-            allowClear={fieldProps.allowClear !== false}
-            autoClearSearchValue={fieldProps.autoClearSearchValue}
-            autoFocus={fieldProps.autoFocus}
-            defaultActiveFirstOption={fieldProps.defaultActiveFirstOption}
-            defaultOpen={fieldProps.defaultOpen}
+            allowClear
+            {...fieldProps}
             disabled={field.isDisabled()}
             readOnly={field.isReadOnly()}
-            fieldNames={fieldProps.fieldNames}
-            filterOption={fieldProps.filterOption}
-            filterSort={fieldProps.filterSort}
-            labelInValue={fieldProps.labelInValue}
-            listHeight={fieldProps.listHeight}
-            loading={fieldProps.loading}
-            maxTagCount={fieldProps.maxTagCount}
-            maxTagPlaceholder={fieldProps.maxTagPlaceholder}
-            maxTagTextLength={fieldProps.maxTagTextLength}
-            menuItemSelectedIcon={fieldProps.menuItemSelectedIcon}
-            mode={fieldProps.mode}
-            notFoundContent={fieldProps.notFoundContent}
-            optionFilterProp={fieldProps.optionFilterProp}
-            optionLabelProp={fieldProps.optionLabelProp}
-            placeholder={fieldProps.placeholder}
-            placement={fieldProps.placement}
-            popupClassName={fieldProps.popupClassName}
-            removeIcon={fieldProps.removeIcon}
-            showSearch={fieldProps.showSearch}
-            suffixIcon={fieldProps.suffixIcon}
-            tagRender={fieldProps.tagRender}
-            tokenSeparators={fieldProps.tokenSeparators}
             value={value}
-            virtual={fieldProps.virtual}
             style={style}
             /******** Callbacks *********/
             onBlur={onBlur}
             onChange={onChange}
-            onSelect={fieldProps.onSelect}
-            onDeselect={fieldProps.onDeselect}
         />
     );
 };

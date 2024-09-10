@@ -6,9 +6,7 @@ import {HttpRequestHeader, ItemRender, ShowUploadListInterface, UploadListProgre
 import {UploadDraggerFieldRender} from '@src/dForm/fields/uploadDragger/uploadDraggerFieldRender';
 
 //TODO: Test component
-export interface IUploadDraggerFieldProps extends IBaseFieldProps<UploadDraggerField> {
-    /** Default list of files that have been uploaded*/
-    value?: Array<UploadFile<unknown>>;
+export interface IUploadDraggerFieldProps extends IBaseFieldProps<UploadDraggerField, Array<UploadFile<unknown>>> {
     /** File types that can be accepted (See html input "accept" Attribute) */
     accept?: string;
     /** Uploading URL/promise */
