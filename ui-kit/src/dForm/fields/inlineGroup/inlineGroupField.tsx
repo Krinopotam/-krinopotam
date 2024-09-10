@@ -3,7 +3,7 @@ import React from 'react';
 import {InlineGroupRender} from '@src/dForm/fields/inlineGroup/inlineGroupRender';
 import {IDFormFieldsProps} from "@src/dForm";
 
-export interface IInlineGroupFieldProps extends IBaseFieldProps<InlineGroupField> {
+export interface IInlineGroupFieldProps extends IBaseFieldProps<InlineGroupField, never> {
     /** Inline fields properties */
     fieldsProps: IDFormFieldsProps;
 }

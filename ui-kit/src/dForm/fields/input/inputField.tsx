@@ -2,10 +2,7 @@ import {BaseField, IBaseFieldProps,} from "@src/dForm/fields/base/baseField";
 import {InputFieldRender} from "@src/dForm/fields/input/inputFieldRender";
 import React from "react";
 
-export interface IInputFieldProps extends IBaseFieldProps<InputField> {
-    /** Default value */
-    value?: string | number;
-
+export interface IInputFieldProps extends IBaseFieldProps<InputField, string | number> {
     /** Whether show text count */
     showCount?: boolean;
 

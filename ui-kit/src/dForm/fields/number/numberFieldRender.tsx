@@ -8,7 +8,7 @@ export const NumberFieldRender = ({field}: {field: NumberField}): React.JSX.Elem
     const fieldName = field.getName();
     const fieldProps = field.getProps();
 
-    const value = field.getValue() as number | undefined;
+    const value = field.getValue();
 
     const onChange = useCallback(
         (val: string | number | null) => {

@@ -2,10 +2,7 @@ import {BaseField, IBaseFieldProps} from '@src/dForm/fields/base/baseField';
 import React from 'react';
 import {DividerFieldRender} from "@src/dForm/fields/divider/dividerFieldRender";
 
-export interface IDividerFieldProps extends IBaseFieldProps<DividerField> {
-    /** Divider title */
-    value?: string | React.ReactNode,
-
+export interface IDividerFieldProps extends IBaseFieldProps<DividerField, string | React.ReactNode> {
     /** Divider text show as plain style */
     plain?: boolean,
 

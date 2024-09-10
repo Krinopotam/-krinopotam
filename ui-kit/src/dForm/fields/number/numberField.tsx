@@ -3,7 +3,7 @@ import React from "react";
 import {NumberFieldRender} from "@src/dForm/fields/number/numberFieldRender";
 import {InputNumberProps} from "antd/es/input-number";
 
-export interface INumberFieldProps extends IBaseFieldProps<NumberField> {
+export interface INumberFieldProps extends IBaseFieldProps<NumberField, string | number> {
     /** The label text displayed after (on the right side of) the input field */
     addonAfter?: React.ReactNode;
 
@@ -15,9 +15,6 @@ export interface INumberFieldProps extends IBaseFieldProps<NumberField> {
 
     /** Decimal separator. Syntactic sugar of `formatter`. Config decimal separator of display. */
     decimalSeparator?: string;
-
-    /** Default value */
-    value?: string | number;
 
     /** Specifies the format of the value presented. Transform `value` to display value show in input */
     formatter?: InputNumberProps['formatter'];

@@ -6,7 +6,7 @@ export const LinkFieldRender = ({field}: {field: LinkField}): React.JSX.Element 
 
     const fieldProps = field.getProps();
 
-    const value = field.getValue() as string | undefined;
+    const value = field.getValue();
 
     const onClick = useCallback(
         (e: MouseEvent) => {

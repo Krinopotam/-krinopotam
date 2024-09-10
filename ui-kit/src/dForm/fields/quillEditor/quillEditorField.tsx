@@ -6,11 +6,8 @@ import {IDeltaStatic} from '@src/quillEditor/quillEditor';
 import {Sources} from 'quill';
 import {Range, UnprivilegedEditor} from 'react-quill';
 
-export interface IQuillEditorFieldProps extends IBaseFieldProps<QuillEditorField> {
+export interface IQuillEditorFieldProps extends IBaseFieldProps<QuillEditorField, string> {
     bounds?: IQuillEditorProps['bounds'];
-
-    /** Default value */
-    value?: string;
 
     className?: IQuillEditorProps['className'];
 

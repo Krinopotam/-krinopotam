@@ -9,12 +9,12 @@ export const TextAreaFieldRender = ({field}: {field: TextAreaField}): React.JSX.
     const fieldName = field.getName();
     const fieldProps = field.getProps();
 
-    const value = field.getValue() as string | number | undefined;
+    const value = field.getValue();
 
     const onChange = useCallback(
         (e: React.ChangeEvent<HTMLTextAreaElement>) => {
             if (field.isReady()) {
-                field.setValue(e.target.value || null);
+                field.setValue(e.target.value);
                 field.setDirty(true);
             }
         },

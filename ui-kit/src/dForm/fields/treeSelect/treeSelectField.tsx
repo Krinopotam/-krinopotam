@@ -3,10 +3,7 @@ import React from "react";
 import {TreeSelectFieldRender} from "@src/dForm/fields/treeSelect/treeSelectFieldRender";
 import {ITreeSelectProps, ITreeSelectValue} from "@src/treeSelect";
 
-export interface ITreeSelectFieldOnlyProps extends IBaseFieldProps<TreeSelectField> {
-    /** Default value */
-    value?: ITreeSelectValue | string;
-
+export interface ITreeSelectFieldOnlyProps extends IBaseFieldProps<TreeSelectField, ITreeSelectValue> {
     /** Callback for onReady event */
     onReady?: (field: TreeSelectField) => void;
 }

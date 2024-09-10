@@ -3,9 +3,9 @@ import React from 'react';
 import {SelectFieldRender} from '@src/dForm/fields/select/selectFieldRender';
 import {SelectProps} from 'rc-select/lib/Select';
 
-import {ISelectProps} from '@src/select';
+import {ISelectNode, ISelectProps} from '@src/select';
 
-export interface ISelectFieldProps extends IBaseFieldProps<SelectField> {
+export interface ISelectFieldProps extends IBaseFieldProps<SelectField, ISelectProps['value'] | ISelectNode | ISelectNode[]> {
     /** if true, then the entire elements (full node) will be written into the values*/
     fullItemValue?:boolean;
 
@@ -23,9 +23,6 @@ export interface ISelectFieldProps extends IBaseFieldProps<SelectField> {
 
     /** Initial open state of dropdown */
     defaultOpen?: ISelectProps['defaultOpen'];
-
-    /** Initial selected option */
-    value?: ISelectProps['value'];
 
     /** The className of dropdown menu */
     popupClassName?: ISelectProps['popupClassName'];

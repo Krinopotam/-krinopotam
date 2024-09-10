@@ -7,7 +7,7 @@ export const SelectFieldRender = ({field}: {field: SelectField}): React.JSX.Elem
 
     const fieldProps = field.getProps();
 
-    const value = field.getValue() as ISelectValue | undefined;
+    const value = field.getValue();
 
     const onChange = useCallback(
         (value: ISelectValue, options: ISelectNode | ISelectNode[]) => {

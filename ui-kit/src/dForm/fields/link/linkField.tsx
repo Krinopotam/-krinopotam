@@ -2,7 +2,7 @@ import {BaseField, IBaseFieldProps} from '@src/dForm/fields/base/baseField';
 import React, {DragEvent, MouseEvent} from 'react';
 import {LinkFieldRender} from '@src/dForm/fields/link/linkFieldRender';
 
-export interface ILinkFieldProps extends IBaseFieldProps<LinkField> {
+export interface ILinkFieldProps extends IBaseFieldProps<LinkField, string> {
     /** Anchor url */
     href?: string;
 

@@ -2,10 +2,7 @@ import {BaseField, IBaseFieldProps,} from "@src/dForm/fields/base/baseField";
 import React from "react";
 import {SwitchFieldRender} from "@src/dForm/fields/switch/switchFieldRender";
 
-export interface ISwitchFieldProps extends IBaseFieldProps<SwitchField> {
-    /** Default value */
-    value?: boolean;
-
+export interface ISwitchFieldProps extends IBaseFieldProps<SwitchField, boolean> {
     /** The content to be shown when the state is checked */
     checkedChildren?: React.ReactNode;
 

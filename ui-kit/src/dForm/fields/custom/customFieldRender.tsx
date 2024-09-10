@@ -6,7 +6,7 @@ export const CustomFieldRender = ({field}: {field: CustomField}): React.JSX.Elem
 
     const fieldProps = field.getProps();
 
-    const value = field.getValue() as string | undefined | React.ReactNode;
+    const value = field.getValue();
     const curValue = fieldProps?.onRender?.(value, field) ?? value;
 
     useEffect(() => {

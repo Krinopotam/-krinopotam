@@ -5,10 +5,7 @@ import {IGridApi, IGridDataSourcePromise, IGridDeletePromise, IGridProps, IGridR
 import {IRequestProps} from '@src/tabulatorBase';
 import {RowComponent} from 'tabulator-tables';
 
-export interface ITabulatorGridFieldPropsBase extends IBaseFieldProps<TabulatorGridField> {
-    /** Default value */
-    value?: IGridRowData[];
-
+export interface ITabulatorGridFieldPropsBase extends IBaseFieldProps<TabulatorGridField, IGridRowData[]> {
     /** Auto resize height on form resize */
     resizeHeightWithForm?: boolean;
 

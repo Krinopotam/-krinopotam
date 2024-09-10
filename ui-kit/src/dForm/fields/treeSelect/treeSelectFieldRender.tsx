@@ -1,6 +1,6 @@
 import React, {CSSProperties, useCallback, useEffect, useMemo, useState, useSyncExternalStore} from 'react';
 import {ITreeSelectFieldOnlyProps, TreeSelectField} from '@src/dForm/fields/treeSelect/treeSelectField';
-import {ITreeSelectApi, ITreeSelectProps, ITreeSelectValue, TreeSelect} from '@src/treeSelect';
+import {ITreeSelectApi, ITreeSelectProps, TreeSelect} from '@src/treeSelect';
 import {SplitObject} from '@krinopotam/js-helpers';
 import {IAnyFieldProps} from '@src/dForm/fields/base';
 
@@ -9,7 +9,7 @@ export const TreeSelectFieldRender = ({field}: {field: TreeSelectField}): React.
     const [api] = useState({} as ITreeSelectApi);
 
     const fieldProps = field.getProps();
-    const value = field.getValue() as ITreeSelectValue | string;
+    const value = field.getValue();
     const onChange = useOnChange(field);
     const onBlur = useOnBlur(field);
     const onClear = useOnClear(field);

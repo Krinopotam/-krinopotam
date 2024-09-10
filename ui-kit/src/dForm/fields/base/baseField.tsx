@@ -76,7 +76,7 @@ export interface IBaseFieldProps<TField extends IBaseField, TValue> extends Reco
 
     /*************** Callbacks **************/
     /** fires when the value of a field changed */
-    onValueChanged?: (value: unknown, prevValue: unknown, field: TField) => void;
+    onValueChanged?: (value: TValue, prevValue: TValue, field: TField) => void;
 
     /** fires when the touched state of a field changed */
     onTouchedStateChanged?: (state: boolean, field: TField) => void;
@@ -103,7 +103,7 @@ export interface IBaseFieldProps<TField extends IBaseField, TValue> extends Reco
     onReadyStateChanged?: (state: boolean, field: TField) => void;
 
     /** fires when a field validated */
-    onValidated?: (value: unknown, error: string, isSubmit: boolean, field: TField) => void;
+    onValidated?: (value: TValue, error: string, isSubmit: boolean, field: TField) => void;
 }
 
 export type IAnyFieldProps = IBaseFieldProps<AnyType, AnyType>;
@@ -212,7 +212,7 @@ export class BaseField<TFieldProps extends IAnyFieldProps> {
     }
 
     /** @return field value */
-    getValue(): unknown {
+    getValue(): TFieldProps['value'] | undefined {
         const formValues = this.model.getFormValues();
         return formValues[this.fieldName];
     }
@@ -224,7 +224,7 @@ export class BaseField<TFieldProps extends IAnyFieldProps> {
      * @param noEvents - do not emit onValueChanged callback
      * @param noRerender - do not emit re-rendering
      */
-    setValue(value: unknown, noEvents?: boolean, noRerender?: boolean) {
+    setValue(value: TFieldProps['value'] | undefined, noEvents?: boolean, noRerender?: boolean) {
         const prevValue = this.getValue();
         if (prevValue === value) return;
 

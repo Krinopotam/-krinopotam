@@ -2,10 +2,7 @@ import {BaseField, IBaseFieldProps,} from "@src/dForm/fields/base/baseField";
 import React from "react";
 import {PasswordFieldRender} from "@src/dForm/fields/password/passwordFieldRender";
 
-export interface IPasswordFieldProps extends IBaseFieldProps<PasswordField> {
-    /** Default value */
-    value?: string | number;
-
+export interface IPasswordFieldProps extends IBaseFieldProps<PasswordField, string | number> {
     /** Show input counter */
     showCount?: boolean;
 

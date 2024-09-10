@@ -9,7 +9,7 @@ export const QuillEditorFieldRender = ({field}: {field: QuillEditorField}): Reac
 
     const fieldProps = field.getProps();
 
-    const value = field.getValue() as string | undefined;
+    const value = field.getValue();
 
     const onChange = useCallback(
         function (this: Quill, value: string, delta: IDeltaStatic, source: Sources, editor: UnprivilegedEditor) {

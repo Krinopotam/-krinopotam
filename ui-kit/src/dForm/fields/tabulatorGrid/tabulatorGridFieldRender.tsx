@@ -13,7 +13,7 @@ export const TabulatorGridFieldRender = ({field, gridApi: gridApiBase}: {field: 
     useSyncExternalStore(field.subscribe.bind(field), field.getSnapshot.bind(field));
 
     const fieldProps = field.getProps();
-    const [gridApi] = useState(gridApiBase as IGridApi);
+    const [gridApi] = useState(gridApiBase);
 
     const tabulatorProps = useSplitTabulatorProps(fieldProps);
 

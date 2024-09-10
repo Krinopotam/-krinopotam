@@ -7,7 +7,7 @@ export const SwitchFieldRender = ({field}: {field: SwitchField}): React.JSX.Elem
 
     const fieldProps = field.getProps();
 
-    const value = field.getValue() as boolean | undefined;
+    const value = field.getValue() ;
 
     const onChange = useCallback(
         (checked: boolean) => {

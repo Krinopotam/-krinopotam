@@ -2,10 +2,7 @@ import {BaseField, IBaseFieldProps} from '@src/dForm/fields/base/baseField';
 import React from 'react';
 import {CustomFieldRender} from '@src/dForm/fields/custom/customFieldRender';
 
-export interface ICustomFieldProps extends IBaseFieldProps<CustomField> {
-    /** Default value */
-    value?: string | React.ReactNode;
-
+export interface ICustomFieldProps extends IBaseFieldProps<CustomField, string | React.ReactNode> {
     /** Fires on field render */
     onRender?: (value: string | React.ReactNode, field: CustomField) => string | React.ReactNode;
 }

@@ -5,7 +5,7 @@ import {IDatePickerProps} from "@src/datePicker";
 import {PanelMode} from "rc-picker/lib/interface";
 import {Dayjs} from "dayjs";
 
-export interface IDateTimeFieldProps extends IBaseFieldProps<DateTimeField> {
+export interface IDateTimeFieldProps extends IBaseFieldProps<DateTimeField, IDatePickerProps['value']> {
     /** Whether to show clear button */
     allowClear?: IDatePickerProps['allowClear'];
 
@@ -14,9 +14,6 @@ export interface IDateTimeFieldProps extends IBaseFieldProps<DateTimeField> {
 
     /** Custom rendering function for date cells */
     dateRender?: IDatePickerProps['dateRender'];
-
-    /** Default value. If start time or end time is null or undefined, the date range will be an open interval */
-    value?: IDatePickerProps['value'];
 
     /** To set default picker date */
     defaultPickerValue?: IDatePickerProps['defaultPickerValue'];
