@@ -5,6 +5,10 @@ import {DForm, IDFormProps} from '@src/dForm';
 import {IDFormModalProps} from '@src/dFormModal';
 import {InputField} from '@src/dForm/fields/input/inputField';
 import {ITreeSelectFieldProps, TreeSelectField} from '@src/dForm/fields/treeSelect/treeSelectField';
+import {CloneObject} from '@krinopotam/js-helpers';
+import {removeFromDataSet} from '@src/_shared/hooks/treeComponentApiMethods/serviceMethods/removeFromDataSet';
+import {ITreeSelectApi} from '@src/treeSelect';
+import {IBaseField} from '@src/dForm/fields/base';
 
 const dataSet = [
     {
@@ -108,12 +112,29 @@ const dataSet = [
     },
 ];
 
+const getDataSet = (field: IBaseField) => {
+    const data = departmentsApi.getDataSet();
+    const model = field.getModel();
+    const formMode = model.getFormMode();
+    if (formMode !== 'update') return data;
+    /** modify dataset for update to avoid the possibility of a parent node choosing itself or its own child node */
+    const id = model.getFormDataSet()['id'];
+    const clonedData = CloneObject(data);
+    removeFromDataSet(clonedData, id, {key: 'id', children: 'children'});
+    return clonedData;
+}
+
+const departmentsApi = {} as ITreeSelectApi;
 const editForm: IDFormModalProps = {
     formId: 'EditForm',
     confirmChanges: true,
     fieldsProps: {
         title: {component: InputField, label: 'Подразделение'},
-        parent:{component: TreeSelectField, label: 'Родитель', dataSet: dataSet,} satisfies ITreeSelectFieldProps,
+        parent: {
+            component: TreeSelectField,
+            label: 'Родитель',
+            dataSet: getDataSet,
+        } satisfies ITreeSelectFieldProps,
     },
 
     onSubmit: (values: Record<string, unknown>) => {
@@ -126,6 +147,8 @@ const editForm: IDFormModalProps = {
     },
 };
 
+
+
 const formProps: IDFormProps = {
     formId: 'Test form',
 
@@ -133,6 +156,7 @@ const formProps: IDFormProps = {
     fieldsProps: {
         department: {
             component: TreeSelectField,
+            apiRef: departmentsApi,
             label: 'Подразделения',
             confirmDelete: true,
             dataSet: dataSet,
