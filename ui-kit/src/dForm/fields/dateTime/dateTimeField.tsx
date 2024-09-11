@@ -5,7 +5,11 @@ import {IDatePickerProps} from '@src/datePicker';
 import {PanelMode} from 'rc-picker/lib/interface';
 import {Dayjs} from 'dayjs';
 
-interface IDateTimeFieldOwnProps extends IBaseFieldProps<DateTimeField, string> {
+
+interface IDateTimeFieldOwnProps extends IBaseFieldProps<DateTimeField, 'now'| string> {
+    /** Set current date as default value if field value is empty (default true) */
+    nowIfEmpty?: boolean;
+
     /** Callback when click ok button */
     onOk?: (date: Dayjs, field: DateTimeField) => void;
 

@@ -10,8 +10,10 @@ export const DateTimeFieldRender = ({field}: {field: DateTimeField}): React.JSX.
 
     const fieldFormat = GetDatePickerFormat(fieldProps.mode, fieldProps.timeMode, fieldProps.format);
     let value = field.getValue();
+    if (!value) value = undefined;
+    if (value === 'now') value = dayjs(new Date()).format(fieldFormat);
 
-    if (!value && !field.isDirty() && !field.isTouched()) {
+    if (fieldProps.nowIfEmpty !==false && !value && !field.isDirty() && !field.isTouched()) {
         value = dayjs(new Date()).format(fieldFormat);
         field.setValue(value, true);
     }

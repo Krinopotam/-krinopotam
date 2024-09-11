@@ -17,12 +17,12 @@ import {IDFormApi, IDFormDataSet, IDFormFieldsProps, IDFormProps} from '@src/dFo
 import {IError} from '@krinopotam/service-types';
 import {InlineGroupField} from '@src/dForm/fields/inlineGroup/inlineGroupField';
 import {IDFormMode} from '@src/dForm/types/dFormTypes';
-import {IDFormModelCallbacks, IDFormSubmitResultObject, IDFormSubmitResultPromise} from '@src/dForm/types/dModelTypes';
+import {IDFormModelCallbacks} from '@src/dForm/types/dModelTypes';
 
 export class DModel {
     //region Private properties
     /** Form API instance */
-    private readonly _formApi: IDFormApi
+    private readonly _formApi: IDFormApi;
 
     /** form properties (immutable clone) */
     private _formProps: IDFormProps = {};
@@ -119,8 +119,6 @@ export class DModel {
     }
 
     initModel(formProps: IDFormProps, callbacks: IDFormModelCallbacks) {
-        //const startTime = new Date().getTime();
-
         this._callbacks = callbacks;
 
         if (this._formProps === formProps) return;
@@ -134,16 +132,15 @@ export class DModel {
 
         const oldDataSet = this._dataSet;
         [this._labels, this._values, this._hidden, this._readOnly, this._disabled] = this.initFieldsParameters({
-                fieldsMap: this._fieldsMap,
-                prevFieldsMap: prevFieldsMap,
-                curValues: this._values,
-                curDisabled: this._disabled,
-                curReadOnly: this._readOnly,
-                curHidden: this._hidden,
-                dataSet: oldDataSet !== formProps.dataSet ? formProps.dataSet : undefined,
-                mode: formProps.formMode ?? 'create'
-            }
-        );
+            fieldsMap: this._fieldsMap,
+            prevFieldsMap: prevFieldsMap,
+            curValues: this._values,
+            curDisabled: this._disabled,
+            curReadOnly: this._readOnly,
+            curHidden: this._hidden,
+            dataSet: oldDataSet !== formProps.dataSet ? formProps.dataSet : undefined,
+            mode: formProps.formMode ?? 'create',
+        });
 
         this._dataSet = formProps.dataSet;
 
@@ -151,8 +148,6 @@ export class DModel {
         else this._disabled = this.calculateLockedFields();
 
         this._callbacks.onFormModelInitialized?.(this);
-        //const endTime = new Date().getTime();
-        //console.log(`dModel init: ${endTime - startTime}ms`);
     }
 
     /** Instantiate fields classes and prepare fields collections */
@@ -218,28 +213,31 @@ export class DModel {
     }
 
     /** Init fields parameters (keep fields values if field components still the same) */
-    private initFieldsParameters(
-        {
-            fieldsMap,
-            prevFieldsMap,
-            curValues,
-            curDisabled,
-            curReadOnly,
-            curHidden,
-            dataSet,
-            mode
-        }:
-            {
-                fieldsMap: DModel['_fieldsMap'],
-                prevFieldsMap: DModel['_fieldsMap'],
-                curValues: DModel['_values'],
-                curDisabled: DModel['_disabled'],
-                curReadOnly: DModel['_readOnly'],
-                curHidden: DModel['_hidden'],
-                dataSet: IDFormDataSet | undefined,
-                mode: IDFormMode
-            }
-    ): [Record<string, React.ReactNode | undefined>, Record<string, unknown>, Record<string, boolean | undefined>, Record<string, boolean | undefined>, Record<string, boolean | undefined>] {
+    private initFieldsParameters({
+        fieldsMap,
+        prevFieldsMap,
+        curValues,
+        curDisabled,
+        curReadOnly,
+        curHidden,
+        dataSet,
+        mode,
+    }: {
+        fieldsMap: DModel['_fieldsMap'];
+        prevFieldsMap: DModel['_fieldsMap'];
+        curValues: DModel['_values'];
+        curDisabled: DModel['_disabled'];
+        curReadOnly: DModel['_readOnly'];
+        curHidden: DModel['_hidden'];
+        dataSet: IDFormDataSet | undefined;
+        mode: IDFormMode;
+    }): [
+        Record<string, React.ReactNode | undefined>,
+        Record<string, unknown>,
+        Record<string, boolean | undefined>,
+        Record<string, boolean | undefined>,
+        Record<string, boolean | undefined>,
+    ] {
         const values: Record<string, unknown> = {};
         const hidden: Record<string, boolean | undefined> = {};
         const readOnly: Record<string, boolean | undefined> = {};
@@ -320,7 +318,7 @@ export class DModel {
      */
     private isFieldMustBeLocked(field: IBaseField) {
         const fieldProps = field.getProps();
-        if (!fieldProps.dependsOn?.length) return field.isHidden() //return unchanged if there are no dependent fields
+        if (!fieldProps.dependsOn?.length) return field.isHidden(); //return unchanged if there are no dependent fields
 
         for (const parentName of fieldProps.dependsOn) {
             const parentField = this._fieldsMap[parentName];
@@ -355,8 +353,8 @@ export class DModel {
     }
 
     /** @return field by name from fields map */
-    getField(fieldName: string) {
-        return this._fieldsMap[fieldName];
+    getField<T extends IBaseField = IBaseField>(fieldName: string): T {
+        return this._fieldsMap[fieldName] as T;
     }
 
     //endregion
@@ -400,7 +398,7 @@ export class DModel {
      * @param noRerender - do not emit re-rendering
      */
     setFormValues(dataSet: IDFormDataSet | undefined, noEvents?: boolean, noRerender?: boolean) {
-        const newDataSet = noEvents ? dataSet : this._callbacks.onDataSetChange?.(dataSet, this) ?? dataSet;
+        const newDataSet = noEvents ? dataSet : (this._callbacks.onDataSetChange?.(dataSet, this) ?? dataSet);
 
         this._dataSet = newDataSet;
 
@@ -687,7 +685,7 @@ export class DModel {
         if (!dataSource) return;
 
         dataSource.then(
-            (result: { data: Record<string, unknown> }) => {
+            (result: {data: Record<string, unknown>}) => {
                 if (!this.isFormMounted()) return;
                 this.setFormFetching(false);
                 this.setFormFetchingFailed(false);
@@ -720,9 +718,9 @@ export class DModel {
      * Submit form
      */
     submit(
-        onSubmitSuccess?: (values: Record<string, unknown>, dataSet:IDFormDataSet, result: Record<string, unknown> | undefined, model: DModel) => void,
-        onSubmitError?: (values: Record<string, unknown>, dataSet:IDFormDataSet, error: IError, model: DModel) => void,
-        onSubmitComplete?: (values: Record<string, unknown>, dataSet:IDFormDataSet, errors: Record<string, string | undefined>, model: DModel) => void
+        onSubmitSuccess?: (values: Record<string, unknown>, dataSet: IDFormDataSet, result: Record<string, unknown> | undefined, model: DModel) => void,
+        onSubmitError?: (values: Record<string, unknown>, dataSet: IDFormDataSet, error: IError, model: DModel) => void,
+        onSubmitComplete?: (values: Record<string, unknown>, dataSet: IDFormDataSet, errors: Record<string, string | undefined>, model: DModel) => void
     ) {
         if (this.isFormSubmitting()) return;
 
@@ -755,19 +753,29 @@ export class DModel {
 
         if (!this._callbacks?.onSubmit) {
             this.setFormSubmitting(false);
-            onSubmitError?.(formValues, dataSet, {
-                message: 'The onSubmit callback not specified',
-                error: 'ERR_SUBMIT_NOT_SPECIFIED',
-                code: 405,
-                stack: Error().stack
-            }, this);
+            onSubmitError?.(
+                formValues,
+                dataSet,
+                {
+                    message: 'The onSubmit callback not specified',
+                    error: 'ERR_SUBMIT_NOT_SPECIFIED',
+                    code: 405,
+                    stack: Error().stack,
+                },
+                this
+            );
             onSubmitComplete?.(formValues, dataSet, validationErrors, this);
-            this._callbacks?.onSubmitError?.(formValues, dataSet, {
-                message: 'The onSubmit callback not specified',
-                error: 'ERR_SUBMIT_NOT_SPECIFIED',
-                code: 405,
-                stack: Error().stack
-            }, this);
+            this._callbacks?.onSubmitError?.(
+                formValues,
+                dataSet,
+                {
+                    message: 'The onSubmit callback not specified',
+                    error: 'ERR_SUBMIT_NOT_SPECIFIED',
+                    code: 405,
+                    stack: Error().stack,
+                },
+                this
+            );
             this._callbacks?.onSubmitComplete?.(formValues, dataSet, validationErrors, this);
             return;
         }
@@ -775,8 +783,7 @@ export class DModel {
         const result = this._callbacks?.onSubmit(formValues, dataSet, this);
 
         if (IsPromise(result)) {
-            const promiseResult = result as IDFormSubmitResultPromise;
-            promiseResult
+            result
                 .then(result => {
                     if (!this.isFormMounted()) return;
                     this.setFormSubmitting(false);
@@ -799,21 +806,30 @@ export class DModel {
 
         if (typeof result === 'object') {
             this.setFormSubmitting(false);
-            const objectResult = result as IDFormSubmitResultObject;
-            if (objectResult.error?.message) {
-                onSubmitError?.(formValues, dataSet, {
-                    message: objectResult.error.message || '',
-                    error: objectResult.error.error,
-                    code: objectResult.error.code || 400
-                }, this);
-                this._callbacks?.onSubmitError?.(formValues, dataSet, {
-                    message: objectResult.error.message || '',
-                    error: objectResult.error.error,
-                    code: objectResult.error.code || 400
-                }, this);
+            if (result.error?.message) {
+                onSubmitError?.(
+                    formValues,
+                    dataSet,
+                    {
+                        message: result.error.message || '',
+                        error: result.error.error,
+                        code: result.error.code || 400,
+                    },
+                    this
+                );
+                this._callbacks?.onSubmitError?.(
+                    formValues,
+                    dataSet,
+                    {
+                        message: result.error.message || '',
+                        error: result.error.error,
+                        code: result.error.code || 400,
+                    },
+                    this
+                );
             } else {
-                onSubmitSuccess?.(formValues, dataSet, objectResult.data ?? dataSet, this);
-                this._callbacks?.onSubmitSuccess?.(formValues, dataSet, objectResult.data ?? dataSet, this);
+                onSubmitSuccess?.(formValues, dataSet, result.data ?? dataSet, this);
+                this._callbacks?.onSubmitSuccess?.(formValues, dataSet, result.data ?? dataSet, this);
             }
 
             onSubmitComplete?.(formValues, dataSet, validationErrors, this);
@@ -828,18 +844,28 @@ export class DModel {
                 onSubmitSuccess?.(formValues, dataSet, dataSet, this);
                 this._callbacks?.onSubmitSuccess?.(formValues, dataSet, dataSet, this);
             } else {
-                onSubmitError?.(formValues, dataSet, {
-                    message: 'Unknown error',
-                    error: 'ERR_UNKNOWN',
-                    code: 520,
-                    stack: Error().stack
-                }, this);
-                this._callbacks?.onSubmitError?.(formValues, dataSet, {
-                    message: 'Unknown error',
-                    error: 'ERR_UNKNOWN',
-                    code: 520,
-                    stack: Error().stack
-                }, this);
+                onSubmitError?.(
+                    formValues,
+                    dataSet,
+                    {
+                        message: 'Unknown error',
+                        error: 'ERR_UNKNOWN',
+                        code: 520,
+                        stack: Error().stack,
+                    },
+                    this
+                );
+                this._callbacks?.onSubmitError?.(
+                    formValues,
+                    dataSet,
+                    {
+                        message: 'Unknown error',
+                        error: 'ERR_UNKNOWN',
+                        code: 520,
+                        stack: Error().stack,
+                    },
+                    this
+                );
             }
 
             onSubmitComplete?.(formValues, dataSet, validationErrors, this);

@@ -2,8 +2,8 @@
 
 import React from 'react';
 import {DForm, IDFormProps} from '@src/dForm';
-import {InputField} from '@src/dForm/fields/input/inputField';
-import {DateTimeField} from '@src/dForm/fields/dateTime/dateTimeField';
+import {IInputFieldProps, InputField} from '@src/dForm/fields/input/inputField';
+import {DateTimeField, IDateTimeFieldProps} from '@src/dForm/fields/dateTime/dateTimeField';
 
 const formProps: IDFormProps = {
     formId: 'Test form',
@@ -15,16 +15,16 @@ const formProps: IDFormProps = {
             label: 'Field1',
             inlineGroup: 'row1',
             rules: [{type: 'string', rule: 'not-empty', message: 'Поле не должно быть пустым'}],
-        },
-        field2: {component: InputField, label: 'Field2', inlineGroup: 'row1'},
-        field3: {component: InputField, label: 'Field3'},
+        } satisfies IDateTimeFieldProps,
+        field2: {component: InputField, label: 'Field2', inlineGroup: 'row1'} satisfies IInputFieldProps,
+        field3: {component: InputField, label: 'Field3'} satisfies IInputFieldProps,
         /*        group1: {
                     component:InlineGroupField, fieldsProps: {
                         field1: {component: InputField, label: 'Field1' ,inlineGroup:'row1', rules: [{type: 'string', rule: 'not-empty', message: 'Поле не должно быть пустым'}]} ,
                         field2: {component: InputField, label: 'Field2',inlineGroup:'row1'},
                     },//label:'group1'
                 },*/
-        field4: {component: InputField, label: 'Field4'},
+        field4: {component: InputField, label: 'Field4'} satisfies IInputFieldProps,
     },
     onFormValuesChanged: (fieldName, values) => console.log(`${fieldName} changed:`, values[fieldName]),
     buttons: {ok: {position: 'right'}},

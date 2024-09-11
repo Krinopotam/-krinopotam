@@ -126,7 +126,7 @@ const formProps: IDFormProps = {
                 else newDataSet = [];
 
                 const model = field.getModel();
-                const division = model.getField('division');
+                const division = model.getField<TreeSelectField>('division');
                 division.updateProps({dataSet: newDataSet});
                 division.setValue(null);
             },
