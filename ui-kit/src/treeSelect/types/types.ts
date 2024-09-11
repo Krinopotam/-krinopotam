@@ -71,7 +71,7 @@ export interface ITreeSelectBaseProps {
     filterTreeNode?: boolean | ((inputValue: string, treeNode: ITreeSelectNode) => boolean);
 
     /** Local data set */
-    dataSet?: ITreeSelectNode[];
+    dataSet?: ITreeSelectNode[] | (() => ITreeSelectNode[]);
 
     /**  Start fetching remote data on load control or on use control (example, open dropdown). Default OnLoad */
     fetchMode?: 'onLoad' | 'onUse' | 'onUseForce';
@@ -148,7 +148,10 @@ export interface ITreeSelectBaseProps {
     onReady?: () => void;
 
     /** Fires when the TreeSelect value is changed */
-    onChange?: (keys: Key[], nodes: ITreeSelectNode[]) => void;
+    onChange?: (valueType: ILabeledValue | ILabeledValue[], keys: Key[], nodes: ITreeSelectNode[]) => void;
+
+    /** Fires when the TreeSelect dataSet is changed */
+    onDataSetChanged?: (dataSet: ITreeSelectNode[] | undefined) => void;
 
     /** fires when the TreeSelect trying to fetch data */
     onDataFetch?: (search: string, api: ITreeSelectApi) => ITreeSelectSourcePromise | undefined;
@@ -173,27 +176,19 @@ export type ITreeSelectProps = ITreeSelectBaseProps & IAntTreeSelectProps;
 export type ITreeSelectSourcePromise = Promise<{data: ITreeSelectNode[]}>;
 export type ITreeSelectDeletePromise = Promise<{data: Record<string, unknown>}>;
 
-export interface IBaseValueWithLabel {
+export interface ILabeledValue {
     value: Key;
     label?: React.ReactNode;
 }
 
-export type ITreeSelectValue =
-    | Key
-    | Key[]
-    | IBaseValueWithLabel
-    | IBaseValueWithLabel[]
-    | Record<string, unknown>
-    | Record<string, unknown>[]
-    | null
-    | undefined;
+export type ITreeSelectValue = Key | Key[] | ILabeledValue | ILabeledValue[] | Record<string, unknown> | Record<string, unknown>[] | null | undefined;
 
 export interface ITreeSelectApi extends Omit<ITreeComponentApi<ITreeSelectNode, ITreeSelectProps>, 'setSelectedKeys'> {
     /** Tree ref */
     treeSelectRef: React.RefObject<GetRef<typeof TreeSelect>>;
 
     /** Get values (values always in IBaseValueWithLabel array) */
-    getValues: () => IBaseValueWithLabel[] | undefined;
+    getValues: () => ILabeledValue[] | undefined;
 
     /** Set values (values may be  as Key or IBaseValueWithLabel or array) */
     setValues: (value: ITreeSelectValue) => void;

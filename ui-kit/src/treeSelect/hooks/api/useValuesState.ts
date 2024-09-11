@@ -1,13 +1,13 @@
 import {ITreeSelectProps, ITreeSelectValue} from '@src/treeSelect';
 import React, {useEffect, useMemo, useRef, useState} from 'react';
-import {IBaseValueWithLabel} from '@src/treeSelect/types/types';
+import {ILabeledValue} from '@src/treeSelect/types/types';
 import {IFieldNames} from '@src/_shared/hooks/treeComponentApiMethods/types/treeApiTypes';
 import {anyValueToValuesWithLabel} from '@src/treeSelect/tools/dataConvertors';
 
 export const useValuesState = (
     {value}: ITreeSelectProps,
     fieldNames: IFieldNames
-): [value: IBaseValueWithLabel[] | undefined, setValue: React.Dispatch<React.SetStateAction<IBaseValueWithLabel[] | undefined>>] => {
+): [value: ILabeledValue[] | undefined, setValue: React.Dispatch<React.SetStateAction<ILabeledValue[] | undefined>>] => {
     const valuesWithLabel = useValueWithLabel(value, fieldNames);
 
     const [val, setVal] = useState(valuesWithLabel);

@@ -9,7 +9,7 @@ import {DefaultDropdownRender} from '@src/treeSelect/renders/defaultDropdownRend
 import {usePrepareEditFormProps} from '@src/treeSelect/hooks/prepareEditForm';
 import {DFormModal} from '@src/dFormModal';
 import {useWhyDidYouUpdate} from 'ahooks';
-import {IBaseValueWithLabel} from '@src/treeSelect/types/types';
+import {ILabeledValue} from '@src/treeSelect/types/types';
 import {useApiGetSelectedNodes} from '@src/treeSelect/hooks/api/useApiGetSelectedNodes';
 import {useApiGetSelectedKeys} from '@src/treeSelect/hooks/api/useApiGetSelectedKeys';
 
@@ -112,10 +112,10 @@ const useOnChange = (api: ITreeSelectApi) => {
     const valueToKeys = useApiGetSelectedKeys();
     return useCallback<(value: unknown) => void>(
         value => {
-            const val = value as IBaseValueWithLabel | IBaseValueWithLabel[];
+            const val = value as ILabeledValue | ILabeledValue[];
             api.setValues(val);
             const props = api.getProps();
-            props.onChange?.(valueToKeys(val) ?? [], valueToNodes(undefined, val) ?? []);
+            props.onChange?.(value as ILabeledValue | ILabeledValue[], valueToKeys(val) ?? [], valueToNodes(undefined, val) ?? []);
         },
         [api, valueToKeys, valueToNodes]
     );

@@ -14,4 +14,5 @@ export type IUnionToIntersection<T> = (T extends any ? (k: T) => void : never) e
 export type IUnionInterfaces<T extends {
     [key: string]: any;
 }[]> = IUnionToIntersection<T[number]>;
+export type IAddParamToFunction<F, T> = NonNullable<F> extends (...args: infer P) => infer R ? (...args: [...P, T]) => R : never;
 export type { IKeyboardKey, IKeyboardCode } from "./keys";

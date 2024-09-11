@@ -21,7 +21,8 @@ export const useApiAddNode = (api: {
             const childrenField = fieldNames.children;
 
             const dataSet = externalDataset ?? CloneObject(api.getDataSet() ?? []);
-            const targetNode = typeof target === 'object' ? target : api.getNode(target, dataSet);
+            const targetKey = typeof target === 'object' ? target[keyField] as Key: target;
+            const targetNode = api.getNode(targetKey, dataSet);
             if (!targetNode || ((position === 'insideTop' || position === 'insideBottom') && targetNode?.isLeaf)) position = 'below'; //we can't add node into the leaf node or undefined node
 
             let targetList: Record<string, unknown>[] = [];

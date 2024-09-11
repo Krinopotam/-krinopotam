@@ -1,5 +1,5 @@
 import {IFieldNames} from '@src/_shared/hooks/treeComponentApiMethods/types/treeApiTypes';
-import {IBaseValueWithLabel, ITreeSelectValue} from '@src/treeSelect/types/types';
+import {ILabeledValue, ITreeSelectValue} from '@src/treeSelect/types/types';
 import React, {Key} from 'react';
 import {findNodeIndex} from '@src/_shared/hooks/treeComponentApiMethods/serviceMethods/findNodeIndex';
 
@@ -8,7 +8,7 @@ import {findNodeIndex} from '@src/_shared/hooks/treeComponentApiMethods/serviceM
  * @param val
  * @param fieldNames
  */
-export const anyValueToValuesWithLabel = (val: ITreeSelectValue, fieldNames: IFieldNames): IBaseValueWithLabel[] | undefined => {
+export const anyValueToValuesWithLabel = (val: ITreeSelectValue, fieldNames: IFieldNames): ILabeledValue[] | undefined => {
     if (!val) return undefined;
     if (!Array.isArray(val)) {
         if (typeof val === 'object') {
@@ -17,7 +17,7 @@ export const anyValueToValuesWithLabel = (val: ITreeSelectValue, fieldNames: IFi
         } else return [{value: val}];
     }
 
-    const result: IBaseValueWithLabel[] = [];
+    const result: ILabeledValue[] = [];
     for (const item of val) {
         if (!item) continue;
 
@@ -29,7 +29,7 @@ export const anyValueToValuesWithLabel = (val: ITreeSelectValue, fieldNames: IFi
     return result;
 };
 
-export const isValueWithLabel = (val: unknown): val is IBaseValueWithLabel => {
+export const isValueWithLabel = (val: unknown): val is ILabeledValue => {
     return !!(val && typeof val === 'object' && (val as Record<string, unknown>)['value']);
 };
 
@@ -38,7 +38,7 @@ export const isValueWithLabel = (val: unknown): val is IBaseValueWithLabel => {
  * @param node
  * @param fieldNames
  */
-export const nodeToValueWithLabel = (node: Record<string, unknown>, fieldNames: IFieldNames): IBaseValueWithLabel => {
+export const nodeToValueWithLabel = (node: Record<string, unknown>, fieldNames: IFieldNames): ILabeledValue => {
     const key = node[fieldNames.key] as Key;
     const label = node[fieldNames.title] as React.ReactNode;
     return {value: key, label: label};
@@ -51,14 +51,17 @@ export const nodeToValueWithLabel = (node: Record<string, unknown>, fieldNames: 
  * @param val
  * @param dataSet
  * @param fieldNames
+ * @return node without children
  */
 export const valueWithLabelToNode = (
-    val: IBaseValueWithLabel,
+    val: ILabeledValue,
     dataSet: Record<string, unknown>[] | undefined,
     fieldNames: IFieldNames
 ): Record<string, unknown> => {
     const baseNode = {[fieldNames.key]: val.value, [fieldNames.title]: val.label};
     const {idx, nodes} = findNodeIndex(dataSet, val.value, fieldNames);
     if (idx < 0 || !nodes?.[idx]) return baseNode;
-    return nodes[idx];
+    const node = {...nodes[idx]}
+    delete node[fieldNames.children];
+    return node;
 };

@@ -2,7 +2,7 @@ import {Key, useCallback} from 'react';
 
 import {ITreeComponentApi} from '@src/_shared/hooks/treeComponentApiMethods/types/treeApiTypes';
 import {ITreeSelectApi} from '@src/treeSelect';
-import {IBaseValueWithLabel} from '@src/treeSelect/types/types';
+import {ILabeledValue} from '@src/treeSelect/types/types';
 import {anyValueToValuesWithLabel} from "@src/treeSelect/tools/dataConvertors";
 
 export const useApiSelectNode = (
@@ -34,7 +34,7 @@ export const useApiSelectNode = (
     );
 };
 
-const isValuesIncludes = (values: IBaseValueWithLabel[] | undefined, key: Key) => {
+const isValuesIncludes = (values: ILabeledValue[] | undefined, key: Key) => {
     if (!values) return false;
     for (const val of values) {
         if (val.value === key) return true;

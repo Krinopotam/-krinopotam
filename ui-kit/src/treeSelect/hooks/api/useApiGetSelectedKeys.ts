@@ -1,9 +1,9 @@
-import {IBaseValueWithLabel} from '@src/treeSelect/types/types';
+import {ILabeledValue} from '@src/treeSelect/types/types';
 import {Key, useCallback} from 'react';
 
-export const useApiGetSelectedKeys = (value?: IBaseValueWithLabel | IBaseValueWithLabel[]) => {
+export const useApiGetSelectedKeys = (value?: ILabeledValue | ILabeledValue[]) => {
     return useCallback(
-        (extraValue?: IBaseValueWithLabel | IBaseValueWithLabel[]) => {
+        (extraValue?: ILabeledValue | ILabeledValue[]) => {
             const val = extraValue ?? value;
             if (!val) return undefined;
 

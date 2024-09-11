@@ -12,28 +12,28 @@ export interface IFindNodeOptions {
     notDisabled?: boolean;
 }
 
-export type IFieldNames = {key: string; title: string; children: string};
+export type IFieldNames = {key: string; title: string; children: string; parent: string};
 
 export type INodePosition = 'below' | 'above' | 'insideTop' | 'insideBottom';
 
 export interface ITreeComponentApi<TNode extends Record<string, unknown> = Record<string, unknown>, TProps extends object = object>
     extends IBaseComponentApi<TProps> {
     /** Get node fields names */
-    getFieldNames: () => {key: string; children: string; title: string};
+    getFieldNames: () => IFieldNames;
 
-    /** Get data set */
+    /** Returns data set */
     getDataSet: () => TNode[] | undefined;
 
     /** Set data set */
     setDataSet: (dataSet: TNode[] | undefined) => void;
 
-    /** Get selected keys */
+    /** Returns selected keys */
     getSelectedKeys: () => Key[] | undefined;
 
     /** Set selected keys */
     setSelectedKeys: (keys: Key | Key[] | null | undefined) => void;
 
-    /** Get selected nodes
+    /** Returns selected nodes
      * @param externalDataset - if not set, current data set will be used, if set, node will be searched in this data set
      * */
     getSelectedNodes: (externalDataset?: TNode[]) => TNode[] | undefined;
@@ -41,7 +41,7 @@ export interface ITreeComponentApi<TNode extends Record<string, unknown> = Recor
     /** Get node selected status
      * @param externalDataset - if not set, current data set will be used, if set, node will be searched in this data set
      * */
-    isNodeSelected: (node:Key | TNode | undefined) => boolean;
+    isNodeSelected: (node: Key | TNode | undefined) => boolean;
 
     /**
      * Select node
@@ -51,23 +51,23 @@ export interface ITreeComponentApi<TNode extends Record<string, unknown> = Recor
     selectNode: (node: Key | TNode, select?: boolean) => void;
 
     /**
-     * Get active node
+     * Returns active node
      * By default, active node is last selected node.
      * @param singleOnly - component have active node if only one node is selected
      * @param externalDataset - if not set, current data set will be used, if set, node will be searched in this data set
      */
     getActiveNode: (singleOnly?: boolean, externalDataset?: TNode[]) => TNode | undefined;
 
-    /** Get active node key (last selected) */
+    /** Returns active node key (last selected) */
     getActiveNodeKey: (singleOnly?: boolean) => Key | undefined;
 
-    /** Get expanded keys */
+    /** Returns expanded keys */
     getExpandedKeys: () => Key[] | undefined;
 
     /** Set expanded keys */
     setExpandedKeys: (keys: Key[] | undefined) => void;
 
-    /** Get expanded nodes */
+    /** Returns expanded nodes */
     getExpandedNodes: () => TNode[] | undefined;
 
     /** Check if node is expanded */
@@ -83,21 +83,21 @@ export interface ITreeComponentApi<TNode extends Record<string, unknown> = Recor
     toggleNode: (key: Key | TNode) => void;
 
     /**
-     * Get node
+     * Returns node
      * @param key - node key
      * @param externalDataset - if not set, current data set will be used, if set, node will be searched in this data set
      */
     getNode: (key: Key | undefined, externalDataset?: TNode[]) => TNode | undefined;
 
     /**
-     * Get the nodes by key value
+     * Returns the nodes by key value
      * @param keys - array of key values
      * @param extDataSet - external data set. If set, search nodes in this data set, not current dataSet
      */
     getNodes: (key: Key | Key[] | null | undefined, extDataSet?: TNode[]) => TNode[] | undefined;
 
     /**
-     * Get parent node
+     * Returns parent node
      * @param node - node or key
      * @param externalDataset - if not set, current data set will be used, if set, node will be searched in this data set
      */
@@ -153,7 +153,7 @@ export interface ITreeComponentApi<TNode extends Record<string, unknown> = Recor
      */
     moveNode: (
         source: Key | TNode,
-        target: Key | TNode,
+        target: Key | TNode | undefined,
         position?: INodePosition,
         opts?: {
             ensureVisible?: boolean;
@@ -172,7 +172,7 @@ export interface ITreeComponentApi<TNode extends Record<string, unknown> = Recor
     removeNode: (
         node: Key | TNode,
         opts?: {
-            select?: 'prev' | 'next';
+            select?: 'prev' | 'next' | 'keep';
         },
         externalDataset?: TNode[]
     ) => TNode[] | undefined;
@@ -192,7 +192,7 @@ export interface ITreeComponentApi<TNode extends Record<string, unknown> = Recor
     ensureNodeVisible: (node: Key | TNode, externalDataset?: TNode[]) => void;
 
     /**
-     * Get next node key
+     * Returns next node key
      * @param key
      * @param opts
      * @param externalDataset - if not set, search will be performed in current data set. If set - in this data set
@@ -200,7 +200,7 @@ export interface ITreeComponentApi<TNode extends Record<string, unknown> = Recor
     getNextNodeKey: (key: Key | undefined, opts?: IFindNodeOptions, externalDataset?: TNode[]) => Key | undefined;
 
     /**
-     * Get prev node key
+     * Returns prev node key
      * @param key
      * @param opts
      * @param externalDataset - if not set, search will be performed in current data set. If set - in this data set
@@ -208,7 +208,7 @@ export interface ITreeComponentApi<TNode extends Record<string, unknown> = Recor
     getPrevNodeKey: (key: Key | undefined, opts?: IFindNodeOptions, externalDataset?: TNode[]) => Key | undefined;
 
     /**
-     * Get next node
+     * Returns next node
      * @param key
      * @param opts
      * @param externalDataset - if not set, search will be performed in current data set. If set - in this data set
@@ -216,7 +216,7 @@ export interface ITreeComponentApi<TNode extends Record<string, unknown> = Recor
     getNextNode: (node: TNode, opts?: IFindNodeOptions, externalDataset?: TNode[]) => TNode | undefined;
 
     /**
-     * Get prev node
+     * Returns prev node
      * @param key
      * @param opts
      * @param externalDataset - if not set, search will be performed in current data set. If set - in this data set

@@ -13,10 +13,10 @@ export const useApiMoveNode = (api: {
         (source, target, position, opts, externalDataSet) => {
             const movedNode = typeof source === 'object' ? source : api.getNode(source);
             const targetNode = typeof target === 'object' ? target : api.getNode(target);
-            if (!movedNode || !targetNode) return;
+            if (!movedNode) return;
 
             let dataSet = externalDataSet ?? CloneObject(api.getDataSet() ?? []);
-            dataSet = api.removeNode(movedNode, undefined, dataSet) ?? [];
+            dataSet = api.removeNode(movedNode, {select: 'keep'}, dataSet) ?? [];
             dataSet = api.addNode(movedNode, targetNode, position, opts, dataSet) ?? [];
             if (!externalDataSet) api.setDataSet(dataSet);
             return dataSet;

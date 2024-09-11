@@ -24,11 +24,11 @@ export const useApiUpdateNode = (api: {
 
             const {idx, nodes} = findNodeIndex(dataSet, node[keyField] as Key, fieldNames);
             if (idx < 0 || !nodes) return;
-            nodes[idx] = node;
+            updateValues(nodes[idx], node, fieldNames.children);
 
             const targetNode = typeof target === 'object' ? target : api.getNode(target, dataSet);
             const parentNode = api.getParentNode(node[keyField] as Key, dataSet);
-            if (target && targetNode !== parentNode) dataSet = api.moveNode(node[keyField] as Key, target, 'insideBottom', opts, dataSet) ?? [];
+            if (targetNode !== parentNode) dataSet = api.moveNode(node[keyField] as Key, target, 'insideBottom', opts, dataSet) ?? [];
 
             if (!externalDataset) api.setDataSet(dataSet);
             if (opts?.ensureVisible) api.ensureNodeVisible(node[keyField] as Key, dataSet);
@@ -37,4 +37,11 @@ export const useApiUpdateNode = (api: {
         },
         [api]
     );
+};
+
+const updateValues = (source: Record<string, unknown>, target: Record<string, unknown>, childrenField: string) => {
+    for (const field in target) {
+        if (field === childrenField) continue;
+        source[field] = target[field];
+    }
 };

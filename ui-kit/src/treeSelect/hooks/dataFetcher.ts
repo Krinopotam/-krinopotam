@@ -28,7 +28,7 @@ export const useDataFetcher = (api: ITreeSelectApi) => {
             if (!searchString) api.setDataSet(undefined);
 
             dataSource.then(
-                (result: { data: ITreeSelectNode[] }) => {
+                (result: {data: ITreeSelectNode[]}) => {
                     if (!api.getIsMounted()) return;
 
                     api.setDataSet(result.data);
@@ -44,7 +44,7 @@ export const useDataFetcher = (api: ITreeSelectApi) => {
                     treeProps?.onDataFetchSuccess?.(result, api);
                     treeProps?.onDataFetchComplete?.(api);
                 },
-                (error: { message: string }) => {
+                (error: {message: string}) => {
                     if (!api.getIsMounted()) return;
                     api.setSetFetchError(error.message);
                     api.setDataSet(undefined);

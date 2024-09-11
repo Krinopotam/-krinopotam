@@ -41,7 +41,6 @@ import {useApiIsMounted} from '@src/_shared/hooks/componentApiMethods/useApiIsMo
 import {useApiGetButtonsApi} from '@src/_shared/hooks/componentApiMethods/useApiGetButtonsApi';
 import {IButtonsRowApi} from '@src/buttonsRow';
 import {useApiIsNodeSelected} from '@src/_shared/hooks/treeComponentApiMethods/useApiIsNodeSelected';
-import {useSelectedState} from '@src/_shared/hooks/treeComponentApiMethods/useSelectedState';
 import {useOpenState} from '@src/treeSelect/hooks/api/useOpenState';
 import {useApiGetIsOpen} from '@src/treeSelect/hooks/api/useApiGetIsOpen';
 import {useApiSetIsOpen} from '@src/treeSelect/hooks/api/useApiSetIsOpen';
@@ -101,7 +100,7 @@ export const useInitApi = ({
 
     /** Tree component Api methods */
     api.getDataSet = useApiGetDataSet(dataSet);
-    api.setDataSet = useApiSetDataset(setDataset);
+    api.setDataSet = useApiSetDataset(setDataset, props?.onDataSetChanged);
     api.getValues = useApiGetValues(value);
     api.setValues = useApiSetValues(setValue, fieldNames);
     api.isDataPlainList = useApiGetIsDataPlain(isDataPlain);

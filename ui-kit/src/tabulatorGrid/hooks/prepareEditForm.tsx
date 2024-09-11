@@ -3,7 +3,7 @@ import {IDFormApi, IDFormDataSet} from '@src/dForm';
 import {GetUuid} from "@krinopotam/js-helpers";
 import {IGridApi, IGridProps, IGridRowData} from "@src/tabulatorGrid";
 
-export const usePrepareEditFormProps = (gridApi: IGridApi, gridProps: IGridProps) => {
+export const usePrepareEditForm = (gridApi: IGridApi, gridProps: IGridProps) => {
     return useMemo(() => {
         const editFormProps = gridProps?.editFormProps;
         if (!editFormProps) return undefined;
@@ -15,7 +15,7 @@ export const usePrepareEditFormProps = (gridApi: IGridApi, gridProps: IGridProps
 
         formProps.onSubmitSuccess = (values: Record<string, unknown>, dataSet: IDFormDataSet, resultData: Record<string, unknown> | undefined, formApi: IDFormApi) => {
             if (prevOnSubmitSuccess && prevOnSubmitSuccess(values, dataSet, resultData, formApi) === false) return false;
-            const updatedRow = {...formApi.model.getFormDataSet(), ...resultData} as IGridRowData;
+            const updatedRow = {...resultData} as IGridRowData;
 
             const formMode = formApi.model.getFormMode();
 

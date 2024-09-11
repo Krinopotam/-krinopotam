@@ -1,12 +1,9 @@
 import React, {Key, useCallback, useEffect, useRef, useState} from 'react';
+import {IFieldNames} from "@src/_shared/hooks/treeComponentApiMethods/types/treeApiTypes";
 
 export const useDataSetState = <T extends Record<string, unknown>>(
     propsDataSet: React.SetStateAction<T[] | undefined>,
-    fieldNames: {
-        key: string;
-        children: string;
-        title: string;
-    },
+    fieldNames: IFieldNames,
     prepareNodeFn?: (node: T) => T
 ): [T[] | undefined, React.Dispatch<React.SetStateAction<T[] | undefined>>, boolean, Key[]] => {
     const propsState = typeof propsDataSet === 'function' ? propsDataSet(undefined) : propsDataSet;

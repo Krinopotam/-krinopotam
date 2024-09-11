@@ -111,9 +111,9 @@ const dataSet = [
 const editForm: IDFormModalProps = {
     formId: 'EditForm',
     confirmChanges: true,
-    height: 100,
     fieldsProps: {
         title: {component: InputField, label: 'Подразделение'},
+        parent:{component: TreeSelectField, label: 'Родитель', dataSet: dataSet,} satisfies ITreeSelectFieldProps,
     },
 
     onSubmit: (values: Record<string, unknown>) => {

@@ -48,7 +48,7 @@ export const useApiRemoveNode = (api: {
 
             if (!externalDataSet) api.setDataSet(dataSet);
 
-            api.selectNode(key, false);
+            if (opts?.select !=='keep') api.selectNode(key, false);
             if (selectKey) api.selectNode(selectKey, true);
 
             return dataSet;

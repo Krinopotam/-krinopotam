@@ -277,7 +277,7 @@ const useApiGetRowByKey = (gridApi: IGridApi): IGridApi['getRowByKey'] => {
 
 const useApiInsertRows = (dataSetRef: React.MutableRefObject<IGridProps['dataSet'] | undefined>, gridApi: IGridApi): IGridApi['insertRows'] => {
     return useCallback(
-        (rows: IGridRowData[] | IGridRowData, place?: 'above' | 'below', key?: IRowKey, updateActiveRow?: boolean) => {
+        (rows: IGridRowData[] | IGridRowData, place?: 'above' | 'below', target?: IRowKey, updateActiveRow?: boolean) => {
             const tableApi = gridApi.tableApi;
             if (!tableApi) return;
 
@@ -288,8 +288,8 @@ const useApiInsertRows = (dataSetRef: React.MutableRefObject<IGridProps['dataSet
             const _rows: IGridRowData[] = IsArray(rows) ? [...(rows as IGridRowData[])] : [rows as IGridRowData];
 
             for (const row of _rows) {
-                if (!dataTree) tableApi.addData([row], above, key).then();
-                else addTreeRows(gridApi, [row], place, key);
+                if (!dataTree) tableApi.addData([row], above, target).then();
+                else addTreeRows(gridApi, [row], place, target);
             }
 
             dataSetRef.current = tableApi.getData() || [];

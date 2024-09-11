@@ -1,12 +1,13 @@
 // noinspection DuplicatedCode
 
 import React from 'react';
-import {DForm, IDFormProps} from '@src/dForm';
+import {DForm} from '@src/dForm';
 import {IDFormModalProps} from '@src/dFormModal';
 import {IInputFieldProps, InputField} from '@src/dForm/fields/input/inputField';
 import {ITreeSelectFieldProps, TreeSelectField} from '@src/dForm/fields/treeSelect/treeSelectField';
+import {ITreeSelectNode} from '@src/treeSelect';
 
-const dataSet = [
+let dataSet: ITreeSelectNode[] = [
     {
         id: '01',
         title: 'Департамент аналитики данных',
@@ -113,7 +114,7 @@ const editForm: IDFormModalProps = {
     confirmChanges: true,
     fieldsProps: {
         title: {component: InputField, label: 'Подразделение'} satisfies IInputFieldProps,
-        parent:{component: TreeSelectField, label: 'Родитель'} satisfies ITreeSelectFieldProps,
+        parent: {component: TreeSelectField, label: 'Родитель', dataSet: () => dataSet} satisfies ITreeSelectFieldProps,
     },
 };
 
@@ -128,6 +129,9 @@ const formProps: IDFormModalProps = {
             editFormProps: editForm,
             confirmDelete: true,
             dataSet: dataSet,
+            onDataSetChanged: data => {
+                dataSet = data!;
+            },
         } satisfies ITreeSelectFieldProps,
     },
     buttons: null,
