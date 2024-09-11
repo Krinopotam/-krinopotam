@@ -5,9 +5,11 @@ import {DForm} from '@src/dForm';
 import {IDFormModalProps} from '@src/dFormModal';
 import {IInputFieldProps, InputField} from '@src/dForm/fields/input/inputField';
 import {ITreeSelectFieldProps, TreeSelectField} from '@src/dForm/fields/treeSelect/treeSelectField';
-import {ITreeSelectNode} from '@src/treeSelect';
+import {ITreeSelectApi, ITreeSelectNode} from '@src/treeSelect';
+import {CloneObject} from '@krinopotam/js-helpers';
+import {removeFromDataSet} from '@src/_shared/hooks/treeComponentApiMethods/serviceMethods/removeFromDataSet';
 
-let dataSet: ITreeSelectNode[] = [
+const dataSet: ITreeSelectNode[] = [
     {
         id: '01',
         title: 'Департамент аналитики данных',
@@ -109,12 +111,28 @@ let dataSet: ITreeSelectNode[] = [
     },
 ];
 
+const departmentsApi = {} as ITreeSelectApi;
+
 const editForm: IDFormModalProps = {
     formId: 'EditForm',
     confirmChanges: true,
     fieldsProps: {
         title: {component: InputField, label: 'Подразделение'} satisfies IInputFieldProps,
-        parent: {component: TreeSelectField, label: 'Родитель', dataSet: () => dataSet} satisfies ITreeSelectFieldProps,
+        parent: {
+            component: TreeSelectField,
+            label: 'Родитель',
+            dataSet: field => {
+                const data = departmentsApi.getDataSet();
+                const model = field.getModel();
+                const formMode = model.getFormMode();
+                if (formMode !== 'update') return data;
+                /** modify dataset for update to avoid the possibility of a parent node choosing itself or its own child node */
+                const id = model.getFormDataSet()['id'];
+                const clonedData = CloneObject(data);
+                removeFromDataSet(clonedData, id, {key: 'id', children: 'children'});
+                return clonedData;
+            },
+        } satisfies ITreeSelectFieldProps,
     },
 };
 
@@ -125,13 +143,11 @@ const formProps: IDFormModalProps = {
     fieldsProps: {
         departments: {
             component: TreeSelectField,
+            apiRef: departmentsApi,
             label: 'Подразделения',
             editFormProps: editForm,
             confirmDelete: true,
             dataSet: dataSet,
-            onDataSetChanged: data => {
-                dataSet = data!;
-            },
         } satisfies ITreeSelectFieldProps,
     },
     buttons: null,

@@ -1,12 +1,15 @@
 import {BaseField, IBaseFieldProps} from '@src/dForm/fields/base/baseField';
 import React from 'react';
 import {TreeSelectFieldRender} from '@src/dForm/fields/treeSelect/treeSelectFieldRender';
-import {ITreeSelectProps, ITreeSelectValue} from '@src/treeSelect';
+import {ITreeSelectNode, ITreeSelectProps, ITreeSelectValue} from '@src/treeSelect';
 import {IAddParamToFunction} from '@krinopotam/service-types';
 
 export interface ITreeSelectFieldOnlyProps extends IBaseFieldProps<TreeSelectField, ITreeSelectValue> {
     /** Callback for onReady event */
     onReady?: (field: TreeSelectField) => void;
+
+    /** Data set for TreeSelect field */
+    dataSet?: ITreeSelectNode[] | ((field: TreeSelectField) => ITreeSelectNode[] | undefined);
 
     /**
      *  Value type of TreeSelect field which will be used in form (default: node)
@@ -22,7 +25,8 @@ export interface ITreeSelectFieldOnlyProps extends IBaseFieldProps<TreeSelectFie
     onDataSetChanged?: IAddParamToFunction<ITreeSelectProps['onDataSetChanged'], TreeSelectField>;
 }
 
-export type ITreeSelectFieldProps = ITreeSelectFieldOnlyProps & Omit<ITreeSelectProps, 'placeholder' | 'value' | 'onReady' | 'onDataSetChanged' | 'onChange'>;
+export type ITreeSelectFieldProps = ITreeSelectFieldOnlyProps &
+    Omit<ITreeSelectProps, 'placeholder' | 'value' | 'onReady' | 'onDataSetChanged' | 'onChange' | 'dataSet'>;
 
 export class TreeSelectField extends BaseField<ITreeSelectFieldProps> {
     protected render() {

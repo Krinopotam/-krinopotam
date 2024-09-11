@@ -1,5 +1,5 @@
-import React, {CSSProperties, useEffect, useState, useSyncExternalStore} from 'react';
-import {TreeSelectField} from '@src/dForm/fields/treeSelect/treeSelectField';
+import React, {CSSProperties, useEffect, useMemo, useState, useSyncExternalStore} from 'react';
+import {ITreeSelectFieldProps, TreeSelectField} from '@src/dForm/fields/treeSelect/treeSelectField';
 import {ITreeSelectApi, TreeSelect} from '@src/treeSelect';
 import {useOnChange} from '@src/dForm/fields/treeSelect/hooks/useOnChange';
 import {useOnBlur} from '@src/dForm/fields/treeSelect/hooks/useOnBlur';
@@ -12,6 +12,8 @@ export const TreeSelectFieldRender = ({field}: {field: TreeSelectField}): React.
     const [api] = useState({} as ITreeSelectApi);
 
     const fieldProps = field.getProps();
+
+    const dataSet = useDataSet(field, fieldProps.dataSet);
     const value = field.getValue();
     const onChange = useOnChange(field);
     const onBlur = useOnBlur(field);
@@ -32,6 +34,7 @@ export const TreeSelectFieldRender = ({field}: {field: TreeSelectField}): React.
             style={style}
             {...treeProps}
             /***** No overrides ***/
+            dataSet={dataSet}
             autoFocus={fieldProps.autoFocus}
             disabled={field.isDisabled()}
             readOnly={field.isReadOnly()}
@@ -44,4 +47,14 @@ export const TreeSelectFieldRender = ({field}: {field: TreeSelectField}): React.
             onReady={() => fieldProps.onReady?.(field)}
         />
     );
+};
+
+export const useDataSet = (field: TreeSelectField, dataSet: ITreeSelectFieldProps['dataSet']) => {
+    return useMemo(() => {
+        if (typeof dataSet !== 'function') return dataSet;
+        else
+            return () => {
+                return dataSet(field);
+            };
+    }, [dataSet, field]);
 };

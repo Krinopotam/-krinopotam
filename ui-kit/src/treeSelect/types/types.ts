@@ -71,7 +71,7 @@ export interface ITreeSelectBaseProps {
     filterTreeNode?: boolean | ((inputValue: string, treeNode: ITreeSelectNode) => boolean);
 
     /** Local data set */
-    dataSet?: ITreeSelectNode[] | (() => ITreeSelectNode[]);
+    dataSet?: ITreeSelectNode[] | (() => ITreeSelectNode[] | undefined);
 
     /**  Start fetching remote data on load control or on use control (example, open dropdown). Default OnLoad */
     fetchMode?: 'onLoad' | 'onUse' | 'onUseForce';
