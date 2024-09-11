@@ -10,8 +10,16 @@ export const DateTimeFieldRender = ({field}: {field: DateTimeField}): React.JSX.
 
     const fieldFormat = GetDatePickerFormat(fieldProps.mode, fieldProps.timeMode, fieldProps.format);
     let value = field.getValue();
-    if (!value) value = undefined;
-    if (value === 'now') value = dayjs(new Date()).format(fieldFormat);
+
+    if (!value) {
+        value = undefined;
+        field.setValue(value, true);
+    }
+
+    if (value === 'now') {
+        value = dayjs(new Date()).format(fieldFormat);
+        field.setValue(value, true);
+    }
 
     if (fieldProps.nowIfEmpty !==false && !value && !field.isDirty() && !field.isTouched()) {
         value = dayjs(new Date()).format(fieldFormat);
@@ -22,7 +30,7 @@ export const DateTimeFieldRender = ({field}: {field: DateTimeField}): React.JSX.
         e => {
             if (!field.isReady()) return;
             field.setDirty(true);
-            field.setValue((e as dayjs.Dayjs | null)?.format(fieldFormat));
+            field.setValue((e as dayjs.Dayjs | null)?.format(fieldFormat) ?? undefined);
         },
         [field, fieldFormat]
     );
@@ -43,7 +51,7 @@ export const DateTimeFieldRender = ({field}: {field: DateTimeField}): React.JSX.
         <DatePicker
             {...fieldProps}
             disabled={field.isDisabled()}
-            readOnly={field.isDisabled()}
+            readOnly={field.isReadOnly()}
             name={fieldName}
             value={value}
             style={style}

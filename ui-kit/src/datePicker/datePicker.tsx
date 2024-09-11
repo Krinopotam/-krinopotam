@@ -55,6 +55,7 @@ export const DatePicker = ({
             mode={fieldMode}
             picker={fieldPicker}
             value={fieldValue}
+
         />
         //<AntDatePicker {...props} />
     );
