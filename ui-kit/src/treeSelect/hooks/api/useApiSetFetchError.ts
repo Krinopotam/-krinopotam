@@ -1,9 +1,10 @@
 import {useCallback} from 'react';
+import {ITreeSelectApi} from '@src/treeSelect';
 
-export const useApiSetFetchError = (setFetchError: (value: string) => void) => {
+export const useApiSetFetchError = (setFetchError: (value: string | undefined) => void): ITreeSelectApi['setFetchError'] => {
     return useCallback(
-        (fetchError: string | null) => {
-            setFetchError(fetchError ?? '');
+        fetchError => {
+            setFetchError(fetchError);
         },
         [setFetchError]
     );

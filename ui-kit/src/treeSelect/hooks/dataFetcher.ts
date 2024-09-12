@@ -10,13 +10,13 @@ export const useDataFetcher = (api: ITreeSelectApi) => {
             if (!treeProps.noCacheFetchedData && api.getIsAllFetched()) return;
 
             if (treeProps.minSearchLength && searchString.length < treeProps.minSearchLength) {
-                api.setSetMynSymbols(treeProps.minSearchLength);
+                api.setMinSymbols(treeProps.minSearchLength);
                 api.setDataSet(undefined);
                 return;
             }
 
-            api.setSetMynSymbols(0);
-            api.setSetFetchError(null);
+            api.setMinSymbols(0);
+            api.setFetchError(undefined);
 
             const dataSource = treeProps?.onDataFetch?.(searchString, api);
             if (!dataSource) {
@@ -46,7 +46,7 @@ export const useDataFetcher = (api: ITreeSelectApi) => {
                 },
                 (error: {message: string}) => {
                     if (!api.getIsMounted()) return;
-                    api.setSetFetchError(error.message);
+                    api.setFetchError(error.message);
                     api.setDataSet(undefined);
                     api.setIsFetching(false);
                 }

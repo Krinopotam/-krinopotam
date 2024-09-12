@@ -1,0 +1,1 @@
+export declare const useAddEventListener: <K extends keyof DocumentEventMap, Target extends EventTarget, TReturn>(name: K, handler: (ev: DocumentEventMap[K]) => TReturn, target?: Target | undefined, options?: boolean | AddEventListenerOptions) => void;

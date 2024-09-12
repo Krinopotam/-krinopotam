@@ -10,8 +10,7 @@ import {removeFromDataSet} from '@src/treeSelect/tools/removeFromDataSet';
 import {ITreeSelectApi} from '@src/treeSelect';
 
 export const TreeSelectWithFormAsync = (): React.JSX.Element => {
-    const treeEditFormProps = useTreeEditFormProps();
-    const formProps = useFormProps(treeEditFormProps);
+    const formProps = useFormProps();
 
     return (
         <>
@@ -27,6 +26,38 @@ export const TreeSelectWithFormAsync = (): React.JSX.Element => {
 };
 
 const departmentsApi = {} as ITreeSelectApi;
+
+const useFormProps = () => {
+    const treeEditFormProps = useTreeEditFormProps();
+
+    return useMemo(
+        (): IDFormProps => ({
+            formId: 'Test form',
+            confirmChanges: true,
+
+            fieldsProps: {
+                departments: {
+                    component: TreeSelectField,
+                    apiRef: departmentsApi,
+                    label: 'Подразделения',
+                    confirmDelete: true,
+                    dataSet: dataSet,
+                    editFormProps: treeEditFormProps,
+                    onDelete: () => {
+                        return new Promise((resolve, reject) => {
+                            setTimeout(() => {
+                                if (Math.random() < 0.3) reject({message: 'Тестовая ошибка удаления строк', code: 400});
+                                else resolve({data: {result: 'OK'}});
+                            }, 2000);
+                        });
+                    },
+                } satisfies ITreeSelectFieldProps,
+            },
+            buttons: null,
+        }),
+        [treeEditFormProps]
+    );
+};
 
 const useTreeEditFormProps = () => {
     return useMemo(
@@ -67,36 +98,6 @@ const useTreeEditFormProps = () => {
             },
         }),
         []
-    );
-};
-
-const useFormProps = (editFormProps: IDFormModalProps) => {
-    return useMemo(
-        (): IDFormProps => ({
-            formId: 'Test form',
-            confirmChanges: true,
-
-            fieldsProps: {
-                departments: {
-                    component: TreeSelectField,
-                    apiRef: departmentsApi,
-                    label: 'Подразделения',
-                    confirmDelete: true,
-                    dataSet: dataSet,
-                    editFormProps: editFormProps,
-                    onDelete: () => {
-                        return new Promise((resolve, reject) => {
-                            setTimeout(() => {
-                                if (Math.random() < 0.3) reject({message: 'Тестовая ошибка удаления строк', code: 400});
-                                else resolve({data: {result: 'OK'}});
-                            }, 2000);
-                        });
-                    },
-                } satisfies ITreeSelectFieldProps,
-            },
-            buttons: null,
-        }),
-        [editFormProps]
     );
 };
 

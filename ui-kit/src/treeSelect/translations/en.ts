@@ -26,4 +26,5 @@ export const en = {
     tryAgainQt: 'Try again?',
     deleteSelectedRecordQt: 'Delete selected record?',
     error:'Error',
+    dataNotFound: 'Data not found',
 }

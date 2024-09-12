@@ -1,5 +1,4 @@
 import {useCallback, useMemo} from 'react';
-import {translations} from "@src/treeSelect/translations/translations";
 
 /** Get translate function
  * @param language - Language to use

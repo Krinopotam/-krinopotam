@@ -4,9 +4,9 @@ import {GetProps, GetRef, TreeSelect} from 'antd';
 import {IDFormModalApi, IDFormModalProps} from '@src/dFormModal';
 import {IButtonsRowApi, IFormButton} from '@src/buttonsRow';
 import {DefaultOptionType} from 'rc-tree-select/es/TreeSelect';
-import {translations} from '@src/tabulatorGrid/translations/translations';
 
 import {IFieldNames, ITreeComponentApi} from '@src/_shared/hooks/treeComponentApiMethods/types/treeApiTypes';
+import {translations} from "@src/treeSelect/translations/translations";
 
 interface ITreeSelectNodeBase extends Omit<DefaultOptionType, 'children'> {
     /** Node id */
@@ -187,6 +187,9 @@ export interface ITreeSelectApi extends Omit<ITreeComponentApi<ITreeSelectNode, 
     /** Tree ref */
     treeSelectRef: React.RefObject<GetRef<typeof TreeSelect>>;
 
+    /** Get translation */
+    t: (str: keyof (typeof translations)['en']) => string;
+
     /** Get values (values always in IBaseValueWithLabel array) */
     getValues: () => ILabeledValue[] | undefined;
 
@@ -209,7 +212,7 @@ export interface ITreeSelectApi extends Omit<ITreeComponentApi<ITreeSelectNode, 
     getIsOpen: () => boolean | undefined;
 
     /** Set Dropdown list open/close status */
-    setIsOpen: (state: boolean | undefined) => void;
+    setIsOpen: (state: React.SetStateAction<boolean | undefined>) => void;
 
     /** Set the TreeSelect ready to user input status (data is fetched) */
     setIsReady: (value: boolean) => void;
@@ -221,10 +224,10 @@ export interface ITreeSelectApi extends Omit<ITreeComponentApi<ITreeSelectNode, 
     setIsFetching: (value: boolean) => void;
 
     /** Get the TreeSelect fetch error */
-    getFetchError: () => string;
+    getFetchError: () => string | undefined;
 
     /** Set the TreeSelect fetch error */
-    setSetFetchError: (value: string | null) => void;
+    setFetchError: (value: string | undefined) => void;
 
     /** Get the TreeSelect all fetched status (full data set completely fetched) */
     getIsAllFetched: () => boolean;
@@ -236,13 +239,13 @@ export interface ITreeSelectApi extends Omit<ITreeComponentApi<ITreeSelectNode, 
     getMinSymbols: () => number;
 
     /** Set the TreeSelect min symbols input status to show/hide error */
-    setSetMynSymbols: (value: number) => void;
+    setMinSymbols: (value: number) => void;
 
     /** Fetch data
      * @param search - search string
      * @param debounce - should debounce
      */
-    fetchData: (search: string, debounce?: boolean) => void;
+    fetchData: (search?: string, debounce?: boolean) => void;
 
     //TODO:remove after testing
     /** Add nodes to current dataset*/

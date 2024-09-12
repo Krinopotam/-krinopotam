@@ -26,4 +26,5 @@ export const ru = {
     tryAgainQt: 'Попробовать еще раз?',
     deleteSelectedRecordQt: 'Удалить выбранную запись?',
     error: 'Ошибка',
-}
+    dataNotFound: 'Данные не найдены',
+};

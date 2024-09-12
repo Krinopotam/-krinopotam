@@ -26,4 +26,5 @@ export const cn =  {
     tryAgainQt: '再试一次',
     deleteSelectedRecordQt: '删除选定的记录',
     error: '错误',
+    dataNotFound: '数据未找到',
 }

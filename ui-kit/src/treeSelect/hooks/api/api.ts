@@ -64,6 +64,8 @@ import {useApiSetValues} from '@src/treeSelect/hooks/api/useApiSetValues';
 import {useApiGetSelectedKeys} from '@src/treeSelect/hooks/api/useApiGetSelectedKeys';
 import {useApiGetSelectedNodes} from '@src/treeSelect/hooks/api/useApiGetSelectedNodes';
 import {useApiSelectNode} from '@src/treeSelect/hooks/api/useApiSelectNode';
+import {useTranslate} from "@src/_shared/hooks/useTranslate";
+import {translations} from "@src/treeSelect/translations/translations";
 
 export const useInitApi = ({
     props,
@@ -77,7 +79,7 @@ export const useInitApi = ({
     const [editGroupFormApi] = useState((props.editGroupFormProps?.apiRef ?? {}) as IDFormModalApi);
     const [isReady, setIsReady] = useState(false);
     const [fetching, setFetching] = useState(false); //is fetching now
-    const [fetchError, setFetchError] = useState(''); //has fetching error
+    const [fetchError, setFetchError] = useState<string | undefined>(); //has fetching error
     const [allFetched, setAllFetched] = useState(false); //is all fetched
     const [minSymbols, setMinSymbols] = useState(0); //show min symbols error
     //const [selectedKeys, setSelectedKeys] = useSelectedState(props);
@@ -95,6 +97,7 @@ export const useInitApi = ({
     api.getId = useApiGetId(props.componentId ?? 'treeSelect-' + GetNanoId());
     api.getProps = useApiGetProps(props);
     api.setProps = useApiSetProps(setProps);
+    api.t = useT(api)
     api.updateProps = useApiUpdateProps(props, setProps);
     api.getIsMounted = useApiIsMounted();
 
@@ -144,11 +147,11 @@ export const useInitApi = ({
     api.getIsFetching = useApiGetIsFetching(fetching);
     api.setIsFetching = useApiSetIsFetching(setFetching);
     api.getFetchError = useApiGetFetchError(fetchError);
-    api.setSetFetchError = useApiSetFetchError(setFetchError);
+    api.setFetchError = useApiSetFetchError(setFetchError);
     api.getIsAllFetched = useApiGetIsAllFetched(allFetched);
     api.setIsAllFetched = useApiSetIsAllFetched(setAllFetched);
     api.getMinSymbols = useApiGetMinSymbols(minSymbols);
-    api.setSetMynSymbols = useApiSetMinSymbols(setMinSymbols);
+    api.setMinSymbols = useApiSetMinSymbols(setMinSymbols);
 
     const dataFetcher = useDataFetcher(api);
     api.fetchData = useApiFetchData(dataFetcher, api);
@@ -160,11 +163,16 @@ export const useInitApi = ({
     return api;
 };
 
+const useT = (api: ITreeSelectApi) => {
+    const treeProps = api.getProps();
+    return useTranslate(treeProps.language, translations, treeProps.translation);
+};
+
 //todo remove
 const useAddNodes = (api: ITreeSelectApi) => {
     return useCallback(
         (parentNode: ITreeSelectNode | undefined, newNodes: ITreeSelectNode | ITreeSelectNode[]) => {
-            const _newNodes = IsArray(newNodes) ? (newNodes as ITreeSelectNode[]) : [newNodes as ITreeSelectNode];
+            const _newNodes = IsArray(newNodes) ? newNodes : [newNodes];
             const fieldNames = api.getFieldNames();
             const keyField = fieldNames.key;
             const childrenField = fieldNames.children;
@@ -207,7 +215,7 @@ const useAddNodes = (api: ITreeSelectApi) => {
 const useUpdateNodes = (api: ITreeSelectApi) => {
     return useCallback(
         (updatedNodes: ITreeSelectNode | ITreeSelectNode[]) => {
-            const _updatedNodes = IsArray(updatedNodes) ? (updatedNodes as ITreeSelectNode[]) : [updatedNodes as ITreeSelectNode];
+            const _updatedNodes = IsArray(updatedNodes) ? updatedNodes : [updatedNodes];
             const fieldNames = api.getFieldNames();
             const keyField = fieldNames.key;
             const childrenField = fieldNames.children;

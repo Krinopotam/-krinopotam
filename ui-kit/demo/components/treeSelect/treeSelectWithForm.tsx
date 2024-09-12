@@ -11,8 +11,7 @@ import {removeFromDataSet} from '@src/treeSelect/tools/removeFromDataSet';
 import {CloneObject} from '@krinopotam/js-helpers';
 
 export const TreeSelectWithForm = (): React.JSX.Element => {
-    const treeEditFormProps = useTreeEditFormProps();
-    const formProps = useFormProps(treeEditFormProps);
+    const formProps = useFormProps();
     return (
         <>
             {/*Description Start*/}
@@ -27,7 +26,8 @@ export const TreeSelectWithForm = (): React.JSX.Element => {
 
 const departmentsApi = {} as ITreeSelectApi;
 
-const useFormProps = (editFormProps: IDFormModalProps) => {
+const useFormProps = () => {
+    const editFormProps = useTreeEditFormProps();
     return useMemo(
         (): IDFormProps => ({
             formId: 'Test form',

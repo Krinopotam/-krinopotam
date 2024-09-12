@@ -3,7 +3,6 @@ import {IsPromise, MergeObjects} from '@krinopotam/js-helpers';
 import {ITreeSelectApi, ITreeSelectNode, ITreeSelectProps} from '@src/treeSelect';
 import {ITreeSelectButton, ITreeSelectButtons} from '@src/treeSelect/types/types';
 import {IDFormDataSet} from '@src/dForm';
-import {useTranslate} from '@src/_shared/hooks/useTranslate';
 
 import {
     defaultButtonClone,
@@ -14,7 +13,6 @@ import {
     defaultButtonView,
     defaultHeaderLabel,
 } from '@src/_shared/hooks/buttons/defaultButtonsProps';
-import {translations} from '@src/treeSelect/translations/translations';
 import {MessageBox, MessageBoxApi} from '@src/messageBox';
 import {IButtonsRowApi} from '@src/buttonsRow';
 import {IError} from '@krinopotam/service-types';
@@ -86,16 +84,16 @@ const useGetHeaderLabel = (api: ITreeSelectProps): ITreeSelectButton | undefined
 
 /** Get create button props */
 const useGetCreateButton = (api: ITreeSelectApi, props: ITreeSelectProps): ITreeSelectButton | undefined => {
-    const t = useT(api);
-
     return useMemo(() => {
         if (!props.editFormProps || props.disabled || props.readOnly || props.editButtons?.create === null) return undefined;
         return {
             ...defaultButtonCreate,
-            title: t('create'),
-            tooltip: t('createRecord'),
+            title: api.t('create'),
+            tooltip: api.t('createRecord'),
             onClick: () => {
-                //const fieldNames = api.getFieldNames();
+                console.log('open ',api.getIsOpen())
+                    api.setIsOpen(true);
+
                 const fieldNames = api.getFieldNames();
                 const activeNode = api.getActiveNode();
                 let parent: ITreeSelectNode | undefined = undefined;
@@ -106,18 +104,17 @@ const useGetCreateButton = (api: ITreeSelectApi, props: ITreeSelectProps): ITree
                 api.getEditFormApi().open('create', {defaultValues: {[fieldNames.parent]: parent}});
             },
         } satisfies ITreeSelectButton;
-    }, [api, props.disabled, props.editButtons?.create, props.editFormProps, props.readOnly, t]);
+    }, [api, props.disabled, props.editButtons?.create, props.editFormProps, props.readOnly]);
 };
 
 /** Get create group button props */
 const useGetCreateGroupButton = (api: ITreeSelectApi, props: ITreeSelectProps): ITreeSelectButton | undefined => {
-    const t = useT(api);
     return useMemo(() => {
         if (!props.editGroupFormProps || props.disabled || props.readOnly || props.editButtons?.createGroup === null) return undefined;
         return {
             ...defaultButtonCreateGroup,
-            title: t('createGroup'),
-            tooltip: t('createRecordsGroup'),
+            title: api.t('createGroup'),
+            tooltip: api.t('createRecordsGroup'),
             onClick: () => {
                 const fieldNames = api.getFieldNames();
                 const activeNode = api.getActiveNode();
@@ -129,7 +126,7 @@ const useGetCreateGroupButton = (api: ITreeSelectApi, props: ITreeSelectProps): 
                 api.getEditGroupFormApi().open('create', {defaultValues: {[fieldNames.parent]: parent}});
             },
         } satisfies ITreeSelectButton;
-    }, [props.editGroupFormProps, props.disabled, props.readOnly, props.editButtons?.createGroup, t, api]);
+    }, [props.editGroupFormProps, props.disabled, props.readOnly, props.editButtons?.createGroup, api]);
 };
 
 /** Get view button props */
@@ -139,8 +136,6 @@ const useGetViewButton = (
     activeNode: ITreeSelectNode | undefined,
     isGroup?: boolean
 ): ITreeSelectButton | undefined => {
-    const t = useT(api);
-
     return useMemo(() => {
         if (
             (!isGroup && !props.editFormProps) ||
@@ -152,8 +147,8 @@ const useGetViewButton = (
             return undefined;
         return {
             ...defaultButtonView,
-            title: t('view'),
-            tooltip: t('viewRecord'),
+            title: api.t('view'),
+            tooltip: api.t('viewRecord'),
             disabled: !activeNode,
             onClick: () => {
                 if (!activeNode) return;
@@ -163,7 +158,7 @@ const useGetViewButton = (
                 else api.getEditGroupFormApi().open('view', {dataSet: {...getDataSet(activeNode), [fieldNames.parent]: parent}});
             },
         } satisfies ITreeSelectButton;
-    }, [isGroup, props.editFormProps, props.editGroupFormProps, props.readOnly, props.disabled, props.editButtons?.view, t, activeNode, api]);
+    }, [isGroup, props.editFormProps, props.editGroupFormProps, props.readOnly, props.disabled, props.editButtons?.view, activeNode, api]);
 };
 
 /** Get clone button props */
@@ -173,8 +168,6 @@ const useGetCloneButton = (
     activeNode: ITreeSelectNode | undefined,
     isGroup?: boolean
 ): ITreeSelectButton | undefined => {
-    const t = useT(api);
-
     return useMemo(() => {
         const editGroupFormProps = props.editGroupFormProps;
 
@@ -189,8 +182,8 @@ const useGetCloneButton = (
 
         return {
             ...defaultButtonClone,
-            title: isGroup && editGroupFormProps ? t('cloneGroup') : t('clone'),
-            tooltip: isGroup && editGroupFormProps ? t('cloneRecordsGroup') : t('cloneRecord'),
+            title: isGroup && editGroupFormProps ? api.t('cloneGroup') : api.t('clone'),
+            tooltip: isGroup && editGroupFormProps ? api.t('cloneRecordsGroup') : api.t('cloneRecord'),
             disabled: !activeNode,
             onClick: () => {
                 if (!activeNode) return;
@@ -200,7 +193,7 @@ const useGetCloneButton = (
                 else api.getEditGroupFormApi().open('clone', {dataSet: {...getDataSet(activeNode), [fieldNames.parent]: parent}});
             },
         } satisfies ITreeSelectButton;
-    }, [props.editGroupFormProps, props.editFormProps, props.disabled, props.readOnly, props.editButtons?.clone, isGroup, t, activeNode, api]);
+    }, [props.editGroupFormProps, props.editFormProps, props.disabled, props.readOnly, props.editButtons?.clone, isGroup, activeNode, api]);
 };
 
 /** Get update button props */
@@ -210,7 +203,6 @@ const useGetUpdateButton = (
     activeNode: ITreeSelectNode | undefined,
     isGroup?: boolean
 ): ITreeSelectButton | undefined => {
-    const t = useT(api);
 
     return useMemo(() => {
         const editGroupFormProps = props.editGroupFormProps;
@@ -225,8 +217,8 @@ const useGetUpdateButton = (
             return undefined;
         return {
             ...defaultButtonUpdate,
-            title: isGroup && editGroupFormProps ? t('editGroup') : t('edit'),
-            tooltip: isGroup && editGroupFormProps ? t('editRecordsGroup') : t('editRecord'),
+            title: isGroup && editGroupFormProps ? api.t('editGroup') : api.t('edit'),
+            tooltip: isGroup && editGroupFormProps ? api.t('editRecordsGroup') : api.t('editRecord'),
             disabled: !activeNode,
             onClick: () => {
                 if (!activeNode) return;
@@ -236,7 +228,7 @@ const useGetUpdateButton = (
                 else api.getEditGroupFormApi().open('update', {dataSet: {...getDataSet(activeNode), [fieldNames.parent]: parent}});
             },
         } satisfies ITreeSelectButton;
-    }, [props.editGroupFormProps, props.editFormProps, props.disabled, props.readOnly, props.editButtons?.update, isGroup, t, activeNode, api]);
+    }, [props.editGroupFormProps, props.editFormProps, props.disabled, props.readOnly, props.editButtons?.update, isGroup, activeNode, api]);
 };
 
 /** Get delete button props */
@@ -246,29 +238,28 @@ const useGetDeleteButton = (
     activeNode: ITreeSelectNode | undefined,
     isGroup?: boolean
 ): ITreeSelectButton | undefined => {
-    const t = useT(api);
     const {ctrlPressedRef} = useContext(TreeSelectContext);
     return useMemo(() => {
         if (!props.editFormProps || props.disabled || props.readOnly || props.editButtons?.delete === null) return undefined;
         return {
             ...defaultButtonDelete,
-            title: isGroup ? t('deleteGroup') : t('delete'),
-            tooltip: isGroup ? t('deleteRecordsGroup') : t('deleteRecord'),
+            title: isGroup ? api.t('deleteGroup') : api.t('delete'),
+            tooltip: isGroup ? api.t('deleteRecordsGroup') : api.t('deleteRecord'),
             disabled: !activeNode,
             onClick: () => {
                 if (!activeNode) return;
                 api.setIsOpen(true);
                 if (!props.confirmDelete) {
-                    deleteNode(activeNode, props, api,ctrlPressedRef, t('error'));
+                    deleteNode(activeNode, props, api, ctrlPressedRef, api.t('error'));
                     api.setIsOpen(undefined);
                     return;
                 }
 
                 const messageBox = MessageBox.confirmWaiter({
                     language: props.language,
-                    content: props.nodeDeleteMessage ?? t('deleteSelectedRecordQt'),
+                    content: props.nodeDeleteMessage ?? api.t('deleteSelectedRecordQt'),
                     onOk: () => {
-                        deleteNode(activeNode, props, api, ctrlPressedRef, t('error'), messageBox);
+                        deleteNode(activeNode, props, api, ctrlPressedRef, api.t('error'), messageBox);
                     },
                     onCancel: () => {
                         messageBox.destroy();
@@ -277,7 +268,7 @@ const useGetDeleteButton = (
                 });
             },
         } satisfies ITreeSelectButton;
-    }, [props, isGroup, t, activeNode, api, ctrlPressedRef]);
+    }, [props, isGroup, activeNode, api, ctrlPressedRef]);
 };
 
 const deleteNode = (
@@ -286,7 +277,7 @@ const deleteNode = (
     api: ITreeSelectApi,
     ctrlPressedRef: React.MutableRefObject<boolean>,
     errorMsg: string,
-    messageBox?: MessageBoxApi,
+    messageBox?: MessageBoxApi
 ) => {
     const buttonsApi: IButtonsRowApi = api.getButtonsApi();
     const deleteResult = props?.onDelete?.(node, api);
@@ -338,10 +329,4 @@ const deleteNode = (
 const getDataSet = (node: ITreeSelectNode) => {
     const dataSet = {...node};
     return dataSet as IDFormDataSet;
-};
-
-const useT = (api: ITreeSelectApi) => {
-    const treeProps = api.getProps();
-    const t = useTranslate(treeProps.language, translations, treeProps.translation);
-    return useMemo(() => t, [t]);
 };

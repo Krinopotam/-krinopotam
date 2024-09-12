@@ -1,18 +1,27 @@
 import {useEffect} from 'react';
 import {useEvent} from "./useEvent";
 
-
-export const useAddEventListener = <K extends keyof DocumentEventMap, TReturn>(
+/**
+ * Add event listener and remove it on unmount
+ * @param name - event name
+ * @param handler - event handler (stable function is not required, handler will be wrapped by useEvent)
+ * @param target - event target (document by default)
+ * @param options - additional options
+ */
+export const useAddEventListener = <K extends keyof DocumentEventMap, Target extends EventTarget, TReturn>(
     name: K,
-    handler:  (this: Document, ev:DocumentEventMap[K]) => TReturn,
+    handler: (ev: DocumentEventMap[K]) => TReturn,
+    target?: Target,
     options?: boolean | AddEventListenerOptions
 ) => {
-    const callback = useEvent(handler);
+    const callback = useEvent(handler) as unknown as EventListener;
 
     useEffect(() => {
-        document.addEventListener(name, callback, options);
+        const targetElement = target ?? document;
+        targetElement.addEventListener(name, callback, options);
         return () => {
-            document.removeEventListener(name, callback, options);
+            targetElement.removeEventListener(name, callback, options);
         };
-    }, [name, handler, callback, options]);
+    }, [callback, name, options, target]);
 };
+

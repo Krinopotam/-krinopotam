@@ -1,6 +1,8 @@
 import {Spin} from 'antd';
 import React from 'react';
-import {ITreeSelectApi} from '@src/treeSelect';
+import {ITreeSelectApi, ITreeSelectProps} from '@src/treeSelect';
+import {useTranslate} from '@src/_shared/hooks/useTranslate';
+import {translations} from '@src/treeSelect/translations/translations';
 
 export const DropdownStatus = ({api}: {api: ITreeSelectApi}): React.JSX.Element => {
     const error = api.getFetchError();
@@ -35,16 +37,19 @@ const ErrorStatus = ({error, plainList}: {error: string; plainList?: boolean}): 
 };
 
 export const NotFound = ({
+    treeProps,
     fetching,
     error,
     minSymbols,
     plainList,
 }: {
-    fetching: boolean;
-    error: string;
-    minSymbols: number;
+    treeProps: ITreeSelectProps;
+    fetching?: boolean;
+    error?: string;
+    minSymbols?: number;
     plainList?: boolean;
 }): React.JSX.Element => {
+    const t = useTranslate(treeProps.language, translations, treeProps.translation);
     if (minSymbols || fetching || error) return <></>;
-    return <div style={{paddingLeft: !plainList ? '30px' : '8px', fontSize: '12px'}}>Данные отсутствуют</div>;
+    return <div style={{paddingLeft: !plainList ? '30px' : '8px', fontSize: '12px'}}>{t('dataNotFound')}</div>;
 };
