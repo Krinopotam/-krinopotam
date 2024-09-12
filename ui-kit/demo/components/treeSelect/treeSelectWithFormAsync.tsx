@@ -1,14 +1,104 @@
 // noinspection DuplicatedCode
 
-import React from 'react';
+import React, {useMemo} from 'react';
 import {DForm, IDFormProps} from '@src/dForm';
 import {IDFormModalProps} from '@src/dFormModal';
-import {InputField} from '@src/dForm/fields/input/inputField';
+import {IInputFieldProps, InputField} from '@src/dForm/fields/input/inputField';
 import {ITreeSelectFieldProps, TreeSelectField} from '@src/dForm/fields/treeSelect/treeSelectField';
 import {CloneObject} from '@krinopotam/js-helpers';
 import {removeFromDataSet} from '@src/_shared/hooks/treeComponentApiMethods/serviceMethods/removeFromDataSet';
 import {ITreeSelectApi} from '@src/treeSelect';
-import {IBaseField} from '@src/dForm/fields/base';
+
+export const TreeSelectWithFormAsync = (): React.JSX.Element => {
+    const treeEditFormProps = useTreeEditFormProps();
+    const formProps = useFormProps(treeEditFormProps);
+
+    return (
+        <>
+            {/*Description Start*/}
+            <h1>Пример TreeSelect с асинхронной формой редактирования</h1>
+            <p>Для данного примера операция завершится ошибкой с вероятностью 30%</p>
+            {/*Description End*/}
+            <div style={{maxWidth: 500}}>
+                <DForm {...formProps} />
+            </div>
+        </>
+    );
+};
+
+const departmentsApi = {} as ITreeSelectApi;
+
+const useTreeEditFormProps = () => {
+    return useMemo(
+        (): IDFormModalProps => ({
+            onFormInit: formApi => {
+                const model = formApi.model;
+                const field = model.getField('parent');
+
+                const data = departmentsApi.getDataSet();
+                const formMode = model.getFormMode();
+                if (formMode !== 'update') {
+                    field.updateProps({dataSet: data});
+                    return;
+                }
+                /** modify dataset for update to avoid the possibility of a parent node choosing itself or its own child node */
+                const id = model.getFormDataSet()['id'];
+                const clonedData = CloneObject(data);
+                removeFromDataSet(clonedData, id, {key: 'id', children: 'children'});
+
+                field.updateProps({dataSet: clonedData});
+            },
+            formId: 'EditForm',
+            confirmChanges: true,
+            fieldsProps: {
+                title: {component: InputField, label: 'Подразделение'} satisfies IInputFieldProps,
+                parent: {
+                    component: TreeSelectField,
+                    label: 'Родитель',
+                } satisfies ITreeSelectFieldProps,
+            },
+            onSubmit: (_values, dataSet) => {
+                return new Promise((resolve, reject) => {
+                    setTimeout(() => {
+                        if (Math.random() < 0.3) reject({message: 'Тестовая ошибка сохранения', code: 400});
+                        else resolve({data: dataSet});
+                    }, 3000);
+                });
+            },
+        }),
+        []
+    );
+};
+
+const useFormProps = (editFormProps: IDFormModalProps) => {
+    return useMemo(
+        (): IDFormProps => ({
+            formId: 'Test form',
+            confirmChanges: true,
+
+            fieldsProps: {
+                departments: {
+                    component: TreeSelectField,
+                    apiRef: departmentsApi,
+                    label: 'Подразделения',
+                    confirmDelete: true,
+                    dataSet: dataSet,
+                    editFormProps: editFormProps,
+                    onDelete: () => {
+                        return new Promise((resolve, reject) => {
+                            setTimeout(() => {
+                                if (Math.random() < 0.3) reject({message: 'Тестовая ошибка удаления строк', code: 400});
+                                else resolve({data: {result: 'OK'}});
+                            }, 2000);
+                        });
+                    },
+                } satisfies ITreeSelectFieldProps,
+            },
+            buttons: null,
+        }),
+        [editFormProps]
+    );
+};
 
 const dataSet = [
     {
@@ -111,79 +201,3 @@ const dataSet = [
         ],
     },
 ];
-
-const getDataSet = (field: IBaseField) => {
-    const data = departmentsApi.getDataSet();
-    const model = field.getModel();
-    const formMode = model.getFormMode();
-    if (formMode !== 'update') return data;
-    /** modify dataset for update to avoid the possibility of a parent node choosing itself or its own child node */
-    const id = model.getFormDataSet()['id'];
-    const clonedData = CloneObject(data);
-    removeFromDataSet(clonedData, id, {key: 'id', children: 'children'});
-    return clonedData;
-}
-
-const departmentsApi = {} as ITreeSelectApi;
-const editForm: IDFormModalProps = {
-    formId: 'EditForm',
-    confirmChanges: true,
-    fieldsProps: {
-        title: {component: InputField, label: 'Подразделение'},
-        parent: {
-            component: TreeSelectField,
-            label: 'Родитель',
-            dataSet: getDataSet,
-        } satisfies ITreeSelectFieldProps,
-    },
-
-    onSubmit: (values: Record<string, unknown>) => {
-        return new Promise((resolve, reject) => {
-            setTimeout(() => {
-                if (Math.random() < 0.3) reject({message: 'Ошибка сохранения', code: 400});
-                else resolve({data: values});
-            }, 3000);
-        });
-    },
-};
-
-
-
-const formProps: IDFormProps = {
-    formId: 'Test form',
-
-    confirmChanges: true,
-    fieldsProps: {
-        department: {
-            component: TreeSelectField,
-            apiRef: departmentsApi,
-            label: 'Подразделения',
-            confirmDelete: true,
-            dataSet: dataSet,
-            editFormProps: editForm,
-            onDelete: () => {
-                return new Promise((resolve, reject) => {
-                    setTimeout(() => {
-                        if (Math.random() < 0.3) reject({message: 'Случайная ошибка удаления строк', code: 400});
-                        else resolve({data: {result: 'OK'}});
-                    }, 2000);
-                });
-            },
-        } satisfies ITreeSelectFieldProps,
-    },
-    buttons: null,
-};
-
-export const TreeSelectWithFormAsync = (): React.JSX.Element => {
-    return (
-        <>
-            {/*Description Start*/}
-            <h1>Пример TreeSelect с асинхронной формой редактирования</h1>
-            <p>Для данного примера операция завершится ошибкой с вероятностью 30%</p>
-            {/*Description End*/}
-            <div style={{maxWidth: 500}}>
-                <DForm {...formProps} />
-            </div>
-        </>
-    );
-};
