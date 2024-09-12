@@ -4,7 +4,7 @@ import {ITreeSelectApi, ITreeSelectNode, ITreeSelectProps} from '@src/treeSelect
 import type {IDFormApi, IDFormDataSet} from '@src/dForm/types/dFormTypes';
 import {ILabeledValue} from '@src/treeSelect/types/types';
 import {IFieldNames} from '@src/_shared/hooks/treeComponentApiMethods/types/treeApiTypes';
-import {TreeSelectContext} from "@src/treeSelect/context/context";
+import {TreeSelectContext} from '@src/treeSelect/context/context';
 
 export const usePrepareEditFormProps = (treeApi: ITreeSelectApi, props: ITreeSelectProps, forGroup: boolean) => {
     const {editFormOpenedRef} = useContext(TreeSelectContext);
@@ -30,7 +30,7 @@ export const usePrepareEditFormProps = (treeApi: ITreeSelectApi, props: ITreeSel
 
             const updatedNode = {...resultData} as ITreeSelectNode & {parent?: Record<string, unknown>; parentId?: Key};
 
-            let targetKey: Key | undefined = undefined;
+            let targetKey: Key | undefined;
             if (IsObjectHasOwnProperty(updatedNode, fieldNames.parent)) targetKey = updatedNode[fieldNames.parent]?.[fieldNames.key] as Key;
             else targetKey = treeApi.getActiveNodeKey();
 
@@ -40,29 +40,32 @@ export const usePrepareEditFormProps = (treeApi: ITreeSelectApi, props: ITreeSel
             } else if (formMode === 'update') {
                 treeApi.updateNode(updatedNode, targetKey, {ensureVisible: true});
                 const curValues = treeApi.getValues();
-                treeApi.setValues(updateValues(curValues, updatedNode, fieldNames));
+                treeApi.setValues(refreshSelectedValues(curValues, updatedNode, fieldNames));
             }
         };
 
         const prevOnOpen = editFormProps?.onOpen;
-        formProps.onOpen = (formApi,  dataSet) => {
-            if (prevOnOpen?.(formApi,  dataSet) === false) return false;
+        formProps.onOpen = (formApi, dataSet) => {
+            if (prevOnOpen?.(formApi, dataSet) === false) return false;
             editFormOpenedRef.current = true;
-            console.log('form open')
         };
 
         const prevOnClose = editFormProps?.onClosed;
-        formProps.onClosed = (formApi) => {
-            prevOnClose?.(formApi)
+        formProps.onClosed = formApi => {
+            prevOnClose?.(formApi);
             editFormOpenedRef.current = false;
-            console.log('form closed')
         };
 
         return formProps;
     }, [editFormOpenedRef, forGroup, props?.editFormProps, props?.editGroupFormProps, props.language, treeApi]);
 };
 
-const updateValues = (vals: ILabeledValue[] | undefined, updatedNode: ITreeSelectNode, fieldNames: IFieldNames) => {
+/** WORKAROUND:
+ * Since the label of the selected value is stored in labeledValue, it does not change when the title of the node changes.
+ * Therefore, we use a workaround: we overwrite the selected labeledValue, but only with value, without label.
+ * Then treeSelect itself will update the selected label from the dataSet
+ * */
+const refreshSelectedValues = (vals: ILabeledValue[] | undefined, updatedNode: ITreeSelectNode, fieldNames: IFieldNames) => {
     if (!vals) return undefined;
     const result: ILabeledValue[] = [];
     for (const val of vals) {
