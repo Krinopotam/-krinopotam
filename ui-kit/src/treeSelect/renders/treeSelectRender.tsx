@@ -34,7 +34,7 @@ export const TreeSelectRender = ({
     const editGroupFormProps = usePrepareEditFormProps(api, allProps, true);
 
     const dropdownStyle = useDropdownStyle(allProps.dropdownStyle);
-    const defaultDropdownRender = useDefaultDropdownRender({treeApi: api});
+    const defaultDropdownRender = useDefaultDropdownRender({api: api});
     const value = useValue(api);
     const fieldNames = useFieldNames(api);
     const treeNodeLabelProp = useTreeNodeLabelProp(api);
@@ -111,8 +111,8 @@ const useValue = (api: ITreeSelectApi) => {
     else return vals?.[0] ?? undefined;
 };
 
-const useDefaultDropdownRender = ({treeApi}: {treeApi: ITreeSelectApi}) => {
-    return useCallback((menu: React.ReactNode) => <DefaultDropdownRender treeApi={treeApi}>{menu}</DefaultDropdownRender>, [treeApi]);
+const useDefaultDropdownRender = ({api}: {api: ITreeSelectApi}) => {
+    return useCallback((menu: React.ReactNode) => <DefaultDropdownRender api={api}>{menu}</DefaultDropdownRender>, [api]);
 };
 
 const useOnClear = (api: ITreeSelectApi) => {

@@ -1,17 +1,13 @@
 import {Spin} from 'antd';
 import React from 'react';
+import {ITreeSelectApi} from '@src/treeSelect';
 
-export const DropdownStatus = ({
-    fetching,
-    error,
-    minSymbols,
-    plainList,
-}: {
-    fetching: boolean;
-    error: string;
-    minSymbols: number;
-    plainList?: boolean;
-}): React.JSX.Element => {
+export const DropdownStatus = ({api}: {api: ITreeSelectApi}): React.JSX.Element => {
+    const error = api.getFetchError();
+    const fetching = api.getIsFetching();
+    const minSymbols = api.getMinSymbols();
+    const plainList = api.isDataPlainList();
+
     if (minSymbols) return <MinSymbolsStatus minSymbols={minSymbols} plainList={plainList} />;
     if (fetching) return <FetchingStatus plainList={plainList} />;
     if (error) return <ErrorStatus error={error} plainList={plainList} />;

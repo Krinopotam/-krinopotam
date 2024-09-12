@@ -12,8 +12,8 @@ export const anyValueToValuesWithLabel = (val: ITreeSelectValue, fieldNames: IFi
     if (!val) return undefined;
     if (!Array.isArray(val)) {
         if (typeof val === 'object') {
-            if (isValueWithLabel(val)) return [val];
-            return [nodeToValueWithLabel(val, fieldNames)];
+            if (isLabeledValue(val)) return [val];
+            return [nodeToLabeledValue(val, fieldNames)];
         } else return [{value: val}];
     }
 
@@ -22,14 +22,14 @@ export const anyValueToValuesWithLabel = (val: ITreeSelectValue, fieldNames: IFi
         if (!item) continue;
 
         if (typeof item === 'object') {
-            if (isValueWithLabel(item)) result.push(item);
-            else result.push(nodeToValueWithLabel(item, fieldNames));
+            if (isLabeledValue(item)) result.push(item);
+            else result.push(nodeToLabeledValue(item, fieldNames));
         } else result.push({value: item});
     }
     return result;
 };
 
-export const isValueWithLabel = (val: unknown): val is ILabeledValue => {
+export const isLabeledValue = (val: unknown): val is ILabeledValue => {
     return !!(val && typeof val === 'object' && (val as Record<string, unknown>)['value']);
 };
 
@@ -38,7 +38,7 @@ export const isValueWithLabel = (val: unknown): val is ILabeledValue => {
  * @param node
  * @param fieldNames
  */
-export const nodeToValueWithLabel = (node: Record<string, unknown>, fieldNames: IFieldNames): ILabeledValue => {
+export const nodeToLabeledValue = (node: Record<string, unknown>, fieldNames: IFieldNames): ILabeledValue => {
     const key = node[fieldNames.key] as Key;
     const label = node[fieldNames.title] as React.ReactNode;
     return {value: key, label: label};
@@ -53,7 +53,7 @@ export const nodeToValueWithLabel = (node: Record<string, unknown>, fieldNames: 
  * @param fieldNames
  * @return node without children
  */
-export const valueWithLabelToNode = (
+export const LabeledValueToNode = (
     val: ILabeledValue,
     dataSet: Record<string, unknown>[] | undefined,
     fieldNames: IFieldNames
