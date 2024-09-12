@@ -1,11 +1,14 @@
-import {Key, useMemo} from 'react';
+import {Key, useContext, useMemo} from 'react';
 import {GetUuid, IsObjectHasOwnProperty} from '@krinopotam/js-helpers';
 import {ITreeSelectApi, ITreeSelectNode, ITreeSelectProps} from '@src/treeSelect';
 import type {IDFormApi, IDFormDataSet} from '@src/dForm/types/dFormTypes';
 import {ILabeledValue} from '@src/treeSelect/types/types';
 import {IFieldNames} from '@src/_shared/hooks/treeComponentApiMethods/types/treeApiTypes';
+import {TreeSelectContext} from "@src/treeSelect/context/context";
 
 export const usePrepareEditFormProps = (treeApi: ITreeSelectApi, props: ITreeSelectProps, forGroup: boolean) => {
+    const {editFormOpenedRef} = useContext(TreeSelectContext);
+
     return useMemo(() => {
         const editFormProps = !forGroup ? props?.editFormProps : props?.editGroupFormProps;
         if (!editFormProps) return undefined;
@@ -14,7 +17,6 @@ export const usePrepareEditFormProps = (treeApi: ITreeSelectApi, props: ITreeSel
         if (props.language && !formProps.language) formProps.language = props.language;
 
         const prevOnSubmitSuccess = editFormProps?.onSubmitSuccess;
-
         formProps.onSubmitSuccess = (
             values: Record<string, unknown>,
             dataSet: IDFormDataSet,
@@ -42,8 +44,22 @@ export const usePrepareEditFormProps = (treeApi: ITreeSelectApi, props: ITreeSel
             }
         };
 
+        const prevOnOpen = editFormProps?.onOpen;
+        formProps.onOpen = (formApi,  dataSet) => {
+            if (prevOnOpen?.(formApi,  dataSet) === false) return false;
+            editFormOpenedRef.current = true;
+            console.log('form open')
+        };
+
+        const prevOnClose = editFormProps?.onClosed;
+        formProps.onClosed = (formApi) => {
+            prevOnClose?.(formApi)
+            editFormOpenedRef.current = false;
+            console.log('form closed')
+        };
+
         return formProps;
-    }, [forGroup, props?.editFormProps, props?.editGroupFormProps, props.language, treeApi]);
+    }, [editFormOpenedRef, forGroup, props?.editFormProps, props?.editGroupFormProps, props.language, treeApi]);
 };
 
 const updateValues = (vals: ILabeledValue[] | undefined, updatedNode: ITreeSelectNode, fieldNames: IFieldNames) => {

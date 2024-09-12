@@ -1,5 +1,5 @@
 import {TreeSelect as AntdTreeSelect} from 'antd';
-import React, {useCallback, useMemo} from 'react';
+import React, {useCallback, useContext, useEffect, useMemo} from 'react';
 import {IAntTreeSelectProps, ITreeSelectApi, ITreeSelectProps} from '@src/treeSelect';
 import {useDropdownStyle} from '@src/treeSelect/hooks/dropdownStyle';
 import {useDefaultFilter} from '@src/treeSelect/hooks/filter';
@@ -8,70 +8,66 @@ import {DefaultOptionType} from 'rc-tree-select/es/TreeSelect';
 import {DefaultDropdownRender} from '@src/treeSelect/renders/defaultDropdownRender';
 import {usePrepareEditFormProps} from '@src/treeSelect/hooks/prepareEditForm';
 import {DFormModal} from '@src/dFormModal';
-import {useWhyDidYouUpdate} from 'ahooks';
 import {ILabeledValue} from '@src/treeSelect/types/types';
 import {useApiGetSelectedNodes} from '@src/treeSelect/hooks/api/useApiGetSelectedNodes';
 import {useApiGetSelectedKeys} from '@src/treeSelect/hooks/api/useApiGetSelectedKeys';
+import {IKeyboardKey} from '@krinopotam/service-types';
+import {TreeSelectContext} from '@src/treeSelect/context/context';
 
 // For clarity. Antd has labels for a node(1) and for the selected value(2). fieldNames.label property sets the node label(1) and treeNodeLabelProp sets the selected value label(2)
 // In order not to get confused, we will consider Node's label is title(1), and Label of the selected value is label(2)
 // For the implementation of the capabilities of the Title & Labels  renders, we add to dataSet 2 service fields: __title & __label
 
 export const TreeSelectRender = ({
-    treeApi,
+    api,
     allProps,
     treeSelectProps,
 }: {
-    treeApi: ITreeSelectApi;
+    api: ITreeSelectApi;
     allProps: ITreeSelectProps;
     treeSelectProps: IAntTreeSelectProps;
 }): React.JSX.Element => {
-    useWhyDidYouUpdate('treeSelect', {
-        treeApi,
-        allProps,
-        treeSelectProps,
-    });
-    const editFormProps = usePrepareEditFormProps(treeApi, allProps, false);
-    const editGroupFormProps = usePrepareEditFormProps(treeApi, allProps, true);
+    const {ctrlPressedRef, editFormOpenedRef} = useContext(TreeSelectContext);
+    useCtrPressed(api, ctrlPressedRef, editFormOpenedRef);
+
+    const editFormProps = usePrepareEditFormProps(api, allProps, false);
+    const editGroupFormProps = usePrepareEditFormProps(api, allProps, true);
 
     const dropdownStyle = useDropdownStyle(allProps.dropdownStyle);
-    const defaultDropdownRender = useDefaultDropdownRender({treeApi: treeApi});
-    const value = useValue(treeApi);
-    const fieldNames = useFieldNames(treeApi);
-    const treeNodeLabelProp = useTreeNodeLabelProp(treeApi);
-    const expandedKeys = treeApi.getExpandedKeys();
-    const onExpand = useOnExpand(treeApi);
-    const onClear = useOnClear(treeApi);
-    const onChange = useOnChange(treeApi);
-    const onDropdownVisibleChange = useOnDropdownVisibleChange(treeApi);
-    const onSearch = useOnSearch(treeApi);
-    const filterTreeNode = useOnFilterTreeNode(treeApi);
-    const plainList = treeApi.isDataPlainList();
-    console.log(expandedKeys, treeApi.getIsOpen());
+    const defaultDropdownRender = useDefaultDropdownRender({treeApi: api});
+    const value = useValue(api);
+    const fieldNames = useFieldNames(api);
+    const treeNodeLabelProp = useTreeNodeLabelProp(api);
+    const expandedKeys = api.getExpandedKeys();
+    const onExpand = useOnExpand(api);
+    const onClear = useOnClear(api);
+    const onChange = useOnChange(api, ctrlPressedRef);
+    const onDropdownVisibleChange = useOnDropdownVisibleChange(api);
+    const onSearch = useOnSearch(api);
+    const filterTreeNode = useOnFilterTreeNode(api);
+    const plainList = api.isDataPlainList();
+    console.log(expandedKeys, api.getIsOpen());
     return (
         <>
             <AntdTreeSelect
-                ref={treeApi.treeSelectRef}
+                ref={api.treeSelectRef}
                 showSearch // shows search field by default
                 allowClear // allows to clear the selected value by default
                 treeNodeFilterProp={fieldNames.label} //Field to be  used for filtering if filterTreeNode returns true. Default: title (getting from api.fieldNames)
                 dropdownRender={defaultDropdownRender}
-                notFoundContent={
-                    <NotFound fetching={treeApi.getIsFetching()} error={treeApi.getFetchError()} minSymbols={treeApi.getMinSymbols()} plainList={plainList} />
-                }
+                notFoundContent={<NotFound fetching={api.getIsFetching()} error={api.getFetchError()} minSymbols={api.getMinSymbols()} plainList={plainList} />}
                 {...treeSelectProps}
                 /************ no override ****************/
                 labelInValue
                 fieldNames={fieldNames}
                 treeNodeLabelProp={treeNodeLabelProp} //Selected value label. Will render as content of select. Default: title
-                treeData={treeApi.getDataSet()}
+                treeData={api.getDataSet()}
                 value={value}
                 disabled={allProps.disabled || allProps.readOnly} //TODO: implement true readOnly
                 treeDefaultExpandAll={allProps.defaultExpandAll}
                 treeDefaultExpandedKeys={allProps.defaultExpandedKeys}
                 treeExpandedKeys={expandedKeys}
-                open={treeApi.getIsOpen()}
-                //loadData={onLoadData}
+                open={api.getIsOpen()}
                 dropdownStyle={dropdownStyle}
                 /** --- Callbacks --------------- */
                 filterTreeNode={filterTreeNode}
@@ -81,18 +77,38 @@ export const TreeSelectRender = ({
                 onDropdownVisibleChange={onDropdownVisibleChange}
                 onSearch={onSearch}
             />
-            {editFormProps && !allProps.readOnly ? <DFormModal {...editFormProps} apiRef={treeApi.getEditFormApi()} /> : null}
-            {editGroupFormProps && !allProps.readOnly ? <DFormModal {...editGroupFormProps} apiRef={treeApi.getEditGroupFormApi()} /> : null}
+            {editFormProps && !allProps.readOnly ? <DFormModal {...editFormProps} apiRef={api.getEditFormApi()} /> : null}
+            {editGroupFormProps && !allProps.readOnly ? <DFormModal {...editGroupFormProps} apiRef={api.getEditGroupFormApi()} /> : null}
         </>
     );
 };
 
-const useValue = (api: ITreeSelectApi) => {
+const useCtrPressed = (api: ITreeSelectApi, ctrlPressedRef: React.MutableRefObject<boolean>, editFormOpenedRef: React.MutableRefObject<boolean>) => {
+    useEffect(() => {
+        const onCtrlDown = (e: KeyboardEvent) => {
+            if ((e.key as IKeyboardKey) === 'Control') ctrlPressedRef.current = true;
+        };
 
+        const onCtrlUp = (e: KeyboardEvent) => {
+            if ((e.key as IKeyboardKey) === 'Control') {
+                ctrlPressedRef.current = false;
+                if (!editFormOpenedRef.current) api.setIsOpen(undefined);
+            }
+        };
+        document.addEventListener('keydown', onCtrlDown);
+        document.addEventListener('keyup', onCtrlUp);
+        return () => {
+            document.removeEventListener('keydown', onCtrlDown);
+            document.removeEventListener('keyup', onCtrlUp);
+        };
+    }, [api, ctrlPressedRef, editFormOpenedRef]);
+};
+
+const useValue = (api: ITreeSelectApi) => {
     const vals = api.getValues();
     const props = api.getProps();
-    if (props.multiple) return vals ?? null;
-    else return vals?.[0] ?? null;
+    if (props.multiple) return vals ?? undefined;
+    else return vals?.[0] ?? undefined;
 };
 
 const useDefaultDropdownRender = ({treeApi}: {treeApi: ITreeSelectApi}) => {
@@ -107,7 +123,7 @@ const useOnClear = (api: ITreeSelectApi) => {
     }, [api]);
 };
 
-const useOnChange = (api: ITreeSelectApi) => {
+const useOnChange = (api: ITreeSelectApi, ctrlPressedRef: React.MutableRefObject<boolean>) => {
     const valueToNodes = useApiGetSelectedNodes(api);
     const valueToKeys = useApiGetSelectedKeys();
     return useCallback<(value: unknown) => void>(
@@ -116,8 +132,11 @@ const useOnChange = (api: ITreeSelectApi) => {
             api.setValues(val);
             const props = api.getProps();
             props.onChange?.(value as ILabeledValue | ILabeledValue[], valueToKeys(val) ?? [], valueToNodes(undefined, val) ?? []);
+
+            if (ctrlPressedRef.current) api.setIsOpen(true);
+            else api.setIsOpen(undefined);
         },
-        [api, valueToKeys, valueToNodes]
+        [api, ctrlPressedRef, valueToKeys, valueToNodes]
     );
 };
 
