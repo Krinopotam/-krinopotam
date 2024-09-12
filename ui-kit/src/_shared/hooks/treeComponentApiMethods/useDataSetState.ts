@@ -1,17 +1,16 @@
-import React, {Key, useCallback, useEffect, useMemo, useRef, useState} from 'react';
-import {IFieldNames} from "@src/_shared/hooks/treeComponentApiMethods/types/treeApiTypes";
+import React, {Key, useCallback, useEffect, useRef, useState} from 'react';
+import {IFieldNames} from '@src/_shared/hooks/treeComponentApiMethods/types/treeApiTypes';
 
 export const useDataSetState = <T extends Record<string, unknown>>(
     propsDataSet: React.SetStateAction<T[] | undefined>,
     fieldNames: IFieldNames,
     prepareNodeFn?: (node: T) => T
 ): [T[] | undefined, React.Dispatch<React.SetStateAction<T[] | undefined>>, boolean, Key[]] => {
-    const propsState = useDataSet(propsDataSet);
     const prepareDataSet = usePrepareDataSet<T>(fieldNames, prepareNodeFn);
 
     const initialStateRef = useRef<[T[] | undefined, boolean, Key[]] | undefined>(undefined);
     if (!initialStateRef.current) {
-        initialStateRef.current = prepareDataSet(propsState);
+        initialStateRef.current = prepareDataSet(typeof propsDataSet === 'function' ? propsDataSet(undefined) : propsDataSet);
     }
 
     const [initPrepData, initIsPlain, initParentKeys] = initialStateRef.current;
@@ -39,8 +38,8 @@ export const useDataSetState = <T extends Record<string, unknown>>(
             isFirstRender.current = false;
             return;
         }
-        setDataSet(propsState);
-    }, [propsState, setDataSet]);
+        setDataSet(propsDataSet);
+    }, [propsDataSet, setDataSet]);
 
     return [data, setDataSet, isPlain, parentKeys];
 };
@@ -88,10 +87,3 @@ const usePrepareDataSet = <T extends Record<string, unknown>>(
         [prepareNodeFn, fieldNames.children, fieldNames.key]
     );
 };
-
-
-const useDataSet = <T extends Record<string, unknown>>(dataSet:React.SetStateAction<T[] | undefined>)=>{
-    return useMemo(()=>{
-        return typeof dataSet === 'function' ? dataSet(undefined) : dataSet;
-    }, [dataSet])
-}

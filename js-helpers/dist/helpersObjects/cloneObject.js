@@ -1,42 +1,41 @@
 import { IsArray } from "./isArray";
+import { IsObjectHasOwnProperty } from "./isObjectHasOwnProperty";
 export const CloneObject = (object, maxLevel) => {
-    if (typeof object !== 'object')
-        return object;
-    const objRecursion = (obj, level, cloneMaxLevel) => {
+    const objRecursion = (obj, level) => {
         if (!obj)
             return obj;
         const clonedObj = {};
         level++;
         for (const key in obj) {
-            if (!Object.prototype.hasOwnProperty.call(obj, key))
+            if (!IsObjectHasOwnProperty(obj, key))
                 continue;
             const item = obj[key];
-            if (typeof item !== 'object' || level >= cloneMaxLevel)
+            if (!item || typeof item !== 'object' || (maxLevel && level > maxLevel))
                 clonedObj[key] = item;
             else
                 clonedObj[key] = !IsArray(item)
-                    ? objRecursion(item, level, cloneMaxLevel)
-                    : arraysRecursion(item, level, cloneMaxLevel);
+                    ? objRecursion(item, level)
+                    : arraysRecursion(item, level);
         }
         return clonedObj;
     };
-    const arraysRecursion = (arr, level, cloneMaxLevel) => {
-        if (!arr)
-            return arr;
+    const arraysRecursion = (arr, level) => {
         const clonedArr = [];
         level++;
         for (let i = 0; i < arr.length; i++) {
             const item = arr[i];
-            if (typeof item !== 'object' || level >= cloneMaxLevel)
+            if (!item || typeof item !== 'object' || (maxLevel && level > maxLevel))
                 clonedArr[i] = item;
             else
                 clonedArr[i] = !IsArray(item)
-                    ? objRecursion(item, level, cloneMaxLevel)
-                    : arraysRecursion(item, level, cloneMaxLevel);
+                    ? objRecursion(item, level)
+                    : arraysRecursion(item, level);
         }
         return clonedArr;
     };
+    if (typeof object !== 'object' || object === null)
+        return object;
     return !IsArray(object)
-        ? objRecursion(object, 0, maxLevel !== null && maxLevel !== void 0 ? maxLevel : 0)
-        : arraysRecursion(object, 0, maxLevel !== null && maxLevel !== void 0 ? maxLevel : 0);
+        ? objRecursion(object, 0)
+        : arraysRecursion(object, 0);
 };

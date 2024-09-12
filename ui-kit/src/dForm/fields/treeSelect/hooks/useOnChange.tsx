@@ -1,11 +1,10 @@
-import {TreeSelectField} from '@src/dForm/fields/treeSelect/treeSelectField';
+import {ITreeSelectFieldProps, TreeSelectField} from '@src/dForm/fields/treeSelect/treeSelectField';
 import {useCallback} from 'react';
 import {ITreeSelectProps} from '@src/treeSelect';
 
-export const useOnChange = (field: TreeSelectField) => {
+export const useOnChange = (field: TreeSelectField, fieldProps: ITreeSelectFieldProps) => {
     return useCallback<NonNullable<ITreeSelectProps['onChange']>>(
         (labeledVal, keys, nodes) => {
-            const fieldProps = field.getProps();
             if (field.isReady()) {
                 switch (fieldProps.valueType) {
                     case undefined:
@@ -27,6 +26,6 @@ export const useOnChange = (field: TreeSelectField) => {
 
             fieldProps.onChange?.(labeledVal, keys, nodes, field);
         },
-        [field]
+        [field, fieldProps]
     );
 };

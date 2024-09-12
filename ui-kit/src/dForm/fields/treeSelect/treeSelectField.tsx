@@ -5,9 +5,6 @@ import {ITreeSelectNode, ITreeSelectProps, ITreeSelectValue} from '@src/treeSele
 import {IAddParamToFunction} from '@krinopotam/service-types';
 
 export interface ITreeSelectFieldOnlyProps extends IBaseFieldProps<TreeSelectField, ITreeSelectValue> {
-    /** Callback for onReady event */
-    onReady?: (field: TreeSelectField) => void;
-
     /** Data set for TreeSelect field */
     dataSet?: ITreeSelectNode[] | ((field: TreeSelectField) => ITreeSelectNode[] | undefined);
 
@@ -23,10 +20,16 @@ export interface ITreeSelectFieldOnlyProps extends IBaseFieldProps<TreeSelectFie
 
     /** Fires when the TreeSelect dataSet is changed */
     onDataSetChanged?: IAddParamToFunction<ITreeSelectProps['onDataSetChanged'], TreeSelectField>;
+
+    /** fires when the TreeSelect trying to fetch data */
+    onDataFetch?: IAddParamToFunction<ITreeSelectProps['onDataFetch'], TreeSelectField>;
+
+    /** Fires when the component is ready for use (when it fully downloaded all the data, if necessary) */
+    onReady?: IAddParamToFunction<ITreeSelectProps['onReady'], TreeSelectField>;
 }
 
 export type ITreeSelectFieldProps = ITreeSelectFieldOnlyProps &
-    Omit<ITreeSelectProps, 'placeholder' | 'value' | 'onReady' | 'onDataSetChanged' | 'onChange' | 'dataSet'>;
+    Omit<ITreeSelectProps, 'placeholder' | 'value' | 'dataSet' | 'onChange' | 'onDataSetChanged' | 'onDataFetch' | 'onReady'>;
 
 export class TreeSelectField extends BaseField<ITreeSelectFieldProps> {
     protected render() {

@@ -36,14 +36,14 @@ export interface IDFormProps extends IDFormCallbacks {
     containerClassName?: string;
 
     /** Form container style*/
-    containerStyle?: CSSProperties
+    containerStyle?: CSSProperties;
 
     /** Indent from the beginning of the controls (default 12)  */
     contentIndent?: number;
 
     /** Form default values. Unlike dataSet, defaultValues sets field values in Create form mode.
      * Has a priority lower than the field's set value */
-    defaultValues?: Record<string, unknown>
+    defaultValues?: Record<string, unknown>;
 
     /** Form data (are not set in Create form mode) */
     dataSet?: IDFormDataSet;
@@ -64,7 +64,7 @@ export interface IDFormProps extends IDFormCallbacks {
     wrapperCol?: ColProps;
 
     /** text align of label of all items */
-    labelAlign?: FormLabelAlign
+    labelAlign?: FormLabelAlign;
 
     /** Form layout (horizontal or vertical). Vertical is default */
     layout?: 'horizontal' | 'vertical';
@@ -79,7 +79,7 @@ export interface IDFormProps extends IDFormCallbacks {
     disableDepended?: boolean;
 
     /** Tabs panes height (default 40)*/
-    tabsHeight?: number
+    tabsHeight?: number;
 
     /** Form parent item data */
     // formParentData?: IFormDataSet;
@@ -104,32 +104,34 @@ export interface IDFormProps extends IDFormCallbacks {
 
     /**  If specified, additional values will be added to the resulting form data depending on the form mode
      *  @example {create:'isNew', clone?:'clonedFrom', update?:'isUpdating'}
-    */
+     */
     assignExtraValues?: {
-        create?: string,
-        clone?: string,
-        update?: string,
-    }
+        create?: string;
+        clone?: string;
+        update?: string;
+    };
 
     /** Language */
     language?: keyof typeof translations;
 
     /** Custom translation */
-    translation?: Partial<typeof translations.en>
+    translation?: Partial<typeof translations.en>;
 
     /** @private O A service property meaning that the form is used in another component that overrides the api part (for example DModalForm)  */
-    _overriddenApi?: { [K in keyof IDFormApi as string extends K ? never : K]?: boolean; }
-
+    _overriddenApi?: {[K in keyof IDFormApi as string extends K ? never : K]?: boolean};
 }
 
-export type IDFormCallbacks = IDFormBaseCallbacks<IDFormApi>
+export interface IDFormCallbacks extends IDFormBaseCallbacks<IDFormApi> {
+    /** On first render callback */
+    onFirstRender?: (props: IDFormProps) => IDFormProps | void;
+}
 
 /** Form data set type */
 export interface IDFormDataSet extends Record<string, unknown> {
     id?: Key;
 }
 
-export type IDFormDataSourcePromise = Promise<{ data: Record<string, unknown> }>;
+export type IDFormDataSourcePromise = Promise<{data: Record<string, unknown>}>;
 
 export interface IDFormApi<TProps extends object = IDFormProps> extends IBaseComponentApi<TProps> {
     /** Form model instance */

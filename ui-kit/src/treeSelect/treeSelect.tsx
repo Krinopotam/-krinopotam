@@ -63,6 +63,7 @@ const useSplitProps = (props: ITreeSelectProps) => {
             groupsMode: true,
             onChange: true,
             onGetLabelCallback: true,
+            onDataSetChanged: true,
         });
 
         return result[1];

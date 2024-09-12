@@ -1,6 +1,6 @@
-import React, {CSSProperties, useEffect, useMemo, useState, useSyncExternalStore} from 'react';
+import React, {CSSProperties, useCallback, useEffect, useMemo, useState, useSyncExternalStore} from 'react';
 import {ITreeSelectFieldProps, TreeSelectField} from '@src/dForm/fields/treeSelect/treeSelectField';
-import {ITreeSelectApi, TreeSelect} from '@src/treeSelect';
+import {ITreeSelectApi, ITreeSelectProps, TreeSelect} from '@src/treeSelect';
 import {useOnChange} from '@src/dForm/fields/treeSelect/hooks/useOnChange';
 import {useOnBlur} from '@src/dForm/fields/treeSelect/hooks/useOnBlur';
 import {useOnClear} from '@src/dForm/fields/treeSelect/hooks/useOnClear';
@@ -13,12 +13,16 @@ export const TreeSelectFieldRender = ({field}: {field: TreeSelectField}): React.
 
     const fieldProps = field.getProps();
 
-    const dataSet = useDataSet(field, fieldProps.dataSet);
+
     const value = field.getValue();
-    const onChange = useOnChange(field);
+
     const onBlur = useOnBlur(field);
     const onClear = useOnClear(field);
+    const dataSet = useDataSet(field, fieldProps.dataSet);
+    const onChange = useOnChange(field, fieldProps);
     const onDataSetChanged = useOnDataSetChanged(field, fieldProps);
+    const onDataFetch = useOnDataFetch(field, fieldProps);
+    const onReady = useOnReady(field, fieldProps);
 
     useEffect(() => {
         field.setReady(true);
@@ -41,10 +45,11 @@ export const TreeSelectFieldRender = ({field}: {field: TreeSelectField}): React.
             value={value}
             placeholder={fieldProps.placeholder ?? 'Choose'}
             onChange={onChange}
+            onDataSetChanged={onDataSetChanged}
+            onDataFetch={onDataFetch}
+            onReady={onReady}
             onClear={onClear}
             onBlur={onBlur}
-            onDataSetChanged={onDataSetChanged}
-            onReady={() => fieldProps.onReady?.(field)}
         />
     );
 };
@@ -57,4 +62,13 @@ export const useDataSet = (field: TreeSelectField, dataSet: ITreeSelectFieldProp
                 return dataSet(field);
             };
     }, [dataSet, field]);
+};
+
+
+export const useOnDataFetch = (field: TreeSelectField, fieldProps: ITreeSelectFieldProps) => {
+    return useCallback<NonNullable<ITreeSelectProps['onDataFetch']>>((search, api) => fieldProps.onDataFetch?.(search, api, field), [field, fieldProps]);
+};
+
+export const useOnReady = (field: TreeSelectField, fieldProps: ITreeSelectFieldProps) => {
+    return useCallback<NonNullable<ITreeSelectProps['onReady']>>(() => fieldProps.onReady?.(field), [field, fieldProps]);
 };

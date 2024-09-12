@@ -1,1 +1,1 @@
-export declare const IsArray: (val: unknown) => boolean;
+export declare const IsArray: <T>(val: unknown) => val is T[];

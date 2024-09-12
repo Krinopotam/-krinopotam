@@ -23,6 +23,9 @@ export const useFormCallbacks = (formModalApi: IDFormModalApi, modalFormProps: I
             /** fires when the read only state of the form changed */
             onFormReadOnlyStateChanged: (state: boolean) => modalFormProps?.onFormReadOnlyStateChanged?.(state, formModalApi),
 
+            /** On first render callback */
+            onFirstRender: () => modalFormProps?.onFirstRender?.(modalFormProps),
+
             /** fires when the form began initialization (renders for the first time) */
             onFormInit: () => modalFormProps?.onFormInit?.(formModalApi),
 

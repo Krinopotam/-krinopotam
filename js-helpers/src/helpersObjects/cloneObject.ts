@@ -1,46 +1,45 @@
 import {IsArray} from "./isArray";
+import {IsObjectHasOwnProperty} from "./isObjectHasOwnProperty";
 
 /** Deep clone  objects */
-export const CloneObject = <TObject>(object: TObject, maxLevel?: number): TObject => {
-    if (typeof object !== 'object') return object;
+export const CloneObject = <TObject extends object | undefined | null>(object: TObject, maxLevel?: number): TObject => {
 
-    const objRecursion = (obj: Record<string, unknown> | null, level: number, cloneMaxLevel: number) => {
+    const objRecursion = (obj: Record<string, unknown> | null, level: number) => {
         if (!obj) return obj;
         const clonedObj: Record<string, unknown> = {};
         level++;
         for (const key in obj) {
-            if (!Object.prototype.hasOwnProperty.call(obj, key)) continue;
+            if (!IsObjectHasOwnProperty(obj, key)) continue;
             const item = obj[key];
-            if (typeof item !== 'object' || level >= cloneMaxLevel) clonedObj[key] = item;
+            if (!item || typeof item !== 'object' || (maxLevel && level > maxLevel)) clonedObj[key] = item;
             else
                 clonedObj[key] = !IsArray(item)
-                    ? objRecursion(item as Record<string, unknown>, level, cloneMaxLevel)
-                    : arraysRecursion(item as unknown[], level, cloneMaxLevel);
+                    ? objRecursion(item as Record<string, unknown>, level)
+                    : arraysRecursion(item, level);
         }
 
         return clonedObj;
     };
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const arraysRecursion = (arr: any, level: number, cloneMaxLevel: number) => {
-        if (!arr) return arr;
+
+    const arraysRecursion = (arr: unknown[], level: number) => {
         const clonedArr: unknown[] = [];
         level++;
-        for (let i = 0; i < (arr as unknown[]).length; i++) {
+        for (let i = 0; i < arr.length; i++) {
             const item = arr[i];
-            if (typeof item !== 'object' || level >= cloneMaxLevel) clonedArr[i] = item;
+            if (!item || typeof item !== 'object' || (maxLevel && level > maxLevel)) clonedArr[i] = item;
             else
                 clonedArr[i] = !IsArray(item)
-                    ? objRecursion(item as Record<string, unknown>, level, cloneMaxLevel)
-                    : arraysRecursion(item as unknown[], level, cloneMaxLevel);
+                    ? objRecursion(item as Record<string, unknown>, level)
+                    : arraysRecursion(item, level);
         }
 
         return clonedArr;
     };
 
-    return !IsArray(object)
-        ? (objRecursion(object as Record<string, unknown>, 0, maxLevel ?? 0) as TObject)
-        : (arraysRecursion(object, 0, maxLevel ?? 0) as TObject);
+    if (typeof object !== 'object' || object === null) return object;
 
-    //return cloneDeep( object);
+    return !IsArray(object)
+        ? (objRecursion(object as Record<string, unknown>, 0) as TObject)
+        : (arraysRecursion(object, 0) as TObject);
 };
