@@ -15,7 +15,7 @@ const __dirname = path.dirname(__filename);
 
 export default tsEsLint.config(
     {
-        ignores: ['**/build/**', '**/dist/**', 'node_modules', 'eslint.config.js', 'eslint.config.mjs', 'vitest.config.js'],
+        ignores: ['**/build/**', '**/dist/**', 'node_modules', 'eslint.config.js', 'eslint.config.mjs'],
     },
     esLint.configs.recommended,
     ...tsEsLint.configs.recommended,

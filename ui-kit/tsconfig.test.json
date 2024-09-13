@@ -5,7 +5,8 @@
     /* Enable error reporting for expressions and declarations with an implied 'any' type. */
   },
   "include": [
-    "./tests/**/*.test.ts"
+    "./tests/**/*.test.ts",
+    "./tests/**/*.test.tsx"
   ],
   "exclude": []
 }
