@@ -1,12 +1,19 @@
 import {IsArray} from "./isArray";
 import {IsObjectHasOwnProperty} from "./isObjectHasOwnProperty";
 
-/** Deep clone  objects */
-export const CloneObject = <TObject extends object | undefined | null>(object: TObject, maxLevel?: number): TObject => {
+/**
+ * Deep clone  objects. Allows circular references
+ */
+export const CloneObject = <TObject>(object: TObject, maxLevel?: number): TObject => {
+    const objectsMap = new Map<Record<string, unknown>, Record<string, unknown>>()
 
     const objRecursion = (obj: Record<string, unknown> | null, level: number) => {
         if (!obj) return obj;
+
+        if (objectsMap.has(obj)) return objectsMap.get(obj);
         const clonedObj: Record<string, unknown> = {};
+        objectsMap.set(obj, clonedObj);
+
         level++;
         for (const key in obj) {
             if (!IsObjectHasOwnProperty(obj, key)) continue;

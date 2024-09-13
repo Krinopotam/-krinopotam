@@ -37,8 +37,6 @@ export {HashObjectContent} from "./helpersObjects/hashObjectContent";
 export {IsObjectHasOwnProperty} from "./helpersObjects/isObjectHasOwnProperty";
 export {SplitObject} from "./helpersObjects/splitObject";
 export {ObjectDiffs} from "./helpersObjects/objectDiffs";
-export {IsReactClassComponent} from "./helpersObjects/isReactClassComponent";
-export {IsReactComponent} from "./helpersObjects/isReactComponent";
 export {AddElementToArray} from "./helpersObjects/addElementToArray";
 export {ParseJwt} from "./helpersObjects/parseJwt";
 

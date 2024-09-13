@@ -1,5 +1,5 @@
 /**
- * Deep merge objects
+ * Deep merge objects (mutate object)
  * Uses lodash.merge
  * Recursively merges own and inherited enumerable properties of source
  * objects into the destination object, skipping source properties that resolve

@@ -1,11 +1,17 @@
 import { IsArray } from "./isArray";
 import { IsObjectHasOwnProperty } from "./isObjectHasOwnProperty";
-/** Deep clone  objects */
+/**
+ * Deep clone  objects. Allows circular references
+ */
 export const CloneObject = (object, maxLevel) => {
+    const objectsMap = new Map();
     const objRecursion = (obj, level) => {
         if (!obj)
             return obj;
+        if (objectsMap.has(obj))
+            return objectsMap.get(obj);
         const clonedObj = {};
+        objectsMap.set(obj, clonedObj);
         level++;
         for (const key in obj) {
             if (!IsObjectHasOwnProperty(obj, key))

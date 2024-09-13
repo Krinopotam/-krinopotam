@@ -14,5 +14,5 @@ export const SplitObject = <R1 extends object, R2 extends object>(obj: object, p
         if ((propNames as Record<string, unknown>)[key]) (obj1 as Record<string, unknown>)[key] = (obj as Record<string, unknown>)[key];
         else (obj2 as Record<string, unknown>)[key] = (obj as Record<string, unknown>)[key];
     }
-    return [obj1 as R1, obj2 as R2];
+    return [obj1, obj2];
 };
