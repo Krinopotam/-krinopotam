@@ -91,9 +91,6 @@ const useGetCreateButton = (api: ITreeSelectApi, props: ITreeSelectProps): ITree
             title: api.t('create'),
             tooltip: api.t('createRecord'),
             onClick: () => {
-                console.log('open ',api.getIsOpen())
-                    api.setIsOpen(true);
-
                 const fieldNames = api.getFieldNames();
                 const activeNode = api.getActiveNode();
                 let parent: ITreeSelectNode | undefined = undefined;
@@ -238,7 +235,7 @@ const useGetDeleteButton = (
     activeNode: ITreeSelectNode | undefined,
     isGroup?: boolean
 ): ITreeSelectButton | undefined => {
-    const {ctrlPressedRef} = useContext(TreeSelectContext);
+    const {dialogOpenedRef} = useContext(TreeSelectContext);
     return useMemo(() => {
         if (!props.editFormProps || props.disabled || props.readOnly || props.editButtons?.delete === null) return undefined;
         return {
@@ -248,10 +245,10 @@ const useGetDeleteButton = (
             disabled: !activeNode,
             onClick: () => {
                 if (!activeNode) return;
-                api.setIsOpen(true);
+                dialogOpenedRef.current = true;
                 if (!props.confirmDelete) {
-                    deleteNode(activeNode, props, api, ctrlPressedRef, api.t('error'));
-                    api.setIsOpen(undefined);
+                    deleteNode(activeNode, props, api, dialogOpenedRef, api.t('error'));
+                    dialogOpenedRef.current = false;
                     return;
                 }
 
@@ -259,23 +256,23 @@ const useGetDeleteButton = (
                     language: props.language,
                     content: props.nodeDeleteMessage ?? api.t('deleteSelectedRecordQt'),
                     onOk: () => {
-                        deleteNode(activeNode, props, api, ctrlPressedRef, api.t('error'), messageBox);
+                        deleteNode(activeNode, props, api, dialogOpenedRef, api.t('error'), messageBox);
                     },
                     onCancel: () => {
                         messageBox.destroy();
-                        if (!ctrlPressedRef.current) api.setIsOpen(undefined);
+                        dialogOpenedRef.current = false;
                     },
                 });
             },
         } satisfies ITreeSelectButton;
-    }, [props, isGroup, activeNode, api, ctrlPressedRef]);
+    }, [props, isGroup, api, activeNode, dialogOpenedRef]);
 };
 
 const deleteNode = (
     node: ITreeSelectNode,
     props: ITreeSelectProps,
     api: ITreeSelectApi,
-    ctrlPressedRef: React.MutableRefObject<boolean>,
+    dialogOpenedRef: React.MutableRefObject<boolean>,
     errorMsg: string,
     messageBox?: MessageBoxApi
 ) => {
@@ -285,8 +282,8 @@ const deleteNode = (
     if (!IsPromise(deleteResult)) {
         if (api.isNodeSelected(node)) api.selectNode(node, false);
         api.removeNode(node);
-        if (!ctrlPressedRef.current) api.setIsOpen(undefined);
         if (messageBox) messageBox.destroy();
+        dialogOpenedRef.current=false
         return;
     }
 
@@ -300,11 +297,11 @@ const deleteNode = (
             messageBox?.destroy();
             if (!api.getIsMounted()) return;
             api.removeNode(node);
-            if (!ctrlPressedRef.current) api.setIsOpen(undefined);
             if (!props.confirmDelete) {
                 buttonsApi.loading('delete', false);
                 buttonsApi.disableAll(false);
             }
+            dialogOpenedRef.current=false
         })
         .catch((error: IError) => {
             messageBox?.destroy();
@@ -320,7 +317,7 @@ const deleteNode = (
                 content: <ErrorMessage error={error} />,
                 colorType: 'danger',
                 onOk: () => {
-                    if (!ctrlPressedRef.current) api.setIsOpen(undefined);
+                    dialogOpenedRef.current=false
                 },
             });
         });

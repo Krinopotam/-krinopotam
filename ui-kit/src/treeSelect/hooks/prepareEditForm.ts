@@ -7,7 +7,7 @@ import {IFieldNames} from '@src/_shared/hooks/treeComponentApiMethods/types/tree
 import {TreeSelectContext} from '@src/treeSelect/context/context';
 
 export const usePrepareEditFormProps = (treeApi: ITreeSelectApi, props: ITreeSelectProps, forGroup: boolean) => {
-    const {editFormOpenedRef} = useContext(TreeSelectContext);
+    const {dialogOpenedRef} = useContext(TreeSelectContext);
 
     return useMemo(() => {
         const editFormProps = !forGroup ? props?.editFormProps : props?.editGroupFormProps;
@@ -47,17 +47,17 @@ export const usePrepareEditFormProps = (treeApi: ITreeSelectApi, props: ITreeSel
         const prevOnOpen = editFormProps?.onOpen;
         formProps.onOpen = (formApi, dataSet) => {
             if (prevOnOpen?.(formApi, dataSet) === false) return false;
-            editFormOpenedRef.current = true;
+            dialogOpenedRef.current = true;
         };
 
         const prevOnClose = editFormProps?.onClosed;
         formProps.onClosed = formApi => {
             prevOnClose?.(formApi);
-            editFormOpenedRef.current = false;
+            dialogOpenedRef.current = false;
         };
 
         return formProps;
-    }, [editFormOpenedRef, forGroup, props?.editFormProps, props?.editGroupFormProps, props.language, treeApi]);
+    }, [dialogOpenedRef, forGroup, props?.editFormProps, props?.editGroupFormProps, props.language, treeApi]);
 };
 
 /** WORKAROUND:

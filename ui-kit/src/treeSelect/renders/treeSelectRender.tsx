@@ -28,8 +28,8 @@ export const TreeSelectRender = ({
     allProps: ITreeSelectProps;
     treeSelectProps: IAntTreeSelectProps;
 }): React.JSX.Element => {
-    const {ctrlPressedRef, editFormOpenedRef} = useContext(TreeSelectContext);
-    useCtrPressed(api, ctrlPressedRef, editFormOpenedRef);
+    const {ctrlPressedRef, dialogOpenedRef} = useContext(TreeSelectContext);
+    useCtrPressed(ctrlPressedRef);
 
     const editFormProps = usePrepareEditFormProps(api, allProps, false);
     const editGroupFormProps = usePrepareEditFormProps(api, allProps, true);
@@ -42,8 +42,8 @@ export const TreeSelectRender = ({
     const expandedKeys = api.getExpandedKeys();
     const onExpand = useOnExpand(api);
     const onClear = useOnClear(api);
-    const onChange = useOnChange(api, ctrlPressedRef);
-    const onDropdownVisibleChange = useOnDropdownVisibleChange(api, ctrlPressedRef);
+    const onChange = useOnChange(api);
+    const onDropdownVisibleChange = useOnDropdownVisibleChange(api, ctrlPressedRef, dialogOpenedRef);
     const onSearch = useOnSearch(api);
     const filterTreeNode = useOnFilterTreeNode(api);
     const plainList = api.isDataPlainList();
@@ -92,16 +92,13 @@ export const TreeSelectRender = ({
     );
 };
 
-const useCtrPressed = (api: ITreeSelectApi, ctrlPressedRef: React.MutableRefObject<boolean>, editFormOpenedRef: React.MutableRefObject<boolean>) => {
+const useCtrPressed = (ctrlPressedRef: React.MutableRefObject<boolean>) => {
     useAddEventListener('keydown', e => {
         if ((e.key as IKeyboardKey) === 'Control') ctrlPressedRef.current = true;
     });
 
     useAddEventListener('keyup', e => {
-        if ((e.key as IKeyboardKey) === 'Control') {
-            ctrlPressedRef.current = false;
-            if (!editFormOpenedRef.current) api.setIsOpen(undefined);
-        }
+        if ((e.key as IKeyboardKey) === 'Control') ctrlPressedRef.current = false;
     });
 };
 
@@ -124,7 +121,7 @@ const useOnClear = (api: ITreeSelectApi) => {
     }, [api]);
 };
 
-const useOnChange = (api: ITreeSelectApi, ctrlPressedRef: React.MutableRefObject<boolean>) => {
+const useOnChange = (api: ITreeSelectApi) => {
     const valueToNodes = useApiGetSelectedNodes(api);
     const valueToKeys = useApiGetSelectedKeys();
     return useCallback<(value: unknown) => void>(
@@ -133,25 +130,22 @@ const useOnChange = (api: ITreeSelectApi, ctrlPressedRef: React.MutableRefObject
             api.setValues(val);
             const props = api.getProps();
             props.onChange?.(value as ILabeledValue | ILabeledValue[], valueToKeys(val) ?? [], valueToNodes(undefined, val) ?? []);
-
-            /*            if (ctrlPressedRef.current)                 api.setIsOpen(()=>true);
-                        else api.setIsOpen(undefined);*/
         },
-        [api, ctrlPressedRef, valueToKeys, valueToNodes]
+        [api, valueToKeys, valueToNodes]
     );
 };
 
-const useOnDropdownVisibleChange = (api: ITreeSelectApi, ctrlPressedRef: React.MutableRefObject<boolean>) => {
+const useOnDropdownVisibleChange = (api: ITreeSelectApi, ctrlPressedRef: React.MutableRefObject<boolean>, dialogOpenedRef: React.MutableRefObject<boolean>) => {
     return useCallback<NonNullable<IAntTreeSelectProps['onDropdownVisibleChange']>>(
         open => {
-            if (ctrlPressedRef.current) api.setIsOpen(true);
+            if (ctrlPressedRef.current || dialogOpenedRef.current) api.setIsOpen(true);
             else api.setIsOpen(open);
 
             const props = api.getProps();
             if (open && (props.fetchMode === 'onUse' || props.fetchMode === 'onUseForce')) api.fetchData();
             props.onDropdownVisibleChange?.(open);
         },
-        [api]
+        [api, ctrlPressedRef, dialogOpenedRef]
     );
 };
 
