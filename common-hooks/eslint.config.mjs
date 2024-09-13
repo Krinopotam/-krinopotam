@@ -1,7 +1,6 @@
-// @ts-check
-
 import esLint from '@eslint/js';
 import tsEsLint from 'typescript-eslint';
+import eslintReact from 'eslint-plugin-react';
 import eslintConfigPrettier from 'eslint-config-prettier';
 
 import globals from 'globals';
@@ -21,21 +20,25 @@ export default tsEsLint.config(
     ...tsEsLint.configs.recommended,
     {
         plugins: {
-            '@typescript-eslint': tsEsLint.plugin
+            '@typescript-eslint': tsEsLint.plugin,
+            react: eslintReact,
         },
 
         languageOptions: {
             globals: {
                 ...globals.browser,
-                ...globals.es2021,
-                ...globals.node
+                ...globals.es2021
             },
             parser: tsEsLint.parser,
             parserOptions: {
+                ecmaFeatures: {
+                    jsx: true,
+                },
+                //projectService: true,
                 project: [
                     './tsconfig.json',
-                    './tsconfig.test.json',
                     './tsconfig.eslint.json',
+                    './tsconfig.test.json',
                 ],
                 //tsconfigRootDir: import.meta.dirname,
                 tsconfigRootDir: __dirname,
@@ -43,6 +46,9 @@ export default tsEsLint.config(
             },
             ecmaVersion: 'latest',
             sourceType: 'module',
+        },
+        rules: {
+            ...eslintReact.configs.recommended.rules,
         },
     },
     {

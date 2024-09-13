@@ -1,5 +1,3 @@
-// @ts-check
-
 import esLint from '@eslint/js';
 import tsEsLint from 'typescript-eslint';
 import eslintReact from 'eslint-plugin-react';
@@ -17,7 +15,7 @@ const __dirname = path.dirname(__filename);
 
 export default tsEsLint.config(
     {
-        ignores: ['**/build/**', '**/dist/**', 'node_modules', 'eslint.config.js', 'eslint.config.mjs'],
+        ignores: ['**/build/**', '**/dist/**', 'node_modules', 'eslint.config.js', 'eslint.config.mjs', 'vitest.config.js'],
     },
     esLint.configs.recommended,
     ...tsEsLint.configs.recommended,
@@ -31,8 +29,7 @@ export default tsEsLint.config(
         languageOptions: {
             globals: {
                 ...globals.browser,
-                ...globals.es2021,
-                ...globals.jest,
+                ...globals.es2021
             },
             parser: tsEsLint.parser,
             parserOptions: {
@@ -43,6 +40,7 @@ export default tsEsLint.config(
                 project: [
                     './tsconfig.json',
                     './tsconfig.eslint.json',
+                    './tsconfig.test.json',
                 ],
                 //tsconfigRootDir: import.meta.dirname,
                 tsconfigRootDir: __dirname,

@@ -13,9 +13,8 @@ if %ERRORLEVEL% NEQ 0 (
 )
 
 :: If tests passed, proceed with the build
-echo Tests passed! Proceeding with build and publish...
-call d:\projects\@krinopotam\build-tools\build-and-publish.bat
+echo Tests passed! Proceeding with build...
+call npm run build
 
 pause
 endlocal
-

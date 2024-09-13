@@ -4,5 +4,5 @@
     "noImplicitAny": false  /* Enable error reporting for expressions and declarations with an implied 'any' type. */
   },
   "include": ["./tests/**/*.test.ts"],
-  "exclude": ["./node_modules/**/*", "./dist/**/*", "./coverage/**/*"]
+  "exclude": []
 }
