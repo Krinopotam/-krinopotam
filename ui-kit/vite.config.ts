@@ -3,7 +3,7 @@ import * as path from "path";
 import react from '@vitejs/plugin-react-swc'
 import {watch} from "vite-plugin-watch"
 
-export const commonCfg: UserConfig = {
+const commonCfg: UserConfig = {
     plugins: [react()],
     resolve: {
         alias: {
@@ -20,7 +20,7 @@ export const commonCfg: UserConfig = {
 const devDemoCfg: UserConfig = {
     ...commonCfg,
     plugins: [
-        ...commonCfg.plugins,
+        ...commonCfg.plugins!,
         watch({
             pattern: ['demo/components/**/*.*'],
             command: "node ./demo/.generator/generateDemo.js",
