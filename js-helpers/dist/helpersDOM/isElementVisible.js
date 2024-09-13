@@ -1,3 +1,4 @@
+/** check if element visible */
 export const IsElementVisible = (elem) => {
     if (!elem)
         return false;

@@ -1,3 +1,4 @@
+/* Returns random color **/
 export const GetRandomColor = () => {
     const letters = '0123456789ABCDEF';
     let color = '#';

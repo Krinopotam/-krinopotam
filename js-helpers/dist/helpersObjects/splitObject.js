@@ -1,3 +1,11 @@
+/**
+ * Splits the object and return two objects.
+ * The first object contains only the properties that are in the propNames list
+ *  The second object contains only the properties that are not in the propNames list
+ * @param obj
+ * @param propNames
+ * @returns
+ */
 export const SplitObject = (obj, propNames) => {
     const obj1 = {};
     const obj2 = {};

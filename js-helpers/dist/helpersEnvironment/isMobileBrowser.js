@@ -1,4 +1,7 @@
+/** Check if browser is mobile */
 export const isMobileBrowser = () => {
+    // @ts-ignore
+    // noinspection JSDeprecatedSymbols
     const userAgent = navigator.userAgent || navigator.vendor || window.opera;
     const tokens = [
         'android',

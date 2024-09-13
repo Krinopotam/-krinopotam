@@ -1,5 +1,6 @@
 import { IsArray } from "./isArray";
 import { IsObjectHasOwnProperty } from "./isObjectHasOwnProperty";
+/** Deep clone  objects */
 export const CloneObject = (object, maxLevel) => {
     const objRecursion = (obj, level) => {
         if (!obj)

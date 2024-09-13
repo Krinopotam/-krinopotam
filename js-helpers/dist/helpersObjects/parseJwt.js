@@ -1,3 +1,8 @@
+/**
+ * Parse JWT token
+ * @param token
+ * @constructor
+ */
 export const ParseJwt = (token) => {
     if (!token)
         return undefined;

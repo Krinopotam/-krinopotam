@@ -1,3 +1,5 @@
+/** Check is element is overlapped by another element */
+// !Function uncompleted and doesn't work
 export const _IsElementOverlapped = (elem) => {
     const isOverlap = (elem1, elem2) => {
         const rect1 = elem1.getBoundingClientRect();

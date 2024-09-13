@@ -1,3 +1,4 @@
+/** Separates a string in CamelCase with spaces (for example: "CamelCaseString" to "Camel Case String")*/
 export const CamelCaseSplit = (str, splitter) => {
     if (typeof splitter === 'undefined')
         splitter = ' ';

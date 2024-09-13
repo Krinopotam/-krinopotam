@@ -1,3 +1,4 @@
+/** Check if an object is React Component */
 export const IsReactComponent = (obj) => {
     var _a;
     if (typeof obj === 'object') {

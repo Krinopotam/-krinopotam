@@ -1,3 +1,4 @@
+/** Check if parameter is promise */
 export const IsPromise = (val) => {
     return !!val && (val instanceof Promise
         || val.constructor === Promise

@@ -1,3 +1,11 @@
+/**
+ * Inserts new element into array
+ * @param arr - array
+ * @param newElement - new element
+ * @param targetElement - target element
+ * @param position  - position (insert at bottom or top of array, or 'before' | 'after' of target element)
+ * @param clone - if true, returns cloned array, if false - mutate original array
+ */
 export const AddElementToArray = function (arr, newElement, targetElement, position, clone = true) {
     const _arr = clone ? [...arr] : arr;
     const targetIndex = targetElement ? _arr.indexOf(targetElement) : -1;

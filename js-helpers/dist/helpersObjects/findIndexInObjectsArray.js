@@ -1,4 +1,5 @@
 import { IsArray } from "./isArray";
+/** Search index in objects array with specified object property */
 export const FindIndexInObjectsArray = (objArray, objProperty, searchVal) => {
     if (!IsArray(objArray))
         return -1;

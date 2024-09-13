@@ -1,3 +1,4 @@
+/** Measure time of function execution */
 export const measureTime = (name, fn) => {
     const start = performance.now();
     const result = fn();
