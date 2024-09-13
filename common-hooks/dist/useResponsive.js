@@ -7,6 +7,12 @@ const defaultDimensionMaxMap = {
     xl: '1199.98px',
     xxl: '1599.98px',
 };
+/**
+ *
+ * @param breakpoint
+ * @param onBreakpoint
+ * @param dimensionMaxMap
+ */
 export const useResponsive = (breakpoint, onBreakpoint, dimensionMaxMap) => {
     const handlerFn = (mql) => {
         onBreakpoint === null || onBreakpoint === void 0 ? void 0 : onBreakpoint(mql.matches);
@@ -25,6 +31,7 @@ export const useResponsive = (breakpoint, onBreakpoint, dimensionMaxMap) => {
                     mql.addEventListener('change', responsiveHandler);
                 }
                 catch (_a) {
+                    // noinspection JSDeprecatedSymbols
                     mql.addListener(responsiveHandler);
                 }
                 responsiveHandler(mql);
@@ -35,6 +42,7 @@ export const useResponsive = (breakpoint, onBreakpoint, dimensionMaxMap) => {
                 mql === null || mql === void 0 ? void 0 : mql.removeEventListener('change', responsiveHandler);
             }
             catch (_a) {
+                // noinspection JSDeprecatedSymbols
                 mql === null || mql === void 0 ? void 0 : mql.removeListener(responsiveHandler);
             }
         };

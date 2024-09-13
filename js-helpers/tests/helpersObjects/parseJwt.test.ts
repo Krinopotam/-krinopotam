@@ -2,11 +2,6 @@ import { describe, it, expect } from 'vitest';
 import { ParseJwt } from '@src/helpersObjects/parseJwt';
 import { JSDOM } from 'jsdom';
 
-// Set up the jsdom environment
-const { window } = new JSDOM('');
-// noinspection JSConstantReassignment
-global.window = window as any;
-
 describe('ParseJwt', () => {
     it('should return a valid payload for a valid JWT token', () => {
         const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c';

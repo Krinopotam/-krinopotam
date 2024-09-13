@@ -2,13 +2,6 @@ import { describe, it, expect } from 'vitest';
 import { isMobileBrowser } from '@src/helpersEnvironment/isMobileBrowser';
 import { JSDOM } from 'jsdom';
 
-// Set up the jsdom environment
-const { window } = new JSDOM('');
-// noinspection JSConstantReassignment
-global.window = window as any;
-// noinspection JSConstantReassignment
-global.navigator = window.navigator;
-
 //  userAgent mocking
 const setUserAgent = (userAgent: string) => {
     Object.defineProperty(window.navigator, 'userAgent', {
