@@ -1,5 +1,4 @@
-import type {IFieldNames} from "@src/_shared/hooks/treeComponentApiMethods/types/treeApiTypes";
-import type {Key} from "react";
+import {IKey} from "@krinopotam/service-types";
 
 /**
  * Find node by node key
@@ -10,8 +9,8 @@ import type {Key} from "react";
  */
 export const findNodeIndex = <T extends Record<string, unknown>>(
     dataSet: T[] | undefined,
-    key: Key,
-    fieldNames:IFieldNames
+    key: IKey,
+    fieldNames:{key: string; children: string}
 ): {
     idx: number;
     nodes: T[] | undefined;

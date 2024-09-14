@@ -76,7 +76,7 @@
   "dependencies": {
     "@krinopotam/common-hooks": "^1.0.18",
     "@krinopotam/js-helpers": "^1.0.49",
-    "@krinopotam/service-types": "^1.0.18",
+    "@krinopotam/service-types": "^1.0.19",
     "ahooks": "^3.8.1",
     "antd": "^5.20.6",
     "lodash.debounce": "^4.0.8",

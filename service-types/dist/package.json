@@ -1,6 +1,6 @@
 {
   "name": "@krinopotam/service-types",
-  "version": "1.0.18",
+  "version": "1.0.19",
   "description": "Common service types for Krinopotam's projects",
   "private": false,
   "author": "Maxim Zaytsev",

@@ -25,5 +25,7 @@ export type IUnionInterfaces<T extends {
 }[]> = IUnionToIntersection<T[number]>;
 /** Return the same function type with addition parameter T at the end */
 export type IAddParamToFunction<F, T> = NonNullable<F> extends (...args: infer P) => infer R ? (...args: [...P, T]) => R : never;
+/** DataSet key */
+export type IKey = string | number;
 /** KeyboardEvent.key type */
-export type { IKeyboardKey, IKeyboardCode } from "./keys";
+export type { IKeyboardKey, IKeyboardCode } from './keys';
