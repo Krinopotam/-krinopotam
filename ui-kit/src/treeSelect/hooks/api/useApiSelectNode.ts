@@ -1,9 +1,10 @@
-import {Key, useCallback} from 'react';
+import {useCallback} from 'react';
 
 import {ITreeComponentApi} from '@src/_shared/hooks/treeComponentApiMethods/types/treeApiTypes';
 import {ITreeSelectApi} from '@src/treeSelect';
 import {ILabeledValue} from '@src/treeSelect/types/types';
 import {anyValueToValuesWithLabel} from "@src/treeSelect/tools/dataConvertors";
+import {IKey} from "@krinopotam/service-types";
 
 export const useApiSelectNode = (
     api: {
@@ -34,7 +35,7 @@ export const useApiSelectNode = (
     );
 };
 
-const isValuesIncludes = (values: ILabeledValue[] | undefined, key: Key) => {
+const isValuesIncludes = (values: ILabeledValue[] | undefined, key: IKey) => {
     if (!values) return false;
     for (const val of values) {
         if (val.value === key) return true;

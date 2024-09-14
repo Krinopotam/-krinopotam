@@ -1,6 +1,7 @@
-import {Key, useCallback} from 'react';
+import {useCallback} from 'react';
 import {CloneObject} from '@krinopotam/js-helpers';
 import {ITreeComponentApi} from '@src/_shared/hooks/treeComponentApiMethods/types/treeApiTypes';
+import {IKey} from "@krinopotam/service-types";
 
 export const useApiRemoveNode = (api: {
     getDataSet: ITreeComponentApi['getDataSet'];
@@ -13,12 +14,12 @@ export const useApiRemoveNode = (api: {
     return useCallback(
         (node, opts, externalDataSet) => {
             const fieldNames = api.getFieldNames();
-            const key: Key = typeof node === 'object' ? (node[fieldNames.key] as Key) : node;
+            const key: IKey = typeof node === 'object' ? (node[fieldNames.key] as IKey) : node;
 
             const dataSet = externalDataSet ?? CloneObject(api.getDataSet());
             if (!dataSet) return;
 
-            let selectKey: Key | undefined = undefined;
+            let selectKey: IKey | undefined = undefined;
             const prevKey = api.getPrevNodeKey(key, undefined, dataSet);
             if (opts?.select === 'next') {
                 selectKey = api.getNextNodeKey(key, undefined, dataSet);

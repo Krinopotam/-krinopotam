@@ -6,7 +6,7 @@ import {IDFormModalProps} from '@src/dFormModal';
 import {IInputFieldProps, InputField} from '@src/dForm/fields/input/inputField';
 import {ITreeSelectFieldProps, TreeSelectField} from '@src/dForm/fields/treeSelect/treeSelectField';
 import {CloneObject} from '@krinopotam/js-helpers';
-import {removeFromDataSet} from '@src/treeSelect/tools/removeFromDataSet';
+import {removeFromDataSet} from '@src/_shared/hooks/treeComponentApiMethods/serviceMethods/removeFromDataSet';
 import {ITreeSelectApi} from '@src/treeSelect';
 
 export const TreeSelectWithFormAsync = (): React.JSX.Element => {

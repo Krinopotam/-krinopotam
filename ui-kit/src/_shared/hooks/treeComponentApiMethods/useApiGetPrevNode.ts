@@ -1,6 +1,7 @@
-import {Key, useCallback} from 'react';
-import {findPrevNodeKey} from '@src/_shared/hooks/treeComponentApiMethods/serviceMethods/findeNextNodeKey';
+import {useCallback} from 'react';
 import {ITreeComponentApi} from "@src/_shared/hooks/treeComponentApiMethods/types/treeApiTypes";
+import {IKey} from "@krinopotam/service-types";
+import {findPrevNodeKey} from "@src/_shared/hooks/treeComponentApiMethods/serviceMethods/findPrevNodeKey";
 
 export const useApiGetPrevNode = (api: {
     getDataSet: ITreeComponentApi['getDataSet'];
@@ -13,7 +14,7 @@ export const useApiGetPrevNode = (api: {
         (node, opts, externalDataset) => {
             const fieldNames = api.getFieldNames();
             const keyField = fieldNames.key;
-            const prevKey = findPrevNodeKey(externalDataset ?? api.getDataSet(), node[keyField] as Key, api.getExpandedKeys(), fieldNames, opts);
+            const prevKey = findPrevNodeKey(externalDataset ?? api.getDataSet(), node[keyField] as IKey, api.getExpandedKeys(), fieldNames, opts);
             return prevKey ? api.getNode(prevKey, externalDataset) : undefined;
         },
         [api]

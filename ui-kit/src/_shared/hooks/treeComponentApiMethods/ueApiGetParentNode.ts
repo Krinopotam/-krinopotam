@@ -1,6 +1,8 @@
-import {Key, useCallback} from 'react';
+import {useCallback} from 'react';
 
 import {ITreeComponentApi} from '@src/_shared/hooks/treeComponentApiMethods/types/treeApiTypes';
+import {IKey} from '@krinopotam/service-types';
+import {findParentNode} from '@src/_shared/hooks/treeComponentApiMethods/serviceMethods/findParentNode';
 
 export const useApiGetParentNode = (api: {
     getDataSet: ITreeComponentApi['getDataSet'];
@@ -9,23 +11,9 @@ export const useApiGetParentNode = (api: {
     return useCallback(
         (node, externalDataset) => {
             const fieldNames = api.getFieldNames();
-            const key = typeof node === 'object' ? (node[fieldNames.key] as Key) : node;
-
-            const recursive = (nodes: Record<string, unknown>[], parentNode: Record<string, unknown> | undefined): Record<string, unknown> | undefined => {
-                for (const node of nodes) {
-                    if (node[fieldNames.key] === key) return parentNode;
-                    if (node[fieldNames.children]) {
-                        const result = recursive(node[fieldNames.children] as Record<string, unknown>[], node);
-                        if (result) return result;
-                    }
-                }
-                return undefined;
-            };
-
+            const key = typeof node === 'object' ? (node[fieldNames.key] as IKey) : node;
             const data = externalDataset ?? api.getDataSet();
-
-            if (!data) return undefined;
-            return recursive(data, undefined);
+            return findParentNode(data, key, fieldNames);
         },
         [api]
     );

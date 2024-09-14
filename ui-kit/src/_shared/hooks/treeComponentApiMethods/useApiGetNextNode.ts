@@ -1,6 +1,7 @@
-import {Key, useCallback} from 'react';
+import {useCallback} from 'react';
 import {findNextNodeKey} from '@src/_shared/hooks/treeComponentApiMethods/serviceMethods/findeNextNodeKey';
 import {ITreeComponentApi} from "@src/_shared/hooks/treeComponentApiMethods/types/treeApiTypes";
+import {IKey} from "@krinopotam/service-types";
 
 export const useApiGetNextNode = (api: {
     getDataSet: ITreeComponentApi['getDataSet'];
@@ -13,7 +14,7 @@ export const useApiGetNextNode = (api: {
         (node, opts, externalDataset) => {
             const fieldNames = api.getFieldNames();
             const keyField = fieldNames.key;
-            const nextKey = findNextNodeKey(externalDataset ?? api.getDataSet(), node[keyField] as Key, api.getExpandedKeys(), fieldNames, opts);
+            const nextKey = findNextNodeKey(externalDataset ?? api.getDataSet(), node[keyField] as IKey, api.getExpandedKeys(), fieldNames, opts);
             return nextKey ? api.getNode(nextKey, externalDataset) : undefined;
         },
         [api]

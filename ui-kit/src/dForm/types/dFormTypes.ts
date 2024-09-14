@@ -1,6 +1,6 @@
 import {DModel, IDFormBaseCallbacks, IRuleType} from '@src/dForm';
 import {IButtonsRowApi, IFormButtons} from '@src/buttonsRow';
-import React, {CSSProperties, Key} from 'react';
+import React, {CSSProperties} from 'react';
 import {IColorType} from '@src/button';
 import {ColProps} from 'antd';
 import {FormLabelAlign} from 'antd/es/form/interface';
@@ -8,6 +8,7 @@ import {RequiredMark} from 'antd/es/form/Form';
 import {translations} from '@src/dForm/translations/translations';
 import {IBaseComponentApi} from '@src/_shared/hooks/componentApiMethods/types/apiTypes';
 import {IAnyFieldProps} from '@src/dForm/fields/base';
+import {IKey} from "@krinopotam/service-types";
 
 export type IDFormValidationRules = Record<string, IRuleType[]>;
 
@@ -128,7 +129,7 @@ export interface IDFormCallbacks extends IDFormBaseCallbacks<IDFormApi> {
 
 /** Form data set type */
 export interface IDFormDataSet extends Record<string, unknown> {
-    id?: Key;
+    id?: IKey;
 }
 
 export type IDFormDataSourcePromise = Promise<{data: Record<string, unknown>}>;

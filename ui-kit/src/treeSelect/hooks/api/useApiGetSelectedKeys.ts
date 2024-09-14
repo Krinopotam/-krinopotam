@@ -1,5 +1,6 @@
 import {ILabeledValue} from '@src/treeSelect/types/types';
-import {Key, useCallback} from 'react';
+import {useCallback} from 'react';
+import {IKey} from "@krinopotam/service-types";
 
 export const useApiGetSelectedKeys = (value?: ILabeledValue | ILabeledValue[]) => {
     return useCallback(
@@ -8,7 +9,7 @@ export const useApiGetSelectedKeys = (value?: ILabeledValue | ILabeledValue[]) =
             if (!val) return undefined;
 
             if (!Array.isArray(val)) return [val.value];
-            const result: Key[] = [];
+            const result: IKey[] = [];
             for (const item of val) {
                 result.push(item.value);
             }

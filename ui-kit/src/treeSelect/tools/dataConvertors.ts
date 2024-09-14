@@ -1,7 +1,8 @@
 import {IFieldNames} from '@src/_shared/hooks/treeComponentApiMethods/types/treeApiTypes';
 import {ILabeledValue, ITreeSelectValue} from '@src/treeSelect/types/types';
-import React, {Key} from 'react';
+import React from 'react';
 import {findNodeIndex} from '@src/_shared/hooks/treeComponentApiMethods/serviceMethods/findNodeIndex';
+import {IKey} from "@krinopotam/service-types";
 
 /**
  * Convert unknown value (Key|Key[]|Object|Object[]) to values with label array {value: Key, label?: ReactNode}[]
@@ -39,7 +40,7 @@ export const isLabeledValue = (val: unknown): val is ILabeledValue => {
  * @param fieldNames
  */
 export const nodeToLabeledValue = (node: Record<string, unknown>, fieldNames: IFieldNames): ILabeledValue => {
-    const key = node[fieldNames.key] as Key;
+    const key = node[fieldNames.key] as IKey;
     const label = node[fieldNames.title] as React.ReactNode;
     return {value: key, label: label};
 };

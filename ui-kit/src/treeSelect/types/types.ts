@@ -1,5 +1,5 @@
 //region Types
-import React, {Key} from 'react';
+import React from 'react';
 import {GetProps, GetRef, TreeSelect} from 'antd';
 import {IDFormModalApi, IDFormModalProps} from '@src/dFormModal';
 import {IButtonsRowApi, IFormButton} from '@src/buttonsRow';
@@ -7,10 +7,11 @@ import {DefaultOptionType} from 'rc-tree-select/es/TreeSelect';
 
 import {IFieldNames, ITreeComponentApi} from '@src/_shared/hooks/treeComponentApiMethods/types/treeApiTypes';
 import {translations} from "@src/treeSelect/translations/translations";
+import {IKey} from "@krinopotam/service-types";
 
 interface ITreeSelectNodeBase extends Omit<DefaultOptionType, 'children'> {
     /** Node id */
-    id?: Key;
+    id?: IKey;
     /** Leaf node or not */
     isLeaf?: boolean;
     /** Children nodes */
@@ -148,7 +149,7 @@ export interface ITreeSelectBaseProps {
     onReady?: () => void;
 
     /** Fires when the TreeSelect value is changed */
-    onChange?: (valueType: ILabeledValue | ILabeledValue[], keys: Key[], nodes: ITreeSelectNode[]) => void;
+    onChange?: (valueType: ILabeledValue | ILabeledValue[], keys: IKey[], nodes: ITreeSelectNode[]) => void;
 
     /** Fires when the TreeSelect dataSet is changed */
     onDataSetChanged?: (dataSet: ITreeSelectNode[] | undefined) => void;
@@ -169,7 +170,7 @@ export interface ITreeSelectBaseProps {
     onDelete?: (selectedNodes: ITreeSelectNode, api: ITreeSelectApi) => ITreeSelectDeletePromise | void | undefined;
 
     /** Callback to get the label of the node's set value. Called when the value set in the TreeSelect is changed */
-    onGetLabelCallback?: (key: Key, dataSet: ITreeSelectNode[] | undefined) => React.ReactNode;
+    onGetLabelCallback?: (key: IKey, dataSet: ITreeSelectNode[] | undefined) => React.ReactNode;
 }
 
 export type ITreeSelectProps = ITreeSelectBaseProps & IAntTreeSelectProps;
@@ -177,11 +178,11 @@ export type ITreeSelectSourcePromise = Promise<{data: ITreeSelectNode[]}>;
 export type ITreeSelectDeletePromise = Promise<{data: Record<string, unknown>}>;
 
 export interface ILabeledValue {
-    value: Key;
+    value: IKey;
     label?: React.ReactNode;
 }
 
-export type ITreeSelectValue = Key | Key[] | ILabeledValue | ILabeledValue[] | Record<string, unknown> | Record<string, unknown>[] | null | undefined;
+export type ITreeSelectValue = IKey | IKey[] | ILabeledValue | ILabeledValue[] | Record<string, unknown> | Record<string, unknown>[] | null | undefined;
 
 export interface ITreeSelectApi extends Omit<ITreeComponentApi<ITreeSelectNode, ITreeSelectProps>, 'setSelectedKeys'> {
     /** Tree ref */

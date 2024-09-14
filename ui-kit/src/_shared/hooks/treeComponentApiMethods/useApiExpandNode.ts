@@ -1,6 +1,7 @@
-import {Key, useCallback} from 'react';
+import {useCallback} from 'react';
 
 import {ITreeComponentApi} from '@src/_shared/hooks/treeComponentApiMethods/types/treeApiTypes';
+import {IKey} from "@krinopotam/service-types";
 
 export const useApiExpandNode = (api: {
     getExpandedKeys: ITreeComponentApi['getExpandedKeys'];
@@ -10,7 +11,7 @@ export const useApiExpandNode = (api: {
     return useCallback(
         node => {
             const fieldNames = api.getFieldNames();
-            const key = typeof node === 'object' ? (node[fieldNames.key] as Key) : node;
+            const key = typeof node === 'object' ? (node[fieldNames.key] as IKey) : node;
             const expandedKeys = api.getExpandedKeys();
             if (expandedKeys?.includes(key)) return;
             api.setExpandedKeys([...(expandedKeys ?? []), key]);

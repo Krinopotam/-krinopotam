@@ -1,6 +1,6 @@
 import {Key, useCallback} from 'react';
-import {findPrevNodeKey} from '@src/_shared/hooks/treeComponentApiMethods/serviceMethods/findeNextNodeKey';
 import {ITreeComponentApi} from "@src/_shared/hooks/treeComponentApiMethods/types/treeApiTypes";
+import {findPrevNodeKey} from "@src/_shared/hooks/treeComponentApiMethods/serviceMethods/findPrevNodeKey";
 
 export const useApiGetPrevNode = (api: {
     getDataSet: ITreeComponentApi['getDataSet'];

@@ -1,6 +1,7 @@
-import {Key, useCallback} from 'react';
+import {useCallback} from 'react';
 
 import {ITreeComponentApi} from "@src/_shared/hooks/treeComponentApiMethods/types/treeApiTypes";
+import {IKey} from "@krinopotam/service-types";
 
 export const useApiSelectNode = (
     api: {
@@ -13,7 +14,7 @@ export const useApiSelectNode = (
     return useCallback(
         (node, isSelect = true) => {
             const fieldNames = api.getFieldNames();
-            const key:Key = typeof node === 'object' ? node[fieldNames.key] as Key : node;
+            const key:IKey = typeof node === 'object' ? node[fieldNames.key] as IKey : node;
 
             const selectedKeys = api.getSelectedKeys();
             if (isSelect) {

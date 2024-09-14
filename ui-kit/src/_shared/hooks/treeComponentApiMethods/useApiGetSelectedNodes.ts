@@ -1,12 +1,13 @@
-import {Key, useCallback, useRef} from 'react';
+import {useCallback, useRef} from 'react';
 
 import {ITreeComponentApi} from '@src/_shared/hooks/treeComponentApiMethods/types/treeApiTypes';
+import {IKey} from "@krinopotam/service-types";
 
 export const useApiGetSelectedNodes = (api: {
     getSelectedKeys: ITreeComponentApi['getSelectedKeys'];
     getNode: ITreeComponentApi['getNode'];
 }): ITreeComponentApi['getSelectedNodes'] => {
-    const prevKeysRef = useRef<Key[] | undefined>(undefined);
+    const prevKeysRef = useRef<IKey[] | undefined>(undefined);
     const prevNodesRef = useRef<Record<string, unknown>[] | undefined>(undefined);
     return useCallback(
         extDataSet => {

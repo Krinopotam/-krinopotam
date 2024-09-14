@@ -1,5 +1,6 @@
-import {Key, useCallback} from 'react';
+import {useCallback} from 'react';
 import {ITreeComponentApi} from "@src/_shared/hooks/treeComponentApiMethods/types/treeApiTypes";
+import {IKey} from "@krinopotam/service-types";
 
 export const useApiExpandParentNodes = (api: {
     expandNode: ITreeComponentApi['expandNode'];
@@ -11,7 +12,7 @@ export const useApiExpandParentNodes = (api: {
             const data = externalDataset ?? api.getDataSet();
             if (!data) return;
             const fieldNames = api.getFieldNames();
-            const key:Key = typeof node === 'object' ? node[fieldNames.key] as Key : node;
+            const key:IKey = typeof node === 'object' ? node[fieldNames.key] as IKey : node;
 
             const recursive = (nodes: Record<string, unknown>[]) => {
                 for (const node of nodes) {
@@ -21,7 +22,7 @@ export const useApiExpandParentNodes = (api: {
                         const founded = recursive(node[fieldNames.children] as Record<string, unknown>[]);
 
                         if (founded) {
-                            api.expandNode(node[fieldNames.key] as Key);
+                            api.expandNode(node[fieldNames.key] as IKey);
                             return true;
                         }
                     }

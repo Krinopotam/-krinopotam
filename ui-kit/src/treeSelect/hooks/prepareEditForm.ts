@@ -1,10 +1,11 @@
-import {Key, useContext, useMemo} from 'react';
+import {useContext, useMemo} from 'react';
 import {GetUuid, IsObjectHasOwnProperty} from '@krinopotam/js-helpers';
 import {ITreeSelectApi, ITreeSelectNode, ITreeSelectProps} from '@src/treeSelect';
 import type {IDFormApi, IDFormDataSet} from '@src/dForm/types/dFormTypes';
 import {ILabeledValue} from '@src/treeSelect/types/types';
 import {IFieldNames} from '@src/_shared/hooks/treeComponentApiMethods/types/treeApiTypes';
 import {TreeSelectContext} from '@src/treeSelect/context/context';
+import {IKey} from "@krinopotam/service-types";
 
 export const usePrepareEditFormProps = (treeApi: ITreeSelectApi, props: ITreeSelectProps, forGroup: boolean) => {
     const {dialogOpenedRef} = useContext(TreeSelectContext);
@@ -28,10 +29,10 @@ export const usePrepareEditFormProps = (treeApi: ITreeSelectApi, props: ITreeSel
             const formMode = formApi.model.getFormMode();
             const fieldNames = treeApi.getFieldNames();
 
-            const updatedNode = {...resultData} as ITreeSelectNode & {parent?: Record<string, unknown>; parentId?: Key};
+            const updatedNode = {...resultData} as ITreeSelectNode & {parent?: Record<string, unknown>; parentId?: IKey};
 
-            let targetKey: Key | undefined;
-            if (IsObjectHasOwnProperty(updatedNode, fieldNames.parent)) targetKey = updatedNode[fieldNames.parent]?.[fieldNames.key] as Key;
+            let targetKey: IKey | undefined;
+            if (IsObjectHasOwnProperty(updatedNode, fieldNames.parent)) targetKey = updatedNode[fieldNames.parent]?.[fieldNames.key] as IKey;
             else targetKey = treeApi.getActiveNodeKey();
 
             if (formMode === 'create' || formMode === 'clone') {

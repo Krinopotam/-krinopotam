@@ -1,6 +1,8 @@
-import {IFieldNames, IFindNodeOptions} from "@src/_shared/hooks/treeComponentApiMethods/types/treeApiTypes";
-import {Key} from "react";
-
+import {IFindNodeOptions} from '@src/_shared/hooks/treeComponentApiMethods/types/treeApiTypes';
+import {IKey} from '@krinopotam/service-types';
+import {shouldSearchInChildren} from "@src/_shared/hooks/treeComponentApiMethods/serviceMethods/shouldSearchInChildren";
+import {isNodeCanBeSelected} from "@src/_shared/hooks/treeComponentApiMethods/serviceMethods/isNodeCanBeSelected";
+import {findPrevNodeKey} from "@src/_shared/hooks/treeComponentApiMethods/serviceMethods/findPrevNodeKey";
 
 /**
  * Find next node key in data set by display order.
@@ -14,18 +16,18 @@ import {Key} from "react";
  */
 export const findNextNodeKey = <T extends Record<string, unknown>>(
     dataSet: T[] | undefined,
-    key: Key | undefined,
-    expandedKeys: Key[] | undefined,
-    fieldNames: IFieldNames,
+    key: IKey | undefined,
+    expandedKeys: IKey[] | undefined,
+    fieldNames: {key: string; children: string},
     opts?: IFindNodeOptions
-): Key | undefined => {
+): IKey | undefined => {
     let curFound = !key;
     let breakSearch = false;
 
-    const recursive = (nodes: T[]): Key | undefined => {
+    const recursive = (nodes: T[]): IKey | undefined => {
         for (const node of nodes) {
             if (breakSearch) return undefined;
-            if (curFound && isNodeCanBeSelected(node, opts)) return node[fieldNames.key] as Key;
+            if (curFound && isNodeCanBeSelected(node, opts)) return node[fieldNames.key] as IKey;
 
             if (typeof key === 'undefined' || node[fieldNames.key] === key) curFound = true;
 
@@ -40,55 +42,10 @@ export const findNextNodeKey = <T extends Record<string, unknown>>(
     };
 
     if (!dataSet) return undefined;
-    return recursive(dataSet);
+    const result = recursive(dataSet);
+    if (result) return result
+
+    if (opts?.defaultToBoundary === false) return undefined
+    return key ? key : findPrevNodeKey(dataSet,undefined,expandedKeys,fieldNames,opts);
 };
 
-/**
- * Find prev node key in data set by display order.
- * If no node on same level found, returns parent node key.
- * If the parent has children nodes, then we return the last one
- * @param dataSet - hierarchy collection of nodes
- * @param key - node key
- * @param expandedKeys - keys of expanded nodes
- * @param fieldNames - field names
- * @param opts - search options
- */
-export const findPrevNodeKey = <T extends Record<string, unknown>>(
-    dataSet: T[] | undefined,
-    key: Key | undefined,
-    expandedKeys: Key[] | undefined,
-    fieldNames: IFieldNames,
-    opts?: IFindNodeOptions
-): Key | undefined => {
-    let curFound = !key;
-    let breakSearch = false;
-
-    const recursive = (nodes: T[]): Key | undefined => {
-        for (let i = nodes.length - 1; i >= 0; i--) {
-            const node = nodes[i];
-            if (breakSearch) return undefined;
-
-            if (node[fieldNames.children] && (!curFound || shouldSearchInChildren(node, expandedKeys, fieldNames, opts))) {
-                const childResult = recursive(node[fieldNames.children] as T[]);
-                if (childResult) return childResult;
-            }
-
-            if (curFound && isNodeCanBeSelected(node, opts)) return node[fieldNames.key] as Key;
-
-            if (typeof key === 'undefined' || node[fieldNames.key] === key) curFound = true;
-        }
-
-        if (curFound && opts?.sameLevelOnly) breakSearch = true;
-        return undefined;
-    };
-
-    if (!dataSet) return undefined;
-    return recursive(dataSet);
-};
-
-const isNodeCanBeSelected = (node: Record<string, unknown>, opts?: IFindNodeOptions) =>
-    (opts?.notDisabled === false || node.disabled !== true) && (opts?.selectableOnly === false || node.selectable !== false);
-
-const shouldSearchInChildren = (node: Record<string, unknown>, expandedKeys: Key[] | undefined, fieldNames: IFieldNames, opts?: IFindNodeOptions) => {
-    return !opts?.sameLevelOnly && (opts?.expandedOnly === false || expandedKeys?.includes(node[fieldNames.key] as Key));
-};

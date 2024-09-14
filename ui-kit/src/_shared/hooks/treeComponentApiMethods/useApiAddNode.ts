@@ -1,6 +1,7 @@
-import {Key, useCallback} from 'react';
+import {useCallback} from 'react';
 import {AddElementToArray, CloneObject} from '@krinopotam/js-helpers';
 import {ITreeComponentApi} from "@src/_shared/hooks/treeComponentApiMethods/types/treeApiTypes";
+import {IKey} from "@krinopotam/service-types";
 
 export const useApiAddNode = (api: {
     getDataSet: ITreeComponentApi['getDataSet'];
@@ -21,7 +22,7 @@ export const useApiAddNode = (api: {
             const childrenField = fieldNames.children;
 
             const dataSet = externalDataset ?? CloneObject(api.getDataSet() ?? []);
-            const targetKey = typeof target === 'object' ? target[keyField] as Key: target;
+            const targetKey = typeof target === 'object' ? target[keyField] as IKey: target;
             const targetNode = api.getNode(targetKey, dataSet);
             if (!targetNode || ((position === 'insideTop' || position === 'insideBottom') && targetNode?.isLeaf)) position = 'below'; //we can't add node into the leaf node or undefined node
 
@@ -35,7 +36,7 @@ export const useApiAddNode = (api: {
                 AddElementToArray(targetList, node, undefined, arrPos, false);
             } else {
                 if (targetNode) {
-                    const parentNode = api.getParentNode(targetNode[keyField] as Key, dataSet);
+                    const parentNode = api.getParentNode(targetNode[keyField] as IKey, dataSet);
                     if (parentNode) targetList = parentNode[childrenField] as Record<string, unknown>[];
                     else targetList = dataSet;
                 }
@@ -45,8 +46,8 @@ export const useApiAddNode = (api: {
             }
 
             if (!externalDataset) api.setDataSet(dataSet);
-            if (opts?.ensureVisible) api.ensureNodeVisible(node[keyField] as Key, dataSet);
-            if (opts?.select) api.selectNode(node[keyField] as Key, true);
+            if (opts?.ensureVisible) api.ensureNodeVisible(node[keyField] as IKey, dataSet);
+            if (opts?.select) api.selectNode(node[keyField] as IKey, true);
             return dataSet;
         },
         [api]
