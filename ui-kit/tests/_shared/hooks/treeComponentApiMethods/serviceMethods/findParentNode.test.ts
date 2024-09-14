@@ -33,4 +33,13 @@ describe('findParentNode', () => {
         const result = findParentNode(dataSet, '3', { key: 'id', children: 'children' });
         expect(result).toEqual({ id: '2', children: [{ id: '3', children: [] }] });
     });
+
+    it('should return parent node when key is node', () => {
+        const dataSet = [
+            { id: '1', children: [{ id: '2', children: [{ id: '3', children: [] }] }] },
+            { id: '4', children: [] },
+        ];
+        const result = findParentNode(dataSet, {id: '3'}, { key: 'id', children: 'children' });
+        expect(result).toEqual({ id: '2', children: [{ id: '3', children: [] }] });
+    });
 });

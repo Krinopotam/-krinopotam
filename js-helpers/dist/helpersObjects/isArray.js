@@ -1,4 +1,4 @@
-/** Check if parameter is an array */
-export const IsArray = (val) => {
-    return val instanceof Array;
+const n = (r) => r instanceof Array;
+export {
+  n as IsArray
 };

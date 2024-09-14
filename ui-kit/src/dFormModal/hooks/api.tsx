@@ -1,6 +1,7 @@
 import {IDFormProps} from '@src/dForm';
 import {MessageBox} from '@src/messageBox';
-import {CloneObject, GetNanoId} from '@krinopotam/js-helpers';
+import {CloneObject} from '@krinopotam/js-helpers/helpersObjects/cloneObject';
+import {GetNanoId} from '@krinopotam/js-helpers/helpersString/getNanoId';
 import React, {useCallback, useEffect, useState} from 'react';
 import {IsDebugMode} from '@krinopotam/common-hooks';
 import {IDFormModalApi, IDFormModalProps} from '@src/dFormModal';

@@ -3,6 +3,7 @@ import {ILabeledValue, ITreeSelectValue} from '@src/treeSelect/types/types';
 import React from 'react';
 import {findNodeIndex} from '@src/_shared/hooks/treeComponentApiMethods/serviceMethods/findNodeIndex';
 import {IKey} from "@krinopotam/service-types";
+import {IsArray} from "@krinopotam/js-helpers/helpersObjects/isArray";
 
 /**
  * Convert unknown value (Key|Key[]|Object|Object[]) to values with label array {value: Key, label?: ReactNode}[]
@@ -11,7 +12,7 @@ import {IKey} from "@krinopotam/service-types";
  */
 export const anyValueToValuesWithLabel = (val: ITreeSelectValue, fieldNames: IFieldNames): ILabeledValue[] | undefined => {
     if (!val) return undefined;
-    if (!Array.isArray(val)) {
+    if (!IsArray(val)) {
         if (typeof val === 'object') {
             if (isLabeledValue(val)) return [val];
             return [nodeToLabeledValue(val, fieldNames)];

@@ -1,11 +1,11 @@
-import {IsPromise, MergeObjects} from '@krinopotam/js-helpers';
+import {IsPromise} from '@krinopotam/js-helpers/helpersObjects/isPromise';
+import {MergeObjects} from '@krinopotam/js-helpers/helpersObjects/mergeObjects';
 import React, {useMemo} from 'react';
 import {ITreeSelectApi, ITreeSelectDeletePromise} from '@src/treeSelect';
 import {DeleteOutlined, EditOutlined, PlusOutlined} from '@ant-design/icons';
 import {IDFormModalApi} from '@src/dFormModal';
-import {MessageBoxApi, MessageBox} from '@src/messageBox';
+import {MessageBox, MessageBoxApi} from '@src/messageBox';
 import {IError} from '@krinopotam/service-types';
-import {IsDebugMode} from '@krinopotam/common-hooks';
 import {IFormButtons} from '@src/buttonsRow';
 import {ErrorMessage} from '@src/errorMessage';
 

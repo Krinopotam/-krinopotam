@@ -1,7 +1,7 @@
 import React from 'react';
 import {GlobalToken, theme} from 'antd';
 import {IColorType} from '@src/button/button';
-import {isMobileBrowser} from "@krinopotam/js-helpers";
+import {isMobileBrowser} from "@krinopotam/js-helpers/helpersEnvironment/isMobileBrowser";
 
 const {useToken} = theme;
 

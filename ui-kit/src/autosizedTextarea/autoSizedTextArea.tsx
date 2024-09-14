@@ -2,7 +2,7 @@ import React, {CSSProperties, ChangeEvent, useEffect, useMemo, useRef, useState}
 import {TextAreaProps, TextAreaRef} from 'antd/es/input/TextArea';
 
 import {Input} from 'antd';
-import {MergeObjects} from "@krinopotam/js-helpers";
+import {MergeObjects} from "@krinopotam/js-helpers/helpersObjects/mergeObjects";
 import styled from 'styled-components';
 
 const {TextArea} = Input;

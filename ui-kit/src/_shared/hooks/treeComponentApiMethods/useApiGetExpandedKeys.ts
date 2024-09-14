@@ -1,5 +1,3 @@
-import React, {useCallback} from "react";
+import {IKey} from '@krinopotam/service-types';
 
-export const useApiGetExpandedKeys = (expandedKeys: React.Key[] | undefined) => {
-    return useCallback(() => expandedKeys, [expandedKeys]);
-};
+export const useApiGetExpandedKeys = (expandedKeys: IKey[] | undefined) => () => expandedKeys;

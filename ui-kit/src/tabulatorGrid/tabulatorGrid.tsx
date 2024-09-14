@@ -2,7 +2,7 @@ import React, {useMemo, useRef, useState} from 'react';
 import {ITabulator, ITabulatorProps} from '@src/tabulatorBase';
 import {useInitGridApi} from './hooks/api';
 import {ContainerRender} from './renders/containerRender';
-import {SplitObject} from '@krinopotam/js-helpers';
+import {SplitObject} from '@krinopotam/js-helpers/helpersObjects/splitObject';
 import {IGridProps, IGridPropsBase, IGridPropsCallbacks} from '@src/tabulatorGrid/types/tabulatorGridTypes';
 import {useGetActualProps} from '@krinopotam/common-hooks';
 

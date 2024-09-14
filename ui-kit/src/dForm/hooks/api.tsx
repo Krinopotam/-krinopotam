@@ -11,7 +11,7 @@ import {useApiUpdateProps} from '@src/_shared/hooks/componentApiMethods/useApiUp
 import {useApiGetId} from '@src/_shared/hooks/componentApiMethods/useApiGetId';
 import {useApiIsMounted} from '@src/_shared/hooks/componentApiMethods/useApiIsMointed';
 import {useApiGetButtonsApi} from "@src/_shared/hooks/componentApiMethods/useApiGetButtonsApi";
-import {GetNanoId} from "@krinopotam/js-helpers";
+import {GetNanoId} from "@krinopotam/js-helpers/helpersString/getNanoId";
 
 export const useInitFormApi = ({
     props,

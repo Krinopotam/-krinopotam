@@ -1,7 +1,9 @@
 import {ITreeSelectNode, ITreeSelectProps} from '@src/treeSelect';
 import {useCallback, useRef, useState} from 'react';
 import {useDataFetcher} from '@src/treeSelect/hooks/dataFetcher';
-import {GetNanoId, GetUuid, IsArray} from '@krinopotam/js-helpers';
+import {GetNanoId} from '@krinopotam/js-helpers/helpersString/getNanoId';
+import {GetUuid} from '@krinopotam/js-helpers/helpersString/getUuid';
+import {IsArray} from '@krinopotam/js-helpers/helpersObjects/isArray';
 import {ITreeSelectApi} from '@src/treeSelect/types/types';
 import {IDFormModalApi} from '@src/dFormModal';
 import {useDataSetState} from '@src/_shared/hooks/treeComponentApiMethods/useDataSetState';
@@ -64,8 +66,8 @@ import {useApiSetValues} from '@src/treeSelect/hooks/api/useApiSetValues';
 import {useApiGetSelectedKeys} from '@src/treeSelect/hooks/api/useApiGetSelectedKeys';
 import {useApiGetSelectedNodes} from '@src/treeSelect/hooks/api/useApiGetSelectedNodes';
 import {useApiSelectNode} from '@src/treeSelect/hooks/api/useApiSelectNode';
-import {useTranslate} from "@src/_shared/hooks/useTranslate";
-import {translations} from "@src/treeSelect/translations/translations";
+import {useTranslate} from '@src/_shared/hooks/useTranslate';
+import {translations} from '@src/treeSelect/translations/translations';
 
 export const useInitApi = ({
     props,
@@ -97,7 +99,7 @@ export const useInitApi = ({
     api.getId = useApiGetId(props.componentId ?? 'treeSelect-' + GetNanoId());
     api.getProps = useApiGetProps(props);
     api.setProps = useApiSetProps(setProps);
-    api.t = useT(api)
+    api.t = useT(api);
     api.updateProps = useApiUpdateProps(props, setProps);
     api.getIsMounted = useApiIsMounted();
 

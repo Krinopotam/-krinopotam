@@ -9,18 +9,20 @@ import {findNextNodeKey} from '@src/_shared/hooks/treeComponentApiMethods/servic
  * If no node on same level found, returns parent node key.
  * If the parent has children nodes, then we return the last one
  * @param dataSet - hierarchy collection of nodes
- * @param key - node key
+ * @param node - node or node key
  * @param expandedKeys - keys of expanded nodes
  * @param fieldNames - field names
  * @param opts - search options
  */
 export const findPrevNodeKey = <T extends Record<string, unknown>>(
     dataSet: T[] | undefined,
-    key: IKey | undefined,
+    node: IKey | Record<string, unknown> | undefined,
     expandedKeys: IKey[] | undefined,
-    fieldNames: {key: string; children: string},
+    fieldNames: {key: string; children: string, disabled: string, selectable: string},
     opts?: IFindNodeOptions
 ): IKey | undefined => {
+    const key = typeof node === 'object' ? (node[fieldNames.key] as IKey) : node;
+
     let curFound = !key;
     let breakSearch = false;
 
@@ -35,7 +37,7 @@ export const findPrevNodeKey = <T extends Record<string, unknown>>(
                 if (breakSearch) return undefined;
             }
 
-            if (curFound && isNodeCanBeSelected(node, opts)) return node[fieldNames.key] as IKey;
+            if (curFound && isNodeCanBeSelected(node, fieldNames, opts)) return node[fieldNames.key] as IKey;
 
             if (node[fieldNames.key] === key) curFound = true;
         }

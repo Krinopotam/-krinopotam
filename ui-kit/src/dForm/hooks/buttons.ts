@@ -1,4 +1,4 @@
-import {MergeObjects} from "@krinopotam/js-helpers";
+import {MergeObjects} from "@krinopotam/js-helpers/helpersObjects/mergeObjects";
 import {useMemo} from "react";
 import {IDFormApi, IDFormProps} from "@src/dForm";
 import {translations} from "@src/dForm/translations/translations";

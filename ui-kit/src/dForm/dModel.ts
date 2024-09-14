@@ -8,7 +8,7 @@
  * @license MIT
  */
 
-import {IsPromise} from '@krinopotam/js-helpers';
+import {IsPromise} from '@krinopotam/js-helpers/helpersObjects/isPromise';
 
 import {BaseValidator} from './validators/baseValidator';
 import React from 'react';

@@ -1,5 +1,5 @@
-import hash from "object-hash";
-/** Get object content hash */
-export const HashObjectContent = (object, options) => {
-    return hash(object, options);
+import r from "object-hash";
+const n = (t, o) => r(t, o);
+export {
+  n as HashObjectContent
 };

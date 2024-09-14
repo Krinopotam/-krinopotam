@@ -2,6 +2,7 @@ import {Module, Options, TabulatorFull as Tabulator} from 'tabulator-tables';
 import {AnyType} from '@krinopotam/service-types';
 import {ITabulatorFilterFunc} from '@src/tabulatorBase';
 import {IModule, ITabulatorCore} from "@src/tabulatorBase/types/tabulatorCoreTypes";
+import {IsArray} from "@krinopotam/js-helpers/helpersObjects/isArray";
 
 //region Interfaces
 export interface IAdvancedHeaderFilterTabulator extends ITabulatorCore {
@@ -321,7 +322,7 @@ const defaultFilters: Record<string, ITabulatorFilterFunc | undefined> = {
 
     //in array
     in: function (filterVal, rowVal) {
-        if (Array.isArray(filterVal)) {
+        if (IsArray(filterVal)) {
             return filterVal.length ? filterVal.indexOf(rowVal) > -1 : true;
         } else {
             console.warn('Filter Error - filter value is not an array:', filterVal);

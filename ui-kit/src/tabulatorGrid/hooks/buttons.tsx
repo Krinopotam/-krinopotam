@@ -1,6 +1,6 @@
 import React, {useCallback, useMemo, useState} from 'react';
 import {FilterOutlined, MenuOutlined} from '@ant-design/icons';
-import {MergeObjects} from '@krinopotam/js-helpers';
+import {MergeObjects} from '@krinopotam/js-helpers/helpersObjects/mergeObjects';
 import {IGridApi, IGridRowData, ITabulator} from '@src/tabulatorGrid';
 import {ITabulatorButton, ITabulatorButtons} from '@src/tabulatorGrid/types/tabulatorGridTypes';
 import {translations} from '@src/tabulatorGrid/translations/translations';

@@ -1,4 +1,4 @@
-/** Converts the first letter of a string to lowercase */
-export const LowerFirstLetter = (val) => {
-    return val.charAt(0).toLowerCase() + val.slice(1);
+const r = (e) => e.charAt(0).toLowerCase() + e.slice(1);
+export {
+  r as LowerFirstLetter
 };

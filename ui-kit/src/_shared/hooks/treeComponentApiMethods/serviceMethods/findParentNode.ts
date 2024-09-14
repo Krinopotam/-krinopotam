@@ -2,12 +2,14 @@ import {IKey} from "@krinopotam/service-types";
 
 export const findParentNode = (
     dataSet: Record<string, unknown>[] | undefined,
-    key: IKey,
+    node: IKey | Record<string, unknown>,
     fieldNames: {
         key: string;
         children: string;
     }
 ): Record<string, unknown> | undefined => {
+    const key = typeof node === 'object' ? (node[fieldNames.key] as IKey) : node;
+
     const recursive = (nodes: Record<string, unknown>[], parentNode: Record<string, unknown> | undefined): Record<string, unknown> | undefined => {
         for (const node of nodes) {
             if (node[fieldNames.key] === key) return parentNode;

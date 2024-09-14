@@ -1,5 +1,6 @@
 import React, {useCallback, useContext, useMemo, useState} from 'react';
-import {IsPromise, MergeObjects} from '@krinopotam/js-helpers';
+import {IsPromise} from '@krinopotam/js-helpers/helpersObjects/isPromise';
+import {MergeObjects} from '@krinopotam/js-helpers/helpersObjects/mergeObjects';
 import {ITreeSelectApi, ITreeSelectNode, ITreeSelectProps} from '@src/treeSelect';
 import {ITreeSelectButton, ITreeSelectButtons} from '@src/treeSelect/types/types';
 import {IDFormDataSet} from '@src/dForm';
@@ -92,7 +93,7 @@ const useGetCreateButton = (api: ITreeSelectApi, props: ITreeSelectProps): ITree
             tooltip: api.t('createRecord'),
             onClick: () => {
                 const fieldNames = api.getFieldNames();
-                const activeNode = api.getActiveNode();
+                const activeNode = api.getActiveNode(false);
                 let parent: ITreeSelectNode | undefined = undefined;
                 if (activeNode) {
                     if (!activeNode.isLeaf) parent = activeNode;
@@ -114,7 +115,7 @@ const useGetCreateGroupButton = (api: ITreeSelectApi, props: ITreeSelectProps): 
             tooltip: api.t('createRecordsGroup'),
             onClick: () => {
                 const fieldNames = api.getFieldNames();
-                const activeNode = api.getActiveNode();
+                const activeNode = api.getActiveNode(false);
                 let parent: ITreeSelectNode | undefined = undefined;
                 if (activeNode) {
                     if (!activeNode.isLeaf) parent = activeNode;

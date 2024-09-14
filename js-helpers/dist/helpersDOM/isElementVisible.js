@@ -1,15 +1,12 @@
-/** check if element visible */
-export const IsElementVisible = (elem) => {
-    if (!elem)
-        return false;
-    const recursiveCheck = (target) => {
-        if (!target)
-            return true;
-        const display = window.getComputedStyle(target).display;
-        const visibility = window.getComputedStyle(target).visibility;
-        if (display === 'none' || visibility === 'hidden')
-            return false;
-        return recursiveCheck(target.parentElement);
-    };
-    return recursiveCheck(elem);
+const r = (i) => {
+  if (!i) return !1;
+  const n = (e) => {
+    if (!e) return !0;
+    const t = window.getComputedStyle(e).display, s = window.getComputedStyle(e).visibility;
+    return t === "none" || s === "hidden" ? !1 : n(e.parentElement);
+  };
+  return n(i);
+};
+export {
+  r as IsElementVisible
 };

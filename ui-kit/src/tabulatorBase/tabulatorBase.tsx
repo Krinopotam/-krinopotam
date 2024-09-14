@@ -1,7 +1,7 @@
 import 'tabulator-tables/dist/css/tabulator_simple.css';
 import React, {useCallback, useRef} from 'react';
 import {useInit} from './hooks/init';
-import {GetNanoId} from '@krinopotam/js-helpers';
+import {GetNanoId} from '@krinopotam/js-helpers/helpersString/getNanoId';
 import {Stylization} from '@src/tabulatorBase/stylization';
 import {ITabulator, ITabulatorProps} from '@src/tabulatorBase/types/tabulatorBaseTypes';
 

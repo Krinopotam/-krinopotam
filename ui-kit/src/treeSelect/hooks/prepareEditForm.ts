@@ -1,5 +1,6 @@
 import {useContext, useMemo} from 'react';
-import {GetUuid, IsObjectHasOwnProperty} from '@krinopotam/js-helpers';
+import {GetUuid} from '@krinopotam/js-helpers/helpersString/getUuid';
+import {IsObjectHasOwnProperty} from '@krinopotam/js-helpers/helpersObjects/isObjectHasOwnProperty';
 import {ITreeSelectApi, ITreeSelectNode, ITreeSelectProps} from '@src/treeSelect';
 import type {IDFormApi, IDFormDataSet} from '@src/dForm/types/dFormTypes';
 import {ILabeledValue} from '@src/treeSelect/types/types';

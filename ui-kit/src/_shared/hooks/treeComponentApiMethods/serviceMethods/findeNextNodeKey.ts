@@ -1,33 +1,35 @@
 import {IFindNodeOptions} from '@src/_shared/hooks/treeComponentApiMethods/types/treeApiTypes';
 import {IKey} from '@krinopotam/service-types';
-import {shouldSearchInChildren} from "@src/_shared/hooks/treeComponentApiMethods/serviceMethods/shouldSearchInChildren";
-import {isNodeCanBeSelected} from "@src/_shared/hooks/treeComponentApiMethods/serviceMethods/isNodeCanBeSelected";
-import {findPrevNodeKey} from "@src/_shared/hooks/treeComponentApiMethods/serviceMethods/findPrevNodeKey";
+import {shouldSearchInChildren} from '@src/_shared/hooks/treeComponentApiMethods/serviceMethods/shouldSearchInChildren';
+import {isNodeCanBeSelected} from '@src/_shared/hooks/treeComponentApiMethods/serviceMethods/isNodeCanBeSelected';
+import {findPrevNodeKey} from '@src/_shared/hooks/treeComponentApiMethods/serviceMethods/findPrevNodeKey';
 
 /**
  * Find next node key in data set by display order.
  * If no node on same level found, returns next of parent level node key.
  * If current node has children, returns the first one
  * @param dataSet - hierarchy collection of nodes
- * @param key - node key
+ * @param node - node key or node
  * @param expandedKeys - keys of expanded nodes
  * @param fieldNames - field names
  * @param opts - search options
  */
 export const findNextNodeKey = <T extends Record<string, unknown>>(
     dataSet: T[] | undefined,
-    key: IKey | undefined,
+    node: IKey | Record<string, unknown> | undefined,
     expandedKeys: IKey[] | undefined,
-    fieldNames: {key: string; children: string},
+    fieldNames: {key: string; children: string, disabled: string, selectable: string},
     opts?: IFindNodeOptions
 ): IKey | undefined => {
+    const key = typeof node === 'object' ? (node[fieldNames.key] as IKey) : node;
+
     let curFound = !key;
     let breakSearch = false;
 
     const recursive = (nodes: T[]): IKey | undefined => {
         for (const node of nodes) {
             if (breakSearch) return undefined;
-            if (curFound && isNodeCanBeSelected(node, opts)) return node[fieldNames.key] as IKey;
+            if (curFound && isNodeCanBeSelected(node, fieldNames, opts)) return node[fieldNames.key] as IKey;
 
             if (typeof key === 'undefined' || node[fieldNames.key] === key) curFound = true;
 
@@ -43,9 +45,8 @@ export const findNextNodeKey = <T extends Record<string, unknown>>(
 
     if (!dataSet) return undefined;
     const result = recursive(dataSet);
-    if (result) return result
+    if (result) return result;
 
-    if (opts?.defaultToBoundary === false) return undefined
-    return key ? key : findPrevNodeKey(dataSet,undefined,expandedKeys,fieldNames,opts);
+    if (opts?.defaultToBoundary === false) return undefined;
+    return key ? key : findPrevNodeKey(dataSet, undefined, expandedKeys, fieldNames, opts);
 };
-

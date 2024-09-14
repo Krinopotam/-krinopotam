@@ -1,7 +1,7 @@
 import {IAnyFieldProps} from '@src/dForm/fields/base';
 import {useMemo} from 'react';
 import {ITreeSelectProps} from '@src/treeSelect';
-import {SplitObject} from '@krinopotam/js-helpers';
+import {SplitObject} from '@krinopotam/js-helpers/helpersObjects/splitObject';
 import {ITreeSelectFieldOnlyProps} from '@src/dForm/fields/treeSelect/treeSelectField';
 
 export const useSplitTreeSelectProps = (props: IAnyFieldProps) => {

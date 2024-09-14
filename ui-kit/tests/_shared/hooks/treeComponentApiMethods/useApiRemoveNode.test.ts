@@ -1,59 +1,149 @@
-import {Key, useCallback} from 'react';
-import {CloneObject} from '@krinopotam/js-helpers';
-import {ITreeComponentApi} from '@src/_shared/hooks/treeComponentApiMethods/types/treeApiTypes';
+import {beforeEach, describe, expect, it, vi} from 'vitest';
+import {useApiRemoveNode} from '@src/_shared/hooks/treeComponentApiMethods/useApiRemoveNode';
+import {CloneObject} from '@krinopotam/js-helpers/helpersObjects/cloneObject';
+import {findNextNodeKey} from '@src/_shared/hooks/treeComponentApiMethods/serviceMethods/findeNextNodeKey';
+import {findPrevNodeKey} from '@src/_shared/hooks/treeComponentApiMethods/serviceMethods/findPrevNodeKey';
 
-export const useApiRemoveNode = (api: {
-    getDataSet: ITreeComponentApi['getDataSet'];
-    getFieldNames: ITreeComponentApi['getFieldNames'];
-    getNextNodeKey: ITreeComponentApi['getNextNodeKey'];
-    getPrevNodeKey: ITreeComponentApi['getPrevNodeKey'];
-    selectNode: ITreeComponentApi['selectNode'];
-    setDataSet: ITreeComponentApi['setDataSet'];
-}): ITreeComponentApi['removeNode'] => {
-    return useCallback(
-        (node, opts, externalDataSet) => {
-            const fieldNames = api.getFieldNames();
-            const key: Key = typeof node === 'object' ? (node[fieldNames.key] as Key) : node;
+const fieldNames = {key: 'id', children: 'children', disabled: 'disabled', selectable: 'selectable'};
 
-            const dataSet = externalDataSet ?? CloneObject(api.getDataSet());
-            if (!dataSet) return;
+// Mocking necessary functions
+const getDataSetMock = vi.fn();
+const getFieldNamesMock = vi.fn();
+const getNextNodeKeyMock = vi.fn((node, opts, externalDataset) => findNextNodeKey(externalDataset, node, [], fieldNames, opts));
+const getPrevNodeKeyMock = vi.fn((node, opts, externalDataset) => findPrevNodeKey(externalDataset, node, [], fieldNames, opts));
+const selectNodeMock = vi.fn();
+const setDataSetMock = vi.fn();
 
-            let selectKey: Key | undefined = undefined;
-            const prevKey = api.getPrevNodeKey(key, undefined, dataSet);
-            if (opts?.select === 'next') {
-                selectKey = api.getNextNodeKey(key, undefined, dataSet);
-                //for last key search for previous
-                if (!selectKey) selectKey = api.getPrevNodeKey(key, undefined, dataSet);
-            } else if (opts?.select === 'prev') {
-                selectKey = api.getPrevNodeKey(key, undefined, dataSet);
-                //for last key search for next
-                if (!selectKey) selectKey = api.getNextNodeKey(key, undefined, dataSet);
-            }
+/*vi.mock('@src/_shared/hooks/treeComponentApiMethods/serviceMethods/removeFromTree', () => ({
+    removeFromTree: vi.fn(),
+}));*/
 
-            const recursive = (nodes: Record<string, unknown>[]) => {
-                for (let i = 0; i < nodes.length; i++) {
-                    const node = nodes[i];
-                    if (node[fieldNames.key] === key) {
-                        nodes.splice(i, 1);
-                        return true;
-                    }
+// Sample dataset and fieldNames
+const dataSet = [
+    {id: 1, name: 'Node 1', children: []},
+    {id: 2, name: 'Node 2', children: []},
+    {id: 3, name: 'Node 3', children: []},
+];
 
-                    if (node[fieldNames.children]) {
-                        const result = recursive(node[fieldNames.children] as Record<string, unknown>[]);
-                        if (result) return true;
-                    }
-                }
-            };
-
-            recursive(dataSet);
-
-            if (!externalDataSet) api.setDataSet(dataSet);
-
-            if (opts?.select !=='keep') api.selectNode(key, false);
-            if (selectKey) api.selectNode(selectKey, true);
-
-            return dataSet;
-        },
-        [api]
-    );
+const api = {
+    getDataSet: getDataSetMock,
+    getFieldNames: getFieldNamesMock,
+    getNextNodeKey: getNextNodeKeyMock,
+    getPrevNodeKey: getPrevNodeKeyMock,
+    selectNode: selectNodeMock,
+    setDataSet: setDataSetMock,
 };
+
+describe('useApiRemoveNode', () => {
+    beforeEach(() => {
+        vi.clearAllMocks();
+        getDataSetMock.mockReturnValue(CloneObject(dataSet));
+        getFieldNamesMock.mockReturnValue(fieldNames);
+    });
+
+    it('should remove the node, update dataset without externalDataSet and select the next node', () => {
+        const removeNode = useApiRemoveNode(api);
+        removeNode(2, {select: 'next'}, undefined);
+
+        expect(setDataSetMock).toHaveBeenCalledWith([
+            {id: 1, name: 'Node 1', children: []},
+            {id: 3, name: 'Node 3', children: []},
+        ]);
+
+        expect(selectNodeMock).toHaveBeenCalledTimes(2);
+        expect(selectNodeMock).toHaveBeenCalledWith(2, false); //deselect node 2
+        expect(selectNodeMock).toHaveBeenCalledWith(3, true); //select node 3
+    });
+
+    it('should remove the node and update dataset with externalDataSet', () => {
+        const externalDataSet = CloneObject(dataSet);
+        const removeNode = useApiRemoveNode(api);
+        const result = removeNode(2, {select: 'next'}, externalDataSet);
+
+        expect(result).toEqual([
+            {id: 1, name: 'Node 1', children: []},
+            {id: 3, name: 'Node 3', children: []},
+        ]);
+        expect(setDataSetMock).not.toHaveBeenCalled();
+        expect(selectNodeMock).toHaveBeenCalledWith(2, false); //deselect node 2
+        expect(selectNodeMock).toHaveBeenCalledWith(3, true); //select node 3
+    });
+
+    it('should select the next node if opts.select is "next"', () => {
+        const removeNode = useApiRemoveNode(api);
+
+        removeNode(2, {select: 'next'}, undefined);
+
+        expect(selectNodeMock).toHaveBeenCalledTimes(2);
+        expect(selectNodeMock).toHaveBeenCalledWith(2, false); //deselect node 2
+        expect(selectNodeMock).toHaveBeenCalledWith(3, true); //select node 3
+    });
+
+    it('should select the previous node if opts.select is "prev"', () => {
+        const removeNode = useApiRemoveNode(api);
+
+        removeNode(2, {select: 'prev'}, undefined);
+
+        expect(selectNodeMock).toHaveBeenCalledTimes(2);
+        expect(selectNodeMock).toHaveBeenCalledWith(2, false); //deselect node 2
+        expect(selectNodeMock).toHaveBeenCalledWith(1, true); //select node 1
+    });
+
+    it('should not change selection if opts.select is "keep"', () => {
+         const removeNode = useApiRemoveNode(api);
+
+        removeNode(2, {select: 'keep'}, undefined);
+
+        expect(selectNodeMock).not.toHaveBeenCalled();
+    });
+
+    it('should deselect the removed node if opts.select is not "keep"', () => {
+        const removeNode = useApiRemoveNode(api);
+
+        removeNode(2, {select: 'next'}, undefined);
+
+        expect(selectNodeMock).toHaveBeenCalledTimes(2);
+        expect(selectNodeMock).toHaveBeenCalledWith(2, false); //deselect node 2
+        expect(selectNodeMock).toHaveBeenCalledWith(3, true); //select node 3
+    });
+
+    it('should select the previous node if removed node is the last and select option is "next"', () => {
+       const removeNode = useApiRemoveNode(api);
+
+        removeNode(3, {select: 'next'}, undefined);
+
+        expect(selectNodeMock).toHaveBeenCalledTimes(2);
+        expect(selectNodeMock).toHaveBeenCalledWith(3, false); //deselect node 3
+        expect(selectNodeMock).toHaveBeenCalledWith(2, true); //select node 2
+    });
+
+    it('should select the previous node if removed node is the last and select  option is "prev"', () => {
+        const removeNode = useApiRemoveNode(api);
+
+        removeNode(3, {select: 'prev'}, undefined);
+
+        expect(selectNodeMock).toHaveBeenCalledTimes(2);
+        expect(selectNodeMock).toHaveBeenCalledWith(3, false); //deselect node 3
+        expect(selectNodeMock).toHaveBeenCalledWith(2, true); //select node 2
+    });
+
+    it('should select the next node if removed node is the first and select option is "next"', () => {
+        const removeNode = useApiRemoveNode(api);
+
+        removeNode(1, {select: 'next'}, undefined);
+
+        expect(selectNodeMock).toHaveBeenCalledTimes(2);
+        expect(selectNodeMock).toHaveBeenCalledWith(1, false); //deselect node 3
+        expect(selectNodeMock).toHaveBeenCalledWith(2, true); //select node 2
+    });
+
+    it('should select the next node if removed node is the first and select option is "prev"', () => {
+        const removeNode = useApiRemoveNode(api);
+
+        removeNode(1, {select: 'prev'}, undefined);
+
+        expect(selectNodeMock).toHaveBeenCalledTimes(2);
+        expect(selectNodeMock).toHaveBeenCalledWith(1, false); //deselect node 3
+        expect(selectNodeMock).toHaveBeenCalledWith(2, true); //select node 2
+    });
+});

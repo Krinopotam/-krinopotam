@@ -1,6 +1,6 @@
 import {useMemo} from 'react';
 import {IDFormApi, IDFormDataSet} from '@src/dForm';
-import {GetUuid} from "@krinopotam/js-helpers";
+import {GetUuid} from "@krinopotam/js-helpers/helpersString/getUuid";
 import {IGridApi, IGridProps, IGridRowData} from "@src/tabulatorGrid";
 
 export const usePrepareEditForm = (gridApi: IGridApi, gridProps: IGridProps) => {

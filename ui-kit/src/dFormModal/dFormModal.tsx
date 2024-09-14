@@ -11,7 +11,7 @@ import {useInitModalFormApi} from './hooks/api';
 import React, {useMemo} from 'react';
 
 import {DFormModalRender} from './renders/dFormModalRender';
-import {SplitObject} from '@krinopotam/js-helpers';
+import {SplitObject} from '@krinopotam/js-helpers/helpersObjects/splitObject';
 import {useFormCallbacks} from './hooks/callbacks';
 import {useInitButtons} from './hooks/buttons';
 import {useUpdateMessageBoxTheme} from '@src/messageBox';

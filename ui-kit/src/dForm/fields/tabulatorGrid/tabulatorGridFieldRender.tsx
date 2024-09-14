@@ -6,7 +6,7 @@ import {
     TabulatorGridField,
 } from '@src/dForm/fields/tabulatorGrid/tabulatorGridField';
 import {IGridApi, IGridPropsCallbacks, IGridRowData, ITabulatorProps, TabulatorGrid} from '@src/tabulatorGrid';
-import {SplitObject} from '@krinopotam/js-helpers';
+import {SplitObject} from '@krinopotam/js-helpers/helpersObjects/splitObject';
 import {IRequestProps} from '@src/tabulatorBase';
 
 export const TabulatorGridFieldRender = ({field, gridApi: gridApiBase}: {field: TabulatorGridField; gridApi: IGridApi}): React.JSX.Element => {

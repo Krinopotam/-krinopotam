@@ -1,5 +1,5 @@
 import {useCallback, useRef} from 'react';
-import {GetNanoId} from '@krinopotam/js-helpers';
+import {GetNanoId} from '@krinopotam/js-helpers/helpersString/getNanoId';
 
 export const useApiGetId = (id: string | undefined) => {
     const identifier = useGetId(id);

@@ -1,6 +1,8 @@
-import { ObjectKeys } from "./objectKeys";
-/**  Returns object's keys count */
-export const ObjectKeysLength = (val) => {
-    const keys = ObjectKeys(val);
-    return keys ? keys.length : 0;
+import { ObjectKeys as n } from "./objectKeys.js";
+const r = (t) => {
+  const e = n(t);
+  return e ? e.length : 0;
+};
+export {
+  r as ObjectKeysLength
 };

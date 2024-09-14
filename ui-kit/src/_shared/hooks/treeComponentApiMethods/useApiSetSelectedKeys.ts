@@ -1,6 +1,7 @@
 import React, {Key, useCallback} from 'react';
 
 import {ITreeComponentApi} from "@src/_shared/hooks/treeComponentApiMethods/types/treeApiTypes";
+import {IsArray} from "@krinopotam/js-helpers/helpersObjects/isArray";
 
 export const useApiSetSelectedKeys = (setSelectedKeys: React.Dispatch<React.SetStateAction<Key[] | undefined>>): ITreeComponentApi['setSelectedKeys'] => {
     return useCallback(
@@ -10,7 +11,7 @@ export const useApiSetSelectedKeys = (setSelectedKeys: React.Dispatch<React.SetS
                 return;
             }
 
-            if (!Array.isArray(keys)) setSelectedKeys([keys]);
+            if (!IsArray(keys)) setSelectedKeys([keys]);
             else setSelectedKeys(keys);
         },
         [setSelectedKeys]

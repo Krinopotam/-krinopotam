@@ -1,9 +1,11 @@
-/** Add value to browser local storage */
-export const AddToLocalStorage = (key, value) => {
-    if (typeof (Storage) === "undefined") {
-        console.error("Local storage is not supported in this browser.");
-        return;
-    }
-    const userData = JSON.stringify(value);
-    localStorage.setItem(key, userData);
+const r = (o, e) => {
+  if (typeof Storage > "u") {
+    console.error("Local storage is not supported in this browser.");
+    return;
+  }
+  const t = JSON.stringify(e);
+  localStorage.setItem(o, t);
+};
+export {
+  r as AddToLocalStorage
 };

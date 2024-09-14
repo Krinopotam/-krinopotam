@@ -1,4 +1,4 @@
-/** Converts the first letter of a string to uppercase */
-export const UpperFirstLetter = (val) => {
-    return val.charAt(0).toUpperCase() + val.slice(1);
+const r = (e) => e.charAt(0).toUpperCase() + e.slice(1);
+export {
+  r as UpperFirstLetter
 };

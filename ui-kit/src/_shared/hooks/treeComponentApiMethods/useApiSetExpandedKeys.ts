@@ -1,8 +1,9 @@
 import React, {useCallback} from 'react';
+import {IKey} from "@krinopotam/service-types";
 
-export const useApiSetExpandedKeys = (setExpandedKeys: React.Dispatch<React.SetStateAction<React.Key[] | undefined>>) => {
+export const useApiSetExpandedKeys = (setExpandedKeys: React.Dispatch<React.SetStateAction<IKey[] | undefined>>) => {
     return useCallback(
-        (keys: React.Key[] | undefined) => {
+        (keys: IKey[] | undefined) => {
             setExpandedKeys(keys);
         },
         [setExpandedKeys]

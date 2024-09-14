@@ -1,6 +1,7 @@
-/** Returns object's keys list as string array */
-export const ObjectKeys = (val) => {
-    if (!val || typeof val !== 'object')
-        return undefined;
-    return Object.keys(val);
+const t = (e) => {
+  if (!(!e || typeof e != "object"))
+    return Object.keys(e);
+};
+export {
+  t as ObjectKeys
 };

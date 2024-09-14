@@ -15,6 +15,7 @@ import {LabelTooltipType} from 'antd/es/form/FormItemLabel';
 import {BaseFieldRender} from './baseFieldRender';
 import {DModel} from '@src/dForm';
 import {IRuleType} from '@src/dForm/validators/baseValidator';
+import {IsArray} from "@krinopotam/js-helpers/helpersObjects/isArray";
 
 export interface IBaseFieldProps<TField extends IBaseField, TValue> extends Record<string, unknown> {
     /** Field React component */
@@ -246,7 +247,7 @@ export class BaseField<TFieldProps extends IAnyFieldProps> {
     isEmptyValue() {
         const val = this.getValue();
         if (val === null) return true;
-        if (Array.isArray(val) && val.length === 0) return true;
+        if (IsArray(val) && val.length === 0) return true;
         if (typeof val === 'object' && Object.keys(val as Record<string, unknown>).length === 0) return true;
         return val !== 0 && !val;
     }

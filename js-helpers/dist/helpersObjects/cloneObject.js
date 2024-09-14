@@ -1,48 +1,28 @@
-import { IsArray } from "./isArray";
-import { IsObjectHasOwnProperty } from "./isObjectHasOwnProperty";
-/**
- * Deep clone  objects. Allows circular references
- */
-export const CloneObject = (object, maxLevel) => {
-    const objectsMap = new Map();
-    const objRecursion = (obj, level) => {
-        if (!obj)
-            return obj;
-        if (objectsMap.has(obj))
-            return objectsMap.get(obj);
-        const clonedObj = {};
-        objectsMap.set(obj, clonedObj);
-        level++;
-        for (const key in obj) {
-            if (!IsObjectHasOwnProperty(obj, key))
-                continue;
-            const item = obj[key];
-            if (!item || typeof item !== 'object' || (maxLevel && level > maxLevel))
-                clonedObj[key] = item;
-            else
-                clonedObj[key] = !IsArray(item)
-                    ? objRecursion(item, level)
-                    : arraysRecursion(item, level);
-        }
-        return clonedObj;
-    };
-    const arraysRecursion = (arr, level) => {
-        const clonedArr = [];
-        level++;
-        for (let i = 0; i < arr.length; i++) {
-            const item = arr[i];
-            if (!item || typeof item !== 'object' || (maxLevel && level > maxLevel))
-                clonedArr[i] = item;
-            else
-                clonedArr[i] = !IsArray(item)
-                    ? objRecursion(item, level)
-                    : arraysRecursion(item, level);
-        }
-        return clonedArr;
-    };
-    if (typeof object !== 'object' || object === null)
-        return object;
-    return !IsArray(object)
-        ? objRecursion(object, 0)
-        : arraysRecursion(object, 0);
+import { IsArray as p } from "./isArray.js";
+import { IsObjectHasOwnProperty as y } from "./isObjectHasOwnProperty.js";
+const m = (c, i) => {
+  const f = /* @__PURE__ */ new Map(), e = (n, s) => {
+    if (!n) return n;
+    if (f.has(n)) return f.get(n);
+    const o = {};
+    f.set(n, o), s++;
+    for (const r in n) {
+      if (!y(n, r)) continue;
+      const t = n[r];
+      !t || typeof t != "object" || i && s > i ? o[r] = t : o[r] = p(t) ? u(t, s) : e(t, s);
+    }
+    return o;
+  }, u = (n, s) => {
+    const o = [];
+    s++;
+    for (let r = 0; r < n.length; r++) {
+      const t = n[r];
+      !t || typeof t != "object" || i && s > i ? o[r] = t : o[r] = p(t) ? u(t, s) : e(t, s);
+    }
+    return o;
+  };
+  return typeof c != "object" || c === null ? c : p(c) ? u(c, 0) : e(c, 0);
+};
+export {
+  m as CloneObject
 };

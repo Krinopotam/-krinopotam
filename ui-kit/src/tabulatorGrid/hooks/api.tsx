@@ -1,12 +1,13 @@
 import React, {MutableRefObject, useCallback, useRef, useState} from 'react';
-import {GetNanoId, IsArray, IsPromise} from '@krinopotam/js-helpers';
+import {GetNanoId} from '@krinopotam/js-helpers/helpersString/getNanoId';
+import {IsArray} from '@krinopotam/js-helpers/helpersObjects/isArray';
+import {IsPromise} from '@krinopotam/js-helpers/helpersObjects/isPromise';
 
 import {RowComponent, ScrollToRowPosition, TabulatorFull as Tabulator} from 'tabulator-tables';
 import {ITabulator} from '@src/tabulatorBase';
 import {MessageBox, MessageBoxApi} from '@src/messageBox';
 import {GenerateAjaxRequestFunc} from '@src/tabulatorGrid/helpers/fetchHelpers';
 import {IError} from '@krinopotam/service-types';
-import {IsDebugMode} from '@krinopotam/common-hooks';
 import {IGridDeletePromise, IGridProps, IGridRowData} from '@src/tabulatorGrid';
 import {IGridApi, IRowKey, IRowKeys} from '@src/tabulatorGrid/types/tabulatorGridTypes';
 import {useTranslate} from '@src/_shared/hooks/useTranslate';
@@ -477,7 +478,7 @@ const useApiDeleteRows = (gridApi: IGridApi, gridProps: IGridProps): IGridApi['d
     return useCallback(
         (rows: IGridRowData | IGridRowData[] | undefined) => {
             if (!rows) return;
-            const rowsData = Array.isArray(rows) ? rows : [rows];
+            const rowsData = IsArray(rows) ? rows : [rows];
             let messageBox: MessageBoxApi;
             const removeRows = () => {
                 const deletePromise = gridProps?.onDelete?.(rowsData, gridApi);

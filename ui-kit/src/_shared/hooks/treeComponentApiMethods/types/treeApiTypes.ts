@@ -1,5 +1,5 @@
 import {IBaseComponentApi} from '@src/_shared/hooks/componentApiMethods/types/apiTypes';
-import {IKey} from "@krinopotam/service-types";
+import {IKey} from '@krinopotam/service-types';
 
 export interface IFindNodeOptions {
     /** If true, search will be performed only in the same level */
@@ -14,7 +14,16 @@ export interface IFindNodeOptions {
     defaultToBoundary?: boolean;
 }
 
-export type IFieldNames = {key: string; title: string; children: string; parent: string};
+export type IFieldNames = {
+    key: string;
+    title: string;
+    children: string;
+    parent: string;
+    isLeaf: string;
+    isFolder: string;
+    disabled: string,
+    selectable: string
+};
 
 export type INodePosition = 'below' | 'above' | 'insideTop' | 'insideBottom';
 
@@ -58,7 +67,7 @@ export interface ITreeComponentApi<TNode extends Record<string, unknown> = Recor
      * @param singleOnly - component have active node if only one node is selected
      * @param externalDataset - if not set, current data set will be used, if set, node will be searched in this data set
      */
-    getActiveNode: (singleOnly?: boolean, externalDataset?: TNode[]) => TNode | undefined;
+    getActiveNode: (singleOnly?: boolean, withChildren?: boolean, externalDataset?: TNode[]) => TNode | undefined;
 
     /** Returns active node key (last selected) */
     getActiveNodeKey: (singleOnly?: boolean) => IKey | undefined;
@@ -195,19 +204,19 @@ export interface ITreeComponentApi<TNode extends Record<string, unknown> = Recor
 
     /**
      * Returns next node key
-     * @param key
+     * @param node - node or key
      * @param opts
      * @param externalDataset - if not set, search will be performed in current data set. If set - in this data set
      */
-    getNextNodeKey: (key: IKey | undefined, opts?: IFindNodeOptions, externalDataset?: TNode[]) => IKey | undefined;
+    getNextNodeKey: (key: IKey | Record<string, unknown> | undefined, opts?: IFindNodeOptions, externalDataset?: TNode[]) => IKey | undefined;
 
     /**
      * Returns prev node key
-     * @param key
+     * @param node - node or key
      * @param opts
      * @param externalDataset - if not set, search will be performed in current data set. If set - in this data set
      */
-    getPrevNodeKey: (key: IKey | undefined, opts?: IFindNodeOptions, externalDataset?: TNode[]) => IKey | undefined;
+    getPrevNodeKey: (node: IKey | Record<string, unknown> | undefined, opts?: IFindNodeOptions, externalDataset?: TNode[]) => IKey | undefined;
 
     /**
      * Returns next node

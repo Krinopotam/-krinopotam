@@ -17,7 +17,7 @@ import {ModalRender} from './renders/modalRender';
 import classNames from 'classnames';
 import {useResize} from './hooks/useResize';
 import {IButtonRowWrapperRemoteCallbacks} from '@src/buttonsRow/components/buttonsRowWrapper';
-import {GetNanoId} from '@krinopotam/js-helpers';
+import {GetNanoId} from '@krinopotam/js-helpers/helpersString/getNanoId';
 import {IExtendedModalProps} from "@src/modal/types/types";
 
 export const Modal = (props: IExtendedModalProps): React.JSX.Element => {

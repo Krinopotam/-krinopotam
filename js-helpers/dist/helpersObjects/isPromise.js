@@ -1,7 +1,4 @@
-/** Check if parameter is promise */
-export const IsPromise = (val) => {
-    return !!val && (val instanceof Promise
-        || val.constructor === Promise
-        || Object.prototype.toString.call(val) === '[object Promise]'
-        || typeof val.then === 'function');
+const t = (o) => !!o && (o instanceof Promise || o.constructor === Promise || Object.prototype.toString.call(o) === "[object Promise]" || typeof o.then == "function");
+export {
+  t as IsPromise
 };

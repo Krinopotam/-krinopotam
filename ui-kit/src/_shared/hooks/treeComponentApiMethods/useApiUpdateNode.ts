@@ -1,5 +1,5 @@
 import {useCallback} from 'react';
-import {CloneObject} from '@krinopotam/js-helpers';
+import {CloneObject} from '@krinopotam/js-helpers/helpersObjects/cloneObject';
 import {findNodeIndex} from '@src/_shared/hooks/treeComponentApiMethods/serviceMethods/findNodeIndex';
 
 import {ITreeComponentApi} from '@src/_shared/hooks/treeComponentApiMethods/types/treeApiTypes';

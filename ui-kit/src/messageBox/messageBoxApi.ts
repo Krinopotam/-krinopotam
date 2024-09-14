@@ -1,5 +1,5 @@
 import {ModalFuncProps} from 'antd';
-import {MergeObjects} from '@krinopotam/js-helpers';
+import {MergeObjects} from '@krinopotam/js-helpers/helpersObjects/mergeObjects';
 import {IAnyModalConfig, IModalBaseConfig} from "@src/messageBox/types/messageBoxTypes";
 import {IFormButton} from "@src/buttonsRow";
 

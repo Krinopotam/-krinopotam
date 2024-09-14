@@ -1,12 +1,10 @@
-import {useCallback} from 'react';
-
-import {ITreeComponentApi} from "@src/_shared/hooks/treeComponentApiMethods/types/treeApiTypes";
+import {ITreeComponentApi} from '@src/_shared/hooks/treeComponentApiMethods/types/treeApiTypes';
 
 export const useApiGetExpandedNodes = (api: {
     getExpandedKeys: ITreeComponentApi['getExpandedKeys'];
     getNode: ITreeComponentApi['getNode'];
 }): ITreeComponentApi['getExpandedNodes'] => {
-    return useCallback(() => {
+    return () => {
         const expandedKeys = api.getExpandedKeys();
         if (!expandedKeys) return undefined;
 
@@ -16,5 +14,5 @@ export const useApiGetExpandedNodes = (api: {
             if (foundNode) result.push(foundNode);
         }
         return result;
-    }, [api]);
+    };
 };

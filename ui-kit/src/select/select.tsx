@@ -1,8 +1,9 @@
 import {Select as AntdSelect} from 'antd';
 import React, {useMemo} from 'react';
-import {SplitObject} from '@krinopotam/js-helpers';
+import {SplitObject} from '@krinopotam/js-helpers/helpersObjects/splitObject';
 import {ArrayElement} from '@krinopotam/service-types';
 import {IAntdSelectProps, ISelectBaseProps, ISelectBaseValue, ISelectNode, ISelectProps, ISelectValue} from '@src/select/types/types';
+import {IsArray} from "@krinopotam/js-helpers/helpersObjects/isArray";
 
 export const Select = (props: ISelectProps): React.JSX.Element => {
     const antdSelectProps = useSplitAntTreeSelectProps(props);
@@ -31,7 +32,7 @@ const useGetOptions = (props: ISelectProps) => {
 
         const convertor = (nodes: ISelectNode[] | ISelectNode['children']) => {
             const result: IAntdSelectProps['options'] = [];
-            if (!nodes || !Array.isArray(nodes)) return undefined;
+            if (!nodes || !IsArray(nodes)) return undefined;
             for (const item of nodes) {
                 const mItem = {...item} as ArrayElement<IAntdSelectProps['options']>;
                 if (item.id) mItem.value = item.id;
@@ -49,7 +50,7 @@ const useGetOptions = (props: ISelectProps) => {
 const useConvertToBaseVal = (_props: ISelectProps, val: ISelectValue | undefined) => {
     return useMemo((): ISelectBaseValue | undefined => {
         if (typeof val === 'undefined') return undefined;
-        if (!Array.isArray(val)) {
+        if (!IsArray(val)) {
             if (typeof val === 'object') return {value: val.id, label: val.label};
             return val;
         }
@@ -67,7 +68,7 @@ const useConvertToBaseVal = (_props: ISelectProps, val: ISelectValue | undefined
 /*const useConvertFormBaseVal = (props: ISelectProps, val: ISelectBaseValue) => {
     return useMemo((): ISelectValue | undefined => {
         if (typeof val === 'undefined') return undefined;
-        if (!Array.IsArray(val)) {
+        if (!IsArray(val)) {
             if (typeof val === 'object') return {id: val.value as string | number, label: val.label};
             return val as string | number;
         }

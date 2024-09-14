@@ -1,4 +1,5 @@
 import React, {Key, useEffect, useRef, useState} from 'react';
+import {IsArray} from "@krinopotam/js-helpers/helpersObjects/isArray";
 
 export const useSelectedState = (
     key: Key | Key[] | undefined
@@ -19,5 +20,5 @@ export const useSelectedState = (
 
 const valueToArray = (value: Key | Key[] | undefined) => {
     if (!value) return undefined;
-    return !Array.isArray(value) ? [value] : value;
+    return !IsArray(value) ? [value] : value;
 };

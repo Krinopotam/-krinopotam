@@ -1,9 +1,10 @@
-/* Returns random color **/
-export const GetRandomColor = () => {
-    const letters = '0123456789ABCDEF';
-    let color = '#';
-    for (let i = 0; i < 6; i++) {
-        color += letters[Math.floor(Math.random() * 16)];
-    }
-    return color;
+const e = () => {
+  const r = "0123456789ABCDEF";
+  let o = "#";
+  for (let t = 0; t < 6; t++)
+    o += r[Math.floor(Math.random() * 16)];
+  return o;
+};
+export {
+  e as GetRandomColor
 };

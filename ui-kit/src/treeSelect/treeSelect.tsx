@@ -1,5 +1,5 @@
 import React, {useEffect, useMemo} from 'react';
-import {SplitObject} from '@krinopotam/js-helpers';
+import {SplitObject} from '@krinopotam/js-helpers/helpersObjects/splitObject';
 import {TreeSelectRender} from '@src/treeSelect/renders/treeSelectRender';
 import {useInitApi} from '@src/treeSelect/hooks/api/api';
 import {useGetActualProps} from '@krinopotam/common-hooks';

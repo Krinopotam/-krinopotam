@@ -1,11 +1,12 @@
 import React, {useEffect, useRef, useState} from 'react';
+import {IKey} from '@krinopotam/service-types';
 
 export const useExpandedKeysState = (
-    expandedKeys: React.Key[] | undefined,
-    defaultExpandedKeys: React.Key[] | undefined,
+    expandedKeys: IKey[] | undefined,
+    defaultExpandedKeys: IKey[] | undefined,
     defaultExpandAll: boolean | undefined,
-    parentsKeys: React.Key[] | undefined
-): [React.Key[] | undefined, React.Dispatch<React.SetStateAction<React.Key[] | undefined>>] => {
+    parentsKeys: IKey[] | undefined
+): [IKey[] | undefined, React.Dispatch<React.SetStateAction<IKey[] | undefined>>] => {
     const allExpanded = defaultExpandAll !== false && parentsKeys?.length ? parentsKeys : undefined;
     const [expKeys, setExpKeys] = useState(expandedKeys ?? defaultExpandedKeys ?? allExpanded);
     const isFirstRender = useRef(true);

@@ -1,6 +1,4 @@
-/** Separates a string in CamelCase with spaces (for example: "CamelCaseString" to "Camel Case String")*/
-export const CamelCaseSplit = (str, splitter) => {
-    if (typeof splitter === 'undefined')
-        splitter = ' ';
-    return str.replace(/([a-z0-9])([A-Z])/g, '$1' + splitter + '$2');
+const n = (a, e) => (typeof e > "u" && (e = " "), a.replace(/([a-z0-9])([A-Z])/g, "$1" + e + "$2"));
+export {
+  n as CamelCaseSplit
 };

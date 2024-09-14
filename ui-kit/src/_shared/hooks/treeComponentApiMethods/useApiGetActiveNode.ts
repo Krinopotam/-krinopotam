@@ -8,10 +8,12 @@ export const useApiGetActiveNode = (api: {
     getFieldNames: ITreeComponentApi['getFieldNames'];
 }): ITreeComponentApi['getActiveNode'] => {
     return useCallback(
-        (singleOnly, externalDataset) => {
+        (singleOnly, withChildren, externalDataset) => {
             const activeKey = api.getActiveNodeKey(singleOnly);
             const node = api.getNode(activeKey, externalDataset);
             if (!node) return undefined;
+            if (withChildren) return node;
+
             const fieldNames = api.getFieldNames();
             const cleanNode = {...node};
             delete cleanNode[fieldNames.children];

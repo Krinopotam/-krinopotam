@@ -1,5 +1,6 @@
 import React, {CSSProperties, useMemo, useRef, useState} from 'react';
-import {GetNanoId, IsDescendant} from '@krinopotam/js-helpers';
+import {GetNanoId} from '@krinopotam/js-helpers/helpersString/getNanoId';
+import {IsDescendant} from '@krinopotam/js-helpers/helpersDOM/isDescendant';
 
 export interface IButtonRowWrapperContext {
     wrapperId: string;

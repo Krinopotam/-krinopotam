@@ -1,5 +1,5 @@
 import {describe, it, expect} from 'vitest';
-import {removeFromDataSet} from '@src/_shared/hooks/treeComponentApiMethods/serviceMethods/removeFromDataSet';
+import {removeFromTree} from '@src/_shared/hooks/treeComponentApiMethods/serviceMethods/removeFromTree';
 
 describe('removeFromDataSet', () => {
     it('should remove the node with the given key from the data set', () => {
@@ -11,7 +11,7 @@ describe('removeFromDataSet', () => {
         const key = 2;
         const fieldNames = {key: 'id', children: 'children'};
 
-        removeFromDataSet(dataSet, key, fieldNames);
+        removeFromTree(dataSet, key, fieldNames);
 
         expect(dataSet).toEqual([
             {id: 1, name: 'Node 1', children: []},
@@ -41,7 +41,7 @@ describe('removeFromDataSet', () => {
         ];
         const fieldNames = {key: 'id', children: 'children'};
 
-        removeFromDataSet(dataSet, 11, fieldNames);
+        removeFromTree(dataSet, 11, fieldNames);
 
         expect(dataSet).toEqual([
             {
@@ -63,7 +63,7 @@ describe('removeFromDataSet', () => {
         const key = 4;
         const fieldNames = {key: 'id', children: 'children'};
 
-        removeFromDataSet(dataSet, key, fieldNames);
+        removeFromTree(dataSet, key, fieldNames);
 
         expect(dataSet).toEqual([
             {id: 1, name: 'Node 1', children: []},
@@ -77,7 +77,7 @@ describe('removeFromDataSet', () => {
         const key = 1;
         const fieldNames = {key: 'id', children: 'children'};
 
-        removeFromDataSet(dataSet, key, fieldNames);
+        removeFromTree(dataSet, key, fieldNames);
 
         expect(dataSet).toEqual([]);
     });

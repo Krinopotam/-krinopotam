@@ -17,7 +17,8 @@ import {ButtonsRender} from '@src/modal/renders/buttonsRender';
 import {ContentRender} from './renders/contentRender';
 import {MessageBoxApi} from './messageBoxApi';
 import React from 'react';
-import {GetNanoId, MergeObjects} from '@krinopotam/js-helpers';
+import {GetNanoId} from '@krinopotam/js-helpers/helpersString/getNanoId';
+import {MergeObjects} from '@krinopotam/js-helpers/helpersObjects/mergeObjects';
 import {QuestionCircleOutlined} from '@ant-design/icons';
 import {
     IModalAlertConfig,

@@ -1,4 +1,4 @@
-/** Is object has own property */
-export const IsObjectHasOwnProperty = (obj, propName) => {
-    return !obj ? false : Object.prototype.hasOwnProperty.call(obj, propName);
+const r = (t, e) => t ? Object.prototype.hasOwnProperty.call(t, e) : !1;
+export {
+  r as IsObjectHasOwnProperty
 };

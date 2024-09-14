@@ -10,6 +10,7 @@ import {FolderOutlined} from '@ant-design/icons';
 import {IsDebugMode} from '@krinopotam/common-hooks';
 import {useTranslate} from '@src/_shared/hooks/useTranslate';
 import {translations} from '@src/tabulatorGrid/translations/translations';
+import {IsArray} from "@krinopotam/js-helpers/helpersObjects/isArray";
 
 //region Types
 export interface IColumnsDialogProps {
@@ -405,7 +406,7 @@ const useOnCheck = (dialogApi: IColumnsDialogApi, setChecked: React.Dispatch<Rea
     return useCallback(
         (keys: React.Key[] | {checked: React.Key[]; halfChecked: React.Key[]}) => {
             let checkedKeys: React.Key[];
-            if (Array.isArray(keys)) checkedKeys = keys;
+            if (IsArray(keys)) checkedKeys = keys;
             else checkedKeys = [...keys.checked, ...keys.halfChecked];
             dialogApi.checked = checkedKeys;
             setChecked(checkedKeys);

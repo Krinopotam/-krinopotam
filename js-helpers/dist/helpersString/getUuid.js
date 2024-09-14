@@ -1,5 +1,5 @@
-import { v4 as uuid } from "uuid";
-/** generate new UUID */
-export const GetUuid = () => {
-    return uuid();
+import { v4 as r } from "uuid";
+const o = () => r();
+export {
+  o as GetUuid
 };

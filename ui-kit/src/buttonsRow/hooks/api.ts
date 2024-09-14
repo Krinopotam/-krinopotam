@@ -1,5 +1,6 @@
 import {useMemo, useState} from 'react';
-import {GetNanoId, MergeObjects} from '@krinopotam/js-helpers';
+import {GetNanoId} from '@krinopotam/js-helpers/helpersString/getNanoId';
+import {MergeObjects} from '@krinopotam/js-helpers/helpersObjects/mergeObjects';
 import {IButtonRowProps, IButtonsRowApi, IFormButton, IFormButtons} from '@src/buttonsRow';
 import {changeActiveButton, prepareButtons, setActiveButton} from '@src/buttonsRow/helpers/buttonMethods';
 import {useApiGetId} from '@src/_shared/hooks/componentApiMethods/useApiGetId';

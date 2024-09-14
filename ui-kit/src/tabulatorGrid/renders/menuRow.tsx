@@ -1,5 +1,5 @@
 import React, {useLayoutEffect, useMemo, useState} from 'react';
-import {ObjectKeysLength} from '@krinopotam/js-helpers';
+import {ObjectKeysLength} from '@krinopotam/js-helpers/helpersObjects/objectKeysLength';
 import {ButtonsRow} from '@src/buttonsRow/buttonsRow';
 import {useInitButtons} from '../hooks/buttons';
 import {IGridApi} from '@src/tabulatorGrid';

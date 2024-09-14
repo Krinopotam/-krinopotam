@@ -1,8 +1,10 @@
-/** Remove value from browser local storage */
-export const RemoveFromLocalStorage = (key) => {
-    if (typeof (Storage) === "undefined") {
-        console.error("Local storage is not supported in this browser.");
-        return;
-    }
-    localStorage.removeItem(key);
+const e = (o) => {
+  if (typeof Storage > "u") {
+    console.error("Local storage is not supported in this browser.");
+    return;
+  }
+  localStorage.removeItem(o);
+};
+export {
+  e as RemoveFromLocalStorage
 };

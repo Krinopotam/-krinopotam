@@ -6,7 +6,7 @@ import {IDFormModalProps} from '@src/dFormModal';
 import {IInputFieldProps, InputField} from '@src/dForm/fields/input/inputField';
 import {ITreeSelectFieldProps, TreeSelectField} from '@src/dForm/fields/treeSelect/treeSelectField';
 import {CloneObject} from '@krinopotam/js-helpers';
-import {removeFromDataSet} from '@src/_shared/hooks/treeComponentApiMethods/serviceMethods/removeFromDataSet';
+import {removeFromTree} from '@src/_shared/hooks/treeComponentApiMethods/serviceMethods/removeFromTree';
 import {ITreeSelectApi} from '@src/treeSelect';
 
 export const TreeSelectWithFormAsync = (): React.JSX.Element => {
@@ -75,7 +75,7 @@ const useTreeEditFormProps = () => {
                 /** modify dataset for update to avoid the possibility of a parent node choosing itself or its own child node */
                 const id = model.getFormDataSet()['id'];
                 const clonedData = CloneObject(data);
-                removeFromDataSet(clonedData, id, {key: 'id', children: 'children'});
+                removeFromTree(clonedData, id, {key: 'id', children: 'children'});
 
                 field.updateProps({dataSet: clonedData});
             },

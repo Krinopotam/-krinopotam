@@ -1,7 +1,8 @@
 import {ButtonsRow} from '@src/buttonsRow/buttonsRow';
 import {PopconfirmProps, Popover} from 'antd';
 import React, {useEffect, useRef, useState} from 'react';
-import {GetNanoId, MergeObjects} from '@krinopotam/js-helpers';
+import {GetNanoId} from '@krinopotam/js-helpers/helpersString/getNanoId';
+import {MergeObjects} from '@krinopotam/js-helpers/helpersObjects/mergeObjects';
 import {ButtonsRowWrapper, IFormButton, IFormButtons} from "@src/buttonsRow";
 import {IColorType} from "@src/button/button";
 

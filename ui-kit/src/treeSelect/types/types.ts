@@ -90,10 +90,10 @@ export interface ITreeSelectBaseProps {
     defaultExpandAll?: boolean;
 
     /** Default expanded keys */
-    defaultExpandedKeys?: React.Key[];
+    defaultExpandedKeys?: IKey[];
 
     /** Expanded keys */
-    expandedKeys?: React.Key[];
+    expandedKeys?: IKey[];
 
     /** Language */
     language?: keyof typeof translations;

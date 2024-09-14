@@ -2,6 +2,7 @@ import {ITreeSelectApi, ITreeSelectNode} from '@src/treeSelect';
 import {ILabeledValue} from '@src/treeSelect/types/types';
 import {useCallback, useRef} from 'react';
 import {LabeledValueToNode} from '@src/treeSelect/tools/dataConvertors';
+import {IsArray} from "@krinopotam/js-helpers/helpersObjects/isArray";
 
 export const useApiGetSelectedNodes = (api: ITreeSelectApi, value?: ILabeledValue | ILabeledValue[]) => {
     const dataSet = api.getDataSet();
@@ -25,7 +26,7 @@ export const useApiGetSelectedNodes = (api: ITreeSelectApi, value?: ILabeledValu
 
             const result: ITreeSelectNode[] = [];
 
-            if (!Array.isArray(val)) result.push(LabeledValueToNode(val, data, fieldNames));
+            if (!IsArray(val)) result.push(LabeledValueToNode(val, data, fieldNames));
             else {
                 for (const v of val) {
                     const item = LabeledValueToNode(v, data, fieldNames);

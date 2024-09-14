@@ -1,11 +1,10 @@
-import { IsArray } from "./isArray";
-/** Search index in objects array with specified object property */
-export const FindIndexInObjectsArray = (objArray, objProperty, searchVal) => {
-    if (!IsArray(objArray))
-        return -1;
-    for (let i = 0; i < objArray.length; i++) {
-        if (objArray[i][objProperty] === searchVal)
-            return i;
-    }
-    return -1;
+import { IsArray as i } from "./isArray.js";
+const o = (t, e, n) => {
+  if (!i(t)) return -1;
+  for (let r = 0; r < t.length; r++)
+    if (t[r][e] === n) return r;
+  return -1;
+};
+export {
+  o as FindIndexInObjectsArray
 };
