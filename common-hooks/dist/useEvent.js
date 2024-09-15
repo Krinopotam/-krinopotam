@@ -1,15 +1,10 @@
-import { useRef, useEffect, useCallback } from 'react';
-/** Always returns stable event function instance
-* event function shouldn't be called in render time
-*/
-export const useEvent = (callback) => {
-    const callbackRef = useRef(callback);
-    // Keep the callback reference up-to-date
-    useEffect(() => {
-        callbackRef.current = callback;
-    }, [callback]);
-    // Return stable callback that always calls the latest callbackRef.current
-    return useCallback((...args) => {
-        return callbackRef.current(...args);
-    }, []);
+import { useRef as u, useEffect as n, useCallback as s } from "react";
+const o = (e) => {
+  const r = u(e);
+  return n(() => {
+    r.current = e;
+  }, [e]), s((...t) => r.current(...t), []);
+};
+export {
+  o as useEvent
 };

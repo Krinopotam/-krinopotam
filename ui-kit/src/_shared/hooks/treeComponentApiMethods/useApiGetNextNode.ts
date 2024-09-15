@@ -1,4 +1,4 @@
-import {findNextNodeKey} from '@src/_shared/hooks/treeComponentApiMethods/serviceMethods/findeNextNodeKey';
+import {getNextNodeKey} from '@src/_shared/hooks/treeComponentApiMethods/serviceMethods/getNextNodeKey';
 import {ITreeComponentApi} from '@src/_shared/hooks/treeComponentApiMethods/types/treeApiTypes';
 
 export const useApiGetNextNode = (api: {
@@ -9,7 +9,7 @@ export const useApiGetNextNode = (api: {
 }): ITreeComponentApi['getNextNode'] => {
     return (node, opts, externalDataset) => {
         const fieldNames = api.getFieldNames();
-        const nextKey = findNextNodeKey(externalDataset ?? api.getDataSet(), node, api.getExpandedKeys(), fieldNames, opts);
+        const nextKey = getNextNodeKey(externalDataset ?? api.getDataSet(), node, api.getExpandedKeys(), fieldNames, opts);
         return nextKey ? api.getNode(nextKey, externalDataset) : undefined;
     };
 };

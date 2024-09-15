@@ -1,7 +1,7 @@
 import {IFieldNames} from '@src/_shared/hooks/treeComponentApiMethods/types/treeApiTypes';
 import {ILabeledValue, ITreeSelectValue} from '@src/treeSelect/types/types';
 import React from 'react';
-import {findNodeIndex} from '@src/_shared/hooks/treeComponentApiMethods/serviceMethods/findNodeIndex';
+import {getNodeIndex} from '@src/_shared/hooks/treeComponentApiMethods/serviceMethods/getNodeIndex';
 import {IKey} from "@krinopotam/service-types";
 import {IsArray} from "@krinopotam/js-helpers/helpersObjects/isArray";
 
@@ -61,7 +61,7 @@ export const LabeledValueToNode = (
     fieldNames: IFieldNames
 ): Record<string, unknown> => {
     const baseNode = {[fieldNames.key]: val.value, [fieldNames.title]: val.label};
-    const {idx, nodes} = findNodeIndex(dataSet, val.value, fieldNames);
+    const {idx, nodes} = getNodeIndex(dataSet, val.value, fieldNames);
     if (idx < 0 || !nodes?.[idx]) return baseNode;
     const node = {...nodes[idx]}
     delete node[fieldNames.children];

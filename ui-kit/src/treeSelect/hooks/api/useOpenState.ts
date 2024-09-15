@@ -1,15 +1,12 @@
 import {ITreeSelectProps} from '@src/treeSelect';
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useState} from 'react';
+import {useUpdateEffect} from '@krinopotam/common-hooks';
 
 export const useOpenState = (props: ITreeSelectProps): [open: boolean | undefined, setOpen: React.Dispatch<React.SetStateAction<boolean | undefined>>] => {
     const [open, setOpen] = useState<boolean | undefined>(props.open);
-    const firstUpdate = useRef(true);
-    /** Set open if props changed*/
-    useEffect(() => {
-        if (firstUpdate.current) {
-            firstUpdate.current = false;
-            return;
-        }
+
+    useUpdateEffect(() => {
+        /** Set open if props changed*/
         setOpen(props.open);
     }, [props.open]);
 

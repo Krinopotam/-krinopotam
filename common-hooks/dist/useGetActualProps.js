@@ -1,30 +1,13 @@
-import { useRef, useState } from "react";
-/**
- * Returns actual props and setProps function. The props can be changed both by the parent component and setProps function
- * @param props
- * @returns
- */
-export const useGetActualProps = (props) => {
-    const curPropsRef = useRef(props); // props, changed by parent component
-    const curExtPropsRef = useRef(props); // props, changed setProps function
-    const rerender = useGetRerender();
-    const setProps = (props) => {
-        if (typeof props === 'function')
-            curExtPropsRef.current = props(curExtPropsRef.current);
-        else
-            curExtPropsRef.current = props;
-        rerender();
-    };
-    if (curPropsRef.current !== props) {
-        //props changed by parent component
-        curPropsRef.current = props;
-        curExtPropsRef.current = props;
-        return [curPropsRef.current, setProps]; //returns props, changed by parent component
-    }
-    return [curExtPropsRef.current, setProps]; //returns props, changed by setProps
+import { useRef as u, useState as s } from "react";
+const P = (e) => {
+  const r = u(e), t = u(e), o = f(), c = (n) => {
+    typeof n == "function" ? t.current = n(t.current) : t.current = n, o();
+  };
+  return r.current !== e ? (r.current = e, t.current = e, [r.current, c]) : [t.current, c];
+}, f = () => {
+  const [, e] = s({});
+  return () => e({});
 };
-/** Get rerender modal form method */
-const useGetRerender = () => {
-    const [, setUpdateComponent] = useState({});
-    return () => setUpdateComponent({});
+export {
+  P as useGetActualProps
 };

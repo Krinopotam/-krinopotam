@@ -1,4 +1,4 @@
-import {findNodeIndex} from '@src/_shared/hooks/treeComponentApiMethods/serviceMethods/findNodeIndex';
+import {getNodeIndex} from '@src/_shared/hooks/treeComponentApiMethods/serviceMethods/getNodeIndex';
 import {ITreeComponentApi} from '@src/_shared/hooks/treeComponentApiMethods/types/treeApiTypes';
 
 export const useApiGetNode = (api: {
@@ -9,7 +9,7 @@ export const useApiGetNode = (api: {
         const fieldNames = api.getFieldNames();
         if (!key) return undefined;
         const data = externalDataset ?? api.getDataSet();
-        const {idx, nodes} = findNodeIndex(data, key, fieldNames);
+        const {idx, nodes} = getNodeIndex(data, key, fieldNames);
         return idx > -1 ? nodes![idx] : undefined;
     };
 };

@@ -1,6 +1,7 @@
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import React, {useCallback, useRef, useState} from 'react';
 import {IFieldNames} from '@src/_shared/hooks/treeComponentApiMethods/types/treeApiTypes';
-import {IKey} from "@krinopotam/service-types";
+import {IKey} from '@krinopotam/service-types';
+import {useUpdateEffect} from '@krinopotam/common-hooks';
 
 export const useDataSetState = <T extends Record<string, unknown>>(
     propsDataSet: React.SetStateAction<T[] | undefined>,
@@ -32,13 +33,8 @@ export const useDataSetState = <T extends Record<string, unknown>>(
         [prepareDataSet]
     );
 
-    const isFirstRender = useRef(true);
-    useEffect(() => {
+    useUpdateEffect(() => {
         //allow to change dataset via props
-        if (isFirstRender.current) {
-            isFirstRender.current = false;
-            return;
-        }
         setDataSet(propsDataSet);
     }, [propsDataSet, setDataSet]);
 

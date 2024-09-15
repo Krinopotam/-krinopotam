@@ -1,5 +1,5 @@
 import {ITreeComponentApi} from '@src/_shared/hooks/treeComponentApiMethods/types/treeApiTypes';
-import {findParentNode} from '@src/_shared/hooks/treeComponentApiMethods/serviceMethods/findParentNode';
+import {getParentNode} from '@src/_shared/hooks/treeComponentApiMethods/serviceMethods/getParentNode';
 
 export const useApiGetParentNode = (api: {
     getDataSet: ITreeComponentApi['getDataSet'];
@@ -8,6 +8,6 @@ export const useApiGetParentNode = (api: {
     return (node, externalDataset) => {
         const fieldNames = api.getFieldNames();
         const data = externalDataset ?? api.getDataSet();
-        return findParentNode(data, node, fieldNames);
+        return getParentNode(node, data, fieldNames);
     };
 };

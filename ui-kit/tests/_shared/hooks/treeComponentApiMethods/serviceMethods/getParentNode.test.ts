@@ -1,9 +1,9 @@
 import { describe, it, expect } from 'vitest';
-import { findParentNode } from '@src/_shared/hooks/treeComponentApiMethods/serviceMethods/findParentNode';
+import { getParentNode } from '@src/_shared/hooks/treeComponentApiMethods/serviceMethods/getParentNode';
 
 describe('findParentNode', () => {
     it('should return undefined when dataSet is undefined', () => {
-        const result = findParentNode(undefined, 'key', { key: 'id', children: 'children' });
+        const result = getParentNode('key', undefined, { key: 'id', children: 'children' });
         expect(result).toBeUndefined();
     });
 
@@ -12,7 +12,7 @@ describe('findParentNode', () => {
             { id: '1', children: [] },
             { id: '2', children: [] },
         ];
-        const result = findParentNode(dataSet, '3', { key: 'id', children: 'children' });
+        const result = getParentNode('3', dataSet, { key: 'id', children: 'children' });
         expect(result).toBeUndefined();
     });
 
@@ -21,7 +21,7 @@ describe('findParentNode', () => {
             { id: '1', children: [{ id: '2', children: [] }] },
             { id: '3', children: [] },
         ];
-        const result = findParentNode(dataSet, '2', { key: 'id', children: 'children' });
+        const result = getParentNode('2', dataSet, { key: 'id', children: 'children' });
         expect(result).toEqual({ id: '1', children: [{ id: '2', children: [] }] });
     });
 
@@ -30,7 +30,7 @@ describe('findParentNode', () => {
             { id: '1', children: [{ id: '2', children: [{ id: '3', children: [] }] }] },
             { id: '4', children: [] },
         ];
-        const result = findParentNode(dataSet, '3', { key: 'id', children: 'children' });
+        const result = getParentNode('3', dataSet, { key: 'id', children: 'children' });
         expect(result).toEqual({ id: '2', children: [{ id: '3', children: [] }] });
     });
 
@@ -39,7 +39,7 @@ describe('findParentNode', () => {
             { id: '1', children: [{ id: '2', children: [{ id: '3', children: [] }] }] },
             { id: '4', children: [] },
         ];
-        const result = findParentNode(dataSet, {id: '3'}, { key: 'id', children: 'children' });
+        const result = getParentNode({id: '3'}, dataSet, { key: 'id', children: 'children' });
         expect(result).toEqual({ id: '2', children: [{ id: '3', children: [] }] });
     });
 });

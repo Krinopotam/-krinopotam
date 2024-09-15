@@ -20,7 +20,7 @@ export const useApiRemoveNode = (api: {
 
         const prevKey = api.getPrevNodeKey(key, {defaultToBoundary: false}, dataSet);
 
-        removeFromTree(dataSet, key, fieldNames);
+        removeFromTree(key, dataSet, fieldNames);
 
         if (!externalDataSet) api.setDataSet(dataSet);
 

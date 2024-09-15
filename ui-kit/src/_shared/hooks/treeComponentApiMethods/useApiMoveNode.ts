@@ -1,22 +1,25 @@
-import {CloneObject} from '@krinopotam/js-helpers/helpersObjects/cloneObject';
 import {ITreeComponentApi} from '@src/_shared/hooks/treeComponentApiMethods/types/treeApiTypes';
+import {CloneObject} from '@krinopotam/js-helpers/helpersObjects/cloneObject';
+import {moveNode} from '@src/_shared/hooks/treeComponentApiMethods/serviceMethods/moveNode';
 
 export const useApiMoveNode = (api: {
-    getNode: ITreeComponentApi['getNode'];
-    addNode: ITreeComponentApi['addNode'];
-    removeNode: ITreeComponentApi['removeNode'];
+    getProps: () => {groupsMode?: boolean};
     getDataSet: ITreeComponentApi['getDataSet'];
     setDataSet: ITreeComponentApi['setDataSet'];
+    getFieldNames: ITreeComponentApi['getFieldNames'];
+    ensureNodeVisible: ITreeComponentApi['ensureNodeVisible'];
+    selectNode: ITreeComponentApi['selectNode'];
 }): ITreeComponentApi['moveNode'] => {
     return (source, target, position, opts, externalDataSet) => {
-        const movedNode = typeof source === 'object' ? source : api.getNode(source);
-        const targetNode = typeof target === 'object' ? target : api.getNode(target);
-        if (!movedNode) return;
+        const props = api.getProps();
+        const dataSet = externalDataSet ?? CloneObject(api.getDataSet() ?? []);
 
-        let dataSet = externalDataSet ?? CloneObject(api.getDataSet() ?? []);
-        dataSet = api.removeNode(movedNode, {select: 'keep'}, dataSet) ?? [];
-        dataSet = api.addNode(movedNode, targetNode, position, opts, dataSet) ?? [];
+        moveNode(source, target, dataSet, api.getFieldNames(), position, props.groupsMode);
+
         if (!externalDataSet) api.setDataSet(dataSet);
+
+        if (opts?.ensureVisible) api.ensureNodeVisible(source, dataSet);
+        if (opts?.select) api.selectNode(source, true);
         return dataSet;
     };
 };

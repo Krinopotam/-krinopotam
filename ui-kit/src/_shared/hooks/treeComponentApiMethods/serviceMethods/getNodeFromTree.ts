@@ -1,15 +1,14 @@
-import {findNodeIndex} from '@src/_shared/hooks/treeComponentApiMethods/serviceMethods/findNodeIndex';
+import {getNodeIndex} from '@src/_shared/hooks/treeComponentApiMethods/serviceMethods/getNodeIndex';
 import {IKey} from '@krinopotam/service-types';
 
 export const getNodeFromTree = (
-    key: IKey | undefined,
+    node: IKey | Record<string, unknown> | undefined,
     dataSet: Record<string, unknown>[] | undefined,
     fieldNames: {
         key: string;
         children: string;
     }
 ) => {
-    if (!key || !dataSet) return undefined;
-    const {idx, nodes} = findNodeIndex(dataSet, key, fieldNames);
+    const {idx, nodes} = getNodeIndex(dataSet, node, fieldNames);
     return idx > -1 ? nodes![idx] : undefined;
 };

@@ -1,7 +1,5 @@
-import {useCallback} from 'react';
-
-import {ITreeComponentApi} from "@src/_shared/hooks/treeComponentApiMethods/types/treeApiTypes";
-import {IKey} from "@krinopotam/service-types";
+import {ITreeComponentApi} from '@src/_shared/hooks/treeComponentApiMethods/types/treeApiTypes';
+import {IKey} from '@krinopotam/service-types';
 
 export const useApiSelectNode = (
     api: {
@@ -11,22 +9,19 @@ export const useApiSelectNode = (
     },
     multiple: boolean | undefined
 ): ITreeComponentApi['selectNode'] => {
-    return useCallback(
-        (node, isSelect = true) => {
-            const fieldNames = api.getFieldNames();
-            const key:IKey = typeof node === 'object' ? node[fieldNames.key] as IKey : node;
+    return (node, isSelect = true) => {
+        const fieldNames = api.getFieldNames();
+        const key: IKey = typeof node === 'object' ? (node[fieldNames.key] as IKey) : node;
 
-            const selectedKeys = api.getSelectedKeys();
-            if (isSelect) {
-                if (selectedKeys?.includes(key)) return;
-                if (multiple) api.setSelectedKeys([...(selectedKeys ?? []), key]);
-                else api.setSelectedKeys([key]);
-            } else {
-                if (!selectedKeys?.includes(key)) return;
-                if (multiple) api.setSelectedKeys(selectedKeys?.filter(curKey => curKey !== key));
-                else api.setSelectedKeys([]);
-            }
-        },
-        [api, multiple]
-    );
+        const selectedKeys = api.getSelectedKeys();
+        if (isSelect) {
+            if (selectedKeys?.includes(key)) return;
+            if (multiple) api.setSelectedKeys([...(selectedKeys ?? []), key]);
+            else api.setSelectedKeys([key]);
+        } else {
+            if (!selectedKeys?.includes(key)) return;
+            if (multiple) api.setSelectedKeys(selectedKeys?.filter(curKey => curKey !== key));
+            else api.setSelectedKeys([]);
+        }
+    };
 };

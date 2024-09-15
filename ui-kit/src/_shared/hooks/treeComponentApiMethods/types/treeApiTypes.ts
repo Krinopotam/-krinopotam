@@ -20,7 +20,7 @@ export type IFieldNames = {
     children: string;
     parent: string;
     isLeaf: string;
-    isFolder: string;
+    isGroup: string;
     disabled: string,
     selectable: string
 };

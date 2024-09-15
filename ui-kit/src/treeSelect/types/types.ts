@@ -247,14 +247,4 @@ export interface ITreeSelectApi extends Omit<ITreeComponentApi<ITreeSelectNode, 
      * @param debounce - should debounce
      */
     fetchData: (search?: string, debounce?: boolean) => void;
-
-    //TODO:remove after testing
-    /** Add nodes to current dataset*/
-    addNodes: (parentNode: ITreeSelectNode | undefined, newNodes: ITreeSelectNode | ITreeSelectNode[]) => void;
-
-    /** Update nodes content in dataset */
-    updateNodes: (nodes: ITreeSelectNode | ITreeSelectNode[]) => void;
-
-    /** Delete node from dataSet */
-    deleteNodes: (nodes: ITreeSelectNode | ITreeSelectNode[]) => void;
 }

@@ -1,16 +1,16 @@
 import {beforeEach, describe, expect, it, vi} from 'vitest';
 import {useApiRemoveNode} from '@src/_shared/hooks/treeComponentApiMethods/useApiRemoveNode';
 import {CloneObject} from '@krinopotam/js-helpers/helpersObjects/cloneObject';
-import {findNextNodeKey} from '@src/_shared/hooks/treeComponentApiMethods/serviceMethods/findeNextNodeKey';
-import {findPrevNodeKey} from '@src/_shared/hooks/treeComponentApiMethods/serviceMethods/findPrevNodeKey';
+import {getNextNodeKey} from '@src/_shared/hooks/treeComponentApiMethods/serviceMethods/getNextNodeKey';
+import {getPrevNodeKey} from '@src/_shared/hooks/treeComponentApiMethods/serviceMethods/getPrevNodeKey';
 
 const fieldNames = {key: 'id', children: 'children', disabled: 'disabled', selectable: 'selectable'};
 
 // Mocking necessary functions
 const getDataSetMock = vi.fn();
 const getFieldNamesMock = vi.fn();
-const getNextNodeKeyMock = vi.fn((node, opts, externalDataset) => findNextNodeKey(externalDataset, node, [], fieldNames, opts));
-const getPrevNodeKeyMock = vi.fn((node, opts, externalDataset) => findPrevNodeKey(externalDataset, node, [], fieldNames, opts));
+const getNextNodeKeyMock = vi.fn((node, opts, externalDataset) => getNextNodeKey(externalDataset, node, [], fieldNames, opts));
+const getPrevNodeKeyMock = vi.fn((node, opts, externalDataset) => getPrevNodeKey(externalDataset, node, [], fieldNames, opts));
 const selectNodeMock = vi.fn();
 const setDataSetMock = vi.fn();
 

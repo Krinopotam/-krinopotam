@@ -3,6 +3,7 @@ import {ITreeComponentApi} from '@src/_shared/hooks/treeComponentApiMethods/type
 import {addNodeToTree} from '@src/_shared/hooks/treeComponentApiMethods/serviceMethods/addNodeToTree';
 
 export const useApiAddNode = (api: {
+    getProps: ()=>{groupsMode?:boolean};
     getDataSet: ITreeComponentApi['getDataSet'];
     setDataSet: ITreeComponentApi['setDataSet'];
     getFieldNames: ITreeComponentApi['getFieldNames'];
@@ -10,8 +11,9 @@ export const useApiAddNode = (api: {
     selectNode: ITreeComponentApi['selectNode'];
 }): ITreeComponentApi['addNode'] => {
     return (node, target, position, opts, externalDataset) => {
+        const props = api.getProps()
         const dataSet = externalDataset ?? CloneObject(api.getDataSet() ?? []);
-        addNodeToTree(dataSet, node, api.getFieldNames(), target, position, false);
+        addNodeToTree(node, target, dataSet, api.getFieldNames(), position, props.groupsMode);
 
         if (!externalDataset) api.setDataSet(dataSet);
         if (opts?.ensureVisible) api.ensureNodeVisible(node, dataSet);

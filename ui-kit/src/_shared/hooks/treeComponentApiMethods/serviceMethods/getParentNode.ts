@@ -1,8 +1,8 @@
 import {IKey} from "@krinopotam/service-types";
 
-export const findParentNode = (
-    dataSet: Record<string, unknown>[] | undefined,
+export const getParentNode = (
     node: IKey | Record<string, unknown>,
+    dataSet: Record<string, unknown>[] | undefined,
     fieldNames: {
         key: string;
         children: string;

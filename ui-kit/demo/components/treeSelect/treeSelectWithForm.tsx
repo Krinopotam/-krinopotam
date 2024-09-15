@@ -65,7 +65,7 @@ const useTreeEditFormProps = () => {
                 /** modify dataset for update to avoid the possibility of a parent node choosing itself or its own child node */
                 const id = model.getFormDataSet()['id'];
                 const clonedData = CloneObject(data);
-                removeFromTree(clonedData, id, {key: 'id', children: 'children'});
+                removeFromTree(id, clonedData, {key: 'id', children: 'children'});
 
                 field.updateProps({dataSet: clonedData});
             },

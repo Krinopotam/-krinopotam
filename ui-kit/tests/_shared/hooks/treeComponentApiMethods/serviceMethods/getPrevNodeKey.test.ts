@@ -1,5 +1,5 @@
 import {describe, expect, it} from 'vitest';
-import {findPrevNodeKey} from '@src/_shared/hooks/treeComponentApiMethods/serviceMethods/findPrevNodeKey';
+import {getPrevNodeKey} from '@src/_shared/hooks/treeComponentApiMethods/serviceMethods/getPrevNodeKey';
 import {IFindNodeOptions} from '@src/_shared/hooks/treeComponentApiMethods/types/treeApiTypes';
 
 describe('findPrevNodeKey', () => {
@@ -22,27 +22,27 @@ describe('findPrevNodeKey', () => {
     ];
 
     it('should return undefined if no dataset is provided', () => {
-        const result = findPrevNodeKey(undefined, '1', [], fieldNames);
+        const result = getPrevNodeKey(undefined, '1', [], fieldNames);
         expect(result).toBeUndefined();
     });
 
     it('should return the prev node key in the same level', () => {
-        const result = findPrevNodeKey(sampleData, '2', ['2'], fieldNames, {sameLevelOnly: true});
+        const result = getPrevNodeKey(sampleData, '2', ['2'], fieldNames, {sameLevelOnly: true});
         expect(result).toBe('1');
     });
 
     it('should return the prev node key in the same level if node passed', () => {
-        const result = findPrevNodeKey(sampleData, {id: '2'}, ['2'], fieldNames, {sameLevelOnly: true});
+        const result = getPrevNodeKey(sampleData, {id: '2'}, ['2'], fieldNames, {sameLevelOnly: true});
         expect(result).toBe('1');
     });
 
     it('should return the prev node key in the same level for children', () => {
-        const result = findPrevNodeKey(sampleData, '1-2', ['1'], fieldNames, {sameLevelOnly: true});
+        const result = getPrevNodeKey(sampleData, '1-2', ['1'], fieldNames, {sameLevelOnly: true});
         expect(result).toBe('1-1');
     });
 
     it('should return the undefined if no node on the same level is found', () => {
-        const result = findPrevNodeKey(sampleData, '2-1', [], fieldNames, {
+        const result = getPrevNodeKey(sampleData, '2-1', [], fieldNames, {
             sameLevelOnly: true,
             defaultToBoundary: false,
         });
@@ -50,118 +50,118 @@ describe('findPrevNodeKey', () => {
     });
 
     it('should return the parent node key if no node on the same level is found', () => {
-        const result = findPrevNodeKey(sampleData, '2-1', [], fieldNames);
+        const result = getPrevNodeKey(sampleData, '2-1', [], fieldNames);
         expect(result).toBe('2');
     });
 
     it('should return the last child key if prev node on the same the level has children and no matter if it is expanded', () => {
-        const result = findPrevNodeKey(sampleData, '2', [], fieldNames, {expandedOnly: false});
+        const result = getPrevNodeKey(sampleData, '2', [], fieldNames, {expandedOnly: false});
         expect(result).toBe('1-2');
     });
 
     it('should return the last child key of the prev node on the same level has children and it is expanded', () => {
-        const result = findPrevNodeKey(sampleData, '2', ['1'], fieldNames, {expandedOnly: true});
+        const result = getPrevNodeKey(sampleData, '2', ['1'], fieldNames, {expandedOnly: true});
         expect(result).toBe('1-2');
     });
 
     it('should return the first child key if the prev node on the same level has children and it is expanded, and second children is disabled', () => {
-        const result = findPrevNodeKey(sampleData, '7', ['6'], fieldNames, {expandedOnly: true});
+        const result = getPrevNodeKey(sampleData, '7', ['6'], fieldNames, {expandedOnly: true});
         expect(result).toBe('6-1');
     });
 
     it('should return the first child key if the prev node on the same level has children and it is expanded, and second children is not selectable', () => {
-        const result = findPrevNodeKey(sampleData, '8', ['7'], fieldNames, {expandedOnly: true});
+        const result = getPrevNodeKey(sampleData, '8', ['7'], fieldNames, {expandedOnly: true});
         expect(result).toBe('7-1');
     });
 
     it('should return the second child key if the prev node on the same level has children and it is expanded, and no matter is children disabled', () => {
-        const result = findPrevNodeKey(sampleData, '7', ['6'], fieldNames, {expandedOnly: true, notDisabled: false});
+        const result = getPrevNodeKey(sampleData, '7', ['6'], fieldNames, {expandedOnly: true, notDisabled: false});
         expect(result).toBe('6-2');
     });
 
     it('should return the second child key if the prev node on the same level has children and it is expanded, and no matter is children not selectable', () => {
-        const result = findPrevNodeKey(sampleData, '8', ['7'], fieldNames, {expandedOnly: true, selectableOnly: false});
+        const result = getPrevNodeKey(sampleData, '8', ['7'], fieldNames, {expandedOnly: true, selectableOnly: false});
         expect(result).toBe('7-2');
     });
 
     it('should return prev node on same level if prev node is not expanded', () => {
-        const result = findPrevNodeKey(sampleData, '2', [], fieldNames, {expandedOnly: true});
+        const result = getPrevNodeKey(sampleData, '2', [], fieldNames, {expandedOnly: true});
         expect(result).toBe('1');
     });
 
     it('should return last child node of prev node on the same level if prev node is expanded', () => {
-        const result = findPrevNodeKey(sampleData, '2', ['1'], fieldNames, {expandedOnly: true});
+        const result = getPrevNodeKey(sampleData, '2', ['1'], fieldNames, {expandedOnly: true});
         expect(result).toBe('1-2');
     });
 
     it('should respect the expandedOnly option with true', () => {
         const opts: IFindNodeOptions = {expandedOnly: true};
-        const result = findPrevNodeKey(sampleData, '2', [], fieldNames, opts);
+        const result = getPrevNodeKey(sampleData, '2', [], fieldNames, opts);
         expect(result).toBe('1');
     });
 
     it('should respect the expandedOnly option with false', () => {
         const opts: IFindNodeOptions = {expandedOnly: false};
-        const result = findPrevNodeKey(sampleData, '2', [], fieldNames, opts);
+        const result = getPrevNodeKey(sampleData, '2', [], fieldNames, opts);
         expect(result).toBe('1-2');
     });
 
     it('should respect the notDisabled option with true', () => {
         const opts: IFindNodeOptions = {notDisabled: true};
-        const result = findPrevNodeKey(sampleData, '7', ['6'], fieldNames, opts);
+        const result = getPrevNodeKey(sampleData, '7', ['6'], fieldNames, opts);
         expect(result).toBe('6-1');
     });
 
     it('should respect the notDisabled option with false', () => {
         const opts: IFindNodeOptions = {notDisabled: false};
-        const result = findPrevNodeKey(sampleData, '7', ['6'], fieldNames, opts);
+        const result = getPrevNodeKey(sampleData, '7', ['6'], fieldNames, opts);
         expect(result).toBe('6-2');
     });
 
     it('should respect the selectableOnly option with true', () => {
         const opts: IFindNodeOptions = {selectableOnly: true};
-        const result = findPrevNodeKey(sampleData, '8', ['7'], fieldNames, opts);
+        const result = getPrevNodeKey(sampleData, '8', ['7'], fieldNames, opts);
         expect(result).toBe('7-1');
     });
 
     it('should respect the selectableOnly option with false', () => {
         const opts: IFindNodeOptions = {selectableOnly: false};
-        const result = findPrevNodeKey(sampleData, '8', ['7'], fieldNames, opts);
+        const result = getPrevNodeKey(sampleData, '8', ['7'], fieldNames, opts);
         expect(result).toBe('7-2');
     });
 
     it('should work without expandedOnly opts parameter (default expandedOnly: true)', () => {
-        const result = findPrevNodeKey(sampleData, '2', [], fieldNames);
+        const result = getPrevNodeKey(sampleData, '2', [], fieldNames);
         expect(result).toBe('1');
     });
 
     it('should work without expandedOnly opts parameter (default expandedOnly: true)', () => {
-        const result = findPrevNodeKey(sampleData, '2', ['1'], fieldNames);
+        const result = getPrevNodeKey(sampleData, '2', ['1'], fieldNames);
         expect(result).toBe('1-2');
     });
 
     it('should work without notDisabled opts parameter (default notDisabled: true)', () => {
-        const result = findPrevNodeKey(sampleData, '7', ['6'], fieldNames);
+        const result = getPrevNodeKey(sampleData, '7', ['6'], fieldNames);
         expect(result).toBe('6-1');
     });
 
     it('should work without selectableOnly opts parameter (default selectableOnly: true)', () => {
-        const result = findPrevNodeKey(sampleData, '8', ['7'], fieldNames);
+        const result = getPrevNodeKey(sampleData, '8', ['7'], fieldNames);
         expect(result).toBe('7-1');
     });
 
     it('should return undefined if current node is the last and defaultToBoundary is false', () => {
-        const result = findPrevNodeKey(sampleData, '1', [], fieldNames, {defaultToBoundary: false});
+        const result = getPrevNodeKey(sampleData, '1', [], fieldNames, {defaultToBoundary: false});
         expect(result).toBe(undefined);
     });
 
     it('should return current node if current node is the last and defaultToBoundary is true', () => {
-        const result = findPrevNodeKey(sampleData, '1', [], fieldNames, {defaultToBoundary: true});
+        const result = getPrevNodeKey(sampleData, '1', [], fieldNames, {defaultToBoundary: true});
         expect(result).toBe('1');
     });
 
     it('should return first node if current node is undefined', () => {
-        const result = findPrevNodeKey(sampleData, undefined, [], fieldNames);
+        const result = getPrevNodeKey(sampleData, undefined, [], fieldNames);
         expect(result).toBe('1');
     });
 });

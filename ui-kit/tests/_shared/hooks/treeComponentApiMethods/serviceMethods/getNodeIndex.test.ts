@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { findNodeIndex } from '@src/_shared/hooks/treeComponentApiMethods/serviceMethods/findNodeIndex';
+import { getNodeIndex } from '@src/_shared/hooks/treeComponentApiMethods/serviceMethods/getNodeIndex';
 
 describe('findNodeIndex', () => {
     const fieldNames = { key: 'id', children: 'children' };
@@ -10,18 +10,24 @@ describe('findNodeIndex', () => {
     ];
 
     it('should find the node index and parent collection', () => {
-        const result = findNodeIndex(dataSet, 4, fieldNames);
+        const result = getNodeIndex(dataSet, 4, fieldNames);
+        expect(result).toEqual({ idx: 0, nodes: dataSet[1].children });
+        expect(result.nodes).toBe(dataSet[1].children);
+    });
+
+    it('should find the node index and parent collection if node passed', () => {
+        const result = getNodeIndex(dataSet, {id:4}, fieldNames);
         expect(result).toEqual({ idx: 0, nodes: dataSet[1].children });
         expect(result.nodes).toBe(dataSet[1].children);
     });
 
     it('should return -1 and undefined if the node is not found', () => {
-        const result = findNodeIndex(dataSet, 5, fieldNames);
+        const result = getNodeIndex(dataSet, 5, fieldNames);
         expect(result).toEqual({ idx: -1, nodes: undefined });
     });
 
     it('should handle undefined dataset', () => {
-        const result = findNodeIndex(undefined, 1, fieldNames);
+        const result = getNodeIndex(undefined, 1, fieldNames);
         expect(result).toEqual({ idx: -1, nodes: undefined });
     });
 });

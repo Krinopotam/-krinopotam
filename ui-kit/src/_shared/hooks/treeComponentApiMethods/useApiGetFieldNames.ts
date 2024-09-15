@@ -15,7 +15,7 @@ const useFieldNames = (props: {fieldNames?: Partial<IFieldNames>}) => {
             title: props.fieldNames?.title ?? 'title',
             parent: props.fieldNames?.parent ?? 'parent',
             isLeaf: props.fieldNames?.isLeaf ?? 'isLeaf',
-            isFolder: props.fieldNames?.isFolder ?? 'isFolder',
+            isGroup: props.fieldNames?.isGroup ?? 'isGroup',
             disabled: props.fieldNames?.disabled ?? 'disabled',
             selectable: props.fieldNames?.selectable ?? 'selectable',
         }),
@@ -25,7 +25,7 @@ const useFieldNames = (props: {fieldNames?: Partial<IFieldNames>}) => {
             props.fieldNames?.title,
             props.fieldNames?.parent,
             props.fieldNames?.isLeaf,
-            props.fieldNames?.isFolder,
+            props.fieldNames?.isGroup,
             props.fieldNames?.disabled,
             props.fieldNames?.selectable,
         ]

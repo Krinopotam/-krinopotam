@@ -11,7 +11,24 @@ describe('removeFromDataSet', () => {
         const key = 2;
         const fieldNames = {key: 'id', children: 'children'};
 
-        removeFromTree(dataSet, key, fieldNames);
+        removeFromTree(key, dataSet, fieldNames);
+
+        expect(dataSet).toEqual([
+            {id: 1, name: 'Node 1', children: []},
+            {id: 3, name: 'Node 3', children: []},
+        ]);
+    });
+
+    it('should remove the node with the given node from the data set', () => {
+        const dataSet = [
+            {id: 1, name: 'Node 1', children: []},
+            {id: 2, name: 'Node 2', children: []},
+            {id: 3, name: 'Node 3', children: []},
+        ];
+        const node = {id: 2};
+        const fieldNames = {key: 'id', children: 'children'};
+
+        removeFromTree(node, dataSet, fieldNames);
 
         expect(dataSet).toEqual([
             {id: 1, name: 'Node 1', children: []},
@@ -41,7 +58,7 @@ describe('removeFromDataSet', () => {
         ];
         const fieldNames = {key: 'id', children: 'children'};
 
-        removeFromTree(dataSet, 11, fieldNames);
+        removeFromTree(11, dataSet, fieldNames);
 
         expect(dataSet).toEqual([
             {
@@ -63,7 +80,7 @@ describe('removeFromDataSet', () => {
         const key = 4;
         const fieldNames = {key: 'id', children: 'children'};
 
-        removeFromTree(dataSet, key, fieldNames);
+        removeFromTree(key, dataSet, fieldNames);
 
         expect(dataSet).toEqual([
             {id: 1, name: 'Node 1', children: []},
@@ -77,7 +94,7 @@ describe('removeFromDataSet', () => {
         const key = 1;
         const fieldNames = {key: 'id', children: 'children'};
 
-        removeFromTree(dataSet, key, fieldNames);
+        removeFromTree(key, dataSet, fieldNames);
 
         expect(dataSet).toEqual([]);
     });
