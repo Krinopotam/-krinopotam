@@ -29,7 +29,7 @@ export default tsEsLint.config(
         languageOptions: {
             globals: {
                 ...globals.browser,
-                ...globals.es2021
+                ...globals.es2021,
             },
             parser: tsEsLint.parser,
             parserOptions: {
@@ -37,11 +37,7 @@ export default tsEsLint.config(
                     jsx: true,
                 },
                 //projectService: true,
-                project: [
-                    './tsconfig.json',
-                    './tsconfig.eslint.json',
-                    './tsconfig.test.json',
-                ],
+                project: ['./tsconfig.json', './tsconfig.eslint.json', './tsconfig.test.json'],
                 //tsconfigRootDir: import.meta.dirname,
                 tsconfigRootDir: __dirname,
                 sourceType: 'module',
@@ -52,6 +48,7 @@ export default tsEsLint.config(
         rules: {
             ...hooksPlugin.configs.recommended.rules,
             ...eslintReact.configs.recommended.rules,
+            'react-hooks/exhaustive-deps': ['warn', {additionalHooks: '(useUpdateEffect)'}],
         },
     },
     {

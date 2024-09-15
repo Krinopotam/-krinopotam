@@ -11,7 +11,7 @@ import {DFormModal} from '@src/dFormModal';
 import {ILabeledValue} from '@src/treeSelect/types/types';
 import {useApiGetSelectedNodes} from '@src/treeSelect/hooks/api/useApiGetSelectedNodes';
 import {useApiGetSelectedKeys} from '@src/treeSelect/hooks/api/useApiGetSelectedKeys';
-import {IKeyboardKey} from '@krinopotam/service-types';
+import {IKey, IKeyboardKey} from '@krinopotam/service-types';
 import {TreeSelectContext} from '@src/treeSelect/context/context';
 import {useAddEventListener} from '@krinopotam/common-hooks';
 
@@ -52,10 +52,7 @@ export const TreeSelectRender = ({
         <>
             <AntdTreeSelect
                 ref={api.treeSelectRef}
-                showSearch // shows search field by default
-                allowClear // allows to clear the selected value by default
                 treeNodeFilterProp={fieldNames.label} //Field to be  used for filtering if filterTreeNode returns true. Default: title (getting from api.fieldNames)
-                dropdownRender={defaultDropdownRender}
                 notFoundContent={
                     <NotFound
                         treeProps={allProps}
@@ -68,11 +65,14 @@ export const TreeSelectRender = ({
                 {...treeSelectProps}
                 /************ no override ****************/
                 labelInValue
+                showSearch={allProps.showSearch !== false && !allProps.readOnly} // shows search field by default
+                allowClear={allProps.allowClear !== false && !allProps.readOnly} // allows to clear the selected value by default
+                dropdownRender={!allProps.readOnly ? (allProps.dropdownRender ?? defaultDropdownRender) : EmptyDropdown}
                 fieldNames={fieldNames}
                 treeNodeLabelProp={treeNodeLabelProp} //Selected value label. Will render as content of select. Default: title
                 treeData={api.getDataSet()}
                 value={value}
-                disabled={allProps.disabled || allProps.readOnly} //TODO: implement true readOnly
+                disabled={allProps.disabled}
                 treeDefaultExpandAll={allProps.defaultExpandAll}
                 treeDefaultExpandedKeys={allProps.defaultExpandedKeys}
                 treeExpandedKeys={expandedKeys}
@@ -91,6 +91,8 @@ export const TreeSelectRender = ({
         </>
     );
 };
+
+const EmptyDropdown = (): React.JSX.Element => <></>;
 
 const useCtrPressed = (ctrlPressedRef: React.MutableRefObject<boolean>) => {
     useAddEventListener('keydown', e => {
@@ -138,10 +140,15 @@ const useOnChange = (api: ITreeSelectApi) => {
 const useOnDropdownVisibleChange = (api: ITreeSelectApi, ctrlPressedRef: React.MutableRefObject<boolean>, dialogOpenedRef: React.MutableRefObject<boolean>) => {
     return useCallback<NonNullable<IAntTreeSelectProps['onDropdownVisibleChange']>>(
         open => {
+            const props = api.getProps();
+            if (props.readOnly) {
+                api.setIsOpen(false);
+                return;
+            }
+
             if (ctrlPressedRef.current || dialogOpenedRef.current) api.setIsOpen(true);
             else api.setIsOpen(open);
 
-            const props = api.getProps();
             if (open && (props.fetchMode === 'onUse' || props.fetchMode === 'onUseForce')) api.fetchData();
             props.onDropdownVisibleChange?.(open);
         },
@@ -200,7 +207,7 @@ const useOnExpand = (treeApi: ITreeSelectApi) => {
     return useCallback<NonNullable<ITreeSelectProps['onTreeExpand']>>(
         keys => {
             const props = treeApi.getProps();
-            treeApi.setExpandedKeys(keys);
+            treeApi.setExpandedKeys(keys as IKey[]);
             props.onTreeExpand?.(keys);
         },
         [treeApi]

@@ -15,7 +15,7 @@ export const useValuesState = (
     useUpdateEffect(() => {
         /** Set value if props changed*/
         setVal(valuesWithLabel);
-    }, [value, valuesWithLabel]);
+    }, [valuesWithLabel]);
 
     return [val, setVal];
 };
