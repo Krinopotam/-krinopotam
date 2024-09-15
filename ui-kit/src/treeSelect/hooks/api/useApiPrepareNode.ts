@@ -8,7 +8,6 @@ export const useApiPrepareNode = ({titleRender, labelRender, dataMutator}: ITree
             if (titleRender) nodeClone.__title = titleRender(nodeClone);
             if (labelRender) nodeClone.__label = labelRender(nodeClone);
             if (dataMutator) nodeClone = dataMutator(nodeClone);
-            nodeClone.originalData = node;
             return nodeClone;
         },
         [dataMutator, labelRender, titleRender]

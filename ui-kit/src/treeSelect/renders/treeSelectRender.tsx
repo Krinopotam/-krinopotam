@@ -9,8 +9,6 @@ import {DefaultDropdownRender} from '@src/treeSelect/renders/defaultDropdownRend
 import {usePrepareEditFormProps} from '@src/treeSelect/hooks/prepareEditForm';
 import {DFormModal} from '@src/dFormModal';
 import {ILabeledValue} from '@src/treeSelect/types/types';
-import {useApiGetSelectedNodes} from '@src/treeSelect/hooks/api/useApiGetSelectedNodes';
-import {useApiGetSelectedKeys} from '@src/treeSelect/hooks/api/useApiGetSelectedKeys';
 import {IKey, IKeyboardKey} from '@krinopotam/service-types';
 import {TreeSelectContext} from '@src/treeSelect/context/context';
 import {useAddEventListener} from '@krinopotam/common-hooks';
@@ -124,16 +122,16 @@ const useOnClear = (api: ITreeSelectApi) => {
 };
 
 const useOnChange = (api: ITreeSelectApi) => {
-    const valueToNodes = useApiGetSelectedNodes(api);
-    const valueToKeys = useApiGetSelectedKeys();
     return useCallback<(value: unknown) => void>(
         value => {
             const val = value as ILabeledValue | ILabeledValue[];
             api.setValues(val);
             const props = api.getProps();
-            props.onChange?.(value as ILabeledValue | ILabeledValue[], valueToKeys(val) ?? [], valueToNodes(undefined, val) ?? []);
+            const keys = api.getSelectedKeys(val) ?? [];
+            const nodes = api.getSelectedNodes(undefined, val) ?? [];
+            props.onChange?.(value as ILabeledValue | ILabeledValue[], keys, nodes);
         },
-        [api, valueToKeys, valueToNodes]
+        [api]
     );
 };
 

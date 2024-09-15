@@ -3,8 +3,8 @@ import {useCallback} from 'react';
 import {ITreeComponentApi} from '@src/_shared/hooks/treeComponentApiMethods/types/treeApiTypes';
 import {ITreeSelectApi} from '@src/treeSelect';
 import {ILabeledValue} from '@src/treeSelect/types/types';
-import {anyValueToValuesWithLabel} from "@src/treeSelect/tools/dataConvertors";
 import {IKey} from "@krinopotam/service-types";
+import {anyValueToValuesWithLabel} from "@src/treeSelect/tools/anyValueToValuesWithLabel";
 
 export const useApiSelectNode = (
     api: {

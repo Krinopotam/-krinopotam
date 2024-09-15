@@ -6,19 +6,25 @@ import {IButtonsRowApi, IFormButton} from '@src/buttonsRow';
 import {DefaultOptionType} from 'rc-tree-select/es/TreeSelect';
 
 import {IFieldNames, ITreeComponentApi} from '@src/_shared/hooks/treeComponentApiMethods/types/treeApiTypes';
-import {translations} from "@src/treeSelect/translations/translations";
-import {IKey} from "@krinopotam/service-types";
+import {translations} from '@src/treeSelect/translations/translations';
+import {IKey} from '@krinopotam/service-types';
 
 interface ITreeSelectNodeBase extends Omit<DefaultOptionType, 'children'> {
     /** Node id */
     id?: IKey;
+    /** Node disabled status */
+    disabled?: boolean;
     /** Leaf node or not */
     isLeaf?: boolean;
+    /** Node selectable status */
+    selectable?: boolean;
+    /** Node group or not */
+    isGroup?: boolean;
     /** Children nodes */
     children?: ITreeSelectNode[];
 }
 
-export type ITreeSelectNode<T = object> = ITreeSelectNodeBase & {originalData?: T};
+export type ITreeSelectNode<T = Record<string, unknown>> = ITreeSelectNodeBase & T;
 
 type IAntTreeSelectComponentProps = GetProps<typeof TreeSelect>;
 export type IAntTreeSelectProps = Omit<
@@ -66,7 +72,7 @@ export interface ITreeSelectBaseProps {
     value?: ITreeSelectValue;
 
     /** Is TreeSelect read only  */
-    readOnly?: boolean; //TODO: Make readonly
+    readOnly?: boolean;
 
     /**  Custom filter */
     filterTreeNode?: boolean | ((inputValue: string, treeNode: ITreeSelectNode) => boolean);
@@ -184,7 +190,7 @@ export interface ILabeledValue {
 
 export type ITreeSelectValue = IKey | IKey[] | ILabeledValue | ILabeledValue[] | Record<string, unknown> | Record<string, unknown>[] | null | undefined;
 
-export interface ITreeSelectApi extends Omit<ITreeComponentApi<ITreeSelectNode, ITreeSelectProps>, 'setSelectedKeys'> {
+export interface ITreeSelectApi extends Omit<ITreeComponentApi<ITreeSelectNode, ITreeSelectProps>, 'setSelectedKeys' | 'getSelectedKeys' | 'getSelectedNodes'> {
     /** Tree ref */
     treeSelectRef: React.RefObject<GetRef<typeof TreeSelect>>;
 
@@ -196,6 +202,17 @@ export interface ITreeSelectApi extends Omit<ITreeComponentApi<ITreeSelectNode, 
 
     /** Set values (values may be  as Key or IBaseValueWithLabel or array) */
     setValues: (value: ITreeSelectValue) => void;
+
+    /** Returns selected keys
+     * @param extValue - if not set, current value will be used, if set, node will be searched by this value
+     */
+    getSelectedKeys: (extValue?: ILabeledValue | ILabeledValue[]) => IKey[] | undefined;
+
+    /** Returns selected nodes
+     * @param extDataset - if not set, current data set will be used, if set, node will be searched in this data set
+     * @param extValue - if not set, current value will be used, if set, node will be searched by this value
+     * */
+    getSelectedNodes: (extDataset?: ITreeSelectNode[], extValue?: ILabeledValue | ILabeledValue[]) => ITreeSelectNode[] | undefined;
 
     /** Get edit form api */
     getEditFormApi: () => IDFormModalApi;

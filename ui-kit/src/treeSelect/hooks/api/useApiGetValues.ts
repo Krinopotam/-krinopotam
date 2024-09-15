@@ -1,6 +1,5 @@
-import {ILabeledValue} from "@src/treeSelect/types/types";
-import {useCallback} from "react";
+import {ILabeledValue} from '@src/treeSelect/types/types';
 
 export const useApiGetValues = (value: ILabeledValue[] | undefined) => {
-    return useCallback(()=>value, [value])
+    return () => value;
 };

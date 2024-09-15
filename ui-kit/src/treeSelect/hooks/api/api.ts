@@ -1,9 +1,7 @@
-import {ITreeSelectNode, ITreeSelectProps} from '@src/treeSelect';
-import {useCallback, useRef, useState} from 'react';
+import {ITreeSelectProps} from '@src/treeSelect';
+import {useRef, useState} from 'react';
 import {useDataFetcher} from '@src/treeSelect/hooks/dataFetcher';
 import {GetNanoId} from '@krinopotam/js-helpers/helpersString/getNanoId';
-import {GetUuid} from '@krinopotam/js-helpers/helpersString/getUuid';
-import {IsArray} from '@krinopotam/js-helpers/helpersObjects/isArray';
 import {ITreeSelectApi} from '@src/treeSelect/types/types';
 import {IDFormModalApi} from '@src/dFormModal';
 import {useDataSetState} from '@src/_shared/hooks/treeComponentApiMethods/useDataSetState';
@@ -66,8 +64,7 @@ import {useApiSetValues} from '@src/treeSelect/hooks/api/useApiSetValues';
 import {useApiGetSelectedKeys} from '@src/treeSelect/hooks/api/useApiGetSelectedKeys';
 import {useApiGetSelectedNodes} from '@src/treeSelect/hooks/api/useApiGetSelectedNodes';
 import {useApiSelectNode} from '@src/treeSelect/hooks/api/useApiSelectNode';
-import {useTranslate} from '@src/_shared/hooks/useTranslate';
-import {translations} from '@src/treeSelect/translations/translations';
+import {useT} from '@src/treeSelect/hooks/api/useApiT';
 
 export const useInitApi = ({
     props,
@@ -112,8 +109,7 @@ export const useInitApi = ({
     api.getEditFormApi = useApiGetEditFormApi(editFormApi);
     api.getEditGroupFormApi = useApiGetEditGroupFormApi(editGroupFormApi);
     api.getSelectedKeys = useApiGetSelectedKeys(value);
-    //api.setSelectedKeys = useApiSetSelectedKeys(setSelectedKeys);
-    api.getSelectedNodes = useApiGetSelectedNodes(api);
+    api.getSelectedNodes = useApiGetSelectedNodes(api, value);
     api.isNodeSelected = useApiIsNodeSelected(api);
     api.selectNode = useApiSelectNode(api, props.multiple);
     api.getActiveNodeKey = useApiGetActiveNodeKey(api);
@@ -159,9 +155,4 @@ export const useInitApi = ({
     api.fetchData = useApiFetchData(dataFetcher, api);
 
     return api;
-};
-
-const useT = (api: ITreeSelectApi) => {
-    const treeProps = api.getProps();
-    return useTranslate(treeProps.language, translations, treeProps.translation);
 };

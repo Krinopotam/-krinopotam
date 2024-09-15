@@ -2,8 +2,8 @@ import {ITreeSelectProps, ITreeSelectValue} from '@src/treeSelect';
 import React, {useMemo, useState} from 'react';
 import {ILabeledValue} from '@src/treeSelect/types/types';
 import {IFieldNames} from '@src/_shared/hooks/treeComponentApiMethods/types/treeApiTypes';
-import {anyValueToValuesWithLabel} from '@src/treeSelect/tools/dataConvertors';
 import {useUpdateEffect} from '@krinopotam/common-hooks';
+import {anyValueToValuesWithLabel} from "@src/treeSelect/tools/anyValueToValuesWithLabel";
 
 export const useValuesState = (
     {value}: ITreeSelectProps,

@@ -16,7 +16,10 @@ export const TreeSelect = (props: ITreeSelectProps): React.JSX.Element => {
     /** Fetch on load */
     useEffect(() => {
         if ((!allProps.fetchMode || allProps.fetchMode === 'onLoad') && !allProps.minSearchLength) api.fetchData();
-        else if (!api.getIsReady()) allProps?.onReady?.();
+        else if (!api.getIsReady()) {
+            api.setIsReady(true);
+            allProps?.onReady?.();
+        }
     }, [api, allProps, allProps.fetchMode, allProps.minSearchLength]);
 
     return (
