@@ -11,24 +11,24 @@ import { camelCaseSplit } from './tools/camelCaseSplit.js';
 import { menuItemsSorting } from './tools/menuItemsSorting.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const demoRoot = __dirname + '/../../';
-const _componentsFolder = 'components';
-const _pagesFolder = 'pages';
-const _layoutsFolder = 'layouts';
-const _componentsPath = demoRoot + _componentsFolder;
-const _pagesPath = demoRoot + _pagesFolder;
-const _layoutsPath = demoRoot + _layoutsFolder;
 function run() {
+    const demoRoot = __dirname + '/../../';
+    const componentsFN = 'components';
+    const pagesFN = 'pages';
+    const layoutsFN = 'layouts';
+    const componentsPath = demoRoot + componentsFN;
+    const pagesPath = demoRoot + pagesFN;
+    const layoutsPath = demoRoot + layoutsFN;
     //clear pages folder
-    fs.rmSync(_pagesPath, { recursive: true, force: true });
-    if (!fs.existsSync(_pagesPath))
-        fs.mkdirSync(_pagesPath, { recursive: true });
+    fs.rmSync(pagesPath, { recursive: true, force: true });
+    if (!fs.existsSync(pagesPath))
+        fs.mkdirSync(pagesPath, { recursive: true });
     console.log('Generated:');
-    const files = recursiveDirectoriesRun(_componentsPath, _componentsFolder);
+    const files = recursiveDirectoriesRun(componentsPath, componentsFN);
     menuItemsSorting(files);
-    const [routesString, routeImportString] = generatePages(files);
-    generateRoutes(routesString, routeImportString);
-    generateMenuProps(files);
+    const [routesString, routeImportString] = generatePages(files, pagesFN, pagesPath);
+    generateRoutes(routesString, routeImportString, layoutsPath);
+    generateMenuProps(files, layoutsPath);
 }
 //region Prepare components files info
 function recursiveDirectoriesRun(curDir, curDirFromRoot, files) {
@@ -124,7 +124,7 @@ function prepareMenuProps(filesInfo, level = 1, rootFolder = '/') {
     result = result + ']';
     return result;
 }
-function generateMenuProps(filesInfo) {
+function generateMenuProps(filesInfo, layoutsPath) {
     // language=text
     let content = `
 import React from "react";
@@ -146,11 +146,11 @@ function getItem(label: React.ReactNode, key: React.Key, icon?: React.ReactNode,
 
 `;
     content = content + 'export const menuItems: MenuProps["items"] =' + prepareMenuProps(filesInfo);
-    fs.writeFileSync(_layoutsPath + '/menuProps.tsx', content, { encoding: 'utf8', flag: 'w' });
+    fs.writeFileSync(layoutsPath + '/menuProps.tsx', content, { encoding: 'utf8', flag: 'w' });
 }
 //endregion
 //<editor-fold desc="Generate pages">
-function generatePages(filesInfo, subFolderPath = '', level = 0) {
+function generatePages(filesInfo, pagesFN, pagesPath, subFolderPath = '', level = 0) {
     let routesStrings = '';
     let routeImportStrings = '';
     if (filesInfo.length === 0)
@@ -159,25 +159,25 @@ function generatePages(filesInfo, subFolderPath = '', level = 0) {
         if (file.children?.length) {
             const folderName = file.fileName;
             console.log(' '.repeat(level * 4), folderName);
-            const [routeStr, routeImportStr] = generatePages(file.children, subFolderPath + '/' + folderName, level + 1);
+            const [routeStr, routeImportStr] = generatePages(file.children, pagesFN, pagesPath, subFolderPath + '/' + folderName, level + 1);
             routesStrings = routesStrings + `                        {path:"${folderName}", children: [\n${routeStr}\n]},` + '\n';
             routeImportStrings = routeImportStrings + routeImportStr + '\n';
         }
         else {
-            const [routeStr, routeImportStr] = generatePageComponent(file, level);
+            const [routeStr, routeImportStr] = generatePageComponent(file, pagesFN, pagesPath, level);
             routesStrings = routesStrings + routeStr + '\n';
             routeImportStrings = routeImportStrings + routeImportStr + '\n';
         }
     }
     return [routesStrings, routeImportStrings];
 }
-function generatePageComponent(file, level) {
+function generatePageComponent(file, pagesFN, pagesPath, level) {
     const componentModulePath = '../' + trimExtension(file.fullFilePath);
     const componentName = file.componentName;
     const menuItemLink = file.menuItemLink;
     const pageComponentName = 'Page' + file.componentGuid?.replaceAll('-', '');
-    const pagesPath = _pagesPath + '/' + pageComponentName + '.tsx';
-    const pageModulePath = './../' + _pagesFolder + '/' + pageComponentName;
+    const pageComponentPath = pagesPath + '/' + pageComponentName + '.tsx';
+    const pageModulePath = './../' + pagesFN + '/' + pageComponentName;
     let source = file.source;
     source = source.replaceAll(/\$\{/g, '\\${');
     source = source.replaceAll(/`/g, '\\`');
@@ -189,6 +189,7 @@ function generatePageComponent(file, level) {
     import { Divider, Collapse } from 'antd';
     import SyntaxHighlighter from 'react-syntax-highlighter';
     import {darcula, docco} from 'react-syntax-highlighter/dist/esm/styles/hljs';\n`;
+    // language=text
     const bodyStr = `
     export const ${pageComponentName} = (props: {darkMode: boolean}): React.JSX.Element => {
     // language=text
@@ -211,7 +212,7 @@ function generatePageComponent(file, level) {
 export default ${pageComponentName};
 `;
     const content = importStr + bodyStr;
-    fs.writeFileSync(pagesPath, content, { encoding: 'utf8', flag: 'w' });
+    fs.writeFileSync(pageComponentPath, content, { encoding: 'utf8', flag: 'w' });
     // language=text
     const routeStr = `                        {path:"${menuItemLink}", element:<${pageComponentName} darkMode={props.darkMode} />},`;
     const routeImportStr = `    const ${pageComponentName} = lazy(() => import('${pageModulePath}'))`;
@@ -220,7 +221,7 @@ export default ${pageComponentName};
 }
 //</editor-fold>
 //region Generate routes
-function generateRoutes(routers, imports) {
+function generateRoutes(routers, imports, layoutsPath) {
     // language=text
     const result = `
     import React, {lazy, useMemo} from 'react';
@@ -246,6 +247,6 @@ ${routers}
     };
 
 `;
-    fs.writeFileSync(_layoutsPath + '/demoRoutes.tsx', result, { encoding: 'utf8', flag: 'w' });
+    fs.writeFileSync(layoutsPath + '/demoRoutes.tsx', result, { encoding: 'utf8', flag: 'w' });
 }
 run();
