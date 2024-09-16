@@ -1,12 +1,21 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-	"outDir": "./demo/.generator",
-    "noImplicitAny": false
-    /* Enable error reporting for expressions and declarations with an implied 'any' type. */
+	"types": ["node"],
+	"outDir": "./demo/.generator/build",
+    "noImplicitAny": false,
+    "declaration": false,
+
+    "skipLibCheck": true,
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "target": "ESNext",
+    "isolatedModules": true,
+    "esModuleInterop": true,
+    "lib": [ "esnext" ]
   },
   "include": [
-    "./demo/.generator/**/*.ts"
+    "./demo/.generator/src/**/*.ts"
   ],
   "exclude": []
 }

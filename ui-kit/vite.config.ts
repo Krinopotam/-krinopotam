@@ -2,6 +2,7 @@ import {defineConfig, UserConfig} from 'vite'
 import * as path from "path";
 import react from '@vitejs/plugin-react-swc'
 import {watch} from "vite-plugin-watch"
+import {resolve} from "path";
 
 const commonCfg: UserConfig = {
     plugins: [react()],
@@ -23,7 +24,7 @@ const devDemoCfg: UserConfig = {
         ...commonCfg.plugins!,
         watch({
             pattern: ['demo/components/**/*.*'],
-            command: "node ./demo/.generator/generateDemo.js",
+            command: "node ./demo/.generator/build/generateDemo.js",
         }),
     ],
     server: {

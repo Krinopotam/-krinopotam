@@ -1,28 +1,30 @@
-import * as fs from 'fs';
+import fs from 'fs';
 import * as crypto from 'crypto';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { upperFirstLetter } from './tools/upperFirstLetter';
-import { trimExtension } from './tools/trimExtension';
-import { getFileExtension } from './tools/getFileExtension';
-import { getFileNameMainPart } from './tools/getFileNameMainPart';
-import { parseComponentName } from './tools/parseComponentName';
-import { camelCaseSplit } from './tools/camelCaseSplit';
-import { menuItemsSorting } from './tools/menuItemsSorting';
+import { upperFirstLetter } from './tools/upperFirstLetter.js';
+import { trimExtension } from './tools/trimExtension.js';
+import { getFileExtension } from './tools/getFileExtension.js';
+import { getFileNameMainPart } from './tools/getFileNameMainPart.js';
+import { parseComponentName } from './tools/parseComponentName.js';
+import { camelCaseSplit } from './tools/camelCaseSplit.js';
+import { menuItemsSorting } from './tools/menuItemsSorting.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+const demoRoot = __dirname + '/../../';
 const _componentsFolder = 'components';
 const _pagesFolder = 'pages';
-const _examplesRoot = __dirname + '/../' + _componentsFolder;
-const _pagesPath = __dirname + '/../' + _pagesFolder;
-const _layoutsPath = __dirname + '/../layouts';
+const _layoutsFolder = 'layouts';
+const _componentsPath = demoRoot + _componentsFolder;
+const _pagesPath = demoRoot + _pagesFolder;
+const _layoutsPath = demoRoot + _layoutsFolder;
 function run() {
     //clear pages folder
     fs.rmSync(_pagesPath, { recursive: true, force: true });
     if (!fs.existsSync(_pagesPath))
         fs.mkdirSync(_pagesPath, { recursive: true });
     console.log('Generated:');
-    const files = recursiveDirectoriesRun(_examplesRoot, _componentsFolder);
+    const files = recursiveDirectoriesRun(_componentsPath, _componentsFolder);
     menuItemsSorting(files);
     const [routesString, routeImportString] = generatePages(files);
     generateRoutes(routesString, routeImportString);
