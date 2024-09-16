@@ -43,6 +43,11 @@ const selectRender: ITreeSelectFieldProps['selectedRender'] = (treeNode: ITreeSe
     );
 };
 
+const filterTreeNode: ITreeSelectFieldProps['filterTreeNode'] = (inputValue: string, treeNode: ITreeSelectNode) => {
+    const nodeString = (treeNode.title + ' (' + treeNode.head + ')').toLowerCase();
+    return nodeString.indexOf(inputValue.toLowerCase()) >= 0;
+};
+
 const departmentsApi = {} as ITreeSelectApi;
 
 const useFormProps = () => {
@@ -61,6 +66,7 @@ const useFormProps = () => {
                     confirmDelete: true,
                     titleRender: titleRender,
                     selectedRender: selectRender,
+                    filterTreeNode: filterTreeNode,
                     dataSet: dataSet,
                 } satisfies ITreeSelectFieldProps,
             },

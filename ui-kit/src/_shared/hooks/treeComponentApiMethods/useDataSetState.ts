@@ -64,7 +64,7 @@ const usePrepareDataSet = <T extends Record<string, unknown>>(
                 const result: T[] = [];
                 if (!nodes) return result;
                 for (const node of nodes) {
-                    const preparedNode = prepareNodeFn ? prepareNodeFn(node) : {...node};
+                    const preparedNode = prepareNodeFn?.(node) ?? node;
                     if (preparedNode[fieldNames.children]) parentKeys.push(preparedNode[fieldNames.key] as IKey);
 
                     if ((preparedNode[fieldNames.children] as T[])?.length) {
