@@ -1,7 +1,16 @@
-import * as fs from 'fs';
+import fs from 'fs';
 import * as crypto from 'crypto';
 import path from 'path';
-import { fileURLToPath } from 'url';
+import {fileURLToPath} from 'url';
+import {upperFirstLetter} from './tools/upperFirstLetter';
+import {trimExtension} from './tools/trimExtension';
+import {getFileExtension} from './tools/getFileExtension';
+import {getFileNameMainPart} from './tools/getFileNameMainPart';
+import {parseComponentName} from './tools/parseComponentName';
+import {camelCaseSplit} from './tools/camelCaseSplit';
+import {IFileInfo} from './types/types';
+import {menuItemsSorting} from './tools/menuItemsSorting';
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -10,36 +19,6 @@ const _pagesFolder = 'pages';
 const _examplesRoot = __dirname + '/../' + _componentsFolder;
 const _pagesPath = __dirname + '/../' + _pagesFolder;
 const _layoutsPath = __dirname + '/../layouts';
-
-interface IFileInfo {
-    /** File or directory unique id*/
-    fileGuid: string;
-    /** File name without extension or directory name */
-    fileName: string;
-    /** File extension */
-    fileExt?: string;
-    /** file directory from app root */
-    fileDir: string;
-    /** full file path from app root */
-    fullFilePath: string;
-    /** file source content */
-    source?: string;
-    /** component name */
-    componentName?: string;
-    /** unique component id */
-    componentGuid?: string;
-    /** item name for menu */
-    menuItemName?: string;
-    /** link name for menu item */
-    menuItemLink?: string;
-    /** item title */
-    title?: string;
-    /** item description */
-    description?: string;
-
-    /** children files (for directory)*/
-    children?: IFileInfo[];
-}
 
 function run() {
     //clear pages folder
@@ -148,7 +127,9 @@ function prepareMenuProps(filesInfo: IFileInfo[], level: number = 1, rootFolder 
         }
 
         // language=text
-        result = result + `\n${' '.repeat(level * 4)}getItem(<Link to="${rootFolder + file.menuItemLink}">${file.menuItemName}</Link>, "Item${crypto.randomUUID()}"),`;
+        result =
+            result +
+            `\n${' '.repeat(level * 4)}getItem(<Link to="${rootFolder + file.menuItemLink}">${file.menuItemName}</Link>, "Item${crypto.randomUUID()}"),`;
     }
     result = result + ']';
 
@@ -294,55 +275,5 @@ ${routers}
     fs.writeFileSync(_layoutsPath + '/demoRoutes.tsx', result, {encoding: 'utf8', flag: 'w'});
 }
 
-//endregion
-
-//region Sorting
-function menuItemsSorting(items: IFileInfo[]) {
-    items.sort((a, b) => {
-        if (a.children?.length) menuItemsSorting(a.children);
-        if (b.children?.length) menuItemsSorting(b.children);
-
-        if (a.children?.length && b.children?.length) {
-            if (a.fileName === b.fileName) return 0;
-            else return a.fileName > b.fileName ? 1 : -1;
-        } else if (a.children?.length) return -1;
-        else return 1;
-    });
-}
-
-//endregion
-
-//region Service methods
-function camelCaseSplit(str: string, splitter?: string) {
-    if (typeof splitter === 'undefined') splitter = ' ';
-    return str.replace(/([a-z0-9][a-z0-9])([A-Z][a-z0-9])/g, '$1' + splitter + '$2');
-}
-
-function parseComponentName(source: string) {
-    const matcher = /export const ([A-Z]\w*)\s?=/g;
-    const match = matcher.exec(source);
-    return match?.[1] ?? '';
-}
-
-function getFileNameMainPart(fileName: string) {
-    const parts = fileName.split('.');
-    return parts[0];
-}
-
-function getFileExtension(fileName: string) {
-    const parts = fileName.split('.');
-    if (parts.length === 1) return '';
-    return parts[parts.length - 1];
-}
-
-function trimExtension(fileName: string) {
-    return fileName.replace(/\.[^/.]+$/, '');
-}
-
-function upperFirstLetter(val: string) {
-    return val.charAt(0).toUpperCase() + val.slice(1);
-}
-
-//endregion
 
 run();
