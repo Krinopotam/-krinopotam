@@ -29,7 +29,7 @@ export type ITreeSelectNode<T = Record<string, unknown>> = ITreeSelectNodeBase &
 type IAntTreeSelectComponentProps = GetProps<typeof TreeSelect>;
 export type IAntTreeSelectProps = Omit<
     IAntTreeSelectComponentProps,
-    'labelInValue' | 'treeData' | 'fieldNames' | 'treeDefaultExpandAll' | 'treeDefaultExpandedKeys' | 'treeExpandedKeys' | 'onChange'
+    'labelInValue' | 'treeData' | 'fieldNames' | 'treeDefaultExpandAll' | 'treeDefaultExpandedKeys' | 'treeExpandedKeys' | 'onChange' | 'treeTitleRender'
 >;
 
 export interface ITreeSelectButton extends IFormButton {
@@ -63,7 +63,7 @@ export interface ITreeSelectBaseProps {
     titleRender?: (treeNode: ITreeSelectNode) => React.ReactNode;
 
     /** Customize selected node label render */
-    labelRender?: (treeNode: ITreeSelectNode) => React.ReactNode;
+    selectedRender?: (treeNode: ITreeSelectNode) => React.ReactNode;
 
     /** Groups only has children. Group is node which has no isLeaf:true property */
     groupsMode?: boolean;

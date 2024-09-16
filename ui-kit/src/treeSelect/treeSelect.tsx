@@ -55,7 +55,7 @@ const useSplitProps = (props: ITreeSelectProps) => {
             onDelete: true,
             fieldNames: true,
             titleRender: true,
-            labelRender: true,
+            selectedRender: true,
             editGroupFormProps: true,
             defaultExpandAll: true,
             defaultExpandedKeys: true,

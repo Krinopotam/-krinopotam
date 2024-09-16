@@ -109,7 +109,7 @@ export const CustomRenders: Story = {
             );
         },
         /** selected value render */
-        labelRender: (treeNode: ITreeSelectNode) => {
+        selectedRender: (treeNode: ITreeSelectNode) => {
             return (
                 <>
                     {treeNode.title} <small style={{color: '#808080'}}>{' (' + treeNode.head + ')'}</small>

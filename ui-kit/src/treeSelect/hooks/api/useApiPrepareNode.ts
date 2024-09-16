@@ -1,15 +1,13 @@
 import {ITreeSelectNode, ITreeSelectProps} from '@src/treeSelect';
 import {useCallback} from 'react';
 
-export const useApiPrepareNode = ({titleRender, labelRender, dataMutator}: ITreeSelectProps) => {
+export const useApiPrepareNode = ({dataMutator}: ITreeSelectProps) => {
     return useCallback(
         (node: ITreeSelectNode) => {
             let nodeClone = {...node};
-            if (titleRender) nodeClone.__title = titleRender(nodeClone);
-            if (labelRender) nodeClone.__label = labelRender(nodeClone);
             if (dataMutator) nodeClone = dataMutator(nodeClone);
             return nodeClone;
         },
-        [dataMutator, labelRender, titleRender]
+        [dataMutator]
     );
 };

@@ -5,17 +5,17 @@ import {useDropdownStyle} from '@src/treeSelect/hooks/dropdownStyle';
 import {useDefaultFilter} from '@src/treeSelect/hooks/filter';
 import {NotFound} from '@src/treeSelect/renders/dropdownStatus';
 import {DefaultOptionType} from 'rc-tree-select/es/TreeSelect';
-import {DefaultDropdownRender} from '@src/treeSelect/renders/defaultDropdownRender';
 import {usePrepareEditFormProps} from '@src/treeSelect/hooks/prepareEditForm';
 import {DFormModal} from '@src/dFormModal';
 import {ILabeledValue} from '@src/treeSelect/types/types';
 import {IKey, IKeyboardKey} from '@krinopotam/service-types';
 import {TreeSelectContext} from '@src/treeSelect/context/context';
 import {useAddEventListener} from '@krinopotam/common-hooks';
+import {DropdownRender} from '@src/treeSelect/renders/dropdownRender';
+import {IFieldNames} from '@src/_shared/hooks/treeComponentApiMethods/types/treeApiTypes';
 
 // For clarity. Antd has labels for a node(1) and for the selected value(2). fieldNames.label property sets the node label(1) and treeNodeLabelProp sets the selected value label(2)
 // In order not to get confused, we will consider Node's label is title(1), and Label of the selected value is label(2)
-// For the implementation of the capabilities of the Title & Labels  renders, we add to dataSet 2 service fields: __title & __label
 
 export const TreeSelectRender = ({
     api,
@@ -33,10 +33,9 @@ export const TreeSelectRender = ({
     const editGroupFormProps = usePrepareEditFormProps(api, allProps, true);
 
     const dropdownStyle = useDropdownStyle(allProps.dropdownStyle);
-    const defaultDropdownRender = useDefaultDropdownRender({api: api});
+    const dropdownRender = useDropdownRender({api: api});
     const value = useValue(api);
-    const fieldNames = useFieldNames(api);
-    const treeNodeLabelProp = useTreeNodeLabelProp(api);
+    const fieldNames = useFieldNames(api.getFieldNames());
     const expandedKeys = api.getExpandedKeys();
     const onExpand = useOnExpand(api);
     const onClear = useOnClear(api);
@@ -45,7 +44,7 @@ export const TreeSelectRender = ({
     const onSearch = useOnSearch(api);
     const filterTreeNode = useOnFilterTreeNode(api);
     const plainList = api.isDataPlainList();
-    console.log(expandedKeys, api.getIsOpen());
+
     return (
         <>
             <AntdTreeSelect
@@ -63,11 +62,14 @@ export const TreeSelectRender = ({
                 {...treeSelectProps}
                 /************ no override ****************/
                 labelInValue
-                showSearch={allProps.showSearch !== false && !allProps.readOnly} // shows search field by default
-                allowClear={allProps.allowClear !== false && !allProps.readOnly} // allows to clear the selected value by default
-                dropdownRender={!allProps.readOnly ? (allProps.dropdownRender ?? defaultDropdownRender) : EmptyDropdown}
+                /** WORKAROUND: treeTitleRender is used to render both list items and the selected value, which is not suitable for us
+                 * Using treeTitleRender only for select value label render. To set the rendering for a list item, override treeSelectContext in dropdownRender
+                 * In order to render the items title, override treeSelectContext in dropdownRender */
+                treeTitleRender={allProps.selectedRender as (node: unknown) => React.ReactNode}
+                dropdownRender={!allProps.readOnly ? dropdownRender : EmptyDropdown}
+                showSearch={!allProps.readOnly && allProps.showSearch !== false} // shows search field by default
+                allowClear={!allProps.readOnly && allProps.allowClear !== false} // allows to clear the selected value by default
                 fieldNames={fieldNames}
-                treeNodeLabelProp={treeNodeLabelProp} //Selected value label. Will render as content of select. Default: title
                 treeData={api.getDataSet()}
                 value={value}
                 disabled={allProps.disabled}
@@ -84,8 +86,8 @@ export const TreeSelectRender = ({
                 onDropdownVisibleChange={onDropdownVisibleChange}
                 onSearch={onSearch}
             />
-            {editFormProps && !allProps.readOnly ? <DFormModal {...editFormProps} apiRef={api.getEditFormApi()} /> : null}
-            {editGroupFormProps && !allProps.readOnly ? <DFormModal {...editGroupFormProps} apiRef={api.getEditGroupFormApi()} /> : null}
+            {!allProps.readOnly && editFormProps ? <DFormModal {...editFormProps} apiRef={api.getEditFormApi()} /> : null}
+            {!allProps.readOnly && editGroupFormProps ? <DFormModal {...editGroupFormProps} apiRef={api.getEditGroupFormApi()} /> : null}
         </>
     );
 };
@@ -109,8 +111,8 @@ const useValue = (api: ITreeSelectApi) => {
     else return vals?.[0] ?? undefined;
 };
 
-const useDefaultDropdownRender = ({api}: {api: ITreeSelectApi}) => {
-    return useCallback((menu: React.ReactNode) => <DefaultDropdownRender api={api}>{menu}</DefaultDropdownRender>, [api]);
+const useDropdownRender = ({api}: {api: ITreeSelectApi}) => {
+    return useCallback((menu: React.ReactElement) => <DropdownRender api={api}>{menu}</DropdownRender>, [api]);
 };
 
 const useOnClear = (api: ITreeSelectApi) => {
@@ -181,24 +183,13 @@ const useOnFilterTreeNode = (api: ITreeSelectApi) => {
     );
 };
 
-const useFieldNames = (api: ITreeSelectApi) => {
+const useFieldNames = (fieldNames: IFieldNames) => {
     return useMemo(() => {
-        const props = api.getProps();
-        const fieldNames = api.getFieldNames();
         const value = fieldNames.key;
-        const label = !props.treeTitleRender && props.titleRender ? '__title' : fieldNames.title;
+        const label = fieldNames.title;
         const children = fieldNames.children;
         return {value, label, children};
-    }, [api]);
-};
-
-const useTreeNodeLabelProp = (api: ITreeSelectApi) => {
-    return useMemo(() => {
-        const props = api.getProps();
-        const fieldNames = api.getFieldNames();
-        if (props.treeNodeLabelProp) return props.treeNodeLabelProp;
-        return !props.treeTitleRender && props.labelRender ? '__label' : fieldNames.title;
-    }, [api]);
+    }, [fieldNames.children, fieldNames.key, fieldNames.title]);
 };
 
 const useOnExpand = (treeApi: ITreeSelectApi) => {

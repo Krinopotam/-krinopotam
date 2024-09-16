@@ -7,11 +7,11 @@ import {ITreeSelectApi} from '@src/treeSelect';
 /** There is no point in memoizing, since children is constantly updated, even when you hover over the dropdown */
 export const DefaultDropdownRender = ({api, children}: {api: ITreeSelectApi; children: React.ReactNode}): React.JSX.Element => {
     const plainList = api.isDataPlainList();
-    const allProps = api.getProps();
+    const treeProps = api.getProps();
 
     return (
         <div className={plainList ? 'tree-select-plain' : undefined}>
-            {allProps.editFormProps || allProps.editGroupFormProps ? (
+            {treeProps.editFormProps || treeProps.editGroupFormProps ? (
                 <ButtonsWrapper api={api}>{children}</ButtonsWrapper>
             ) : (
                 <>
@@ -22,6 +22,7 @@ export const DefaultDropdownRender = ({api, children}: {api: ITreeSelectApi; chi
         </div>
     );
 };
+
 
 const ButtonsWrapper = ({api, children}: {api: ITreeSelectApi; children: React.ReactNode}): React.JSX.Element => {
     const allProps = api.getProps();

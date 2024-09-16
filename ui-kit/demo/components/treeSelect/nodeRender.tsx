@@ -124,7 +124,7 @@ const titleRender: ITreeSelectFieldProps['titleRender'] = (treeNode: ITreeSelect
     );
 };
 
-const labelRender: ITreeSelectFieldProps['labelRender'] = (treeNode: ITreeSelectNode) => {
+const selectRender: ITreeSelectFieldProps['selectedRender'] = (treeNode: ITreeSelectNode) => {
     return (
         <>
             {treeNode.title} <small style={{color: '#808080'}}>{treeNode.head ? '(' + treeNode.head + ')' : ''}</small>
@@ -147,8 +147,14 @@ const formProps: IDFormProps = {
             label: 'Подразделения',
             dataSet: dataSet,
             titleRender: titleRender, //node title render
-            labelRender: labelRender, //node label render
+            selectedRender: selectRender, //node label render
             filterTreeNode: filterTreeNode, //custom filter
+            dropdownRender:(menu)=><div>dddddd{menu}</div>,
+            fieldNames: {
+                key:'id'    ,
+                title:'title',
+                children:'children',
+            }
         } satisfies ITreeSelectFieldProps,
     },
     buttons: null,
