@@ -1,5 +1,5 @@
-import { trimExtension } from '../tools/trimExtension.js';
 import fs from 'fs';
+import { trimExtension } from '../tools/trimExtension.js';
 export const generatePageComponent = (file, pagesFN, pagesPath, level) => {
     const componentImportPath = '../' + trimExtension(file.fullFilePath);
     const componentName = file.componentName;

@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import {fileURLToPath} from 'url';
+
 import {sortByFileName} from './tools/sortByFileName.js';
 import {getDirFilesInfo} from './getFilesInfo/getDirFilesInfo.js';
 import {generateComponentLoader} from './fileGenerators/generateComponentLoader.js';

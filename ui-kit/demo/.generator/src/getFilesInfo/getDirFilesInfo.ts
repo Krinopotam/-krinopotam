@@ -1,8 +1,8 @@
-//region Prepare components files info
-import {IFileInfo} from '../types/types';
 import fs from 'fs';
-import {getFileInfo} from './getFileInfo.js';
 import crypto from 'crypto';
+
+import {IFileInfo} from '../types/types';
+import {getFileInfo} from './getFileInfo.js';
 import {upperFirstLetter} from '../tools/upperFirstLetter.js';
 import {camelCaseSplit} from '../tools/camelCaseSplit.js';
 

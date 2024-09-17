@@ -37,7 +37,7 @@ export default tsEsLint.config(
                     jsx: true,
                 },
                 //projectService: true,
-                project: ['./tsconfig.json', './tsconfig.eslint.json', './tsconfig.test.json', './tsconfig.demo-gen.json'],
+                project: ['./tsconfig.json', './tsconfig.eslint.json', './tsconfig.test.json'],
                 //tsconfigRootDir: import.meta.dirname,
                 tsconfigRootDir: __dirname,
                 sourceType: 'module',

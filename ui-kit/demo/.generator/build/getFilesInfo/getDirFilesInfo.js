@@ -1,6 +1,6 @@
 import fs from 'fs';
-import { getFileInfo } from './getFileInfo.js';
 import crypto from 'crypto';
+import { getFileInfo } from './getFileInfo.js';
 import { upperFirstLetter } from '../tools/upperFirstLetter.js';
 import { camelCaseSplit } from '../tools/camelCaseSplit.js';
 export const getDirFilesInfo = (curDir, curDirFromRoot, filesInfo) => {

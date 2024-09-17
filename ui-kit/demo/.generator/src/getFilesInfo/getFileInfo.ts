@@ -1,8 +1,9 @@
-import {IFileInfo} from '../types/types';
 import fs from 'fs';
+import crypto from 'crypto';
+
+import {IFileInfo} from '../types/types';
 import {parseFileProperties} from './parseFileProperties.js';
 import {clearSource} from './clearSource.js';
-import crypto from 'crypto';
 import {trimExtension} from '../tools/trimExtension.js';
 import {getFileExtension} from '../tools/getFileExtension.js';
 

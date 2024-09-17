@@ -1,6 +1,7 @@
+import fs from 'fs';
+
 import {IFileInfo} from '../types/types';
 import {trimExtension} from '../tools/trimExtension.js';
-import fs from 'fs';
 
 export const generatePageComponent = (file: IFileInfo, pagesFN: string, pagesPath: string, level: number) => {
     const componentImportPath = '../' + trimExtension(file.fullFilePath);

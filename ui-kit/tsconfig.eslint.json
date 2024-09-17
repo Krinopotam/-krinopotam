@@ -12,5 +12,7 @@
     "vitest.config.ts",
     "./demo/**/*",
     "./stories/**/*"
-  ]
+  ],
+
+  "exclude": [  ]
 }

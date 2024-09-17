@@ -1,6 +1,7 @@
-import {IFileInfo} from '../types/types';
 import fs from 'fs';
 import crypto from "crypto";
+
+import {IFileInfo} from '../types/types';
 
 export const generateMenuProps = (filesInfo: IFileInfo[], layoutsPath: string) => {
     // language=text
