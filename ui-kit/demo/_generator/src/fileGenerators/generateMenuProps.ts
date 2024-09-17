@@ -3,7 +3,7 @@ import crypto from "crypto";
 
 import {IFileInfo} from '../types/types';
 
-export const generateMenuProps = (filesInfo: IFileInfo[], layoutsPath: string) => {
+export const generateMenuProps = (layoutsPath: string, filesInfo: IFileInfo[]) => {
     // language=text
     let content = `
 import React from "react";

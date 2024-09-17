@@ -2,7 +2,7 @@ import {Divider, Layout, Menu, Space, Switch, theme} from 'antd';
 import {Outlet} from 'react-router-dom';
 
 import React, {useCallback} from 'react';
-import {menuItems} from './layouts/menuProps';
+import {menuItems} from '../_generated/menuProps';
 
 const {Sider, Content} = Layout;
 

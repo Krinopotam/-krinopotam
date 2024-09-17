@@ -3,14 +3,14 @@ import fs from 'fs';
 import {IFileInfo} from '../types/types';
 import {trimExtension} from '../tools/trimExtension.js';
 
-export const generatePageComponent = (file: IFileInfo, pagesFN: string, pagesPath: string, level: number) => {
+export const generatePageComponent = (file: IFileInfo, pagesDirName: string, pagesPath: string, level: number) => {
     const componentImportPath = '../../' + trimExtension(file.fullFilePath);
     const componentName = file.componentName;
     const menuItemLink = file.menuItemLink;
     const pageComponentName = file.componentPage;
 
     const pageComponentPath: string = pagesPath + '/' + pageComponentName + '.tsx';
-    const pageImportPath = './../' + pagesFN + '/' + pageComponentName;
+    const pageImportPath = './' + pagesDirName + '/' + pageComponentName;
 
     let source = file.source!;
     source = source.replaceAll(/\$\{/g, '\\${');
@@ -19,8 +19,8 @@ export const generatePageComponent = (file: IFileInfo, pagesFN: string, pagesPat
     // language=text
     const importStr = `
     import React from 'react';
-    import {PageLayout} from '../layouts/pageLayout';
     import {${componentName}} from '${componentImportPath}';
+    import {PageLayout} from '../../_internal/pageLayout'
     import { Divider, Collapse } from 'antd';
     import SyntaxHighlighter from 'react-syntax-highlighter';
     import {darcula, docco} from 'react-syntax-highlighter/dist/esm/styles/hljs';\n`;

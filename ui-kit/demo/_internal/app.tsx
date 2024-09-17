@@ -1,7 +1,7 @@
 import {App, ConfigProvider, theme} from 'antd';
 
 import {RouterProvider} from 'react-router-dom';
-import {useDemoRoutes} from './layouts/demoRoutes';
+import {useDemoRoutes} from '../_generated/demoRoutes';
 import React, {useState} from 'react';
 import ruRU from 'antd/locale/ru_RU';
 

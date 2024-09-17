@@ -4,8 +4,8 @@ export const generateRoutes = (folderPath, routesStr) => {
     const result = `
     import React, {useMemo} from 'react';
     import {createHashRouter} from 'react-router-dom';
-    import {DemoLayout} from '../demoLayout';
-    import {Home} from '../home';
+    import {DemoLayout} from '../_internal/demoLayout';
+    import {Home} from '../_internal/home';
     import {ComponentLoader} from './componentLoader';
 
 export const useDemoRoutes = (props: {darkMode: boolean; setDarkMode: (mode: boolean) => void}) => {

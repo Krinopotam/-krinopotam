@@ -1,6 +1,6 @@
 import fs from 'fs';
 import crypto from "crypto";
-export const generateMenuProps = (filesInfo, layoutsPath) => {
+export const generateMenuProps = (layoutsPath, filesInfo) => {
     // language=text
     let content = `
 import React from "react";

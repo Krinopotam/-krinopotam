@@ -11,22 +11,23 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 function run() {
     const demoRoot = __dirname + '/../../';
-    const componentsFN = 'components';
-    const pagesFN = 'pages';
-    const layoutsFN = 'layouts';
-    const componentsPath = demoRoot + componentsFN;
-    const pagesPath = demoRoot + '_internal/' + pagesFN;
-    const layoutsPath = demoRoot + '_internal/' + layoutsFN;
+    const generatedPath = demoRoot + '_generated';
+    const componentsDirName = 'components';
+    const pagesDirName = 'pages';
+    const componentsPath = demoRoot + componentsDirName;
+    const pagesPath = generatedPath + '/' + pagesDirName;
+    if (!fs.existsSync(generatedPath))
+        fs.mkdirSync(generatedPath, { recursive: true });
     //clear pages folder
     fs.rmSync(pagesPath, { recursive: true, force: true });
     if (!fs.existsSync(pagesPath))
         fs.mkdirSync(pagesPath, { recursive: true });
     console.log('Generated:');
-    const filesInfo = getDirFilesInfo(componentsPath, componentsFN);
+    const filesInfo = getDirFilesInfo(componentsPath, componentsDirName);
     sortByFileName(filesInfo);
-    const [routesString, componentMapStr] = generatePages(filesInfo, pagesFN, pagesPath);
-    generateRoutes(layoutsPath, routesString);
-    generateComponentLoader(layoutsPath, componentMapStr);
-    generateMenuProps(filesInfo, layoutsPath);
+    const [routesString, componentMapStr] = generatePages(filesInfo, pagesDirName, pagesPath);
+    generateRoutes(generatedPath, routesString);
+    generateComponentLoader(generatedPath, componentMapStr);
+    generateMenuProps(generatedPath, filesInfo);
 }
 run();

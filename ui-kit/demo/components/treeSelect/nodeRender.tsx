@@ -149,7 +149,6 @@ const formProps: IDFormProps = {
             titleRender: titleRender, //node title render
             selectedRender: selectRender, //node label render
             filterTreeNode: filterTreeNode, //custom filter
-            dropdownRender:(menu)=><div>dddddd{menu}</div>,
             fieldNames: {
                 key:'id'    ,
                 title:'title',

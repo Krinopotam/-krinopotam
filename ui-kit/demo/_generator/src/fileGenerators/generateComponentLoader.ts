@@ -18,7 +18,7 @@ export const ComponentLoader = ({ pageName, darkMode }: { pageName: string, dark
     }
 
     return (
-        <Suspense fallback={<div>Loading........</div>}>
+        <Suspense fallback={<div>Loading...</div>}>
             <Component darkMode={darkMode} />
         </Suspense>
     );

@@ -1,20 +1,20 @@
 import fs from 'fs';
 import { trimExtension } from '../tools/trimExtension.js';
-export const generatePageComponent = (file, pagesFN, pagesPath, level) => {
+export const generatePageComponent = (file, pagesDirName, pagesPath, level) => {
     const componentImportPath = '../../' + trimExtension(file.fullFilePath);
     const componentName = file.componentName;
     const menuItemLink = file.menuItemLink;
     const pageComponentName = file.componentPage;
     const pageComponentPath = pagesPath + '/' + pageComponentName + '.tsx';
-    const pageImportPath = './../' + pagesFN + '/' + pageComponentName;
+    const pageImportPath = './' + pagesDirName + '/' + pageComponentName;
     let source = file.source;
     source = source.replaceAll(/\$\{/g, '\\${');
     source = source.replaceAll(/`/g, '\\`');
     // language=text
     const importStr = `
     import React from 'react';
-    import {PageLayout} from '../layouts/pageLayout';
     import {${componentName}} from '${componentImportPath}';
+    import {PageLayout} from '../../_internal/pageLayout'
     import { Divider, Collapse } from 'antd';
     import SyntaxHighlighter from 'react-syntax-highlighter';
     import {darcula, docco} from 'react-syntax-highlighter/dist/esm/styles/hljs';\n`;
