@@ -18,16 +18,20 @@ export const generatePageComponent = (file: IFileInfo, pagesDirName: string, pag
 
     // language=text
     const importStr = `
-    import React from 'react';
+    import React, {lazy, Suspense} from 'react';
     import {${componentName}} from '${componentImportPath}';
     import {PageLayout} from '../../_internal/pageLayout'
     import { Divider, Collapse } from 'antd';
-    import SyntaxHighlighter from 'react-syntax-highlighter';
-    import {darcula, docco} from 'react-syntax-highlighter/dist/esm/styles/hljs';\n`;
+    //import SyntaxHighlighter from 'react-syntax-highlighter';
+    import {darcula, docco} from 'react-syntax-highlighter/dist/esm/styles/hljs';\n
+    
+    const SyntaxHighlighter = lazy(() => import('react-syntax-highlighter'));
+    `;
 
     // language=text
     const bodyStr = `
     export const ${pageComponentName} = (props: {darkMode: boolean}): React.JSX.Element => {
+
     // language=text
     const source = \`${source}\`
     return (
@@ -38,7 +42,9 @@ export const generatePageComponent = (file: IFileInfo, pagesDirName: string, pag
             <Divider />
             <div>
                 <Collapse 
-                    items={[{key: 1, label: 'Show source', children: <SyntaxHighlighter language="javascript" style={props.darkMode ? darcula : docco} showLineNumbers={true}>{source}</SyntaxHighlighter>}]}>
+                    items={[{key: 1, label: 'Show source', children: <Suspense fallback={<div>Loading source...</div>}>
+                        <SyntaxHighlighter language="javascript" style={props.darkMode ? darcula : docco} showLineNumbers={true}>{source}</SyntaxHighlighter>
+                    </Suspense>}]}>
                 </Collapse>
             </div>
         </PageLayout>
