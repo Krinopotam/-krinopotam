@@ -16,10 +16,10 @@ export const generatePageComponent = (file, pagesDirName, pagesPath, level) => {
     import {${componentName}} from '${componentImportPath}';
     import {PageLayout} from '../../_internal/pageLayout'
     import { Divider, Collapse } from 'antd';
-    //import SyntaxHighlighter from 'react-syntax-highlighter';
-    import {darcula, docco} from 'react-syntax-highlighter/dist/esm/styles/hljs';\n
+    import { darcula, coy } from 'react-syntax-highlighter/dist/esm/styles/prism';
     
-    const SyntaxHighlighter = lazy(() => import('react-syntax-highlighter'));
+    //const SyntaxHighlighter = lazy(() => import('react-syntax-highlighter'));
+    const SyntaxHighlighter = lazy(() => import('react-syntax-highlighter').then(module => ({ default: module.Prism })));
     `;
     // language=text
     const bodyStr = `
@@ -36,7 +36,7 @@ export const generatePageComponent = (file, pagesDirName, pagesPath, level) => {
             <div>
                 <Collapse 
                     items={[{key: 1, label: 'Show source', children: <Suspense fallback={<div>Loading source...</div>}>
-                        <SyntaxHighlighter language="javascript" style={props.darkMode ? darcula : docco} showLineNumbers={true}>{source}</SyntaxHighlighter>
+                        <SyntaxHighlighter language="tsx" style={props.darkMode ? darcula : coy} showLineNumbers={true}>{source}</SyntaxHighlighter>
                     </Suspense>}]}>
                 </Collapse>
             </div>
