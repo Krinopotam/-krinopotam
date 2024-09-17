@@ -226,14 +226,14 @@ export interface ITreeSelectApi extends Omit<ITreeComponentApi<ITreeSelectNode, 
     /** Get the TreeSelect ready to user input status (data is fetched) */
     getIsReady: () => boolean;
 
+    /** Set the TreeSelect ready to user input status (data is fetched) */
+    setIsReady: (value: boolean) => void;
+
     /** Get Dropdown list open/close status */
     getIsOpen: () => boolean | undefined;
 
     /** Set Dropdown list open/close status */
     setIsOpen: (state: React.SetStateAction<boolean | undefined>) => void;
-
-    /** Set the TreeSelect ready to user input status (data is fetched) */
-    setIsReady: (value: boolean) => void;
 
     /** Get the TreeSelect fetching status (is fetching now) */
     getIsFetching: () => boolean;
