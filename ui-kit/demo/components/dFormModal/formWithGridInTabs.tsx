@@ -8,9 +8,11 @@ import {InputField} from '@src/dForm/fields/input/inputField';
 import {FormLayoutSwitch} from '../../common/buttonsProps';
 import {TabulatorBaseColumns, TabulatorBaseColumnsDef, TabulatorPlainData} from '../../data/tabulatorData';
 import {ITabsFieldProps, TabsField} from '@src/dForm/fields/tabs';
+import {CloneObject} from "@krinopotam/js-helpers/helpersObjects/cloneObject";
 
 const formApi = {} as IDFormModalApi;
 const editFormApi = {} as IDFormModalApi;
+const editFormApi2 = {} as IDFormModalApi;
 
 /** Tabulator edit form props */
 const editFormProps: IDFormModalProps = {
@@ -26,6 +28,19 @@ const editFormProps: IDFormModalProps = {
     buttons: FormLayoutSwitch(editFormApi),
 };
 
+const editFormProps2: IDFormModalProps = {
+    apiRef: editFormApi2,
+    formId: 'formWithGrid',
+    fieldsProps: {
+        name: {component: InputField, label: 'Name'},
+        age: {component: InputField, label: 'Age'},
+        col: {component: InputField, label: 'Favourite Color'},
+        dob: {component: InputField, label: 'Day of Birth'},
+    },
+    confirmChanges: true,
+    buttons: FormLayoutSwitch(editFormApi2),
+};
+
 /** main modal form props */
 const formProps: IDFormModalProps = {
     formId: 'Test form',
@@ -39,10 +54,11 @@ const formProps: IDFormModalProps = {
             tabs: {
                 tab1: {
                     users1: {
+                        id:'users1',
                         component: TabulatorGridField,
                         headerLabel: 'Пользователи 1',
-                        columnDefaults:TabulatorBaseColumnsDef,
-                        columns: TabulatorBaseColumns,
+                        columnDefaults:CloneObject(TabulatorBaseColumnsDef),
+                        columns: CloneObject(TabulatorBaseColumns),
                         layout: 'fitColumns',
                         height: 300,
                         editFormProps: editFormProps,
@@ -52,13 +68,14 @@ const formProps: IDFormModalProps = {
                 },
                 tab2: {
                     users2: {
+                        id:'users2',
                         component: TabulatorGridField,
                         headerLabel: 'Пользователи 2',
-                        columnDefaults:TabulatorBaseColumnsDef,
-                        columns: TabulatorBaseColumns,
+                        columnDefaults:CloneObject(TabulatorBaseColumnsDef),
+                        columns: CloneObject(TabulatorBaseColumns),
                         layout: 'fitColumns',
                         height: 300,
-                        editFormProps: editFormProps,
+                        editFormProps: editFormProps2,
                         confirmDelete: true,
                         autoHeightResize:true,
                     } as ITabulatorGridFieldProps,
@@ -72,7 +89,7 @@ const formProps: IDFormModalProps = {
 
 export const FormWithGridInTabs = (): React.JSX.Element => {
     const onClick = useCallback(() => {
-        formApi.open('update', {dataSet: {users1: TabulatorPlainData, users2: TabulatorPlainData}});
+        formApi.open('update', {dataSet: {users1: CloneObject(TabulatorPlainData), users2: CloneObject(TabulatorPlainData)}});
     }, []);
 
     return (
