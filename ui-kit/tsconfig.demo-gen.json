@@ -3,16 +3,17 @@
   "compilerOptions": {
 	"types": ["node"],
 	"outDir": "./demo/.generator/build",
+    "rootDir": "./demo/.generator/src",
     "noImplicitAny": false,
     "declaration": false,
 
-    "skipLibCheck": true,
+    //"skipLibCheck": true,
     "module": "ESNext",
     "moduleResolution": "bundler",
     "target": "ESNext",
-    "isolatedModules": true,
-    "esModuleInterop": true,
-    "lib": [ "esnext" ]
+    "isolatedModules": false,
+    "esModuleInterop": false,
+    "lib": [ "es2021" ]
   },
   "include": [
     "./demo/.generator/src/**/*.ts"

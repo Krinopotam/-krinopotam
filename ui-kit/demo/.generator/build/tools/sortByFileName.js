@@ -1,9 +1,9 @@
-export const menuItemsSorting = (items) => {
+export const sortByFileName = (items) => {
     items.sort((a, b) => {
         if (a.children?.length)
-            menuItemsSorting(a.children);
+            sortByFileName(a.children);
         if (b.children?.length)
-            menuItemsSorting(b.children);
+            sortByFileName(b.children);
         if (a.children?.length && b.children?.length) {
             if (a.fileName === b.fileName)
                 return 0;

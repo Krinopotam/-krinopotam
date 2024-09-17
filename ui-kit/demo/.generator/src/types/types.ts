@@ -13,8 +13,8 @@ export interface IFileInfo {
     source?: string;
     /** component name */
     componentName?: string;
-    /** unique component id */
-    componentGuid?: string;
+    /** unique component page name */
+    componentPage?: string;
     /** item name for menu */
     menuItemName?: string;
     /** link name for menu item */

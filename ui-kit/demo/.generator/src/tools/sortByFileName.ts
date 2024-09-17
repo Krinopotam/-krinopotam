@@ -1,10 +1,9 @@
-//region Sorting
 import {IFileInfo} from '../types/types';
 
-export const menuItemsSorting = (items: IFileInfo[]) => {
+export const sortByFileName = (items: IFileInfo[]) => {
     items.sort((a, b) => {
-        if (a.children?.length) menuItemsSorting(a.children);
-        if (b.children?.length) menuItemsSorting(b.children);
+        if (a.children?.length) sortByFileName(a.children);
+        if (b.children?.length) sortByFileName(b.children);
 
         if (a.children?.length && b.children?.length) {
             if (a.fileName === b.fileName) return 0;

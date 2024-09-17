@@ -1,12 +1,12 @@
 import {Divider, Layout, Menu, Space, Switch, theme} from 'antd';
 import {Outlet} from 'react-router-dom';
 
-import React, {Suspense, useCallback} from 'react';
-import {menuItems} from "./menuProps";
+import React, {useCallback} from 'react';
+import {menuItems} from './menuProps';
 
 const {Sider, Content} = Layout;
 
-export const DemoLayout = (props: { setDarkMode: (mode: boolean) => void }): React.JSX.Element => {
+export const DemoLayout = (props: {setDarkMode: (mode: boolean) => void}): React.JSX.Element => {
     const {
         token: {colorBgContainer},
     } = theme.useToken();
@@ -19,17 +19,17 @@ export const DemoLayout = (props: { setDarkMode: (mode: boolean) => void }): Rea
     );
 
     return (
-        <Layout style={{height:'100%'}}>
-            <Space style={{height: 50, background: '#222222', color: '#FFFFFF', padding: 10}} align="center" split={<Divider type="vertical"/>}>
+        <Layout style={{height: '100%'}}>
+            <Space style={{height: 50, background: '#222222', color: '#FFFFFF', padding: 10}} align="center" split={<Divider type="vertical" />}>
                 <div>
                     <h1>Примеры компонентов</h1>
                 </div>
                 <div>
-                    Тема: <Switch onChange={onChange}/>
+                    Тема: <Switch onChange={onChange} />
                 </div>
             </Space>
-            <Layout style={{height:'100%', paddingBottom:24}}>
-                <Sider width={400} style={{background: colorBgContainer, overflow: 'auto', height: '100%', scrollbarWidth:'thin'}}>
+            <Layout style={{height: '100%', paddingBottom: 24}}>
+                <Sider width={400} style={{background: colorBgContainer, overflow: 'auto', height: '100%', scrollbarWidth: 'thin'}}>
                     <Menu
                         mode="inline"
                         defaultSelectedKeys={['1']}
@@ -49,13 +49,10 @@ export const DemoLayout = (props: { setDarkMode: (mode: boolean) => void }): Rea
                             background: colorBgContainer,
                             overflow: 'auto',
                             height: '100%',
-                            scrollbarWidth:'thin'
+                            scrollbarWidth: 'thin',
                         }}
                     >
-                        {/* eslint-disable-next-line react/jsx-no-undef */}
-                        <Suspense fallback={<div>Loading...</div>}>
-                            <Outlet/>
-                        </Suspense>
+                        <Outlet />
                     </Content>
                 </Layout>
             </Layout>
