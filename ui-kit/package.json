@@ -11,8 +11,8 @@
   "scripts": {
     "build": "tsc -p tsconfig.json && tsc-alias",
     "demo": "vite --mode demo",
-    "build-demo-generator": "tsc -p ./demo/.generator/src/tsconfig.json",
-    "build-demo": "node ./demo/.generator/generateDemo.js && tsc --noEmit && tsc-alias && vite build --mode demo",
+    "build-demo-generator": "tsc -p ./demo/_generator/src/tsconfig.json",
+    "build-demo": "node ./demo/_generator/generateDemo.js && tsc --noEmit && tsc-alias && vite build --mode demo",
     "preview-demo": "vite preview",
     "storybook": "storybook dev -p 6007",
     "build-storybook": "npx tsx ./stories/injectSources.ts && storybook build --output-dir deploy/ui-kit/storybook",
