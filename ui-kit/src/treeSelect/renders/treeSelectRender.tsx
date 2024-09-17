@@ -129,8 +129,8 @@ const useOnChange = (api: ITreeSelectApi) => {
             const val = value as ILabeledValue | ILabeledValue[];
             api.setValues(val);
             const props = api.getProps();
-            const keys = api.getSelectedKeys(val) ?? [];
-            const nodes = api.getSelectedNodes(undefined, val) ?? [];
+            const keys = !val ? [] : (api.getSelectedKeys(val) ?? []);
+            const nodes = !val ? [] : (api.getSelectedNodes(undefined, val) ?? []);
             props.onChange?.(value as ILabeledValue | ILabeledValue[], keys, nodes);
         },
         [api]

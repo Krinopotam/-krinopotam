@@ -127,6 +127,9 @@ export interface IGridApi extends IBaseComponentApi<IGridProps>{
     /** Component table instance (Tabulator) */
     tableApi: ITabulator | undefined;
 
+    /** Get translation */
+    t: (str: keyof (typeof translations)['en']) => string;
+
     /** Get current data set*/
     getDataSet: () => IGridRowData[] | undefined;
 

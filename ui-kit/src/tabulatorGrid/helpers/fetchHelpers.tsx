@@ -1,4 +1,4 @@
-import {IGridApi, IGridDataSourcePromise, IGridProps, IGridRowData} from '@src/tabulatorGrid';
+import {IGridApi, IGridProps, IGridRowData} from '@src/tabulatorGrid';
 import {IAjaxConfig, IRequestProps} from '@src/tabulatorBase';
 import {IsArray} from '@krinopotam/js-helpers/helpersObjects/isArray';
 import {IsPromise} from '@krinopotam/js-helpers/helpersObjects/isPromise';
@@ -14,13 +14,13 @@ export const GenerateAjaxRequestFunc = (gridApi: IGridApi, onDataFetch: IGridPro
             const fetchPromise = onDataFetch(totalParams, gridApi);
             if (typeof fetchPromise === 'undefined') resolve(prepareData(gridProps, {data: []}));
             if (!IsPromise(fetchPromise)) {
-                if (IsArray(fetchPromise)) resolve(prepareData(gridProps, {data: fetchPromise as IGridRowData[]}));
+                if (IsArray(fetchPromise)) resolve(prepareData(gridProps, {data: fetchPromise}));
                 else reject(new Error());
 
                 return;
             }
 
-            (fetchPromise as IGridDataSourcePromise).then(
+            fetchPromise.then(
                 result => {
                     if (!gridApi.getIsMounted()) return;
                     resolve(prepareData(gridProps, result));
