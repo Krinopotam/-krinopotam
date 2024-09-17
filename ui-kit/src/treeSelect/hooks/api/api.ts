@@ -96,7 +96,6 @@ export const useInitApi = ({
     api.getId = useApiGetId(props.componentId ?? 'treeSelect-' + GetNanoId());
     api.getProps = useApiGetProps(props);
     api.setProps = useApiSetProps(setProps);
-    api.t = useT(api);
     api.updateProps = useApiUpdateProps(props, setProps);
     api.getIsMounted = useApiIsMounted();
 
@@ -136,6 +135,7 @@ export const useInitApi = ({
     api.ensureNodeVisible = useApiEnsureNodeVisible(api);
 
     /** Component own api methods */
+    api.t = useT(api);
     api.treeSelectRef = useRef(null);
     api.getButtonsApi = useApiGetButtonsApi<IButtonsRowApi & {refreshButtons: () => void}>();
     api.getIsReady = useApiGetIsReady(isReady);

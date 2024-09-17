@@ -1,10 +1,10 @@
-import {ITreeSelectNode, ITreeSelectProps} from '@src/treeSelect';
 import {useCallback} from 'react';
+import {IExtTreeNode, IExtTreeProps} from '@src/tree/types/types';
 
-export const useApiPrepareNode = ({dataMutator}: ITreeSelectProps) => {
+export const useApiPrepareNode = ({dataMutator}: IExtTreeProps) => {
     //needs stable function instance (useCallback)
     return useCallback(
-        (node: ITreeSelectNode) => {
+        (node: IExtTreeNode) => {
             if (!dataMutator) return node;
             let nodeClone = {...node};
             if (dataMutator) nodeClone = dataMutator(nodeClone);

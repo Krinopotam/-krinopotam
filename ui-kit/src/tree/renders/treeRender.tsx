@@ -1,8 +1,9 @@
-import React, {Key, useCallback} from 'react';
+import React, {useCallback} from 'react';
 import type {TreeProps} from 'antd';
 import {Tree as AntdTree} from 'antd';
 import type {IExtTreeNode} from '@src/tree/types/types';
 import {IExtTreeApi, IExtTreeProps, INodePosition} from '@src/tree/types/types';
+import {IKey} from '@krinopotam/service-types';
 
 export const TreeRender = (props: {treeApi: IExtTreeApi; allProps: IExtTreeProps; antdTreeProps: TreeProps<IExtTreeNode>}): React.JSX.Element => {
     const treeApi = props.treeApi;
@@ -33,10 +34,10 @@ export const TreeRender = (props: {treeApi: IExtTreeApi; allProps: IExtTreeProps
 const useOnSelect = (treeApi: IExtTreeApi) => {
     return useCallback<NonNullable<IExtTreeProps['onSelect']>>(
         (keys, info) => {
-            const props = treeApi.getTreeProps();
+            const props = treeApi.getProps();
 
             if (!props.noDeselect || info.selected) {
-                treeApi.setSelectedKeys(keys);
+                treeApi.setSelectedKeys(keys as IKey[]);
                 props.onSelect?.(keys, info);
             }
         },
@@ -47,8 +48,8 @@ const useOnSelect = (treeApi: IExtTreeApi) => {
 const useOnExpand = (treeApi: IExtTreeApi) => {
     return useCallback<NonNullable<IExtTreeProps['onExpand']>>(
         (keys, info) => {
-            const props = treeApi.getTreeProps();
-            treeApi.setExpandedKeys(keys);
+            const props = treeApi.getProps();
+            treeApi.setExpandedKeys(keys as IKey[]);
             props.onExpand?.(keys, info);
         },
         [treeApi]
@@ -58,11 +59,11 @@ const useOnExpand = (treeApi: IExtTreeApi) => {
 const useOnDoubleClick = (treeApi: IExtTreeApi) => {
     return useCallback<NonNullable<IExtTreeProps['onDoubleClick']>>(
         (e, node) => {
-            const props = treeApi.getTreeProps();
+            const props = treeApi.getProps();
             const fieldNames = treeApi.getFieldNames();
 
-            if ((node[fieldNames.children] as IExtTreeNode[])?.length) treeApi.toggleNode(node[fieldNames.key] as Key);
-            else treeApi.buttonsApi.triggerClick('update');
+            if ((node[fieldNames.children] as IExtTreeNode[])?.length) treeApi.toggleNode(node[fieldNames.key] as IKey);
+            else treeApi.getButtonsApi().triggerClick('update');
 
             if (props.onDoubleClick) props.onDoubleClick?.(e, node);
         },
@@ -70,13 +71,14 @@ const useOnDoubleClick = (treeApi: IExtTreeApi) => {
     );
 };
 
-const useOnDrop = (treeApi: IExtTreeApi) => {
+const useOnDrop = (api: IExtTreeApi) => {
     return useCallback<NonNullable<TreeProps<IExtTreeNode>['onDrop']>>(
         info => {
             let pos: INodePosition = 'insideTop';
             if (info.dropToGap) pos = info.dropPosition < 0 ? 'above' : 'below';
-            treeApi.moveNode(info.dragNode.id, info.node.id, pos);
+            if (!info.dragNode.id) return
+            api.moveNode(info.dragNode.id, info.node.id, pos);
         },
-        [treeApi]
+        [api]
     );
 };

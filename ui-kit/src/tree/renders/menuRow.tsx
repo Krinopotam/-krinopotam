@@ -3,8 +3,8 @@ import {IExtTreeApi, IExtTreeProps} from '@src/tree/types/types';
 import {ButtonsRow} from '@src/buttonsRow/buttonsRow';
 import {useInitButtons} from '@src/tree/hooks/buttons';
 
-export const MenuRow = ({treeApi, treeProps}: {treeApi: IExtTreeApi; treeProps: IExtTreeProps}): React.JSX.Element | null => {
-    const buttons = useInitButtons(treeApi, treeProps);
+export const MenuRow = ({api, treeProps}: {api: IExtTreeApi; treeProps: IExtTreeProps}): React.JSX.Element | null => {
+    const buttons = useInitButtons(api, treeProps);
 
     return useMemo(() => {
         if (!buttons) return null;
@@ -13,13 +13,13 @@ export const MenuRow = ({treeApi, treeProps}: {treeApi: IExtTreeApi; treeProps: 
             <div style={{width: '100%', padding: '8px'}}>
                 <ButtonsRow
                     buttons={buttons}
-                    apiRef={treeApi.buttonsApi}
+                    apiRef={api.getButtonsApi()}
                     style={treeProps.buttonsRowStyle}
-                    context={treeApi}
+                    context={api}
                     responsiveBreakpoint={treeProps.responsiveBreakpoint}
                     iconsOnly={treeProps.buttonsIconsOnly}
                 />
             </div>
         );
-    }, [buttons, treeApi, treeProps.buttonsIconsOnly, treeProps.buttonsRowStyle, treeProps.responsiveBreakpoint]);
+    }, [buttons, api, treeProps.buttonsIconsOnly, treeProps.buttonsRowStyle, treeProps.responsiveBreakpoint]);
 };

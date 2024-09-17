@@ -1,3 +1,5 @@
+// noinspection DuplicatedCode
+
 import {useRef, useState} from 'react';
 import {GetNanoId} from '@krinopotam/js-helpers/helpersString/getNanoId';
 import {IDFormModalApi} from '@src/dFormModal';
@@ -38,14 +40,21 @@ import {useApiIsMounted} from '@src/_shared/hooks/componentApiMethods/useApiIsMo
 import {useApiGetButtonsApi} from '@src/_shared/hooks/componentApiMethods/useApiGetButtonsApi';
 import {IButtonsRowApi} from '@src/buttonsRow';
 import {useApiIsNodeSelected} from '@src/_shared/hooks/treeComponentApiMethods/useApiIsNodeSelected';
-import {useApiPrepareNode} from '@src/treeSelect/hooks/api/useApiPrepareNode';
-import {useApiGetIsReady} from '@src/treeSelect/hooks/api/useApiGetIsReady';
-import {useApiSetIsReady} from '@src/treeSelect/hooks/api/useApiSetIsReady';
-import {useApiGetEditGroupFormApi} from '@src/treeSelect/hooks/api/useApiGetEditGroupFormApi';
-import {useApiGetEditFormApi} from '@src/treeSelect/hooks/api/useApiGetEditFormApi';
-import {useT} from '@src/treeSelect/hooks/api/useApiT';
-import {IExtTreeProps} from "@src/tree";
-import {IExtTreeApi} from "@src/tree/types/types";
+import {useApiGetIsReady} from '@src/tree/hooks/api/useApiGetIsReady';
+import {useApiSetIsReady} from '@src/tree/hooks/api/useApiSetIsReady';
+import {useApiGetEditGroupFormApi} from '@src/tree/hooks/api/useApiGetEditGroupFormApi';
+import {useApiGetEditFormApi} from '@src/tree/hooks/api/useApiGetEditFormApi';
+import {useT} from '@src/tree/hooks/api/useApiT';
+import {IExtTreeProps} from '@src/tree';
+import {IExtTreeApi} from '@src/tree/types/types';
+import {useApiPrepareNode} from '@src/tree/hooks/api/useApiPrepareNode';
+import {useApiGetSelectedKeys} from '@src/_shared/hooks/treeComponentApiMethods/useApiGetSelectedKeys';
+import {useApiGetSelectedNodes} from '@src/_shared/hooks/treeComponentApiMethods/useApiGetSelectedNodes';
+import {useApiSelectNode} from '@src/_shared/hooks/treeComponentApiMethods/useApiSelectNode';
+import {useSelectedState} from '@src/_shared/hooks/treeComponentApiMethods/useSelectedState';
+import {useApiSetSelectedKeys} from '@src/_shared/hooks/treeComponentApiMethods/useApiSetSelectedKeys';
+import {useApiGetIsLoading} from '@src/tree/hooks/api/useApiGetIsLoading';
+import {useApiSetIsLoading} from '@src/tree/hooks/api/useApiSetIsLoading';
 
 export const useInitApi = ({
     props,
@@ -58,7 +67,8 @@ export const useInitApi = ({
     const [editFormApi] = useState((props.editFormProps?.apiRef ?? {}) as IDFormModalApi);
     const [editGroupFormApi] = useState((props.editGroupFormProps?.apiRef ?? {}) as IDFormModalApi);
     const [isReady, setIsReady] = useState(false);
-    //const [selectedKeys, setSelectedKeys] = useSelectedState(props);
+    const [isLoading, setIsLoading] = useState(false);
+    const [selectedKeys, setSelectedKeys] = useSelectedState(props.selectedKeys);
 
     api.getFieldNames = useApiGetFieldNames(props);
     const fieldNames = api.getFieldNames();
@@ -68,23 +78,22 @@ export const useInitApi = ({
     const [expandedKeys, setExpandedKeys] = useExpandedKeysState(props.expandedKeys, props.defaultExpandedKeys, props.defaultExpandAll, parentKeys); //expanded keys
 
     /** Component Api methods*/
-    api.getId = useApiGetId(props.componentId ?? 'treeSelect-' + GetNanoId());
+    api.getId = useApiGetId(props.id ?? 'tree-' + GetNanoId());
     api.getProps = useApiGetProps(props);
     api.setProps = useApiSetProps(setProps);
-    api.t = useT(api);
     api.updateProps = useApiUpdateProps(props, setProps);
     api.getIsMounted = useApiIsMounted();
 
     /** Tree component Api methods */
     api.getDataSet = useApiGetDataSet(dataSet);
     api.setDataSet = useApiSetDataset(setDataset, props?.onDataSetChanged);
-    api.getValues = useApiGetValues(value);
-    api.setValues = useApiSetValues(setValue, fieldNames);
+
     api.isDataPlainList = useApiGetIsDataPlain(isDataPlain);
     api.getEditFormApi = useApiGetEditFormApi(editFormApi);
     api.getEditGroupFormApi = useApiGetEditGroupFormApi(editGroupFormApi);
-    api.getSelectedKeys = useApiGetSelectedKeys(value);
-    api.getSelectedNodes = useApiGetSelectedNodes(api, value);
+    api.getSelectedKeys = useApiGetSelectedKeys(selectedKeys);
+    api.setSelectedKeys = useApiSetSelectedKeys(setSelectedKeys);
+    api.getSelectedNodes = useApiGetSelectedNodes(api);
     api.isNodeSelected = useApiIsNodeSelected(api);
     api.selectNode = useApiSelectNode(api, props.multiple);
     api.getActiveNodeKey = useApiGetActiveNodeKey(api);
@@ -111,23 +120,14 @@ export const useInitApi = ({
     api.ensureNodeVisible = useApiEnsureNodeVisible(api);
 
     /** Component own api methods */
-    api.treeSelectRef = useRef(null);
+    api.t = useT(api);
+    api.treeRef = useRef(null);
     api.getButtonsApi = useApiGetButtonsApi<IButtonsRowApi & {refreshButtons: () => void}>();
     api.getIsReady = useApiGetIsReady(isReady);
     api.setIsReady = useApiSetIsReady(setIsReady);
-    api.getIsOpen = useApiGetIsOpen(open);
-    api.setIsOpen = useApiSetIsOpen(setOpen);
-    api.getIsFetching = useApiGetIsFetching(fetching);
-    api.setIsFetching = useApiSetIsFetching(setFetching);
-    api.getFetchError = useApiGetFetchError(fetchError);
-    api.setFetchError = useApiSetFetchError(setFetchError);
-    api.getIsAllFetched = useApiGetIsAllFetched(allFetched);
-    api.setIsAllFetched = useApiSetIsAllFetched(setAllFetched);
-    api.getMinSymbols = useApiGetMinSymbols(minSymbols);
-    api.setMinSymbols = useApiSetMinSymbols(setMinSymbols);
-
-    const dataFetcher = useDataFetcher(api);
-    api.fetchData = useApiFetchData(dataFetcher, api);
+    api.getIsLoading = useApiGetIsLoading(isLoading);
+    api.setIsLoading = useApiSetIsLoading(setIsLoading);
 
     return api;
 };
+

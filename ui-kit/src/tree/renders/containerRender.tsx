@@ -10,28 +10,28 @@ import {TreeProps} from 'antd/es/tree/Tree';
 import StickyBox from 'react-sticky-box';
 
 export const ContainerRender = ({
-    treeApi,
+    api,
     allProps,
     antdTreeProps,
 }: {
-    treeApi: IExtTreeApi;
+    api: IExtTreeApi;
     allProps: IExtTreeProps;
     antdTreeProps: TreeProps<IExtTreeNode>;
 }): React.JSX.Element => {
-    const editFormProps = usePrepareEditFormProps(treeApi, allProps, false);
-    const editGroupFormProps = usePrepareEditFormProps(treeApi, allProps, true);
+    const editFormProps = usePrepareEditFormProps(api, allProps, false);
+    const editGroupFormProps = usePrepareEditFormProps(api, allProps, true);
     return (
         <div className="extended-tree-container">
-            <LoadingContainer isLoading={treeApi.getIsLoading()} notHideContent={true} spinStyle={{height: '100%'}}>
+            <LoadingContainer isLoading={api.getIsLoading()} notHideContent={true} spinStyle={{height: '100%'}}>
                 <ButtonsRowWrapper style={{display: 'flex', flexDirection: 'column', ...allProps.buttonsRowWrapperStyle}}>
                     <StickyBox style={{zIndex: 15}}>
-                        <MenuRow treeApi={treeApi} treeProps={allProps} />
+                        <MenuRow api={api} treeProps={allProps} />
                     </StickyBox>
-                    <TreeRender treeApi={treeApi} allProps={allProps} antdTreeProps={antdTreeProps} />
+                    <TreeRender treeApi={api} allProps={allProps} antdTreeProps={antdTreeProps} />
                 </ButtonsRowWrapper>
             </LoadingContainer>
-            {editFormProps && !allProps.readOnly ? <DFormModal {...editFormProps} apiRef={treeApi.editFormApi} /> : null}
-            {editGroupFormProps && !allProps.readOnly ? <DFormModal {...editGroupFormProps} apiRef={treeApi.editGroupFormApi} /> : null}
+            {!allProps.readOnly && editFormProps ? <DFormModal {...editFormProps} apiRef={api.getEditFormApi()} /> : null}
+            {!allProps.readOnly && editGroupFormProps ? <DFormModal {...editGroupFormProps} apiRef={api.getEditGroupFormApi()} /> : null}
         </div>
     );
 };

@@ -1,12 +1,12 @@
 import {GetRef, Tree as AntdTree, type TreeDataNode} from 'antd';
 import {translations} from '@src/tree/translations/translations';
 import {IDFormModalApi, IDFormModalProps} from '@src/dFormModal/types/dFormModalTypes';
-import React, {Key} from 'react';
+import React from 'react';
 import {IButtonsRowApi, IFormButton} from '@src/buttonsRow/types/types';
 import {IBreakpoints} from '@krinopotam/common-hooks/useResponsive';
 import {TreeProps} from 'antd/es/tree/Tree';
-import {ITreeComponentApi} from "@src/_shared/hooks/treeComponentApiMethods/types/treeApiTypes";
-import {IKey} from "@krinopotam/service-types";
+import {ITreeComponentApi} from '@src/_shared/hooks/treeComponentApiMethods/types/treeApiTypes';
+import {IKey} from '@krinopotam/service-types';
 
 export interface IOwnExtTreeProps {
     /** A mutable object to merge with these controls api */
@@ -41,6 +41,29 @@ export interface IOwnExtTreeProps {
     /** Edit group DFormModal parameters */
     editGroupFormProps?: IDFormModalProps;
 
+    /** Default expanded keys */
+    defaultExpandedKeys?: IKey[];
+
+    /** Expanded keys */
+    expandedKeys?: IKey[];
+
+    /** Default selected keys */
+    defaultSelectedKeys?: IKey[];
+
+    /** Selected keys */
+    selectedKeys?: IKey | IKey[];
+
+    /** Default checked keys */
+    checkedKeys?:
+        | IKey[]
+        | {
+              checked: IKey[];
+              halfChecked: IKey[];
+          };
+
+    /** Checked keys */
+    defaultCheckedKeys?: IKey[];
+
     /** Groups only has children. Group is node which has no isLeaf:true property */
     groupsMode?: boolean;
 
@@ -73,9 +96,16 @@ export interface IOwnExtTreeProps {
 
     /** Data mutator function (mutates original data) */
     dataMutator?: (node: IExtTreeNode) => IExtTreeNode;
+
+    /** Fires when the TreeSelect dataSet is changed */
+    onDataSetChanged?: (dataSet: IExtTreeNode[] | undefined) => void;
 }
 
-export type IExtTreeProps = TreeProps<IExtTreeNode> & IOwnExtTreeProps;
+export type IExtTreeProps = Omit<
+    TreeProps<IExtTreeNode>,
+    'expandedKeys' | 'defaultExpandedKeys' | 'selectedKeys' | 'defaultSelectedKeys' | 'checkedKeys' | 'defaultCheckedKeys'
+> &
+    IOwnExtTreeProps;
 
 export interface IExtTreeButton extends IFormButton {
     /** if no row is selected in the grid, disable the button */
@@ -104,7 +134,7 @@ interface IExtTreeNodeBase extends Omit<TreeDataNode, 'key' | 'children'> {
 
 export type IExtTreeNode<T = Record<string, unknown>> = IExtTreeNodeBase & T;
 
-export interface IExtTreeApi extends ITreeComponentApi<IExtTreeNode, IExtTreeProps>{
+export interface IExtTreeApi extends ITreeComponentApi<IExtTreeNode, IExtTreeProps> {
     /** Tree ref */
     treeRef: React.RefObject<GetRef<typeof AntdTree>>;
 

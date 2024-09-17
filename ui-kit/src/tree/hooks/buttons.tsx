@@ -1,10 +1,9 @@
-import React, {Key, useCallback, useMemo, useState} from 'react';
-import {CopyOutlined, DeleteOutlined, EditOutlined, EyeOutlined, PlusOutlined, FolderAddOutlined} from '@ant-design/icons';
+import React, {useCallback, useMemo, useState} from 'react';
+import {CopyOutlined, DeleteOutlined, EditOutlined, EyeOutlined, FolderAddOutlined, PlusOutlined} from '@ant-design/icons';
 import {MergeObjects} from '@krinopotam/js-helpers';
-import {IExtTreeButton, IExtTreeButtons, IExtTreeProps} from '@src/components/extendedTree';
-import {IExtTreeApi, IExtTreeDataNode} from '@src/components/extendedTree/types/types';
-import {IDFormDataSet} from '@krinopotam/ui-kit/dForm';
-import {useTranslate} from '@src/components/extendedTree/hooks/translate';
+import {IExtTreeApi, IExtTreeButton, IExtTreeButtons, IExtTreeNode, IExtTreeProps} from '@src/tree/types/types';
+import {IDFormDataSet} from '@src/dForm';
+import {IKey} from '@krinopotam/service-types';
 
 export const useInitButtons = (treeApi: IExtTreeApi, treeProps: IExtTreeProps): IExtTreeButtons => {
     const [, refreshButtons] = useState({});
@@ -14,7 +13,7 @@ export const useInitButtons = (treeApi: IExtTreeApi, treeProps: IExtTreeProps): 
     const activeItem = '0'; //treeApi.getActiveRow();
     const selectedNodes = treeApi.getSelectedNodes();
 
-    treeApi.buttonsApi.refreshButtons = useRefreshButtons(refreshButtons);
+    treeApi.getButtonsApi().refreshButtons = useRefreshButtons(refreshButtons);
 
     const headerLabel = useGetHeaderLabel(treeProps);
     const viewButton = useGetViewButton(treeApi, treeProps, selectedNodes);
@@ -89,110 +88,103 @@ const useGetHeaderLabel = (treeProps: IExtTreeProps): IExtTreeButton | undefined
 };
 
 /** Get view button props */
-const useGetViewButton = (treeApi: IExtTreeApi, treeProps: IExtTreeProps, selectedNodes: IExtTreeDataNode[] | undefined): IExtTreeButton | undefined => {
-    const t = useTranslate(treeProps);
-
+const useGetViewButton = (api: IExtTreeApi, treeProps: IExtTreeProps, selectedNodes: IExtTreeNode[] | undefined): IExtTreeButton | undefined => {
     return useMemo(() => {
-        const editFormApi = treeApi.editFormApi;
+        const editFormApi = api.getEditFormApi();
         if (!treeProps.editFormProps || !treeProps.readOnly || treeProps.buttons?.view === null) return undefined;
 
         return {
             weight: 100,
-            title: t('view'),
-            tooltip: t('viewRecord'),
+            title: api.t('view'),
+            tooltip: api.t('viewRecord'),
             icon: <EyeOutlined />,
             position: 'right',
             disabled: selectedNodes?.length !== 1,
             hotKeys: [{key: 'Enter'}],
             onClick: () => {
-                const nodes = treeApi.getSelectedNodes();
+                const nodes = api.getSelectedNodes();
                 if (nodes?.length !== 1) return;
                 const node = nodes[0];
                 editFormApi.open('view', {dataSet: node as IDFormDataSet});
             },
         } satisfies IExtTreeButton;
-    }, [treeApi, treeProps.editFormProps, treeProps.readOnly, treeProps.buttons?.view, t, selectedNodes]);
+    }, [api, treeProps.editFormProps, treeProps.readOnly, treeProps.buttons?.view, selectedNodes]);
 };
 
 /** Get create button props */
-const useGetCreateButton = (treeApi: IExtTreeApi, treeProps: IExtTreeProps): IExtTreeButton | undefined => {
-    const t = useTranslate(treeProps);
-
+const useGetCreateButton = (api: IExtTreeApi, treeProps: IExtTreeProps): IExtTreeButton | undefined => {
     return useMemo(() => {
-        const editFormApi = treeApi.editFormApi;
+        const editFormApi = api.getEditFormApi();
 
         if (!treeProps.editFormProps || treeProps.readOnly || treeProps.buttons?.create === null) return undefined;
         return {
             weight: 110,
-            title: t('create'),
-            tooltip: t('createRecord'),
+            title: api.t('create'),
+            tooltip: api.t('createRecord'),
             icon: <PlusOutlined />,
             position: 'right',
             hotKeys: [{key: 'Insert'}],
             onClick: () => {
-                const fieldNames = treeApi.getFieldNames();
-                const activeNode = treeApi.getActiveNode();
-                let parent: IExtTreeDataNode | undefined = undefined;
+                const fieldNames = api.getFieldNames();
+                const activeNode = api.getActiveNode();
+                let parent: IExtTreeNode | undefined = undefined;
                 if (activeNode) {
                     if (!activeNode.isLeaf) parent = activeNode;
-                    else parent = treeApi.getParentNode(activeNode[fieldNames.key] as Key);
+                    else parent = api.getParentNode(activeNode[fieldNames.key] as IKey);
                 }
                 console.log(parent);
                 editFormApi.open('create', {defaultValues: {parent}});
             },
         } satisfies IExtTreeButton;
-    }, [treeApi, treeProps.buttons?.create, treeProps.editFormProps, treeProps.readOnly, t]);
+    }, [api, treeProps.buttons?.create, treeProps.editFormProps, treeProps.readOnly]);
 };
 
 /** Get create group button props */
-const useGetCreateGroupButton = (treeApi: IExtTreeApi, treeProps: IExtTreeProps): IExtTreeButton | undefined => {
-    const t = useTranslate(treeProps);
+const useGetCreateGroupButton = (api: IExtTreeApi, treeProps: IExtTreeProps): IExtTreeButton | undefined => {
     return useMemo(() => {
-        const editGroupFormApi = treeApi.editGroupFormApi;
+        const editGroupFormApi = api.getEditGroupFormApi();
         if (!treeProps.editGroupFormProps || treeProps.readOnly || treeProps.buttons?.createGroup === null) return undefined;
         return {
             weight: 115,
-            title: t('createGroup'),
-            tooltip: t('createRecordsGroup'),
+            title: api.t('createGroup'),
+            tooltip: api.t('createRecordsGroup'),
             icon: <FolderAddOutlined />,
             position: 'right',
             onClick: () => {
-                const fieldNames = treeApi.getFieldNames();
-                const activeNode = treeApi.getActiveNode();
-                let parent: IExtTreeDataNode | undefined = undefined;
+                const fieldNames = api.getFieldNames();
+                const activeNode = api.getActiveNode();
+                let parent: IExtTreeNode | undefined = undefined;
                 if (activeNode) {
                     if (!activeNode.isLeaf) parent = activeNode;
-                    else parent = treeApi.getParentNode(activeNode[fieldNames.key] as Key);
+                    else parent = api.getParentNode(activeNode[fieldNames.key] as IKey);
                 }
                 editGroupFormApi.open('create', {defaultValues: {parent}});
             },
         } satisfies IExtTreeButton;
-    }, [treeApi.editGroupFormApi, treeProps.editGroupFormProps, treeProps.readOnly, treeProps.buttons?.createGroup, t]);
+    }, [api, treeProps.editGroupFormProps, treeProps.readOnly, treeProps.buttons?.createGroup]);
 };
 
 /** Get clone button props */
-const useGetCloneButton = (treeApi: IExtTreeApi, treeProps: IExtTreeProps, selectedNodes: IExtTreeDataNode[] | undefined): IExtTreeButton | undefined => {
-    const t = useTranslate(treeProps);
-
+const useGetCloneButton = (api: IExtTreeApi, treeProps: IExtTreeProps, selectedNodes: IExtTreeNode[] | undefined): IExtTreeButton | undefined => {
     return useMemo(() => {
-        const editFormApi = treeApi.editFormApi;
-        const editGroupFormApi = treeApi.editGroupFormApi;
+        const editFormApi = api.getEditFormApi();
+        const editGroupFormApi = api.getEditGroupFormApi();
         const editGroupFormProps = treeProps.editGroupFormProps;
 
         if (!treeProps.editFormProps || treeProps.readOnly || treeProps.buttons?.clone === null) return undefined;
-        const nodes = treeApi.getSelectedNodes();
+        const nodes = api.getSelectedNodes();
         const isGroup = nodes?.length === 1 && !nodes[0].isLeaf;
 
         return {
             weight: 120,
-            title: isGroup && editGroupFormProps ? t('cloneGroup') : t('clone'),
-            tooltip: isGroup && editGroupFormProps ? t('cloneRecordsGroup') : t('cloneRecord'),
+            title: isGroup && editGroupFormProps ? api.t('cloneGroup') : api.t('clone'),
+            tooltip: isGroup && editGroupFormProps ? api.t('cloneRecordsGroup') : api.t('cloneRecord'),
             icon: <CopyOutlined />,
             position: 'right',
             disabled: selectedNodes?.length !== 1,
             hotKeys: [{key: 'F9'}],
             onClick: () => {
-                const nodes = treeApi.getSelectedNodes();
+                const nodes = api.getSelectedNodes();
                 if (nodes?.length !== 1) return;
                 const node = nodes[0];
 
@@ -200,32 +192,30 @@ const useGetCloneButton = (treeApi: IExtTreeApi, treeProps: IExtTreeProps, selec
                 else editGroupFormApi.open('clone', {dataSet: getDataSet(node)});
             },
         } satisfies IExtTreeButton;
-    }, [treeApi, treeProps.editGroupFormProps, treeProps.editFormProps, treeProps.readOnly, treeProps.buttons?.clone, t, selectedNodes]);
+    }, [api, treeProps.editGroupFormProps, treeProps.editFormProps, treeProps.readOnly, treeProps.buttons?.clone, selectedNodes]);
 };
 
 /** Get update button props */
-const useGetUpdateButton = (treeApi: IExtTreeApi, treeProps: IExtTreeProps, selectedNodes: IExtTreeDataNode[] | undefined): IExtTreeButton | undefined => {
-    const t = useTranslate(treeProps);
-
+const useGetUpdateButton = (api: IExtTreeApi, treeProps: IExtTreeProps, selectedNodes: IExtTreeNode[] | undefined): IExtTreeButton | undefined => {
     return useMemo(() => {
-        const editFormApi = treeApi.editFormApi;
-        const editGroupFormApi = treeApi.editGroupFormApi;
+        const editFormApi = api.getEditFormApi();
+        const editGroupFormApi = api.getEditGroupFormApi();
         const editGroupFormProps = treeProps.editGroupFormProps;
 
         if (!treeProps.editFormProps || treeProps.readOnly || treeProps.buttons?.update === null) return undefined;
-        const nodes = treeApi.getSelectedNodes();
+        const nodes = api.getSelectedNodes();
         const isGroup = nodes?.length === 1 && !nodes[0].isLeaf;
 
         return {
             weight: 130,
-            title: isGroup && editGroupFormProps ? t('editGroup') : t('edit'),
-            tooltip: isGroup && editGroupFormProps ? t('editRecordsGroup') : t('editRecord'),
+            title: isGroup && editGroupFormProps ? api.t('editGroup') : api.t('edit'),
+            tooltip: isGroup && editGroupFormProps ? api.t('editRecordsGroup') : api.t('editRecord'),
             icon: <EditOutlined />,
             position: 'right',
             disabled: selectedNodes?.length !== 1,
             hotKeys: [{key: 'Enter'}, {key: 'F2'}],
             onClick: () => {
-                const nodes = treeApi.getSelectedNodes();
+                const nodes = api.getSelectedNodes();
                 if (nodes?.length !== 1) return;
                 const node = nodes[0];
                 const parent = nodes[0];
@@ -234,35 +224,33 @@ const useGetUpdateButton = (treeApi: IExtTreeApi, treeProps: IExtTreeProps, sele
                 else editGroupFormApi.open('update', {dataSet: {...getDataSet(node), parent}});
             },
         } satisfies IExtTreeButton;
-    }, [treeApi, treeProps.editGroupFormProps, treeProps.editFormProps, treeProps.readOnly, treeProps.buttons?.update, t, selectedNodes]);
+    }, [api, treeProps.editGroupFormProps, treeProps.editFormProps, treeProps.readOnly, treeProps.buttons?.update, selectedNodes]);
 };
 
 /** Get delete button props */
-const useGetDeleteButton = (treeApi: IExtTreeApi, treeProps: IExtTreeProps, activeItem: any): IExtTreeButton | undefined => {
-    const t = useTranslate(treeProps);
-
+const useGetDeleteButton = (api: IExtTreeApi, treeProps: IExtTreeProps, activeItem: any): IExtTreeButton | undefined => {
     return useMemo(() => {
         if (!treeProps.editFormProps || treeProps.readOnly || treeProps.buttons?.delete === null) return undefined;
-        const nodes = treeApi.getSelectedNodes();
+        const nodes = api.getSelectedNodes();
         const isGroup = nodes?.length === 1 && !nodes[0].isLeaf;
         const keyField = treeProps.fieldNames?.key ?? 'id';
         return {
             weight: 140,
-            title: isGroup ? t('deleteGroup') : t('delete'),
-            tooltip: isGroup ? t('deleteRecordsGroup') : t('deleteRecord'),
+            title: isGroup ? api.t('deleteGroup') : api.t('delete'),
+            tooltip: isGroup ? api.t('deleteRecordsGroup') : api.t('deleteRecord'),
             icon: <DeleteOutlined />,
             position: 'right',
             colorType: 'danger',
             disabled: !activeItem,
             hotKeys: [{key: 'Delete', ctrl: true}],
             onClick: () => {
-                const nodes = treeApi.getSelectedNodes();
+                const nodes = api.getSelectedNodes();
                 if (nodes?.length !== 1) return;
                 const node = nodes[0];
-                treeApi.removeNode(node[keyField] as Key, {select: 'next'});
+                api.removeNode(node[keyField] as IKey, {select: 'next'});
             },
         } satisfies IExtTreeButton;
-    }, [treeProps.editFormProps, treeProps.readOnly, treeProps.buttons?.delete, treeApi, t, activeItem]);
+    }, [treeProps.editFormProps, treeProps.readOnly, treeProps.buttons?.delete, treeProps.fieldNames?.key, api, activeItem]);
 };
 
 /** Get arrow up hotkey props */
@@ -295,7 +283,7 @@ const useGetArrowDownHotKey = (treeApi: IExtTreeApi): IExtTreeButton | undefined
     }, [treeApi]);
 };
 
-const getDataSet = (node: IExtTreeDataNode) => {
+const getDataSet = (node: IExtTreeNode) => {
     const dataSet = {...node};
     delete dataSet.icon;
     delete dataSet.isLeaf;
