@@ -8,7 +8,7 @@ import {RequiredMark} from 'antd/es/form/Form';
 import {translations} from '@src/dForm/translations/translations';
 import {IBaseComponentApi} from '@src/_shared/hooks/componentApiMethods/types/apiTypes';
 import {IAnyFieldProps} from '@src/dForm/fields/base';
-import {IKey} from "@krinopotam/service-types";
+import {IKey} from '@krinopotam/service-types';
 
 export type IDFormValidationRules = Record<string, IRuleType[]>;
 
@@ -127,7 +127,7 @@ export interface IDFormCallbacks<TApi = IDFormApi, TProps = IDFormProps> extends
     onFirstRender?: (props: TProps) => IDFormProps | void;
 }
 
-export type IDFormProps = IDFormPropsNoCB  & IDFormCallbacks
+export type IDFormProps = IDFormPropsNoCB & IDFormCallbacks;
 
 /** Form data set type */
 export interface IDFormDataSet extends Record<string, unknown> {
@@ -137,6 +137,9 @@ export interface IDFormDataSet extends Record<string, unknown> {
 export type IDFormDataSourcePromise = Promise<{data: Record<string, unknown>}>;
 
 export interface IDFormApi<TProps extends object = IDFormProps> extends IBaseComponentApi<TProps> {
+    /** Get translation */
+    t: (str: keyof (typeof translations)['en']) => string;
+
     /** Form model instance */
     model: DModel;
 

@@ -13,7 +13,7 @@ import {useApiGetProps} from '@src/_shared/hooks/componentApiMethods/useApiGetPr
 import {useApiSetProps} from '@src/_shared/hooks/componentApiMethods/useApiSetProps';
 import {useApiUpdateProps} from '@src/_shared/hooks/componentApiMethods/useApiUpdateProps';
 import {IDFormModalApi} from '@src/dFormModal';
-import {useT} from '@src/tabulatorGrid/hooks/api/useApiT';
+import {useApiT} from '@src/tabulatorGrid/hooks/api/useApiT';
 import {useApiOpenColumnDialog} from '@src/tabulatorGrid/hooks/api/useApiOpenColumnDialog';
 import {useApiGetRowData} from '@src/tabulatorGrid/hooks/api/useApiGetRowData';
 import {useApiRetryFetchData} from '@src/tabulatorGrid/hooks/api/useApiRetryFetchData';
@@ -79,7 +79,7 @@ export const useInitGridApi = ({
     api.editFormApi = editFormApi;
     api.selectionFormApi = selectionFormApi;
 
-    api.t = useT(api);
+    api.t = useApiT(api);
     api.getButtonsApi = useApiGetButtonsApi<IButtonsRowApi & {refreshButtons: () => void}>();
     api.getDataSet = useApiGetDataSet(dataSetRef, api);
     api.setDataSet = useApiSetDataSet(dataSetRef, api);

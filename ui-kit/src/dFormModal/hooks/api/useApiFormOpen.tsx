@@ -1,0 +1,35 @@
+import {IDFormModalApi, IDFormModalProps} from '@src/dFormModal';
+import {IDFormProps} from '@src/dForm';
+import {IsDebugMode} from '@krinopotam/common-hooks';
+import {CloneObject} from '@krinopotam/js-helpers/helpersObjects/cloneObject';
+
+export const useApiFormOpen = (api: IDFormModalApi): IDFormModalApi['open'] => {
+    return (formMode: IDFormProps['formMode'], extraProps?: Partial<IDFormModalProps>) => {
+        if (!formMode) {
+            if (IsDebugMode()) console.warn('The form mode is not set');
+            return;
+        }
+
+        const newDataSet = extraProps?.dataSet ?? api.getProps().dataSet;
+        const clonedDataSet = newDataSet ? CloneObject(newDataSet) : undefined;
+        const formProps = api.getProps();
+
+        const newProps = {
+            open: true,
+            formMode: formMode,
+            dataSet: clonedDataSet,
+            ...extraProps,
+        };
+
+        if (formProps.onOpen?.(api, clonedDataSet) === false) return;
+        if (extraProps?.onOpen?.(api, clonedDataSet) === false) return;
+
+        api.updateProps(newProps);
+
+        setTimeout(() => {
+            /** Should have time to set props */
+            const props = api.getProps();
+            props.onOpened?.(api, props.dataSet);
+        }, 0);
+    };
+};

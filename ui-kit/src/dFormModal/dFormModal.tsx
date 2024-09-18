@@ -6,14 +6,14 @@
  * @license MIT
  */
 
-import {IDFormCallbacks, IDFormProps} from '@src/dForm';
-import {useInitModalFormApi} from './hooks/api';
+import {IDFormProps} from '@src/dForm';
+import {useInitApi} from './hooks/api/api';
 import React, {useMemo} from 'react';
 
 import {DFormModalRender} from './renders/dFormModalRender';
 import {SplitObject} from '@krinopotam/js-helpers/helpersObjects/splitObject';
-import {useFormCallbacks} from './hooks/callbacks';
-import {useInitButtons} from './hooks/buttons';
+import {useOverrideCallbacks} from './hooks/useOverrideCallbacks';
+import {useInitButtons} from './hooks/useInitButtons';
 import {useUpdateMessageBoxTheme} from '@src/messageBox';
 import {useGetActualProps} from '@krinopotam/common-hooks';
 import {IDFormModalOwnProps, IDFormModalProps} from '@src/dFormModal/types/dFormModalTypes';
@@ -22,21 +22,19 @@ export const DFormModal = (props: IDFormModalProps): React.JSX.Element => {
     useUpdateMessageBoxTheme(); //set current theme to messageBox
 
     const [allProps, setAllProps] = useGetActualProps(props); //props can be set both by parent component and via api
+    const allPropsUpd = useOverrideCallbacks(allProps);
 
-    //region Init api
-    const api = useInitModalFormApi({props: allProps, setProps: setAllProps});
-    const buttons = useInitButtons(api, allProps);
-    //endregion
+    const api = useInitApi({props: allPropsUpd, setProps: setAllProps});
+    const buttons = useInitButtons(api, allPropsUpd);
 
-    const formCallbacks = useFormCallbacks(api, allProps);
     /** Separating DForm props from pure DFormModal props */
-    const [, formProps] = useSeparateProps(allProps, formCallbacks);
+    const [, formProps] = useSeparateProps(allPropsUpd);
 
-    return <DFormModalRender formApi={api} modalFormProps={allProps} formProps={formProps} buttons={buttons} />;
+    return <DFormModalRender formApi={api} modalFormProps={allPropsUpd} formProps={formProps} buttons={buttons} />;
 };
 
 /** Separating props directly related to the DFormModel component from props directly related to the DForm component */
-const useSeparateProps = (formModalProps: IDFormModalProps, formCallbacks: IDFormCallbacks) => {
+const useSeparateProps = (formModalProps: IDFormModalProps) => {
     return useMemo((): [IDFormModalOwnProps, IDFormProps] => {
         const [formModalOwnProps, formProps] = SplitObject<IDFormModalOwnProps, IDFormProps>(formModalProps, {
             /** these properties will be in formModalOwnProps, rest in formProps */
@@ -86,10 +84,9 @@ const useSeparateProps = (formModalProps: IDFormModalProps, formCallbacks: IDFor
             formModalOwnProps,
             {
                 ...formProps,
-                ...formCallbacks,
                 language: formModalProps.language,
                 translation: formModalProps.translation,
             },
         ];
-    }, [formCallbacks, formModalProps]);
+    }, [formModalProps]);
 };

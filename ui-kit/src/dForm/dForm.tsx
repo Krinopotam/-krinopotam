@@ -8,12 +8,11 @@
 
 import {IDFormApi, IDFormProps} from '@src/dForm/types/dFormTypes';
 import {DModel} from './dModel';
-import {IDFormModelCallbacks} from '@src/dForm/types/dModelTypes';
-import {useInitFormApi} from './hooks/api';
+import {useInitApi} from './hooks/api/api';
 import React, {useEffect, useMemo, useRef} from 'react';
 import {FormRender} from './renders/formRender';
-import {useModelCallbacks} from './hooks/callbacks';
-import {useGetButtons} from './hooks/buttons';
+import {useOverrideCallbacks} from './hooks/useOverrideCallbacks';
+import {useGetButtons} from './hooks/useGetButtons';
 import {useUpdateMessageBoxTheme} from '@src/messageBox';
 import {useGetActualProps} from '@krinopotam/common-hooks';
 
@@ -25,17 +24,18 @@ export const DForm = (props: IDFormProps): React.JSX.Element => {
     const _props = useOnFirstRender(props);
 
     const [formProps, setFormProps] = useGetActualProps(_props); //props can be set both by parent component and via api
-    const api = useInitFormApi({props: formProps, setProps: setFormProps});
-    const modelCallbacks = useModelCallbacks(formProps, api);
-    useInitFormModel(api, formProps, modelCallbacks);
+    const formPropsUpd = useOverrideCallbacks(formProps);
+    const api = useInitApi({props: formPropsUpd, setProps: setFormProps});
 
-    const formButtons = useGetButtons(formProps, api); //init buttons
+    useInitFormModel(api, formPropsUpd);
+
+    const formButtons = useGetButtons(formPropsUpd, api); //init buttons
 
     useInitialFetchData(api);
 
     useFormMounted(api);
 
-    return <FormRender formProps={formProps} formApi={api} formButtons={formButtons} />;
+    return <FormRender formProps={formPropsUpd} formApi={api} formButtons={formButtons} />;
 };
 
 const useOnFirstRender = (formProps: IDFormProps): IDFormProps => {
@@ -48,15 +48,15 @@ const useOnFirstRender = (formProps: IDFormProps): IDFormProps => {
     return formProps?.onFirstRender?.(formProps) ?? formProps;
 };
 
-const useInitFormModel = (formApi: IDFormApi, formProps: IDFormProps, callbacks: IDFormModelCallbacks) => {
+const useInitFormModel = (formApi: IDFormApi, formProps: IDFormProps) => {
     const modelRef = useRef<DModel>();
     return useMemo(() => {
         if (!modelRef.current) modelRef.current = new DModel(formApi);
         if (!formProps._overriddenApi?.model) formApi.model = modelRef.current;
-        modelRef.current.initModel(formProps, callbacks);
+        modelRef.current.initModel(formProps);
 
         return modelRef.current;
-    }, [callbacks, formApi, formProps]);
+    }, [formApi, formProps]);
 };
 
 const useFormMounted = (formApi: IDFormApi) => {

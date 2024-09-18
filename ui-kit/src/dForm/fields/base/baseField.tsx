@@ -234,7 +234,7 @@ export class BaseField<TFieldProps extends IAnyFieldProps> {
 
         if (!noEvents) {
             this.getProps()?.onValueChanged?.(value, prevValue, this);
-            this.model.getModelCallbacks().onFormValuesChanged?.(this.fieldName, formValues, this.model);
+            this.model.getFormProps().onFormValuesChanged?.(this.fieldName, formValues, this.model.getFormApi());
             this.validate(noEvents, noRerender);
         }
 
@@ -414,12 +414,13 @@ export class BaseField<TFieldProps extends IAnyFieldProps> {
         else errors[this.fieldName] = value;
 
         if (!noEvents) {
-            this.getProps()?.onErrorChanged?.(value, this);
-            const modelCallbacks = this.model.getModelCallbacks();
+            const fieldProps = this.getProps()
+            fieldProps?.onErrorChanged?.(value, this);
+            const formProps = this.model.getFormProps()
             const values = this.model.getFormValues();
             const dataSet = this.model.getFormDataSet();
-            if (this.model.isFormHasError()) modelCallbacks.onFormHasErrors?.(values, dataSet, errors, this.model);
-            else modelCallbacks.onFormHasNoErrors?.(values, dataSet, this.model);
+            if (this.model.isFormHasError()) formProps.onFormHasErrors?.(values, dataSet, errors, this.model.getFormApi());
+            else formProps.onFormHasNoErrors?.(values, dataSet, this.model.getFormApi());
         }
 
         if (!noRerender) this.emitRender();

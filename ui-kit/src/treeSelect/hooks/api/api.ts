@@ -64,7 +64,7 @@ import {useApiSetValues} from '@src/treeSelect/hooks/api/useApiSetValues';
 import {useApiGetSelectedKeys} from '@src/treeSelect/hooks/api/useApiGetSelectedKeys';
 import {useApiGetSelectedNodes} from '@src/treeSelect/hooks/api/useApiGetSelectedNodes';
 import {useApiSelectNode} from '@src/treeSelect/hooks/api/useApiSelectNode';
-import {useT} from '@src/treeSelect/hooks/api/useApiT';
+import {useApiT} from '@src/treeSelect/hooks/api/useApiT';
 
 export const useInitApi = ({
     props,
@@ -135,7 +135,7 @@ export const useInitApi = ({
     api.ensureNodeVisible = useApiEnsureNodeVisible(api);
 
     /** Component own api methods */
-    api.t = useT(api);
+    api.t = useApiT(api);
     api.treeSelectRef = useRef(null);
     api.getButtonsApi = useApiGetButtonsApi<IButtonsRowApi & {refreshButtons: () => void}>();
     api.getIsReady = useApiGetIsReady(isReady);

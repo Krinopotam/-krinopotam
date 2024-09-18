@@ -1,8 +1,8 @@
-import {ITreeSelectApi} from '@src/treeSelect';
 import {useTranslate} from '@src/_shared/hooks/useTranslate';
-import {translations} from '@src/treeSelect/translations/translations';
+import {translations} from '@src/dForm/translations/translations';
+import {IDFormApi} from "@src/dForm";
 
-export const useApiT = (api: ITreeSelectApi) => {
+export const useApiT = (api: IDFormApi) => {
     const props = api.getProps();
     return useTranslate(props.language, translations, props.translation);
 };

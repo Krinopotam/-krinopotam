@@ -54,6 +54,9 @@ export type IDFormModalOwnProps = IDFormModalPropsNoCB & IDFormModalCallbacks
 export type IDFormModalProps = IDFormModalPropsNoCB & IDFormModalCallbacks & IDFormPropsNoCB
 
 export interface IDFormModalApi extends IDFormApi<IDFormModalProps> {
+    /** Get translation */
+    t: (str: keyof (typeof translations)['en']) => string;
+
     /** Open controls */
     open: (formMode: IDFormProps['formMode'], extraProps?: Partial<Omit<IDFormModalProps, 'formMode' | 'open'>>) => void;
 
