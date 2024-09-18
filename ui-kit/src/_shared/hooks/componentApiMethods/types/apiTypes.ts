@@ -1,4 +1,6 @@
-export interface IBaseComponentApi<TProps extends object> {
+import {AnyType} from "@krinopotam/service-types";
+
+export interface IBaseComponentApi<TProps extends object = AnyType> {
     /** Get component ID */
     getId: () => string;
 

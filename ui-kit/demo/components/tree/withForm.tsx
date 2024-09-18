@@ -24,9 +24,12 @@ export const TreeWithForm = (): React.JSX.Element => {
     );
 };
 
+const departmentsApi = {} as ITreeSelectApi;
+
 const useTreeProps=() =>{
     const editFormProps = useTreeEditFormProps();
     return {
+        apiRef: departmentsApi,
         dataSet: dataSet,
         defaultExpandAll: true,
         confirmDelete: true,
@@ -34,12 +37,10 @@ const useTreeProps=() =>{
     } satisfies IExtTreeProps
 }
 
-const departmentsApi = {} as ITreeSelectApi;
-
 const useTreeEditFormProps = () => {
     return useMemo(
         (): IDFormModalProps => ({
-          /*  onFormInit: formApi => {
+            onFormInit: formApi => {
                 const model = formApi.model;
                 const field = model.getField('parent');
 
@@ -49,13 +50,13 @@ const useTreeEditFormProps = () => {
                     field.updateProps({dataSet: data});
                     return;
                 }
-                /!** modify dataset for update to avoid the possibility of a parent node choosing itself or its own child node *!/
+                /** modify dataset for update to avoid the possibility of a parent node choosing itself or its own child node */
                 const id = model.getFormDataSet()['id'];
                 const clonedData = CloneObject(data);
                 removeFromTree(id, clonedData, {key: 'id', children: 'children'});
 
                 field.updateProps({dataSet: clonedData});
-            },*/
+            },
             formId: 'EditForm',
             confirmChanges: true,
             fieldsProps: {

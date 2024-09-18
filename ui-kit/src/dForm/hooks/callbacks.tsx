@@ -3,7 +3,6 @@ import React, {useMemo} from 'react';
 import {MessageBox} from '@src/messageBox';
 import {IsDebugMode} from '@krinopotam/common-hooks';
 import {IDFormApi, IDFormDataSet, IDFormModelCallbacks, IDFormProps} from '@src/dForm';
-import {Collapse} from 'antd';
 import {translations} from '@src/dForm/translations/translations';
 import {useTranslate} from '@src/_shared/hooks/useTranslate';
 import {ErrorMessage} from '@src/errorMessage';

@@ -29,20 +29,21 @@ const formProps: IDFormModalProps = {
     formId: 'Test form',
     apiRef: formApi,
     confirmChanges: true,
+    height: 500,
+    width: '50%',
     fieldsProps: {
         users: {
             component: TabulatorGridField,
             label: 'Пользователи',
             columns: TabulatorBaseColumns,
             layout: 'fitColumns',
-            height: 300,
+            autoHeightResize: true,
             selectionFormProps: selectionFormProps,
             confirmDelete: true,
             //onDataFetch: () => undefined
 
         },
     },
-    width: 900,
     buttons: FormLayoutSwitch(formApi),
 };
 

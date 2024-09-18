@@ -17,7 +17,7 @@ export type IDFormMode = 'view' | 'create' | 'update' | 'clone' | 'delete';
 /** Fields properties collection */
 export type IDFormFieldsProps = Record<string, IAnyFieldProps>;
 
-export interface IDFormProps extends IDFormCallbacks {
+export interface IDFormPropsNoCB {
     /** A mutable object to merge with these controls api */
     apiRef?: unknown;
 
@@ -122,10 +122,12 @@ export interface IDFormProps extends IDFormCallbacks {
     _overriddenApi?: {[K in keyof IDFormApi as string extends K ? never : K]?: boolean};
 }
 
-export interface IDFormCallbacks extends IDFormBaseCallbacks<IDFormApi> {
+export interface IDFormCallbacks<TApi = IDFormApi, TProps = IDFormProps> extends IDFormBaseCallbacks<TApi> {
     /** On first render callback */
-    onFirstRender?: (props: IDFormProps) => IDFormProps | void;
+    onFirstRender?: (props: TProps) => IDFormProps | void;
 }
+
+export type IDFormProps = IDFormPropsNoCB  & IDFormCallbacks
 
 /** Form data set type */
 export interface IDFormDataSet extends Record<string, unknown> {

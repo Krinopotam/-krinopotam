@@ -1,11 +1,9 @@
 import React from "react";
-import {IDFormApi, IDFormBaseCallbacks, IDFormCallbacks, IDFormDataSet, IDFormProps} from "@src/dForm";
+import {IDFormApi, IDFormCallbacks, IDFormDataSet, IDFormProps, IDFormPropsNoCB} from "@src/dForm";
 import {IExtendedModalProps} from "@src/modal";
 import {translations} from "@src/dFormModal/translations/translations";
 
-export interface IExtendedModalOwnProps extends Omit<IExtendedModalProps, 'modalId' | 'style' | 'styles' | 'footer' | 'onCancel' | 'maskClosable' | 'maskStyle' | 'visible' | 'keyboard' | 'destroyOnClose'> {}
-
-export interface IDFormModalCallbacks extends IDFormBaseCallbacks<IDFormModalApi> {
+export interface IDFormModalCallbacks extends IDFormCallbacks<IDFormModalApi, IDFormModalProps> {
     /** Fires when the form is opening.
      * Don't use formApi.getFormProps() because by the time the form is opened, they have not yet had time to update.
     */
@@ -23,26 +21,37 @@ export interface IDFormModalCallbacks extends IDFormBaseCallbacks<IDFormModalApi
     onCancel?: (formApi: IDFormModalApi) => void;
 }
 
-export type IDFormModalOwnProps = IDFormModalCallbacks & {
-    /** Modal form style */
-    modalStyle?: React.CSSProperties;
-
-    /** modal form components style */
-    modalStyles?: IExtendedModalProps['styles']
-
+export type IDFormModalPropsNoCB =  {
+    /** Form open state */
+    open?: boolean
+    /** Modal title */
+    title?:React.ReactNode
+    /** Modal height */
+    height?: number | string
+    /** Modal max height */
+    maxHeight?: number | string
+    /** Modal min height */
+    minHeight?: number | string
+    /** Modal width */
+    width?: number | string
+    /** Modal max width */
+    maxWidth?: number | string
+    /** Modal min width */
+    minWidth?: number | string
     /** Confirm message before the form closing, if form is dirty */
     closeFormConfirmMessage?: React.ReactNode;
-
     /** Language */
     language?: keyof typeof translations;
-
     /** Custom translation */
     translation?: Partial<typeof translations.en>
+    /** Modal component properties */
+    modalProps?: IExtendedModalProps
 }
 
-export type IDFormModalWithoutModalProps = IDFormModalOwnProps & Exclude<IDFormProps, keyof IDFormCallbacks>
 
-export type IDFormModalProps = IExtendedModalOwnProps & IDFormModalWithoutModalProps
+export type IDFormModalOwnProps = IDFormModalPropsNoCB & IDFormModalCallbacks
+
+export type IDFormModalProps = IDFormModalPropsNoCB & IDFormModalCallbacks & IDFormPropsNoCB
 
 export interface IDFormModalApi extends IDFormApi<IDFormModalProps> {
     /** Open controls */

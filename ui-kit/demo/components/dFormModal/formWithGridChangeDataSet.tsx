@@ -38,6 +38,8 @@ const formProps: IDFormModalProps = {
     formId: 'Test form',
     apiRef: formApi,
     confirmChanges: true,
+    height: 500,
+    width: '50%',
     fieldsProps: {
         grid: {
             component: TabulatorGridField,
@@ -46,12 +48,11 @@ const formProps: IDFormModalProps = {
             columnDefaults: TabulatorBaseColumnsDef,
             columns: columns,
             layout: 'fitColumns',
-            height: 300,
+            autoHeightResize: true,
             editFormProps: editFormProps,
             confirmDelete: true,
         },
     },
-    width: 900,
     buttons: {
         ...FormLayoutSwitch(formApi),
         updateDataSet: {

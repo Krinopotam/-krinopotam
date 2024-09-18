@@ -4,8 +4,7 @@ import {Modal} from '@src/modal/modal';
 import {ButtonsRender} from '@src/modal/renders/buttonsRender';
 import React from 'react';
 import {IDFormModalApi, IDFormModalProps} from '@src/dFormModal';
-import {IExtendedModalOwnProps} from '@src/dFormModal/types/dFormModalTypes';
-import {IFormButtons} from "@src/buttonsRow";
+import {IFormButtons} from '@src/buttonsRow';
 
 interface IDFormModalRenderProps {
     /** form buttons collection */
@@ -16,9 +15,6 @@ interface IDFormModalRenderProps {
 
     /** form api */
     formApi: IDFormModalApi;
-
-    /** Modal component props */
-    modalProps: IExtendedModalOwnProps;
 
     /** Child dynamic form props only */
     formProps: IDFormProps;
@@ -33,25 +29,24 @@ interface IDFormModalRenderProps {
     onCancel?: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
-export const DFormModalRender = ({buttons, formApi, formProps, modalProps, modalFormProps}: IDFormModalRenderProps): React.JSX.Element => {
+export const DFormModalRender = ({buttons, formApi, formProps, modalFormProps}: IDFormModalRenderProps): React.JSX.Element => {
+    const modalProps = modalFormProps.modalProps;
     return (
         <Modal
+            open={modalFormProps.open}
             /**
             By default, modal zIndex = 1000. 
             But we need zIndex = 1060 to be form above treeSelect dropdown, whose zIndex at the first level is 1050, and then grows to 1150 if it is on the form 
             */
             maskProps={{style: {zIndex: 1060}}}
             wrapProps={{style: {zIndex: 1060}}}
-            {...modalProps}
-            // no override section
             modalId={formApi.getId()}
-            style={modalFormProps.modalStyle}
-            styles={modalFormProps.modalStyles}
-            onCancel={formApi.close}
-            centered={typeof modalProps.centered === 'undefined' ? true : modalProps.centered}
+            centered
             maskClosable={false}
             keyboard={false}
-            destroyOnClose={true}
+            destroyOnClose
+            title={formApi.getTitle()}
+            onCancel={formApi.close}
             footer={
                 <ButtonsRender
                     buttons={buttons}
@@ -61,7 +56,13 @@ export const DFormModalRender = ({buttons, formApi, formProps, modalProps, modal
                     context={formApi}
                 />
             }
-            title={formApi.getTitle()}
+            height={modalFormProps.height}
+            maxHeight={modalFormProps.maxHeight}
+            minHeight={modalFormProps.minHeight}
+            width={modalFormProps.width}
+            maxWidth={modalFormProps.maxWidth}
+            minWidth={modalFormProps.minWidth}
+            {...modalProps}
         >
             {modalFormProps.open ? (
                 <DForm
