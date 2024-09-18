@@ -1,8 +1,7 @@
 import React, {useMemo} from 'react';
 import {MessageBox} from '@src/messageBox';
-import {IsDebugMode} from '@krinopotam/common-hooks';
-import {IDFormModalApi, IDFormModalProps} from '@src/dFormModal';
-import {IDFormBaseCallbacks} from '@src/dForm';
+import {IDFormModalCallbacks, IDFormModalProps} from '@src/dFormModal';
+import {ErrorMessage} from '@src/errorMessage';
 
 /**
  * Preparing callbacks for redirection to the form
@@ -10,22 +9,17 @@ import {IDFormBaseCallbacks} from '@src/dForm';
  */
 export const useOverrideCallbacks = (props: IDFormModalProps) => {
     return useMemo(() => {
-        const callbacks: IDFormBaseCallbacks<IDFormModalApi> = {
+        const callbacks: IDFormModalCallbacks = {
             /** fires when the form fetch failed */
-            onDataFetchError: (error, api) => {
-                if (props?.onDataFetchError?.(error, api) === false) return false;
+            onDataFetchError: (error, api, cbControl) => {
+                props?.onDataFetchError?.(error, api, cbControl);
+                if (cbControl.isPrevented()) return;
+                cbControl.preventOriginal();
 
                 const box = MessageBox.confirm({
                     language: props.language,
-                    content: (
-                        <>
-                            <p>
-                                <b>{error.message}</b>
-                            </p>
-                            {error.stack && IsDebugMode() ? <p>{error.stack}</p> : ''}
-                            <p>{api.t('tryAgainQt')}</p>
-                        </>
-                    ),
+                    title: api.t('error'),
+                    content: <ErrorMessage error={error} extraMessage={api.t('tryAgainQt')} />,
                     colorType: 'danger',
                     buttons: {
                         ok: {
@@ -42,27 +36,34 @@ export const useOverrideCallbacks = (props: IDFormModalProps) => {
                         },
                     },
                 });
-
-                return false;
             },
 
             /** fires on submitting the form */
-            onSubmit: (values, dataSet, api) => {
+            onSubmit: (values, dataSet, api, cbControl) => {
+                const result = props?.onSubmit?.(values, dataSet, api, cbControl);
+                if (cbControl.isPrevented()) return result;
+                cbControl.preventOriginal();
+
                 api.getButtonsApi().disabled?.('ok', true);
                 api.getButtonsApi().disabled?.('cancel', true);
                 if (!props.confirmChanges) api.getButtonsApi().loading?.('ok', true);
-                return props?.onSubmit?.(values, dataSet, api);
+                return result;
             },
 
             /** fires on submit success */
-            onSubmitSuccess: (values, dataSet, resultData, api) => {
-                if (props?.onSubmitSuccess?.(values, dataSet, resultData, api) === false) return false;
+            onSubmitSuccess: (values, dataSet, resultData, api, cbControl) => {
+                props?.onSubmitSuccess?.(values, dataSet, resultData, api, cbControl);
+                if (cbControl.isPrevented()) return;
+
                 api.forceClose();
             },
 
             /** fires after the completion of sending the form, regardless of the result */
-            onSubmitComplete: (values, dataSet, errors, api) => {
-                if (props?.onSubmitComplete?.(values, dataSet, errors, api) === false) return false;
+            onSubmitComplete: (values, dataSet, errors, api, cbControl) => {
+                props?.onSubmitComplete?.(values, dataSet, errors, api, cbControl);
+                if (cbControl.isPrevented()) return;
+                cbControl.preventOriginal();
+
                 api.getButtonsApi().disabled?.('ok', false);
                 api.getButtonsApi().disabled?.('cancel', false);
                 api.getButtonsApi().loading?.('ok', false);

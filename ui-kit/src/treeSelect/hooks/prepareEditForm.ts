@@ -2,11 +2,10 @@ import {useContext, useMemo} from 'react';
 import {GetUuid} from '@krinopotam/js-helpers/helpersString/getUuid';
 import {IsObjectHasOwnProperty} from '@krinopotam/js-helpers/helpersObjects/isObjectHasOwnProperty';
 import {ITreeSelectApi, ITreeSelectNode, ITreeSelectProps} from '@src/treeSelect';
-import type {IDFormApi, IDFormDataSet} from '@src/dForm/types/dFormTypes';
 import {ILabeledValue} from '@src/treeSelect/types/types';
 import {IFieldNames} from '@src/_shared/hooks/treeComponentApiMethods/types/treeApiTypes';
 import {TreeSelectContext} from '@src/treeSelect/context/context';
-import {IKey} from "@krinopotam/service-types";
+import {IKey} from '@krinopotam/service-types';
 
 export const usePrepareEditFormProps = (treeApi: ITreeSelectApi, props: ITreeSelectProps, forGroup: boolean) => {
     const {dialogOpenedRef} = useContext(TreeSelectContext);
@@ -19,13 +18,9 @@ export const usePrepareEditFormProps = (treeApi: ITreeSelectApi, props: ITreeSel
         if (props.language && !formProps.language) formProps.language = props.language;
 
         const prevOnSubmitSuccess = editFormProps?.onSubmitSuccess;
-        formProps.onSubmitSuccess = (
-            values: Record<string, unknown>,
-            dataSet: IDFormDataSet,
-            resultData: Record<string, unknown> | undefined,
-            formApi: IDFormApi
-        ) => {
-            if (prevOnSubmitSuccess?.(values, dataSet, resultData, formApi) === false) return false;
+        formProps.onSubmitSuccess = (values, dataSet, resultData, formApi, cbControl) => {
+            prevOnSubmitSuccess?.(values, dataSet, resultData, formApi, cbControl);
+            if (cbControl.isPrevented()) return;
 
             const formMode = formApi.model.getFormMode();
             const fieldNames = treeApi.getFieldNames();
@@ -47,14 +42,19 @@ export const usePrepareEditFormProps = (treeApi: ITreeSelectApi, props: ITreeSel
         };
 
         const prevOnOpen = editFormProps?.onOpen;
-        formProps.onOpen = (formApi, dataSet) => {
-            if (prevOnOpen?.(formApi, dataSet) === false) return false;
+        formProps.onOpen = (formApi, dataSet, cbControl) => {
+            const result = prevOnOpen?.(formApi, dataSet, cbControl);
+            if (cbControl.isPrevented()) return result;
+
             dialogOpenedRef.current = true;
+            return result
         };
 
         const prevOnClose = editFormProps?.onClosed;
-        formProps.onClosed = formApi => {
-            prevOnClose?.(formApi);
+        formProps.onClosed = (formApi, cbControl) => {
+            prevOnClose?.(formApi, cbControl);
+            if (cbControl.isPrevented()) return;
+
             dialogOpenedRef.current = false;
         };
 

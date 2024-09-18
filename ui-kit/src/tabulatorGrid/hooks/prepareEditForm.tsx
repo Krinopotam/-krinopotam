@@ -1,7 +1,6 @@
 import {useMemo} from 'react';
-import {IDFormApi, IDFormDataSet} from '@src/dForm';
-import {GetUuid} from "@krinopotam/js-helpers/helpersString/getUuid";
-import {IGridApi, IGridProps, IGridRowData} from "@src/tabulatorGrid";
+import {GetUuid} from '@krinopotam/js-helpers/helpersString/getUuid';
+import {IGridApi, IGridProps, IGridRowData} from '@src/tabulatorGrid';
 
 export const usePrepareEditForm = (gridApi: IGridApi, gridProps: IGridProps) => {
     return useMemo(() => {
@@ -9,12 +8,13 @@ export const usePrepareEditForm = (gridApi: IGridApi, gridProps: IGridProps) => 
         if (!editFormProps) return undefined;
 
         const formProps = {...editFormProps};
-        if (gridProps.language && !formProps.language) formProps.language = gridProps.language
+        if (gridProps.language && !formProps.language) formProps.language = gridProps.language;
 
         const prevOnSubmitSuccess = editFormProps?.onSubmitSuccess;
 
-        formProps.onSubmitSuccess = (values: Record<string, unknown>, dataSet: IDFormDataSet, resultData: Record<string, unknown> | undefined, formApi: IDFormApi) => {
-            if (prevOnSubmitSuccess && prevOnSubmitSuccess(values, dataSet, resultData, formApi) === false) return false;
+        formProps.onSubmitSuccess = (values, dataSet, resultData, formApi, cbControl) => {
+            prevOnSubmitSuccess?.(values, dataSet, resultData, formApi, cbControl);
+            if (cbControl.isPrevented()) return;
             const updatedRow = {...resultData} as IGridRowData;
 
             const formMode = formApi.model.getFormMode();

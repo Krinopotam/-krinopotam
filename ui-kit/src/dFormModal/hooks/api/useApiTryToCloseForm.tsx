@@ -1,10 +1,11 @@
 import {IDFormModalApi, IDFormModalProps} from '@src/dFormModal';
 import {MessageBox} from '@src/messageBox';
+import {CallbackControl} from "@src/_shared/classes/callbackControl";
 
 /** Api method: try to close modal form */
 export const useApiTryToCloseForm = (api: IDFormModalApi, props: IDFormModalProps) => {
     return () => {
-        if (props.onClosing?.(api) === false) return;
+        if (props.onClosing?.(api, new CallbackControl()) === false) return;
 
         if (api.model.isFormDirty() && props.confirmChanges) {
             MessageBox.confirm({
@@ -13,7 +14,7 @@ export const useApiTryToCloseForm = (api: IDFormModalApi, props: IDFormModalProp
                 okText: api.t('yes'),
                 cancelText: api.t('no'),
                 onOk: () => {
-                    props.onCancel?.(api);
+                    props.onCancel?.(api, new CallbackControl());
                     api.forceClose();
                 },
             });
@@ -21,7 +22,7 @@ export const useApiTryToCloseForm = (api: IDFormModalApi, props: IDFormModalProp
             return;
         }
 
-        props.onCancel?.(api);
+        props.onCancel?.(api, new CallbackControl());
         api.forceClose();
     };
 };

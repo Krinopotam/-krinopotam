@@ -17,6 +17,7 @@ import {IDFormApi, IDFormDataSet, IDFormFieldsProps, IDFormProps} from '@src/dFo
 import {IError} from '@krinopotam/service-types';
 import {InlineGroupField} from '@src/dForm/fields/inlineGroup/inlineGroupField';
 import {IDFormMode} from '@src/dForm/types/dFormTypes';
+import {CallbackControl} from '@src/_shared/classes/callbackControl';
 
 export class DModel {
     //region Private properties
@@ -141,7 +142,7 @@ export class DModel {
         if (!formProps.disableDepended) this._hidden = this.calculateLockedFields();
         else this._disabled = this.calculateLockedFields();
 
-        this._formProps.onFormModelInitialized?.(this._formApi);
+        this._formProps.onFormModelInitialized?.(this._formApi, new CallbackControl());
     }
 
     /** Instantiate fields classes and prepare fields collections */
@@ -392,7 +393,7 @@ export class DModel {
      * @param noRerender - do not emit re-rendering
      */
     setFormValues(dataSet: IDFormDataSet | undefined, noEvents?: boolean, noRerender?: boolean) {
-        const newDataSet = noEvents ? dataSet : (this._formProps.onDataSetChange?.(dataSet, this._formApi) ?? dataSet);
+        const newDataSet = noEvents ? dataSet : (this._formProps.onDataSetChange?.(dataSet, this._formApi, new CallbackControl()) ?? dataSet);
 
         this._dataSet = newDataSet;
 
@@ -465,7 +466,7 @@ export class DModel {
         const prevValue = this.isFormDirty();
         this._formDirty = value;
 
-        if (!noEvents && prevValue !== value) this._formProps?.onFormDirtyStateChanged?.(value, this._formApi);
+        if (!noEvents && prevValue !== value) this._formProps?.onFormDirtyStateChanged?.(value, this._formApi, new CallbackControl());
     }
 
     /**
@@ -494,7 +495,7 @@ export class DModel {
             field.setDisabled(value, noEvents, true);
         }
 
-        if (!noEvents) this._formProps?.onFormDisabledStateChanged?.(value, this._formApi);
+        if (!noEvents) this._formProps?.onFormDisabledStateChanged?.(value, this._formApi, new CallbackControl());
         if (!noRerender) this.emitFormRender();
     }
 
@@ -524,7 +525,7 @@ export class DModel {
             field.setReadOnly(value, noEvents, true);
         }
 
-        if (!noEvents) this._formProps?.onFormReadOnlyStateChanged?.(value, this._formApi);
+        if (!noEvents) this._formProps?.onFormReadOnlyStateChanged?.(value, this._formApi, new CallbackControl());
         if (!noRerender) this.emitFormRender();
     }
 
@@ -535,7 +536,7 @@ export class DModel {
      */
     setFormInit() {
         this.setFormReady(false); //At the time of initialization, the form is not yet ready
-        this._formProps?.onFormInit?.(this._formApi);
+        this._formProps?.onFormInit?.(this._formApi, new CallbackControl());
     }
 
     // Ready
@@ -562,7 +563,7 @@ export class DModel {
 
             if (!value) {
                 this._formReady = value;
-                if (prevValue !== value && !noEvents) this._formProps?.onFormReadyStateChanged?.(value, this._formApi);
+                if (prevValue !== value && !noEvents) this._formProps?.onFormReadyStateChanged?.(value, this._formApi, new CallbackControl());
                 return;
             }
 
@@ -578,7 +579,7 @@ export class DModel {
 
             this._formReady = value;
 
-            if (prevValue !== value && !noEvents) this._formProps?.onFormReadyStateChanged?.(value, this._formApi);
+            if (prevValue !== value && !noEvents) this._formProps?.onFormReadyStateChanged?.(value, this._formApi, new CallbackControl());
         }, 0);
     }
 
@@ -597,7 +598,14 @@ export class DModel {
 
         this.emitFormRender();
 
-        this._formProps.onFormValidated?.(this.getFormValues(), this.getFormDataSet(), this.getFormErrors(), this.isFormSubmitting(), this._formApi);
+        this._formProps.onFormValidated?.(
+            this.getFormValues(),
+            this.getFormDataSet(),
+            this.getFormErrors(),
+            this.isFormSubmitting(),
+            this._formApi,
+            new CallbackControl()
+        );
         return this.getFormErrors();
     }
 
@@ -670,7 +678,7 @@ export class DModel {
 
     //region Fetch
     fetchData() {
-        const dataSource = this._formProps.onDataFetch?.(this._formApi);
+        const dataSource = this._formProps.onDataFetch?.(this._formApi, new CallbackControl());
         if (!dataSource) return;
 
         dataSource.then(
@@ -678,8 +686,8 @@ export class DModel {
                 if (!this.isFormMounted()) return;
                 this.setFormFetching(false);
                 this.setFormFetchingFailed(false);
-                this._formProps.onDataFetchSuccess?.(result, this._formApi);
-                this._formProps.onDataFetchComplete?.(this._formApi);
+                this._formProps.onDataFetchSuccess?.(result, this._formApi, new CallbackControl());
+                this._formProps.onDataFetchComplete?.(this._formApi, new CallbackControl());
 
                 const values = result.data as IDFormDataSet;
                 this.setFormValues(values);
@@ -690,8 +698,8 @@ export class DModel {
                 if (!this.isFormMounted()) return;
                 this.setFormFetching(false);
                 this.setFormFetchingFailed(true);
-                this._formProps.onDataFetchError?.(error, this._formApi);
-                this._formProps.onDataFetchComplete?.(this._formApi);
+                this._formProps.onDataFetchError?.(error, this._formApi, new CallbackControl());
+                this._formProps.onDataFetchComplete?.(this._formApi, new CallbackControl());
             }
         );
 
@@ -735,12 +743,12 @@ export class DModel {
 
         const validationErrors = this.validateForm();
 
-        this._formProps?.onSubmitValidation?.(formValues, dataSet, validationErrors, this._formApi);
+        this._formProps?.onSubmitValidation?.(formValues, dataSet, validationErrors, this._formApi, new CallbackControl());
 
         if (this.isFormHasError()) {
             this.setFormSubmitting(false);
             onSubmitComplete?.(formValues, dataSet, validationErrors, this);
-            this._formProps?.onSubmitComplete?.(formValues, dataSet, validationErrors, this._formApi);
+            this._formProps?.onSubmitComplete?.(formValues, dataSet, validationErrors, this._formApi, new CallbackControl());
             return;
         }
 
@@ -767,13 +775,14 @@ export class DModel {
                     code: 405,
                     stack: Error().stack,
                 },
-                this._formApi
+                this._formApi,
+                new CallbackControl()
             );
-            this._formProps?.onSubmitComplete?.(formValues, dataSet, validationErrors, this._formApi);
+            this._formProps?.onSubmitComplete?.(formValues, dataSet, validationErrors, this._formApi, new CallbackControl());
             return;
         }
 
-        const result = this._formProps?.onSubmit(formValues, dataSet, this._formApi);
+        const result = this._formProps?.onSubmit(formValues, dataSet, this._formApi, new CallbackControl());
 
         if (IsPromise(result)) {
             result
@@ -782,16 +791,16 @@ export class DModel {
                     this.setFormSubmitting(false);
                     onSubmitSuccess?.(formValues, dataSet, result?.data || dataSet, this);
                     onSubmitComplete?.(formValues, dataSet, validationErrors, this);
-                    this._formProps?.onSubmitSuccess?.(formValues, dataSet, result?.data || dataSet, this._formApi);
-                    this._formProps?.onSubmitComplete?.(formValues, dataSet, validationErrors, this._formApi);
+                    this._formProps?.onSubmitSuccess?.(formValues, dataSet, result?.data || dataSet, this._formApi, new CallbackControl());
+                    this._formProps?.onSubmitComplete?.(formValues, dataSet, validationErrors, this._formApi, new CallbackControl());
                 })
                 .catch((error: IError) => {
                     if (!this.isFormMounted()) return;
                     this.setFormSubmitting(false);
                     onSubmitError?.(formValues, dataSet, error, this);
                     onSubmitComplete?.(formValues, dataSet, validationErrors, this);
-                    this._formProps?.onSubmitError?.(formValues, dataSet, error, this._formApi);
-                    this._formProps?.onSubmitComplete?.(formValues, dataSet, validationErrors, this._formApi);
+                    this._formProps?.onSubmitError?.(formValues, dataSet, error, this._formApi, new CallbackControl());
+                    this._formProps?.onSubmitComplete?.(formValues, dataSet, validationErrors, this._formApi, new CallbackControl());
                 });
 
             return;
@@ -818,15 +827,16 @@ export class DModel {
                         error: result.error.error,
                         code: result.error.code || 400,
                     },
-                    this._formApi
+                    this._formApi,
+                    new CallbackControl()
                 );
             } else {
                 onSubmitSuccess?.(formValues, dataSet, result.data ?? dataSet, this);
-                this._formProps?.onSubmitSuccess?.(formValues, dataSet, result.data ?? dataSet, this._formApi);
+                this._formProps?.onSubmitSuccess?.(formValues, dataSet, result.data ?? dataSet, this._formApi, new CallbackControl());
             }
 
             onSubmitComplete?.(formValues, dataSet, validationErrors, this);
-            this._formProps?.onSubmitComplete?.(formValues, dataSet, validationErrors, this._formApi);
+            this._formProps?.onSubmitComplete?.(formValues, dataSet, validationErrors, this._formApi, new CallbackControl());
 
             return;
         }
@@ -835,7 +845,7 @@ export class DModel {
         if (typeof result === 'boolean') {
             if (result) {
                 onSubmitSuccess?.(formValues, dataSet, dataSet, this);
-                this._formProps?.onSubmitSuccess?.(formValues, dataSet, dataSet, this._formApi);
+                this._formProps?.onSubmitSuccess?.(formValues, dataSet, dataSet, this._formApi, new CallbackControl());
             } else {
                 onSubmitError?.(
                     formValues,
@@ -857,20 +867,21 @@ export class DModel {
                         code: 520,
                         stack: Error().stack,
                     },
-                    this._formApi
+                    this._formApi,
+                    new CallbackControl()
                 );
             }
 
             onSubmitComplete?.(formValues, dataSet, validationErrors, this);
-            this._formProps?.onSubmitComplete?.(formValues, dataSet, validationErrors, this._formApi);
+            this._formProps?.onSubmitComplete?.(formValues, dataSet, validationErrors, this._formApi, new CallbackControl());
             return;
         }
 
         if (typeof result === 'undefined') {
             onSubmitSuccess?.(formValues, dataSet, dataSet, this);
             onSubmitComplete?.(formValues, dataSet, validationErrors, this);
-            this._formProps?.onSubmitSuccess?.(formValues, dataSet, dataSet, this._formApi);
-            this._formProps?.onSubmitComplete?.(formValues, dataSet, validationErrors, this._formApi);
+            this._formProps?.onSubmitSuccess?.(formValues, dataSet, dataSet, this._formApi, new CallbackControl());
+            this._formProps?.onSubmitComplete?.(formValues, dataSet, validationErrors, this._formApi, new CallbackControl());
         }
     }
 

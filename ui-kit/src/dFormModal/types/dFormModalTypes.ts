@@ -1,57 +1,56 @@
-import React from "react";
-import {IDFormApi, IDFormCallbacks, IDFormDataSet, IDFormProps, IDFormPropsNoCB} from "@src/dForm";
-import {IExtendedModalProps} from "@src/modal";
-import {translations} from "@src/dFormModal/translations/translations";
+import React from 'react';
+import {IDFormApi, IDFormCallbacks, IDFormDataSet, IDFormProps, IDFormPropsNoCB} from '@src/dForm';
+import {IExtendedModalProps} from '@src/modal';
+import {translations} from '@src/dFormModal/translations/translations';
+import {CallbackControl} from '@src/_shared/classes/callbackControl';
 
-export interface IDFormModalCallbacks extends IDFormCallbacks<IDFormModalApi, IDFormModalProps> {
+export interface IDFormModalOwnCallbacks {
     /** Fires when the form is opening.
      * Don't use formApi.getFormProps() because by the time the form is opened, they have not yet had time to update.
-    */
-    onOpen?: (
-        formApi: IDFormModalApi,
-        dataSet: IDFormDataSet | undefined,
-    ) => boolean | void;
+     */
+    onOpen?: (formApi: IDFormModalApi, dataSet: IDFormDataSet | undefined, cbControl: CallbackControl) => boolean | void;
     /** Fires when the form is opened */
-    onOpened?: (formApi: IDFormModalApi, dataSet: IDFormDataSet | undefined) => void;
+    onOpened?: (formApi: IDFormModalApi, dataSet: IDFormDataSet | undefined, cbControl: CallbackControl) => void;
     /** Fires when the form is closing */
-    onClosing?: (formApi: IDFormModalApi) => boolean | void;
+    onClosing?: (formApi: IDFormModalApi, cbControl: CallbackControl) => boolean | void;
     /** Fires when the form is closed */
-    onClosed?: (formApi: IDFormModalApi) => void;
+    onClosed?: (formApi: IDFormModalApi, cbControl: CallbackControl) => void;
     /** Fires when the form is canceled */
-    onCancel?: (formApi: IDFormModalApi) => void;
+    onCancel?: (formApi: IDFormModalApi, cbControl: CallbackControl) => void;
 }
 
-export type IDFormModalPropsNoCB =  {
+export type IDFormModalCallbacks = IDFormModalOwnCallbacks & IDFormCallbacks<IDFormModalApi, IDFormModalProps>;
+
+export type IDFormModalOwnPropsNoCB = {
     /** Form open state */
-    open?: boolean
+    open?: boolean;
     /** Modal title */
-    title?:React.ReactNode
+    title?: React.ReactNode;
     /** Modal height */
-    height?: number | string
+    height?: number | string;
     /** Modal max height */
-    maxHeight?: number | string
+    maxHeight?: number | string;
     /** Modal min height */
-    minHeight?: number | string
+    minHeight?: number | string;
     /** Modal width */
-    width?: number | string
+    width?: number | string;
     /** Modal max width */
-    maxWidth?: number | string
+    maxWidth?: number | string;
     /** Modal min width */
-    minWidth?: number | string
+    minWidth?: number | string;
     /** Confirm message before the form closing, if form is dirty */
     closeFormConfirmMessage?: React.ReactNode;
     /** Language */
     language?: keyof typeof translations;
     /** Custom translation */
-    translation?: Partial<typeof translations.en>
+    translation?: Partial<typeof translations.en>;
     /** Modal component properties */
-    modalProps?: IExtendedModalProps
-}
+    modalProps?: IExtendedModalProps;
+};
 
+export type IDFormModalOwnProps = IDFormModalOwnPropsNoCB & IDFormModalOwnCallbacks;
 
-export type IDFormModalOwnProps = IDFormModalPropsNoCB & IDFormModalCallbacks
-
-export type IDFormModalProps = IDFormModalPropsNoCB & IDFormModalCallbacks & IDFormPropsNoCB
+export type IDFormModalProps = IDFormModalOwnPropsNoCB & IDFormModalCallbacks & IDFormPropsNoCB;
 
 export interface IDFormModalApi extends IDFormApi<IDFormModalProps> {
     /** Get translation */
@@ -67,8 +66,8 @@ export interface IDFormModalApi extends IDFormApi<IDFormModalProps> {
     forceClose: () => void;
 
     /** Get modal title */
-    getTitle: () => IDFormModalProps['title']
+    getTitle: () => IDFormModalProps['title'];
 
     /** Set modal title */
-    setTitle: (title: IDFormModalProps['title']) => void
+    setTitle: (title: IDFormModalProps['title']) => void;
 }

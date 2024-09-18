@@ -16,6 +16,7 @@ import {BaseFieldRender} from './baseFieldRender';
 import {DModel} from '@src/dForm';
 import {IRuleType} from '@src/dForm/validators/baseValidator';
 import {IsArray} from "@krinopotam/js-helpers/helpersObjects/isArray";
+import {CallbackControl} from "@src/_shared/classes/callbackControl";
 
 export interface IBaseFieldProps<TField extends IBaseField, TValue> extends Record<string, unknown> {
     /** Field React component */
@@ -234,7 +235,7 @@ export class BaseField<TFieldProps extends IAnyFieldProps> {
 
         if (!noEvents) {
             this.getProps()?.onValueChanged?.(value, prevValue, this);
-            this.model.getFormProps().onFormValuesChanged?.(this.fieldName, formValues, this.model.getFormApi());
+            this.model.getFormProps().onFormValuesChanged?.(this.fieldName, formValues, this.model.getFormApi(), new CallbackControl());
             this.validate(noEvents, noRerender);
         }
 
@@ -419,8 +420,8 @@ export class BaseField<TFieldProps extends IAnyFieldProps> {
             const formProps = this.model.getFormProps()
             const values = this.model.getFormValues();
             const dataSet = this.model.getFormDataSet();
-            if (this.model.isFormHasError()) formProps.onFormHasErrors?.(values, dataSet, errors, this.model.getFormApi());
-            else formProps.onFormHasNoErrors?.(values, dataSet, this.model.getFormApi());
+            if (this.model.isFormHasError()) formProps.onFormHasErrors?.(values, dataSet, errors, this.model.getFormApi(), new CallbackControl());
+            else formProps.onFormHasNoErrors?.(values, dataSet, this.model.getFormApi(), new CallbackControl());
         }
 
         if (!noRerender) this.emitRender();

@@ -1,8 +1,7 @@
 import {useMemo} from 'react';
 import {IExtTreeApi, IExtTreeNode, IExtTreeProps} from '@src/tree/types/types';
-import {IDFormApi, IDFormDataSet} from '@src/dForm';
 import {GetUuid} from '@krinopotam/js-helpers';
-import {IKey} from "@krinopotam/service-types";
+import {IKey} from '@krinopotam/service-types';
 
 export const usePrepareEditFormProps = (treeApi: IExtTreeApi, props: IExtTreeProps, forGroup: boolean) => {
     return useMemo(() => {
@@ -14,13 +13,9 @@ export const usePrepareEditFormProps = (treeApi: IExtTreeApi, props: IExtTreePro
 
         const prevOnSubmitSuccess = editFormProps?.onSubmitSuccess;
 
-        formProps.onSubmitSuccess = (
-            values: Record<string, unknown>,
-            dataSet: IDFormDataSet,
-            resultData: Record<string, unknown> | undefined,
-            formApi: IDFormApi
-        ) => {
-            if (prevOnSubmitSuccess && prevOnSubmitSuccess(values, dataSet, resultData, formApi) === false) return false;
+        formProps.onSubmitSuccess = (values, dataSet, resultData, formApi, cbControl) => {
+            prevOnSubmitSuccess?.(values, dataSet, resultData, formApi, cbControl);
+            if (cbControl.isPrevented()) return;
 
             const formMode = formApi.model.getFormMode();
             const fieldNames = treeApi.getFieldNames();

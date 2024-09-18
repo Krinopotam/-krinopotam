@@ -1,5 +1,4 @@
 import {useMemo} from 'react';
-import {IDFormApi, IDFormDataSet} from '@src/dForm';
 import {IGridApi, IGridProps, IGridRowData} from '@src/tabulatorGrid';
 
 export const usePrepareSelectionForm = (gridApi: IGridApi, gridProps: IGridProps) => {
@@ -12,13 +11,10 @@ export const usePrepareSelectionForm = (gridApi: IGridApi, gridProps: IGridProps
 
         const prevOnSubmitSuccess = selectionFormProps?.onSubmitSuccess;
 
-        formProps.onSubmitSuccess = (
-            values: Record<string, unknown>,
-            dataSet: IDFormDataSet,
-            resultData: Record<string, unknown> | undefined,
-            formApi: IDFormApi
-        ) => {
-            if (prevOnSubmitSuccess && prevOnSubmitSuccess(values, dataSet, resultData, formApi) === false) return false;
+        formProps.onSubmitSuccess = (values, dataSet, resultData, formApi, cbControl) => {
+            prevOnSubmitSuccess?.(values, dataSet, resultData, formApi, cbControl);
+            if (cbControl.isPrevented()) return;
+
             const formData = {...resultData};
 
             const selectedRows = (formData.select as IGridRowData[]) ?? [];
