@@ -250,7 +250,7 @@ const deleteNode = (node: IExtTreeNode, props: IExtTreeProps, api: IExtTreeApi, 
 
     if (!IsPromise(deleteResult)) {
         if (api.isNodeSelected(node)) api.selectNode(node, false);
-        api.removeNode(node);
+        api.removeNode(node, {select: props.selectNewNode ? 'next' : undefined});
         if (messageBox) messageBox.destroy();
         return;
     }
@@ -264,7 +264,7 @@ const deleteNode = (node: IExtTreeNode, props: IExtTreeProps, api: IExtTreeApi, 
         .then(() => {
             messageBox?.destroy();
             if (!api.getIsMounted()) return;
-            api.removeNode(node);
+            api.removeNode(node, {select: props.selectNewNode ? 'next' : undefined});
             if (!props.confirmDelete) {
                 buttonsApi.loading('delete', false);
                 buttonsApi.disableAll(false);

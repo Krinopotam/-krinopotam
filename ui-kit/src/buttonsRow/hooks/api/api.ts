@@ -35,15 +35,15 @@ export const useApi = (
 
         /** Custom api methods **/
         buttons: useApiButtons(curButtons, setCurButtons, props),
-        updateButtons: useApiUpdateButtons(curButtons, setCurButtons, props),
-        setNextActive: useApiSetNextActive(curButtons, setCurButtons, props),
-        setActive: useApiSetActive(curButtons, setCurButtons),
-        loading: useApiLoading(curButtons, setCurButtons),
-        disabled: useApiDisabled(curButtons, setCurButtons, props),
+        updateButtons: useApiUpdateButtons(api),
+        setNextActive: useApiSetNextActive(api),
+        setActive: useApiSetActive(api),
+        loading: useApiLoading(api),
+        disabled: useApiDisabled(api),
         disableAll: useApiDisableAll(api),
-        hidden: useApiHidden(curButtons, setCurButtons),
-        triggerClick: useApiTriggerClick(curButtons, props),
-        activeTriggerClick: useApiActiveTriggerClick(curButtons, api),
+        hidden: useApiHidden(api),
+        triggerClick: useApiTriggerClick(api),
+        activeTriggerClick: useApiActiveTriggerClick(api),
     };
 
     Object.assign(api, apiMethods);

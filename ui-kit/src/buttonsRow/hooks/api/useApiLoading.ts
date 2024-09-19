@@ -1,14 +1,14 @@
-import {IButtonsRowApi, IFormButtons} from '@src/buttonsRow';
+import {IButtonsRowApi} from '@src/buttonsRow';
 
-export const useApiLoading = (curButtons: IFormButtons, setCurButtons: (buttons: IFormButtons) => void): IButtonsRowApi['loading'] => {
+export const useApiLoading = (api: IButtonsRowApi): IButtonsRowApi['loading'] => {
     return (buttonId: string, loading?: boolean): boolean => {
-        if (typeof loading === 'undefined') return !!curButtons[buttonId]?.loading;
-        const buttons = {...curButtons};
+        if (typeof loading === 'undefined') return !!api.buttons()?.[buttonId]?.loading;
+        const buttons = {...api.buttons()};
         const button = buttons[buttonId];
         if (!button) return false;
 
         button.loading = loading;
-        setCurButtons({...buttons});
+        api.buttons({...buttons});
         return button.loading;
     };
 };

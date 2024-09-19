@@ -1,8 +1,9 @@
-import {IButtonRowProps, IButtonsRowApi, IFormButtons} from '@src/buttonsRow';
+import {IButtonsRowApi} from '@src/buttonsRow';
 
-export const useApiTriggerClick = (curButtons: IFormButtons, props: IButtonRowProps): IButtonsRowApi['triggerClick'] => {
+export const useApiTriggerClick = (api: IButtonsRowApi): IButtonsRowApi['triggerClick'] => {
     return (buttonId: string) => {
-        const button = curButtons[buttonId];
+        const button = api.buttons()?.[buttonId];
+        const props = api.getProps();
 
         if (!button || props.disableAll || button?.disabled || button?.loading || button?.hidden) return;
 

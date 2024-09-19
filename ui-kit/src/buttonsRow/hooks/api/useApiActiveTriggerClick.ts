@@ -1,7 +1,8 @@
-import {IButtonsRowApi, IFormButtons} from '@src/buttonsRow';
+import {IButtonsRowApi} from '@src/buttonsRow';
 
-export const useApiActiveTriggerClick = (curButtons: IFormButtons, api: IButtonsRowApi): IButtonsRowApi['activeTriggerClick'] => {
+export const useApiActiveTriggerClick = (api: IButtonsRowApi): IButtonsRowApi['activeTriggerClick'] => {
     return () => {
+        const curButtons = api.buttons();
         const activeButtonName =
             Object.keys(curButtons).find(name => {
                 const button = curButtons[name];

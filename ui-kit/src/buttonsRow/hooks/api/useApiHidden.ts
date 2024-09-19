@@ -1,15 +1,15 @@
-import {IButtonsRowApi, IFormButton, IFormButtons} from '@src/buttonsRow';
+import {IButtonsRowApi, IFormButton} from '@src/buttonsRow';
 
-export const useApiHidden = (curButtons: IFormButtons, setCurButtons: (buttons: IFormButtons) => void): IButtonsRowApi['hidden'] => {
+export const useApiHidden = (api: IButtonsRowApi): IButtonsRowApi['hidden'] => {
     return (buttonId: string, hidden?: IFormButton['hidden']): boolean => {
-        if (typeof hidden === 'undefined') return !!curButtons[buttonId]?.hidden;
+        if (typeof hidden === 'undefined') return !!api.buttons()?.[buttonId]?.hidden;
 
-        const buttons = {...curButtons};
+        const buttons = {...api.buttons()};
         const button = buttons[buttonId];
         if (!button) return false;
 
         button.hidden = hidden;
-        setCurButtons({...buttons});
+        api.buttons({...buttons});
         return button.hidden;
     };
 };

@@ -1,13 +1,9 @@
 import {changeActiveButton} from '@src/buttonsRow/helpers/buttonMethods';
-import {IButtonRowProps, IButtonsRowApi, IFormButtons} from '@src/buttonsRow';
+import {IButtonsRowApi} from '@src/buttonsRow';
 
-export const useApiSetNextActive = (
-    curButtons: IFormButtons,
-    setCurButtons: (buttons: IFormButtons) => void,
-    props: IButtonRowProps
-): IButtonsRowApi['setNextActive'] => {
+export const useApiSetNextActive = (api: IButtonsRowApi): IButtonsRowApi['setNextActive'] => {
     return direction => {
-        const changedButtons = changeActiveButton(curButtons, direction, props);
-        setCurButtons(changedButtons);
+        const changedButtons = changeActiveButton(api.buttons(), direction, api.getProps());
+        api.buttons(changedButtons);
     };
 };

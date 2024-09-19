@@ -1,19 +1,15 @@
-import {IButtonRowProps, IButtonsRowApi, IFormButton, IFormButtons} from '@src/buttonsRow';
+import {IButtonsRowApi, IFormButton} from '@src/buttonsRow';
 
-export const useApiDisabled = (
-    curButtons: IFormButtons,
-    setCurButtons: (buttons: IFormButtons) => void,
-    props: IButtonRowProps
-): IButtonsRowApi['disabled'] => {
+export const useApiDisabled = (api: IButtonsRowApi): IButtonsRowApi['disabled'] => {
     return (buttonId: string, disabled?: IFormButton['disabled']): boolean => {
-        if (typeof disabled === 'undefined') return props.disableAll || !!curButtons[buttonId]?.disabled;
-        const buttons = {...curButtons};
+        if (typeof disabled === 'undefined') return api.getProps().disableAll || !!api.buttons()?.[buttonId]?.disabled;
+        const buttons = {...api.buttons()};
         const button = buttons[buttonId];
         if (!button) return false;
 
         button.disabled = disabled;
-        setCurButtons({...buttons});
+        api.buttons({...buttons});
 
-        return props.disableAll || button.disabled;
+        return api.getProps().disableAll || button.disabled;
     };
 };
