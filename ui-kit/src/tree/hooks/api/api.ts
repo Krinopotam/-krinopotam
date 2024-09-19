@@ -70,64 +70,63 @@ export const useInitApi = ({
     const [isLoading, setIsLoading] = useState(false);
     const [selectedKeys, setSelectedKeys] = useSelectedState(props.selectedKeys);
 
-    api.getFieldNames = useApiGetFieldNames(props);
-    const fieldNames = api.getFieldNames();
+    const fieldNames = useApiGetFieldNames(props)();
     const prepareNode = useApiPrepareNode(props);
 
     const [dataSet, setDataset, isDataPlain, parentKeys] = useDataSetState(props.dataSet, fieldNames, prepareNode); //current dataSet
     const [expandedKeys, setExpandedKeys] = useExpandedKeysState(props.expandedKeys, props.defaultExpandedKeys, props.defaultExpandAll, parentKeys); //expanded keys
 
-    /** Component Api methods*/
-    api.getId = useApiGetId(props.id ?? 'tree-' + GetNanoId());
-    api.getProps = useApiGetProps(props);
-    api.setProps = useApiSetProps(setProps);
-    api.updateProps = useApiUpdateProps(props, setProps);
-    api.getIsMounted = useApiIsMounted();
+    const apiMethods: IExtTreeApi = {
+        /** Component Api methods*/
+        getId: useApiGetId(props.id ?? 'tree-' + GetNanoId()),
+        getProps: useApiGetProps(props),
+        setProps: useApiSetProps(setProps),
+        updateProps: useApiUpdateProps(props, setProps),
+        getIsMounted: useApiIsMounted(),
 
-    /** Tree component Api methods */
-    api.getDataSet = useApiGetDataSet(dataSet);
-    api.setDataSet = useApiSetDataset(setDataset, props?.onDataSetChanged);
+        /** Tree component Api methods */
+        getFieldNames: useApiGetFieldNames(props),
+        getDataSet: useApiGetDataSet(dataSet),
+        setDataSet: useApiSetDataset(setDataset, props?.onDataSetChanged),
+        isDataPlainList: useApiGetIsDataPlain(isDataPlain),
+        getEditFormApi: useApiGetEditFormApi(editFormApi),
+        getEditGroupFormApi: useApiGetEditGroupFormApi(editGroupFormApi),
+        getSelectedKeys: useApiGetSelectedKeys(selectedKeys),
+        setSelectedKeys: useApiSetSelectedKeys(setSelectedKeys),
+        getSelectedNodes: useApiGetSelectedNodes(api),
+        isNodeSelected: useApiIsNodeSelected(api),
+        selectNode: useApiSelectNode(api, props.multiple),
+        getActiveNodeKey: useApiGetActiveNodeKey(api),
+        getActiveNode: useApiGetActiveNode(api),
+        getExpandedKeys: useApiGetExpandedKeys(expandedKeys),
+        setExpandedKeys: useApiSetExpandedKeys(setExpandedKeys),
+        getExpandedNodes: useApiGetExpandedNodes(api),
+        isNodeExpanded: useApiIsNodeExpanded(api),
+        expandNode: useApiExpandNode(api),
+        collapseNode: useApiCollapseNode(api),
+        toggleNode: useApiToggleNode(api),
+        expandParentNodes: useApiExpandParentNodes(api),
+        getNode: useApiGetNode(api),
+        getNodes: useApiGetNodes(api),
+        getNextNodeKey: useApiGetNextNodeKey(api),
+        getPrevNodeKey: useApiGetPrevNodeKey(api),
+        getNextNode: useApiGetNextNode(api),
+        getPrevNode: useApiGetPrevNode(api),
+        getParentNode: useApiGetParentNode(api),
+        addNode: useApiAddNode(api),
+        updateNode: useApiUpdateNode(api),
+        removeNode: useApiRemoveNode(api),
+        moveNode: useApiMoveNode(api),
+        ensureNodeVisible: useApiEnsureNodeVisible(api),
 
-    api.isDataPlainList = useApiGetIsDataPlain(isDataPlain);
-    api.getEditFormApi = useApiGetEditFormApi(editFormApi);
-    api.getEditGroupFormApi = useApiGetEditGroupFormApi(editGroupFormApi);
-    api.getSelectedKeys = useApiGetSelectedKeys(selectedKeys);
-    api.setSelectedKeys = useApiSetSelectedKeys(setSelectedKeys);
-    api.getSelectedNodes = useApiGetSelectedNodes(api);
-    api.isNodeSelected = useApiIsNodeSelected(api);
-    api.selectNode = useApiSelectNode(api, props.multiple);
-    api.getActiveNodeKey = useApiGetActiveNodeKey(api);
-    api.getActiveNode = useApiGetActiveNode(api);
-    api.getExpandedKeys = useApiGetExpandedKeys(expandedKeys);
-    api.setExpandedKeys = useApiSetExpandedKeys(setExpandedKeys);
-    api.getExpandedNodes = useApiGetExpandedNodes(api);
-    api.isNodeExpanded = useApiIsNodeExpanded(api);
-    api.expandNode = useApiExpandNode(api);
-    api.collapseNode = useApiCollapseNode(api);
-    api.toggleNode = useApiToggleNode(api);
-    api.expandParentNodes = useApiExpandParentNodes(api);
-    api.getNode = useApiGetNode(api);
-    api.getNodes = useApiGetNodes(api);
-    api.getNextNodeKey = useApiGetNextNodeKey(api);
-    api.getPrevNodeKey = useApiGetPrevNodeKey(api);
-    api.getNextNode = useApiGetNextNode(api);
-    api.getPrevNode = useApiGetPrevNode(api);
-    api.getParentNode = useApiGetParentNode(api);
-    api.addNode = useApiAddNode(api);
-    api.updateNode = useApiUpdateNode(api);
-    api.removeNode = useApiRemoveNode(api);
-    api.moveNode = useApiMoveNode(api);
-    api.ensureNodeVisible = useApiEnsureNodeVisible(api);
-
-    /** Component own api methods */
-    api.t = useT(api);
-    api.treeRef = useRef(null);
-    api.getButtonsApi = useApiGetButtonsApi<IButtonsRowApi & {refreshButtons: () => void}>();
-    api.getIsReady = useApiGetIsReady(isReady);
-    api.setIsReady = useApiSetIsReady(setIsReady);
-    api.getIsLoading = useApiGetIsLoading(isLoading);
-    api.setIsLoading = useApiSetIsLoading(setIsLoading);
-
-    return api;
+        /** Component own api methods */
+        t: useT(api),
+        treeRef: useRef(null),
+        getButtonsApi: useApiGetButtonsApi<IButtonsRowApi & {refreshButtons: () => void}>(),
+        getIsReady: useApiGetIsReady(isReady),
+        setIsReady: useApiSetIsReady(setIsReady),
+        getIsLoading: useApiGetIsLoading(isLoading),
+        setIsLoading: useApiSetIsLoading(setIsLoading),
+    };
+    return Object.assign(api, apiMethods);
 };
-
