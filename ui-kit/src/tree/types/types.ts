@@ -6,7 +6,7 @@ import {IButtonsRowApi, IFormButton} from '@src/buttonsRow/types/types';
 import {IBreakpoints} from '@krinopotam/common-hooks/useResponsive';
 import {TreeProps} from 'antd/es/tree/Tree';
 import {ITreeComponentApi} from '@src/_shared/hooks/treeComponentApiMethods/types/treeApiTypes';
-import {IKey} from '@krinopotam/service-types';
+import {AnyType, IKey} from '@krinopotam/service-types';
 
 export interface IOwnExtTreeProps {
     /** A mutable object to merge with these controls api */
@@ -41,6 +41,9 @@ export interface IOwnExtTreeProps {
     /** Edit group DFormModal parameters */
     editGroupFormProps?: IDFormModalProps;
 
+    /** Confirm message before node delete */
+    nodeDeleteMessage?: React.ReactNode;
+
     /** Default expanded keys */
     defaultExpandedKeys?: IKey[];
 
@@ -73,6 +76,9 @@ export interface IOwnExtTreeProps {
     /** Should confirm before delete */
     confirmDelete?: boolean;
 
+    /** Should select new node after create or clone node */
+    selectNewNode?:boolean
+
     /** Language */
     language?: keyof typeof translations;
 
@@ -97,8 +103,11 @@ export interface IOwnExtTreeProps {
     /** Data mutator function (mutates original data) */
     dataMutator?: (node: IExtTreeNode) => IExtTreeNode;
 
-    /** Fires when the TreeSelect dataSet is changed */
+    /** Fires when the Tree dataSet is changed */
     onDataSetChanged?: (dataSet: IExtTreeNode[] | undefined) => void;
+
+    /** Callback executed when selected node delete */
+    onDelete?: (selectedNodes: IExtTreeNode, api: IExtTreeApi) => ITreeDeletePromise | void | undefined;
 }
 
 export type IExtTreeProps = Omit<
@@ -117,6 +126,8 @@ export interface IExtTreeButton extends IFormButton {
 
 export type IExtTreeButtons = Record<string, IExtTreeButton | null>;
 
+export type ITreeDeletePromise = Promise<{data: Record<string, unknown>}>;
+
 interface IExtTreeNodeBase extends Omit<TreeDataNode, 'key' | 'children'> {
     /** Node id */
     id?: IKey;
@@ -130,6 +141,8 @@ interface IExtTreeNodeBase extends Omit<TreeDataNode, 'key' | 'children'> {
     isGroup?: boolean;
     /** Children nodes */
     children?: IExtTreeNode[];
+
+    [key: string]: AnyType;
 }
 
 export type IExtTreeNode<T = Record<string, unknown>> = IExtTreeNodeBase & T;
@@ -156,22 +169,9 @@ export interface IExtTreeApi extends ITreeComponentApi<IExtTreeNode, IExtTreePro
     /** Get edit mode buttons row api */
     getButtonsApi: () => IButtonsRowApi & {refreshButtons: () => void};
 
-    /** Get the TreeSelect ready to user input status (data is fetched) */
+    /** Get the Tree ready to user input status (data is fetched) */
     getIsReady: () => boolean;
 
-    /** Set the TreeSelect ready to user input status (data is fetched) */
+    /** Set the Tree ready to user input status (data is fetched) */
     setIsReady: (value: boolean) => void;
 }
-
-export interface IFindNodeOptions {
-    /** If true, search will be performed only in the same level */
-    sameLevelOnly?: boolean;
-    /** If true, search will be performed only in the expanded nodes (default true) */
-    expandedOnly?: boolean;
-    /** If true, search will be performed only in the selectable nodes (default true) */
-    selectableOnly?: boolean;
-    /** If true, search will be performed only in the not disabled nodes (default true) */
-    notDisabled?: boolean;
-}
-
-export type INodePosition = 'below' | 'above' | 'insideTop' | 'insideBottom';

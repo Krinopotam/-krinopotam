@@ -2,8 +2,9 @@ import React, {useCallback} from 'react';
 import type {TreeProps} from 'antd';
 import {Tree as AntdTree} from 'antd';
 import type {IExtTreeNode} from '@src/tree/types/types';
-import {IExtTreeApi, IExtTreeProps, INodePosition} from '@src/tree/types/types';
+import {IExtTreeApi, IExtTreeProps} from '@src/tree/types/types';
 import {IKey} from '@krinopotam/service-types';
+import {INodePosition} from "@src/_shared/hooks/treeComponentApiMethods/types/treeApiTypes";
 
 export const TreeRender = (props: {treeApi: IExtTreeApi; allProps: IExtTreeProps; antdTreeProps: TreeProps<IExtTreeNode>}): React.JSX.Element => {
     const treeApi = props.treeApi;

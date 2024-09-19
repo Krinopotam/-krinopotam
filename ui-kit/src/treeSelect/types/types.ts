@@ -112,7 +112,7 @@ export interface ITreeSelectBaseProps {
     headerLabel?: React.ReactNode;
 
     /** Header editor buttons */
-    editButtons?:
+    buttons?:
         | Record<'view' | 'create' | 'createGroup' | 'clone' | 'update' | 'delete' | 'arrowUp' | 'arrowDown', ITreeSelectButton | null>
         | ITreeSelectButtons;
 
@@ -142,6 +142,9 @@ export interface ITreeSelectBaseProps {
 
     /** Should confirm before delete */
     confirmDelete?: boolean;
+
+    /** Should select new node after create or clone node */
+    selectNewNode?:boolean
     //endregion
 
     /**---unchecked -----*/

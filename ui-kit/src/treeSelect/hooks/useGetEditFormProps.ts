@@ -7,19 +7,20 @@ import {IFieldNames} from '@src/_shared/hooks/treeComponentApiMethods/types/tree
 import {TreeSelectContext} from '@src/treeSelect/context/context';
 import {IKey} from '@krinopotam/service-types';
 
-export const useGetEditFormProps = (treeApi: ITreeSelectApi, props: ITreeSelectProps, forGroup: boolean) => {
+export const useGetEditFormProps = (treeApi: ITreeSelectApi, treeSelectProps: ITreeSelectProps, forGroup: boolean) => {
     const {dialogOpenedRef} = useContext(TreeSelectContext);
 
     return useMemo(() => {
-        const editFormProps = !forGroup ? props?.editFormProps : props?.editGroupFormProps;
+        const editFormProps = !forGroup ? treeSelectProps?.editFormProps : treeSelectProps?.editGroupFormProps;
         if (!editFormProps) return undefined;
 
         const formProps = {...editFormProps};
-        if (props.language && !formProps.language) formProps.language = props.language;
+        if (treeSelectProps.language && !formProps.language) formProps.language = treeSelectProps.language;
 
-        const prevOnSubmitSuccess = editFormProps?.onSubmitSuccess;
+        const propsOnSubmitSuccess = editFormProps?.onSubmitSuccess;
+
         formProps.onSubmitSuccess = (values, dataSet, resultData, formApi, cbControl) => {
-            prevOnSubmitSuccess?.(values, dataSet, resultData, formApi, cbControl);
+            propsOnSubmitSuccess?.(values, dataSet, resultData, formApi, cbControl);
             if (cbControl.isPrevented()) return;
 
             const formMode = formApi.model.getFormMode();
@@ -33,7 +34,7 @@ export const useGetEditFormProps = (treeApi: ITreeSelectApi, props: ITreeSelectP
 
             if (formMode === 'create' || formMode === 'clone') {
                 if (!updatedNode[fieldNames.key]) updatedNode[fieldNames.key] = GetUuid();
-                treeApi.addNode(updatedNode, targetKey, 'insideBottom', {ensureVisible: true});
+                treeApi.addNode(updatedNode, targetKey, 'insideBottom', {ensureVisible: true, select: !!treeSelectProps.selectNewNode});
             } else if (formMode === 'update') {
                 treeApi.updateNode(updatedNode, targetKey, {ensureVisible: true});
                 const curValues = treeApi.getValues();
@@ -47,7 +48,7 @@ export const useGetEditFormProps = (treeApi: ITreeSelectApi, props: ITreeSelectP
             if (cbControl.isPrevented()) return result;
 
             dialogOpenedRef.current = true;
-            return result
+            return result;
         };
 
         const prevOnClose = editFormProps?.onClosed;
@@ -59,7 +60,15 @@ export const useGetEditFormProps = (treeApi: ITreeSelectApi, props: ITreeSelectP
         };
 
         return formProps;
-    }, [dialogOpenedRef, forGroup, props?.editFormProps, props?.editGroupFormProps, props.language, treeApi]);
+    }, [
+        forGroup,
+        treeSelectProps?.editFormProps,
+        treeSelectProps?.editGroupFormProps,
+        treeSelectProps.language,
+        treeSelectProps.selectNewNode,
+        treeApi,
+        dialogOpenedRef,
+    ]);
 };
 
 /** WORKAROUND:

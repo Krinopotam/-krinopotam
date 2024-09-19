@@ -1,4 +1,4 @@
-export const cn = {
+export const cn =  {
     view: '查看',
     viewRecord: '查看记录',
     create: '创建',
@@ -19,16 +19,12 @@ export const cn = {
     deleteRecordsGroup: '删除记录组',
     select: '选择',
     selectRecord: '选择记录',
-    go: '去',
+    go: '前往',
     filter: '过滤',
-    exportXls: '导出到Excel',
-    columnsSettings: '列设置',
-    columns: '列',
     ok: '确定',
     cancel: '取消',
-    reset: '重置',
-    noRows: '没有行',
-    tryAgainQt: '再试一次？',
-    deleteSelectedRecordsQt: '删除选定的记录？',
+    tryAgainQt: '再试一次',
+    deleteSelectedRecordQt: '删除选定的记录',
     error: '错误',
+    dataNotFound: '数据未找到',
 }

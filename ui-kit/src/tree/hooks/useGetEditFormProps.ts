@@ -2,38 +2,39 @@ import {useMemo} from 'react';
 import {IExtTreeApi, IExtTreeNode, IExtTreeProps} from '@src/tree/types/types';
 import {GetUuid} from '@krinopotam/js-helpers';
 import {IKey} from '@krinopotam/service-types';
+import {IsObjectHasOwnProperty} from '@krinopotam/js-helpers/helpersObjects/isObjectHasOwnProperty';
 
-export const useGetEditFormProps = (treeApi: IExtTreeApi, props: IExtTreeProps, forGroup: boolean) => {
+export const useGetEditFormProps = (treeApi: IExtTreeApi, treeProps: IExtTreeProps, forGroup: boolean) => {
     return useMemo(() => {
-        const editFormProps = !forGroup ? props?.editFormProps : props?.editGroupFormProps;
+        const editFormProps = !forGroup ? treeProps?.editFormProps : treeProps?.editGroupFormProps;
         if (!editFormProps) return undefined;
 
         const formProps = {...editFormProps};
-        if (props.language && !formProps.language) formProps.language = props.language;
+        if (treeProps.language && !formProps.language) formProps.language = treeProps.language;
 
-        const prevOnSubmitSuccess = editFormProps?.onSubmitSuccess;
+        const propsOnSubmitSuccess = editFormProps?.onSubmitSuccess;
 
         formProps.onSubmitSuccess = (values, dataSet, resultData, formApi, cbControl) => {
-            prevOnSubmitSuccess?.(values, dataSet, resultData, formApi, cbControl);
+            propsOnSubmitSuccess?.(values, dataSet, resultData, formApi, cbControl);
             if (cbControl.isPrevented()) return;
 
             const formMode = formApi.model.getFormMode();
             const fieldNames = treeApi.getFieldNames();
 
-            const updatedNode = {...formApi.model.getFormDataSet(), ...resultData} as IExtTreeNode & {parent?: Record<string, unknown>; parentId?: IKey};
+            const updatedNode = {...resultData} as IExtTreeNode & {parent?: Record<string, unknown>; parentId?: IKey};
+
+            let targetKey: IKey | undefined;
+            if (IsObjectHasOwnProperty(updatedNode, fieldNames.parent)) targetKey = updatedNode[fieldNames.parent]?.[fieldNames.key] as IKey;
+            else targetKey = treeApi.getActiveNodeKey();
 
             if (formMode === 'create' || formMode === 'clone') {
                 if (!updatedNode[fieldNames.key]) updatedNode[fieldNames.key] = GetUuid();
-                const targetKey = treeApi.getActiveNodeKey();
-                treeApi.addNode(updatedNode, targetKey, 'insideBottom', {ensureVisible: true});
+                treeApi.addNode(updatedNode, targetKey, 'insideBottom', {ensureVisible: true, select: !!treeProps.selectNewNode});
             } else if (formMode === 'update') {
-                let targetKey: IKey | undefined = undefined;
-                if (updatedNode.parent) targetKey = updatedNode.parent[fieldNames.key] as IKey;
-                else if (updatedNode.parentId) targetKey = updatedNode.parentId;
                 treeApi.updateNode(updatedNode, targetKey, {ensureVisible: true});
             }
         };
 
         return formProps;
-    }, [forGroup, props?.editFormProps, props?.editGroupFormProps, props.language, treeApi]);
+    }, [forGroup, treeProps?.editFormProps, treeProps?.editGroupFormProps, treeProps.language, treeProps.selectNewNode, treeApi]);
 };

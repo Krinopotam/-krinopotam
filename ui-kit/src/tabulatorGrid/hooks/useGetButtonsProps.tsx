@@ -1,7 +1,7 @@
 import React, {useCallback, useMemo, useState} from 'react';
 import {FilterOutlined, MenuOutlined} from '@ant-design/icons';
 import {MergeObjects} from '@krinopotam/js-helpers/helpersObjects/mergeObjects';
-import {IGridApi, IGridRowData, ITabulator} from '@src/tabulatorGrid';
+import {IGridApi, IGridProps, IGridRowData, ITabulator} from '@src/tabulatorGrid';
 import {ITabulatorButton, ITabulatorButtons} from '@src/tabulatorGrid/types/tabulatorGridTypes';
 import {translations} from '@src/tabulatorGrid/translations/translations';
 import {useTranslate} from '@src/_shared/hooks/useTranslate';
@@ -16,15 +16,16 @@ import {
 } from '@src/_shared/hooks/buttons/defaultButtonsProps';
 
 export const useInitButtons = (gridApi: IGridApi): ITabulatorButtons => {
-    const buttons = gridApi.getProps().buttons;
-    const buttonsSize = gridApi.getProps().buttonsSize ?? 'small';
-    const buttonsPos = gridApi.getProps().buttonsPosition ?? 'right';
+    const props = gridApi.getProps();
+    const buttons = props.buttons;
+    const buttonsSize = props.buttonsSize ?? 'small';
+    const buttonsPos = props.buttonsPosition ?? 'right';
     const activeRow = gridApi.getActiveRow();
     const selectedRows = gridApi.getSelectedRows();
 
     gridApi.getButtonsApi().refreshButtons = useRefreshButtons();
 
-    const headerLabel = useGetHeaderLabel(gridApi);
+    const headerLabel = useGetHeaderLabel(props);
     const viewButton = useGetViewButton(gridApi, activeRow, selectedRows);
     const createButton = useGetCreateButton(gridApi);
     const cloneButton = useGetCloneButton(gridApi, activeRow, selectedRows);
@@ -85,16 +86,15 @@ const useRefreshButtons = () => {
 };
 
 /** Get label props */
-const useGetHeaderLabel = (gridApi: IGridApi): ITabulatorButton | undefined => {
+const useGetHeaderLabel = (props: IGridProps): ITabulatorButton | undefined => {
     return useMemo(() => {
-        const gridProps = gridApi.getProps();
-        if (!gridProps.headerLabel) return undefined;
+        if (!props.headerLabel) return undefined;
 
         return {
             ...defaultHeaderLabel,
-            title: gridProps.headerLabel,
+            title: props.headerLabel,
         } satisfies ITabulatorButton;
-    }, [gridApi]);
+    }, [props]);
 };
 
 /** Get view button props */

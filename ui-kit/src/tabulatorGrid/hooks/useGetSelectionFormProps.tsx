@@ -9,10 +9,10 @@ export const useGetSelectionFormProps = (gridApi: IGridApi, gridProps: IGridProp
         const formProps = {...selectionFormProps};
         if (gridProps.language && !formProps.language) formProps.language = gridProps.language;
 
-        const prevOnSubmitSuccess = selectionFormProps?.onSubmitSuccess;
+        const propsOnSubmitSuccess = selectionFormProps?.onSubmitSuccess;
 
         formProps.onSubmitSuccess = (values, dataSet, resultData, formApi, cbControl) => {
-            prevOnSubmitSuccess?.(values, dataSet, resultData, formApi, cbControl);
+            propsOnSubmitSuccess?.(values, dataSet, resultData, formApi, cbControl);
             if (cbControl.isPrevented()) return;
 
             const formData = {...resultData};
