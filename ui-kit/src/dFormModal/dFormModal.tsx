@@ -29,8 +29,6 @@ export const DFormModal = (props: IDFormModalProps): React.JSX.Element => {
     const api = useInitApi({props: allPropsUpd, setProps: setAllProps});
     const buttons = useInitButtons(api, allPropsUpd);
 
-
-
     return <DFormModalRender formApi={api} modalFormProps={allPropsUpd} formProps={formProps} buttons={buttons} />;
 };
 
@@ -49,13 +47,13 @@ const useSeparateProps = (formModalProps: IDFormModalProps) => {
             height: true,
             minHeight: true,
             maxHeight: true,
-            language: true, //common property
-            translation: true, //common property
             onCancel: true,
             onOpen: true,
             onClosed: true,
             onClosing: true,
             onOpened: true,
+            language: true, //common property
+            translation: true, //common property
         });
 
         formProps.buttons = null; //clear form buttons because the modal form has it own buttons
