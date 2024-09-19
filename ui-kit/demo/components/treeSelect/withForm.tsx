@@ -1,6 +1,6 @@
 // noinspection DuplicatedCode
 
-import React, {useMemo} from 'react';
+import React, {useMemo, useState} from 'react';
 import {DForm, IDFormProps} from '@src/dForm';
 import {IDFormModalProps} from '@src/dFormModal';
 import {IInputFieldProps, InputField} from '@src/dForm/fields/input/inputField';
@@ -9,16 +9,40 @@ import {ITreeSelectApi, ITreeSelectNode} from '@src/treeSelect';
 
 import {removeFromTree} from '@src/_shared/hooks/treeComponentApiMethods/serviceMethods/removeFromTree';
 import {CloneObject} from '@krinopotam/js-helpers';
+import {Space, Switch} from 'antd';
 
 export const TreeSelectWithForm = (): React.JSX.Element => {
     const formProps = useFormProps();
+    const [readOnly, setReadOnly] = useState(false);
+    const [disabled, setDisabled] = useState(false);
+
     return (
         <>
             {/*Description Start*/}
             <h1>Пример TreeSelect с формой редактирования</h1>
             {/*Description End*/}
+
+            <Space style={{paddingBottom:10}}>
+                <div>
+                    Read only
+                    <Switch
+                        onClick={e => {
+                            setReadOnly(e);
+                        }}
+                    />
+                </div>
+                <div>
+                    Disabled
+                    <Switch
+                        onClick={e => {
+                            setDisabled(e);
+                        }}
+                    />
+                </div>
+            </Space>
+
             <div style={{maxWidth: 500}}>
-                <DForm {...formProps} />
+                <DForm {...formProps} readOnly={readOnly} disabled={disabled} />
             </div>
         </>
     );

@@ -75,7 +75,7 @@
     "vitest": "^2.1.1"
   },
   "dependencies": {
-    "@krinopotam/common-hooks": "^1.0.20",
+    "@krinopotam/common-hooks": "^1.0.25",
     "@krinopotam/js-helpers": "^1.0.56",
     "@krinopotam/service-types": "^1.0.19",
     "ahooks": "^3.8.1",

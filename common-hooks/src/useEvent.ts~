@@ -6,7 +6,7 @@ import {useRef, useEffect, useCallback} from 'react';
 export const useEvent = <TArgs extends unknown[], TReturn>(callback: (...args: TArgs) => TReturn) => {
     const callbackRef = useRef(callback);
     callbackRef.current = callback;
-
+    
     // Keep the callback reference up-to-date
     useEffect(() => {
         callbackRef.current = callback;

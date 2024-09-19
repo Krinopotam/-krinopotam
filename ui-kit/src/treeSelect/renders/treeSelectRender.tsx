@@ -86,8 +86,8 @@ export const TreeSelectRender = ({
                 onDropdownVisibleChange={onDropdownVisibleChange}
                 onSearch={onSearch}
             />
-            {!allProps.readOnly && editFormProps ? <DFormModal {...editFormProps} apiRef={api.getEditFormApi()} /> : null}
-            {!allProps.readOnly && editGroupFormProps ? <DFormModal {...editGroupFormProps} apiRef={api.getEditGroupFormApi()} /> : null}
+            {!allProps.disabled && editFormProps ? <DFormModal {...editFormProps} apiRef={api.getEditFormApi()} /> : null}
+            {!allProps.disabled && editGroupFormProps ? <DFormModal {...editGroupFormProps} apiRef={api.getEditGroupFormApi()} /> : null}
         </>
     );
 };

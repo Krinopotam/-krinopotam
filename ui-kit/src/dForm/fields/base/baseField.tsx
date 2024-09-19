@@ -15,8 +15,8 @@ import {LabelTooltipType} from 'antd/es/form/FormItemLabel';
 import {BaseFieldRender} from './baseFieldRender';
 import {DModel} from '@src/dForm';
 import {IRuleType} from '@src/dForm/validators/baseValidator';
-import {IsArray} from "@krinopotam/js-helpers/helpersObjects/isArray";
-import {CallbackControl} from "@src/_shared/classes/callbackControl";
+import {IsArray} from '@krinopotam/js-helpers/helpersObjects/isArray';
+import {CallbackControl} from '@src/_shared/classes/callbackControl';
 
 export interface IBaseFieldProps<TField extends IBaseField, TValue> extends Record<string, unknown> {
     /** Field React component */
@@ -306,6 +306,7 @@ export class BaseField<TFieldProps extends IAnyFieldProps> {
 
     /** @returns field disable status */
     isDisabled(): boolean {
+        if (this.model.isFormDisabled()) return true;
         return this.model.getFormDisabledFields()[this.fieldName] ?? false;
     }
 
@@ -326,6 +327,7 @@ export class BaseField<TFieldProps extends IAnyFieldProps> {
 
     /** @returns field read only status  */
     isReadOnly(): boolean {
+        if (this.model.isFormReadOnly() || (this.getProps().nonEditable && this.model.getFormMode() === 'update')) return true;
         return this.model.getFormReadOnlyFields()[this.fieldName] ?? false;
     }
 
@@ -336,8 +338,7 @@ export class BaseField<TFieldProps extends IAnyFieldProps> {
      * @param noRerender - do not emit re-rendering
      */
     setReadOnly(value: boolean, noEvents?: boolean, noRerender?: boolean) {
-        const prevValue = this.isReadOnly();
-        if (this.getProps().nonEditable && this.model.getFormMode() === 'update') value = true;
+        const prevValue = this.model.getFormReadOnlyFields()[this.fieldName];
 
         if (prevValue === value) return;
 
@@ -415,9 +416,9 @@ export class BaseField<TFieldProps extends IAnyFieldProps> {
         else errors[this.fieldName] = value;
 
         if (!noEvents) {
-            const fieldProps = this.getProps()
+            const fieldProps = this.getProps();
             fieldProps?.onErrorChanged?.(value, this);
-            const formProps = this.model.getFormProps()
+            const formProps = this.model.getFormProps();
             const values = this.model.getFormValues();
             const dataSet = this.model.getFormDataSet();
             if (this.model.isFormHasError()) formProps.onFormHasErrors?.(values, dataSet, errors, this.model.getFormApi(), new CallbackControl());

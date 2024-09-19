@@ -121,6 +121,7 @@ export class DModel {
         this._formProps = formProps;
         this._formMode = formProps.formMode ?? 'create';
         this._formReadOnly = !!formProps.readOnly;
+        this._formDisabled = !!formProps.disabled;
 
         const prevFieldsMap = this._fieldsMap;
         [this._fieldsMap, this._rootFields] = this.prepareFieldCollection(formProps.fieldsProps);
@@ -252,18 +253,14 @@ export class DModel {
                 values[fieldName] = curValues[fieldName];
                 hidden[fieldName] = typeof curHidden[fieldName] === 'boolean' ? curHidden[fieldName] : fieldProps.hidden;
                 disabled[fieldName] = typeof curDisabled[fieldName] === 'boolean' ? curDisabled[fieldName] : fieldProps.disabled;
-
-                if (mode === 'view' || (fieldProps.nonEditable && mode === 'update')) readOnly[fieldName] = true;
-                else readOnly[fieldName] = typeof curReadOnly[fieldName] === 'boolean' ? curReadOnly[fieldName] : fieldProps.readOnly;
+                readOnly[fieldName] = typeof curReadOnly[fieldName] === 'boolean' ? curReadOnly[fieldName] : fieldProps.readOnly;
 
                 continue;
             }
 
             hidden[fieldName] = !!fieldProps.hidden;
             disabled[fieldName] = !!fieldProps.disabled;
-
-            if (mode === 'view' || (fieldProps.nonEditable && mode === 'update')) readOnly[fieldName] = true;
-            else readOnly[fieldName] = !!fieldProps.readOnly;
+            readOnly[fieldName] = !!fieldProps.readOnly;
 
             if (!field.canHaveValue()) continue;
 
@@ -489,12 +486,6 @@ export class DModel {
 
         if (prevValue === value) return;
 
-        const fields = this.getFieldsMap();
-        for (const fieldName in fields) {
-            const field = fields[fieldName];
-            field.setDisabled(value, noEvents, true);
-        }
-
         if (!noEvents) this._formProps?.onFormDisabledStateChanged?.(value, this._formApi, new CallbackControl());
         if (!noRerender) this.emitFormRender();
     }
@@ -518,12 +509,6 @@ export class DModel {
         this._formReadOnly = value;
 
         if (prevValue === value) return;
-
-        const fields = this.getFieldsMap();
-        for (const fieldName in fields) {
-            const field = fields[fieldName];
-            field.setReadOnly(value, noEvents, true);
-        }
 
         if (!noEvents) this._formProps?.onFormReadOnlyStateChanged?.(value, this._formApi, new CallbackControl());
         if (!noRerender) this.emitFormRender();

@@ -27,7 +27,7 @@ describe('useAddEventListener', () => {
         const initialHandler = vi.fn(() => count);
         const updatedHandler = vi.fn(() => ++count);
 
-        const { rerender} = renderHook(({handler}) => useAddEventListener(eventType, handler, document), {initialProps: {handler: initialHandler}});
+        const {result, rerender} = renderHook(({handler}) => useAddEventListener(eventType, handler, document), {initialProps: {handler: initialHandler}});
 
         // Simulate event
         const event = new Event(eventType);
@@ -40,22 +40,5 @@ describe('useAddEventListener', () => {
         document.dispatchEvent(event);
         expect(initialHandler).toHaveBeenCalledTimes(1);
         expect(updatedHandler).toHaveBeenCalledTimes(1);
-    });
-
-    it('should nod add event listener if skip passed', () => {
-        const handler = vi.fn();
-        const eventType = 'click';
-
-        const {unmount} = renderHook(() => useAddEventListener(eventType, handler, document, undefined, true));
-
-        // Simulate event
-        const event = new Event(eventType);
-        document.dispatchEvent(event);
-        expect(handler).toHaveBeenCalledTimes(0);
-
-        // Unmount the hook to remove the event listener
-        unmount();
-        document.dispatchEvent(event);
-        expect(handler).toHaveBeenCalledTimes(0); // should not increase
     });
 });

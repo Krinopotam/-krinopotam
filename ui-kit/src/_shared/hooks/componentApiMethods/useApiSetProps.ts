@@ -1,10 +1,7 @@
-import React, {useCallback} from 'react';
+import React from 'react';
 
 export const useApiSetProps = <T>(setProps: React.Dispatch<React.SetStateAction<T>>): ((props: T) => void) => {
-    return useCallback(
-        (props: T) => {
-            setProps(props);
-        },
-        [setProps]
-    );
+    return (props: T) => {
+        setProps(props);
+    };
 };

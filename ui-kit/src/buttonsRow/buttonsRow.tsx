@@ -1,12 +1,12 @@
 import {Col, Row} from 'antd';
 import React, {useContext, useEffect, useRef, useState} from 'react';
 import {RenderButtonGroup} from '@src/buttonsRow/components/renderButtonGroup';
-import {useApi} from '@src/buttonsRow/hooks/api';
-import {prepareButtons} from '@src/buttonsRow/helpers/buttonMethods';
+import {useApi} from '@src/buttonsRow/hooks/api/api';
 import {ButtonRowWrapperContext} from '@src/buttonsRow/components/buttonsRowWrapper';
 import {keyDownHandler} from '@src/buttonsRow/helpers/keypressProcessing';
 import {IButtonRowProps, IButtonsRowApi, IFormButtons} from '@src/buttonsRow/types/types';
-import {useGetActualProps} from "@krinopotam/common-hooks";
+import {useAddEventListener, useGetActualProps} from '@krinopotam/common-hooks';
+import {useGetPreparedButtons} from '@src/buttonsRow/hooks/useGetPreparedButtons';
 
 export const ButtonsRow = (props: IButtonRowProps): React.JSX.Element => {
     const [allProps, setAllProps] = useGetActualProps(props); //props can be set both by parent component and via api
@@ -44,19 +44,12 @@ const useSubscribeToKeyDownEvent = (props: IButtonRowProps, api: IButtonsRowApi)
 
     const wrapperContext = useContext(ButtonRowWrapperContext);
 
-    useEffect(() => {
-        if (!wrapperContext.wrapperRef?.current) return;
-        const wrapperElement = wrapperContext.wrapperRef.current;
-
-        const onKeyDown = (e: KeyboardEvent) => keyDownHandler(e, propsRef, api, wrapperContext.wrapperId, props);
-        wrapperElement.addEventListener('keydown', onKeyDown);
-        return () => wrapperElement.removeEventListener('keydown', onKeyDown);
-
-        // eslint-disable-next-line
-    }, []);
+    useAddEventListener('keydown', (e: KeyboardEvent) => keyDownHandler(e, props, api, wrapperContext.wrapperId), wrapperContext?.wrapperRef);
 };
+
 const usePrepareButtons = (props: IButtonRowProps): [IFormButtons, (buttons: IFormButtons) => void] => {
-    const [curButtons, setCurButtons] = useState(prepareButtons(props.buttons, props));
+    const preparedButtons = useGetPreparedButtons(props.buttons, props);
+    const [curButtons, setCurButtons] = useState(preparedButtons);
 
     const setTimeoutCurButtons = (buttons: IFormButtons) => {
         setTimeout(() => {
@@ -64,11 +57,9 @@ const usePrepareButtons = (props: IButtonRowProps): [IFormButtons, (buttons: IFo
         }, 0);
     };
 
-    //useUpdateButtonProps(setCurButtons)
     useEffect(() => {
-        const _buttons = prepareButtons(props.buttons, props);
-        setCurButtons(_buttons);
-    }, [props, props.buttons]);
+        setCurButtons(preparedButtons);
+    }, [preparedButtons]);
 
     return [curButtons, setTimeoutCurButtons];
 };

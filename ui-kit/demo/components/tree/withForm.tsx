@@ -1,6 +1,6 @@
 // noinspection DuplicatedCode
 
-import React, {useMemo} from 'react';
+import React, {useMemo, useState} from 'react';
 import {IDFormModalProps} from '@src/dFormModal';
 import {IInputFieldProps, InputField} from '@src/dForm/fields/input/inputField';
 import {ITreeSelectFieldProps, TreeSelectField} from '@src/dForm/fields/treeSelect/treeSelectField';
@@ -9,16 +9,38 @@ import {ITreeSelectApi, ITreeSelectNode} from '@src/treeSelect';
 import {removeFromTree} from '@src/_shared/hooks/treeComponentApiMethods/serviceMethods/removeFromTree';
 import {CloneObject} from '@krinopotam/js-helpers';
 import {IExtTreeProps, Tree} from '@src/tree';
+import {Space, Switch} from "antd";
 
 export const TreeWithForm = (): React.JSX.Element => {
     const treeProps = useTreeProps();
+    const [readOnly, setReadOnly] = useState(false)
+    const [disabled, setDisabled] = useState(false)
     return (
         <>
             {/*Description Start*/}
             <h1>Пример Extended Tree с формой редактирования</h1>
             {/*Description End*/}
-            <div style={{maxWidth: 500}}>
-                <Tree {...treeProps} />
+
+            <Space style={{paddingBottom:10}}>
+                <div>
+                    Read only
+                    <Switch
+                        onClick={e => {
+                            setReadOnly(e);
+                        }}
+                    />
+                </div>
+                <div>
+                    Disabled
+                    <Switch
+                        onClick={e => {
+                            setDisabled(e);
+                        }}
+                    />
+                </div>
+            </Space>
+            <div style={{maxWidth: 500, maxHeight:500, height:'100%', overflow:"auto"}}>
+                <Tree {...treeProps} readOnly={readOnly} disabled={disabled} />
             </div>
         </>
     );
@@ -34,6 +56,7 @@ const useTreeProps=() =>{
         defaultExpandAll: true,
         confirmDelete: true,
         editFormProps: editFormProps,
+        selectNewNode:true,
     } satisfies IExtTreeProps
 }
 

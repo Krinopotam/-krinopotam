@@ -3,17 +3,17 @@ import {useEvent} from './useEvent';
 
 /**
  * Add event listener and remove it on unmount
- * @param name - event name
- * @param handler - event handler (don't care about function stability, handler will be wrapped by useEvent)
- * @param target - event target (document by default)
- * @param options - additional options
- * @param skip - skip adding event listener
  */
 export const useAddEventListener = <K extends keyof DocumentEventMap, Target extends EventTarget, TReturn>(
+    /** event name */
     name: K,
+    /** event handler (don't care about function stability, handler will be wrapped by useEvent) */
     handler: (ev: DocumentEventMap[K]) => TReturn,
+    /** event target (document by default) */
     target?: Target | (() => Target) | React.RefObject<Target> | null,
+    /** additional event options */
     options?: boolean | AddEventListenerOptions,
+    /** skip adding event listener */
     skip?: boolean
 ) => {
     const callback = useEvent(handler) as unknown as EventListener;

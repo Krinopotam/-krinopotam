@@ -76,6 +76,9 @@ export interface IDFormPropsNoCB {
     /** The form is read only */
     readOnly?: boolean;
 
+    /** The form is disabled */
+    disabled?: boolean;
+
     /** Automatically disable fields if they depend on fields whose value is not set. Otherwise, such fields will be automatically hidden */
     disableDepended?: boolean;
 

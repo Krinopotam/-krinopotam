@@ -1,14 +1,15 @@
 import { useEffect as o } from "react";
-import { useEvent as E } from "./useEvent.js";
-const u = (e, s, n, t) => {
-  const r = E(s);
+import { useEvent as i } from "./useEvent.js";
+const d = (e, u, c, n, f) => {
+  const r = i(u);
   o(() => {
-    const c = n ?? document;
-    return c.addEventListener(e, r, t), () => {
-      c.removeEventListener(e, r, t);
+    if (f) return;
+    const t = s(c);
+    return t.addEventListener(e, r, n), () => {
+      t.removeEventListener(e, r, n);
     };
-  }, [r, e, t, n]);
-};
+  }, [r, e, n, c]);
+}, s = (e) => e instanceof EventTarget ? e : typeof e == "function" ? e() : e != null && e.current && e instanceof EventTarget ? e.current : document;
 export {
-  u as useAddEventListener
+  d as useAddEventListener
 };

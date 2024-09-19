@@ -1,22 +1,16 @@
-import React from 'react';
 import {IButtonRowProps, IButtonsRowApi} from '@src/buttonsRow';
 
-export const keyDownHandler = (
-    e: KeyboardEvent,
-    propsRef: React.MutableRefObject<IButtonRowProps>,
-    api: IButtonsRowApi,
-    wrapperId: string,
-    props: IButtonRowProps
-) => {
+export const keyDownHandler = (e: KeyboardEvent, props: IButtonRowProps, api: IButtonsRowApi, wrapperId: string) => {
     const target = e.target as HTMLElement;
-    //target.style.borderColor = GetRandomColor() //DEBUG: -----
+
+    //target.style.border = `solid 1px ${GetRandomColor()}` //DEBUG: -----
 
     if (!e.key || !target?.closest('.buttons-row-wrapper-' + wrapperId)) return;
 
     const key = e.key.toLowerCase();
     if (key === 'f5' || (e.ctrlKey && e.shiftKey && key === 'r')) return; //F5 or ctrl+shift+r pressed - When user press the page refresh buttons, we simply exit
 
-    if (propsRef.current.arrowsSelection) processArrowKeys(e, api);
+    if (props.arrowsSelection) processArrowKeys(e, api);
     processHotKeys(e, api, props);
 };
 

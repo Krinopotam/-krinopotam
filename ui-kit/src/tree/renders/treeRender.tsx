@@ -4,7 +4,7 @@ import {Tree as AntdTree} from 'antd';
 import type {IExtTreeNode} from '@src/tree/types/types';
 import {IExtTreeApi, IExtTreeProps} from '@src/tree/types/types';
 import {IKey} from '@krinopotam/service-types';
-import {INodePosition} from "@src/_shared/hooks/treeComponentApiMethods/types/treeApiTypes";
+import {INodePosition} from '@src/_shared/hooks/treeComponentApiMethods/types/treeApiTypes';
 
 export const TreeRender = (props: {treeApi: IExtTreeApi; allProps: IExtTreeProps; antdTreeProps: TreeProps<IExtTreeNode>}): React.JSX.Element => {
     const treeApi = props.treeApi;
@@ -61,12 +61,16 @@ const useOnDoubleClick = (treeApi: IExtTreeApi) => {
     return useCallback<NonNullable<IExtTreeProps['onDoubleClick']>>(
         (e, node) => {
             const props = treeApi.getProps();
+            if (props.onDoubleClick) props.onDoubleClick?.(e, node);
+
             const fieldNames = treeApi.getFieldNames();
 
-            if ((node[fieldNames.children] as IExtTreeNode[])?.length) treeApi.toggleNode(node[fieldNames.key] as IKey);
-            else treeApi.getButtonsApi().triggerClick('update');
+            if (!props.disabled && !props.readOnly && (props.editFormProps || props.editGroupFormProps)) {
+                treeApi.getButtonsApi().triggerClick('update');
+                return;
+            }
 
-            if (props.onDoubleClick) props.onDoubleClick?.(e, node);
+            if ((node[fieldNames.children] as IExtTreeNode[])?.length) treeApi.toggleNode(node[fieldNames.key] as IKey);
         },
         [treeApi]
     );
@@ -77,8 +81,8 @@ const useOnDrop = (api: IExtTreeApi) => {
         info => {
             let pos: INodePosition = 'insideTop';
             if (info.dropToGap) pos = info.dropPosition < 0 ? 'above' : 'below';
-            if (!info.dragNode.id) return
-            api.moveNode(info.dragNode.id, info.node.id, pos);
+            if (!info.dragNode.id) return;
+            api.moveNode(info.dragNode.id, info.node.id, pos, {ensureVisible: true});
         },
         [api]
     );
