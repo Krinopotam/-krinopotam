@@ -32,7 +32,7 @@ export const useInitApi = ({props, setProps}: {props: IDFormProps; setProps: Rea
     if (!props._overriddenApi?.getIsMounted) api.getIsMounted = apiGetIsMounted;
 
     /************* Component owned Api methods ***************/
-    const apiT = useApiT(api);
+    const apiT = useApiT(props);
     if (!props._overriddenApi?.t) api.t = apiT;
 
     const getButtonsApi = useApiGetButtonsApi();

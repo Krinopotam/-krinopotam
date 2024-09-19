@@ -67,48 +67,51 @@ export const useInitGridApi = ({
 
     useUpdateDataSetFromProps(dataSetRef, props.dataSet);
 
-    /** Component Api methods*/
-    api.getId = useApiGetId(props.id ?? 'grid-' + GetNanoId());
-    api.getProps = useApiGetProps(props);
-    api.setProps = useApiSetProps(setProps);
-    api.updateProps = useApiUpdateProps(props, setProps);
-    api.getIsMounted = useApiIsMounted();
+    const apiMethods: IGridApi = {
+        /** Component Api methods*/
+        getId: useApiGetId(props.id ?? 'grid-' + GetNanoId()),
+        getProps: useApiGetProps(props),
+        setProps: useApiSetProps(setProps),
+        updateProps: useApiUpdateProps(props, setProps),
+        getIsMounted: useApiIsMounted(),
 
-    /** Component own api methods */
-    api.tableApi = tableRef.current as ITabulator;
-    api.editFormApi = editFormApi;
-    api.selectionFormApi = selectionFormApi;
+        /** Component own api methods */
+        tableApi: tableRef.current as ITabulator,
+        editFormApi,
+        selectionFormApi,
 
-    api.t = useApiT(api);
-    api.getButtonsApi = useApiGetButtonsApi<IButtonsRowApi & {refreshButtons: () => void}>();
-    api.getDataSet = useApiGetDataSet(dataSetRef, api);
-    api.setDataSet = useApiSetDataSet(dataSetRef, api);
-    api.getIsLoading = useApiGetIsLoading(isLoading);
-    api.setIsLoading = useApiSetIsLoading(setIsLoading);
-    api.setActiveRowKey = useApiSetActiveRowKey(api);
-    api.getActiveRowKey = useApiGetActiveRowKey(api);
-    api.getActiveNode = useApiGetActiveNode(api);
-    api.getActiveRow = useApiGetActiveRow(api);
-    api.getNextRowKey = useApiGetNextRowKey(api);
-    api.getPrevRowKey = useApiGetPrevRowKey(api);
-    api.getSelectedRowKeys = useApiGetSelectedRowKeys(api);
-    api.getSelectedNodes = useApiGetSelectedNodes(api);
-    api.getSelectedRows = useApiGetSelectedRows(api);
-    api.setSelectedRowKeys = useApiSetSelectedRowsKeys(api);
-    api.setSelectedRows = useApiSetSelectedRows(api);
-    api.getNodeByKey = useApiGetNodeByKey(api);
-    api.getRowByKey = useApiGetRowByKey(api);
-    api.insertRows = useApiInsertRows(dataSetRef, api);
-    api.updateRows = useApiUpdateRows(dataSetRef, api);
-    api.removeRowsByKeys = useApiRemoveRowsByKeys(dataSetRef, api);
-    api.removeRows = useApiRemoveRows(api);
-    api.deleteRows = useApiDeleteRows(api, props);
-    api.fetchData = useApiFetchData(api);
-    api.retryFetchData = useApiRetryFetchData(api);
-    api.setCurrentDataFetchHandler = useSetCurrentDataFetchHandler(curDataFetchHandler, curDataFetchParams);
-    api.getCurrentDataFetchHandler = useGetCurrentDataFetchHandler(curDataFetchHandler, curDataFetchParams);
-    api.getRowData = useApiGetRowData(api);
-    api.openColumnDialog = useApiOpenColumnDialog(setColumnsDialog);
+        t: useApiT(props),
+        getButtonsApi: useApiGetButtonsApi<IButtonsRowApi & {refreshButtons: () => void}>(),
+        getDataSet: useApiGetDataSet(dataSetRef, api),
+        setDataSet: useApiSetDataSet(dataSetRef, api),
+        getIsLoading: useApiGetIsLoading(isLoading),
+        setIsLoading: useApiSetIsLoading(setIsLoading),
+        setActiveRowKey: useApiSetActiveRowKey(api),
+        getActiveRowKey: useApiGetActiveRowKey(api),
+        getActiveNode: useApiGetActiveNode(api),
+        getActiveRow: useApiGetActiveRow(api),
+        getNextRowKey: useApiGetNextRowKey(api),
+        getPrevRowKey: useApiGetPrevRowKey(api),
+        getSelectedRowKeys: useApiGetSelectedRowKeys(api),
+        getSelectedNodes: useApiGetSelectedNodes(api),
+        getSelectedRows: useApiGetSelectedRows(api),
+        setSelectedRowKeys: useApiSetSelectedRowsKeys(api),
+        setSelectedRows: useApiSetSelectedRows(api),
+        getNodeByKey: useApiGetNodeByKey(api),
+        getRowByKey: useApiGetRowByKey(api),
+        insertRows: useApiInsertRows(dataSetRef, api),
+        updateRows: useApiUpdateRows(dataSetRef, api),
+        removeRowsByKeys: useApiRemoveRowsByKeys(dataSetRef, api),
+        removeRows: useApiRemoveRows(api),
+        deleteRows: useApiDeleteRows(api, props),
+        fetchData: useApiFetchData(api),
+        retryFetchData: useApiRetryFetchData(api),
+        setCurrentDataFetchHandler: useSetCurrentDataFetchHandler(curDataFetchHandler, curDataFetchParams),
+        getCurrentDataFetchHandler: useGetCurrentDataFetchHandler(curDataFetchHandler, curDataFetchParams),
+        getRowData: useApiGetRowData(api),
+        openColumnDialog: useApiOpenColumnDialog(setColumnsDialog),
+    };
 
+    Object.assign(api, apiMethods);
     return api;
 };

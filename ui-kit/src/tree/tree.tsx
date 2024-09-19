@@ -41,6 +41,9 @@ const useSeparateProps = (props: IExtTreeProps) => {
             noDeselect: true,
             groupsMode: true,
             onDataSetChanged: true,
+            nodeDeleteMessage: true,
+            onDelete: true,
+            selectNewNode: true,
             /** common props */
             fieldNames: true,
             defaultCheckedKeys: true,

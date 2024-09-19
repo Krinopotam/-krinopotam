@@ -1,3 +1,5 @@
+// noinspection DuplicatedCode
+
 import {ITreeSelectProps} from '@src/treeSelect';
 import {useRef, useState} from 'react';
 import {useDataFetcher} from '@src/treeSelect/hooks/useDataFetcher';
@@ -84,75 +86,79 @@ export const useInitApi = ({
     //const [selectedKeys, setSelectedKeys] = useSelectedState(props);
     const [open, setOpen] = useOpenState(props);
 
-    api.getFieldNames = useApiGetFieldNames(props);
-    const fieldNames = api.getFieldNames();
+    const fieldNames = useApiGetFieldNames(props)();
     const prepareNode = useApiPrepareNode(props);
 
     const [value, setValue] = useValuesState(props, fieldNames);
     const [dataSet, setDataset, isDataPlain, parentKeys] = useDataSetState(props.dataSet, fieldNames, prepareNode); //current dataSet
     const [expandedKeys, setExpandedKeys] = useExpandedKeysState(props.expandedKeys, props.defaultExpandedKeys, props.defaultExpandAll, parentKeys); //expanded keys
 
-    /** Component Api methods*/
-    api.getId = useApiGetId(props.componentId ?? 'treeSelect-' + GetNanoId());
-    api.getProps = useApiGetProps(props);
-    api.setProps = useApiSetProps(setProps);
-    api.updateProps = useApiUpdateProps(props, setProps);
-    api.getIsMounted = useApiIsMounted();
-
-    /** Tree component Api methods */
-    api.getDataSet = useApiGetDataSet(dataSet);
-    api.setDataSet = useApiSetDataset(setDataset, props?.onDataSetChanged);
-    api.getValues = useApiGetValues(value);
-    api.setValues = useApiSetValues(setValue, fieldNames);
-    api.isDataPlainList = useApiGetIsDataPlain(isDataPlain);
-    api.getEditFormApi = useApiGetEditFormApi(editFormApi);
-    api.getEditGroupFormApi = useApiGetEditGroupFormApi(editGroupFormApi);
-    api.getSelectedKeys = useApiGetSelectedKeys(value);
-    api.getSelectedNodes = useApiGetSelectedNodes(api, value);
-    api.isNodeSelected = useApiIsNodeSelected(api);
-    api.selectNode = useApiSelectNode(api, props.multiple);
-    api.getActiveNodeKey = useApiGetActiveNodeKey(api);
-    api.getActiveNode = useApiGetActiveNode(api);
-    api.getExpandedKeys = useApiGetExpandedKeys(expandedKeys);
-    api.setExpandedKeys = useApiSetExpandedKeys(setExpandedKeys);
-    api.getExpandedNodes = useApiGetExpandedNodes(api);
-    api.isNodeExpanded = useApiIsNodeExpanded(api);
-    api.expandNode = useApiExpandNode(api);
-    api.collapseNode = useApiCollapseNode(api);
-    api.toggleNode = useApiToggleNode(api);
-    api.expandParentNodes = useApiExpandParentNodes(api);
-    api.getNode = useApiGetNode(api);
-    api.getNodes = useApiGetNodes(api);
-    api.getNextNodeKey = useApiGetNextNodeKey(api);
-    api.getPrevNodeKey = useApiGetPrevNodeKey(api);
-    api.getNextNode = useApiGetNextNode(api);
-    api.getPrevNode = useApiGetPrevNode(api);
-    api.getParentNode = useApiGetParentNode(api);
-    api.addNode = useApiAddNode(api);
-    api.updateNode = useApiUpdateNode(api);
-    api.removeNode = useApiRemoveNode(api);
-    api.moveNode = useApiMoveNode(api);
-    api.ensureNodeVisible = useApiEnsureNodeVisible(api);
-
-    /** Component own api methods */
-    api.t = useApiT(api);
-    api.treeSelectRef = useRef(null);
-    api.getButtonsApi = useApiGetButtonsApi<IButtonsRowApi & {refreshButtons: () => void}>();
-    api.getIsReady = useApiGetIsReady(isReady);
-    api.setIsReady = useApiSetIsReady(setIsReady);
-    api.getIsOpen = useApiGetIsOpen(open);
-    api.setIsOpen = useApiSetIsOpen(setOpen);
-    api.getIsFetching = useApiGetIsFetching(fetching);
-    api.setIsFetching = useApiSetIsFetching(setFetching);
-    api.getFetchError = useApiGetFetchError(fetchError);
-    api.setFetchError = useApiSetFetchError(setFetchError);
-    api.getIsAllFetched = useApiGetIsAllFetched(allFetched);
-    api.setIsAllFetched = useApiSetIsAllFetched(setAllFetched);
-    api.getMinSymbols = useApiGetMinSymbols(minSymbols);
-    api.setMinSymbols = useApiSetMinSymbols(setMinSymbols);
-
     const dataFetcher = useDataFetcher(api);
-    api.fetchData = useApiFetchData(dataFetcher, api);
+    const apiMethods: ITreeSelectApi = {
+        /** Component Api methods*/
+        getId: useApiGetId(props.componentId ?? 'treeSelect-' + GetNanoId()),
+        getProps: useApiGetProps(props),
+        setProps: useApiSetProps(setProps),
+        updateProps: useApiUpdateProps(props, setProps),
+        getIsMounted: useApiIsMounted(),
+
+        /** Tree component Api methods */
+        getFieldNames: useApiGetFieldNames(props),
+        getDataSet: useApiGetDataSet(dataSet),
+        setDataSet: useApiSetDataset(setDataset, props?.onDataSetChanged),
+        getValues: useApiGetValues(value),
+        setValues: useApiSetValues(setValue, fieldNames),
+        isDataPlainList: useApiGetIsDataPlain(isDataPlain),
+        getEditFormApi: useApiGetEditFormApi(editFormApi),
+        getEditGroupFormApi: useApiGetEditGroupFormApi(editGroupFormApi),
+        getSelectedKeys: useApiGetSelectedKeys(value),
+        getSelectedNodes: useApiGetSelectedNodes(api, value),
+        isNodeSelected: useApiIsNodeSelected(api),
+        selectNode: useApiSelectNode(api, props.multiple),
+        getActiveNodeKey: useApiGetActiveNodeKey(api),
+        getActiveNode: useApiGetActiveNode(api),
+        getExpandedKeys: useApiGetExpandedKeys(expandedKeys),
+        setExpandedKeys: useApiSetExpandedKeys(setExpandedKeys),
+        getExpandedNodes: useApiGetExpandedNodes(api),
+        isNodeExpanded: useApiIsNodeExpanded(api),
+        expandNode: useApiExpandNode(api),
+        collapseNode: useApiCollapseNode(api),
+        toggleNode: useApiToggleNode(api),
+        expandParentNodes: useApiExpandParentNodes(api),
+        getNode: useApiGetNode(api),
+        getNodes: useApiGetNodes(api),
+        getNextNodeKey: useApiGetNextNodeKey(api),
+        getPrevNodeKey: useApiGetPrevNodeKey(api),
+        getNextNode: useApiGetNextNode(api),
+        getPrevNode: useApiGetPrevNode(api),
+        getParentNode: useApiGetParentNode(api),
+        addNode: useApiAddNode(api),
+        updateNode: useApiUpdateNode(api),
+        removeNode: useApiRemoveNode(api),
+        moveNode: useApiMoveNode(api),
+        ensureNodeVisible: useApiEnsureNodeVisible(api),
+
+        /** Component own api methods */
+        t: useApiT(props),
+        treeSelectRef: useRef(null),
+        getButtonsApi: useApiGetButtonsApi<IButtonsRowApi & {refreshButtons: () => void}>(),
+        getIsReady: useApiGetIsReady(isReady),
+        setIsReady: useApiSetIsReady(setIsReady),
+        getIsOpen: useApiGetIsOpen(open),
+        setIsOpen: useApiSetIsOpen(setOpen),
+        getIsFetching: useApiGetIsFetching(fetching),
+        setIsFetching: useApiSetIsFetching(setFetching),
+        getFetchError: useApiGetFetchError(fetchError),
+        setFetchError: useApiSetFetchError(setFetchError),
+        getIsAllFetched: useApiGetIsAllFetched(allFetched),
+        setIsAllFetched: useApiSetIsAllFetched(setAllFetched),
+        getMinSymbols: useApiGetMinSymbols(minSymbols),
+        setMinSymbols: useApiSetMinSymbols(setMinSymbols),
+
+        fetchData: useApiFetchData(dataFetcher, api),
+    };
+
+    Object.assign(api, apiMethods);
 
     return api;
 };

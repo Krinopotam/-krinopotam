@@ -36,7 +36,7 @@ export const ContainerRender = ({
             <LoadingContainer isLoading={gridApi.getIsLoading()} notHideContent={true} spinStyle={{height: '100%'}}>
                 <ButtonsRowWrapper style={{display: 'flex', flexDirection: 'column'}}>
                     <MenuRow gridApi={gridApi} />
-                    <GridRender tableRef={tableRef} gridApi={gridApi} gridProps={gridProps} tabulatorProps={tabulatorProps} />
+                    <GridRender tableRef={tableRef} api={gridApi} gridProps={gridProps} tabulatorProps={tabulatorProps} />
                 </ButtonsRowWrapper>
             </LoadingContainer>
             <ColumnsDialog open={columnsDialog} gridApi={gridApi} />

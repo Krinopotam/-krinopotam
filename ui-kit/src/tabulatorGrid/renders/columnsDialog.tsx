@@ -8,9 +8,7 @@ import type {DataNode} from 'antd/es/tree';
 import {ColumnComponent, ColumnDefinition} from 'tabulator-tables';
 import {FolderOutlined} from '@ant-design/icons';
 import {IsDebugMode} from '@krinopotam/common-hooks';
-import {useTranslate} from '@src/_shared/hooks/useTranslate';
-import {translations} from '@src/tabulatorGrid/translations/translations';
-import {IsArray} from "@krinopotam/js-helpers/helpersObjects/isArray";
+import {IsArray} from '@krinopotam/js-helpers/helpersObjects/isArray';
 
 //region Types
 export interface IColumnsDialogProps {
@@ -34,8 +32,9 @@ interface IColumnsDialogApi {
 //region Components
 export const ColumnsDialog = (props: IColumnsDialogProps): React.JSX.Element => {
     const [dialogApi] = useState<IColumnsDialogApi>({} as IColumnsDialogApi);
-    const gridProps = props.gridApi.getProps();
-    const t = useTranslate(gridProps.language, translations, gridProps.translation);
+    dialogApi.gridApi = props.gridApi;
+
+    const t = props.gridApi.t;
     return (
         <Modal
             title={t('columns')}
@@ -56,7 +55,6 @@ const DialogBody = ({dialogProps, dialogApi}: {dialogProps: IColumnsDialogProps;
     const [expanded, setExpanded] = useState<React.Key[]>([]);
     const [nodes, setNodes] = useState<DataNode[]>([]);
 
-    dialogApi.gridApi = dialogProps.gridApi;
     dialogApi.setNodes = setNodes;
     dialogApi.setChecked = setChecked;
     dialogApi.setExpanded = setExpanded;
@@ -94,8 +92,7 @@ const DialogBody = ({dialogProps, dialogApi}: {dialogProps: IColumnsDialogProps;
 };
 
 const Footer = ({formProps, dialogApi}: {formProps: IColumnsDialogProps; dialogApi: IColumnsDialogApi}): React.JSX.Element => {
-    const gridProps = dialogApi.gridApi.getProps();
-    const t = useTranslate(gridProps.language, translations, gridProps.translation);
+    const t = formProps.gridApi.t;
 
     return (
         <ButtonsRow

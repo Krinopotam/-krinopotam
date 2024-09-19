@@ -43,22 +43,13 @@ export const TreeSelectRender = ({
     const onDropdownVisibleChange = useOnDropdownVisibleChange(api, ctrlPressedRef, dialogOpenedRef);
     const onSearch = useOnSearch(api);
     const filterTreeNode = useOnFilterTreeNode(api);
-    const plainList = api.isDataPlainList();
 
     return (
         <>
             <AntdTreeSelect
                 ref={api.treeSelectRef}
                 treeNodeFilterProp={fieldNames.label} //Field to be  used for filtering if filterTreeNode returns true. Default: title (getting from api.fieldNames)
-                notFoundContent={
-                    <NotFound
-                        treeProps={allProps}
-                        fetching={api.getIsFetching()}
-                        error={api.getFetchError()}
-                        minSymbols={api.getMinSymbols()}
-                        plainList={plainList}
-                    />
-                }
+                notFoundContent={<NotFound api={api} />}
                 {...treeSelectProps}
                 /************ no override ****************/
                 labelInValue

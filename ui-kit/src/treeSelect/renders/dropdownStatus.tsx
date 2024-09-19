@@ -1,8 +1,6 @@
 import {Spin} from 'antd';
 import React from 'react';
-import {ITreeSelectApi, ITreeSelectProps} from '@src/treeSelect';
-import {useTranslate} from '@src/_shared/hooks/useTranslate';
-import {translations} from '@src/treeSelect/translations/translations';
+import {ITreeSelectApi} from '@src/treeSelect';
 
 export const DropdownStatus = ({api}: {api: ITreeSelectApi}): React.JSX.Element => {
     const error = api.getFetchError();
@@ -36,20 +34,12 @@ const ErrorStatus = ({error, plainList}: {error: string; plainList?: boolean}): 
     );
 };
 
-export const NotFound = ({
-    treeProps,
-    fetching,
-    error,
-    minSymbols,
-    plainList,
-}: {
-    treeProps: ITreeSelectProps;
-    fetching?: boolean;
-    error?: string;
-    minSymbols?: number;
-    plainList?: boolean;
-}): React.JSX.Element => {
-    const t = useTranslate(treeProps.language, translations, treeProps.translation);
+export const NotFound = ({api}: {api: ITreeSelectApi}): React.JSX.Element => {
+    const fetching = api.getIsFetching();
+    const error = api.getFetchError();
+    const minSymbols = api.getMinSymbols();
+    const plainList = api.isDataPlainList();
+
     if (minSymbols || fetching || error) return <></>;
-    return <div style={{paddingLeft: !plainList ? '30px' : '8px', fontSize: '12px'}}>{t('dataNotFound')}</div>;
+    return <div style={{paddingLeft: !plainList ? '30px' : '8px', fontSize: '12px'}}>{api.t('dataNotFound')}</div>;
 };

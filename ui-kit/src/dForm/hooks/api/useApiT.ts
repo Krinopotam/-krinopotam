@@ -1,8 +1,7 @@
 import {useTranslate} from '@src/_shared/hooks/useTranslate';
 import {translations} from '@src/dForm/translations/translations';
-import {IDFormApi} from "@src/dForm";
+import {IDFormProps} from '@src/dForm';
 
-export const useApiT = (api: IDFormApi) => {
-    const props = api.getProps();
+export const useApiT = (props: IDFormProps) => {
     return useTranslate(props.language, translations, props.translation);
 };

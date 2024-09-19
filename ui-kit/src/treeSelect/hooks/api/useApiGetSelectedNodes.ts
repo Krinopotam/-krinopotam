@@ -5,12 +5,13 @@ import {IsArray} from '@krinopotam/js-helpers/helpersObjects/isArray';
 import {labeledValueToNode} from '@src/treeSelect/tools/labeledValueToNode';
 
 export const useApiGetSelectedNodes = (api: ITreeSelectApi, value?: ILabeledValue | ILabeledValue[]): ITreeSelectApi['getSelectedNodes'] => {
-    const dataSet = api.getDataSet();
-    const fieldNames = api.getFieldNames();
     const prevDataRef = useRef<Record<string, unknown>[] | undefined>(undefined);
     const prevValsRef = useRef<ILabeledValue | ILabeledValue[] | undefined>(undefined);
     const prevNodesRef = useRef<Record<string, unknown>[] | undefined>(undefined);
     return (extDataset?: ITreeSelectNode[], extValue?: ILabeledValue | ILabeledValue[]) => {
+        const dataSet = api.getDataSet();
+        const fieldNames = api.getFieldNames();
+
         const data = extDataset ?? dataSet;
         const val = extValue ?? value;
 

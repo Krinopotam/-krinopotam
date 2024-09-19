@@ -25,7 +25,7 @@ export const useInitApi = ({props, setProps}: {props: IDFormModalProps; setProps
     api.setProps = useApiSetProps(setProps);
     api.updateProps = useApiUpdateProps(props, setProps);
     api.getIsMounted = useApiIsMounted();
-    api.t = useApiT(api);
+    api.t = useApiT(props);
     /** --------------*/
 
     api.open = useApiFormOpen(api);

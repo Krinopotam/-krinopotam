@@ -1,58 +1,55 @@
 import {ITabulatorProps} from '@src/tabulatorBase';
 import React, {useMemo} from 'react';
 import {MessageBox} from '@src/messageBox';
-import {IsDebugMode} from "@krinopotam/common-hooks";
-import {IGridApi, IGridProps} from "@src/tabulatorGrid";
-import {useTranslate} from "@src/_shared/hooks/useTranslate";
-import {translations} from "@src/tabulatorGrid/translations/translations";
+import {IsDebugMode} from '@krinopotam/common-hooks';
+import {IGridApi, IGridProps} from '@src/tabulatorGrid';
 
-export const useEvents = (gridApi: IGridApi, gridProps: IGridProps): ITabulatorProps['events'] => {
-    const events = gridProps.events
-    const t = useTranslate(gridProps.language, translations, gridProps.translation);
+export const useEvents = (api: IGridApi, gridProps: IGridProps): ITabulatorProps['events'] => {
+    const events = gridProps.events;
     return useMemo(() => {
         return {
             tableBuilt: () => {
                 events?.tableBuilt?.();
-                gridApi.getButtonsApi().refreshButtons();
+                api.getButtonsApi().refreshButtons();
             },
             dataLoading: data => {
                 events?.dataLoading?.(data);
-                gridApi.getProps().onDataLoading?.(data, gridApi);
+                api.getProps().onDataLoading?.(data, api);
 
-                if (!gridApi.getProps().progressiveLoad) gridApi.setIsLoading(true);
+                if (!api.getProps().progressiveLoad) api.setIsLoading(true);
             },
             dataLoaded: data => {
                 events?.dataLoaded?.(data);
-                gridApi.getProps().onDataLoaded?.(data, gridApi);
-                if (!gridApi.getIsMounted()) return;
+                api.getProps().onDataLoaded?.(data, api);
+                if (!api.getIsMounted()) return;
 
-                if (!gridApi.getProps().progressiveLoad) gridApi.setIsLoading(false);
+                if (!api.getProps().progressiveLoad) api.setIsLoading(false);
             },
             dataProcessed: data => {
                 events?.dataProcessed?.(data);
-                gridApi.getProps().onDataProcessed?.(data, gridApi);
+                api.getProps().onDataProcessed?.(data, api);
 
                 //console.log(data)
-                //gridApi.setSelectedRowKeys([1,2,3])
+                //api.setSelectedRowKeys([1,2,3])
             },
             dataLoadError: error => {
                 events?.dataLoadError?.(error);
-                const err = error as unknown as { message: string; code: number };
-                gridApi.getProps().onDataLoadError?.(err.message, err.code, gridApi);
+                const err = error as unknown as {message: string; code: number};
+                api.getProps().onDataLoadError?.(err.message, err.code, api);
 
-                if (!gridApi.getIsMounted()) return;
-                gridApi.setIsLoading(false);
+                if (!api.getIsMounted()) return;
+                api.setIsLoading(false);
 
-                MessageBox.destroyAll()
+                MessageBox.destroyAll();
                 const message = MessageBox.confirm({
-                    language: gridApi.getProps().language,
+                    language: api.getProps().language,
                     content: (
                         <div>
                             <p>
                                 <b>{error.message}</b>
                             </p>
                             {error.stack && IsDebugMode() ? <p>{error.stack}</p> : ''}
-                            <p>{t('tryAgainQt')}</p>
+                            <p>{api.t('tryAgainQt')}</p>
                         </div>
                     ),
                     colorType: 'danger',
@@ -60,7 +57,7 @@ export const useEvents = (gridApi: IGridApi, gridProps: IGridProps): ITabulatorP
                         ok: {
                             onClick: () => {
                                 message.destroy();
-                                gridApi.retryFetchData();
+                                api.retryFetchData();
                             },
                         },
                     },
@@ -68,16 +65,16 @@ export const useEvents = (gridApi: IGridApi, gridProps: IGridProps): ITabulatorP
             },
             rowDblClick: (event, row) => {
                 events?.rowDblClick?.(event, row);
-                gridApi.getButtonsApi().triggerClick('update');
+                api.getButtonsApi().triggerClick('update');
             },
             activeRowChanged: row => {
                 events?.activeRowChanged?.(row);
-                gridApi.getButtonsApi().refreshButtons();
+                api.getButtonsApi().refreshButtons();
             },
             rowSelectionChanged: (data, rows, selectedRows, deselectedRows) => {
                 events?.rowSelectionChanged?.(data, rows, selectedRows, deselectedRows);
-                gridApi.getProps().onSelectionChange?.(data, rows, selectedRows, deselectedRows, gridApi);
+                api.getProps().onSelectionChange?.(data, rows, selectedRows, deselectedRows, api);
             },
         };
-    }, [events, gridApi, t]);
+    }, [events, api]);
 };

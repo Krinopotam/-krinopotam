@@ -120,7 +120,7 @@ export const useInitApi = ({
         ensureNodeVisible: useApiEnsureNodeVisible(api),
 
         /** Component own api methods */
-        t: useT(api),
+        t: useT(props),
         treeRef: useRef(null),
         getButtonsApi: useApiGetButtonsApi<IButtonsRowApi & {refreshButtons: () => void}>(),
         getIsReady: useApiGetIsReady(isReady),
