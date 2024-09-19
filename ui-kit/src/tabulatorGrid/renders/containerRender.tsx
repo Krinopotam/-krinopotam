@@ -1,13 +1,13 @@
 import React from 'react';
 import {DFormModal} from '@src/dFormModal';
 import {LoadingContainer} from '@src/loadingContainer';
-import {usePrepareEditForm} from '../hooks/prepareEditForm';
+import {useGetEditFormProps} from '../hooks/useGetEditFormProps';
 import {MenuRow} from './menuRow';
 import {GridRender} from './gridRender';
 import {ITabulator, ITabulatorProps} from '@src/tabulatorBase';
 import {ButtonsRowWrapper} from '@src/buttonsRow';
 import {ColumnsDialog} from '@src/tabulatorGrid/renders/columnsDialog';
-import {usePrepareSelectionForm} from "@src/tabulatorGrid/hooks/prepareSelectionForm";
+import {useGetSelectionFormProps} from "@src/tabulatorGrid/hooks/useGetSelectionFormProps";
 import {IGridApi, IGridProps} from "@src/tabulatorGrid";
 
 export const ContainerRender = ({
@@ -23,8 +23,8 @@ export const ContainerRender = ({
     tabulatorProps: ITabulatorProps;
     columnsDialog: boolean;
 }): React.JSX.Element => {
-    const editFormProps = usePrepareEditForm(gridApi, gridProps);
-    const selectionFormProps = usePrepareSelectionForm(gridApi, gridProps);
+    const editFormProps = useGetEditFormProps(gridApi, gridProps);
+    const selectionFormProps = useGetSelectionFormProps(gridApi, gridProps);
 
     // Even though gridProps can be obtained from gridApi, we still separately pass gridProps to GridRender
     // Since GridRender is memoized, this is done so that the GridRender component is updated when gridProps changes

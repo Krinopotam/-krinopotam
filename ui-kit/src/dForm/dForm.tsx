@@ -12,7 +12,7 @@ import {useInitApi} from './hooks/api/api';
 import React, {useEffect, useMemo, useRef} from 'react';
 import {FormRender} from './renders/formRender';
 import {useOverrideCallbacks} from './hooks/useOverrideCallbacks';
-import {useGetButtons} from './hooks/useGetButtons';
+import {useGetButtonsProps} from './hooks/useGetButtonsProps';
 import {useUpdateMessageBoxTheme} from '@src/messageBox';
 import {useGetActualProps} from '@krinopotam/common-hooks';
 
@@ -29,7 +29,7 @@ export const DForm = (props: IDFormProps): React.JSX.Element => {
 
     useInitFormModel(api, formPropsUpd);
 
-    const formButtons = useGetButtons(formPropsUpd, api); //init buttons
+    const formButtons = useGetButtonsProps(formPropsUpd, api); //init buttons
 
     useInitialFetchData(api);
 

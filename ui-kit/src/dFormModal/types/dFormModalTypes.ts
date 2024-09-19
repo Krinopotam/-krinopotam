@@ -8,7 +8,7 @@ export interface IDFormModalOwnCallbacks {
     /** Fires when the form is opening.
      * Don't use formApi.getFormProps() because by the time the form is opened, they have not yet had time to update.
      */
-    onOpen?: (formApi: IDFormModalApi, dataSet: IDFormDataSet | undefined, cbControl: CallbackControl) => boolean | void;
+    onOpen?: (formApi: IDFormModalApi, dataSet: IDFormDataSet | undefined, formProps: IDFormModalProps, cbControl: CallbackControl) => boolean | void;
     /** Fires when the form is opened */
     onOpened?: (formApi: IDFormModalApi, dataSet: IDFormDataSet | undefined, cbControl: CallbackControl) => void;
     /** Fires when the form is closing */

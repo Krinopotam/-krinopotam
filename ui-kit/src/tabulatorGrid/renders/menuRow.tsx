@@ -1,7 +1,7 @@
 import React, {useLayoutEffect, useMemo, useState} from 'react';
 import {ObjectKeysLength} from '@krinopotam/js-helpers/helpersObjects/objectKeysLength';
 import {ButtonsRow} from '@src/buttonsRow/buttonsRow';
-import {useInitButtons} from '../hooks/buttons';
+import {useInitButtons} from '../hooks/useGetButtonsProps';
 import {IGridApi} from '@src/tabulatorGrid';
 
 interface IGridMenuProps {

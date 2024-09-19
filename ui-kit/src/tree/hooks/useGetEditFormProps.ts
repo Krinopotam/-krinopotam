@@ -3,7 +3,7 @@ import {IExtTreeApi, IExtTreeNode, IExtTreeProps} from '@src/tree/types/types';
 import {GetUuid} from '@krinopotam/js-helpers';
 import {IKey} from '@krinopotam/service-types';
 
-export const usePrepareEditFormProps = (treeApi: IExtTreeApi, props: IExtTreeProps, forGroup: boolean) => {
+export const useGetEditFormProps = (treeApi: IExtTreeApi, props: IExtTreeProps, forGroup: boolean) => {
     return useMemo(() => {
         const editFormProps = !forGroup ? props?.editFormProps : props?.editGroupFormProps;
         if (!editFormProps) return undefined;

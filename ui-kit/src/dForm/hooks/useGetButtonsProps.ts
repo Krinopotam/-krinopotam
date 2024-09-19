@@ -3,7 +3,7 @@ import {useMemo} from 'react';
 import {IDFormApi, IDFormProps} from '@src/dForm';
 import {IFormButtons} from '@src/buttonsRow';
 
-export const useGetButtons = (formProps: IDFormProps, api: IDFormApi): IFormButtons => {
+export const useGetButtonsProps = (formProps: IDFormProps, api: IDFormApi): IFormButtons => {
     return useMemo(() => {
         if (formProps.buttons === null) return {};
         const defaultButtons: IFormButtons = {

@@ -2,7 +2,7 @@ import {useMemo} from 'react';
 import {GetUuid} from '@krinopotam/js-helpers/helpersString/getUuid';
 import {IGridApi, IGridProps, IGridRowData} from '@src/tabulatorGrid';
 
-export const usePrepareEditForm = (gridApi: IGridApi, gridProps: IGridProps) => {
+export const useGetEditFormProps = (gridApi: IGridApi, gridProps: IGridProps) => {
     return useMemo(() => {
         const editFormProps = gridProps?.editFormProps;
         if (!editFormProps) return undefined;

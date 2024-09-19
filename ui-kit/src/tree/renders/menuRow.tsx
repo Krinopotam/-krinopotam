@@ -1,10 +1,10 @@
 import React, {useMemo} from 'react';
 import {IExtTreeApi, IExtTreeProps} from '@src/tree/types/types';
 import {ButtonsRow} from '@src/buttonsRow/buttonsRow';
-import {useInitButtons} from '@src/tree/hooks/buttons';
+import {useGetButtonsProps} from '@src/tree/hooks/useGetButtonsProps';
 
 export const MenuRow = ({api, treeProps}: {api: IExtTreeApi; treeProps: IExtTreeProps}): React.JSX.Element | null => {
-    const buttons = useInitButtons(api, treeProps);
+    const buttons = useGetButtonsProps(api, treeProps);
 
     return useMemo(() => {
         if (!buttons) return null;

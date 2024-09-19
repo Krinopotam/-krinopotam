@@ -4,7 +4,7 @@ import {IDFormModalApi, IDFormModalProps} from '@src/dFormModal';
 import {IFormButtons} from '@src/buttonsRow';
 
 /** Generate buttons */
-export const useInitButtons = (api: IDFormModalApi, props: IDFormModalProps) => {
+export const useGetButtonsProps = (api: IDFormModalApi, props: IDFormModalProps) => {
     return useMemo((): IFormButtons => {
         const defaultButtons: IFormButtons = {
             ok: {

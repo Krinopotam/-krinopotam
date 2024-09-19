@@ -20,7 +20,7 @@ import {IError} from '@krinopotam/service-types';
 import {ErrorMessage} from '@src/errorMessage';
 import {TreeSelectContext} from '@src/treeSelect/context/context';
 
-export const useInitButtons = (api: ITreeSelectApi, props: ITreeSelectProps) => {
+export const useGetButtonsProps = (api: ITreeSelectApi, props: ITreeSelectProps) => {
     api.getButtonsApi().refreshButtons = useRefreshButtons();
 
     const activeNode = api.getActiveNode(true);

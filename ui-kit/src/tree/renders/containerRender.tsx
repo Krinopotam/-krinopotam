@@ -1,5 +1,5 @@
 import React from 'react';
-import {usePrepareEditFormProps} from '../hooks/prepareEditForm';
+import {useGetEditFormProps} from '../hooks/useGetEditFormProps';
 import {MenuRow} from './menuRow';
 import {ButtonsRowWrapper} from '@src/buttonsRow/components/buttonsRowWrapper';
 import {TreeRender} from '@src/tree/renders/treeRender';
@@ -18,8 +18,8 @@ export const ContainerRender = ({
     allProps: IExtTreeProps;
     antdTreeProps: TreeProps<IExtTreeNode>;
 }): React.JSX.Element => {
-    const editFormProps = usePrepareEditFormProps(api, allProps, false);
-    const editGroupFormProps = usePrepareEditFormProps(api, allProps, true);
+    const editFormProps = useGetEditFormProps(api, allProps, false);
+    const editGroupFormProps = useGetEditFormProps(api, allProps, true);
     return (
         <div className="extended-tree-container">
             <LoadingContainer isLoading={api.getIsLoading()} notHideContent={true} spinStyle={{height: '100%'}}>

@@ -1,7 +1,7 @@
 import {useMemo} from 'react';
 import {IGridApi, IGridProps, IGridRowData} from '@src/tabulatorGrid';
 
-export const usePrepareSelectionForm = (gridApi: IGridApi, gridProps: IGridProps) => {
+export const useGetSelectionFormProps = (gridApi: IGridApi, gridProps: IGridProps) => {
     return useMemo(() => {
         const selectionFormProps = gridApi.getProps()?.selectionFormProps;
         if (!selectionFormProps) return undefined;

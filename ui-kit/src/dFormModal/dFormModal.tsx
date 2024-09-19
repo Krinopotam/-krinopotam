@@ -13,7 +13,7 @@ import React, {useMemo} from 'react';
 import {DFormModalRender} from './renders/dFormModalRender';
 import {SplitObject} from '@krinopotam/js-helpers/helpersObjects/splitObject';
 import {useOverrideCallbacks} from './hooks/useOverrideCallbacks';
-import {useInitButtons} from './hooks/useInitButtons';
+import {useGetButtonsProps} from './hooks/useGetButtonsProps';
 import {useUpdateMessageBoxTheme} from '@src/messageBox';
 import {useGetActualProps} from '@krinopotam/common-hooks';
 import {IDFormModalProps, IDFormModalOwnPropsNoCB, IDFormModalOwnProps} from '@src/dFormModal/types/dFormModalTypes';
@@ -27,7 +27,7 @@ export const DFormModal = (props: IDFormModalProps): React.JSX.Element => {
     const [, formProps] = useSeparateProps(allPropsUpd);
 
     const api = useInitApi({props: allPropsUpd, setProps: setAllProps});
-    const buttons = useInitButtons(api, allPropsUpd);
+    const buttons = useGetButtonsProps(api, allPropsUpd);
 
     return <DFormModalRender formApi={api} modalFormProps={allPropsUpd} formProps={formProps} buttons={buttons} />;
 };

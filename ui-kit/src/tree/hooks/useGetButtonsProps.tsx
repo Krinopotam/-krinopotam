@@ -5,7 +5,7 @@ import {IExtTreeApi, IExtTreeButton, IExtTreeButtons, IExtTreeNode, IExtTreeProp
 import {IDFormDataSet} from '@src/dForm';
 import {IKey} from '@krinopotam/service-types';
 
-export const useInitButtons = (treeApi: IExtTreeApi, treeProps: IExtTreeProps): IExtTreeButtons => {
+export const useGetButtonsProps = (treeApi: IExtTreeApi, treeProps: IExtTreeProps): IExtTreeButtons => {
     const [, refreshButtons] = useState({});
     const buttons = treeProps.buttons;
     const buttonsSize = treeProps.buttonsSize ?? 'small';

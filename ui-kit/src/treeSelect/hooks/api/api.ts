@@ -1,6 +1,6 @@
 import {ITreeSelectProps} from '@src/treeSelect';
 import {useRef, useState} from 'react';
-import {useDataFetcher} from '@src/treeSelect/hooks/dataFetcher';
+import {useDataFetcher} from '@src/treeSelect/hooks/useDataFetcher';
 import {GetNanoId} from '@krinopotam/js-helpers/helpersString/getNanoId';
 import {ITreeSelectApi} from '@src/treeSelect/types/types';
 import {IDFormModalApi} from '@src/dFormModal';

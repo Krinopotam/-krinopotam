@@ -15,15 +15,15 @@ export const useApiFormOpen = (api: IDFormModalApi): IDFormModalApi['open'] => {
         const clonedDataSet = newDataSet ? CloneObject(newDataSet) : undefined;
         const formProps = api.getProps();
 
-        const newProps = {
+        const newProps:IDFormModalProps = {
             open: true,
             formMode: formMode,
             dataSet: clonedDataSet,
             ...extraProps,
         };
 
-        if (formProps.onOpen?.(api, clonedDataSet, new CallbackControl()) === false) return;
-        if (extraProps?.onOpen?.(api, clonedDataSet, new CallbackControl()) === false) return;
+        if (formProps.onOpen?.(api, clonedDataSet, newProps, new CallbackControl()) === false) return;
+        if (extraProps?.onOpen?.(api, clonedDataSet, newProps, new CallbackControl()) === false) return;
 
         api.updateProps(newProps);
 

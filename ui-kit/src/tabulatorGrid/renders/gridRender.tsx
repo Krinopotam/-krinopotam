@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect, useMemo, useRef} from 'react';
 import {TabulatorBase, ITabulator, ITabulatorProps, IRequestProps} from '@src/tabulatorBase';
-import {useEvents} from '../hooks/events';
+import {useEvents} from '../hooks/useEvents';
 import {GenerateAjaxRequestFunc} from '@src/tabulatorGrid/helpers/fetchHelpers';
 import {IGridApi, IGridProps, IGridRowData} from "@src/tabulatorGrid";
 import {translations} from "@src/tabulatorGrid/translations/translations";

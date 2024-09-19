@@ -7,7 +7,7 @@ import {IFieldNames} from '@src/_shared/hooks/treeComponentApiMethods/types/tree
 import {TreeSelectContext} from '@src/treeSelect/context/context';
 import {IKey} from '@krinopotam/service-types';
 
-export const usePrepareEditFormProps = (treeApi: ITreeSelectApi, props: ITreeSelectProps, forGroup: boolean) => {
+export const useGetEditFormProps = (treeApi: ITreeSelectApi, props: ITreeSelectProps, forGroup: boolean) => {
     const {dialogOpenedRef} = useContext(TreeSelectContext);
 
     return useMemo(() => {
@@ -42,8 +42,8 @@ export const usePrepareEditFormProps = (treeApi: ITreeSelectApi, props: ITreeSel
         };
 
         const prevOnOpen = editFormProps?.onOpen;
-        formProps.onOpen = (formApi, dataSet, cbControl) => {
-            const result = prevOnOpen?.(formApi, dataSet, cbControl);
+        formProps.onOpen = (formApi, dataSet, props, cbControl) => {
+            const result = prevOnOpen?.(formApi, dataSet, props, cbControl);
             if (cbControl.isPrevented()) return result;
 
             dialogOpenedRef.current = true;

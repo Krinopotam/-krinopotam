@@ -1,11 +1,11 @@
 import {TreeSelect as AntdTreeSelect} from 'antd';
 import React, {useCallback, useContext, useMemo} from 'react';
 import {IAntTreeSelectProps, ITreeSelectApi, ITreeSelectProps} from '@src/treeSelect';
-import {useDropdownStyle} from '@src/treeSelect/hooks/dropdownStyle';
-import {useDefaultFilter} from '@src/treeSelect/hooks/filter';
+import {useDropdownStyle} from '@src/treeSelect/hooks/useDropdownStyle';
+import {useDefaultFilter} from '@src/treeSelect/hooks/useDefaultFilter';
 import {NotFound} from '@src/treeSelect/renders/dropdownStatus';
 import {DefaultOptionType} from 'rc-tree-select/es/TreeSelect';
-import {usePrepareEditFormProps} from '@src/treeSelect/hooks/prepareEditForm';
+import {useGetEditFormProps} from '@src/treeSelect/hooks/useGetEditFormProps';
 import {DFormModal} from '@src/dFormModal';
 import {ILabeledValue} from '@src/treeSelect/types/types';
 import {IKey, IKeyboardKey} from '@krinopotam/service-types';
@@ -29,8 +29,8 @@ export const TreeSelectRender = ({
     const {ctrlPressedRef, dialogOpenedRef} = useContext(TreeSelectContext);
     useCtrPressed(ctrlPressedRef);
 
-    const editFormProps = usePrepareEditFormProps(api, allProps, false);
-    const editGroupFormProps = usePrepareEditFormProps(api, allProps, true);
+    const editFormProps = useGetEditFormProps(api, allProps, false);
+    const editGroupFormProps = useGetEditFormProps(api, allProps, true);
 
     const dropdownStyle = useDropdownStyle(allProps.dropdownStyle);
     const dropdownRender = useDropdownRender({api: api});

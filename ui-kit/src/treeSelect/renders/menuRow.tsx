@@ -1,11 +1,11 @@
 import ButtonsRow from '@src/buttonsRow/buttonsRow';
-import {useInitButtons} from '@src/treeSelect/hooks/buttons';
+import {useGetButtonsProps} from '@src/treeSelect/hooks/useGetButtonsProps';
 import React, {useMemo} from 'react';
 import {ITreeSelectApi, ITreeSelectProps} from '@src/treeSelect';
 import {theme} from 'antd';
 
 export const MenuRow = ({treeApi, treeProps}: {treeApi: ITreeSelectApi; treeProps: ITreeSelectProps}): React.JSX.Element | null => {
-    const buttons = useInitButtons(treeApi, treeProps);
+    const buttons = useGetButtonsProps(treeApi, treeProps);
 
     const {
         token: {colorBorderSecondary},
