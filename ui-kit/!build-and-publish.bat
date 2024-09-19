@@ -16,6 +16,5 @@ if %ERRORLEVEL% NEQ 0 (
 echo Tests passed! Proceeding with build and publish...
 call d:\projects\@krinopotam\build-tools\build-and-publish.bat
 
-pause
 endlocal
 

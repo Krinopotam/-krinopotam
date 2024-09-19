@@ -68,6 +68,7 @@ const useSplitProps = (props: ITreeSelectProps) => {
             headerLabel: true,
             language: true,
             translation: true,
+            selectNewNode: true,
             groupsMode: true,
             onChange: true,
             onGetLabelCallback: true,
