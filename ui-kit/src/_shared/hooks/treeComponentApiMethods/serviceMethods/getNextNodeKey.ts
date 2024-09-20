@@ -48,5 +48,6 @@ export const getNextNodeKey = <T extends Record<string, unknown>>(
     if (result) return result;
 
     if (opts?.defaultToBoundary === false) return undefined;
-    return key ? key : getPrevNodeKey(dataSet, undefined, expandedKeys, fieldNames, opts);
+
+    return key ?? getPrevNodeKey(dataSet, undefined, expandedKeys, fieldNames, opts);
 };
