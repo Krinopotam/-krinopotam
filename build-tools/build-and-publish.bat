@@ -17,16 +17,6 @@ if %errorlevel% neq 0 (
 )
 
 @echo:
-@echo --------------- Copy CSS folder ---------------------------------
-if exist src\css (
-	@echo src\css
-	robocopy src\css dist\css /E /NJH /NJS /NFL /NDL
-)
-if exist !copyCssToDist.bat (
-	call !copyCssToDist.bat
-)
-
-@echo:
 @echo --------------- Update package.json version ---------------------
 node d:\Projects\@krinopotam\build-tools\update-package-version.js package.json
 
