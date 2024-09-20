@@ -8,3 +8,4 @@ import { default as React } from 'react';
  * @param skip - skip adding event listener
  */
 export declare const useAddEventListener: <K extends keyof DocumentEventMap, Target extends EventTarget, TReturn>(name: K, handler: (ev: DocumentEventMap[K]) => TReturn, target?: Target | (() => Target) | React.RefObject<Target> | null, options?: boolean | AddEventListenerOptions, skip?: boolean) => void;
+export declare const getTarget: <Target extends EventTarget>(target?: Target | (() => Target) | React.RefObject<Target> | null) => Document | Target;

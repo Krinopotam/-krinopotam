@@ -28,9 +28,9 @@ export const useAddEventListener = <K extends keyof DocumentEventMap, Target ext
     }, [callback, name, options, target]);
 };
 
-const getTarget = <Target extends EventTarget>(target?: Target | (() => Target) | React.RefObject<Target> | null) => {
+export const getTarget = <Target extends EventTarget>(target?: Target | (() => Target) | React.RefObject<Target> | null) => {
     if (target instanceof EventTarget) return target;
     if (typeof target === 'function') return target();
-    if (target?.current && target instanceof EventTarget) return target.current;
+    if (target?.current instanceof EventTarget) return target.current;
     return document;
 };

@@ -1,5 +1,5 @@
 import {renderHook} from '@testing-library/react';
-import {useAddEventListener} from '@src/useAddEventListener';
+import {getTarget, useAddEventListener} from '@src/useAddEventListener';
 import {describe, it, expect, vi} from 'vitest';
 
 const eventType = 'click';
@@ -57,5 +57,27 @@ describe('useAddEventListener', () => {
         unmount();
         document.dispatchEvent(event);
         expect(handler).toHaveBeenCalledTimes(0); // should not increase
+    });
+});
+
+describe('getTarget', () => {
+    it('returns the target if it is an EventTarget', () => {
+        const target = document.createElement('div');
+        expect(getTarget(target)).toBe(target);
+    });
+
+    it('returns the result of calling the target if it is a function', () => {
+        const target = () => document.createElement('div');
+        expect(getTarget(target)).toBeInstanceOf(HTMLDivElement);
+    });
+
+    it('returns the current value of the target if it is a React.RefObject', () => {
+        const target = { current: document.createElement('div') };
+        expect(getTarget(target)).toBe(target.current);
+    });
+
+    it('returns the document if the target is null or undefined', () => {
+        expect(getTarget(null)).toBe(document);
+        expect(getTarget(undefined)).toBe(document);
     });
 });
