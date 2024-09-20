@@ -68,7 +68,7 @@ const buildLibCfg: UserConfig = {
             include: ['@ant-design/colors', '@ant-design/icons', '@ant-design/icons-swg', 'classnames', 'dayjs'],
         }),
         libInjectCss(),
-        dts({include: ['src']})
+        dts({include: ['src']}),
     ],
     resolve: {
         alias: {
@@ -79,7 +79,7 @@ const buildLibCfg: UserConfig = {
         target: 'modules',
         emptyOutDir: true,
         outDir: 'dist',
-
+        sourcemap: true,
         lib: {
             entry: components,
             name: '@krinopotam//ui-kit',
@@ -89,10 +89,12 @@ const buildLibCfg: UserConfig = {
 
         rollupOptions: {
             input: Object.fromEntries(include),
+            external: [
+                'rc-tree-select/es/TreeSelectContext', //we use TreeSelectContext in TreeSelect DropdownRender and if it is not specified separately in externals, then vite cuts its import
+            ],
         },
     },
 };
-
 
 export default defineConfig(({command, mode}) => {
     console.log('----------------', command, mode);

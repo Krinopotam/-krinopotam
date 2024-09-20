@@ -1,6 +1,6 @@
 {
   "name": "@krinopotam/ui-kit",
-  "version": "2.0.222",
+  "version": "2.0.233",
   "description": "UI kit for Krinopotam's projects",
   "private": false,
   "author": "Maxim Zaytsev",
@@ -13,7 +13,7 @@
     "build": "tsc -p tsconfig.json && vite build --mode build-lib",
     "demo": "vite --mode demo",
     "build-demo-generator": "tsc -p ./demo/_generator/src/tsconfig.json",
-    "build-demo": "node ./demo/_generator/generateDemo.js && tsc --noEmit && tsc-alias && vite build --mode demo",
+    "build-demo": "node ./demo/_generator/build/generateDemo.js && tsc --noEmit && tsc-alias && vite build --mode demo",
     "preview-demo": "vite preview",
     "storybook": "storybook dev -p 6007",
     "build-storybook": "npx tsx ./stories/injectSources.ts && storybook build --output-dir deploy/ui-kit/storybook",
@@ -78,7 +78,7 @@
     "vitest": "^2.1.1"
   },
   "dependencies": {
-    "@krinopotam/common-hooks": "^1.0.25",
+    "@krinopotam/common-hooks": "^1.0.27",
     "@krinopotam/js-helpers": "^1.0.56",
     "@krinopotam/service-types": "^1.0.19",
     "ahooks": "^3.8.1",
