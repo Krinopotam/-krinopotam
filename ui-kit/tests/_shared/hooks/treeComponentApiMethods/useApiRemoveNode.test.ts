@@ -89,15 +89,7 @@ describe('useApiRemoveNode', () => {
         expect(selectNodeMock).toHaveBeenCalledWith(1, true); //select node 1
     });
 
-    it('should not change selection if opts.select is "keep"', () => {
-         const removeNode = useApiRemoveNode(api);
-
-        removeNode(2, {select: 'keep'}, undefined);
-
-        expect(selectNodeMock).not.toHaveBeenCalled();
-    });
-
-    it('should deselect the removed node if opts.select is not "keep"', () => {
+    it('should deselect the removed node', () => {
         const removeNode = useApiRemoveNode(api);
 
         removeNode(2, {select: 'next'}, undefined);

@@ -55,11 +55,13 @@ export interface ITreeComponentApi<TNode extends Record<string, unknown> = Recor
     isNodeSelected: (node: IKey | TNode | undefined) => boolean;
 
     /**
-     * Select node
+     * Select/deselect node
      * @param node - node or key
      * @param select - if true, node will be selected (default true)
+     * @param withChildren - select/deselect whole subtree
+     * @param externalDataset - if not set, current data set will be used, if set, node will be searched in this data set
      */
-    selectNode: (node: IKey | TNode, select?: boolean) => void;
+    selectNode: (node: IKey | TNode | undefined, select?: boolean, withChildren?: boolean,  externalDataset?: TNode[]) => void;
 
     /**
      * Returns active node
@@ -183,7 +185,7 @@ export interface ITreeComponentApi<TNode extends Record<string, unknown> = Recor
     removeNode: (
         node: IKey | TNode,
         opts?: {
-            select?: 'prev' | 'next' | 'keep';
+            select?: 'prev' | 'next';
         },
         externalDataset?: TNode[]
     ) => TNode[] | undefined;

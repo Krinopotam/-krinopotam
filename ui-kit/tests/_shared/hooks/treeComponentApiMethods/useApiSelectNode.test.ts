@@ -8,11 +8,11 @@ const setSelectedKeysMock = vi.fn();
 const getFieldNamesMock = vi.fn();
 
 // Sample dataset and fieldNames
-const fieldNames = {key: 'id', label: 'name'};
+const fieldNames = {key: 'id', title: 'name', children:'children'};
 const dataSet = [
     {id: 1, name: 'Node 1'},
     {id: 2, name: 'Node 2'},
-    {id: 3, name: 'Node 3'},
+    {id: 3, name: 'Node 3', children:[{id:31, name: 'Node 31'}, {id:32, name: 'Node 32'}]},
 ];
 
 describe('useApiSelectNode', () => {
@@ -24,6 +24,7 @@ describe('useApiSelectNode', () => {
         getFieldNamesMock.mockClear();
 
         api = {
+            getDataSet:()=>dataSet,
             getSelectedKeys: getSelectedKeysMock,
             setSelectedKeys: setSelectedKeysMock,
             getFieldNames: getFieldNamesMock,
@@ -79,5 +80,25 @@ describe('useApiSelectNode', () => {
         selectNode(dataSet[0], false);
 
         expect(setSelectedKeysMock).toHaveBeenCalledWith([2]);
+    });
+
+    it('should handle multiple selection with all children', () => {
+        getSelectedKeysMock.mockReturnValue([1]);
+        getFieldNamesMock.mockReturnValue(fieldNames);
+
+        const selectNode = useApiSelectNode(api, true);
+        selectNode(dataSet[2], true, true);
+
+        expect(setSelectedKeysMock).toHaveBeenCalledWith([1, 3, 31, 32]);
+    });
+
+    it('should handle deselect node with all children', () => {
+        getSelectedKeysMock.mockReturnValue([1, 3, 31, 32]);
+        getFieldNamesMock.mockReturnValue(fieldNames);
+
+        const selectNode = useApiSelectNode(api, true);
+        selectNode(dataSet[2], false, true);
+
+        expect(setSelectedKeysMock).toHaveBeenCalledWith([1]);
     });
 });

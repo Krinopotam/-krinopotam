@@ -249,7 +249,6 @@ const deleteNode = (node: IExtTreeNode, props: IExtTreeProps, api: IExtTreeApi, 
     const deleteResult = props?.onDelete?.(node, api);
 
     if (!IsPromise(deleteResult)) {
-        if (api.isNodeSelected(node)) api.selectNode(node, false);
         api.removeNode(node, {select: props.selectNewNode ? 'next' : undefined});
         if (messageBox) messageBox.destroy();
         return;

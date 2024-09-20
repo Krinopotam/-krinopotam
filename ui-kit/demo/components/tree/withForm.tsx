@@ -15,13 +15,22 @@ export const TreeWithForm = (): React.JSX.Element => {
     const treeProps = useTreeProps();
     const [readOnly, setReadOnly] = useState(false)
     const [disabled, setDisabled] = useState(false)
+    const [multiple, setMultiple] = useState(false)
     return (
         <>
             {/*Description Start*/}
             <h1>Пример Extended Tree с формой редактирования</h1>
             {/*Description End*/}
 
-            <Space style={{paddingBottom:10}}>
+            <Space style={{paddingBottom: 10}}>
+                <div>
+                    Multi select
+                    <Switch
+                        onClick={e => {
+                            setMultiple(e);
+                        }}
+                    />
+                </div>
                 <div>
                     Read only
                     <Switch
@@ -39,8 +48,8 @@ export const TreeWithForm = (): React.JSX.Element => {
                     />
                 </div>
             </Space>
-            <div style={{maxWidth: 500, maxHeight:500, height:'100%', overflow:"auto"}}>
-                <Tree {...treeProps} readOnly={readOnly} disabled={disabled} />
+            <div style={{maxWidth: 500, maxHeight: 500, height: '100%', overflow: 'auto'}}>
+                <Tree {...treeProps} multiple={multiple} readOnly={readOnly} disabled={disabled} />
             </div>
         </>
     );

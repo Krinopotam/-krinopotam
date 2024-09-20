@@ -20,9 +20,8 @@ export const useApiRemoveNode = (api: {
 
         const prevKey = api.getPrevNodeKey(key, {defaultToBoundary: false}, dataSet);
 
+        api.selectNode(key, false, true, dataSet); //deselect removing node and it children nodes
         removeFromTree(key, dataSet, fieldNames);
-
-        if (!externalDataSet) api.setDataSet(dataSet);
 
         let selectKey: IKey | undefined = undefined;
         if (opts?.select === 'next') selectKey = api.getNextNodeKey(prevKey, undefined, dataSet);
@@ -31,10 +30,14 @@ export const useApiRemoveNode = (api: {
             else selectKey = api.getNextNodeKey(undefined, undefined, dataSet);
         }
 
-        if (opts?.select !== 'keep') api.selectNode(key, false);
+        if (selectKey) {
+            /** WORKAROUND: forced to use setTimeout since api.selectNode is used twice and due to the specificity of useState the state overwrites each other*/
+            setTimeout(() => {
+                api.selectNode(selectKey, true);
+            }, 0);
+        }
 
-        if (selectKey) api.selectNode(selectKey, true);
-
+        if (!externalDataSet) api.setDataSet(dataSet);
         return dataSet;
     };
 };

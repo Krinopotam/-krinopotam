@@ -1,3 +1,5 @@
+// noinspection DuplicatedCode
+
 import React, {useCallback, useContext, useMemo, useState} from 'react';
 import {IsPromise} from '@krinopotam/js-helpers/helpersObjects/isPromise';
 import {MergeObjects} from '@krinopotam/js-helpers/helpersObjects/mergeObjects';
@@ -280,7 +282,6 @@ const deleteNode = (
     const deleteResult = props?.onDelete?.(node, api);
 
     if (!IsPromise(deleteResult)) {
-        if (api.isNodeSelected(node)) api.selectNode(node, false);
         api.removeNode(node);
         if (messageBox) messageBox.destroy();
         dialogOpenedRef.current = false;
