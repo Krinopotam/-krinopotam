@@ -16,7 +16,7 @@ export const useApiRemoveNode = (api: {
         const key: IKey = typeof node === 'object' ? (node[fieldNames.key] as IKey) : node;
 
         const dataSet = externalDataSet ?? CloneObject(api.getDataSet());
-        if (!dataSet) return;
+        if (!dataSet?.length) return;
 
         const prevKey = api.getPrevNodeKey(key, {defaultToBoundary: false}, dataSet);
 

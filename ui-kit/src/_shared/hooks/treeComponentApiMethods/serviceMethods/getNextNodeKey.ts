@@ -43,7 +43,7 @@ export const getNextNodeKey = <T extends Record<string, unknown>>(
         return undefined;
     };
 
-    if (!dataSet) return undefined;
+    if (!dataSet?.length) return undefined;
     const result = recursive(dataSet);
     if (result) return result;
 

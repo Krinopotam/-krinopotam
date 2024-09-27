@@ -21,6 +21,6 @@ export const getParentNode = (
         return undefined;
     };
 
-    if (!dataSet) return undefined;
+    if (!dataSet?.length) return undefined;
     return recursive(dataSet, undefined);
 };

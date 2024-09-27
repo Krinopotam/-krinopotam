@@ -46,7 +46,7 @@ export const getPrevNodeKey = <T extends Record<string, unknown>>(
         return undefined;
     };
 
-    if (!dataSet) return undefined;
+    if (!dataSet?.length) return undefined;
     if (typeof key === 'undefined') return getNextNodeKey(dataSet, undefined, expandedKeys, fieldNames, opts);
 
     const result = recursive(dataSet);

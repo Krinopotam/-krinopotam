@@ -21,7 +21,7 @@ export const getAllParentsKeys = <T extends Record<string, unknown>>(
             recursive(node[fieldNames.children] as T[]);
         }
     };
-    if (!dataSet) return undefined;
+    if (!dataSet?.length) return undefined;
     recursive(dataSet);
     return parentsKeys;
 };
