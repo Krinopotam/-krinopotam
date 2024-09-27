@@ -5,7 +5,7 @@ import {watch} from 'vite-plugin-watch';
 import {nodeExternals} from 'rollup-plugin-node-externals';
 import {libInjectCss} from 'vite-plugin-lib-inject-css';
 import dts from 'vite-plugin-dts';
-import glob from 'glob';
+import {glob} from 'glob';
 
 const commonCfg: UserConfig = {
     plugins: [react()],
