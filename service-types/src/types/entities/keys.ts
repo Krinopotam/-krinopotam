@@ -1,3 +1,4 @@
+/** Keyboard Event.key type */
 export type IKeyboardKey = 'Backspace' |
     'Tab' |
     'Enter' |
@@ -133,6 +134,7 @@ export type IKeyboardKey = 'Backspace' |
     '>' |
     '?'
 
+/** Keyboard Event.code type */
 export type IKeyboardCode = 'Backspace'|
 'Tab'|
 'Enter'|

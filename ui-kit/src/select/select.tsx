@@ -34,7 +34,7 @@ const useGetOptions = (props: ISelectProps) => {
             const result: IAntdSelectProps['options'] = [];
             if (!nodes || !IsArray(nodes)) return undefined;
             for (const item of nodes) {
-                const mItem = {...item} as ArrayElement<IAntdSelectProps['options']>;
+                const mItem = {...item} as ArrayElement<NonNullable<IAntdSelectProps['options']>>;
                 if (item.id) mItem.value = item.id;
                 if (item.label) mItem.label = item.label;
                 if (item.children) mItem.children = convertor(item.children);
