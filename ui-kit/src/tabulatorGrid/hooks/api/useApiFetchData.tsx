@@ -1,8 +1,9 @@
+import {AnyType} from "@krinopotam/service-types";
 import {IGridApi, IGridProps} from '@src/tabulatorGrid';
 import {GenerateAjaxRequestFunc} from '@src/tabulatorGrid/helpers/fetchHelpers';
 
 export const useApiFetchData = (gridApi: IGridApi): IGridApi['fetchData'] => {
-    return (dataFetchHandler?: IGridProps['onDataFetch'], params?: Record<string, unknown>) => {
+    return (dataFetchHandler?: IGridProps['onDataFetch'], params?: Record<string, AnyType>) => {
         const table = gridApi.tableApi;
         if (!table) return;
 

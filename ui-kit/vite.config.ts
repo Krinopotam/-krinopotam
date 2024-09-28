@@ -9,11 +9,8 @@ import {glob} from 'glob';
 
 const commonCfg: UserConfig = {
     plugins: [react()],
-    resolve: {
-        alias: {
-            '@src': path.resolve(__dirname, './src'),
-        },
-    },
+    resolve: {alias: {'@src': path.resolve(__dirname, './src')}},
+    css: {preprocessorOptions: {scss: {api: 'modern'}}},
     build: {
         target: 'modules',
         emptyOutDir: true,
@@ -29,24 +26,15 @@ const devDemoCfg: UserConfig = {
             command: 'node ./demo/_generator/build/generateDemo.js',
         }),
     ],
-    resolve: {
-        alias: {
-            '@src': path.resolve(__dirname, './src'),
-        },
-    },
-
-    server: {
-        open: 'index.html',
-    },
+    resolve: {alias: {'@src': path.resolve(__dirname, './src')}},
+    css: {preprocessorOptions: {scss: {api: 'modern'}}},
+    server: {open: 'index.html'},
 };
 
 const buildDemoCfg: UserConfig = {
     plugins: [react()],
-    resolve: {
-        alias: {
-            '@src': path.resolve(__dirname, './src'),
-        },
-    },
+    resolve: {alias: {'@src': path.resolve(__dirname, './src')}},
+    css: {preprocessorOptions: {scss: {api: 'modern'}}},
     base: '/-krinopotam/ui-kit/demo', //base URL (gitHub pages use https://krinopotam.github.io/-krinopotam/ui-kit, so URL is https://krinopotam.github.io and baseURL is /-krinopotam/ui-kit)
     build: {
         target: 'modules',
@@ -70,11 +58,8 @@ const buildLibCfg: UserConfig = {
         libInjectCss(),
         dts({include: ['src']}),
     ],
-    resolve: {
-        alias: {
-            '@src': path.resolve(__dirname, './src'),
-        },
-    },
+    resolve: {alias: {'@src': path.resolve(__dirname, './src')}},
+    css: {preprocessorOptions: {scss: {api: 'modern'}}},
     build: {
         target: 'modules',
         emptyOutDir: true,

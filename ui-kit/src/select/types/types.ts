@@ -1,4 +1,5 @@
 //region Types
+import {AnyType} from "@krinopotam/service-types";
 import React from 'react';
 import {GetProps, Select as AntdSelect} from 'antd';
 
@@ -9,12 +10,12 @@ export type ISelectBaseValue =
     | ISelectBaseLabeledValue
     | (string | number | ISelectBaseLabeledValue)[];
 
-interface ISelectBaseLabeledValue extends Record<string, unknown> {
+interface ISelectBaseLabeledValue extends Record<string, AnyType> {
     value: string | number;
     label?: React.ReactNode;
 }
 
-export interface ISelectLabeledValue extends Record<string, unknown> {
+export interface ISelectLabeledValue extends Record<string, AnyType> {
     id: string | number;
     label?: React.ReactNode;
 }
@@ -22,7 +23,7 @@ export interface ISelectLabeledValue extends Record<string, unknown> {
 /**
  * Item of select control or enum table column
  */
-export interface ISelectNodeBase extends Record<string, unknown> {
+export interface ISelectNodeBase extends Record<string, AnyType> {
     id?: string | number;
     label?: string | React.ReactNode;
     disabled?: boolean;
@@ -31,10 +32,10 @@ export interface ISelectNodeBase extends Record<string, unknown> {
     children?: Omit<ISelectNode, 'children'>;
 }
 
-export type ISelectNode<T extends Record<string, unknown> = Record<string, unknown>> = ISelectNodeBase & T;
+export type ISelectNode<T extends Record<string, AnyType> = Record<string, AnyType>> = ISelectNodeBase & T;
 export type IAntdSelectProps = GetProps<typeof AntdSelect>;
 
-export interface ISelectBaseProps extends Record<string, unknown> {
+export interface ISelectBaseProps extends Record<string, AnyType> {
     /** Select options list*/
     dataSet?: ISelectNode[];
 

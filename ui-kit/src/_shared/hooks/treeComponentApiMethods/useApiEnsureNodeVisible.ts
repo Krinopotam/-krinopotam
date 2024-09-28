@@ -1,12 +1,12 @@
 import {ITreeComponentApi} from '@src/_shared/hooks/treeComponentApiMethods/types/treeApiTypes';
-import {IKey} from '@krinopotam/service-types';
+import {AnyType, IKey} from '@krinopotam/service-types';
 
 export const useApiEnsureNodeVisible = (
     api: {
         expandParentNodes: ITreeComponentApi['expandParentNodes'];
         getFieldNames: ITreeComponentApi['getFieldNames'];
     },
-    extraFn?: (key: IKey, externalDataset?: Record<string, unknown>[]) => void
+    extraFn?: (key: IKey, externalDataset?: Record<string, AnyType>[]) => void
 ): ITreeComponentApi['ensureNodeVisible'] => {
     return (node, externalDataset) => {
         const fieldNames = api.getFieldNames();

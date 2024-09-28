@@ -1,4 +1,4 @@
-import {IKey} from '@krinopotam/service-types';
+import {AnyType, IKey} from '@krinopotam/service-types';
 import {INodePosition} from '@src/_shared/hooks/treeComponentApiMethods/types/treeApiTypes';
 import {removeFromTree} from '@src/_shared/hooks/treeComponentApiMethods/serviceMethods/removeFromTree';
 import {addNodeToTree} from '@src/_shared/hooks/treeComponentApiMethods/serviceMethods/addNodeToTree';
@@ -7,9 +7,9 @@ import {IsDebugMode} from '@krinopotam/common-hooks';
 import {isDescendant} from '@src/_shared/hooks/treeComponentApiMethods/serviceMethods/isDescendant';
 
 export const moveNode = (
-    node: Record<string, unknown> | IKey,
-    target: Record<string, unknown> | IKey | undefined,
-    dataSet: Record<string, unknown>[],
+    node: Record<string, AnyType> | IKey,
+    target: Record<string, AnyType> | IKey | undefined,
+    dataSet: Record<string, AnyType>[],
     fieldNames: {
         key: string;
         children: string;

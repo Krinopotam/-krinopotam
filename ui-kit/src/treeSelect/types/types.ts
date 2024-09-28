@@ -7,7 +7,7 @@ import {DefaultOptionType} from 'rc-tree-select/es/TreeSelect';
 
 import {IFieldNames, ITreeComponentApi} from '@src/_shared/hooks/treeComponentApiMethods/types/treeApiTypes';
 import {translations} from '@src/treeSelect/translations/translations';
-import {IKey} from '@krinopotam/service-types';
+import {AnyType, IKey} from '@krinopotam/service-types';
 
 interface ITreeSelectNodeBase extends Omit<DefaultOptionType, 'children'> {
     /** Node id */
@@ -184,14 +184,14 @@ export interface ITreeSelectBaseProps {
 
 export type ITreeSelectProps = ITreeSelectBaseProps & IAntTreeSelectProps;
 export type ITreeSelectSourcePromise = Promise<{data: ITreeSelectNode[]}>;
-export type ITreeSelectDeletePromise = Promise<{data: Record<string, unknown>}>;
+export type ITreeSelectDeletePromise = Promise<{data: Record<string, AnyType>}>;
 
 export interface ILabeledValue {
     value: IKey;
     label?: React.ReactNode;
 }
 
-export type ITreeSelectValue = IKey | IKey[] | ILabeledValue | ILabeledValue[] | Record<string, unknown> | Record<string, unknown>[] | null | undefined;
+export type ITreeSelectValue = IKey | IKey[] | ILabeledValue | ILabeledValue[] | Record<string, AnyType> | Record<string, AnyType>[] | null | undefined;
 
 export interface ITreeSelectApi extends Omit<ITreeComponentApi<ITreeSelectNode, ITreeSelectProps>, 'setSelectedKeys' | 'getSelectedKeys' | 'getSelectedNodes'> {
     /** Tree ref */

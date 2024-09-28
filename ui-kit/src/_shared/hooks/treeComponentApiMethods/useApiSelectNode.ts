@@ -1,5 +1,5 @@
 import {ITreeComponentApi} from '@src/_shared/hooks/treeComponentApiMethods/types/treeApiTypes';
-import {IKey} from '@krinopotam/service-types';
+import {AnyType, IKey} from '@krinopotam/service-types';
 import {IsArray} from '@krinopotam/js-helpers/helpersObjects/isArray';
 import {getNodeFromTree} from '@src/_shared/hooks/treeComponentApiMethods/serviceMethods/getNodeFromTree';
 
@@ -47,7 +47,7 @@ const selectWithChildren = (
     key: IKey,
     isSelect: boolean,
     curSelectedKeys: IKey[] | undefined,
-    dataSet: Record<string, unknown>[] | undefined,
+    dataSet: Record<string, AnyType>[] | undefined,
     fieldNames: {
         key: string;
         children: string;
@@ -60,7 +60,7 @@ const selectWithChildren = (
     if (!node || !dataSet) return curSelectedKeys;
     const result: IKey[] = [...(curSelectedKeys ?? [])];
 
-    const recursive = (node: Record<string, unknown>) => {
+    const recursive = (node: Record<string, AnyType>) => {
         const curKey = node[fieldNames.key] as IKey;
         if (!curKey) return;
 
@@ -75,7 +75,7 @@ const selectWithChildren = (
 
         if (!IsArray(node[fieldNames.children])) return;
 
-        for (const curNode of node[fieldNames.children] as Record<string, unknown>[]) {
+        for (const curNode of node[fieldNames.children] as Record<string, AnyType>[]) {
             recursive(curNode);
         }
     };

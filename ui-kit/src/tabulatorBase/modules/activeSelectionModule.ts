@@ -1,3 +1,4 @@
+import {AnyType} from "@krinopotam/service-types";
 import {Module, ScrollToRowPosition, Options, RowComponent} from 'tabulator-tables';
 
 import {IModule, IRow, ITabulatorCore} from "@src/tabulatorBase/types/tabulatorCoreTypes";
@@ -25,7 +26,7 @@ export interface IActiveSelectionTabulator extends ITabulatorCore {
     getActiveRow: () => RowComponent | undefined;
 
     /** Get active row data */
-    getActiveRowData: () => Record<string, unknown> | undefined;
+    getActiveRowData: () => Record<string, AnyType> | undefined;
 
     /** Get first node row */
     getFirstRow: () => RowComponent | undefined;

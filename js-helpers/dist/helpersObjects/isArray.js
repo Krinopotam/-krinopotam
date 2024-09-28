@@ -1,4 +1,4 @@
-const n = (r) => r instanceof Array;
+const a = (r) => Array.isArray(r);
 export {
-  n as IsArray
+  a as IsArray
 };

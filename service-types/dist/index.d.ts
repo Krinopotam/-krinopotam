@@ -1,31 +1,14 @@
-/** Any type */
-export type AnyType = any;
-/** Type for promise with typed Resolve and Reject. F.e. TPromise<{data: Record<string, unknown>}, {message: string; code: number}>; */
-export type TPromise<T, F = unknown> = {
-    catch<TResult = never>(onrejected?: ((reason: F) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;
-} & Promise<T>;
-/** Type of array element */
-export type ArrayElement<A> = A extends readonly (infer T)[] ? T : never;
-/** Non-empty array */
-export type INonEmptyArray<T> = [T, ...T[]];
-/** Error type */
-export type IError = {
-    /** Error code */
-    code: number;
-    /** Internal error name */
-    error: string;
-    /** Error message */
-    message: string;
-    /** Stack trace */
-    stack?: string;
-};
-export type IUnionToIntersection<T> = (T extends any ? (k: T) => void : never) extends (k: infer I) => void ? I : never;
-export type IUnionInterfaces<T extends {
-    [key: string]: any;
-}[]> = IUnionToIntersection<T[number]>;
-/** Return the same function type with addition parameter T at the end */
-export type IAddParamToFunction<F, T> = NonNullable<F> extends (...args: infer P) => infer R ? (...args: [...P, T]) => R : never;
-/** DataSet key */
-export type IKey = string | number;
-/** KeyboardEvent.key type */
-export type { IKeyboardKey, IKeyboardCode } from './keys';
+/********** Entities ********/
+export type { IKey } from './types/entities/IKey';
+export type { AnyType } from './types/entities/anyType';
+export type { INonEmptyArray } from './types/entities/INonEmptyArray';
+export type { IKeyboardKey, IKeyboardCode } from './types/entities/keys';
+export type { IError } from './types/entities/IError';
+export type { TPromise } from './types/entities/TPromise';
+/********** Tools ***********/
+export type { ArrayElement } from './types/tools/arrayElement';
+export type { IUnionInterfaces } from './types/tools/IUnionInterfaces';
+export type { IUnionToIntersection } from './types/tools/IUnionToIntersection';
+export type { IAddParamToFunction } from './types/tools/IAddParamToFunction';
+export type { IAddParamsToFunction } from './types/tools/IAddParamsToFunction';
+export type { IndexOptional } from './types/tools/indexOptional';

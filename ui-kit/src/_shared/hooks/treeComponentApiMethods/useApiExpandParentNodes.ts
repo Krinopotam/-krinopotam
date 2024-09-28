@@ -1,5 +1,5 @@
 import {ITreeComponentApi} from '@src/_shared/hooks/treeComponentApiMethods/types/treeApiTypes';
-import {IKey} from '@krinopotam/service-types';
+import {AnyType, IKey} from '@krinopotam/service-types';
 
 export const useApiExpandParentNodes = (api: {
     expandNode: ITreeComponentApi['expandNode'];
@@ -12,12 +12,12 @@ export const useApiExpandParentNodes = (api: {
         const fieldNames = api.getFieldNames();
         const key: IKey = typeof node === 'object' ? (node[fieldNames.key] as IKey) : node;
 
-        const recursive = (nodes: Record<string, unknown>[]) => {
+        const recursive = (nodes: Record<string, AnyType>[]) => {
             for (const node of nodes) {
                 if (node[fieldNames.key] === key) return true;
 
                 if (node[fieldNames.children]) {
-                    const founded = recursive(node[fieldNames.children] as Record<string, unknown>[]);
+                    const founded = recursive(node[fieldNames.children] as Record<string, AnyType>[]);
 
                     if (founded) {
                         api.expandNode(node[fieldNames.key] as IKey);

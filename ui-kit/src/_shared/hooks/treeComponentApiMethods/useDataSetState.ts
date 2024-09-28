@@ -1,9 +1,9 @@
 import React, {useCallback, useRef, useState} from 'react';
 import {IFieldNames} from '@src/_shared/hooks/treeComponentApiMethods/types/treeApiTypes';
-import {IKey} from '@krinopotam/service-types';
+import {AnyType, IKey} from '@krinopotam/service-types';
 import {useUpdateEffect} from '@krinopotam/common-hooks';
 
-export const useDataSetState = <T extends Record<string, unknown>>(
+export const useDataSetState = <T extends Record<string, AnyType>>(
     propsDataSet: React.SetStateAction<T[] | undefined>,
     fieldNames: IFieldNames,
     prepareNodeFn?: (node: T) => T
@@ -42,7 +42,7 @@ export const useDataSetState = <T extends Record<string, unknown>>(
 };
 
 /** Converts the given data by applying the dataMutator function to each node in the tree. */
-const usePrepareDataSet = <T extends Record<string, unknown>>(
+const usePrepareDataSet = <T extends Record<string, AnyType>>(
     fieldNames: {
         key: string;
         children: string;

@@ -1,4 +1,4 @@
 /** Check if parameter is an array */
-export const IsArray = <T>(val: unknown): val is T[] => {
-    return val instanceof Array;
+export const IsArray = <T>(val: T): val is Extract<T, any[]> => {
+    return Array.isArray(val);
 };

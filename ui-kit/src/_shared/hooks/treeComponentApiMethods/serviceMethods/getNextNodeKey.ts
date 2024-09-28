@@ -1,5 +1,5 @@
 import {IFindNodeOptions} from '@src/_shared/hooks/treeComponentApiMethods/types/treeApiTypes';
-import {IKey} from '@krinopotam/service-types';
+import {AnyType, IKey} from '@krinopotam/service-types';
 import {shouldSearchInChildren} from '@src/_shared/hooks/treeComponentApiMethods/serviceMethods/shouldSearchInChildren';
 import {isNodeCanBeSelected} from '@src/_shared/hooks/treeComponentApiMethods/serviceMethods/isNodeCanBeSelected';
 import {getPrevNodeKey} from '@src/_shared/hooks/treeComponentApiMethods/serviceMethods/getPrevNodeKey';
@@ -14,9 +14,9 @@ import {getPrevNodeKey} from '@src/_shared/hooks/treeComponentApiMethods/service
  * @param fieldNames - field names
  * @param opts - search options
  */
-export const getNextNodeKey = <T extends Record<string, unknown>>(
+export const getNextNodeKey = <T extends Record<string, AnyType>>(
     dataSet: T[] | undefined,
-    node: IKey | Record<string, unknown> | undefined,
+    node: IKey | Record<string, AnyType> | undefined,
     expandedKeys: IKey[] | undefined,
     fieldNames: {key: string; children: string, disabled: string, selectable: string},
     opts?: IFindNodeOptions

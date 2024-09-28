@@ -8,7 +8,7 @@ import {RequiredMark} from 'antd/es/form/Form';
 import {translations} from '@src/dForm/translations/translations';
 import {IBaseComponentApi} from '@src/_shared/hooks/componentApiMethods/types/apiTypes';
 import {IAnyFieldProps} from '@src/dForm/fields/base';
-import {IKey} from '@krinopotam/service-types';
+import {AnyType, IKey} from '@krinopotam/service-types';
 
 export type IDFormValidationRules = Record<string, IRuleType[]>;
 
@@ -44,7 +44,7 @@ export interface IDFormPropsNoCB {
 
     /** Form default values. Unlike dataSet, defaultValues sets field values in Create form mode.
      * Has a priority lower than the field's set value */
-    defaultValues?: Record<string, unknown>;
+    defaultValues?: Record<string, AnyType>;
 
     /** Form data (are not set in Create form mode) */
     dataSet?: IDFormDataSet;
@@ -133,11 +133,11 @@ export interface IDFormCallbacks<TApi = IDFormApi, TProps = IDFormProps> extends
 export type IDFormProps = IDFormPropsNoCB & IDFormCallbacks;
 
 /** Form data set type */
-export interface IDFormDataSet extends Record<string, unknown> {
+export interface IDFormDataSet extends Record<string, AnyType> {
     id?: IKey;
 }
 
-export type IDFormDataSourcePromise = Promise<{data: Record<string, unknown>}>;
+export type IDFormDataSourcePromise = Promise<{data: Record<string, AnyType>}>;
 
 export interface IDFormApi<TProps extends object = IDFormProps> extends IBaseComponentApi<TProps> {
     /** Get translation */

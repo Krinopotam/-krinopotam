@@ -1,7 +1,7 @@
 import {useMemo} from 'react';
 import {IExtTreeApi, IExtTreeNode, IExtTreeProps} from '@src/tree/types/types';
 import {GetUuid} from '@krinopotam/js-helpers';
-import {IKey} from '@krinopotam/service-types';
+import {AnyType, IKey} from '@krinopotam/service-types';
 import {IsObjectHasOwnProperty} from '@krinopotam/js-helpers/helpersObjects/isObjectHasOwnProperty';
 
 export const useGetEditFormProps = (treeApi: IExtTreeApi, treeProps: IExtTreeProps, forGroup: boolean) => {
@@ -21,7 +21,7 @@ export const useGetEditFormProps = (treeApi: IExtTreeApi, treeProps: IExtTreePro
             const formMode = formApi.model.getFormMode();
             const fieldNames = treeApi.getFieldNames();
 
-            const updatedNode = {...resultData} as IExtTreeNode & {parent?: Record<string, unknown>; parentId?: IKey};
+            const updatedNode = {...resultData} as IExtTreeNode & {parent?: Record<string, AnyType>; parentId?: IKey};
 
             let targetKey: IKey | undefined;
             if (IsObjectHasOwnProperty(updatedNode, fieldNames.parent)) targetKey = updatedNode[fieldNames.parent]?.[fieldNames.key] as IKey;

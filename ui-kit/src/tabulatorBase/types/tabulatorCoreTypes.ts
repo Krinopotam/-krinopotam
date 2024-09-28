@@ -53,14 +53,14 @@ export interface IRow {
     cells: unknown[];
     component: unknown;
     created: boolean;
-    data: Record<string | 'id', unknown>;
+    data: Record<string | 'id', AnyType>;
     element: HTMLElement;
     height: number;
     heightInitialized: boolean;
     heightStyled: string;
     initialized: boolean;
     manualHeight: boolean;
-    modules: Record<string, unknown>;
+    modules: Record<string, AnyType>;
     outerHeight: number;
     parent: unknown;
     position: number;

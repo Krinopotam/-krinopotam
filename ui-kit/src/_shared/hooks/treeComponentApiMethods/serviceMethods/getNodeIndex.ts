@@ -1,4 +1,4 @@
-import {IKey} from "@krinopotam/service-types";
+import {AnyType, IKey} from "@krinopotam/service-types";
 
 /**
  * Find node by node key
@@ -7,9 +7,9 @@ import {IKey} from "@krinopotam/service-types";
  * @param fieldNames
  * @returns founded node index and nodes collection, where node is located (it may be not the dataSet, for example children)
  */
-export const getNodeIndex = <T extends Record<string, unknown>>(
+export const getNodeIndex = <T extends Record<string, AnyType>>(
     dataSet: T[] | undefined,
-    node: IKey | Record<string, unknown> | undefined,
+    node: IKey | Record<string, AnyType> | undefined,
     fieldNames:{key: string; children: string}
 ): {
     idx: number;

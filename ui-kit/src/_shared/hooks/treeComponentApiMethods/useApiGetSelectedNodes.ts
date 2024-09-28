@@ -1,14 +1,14 @@
 import {useRef} from 'react';
 
 import {ITreeComponentApi} from '@src/_shared/hooks/treeComponentApiMethods/types/treeApiTypes';
-import {IKey} from '@krinopotam/service-types';
+import {AnyType, IKey} from '@krinopotam/service-types';
 
 export const useApiGetSelectedNodes = (api: {
     getSelectedKeys: ITreeComponentApi['getSelectedKeys'];
     getNode: ITreeComponentApi['getNode'];
 }): ITreeComponentApi['getSelectedNodes'] => {
     const prevKeysRef = useRef<IKey[] | undefined>(undefined);
-    const prevNodesRef = useRef<Record<string, unknown>[] | undefined>(undefined);
+    const prevNodesRef = useRef<Record<string, AnyType>[] | undefined>(undefined);
     return extDataSet => {
         const selectedKeys = api.getSelectedKeys();
         if (prevKeysRef.current === selectedKeys) return prevNodesRef.current;
@@ -19,7 +19,7 @@ export const useApiGetSelectedNodes = (api: {
             return undefined;
         }
 
-        const result: Record<string, unknown>[] = [];
+        const result: Record<string, AnyType>[] = [];
         for (const key of selectedKeys) {
             const foundNode = api.getNode(key, extDataSet);
             if (foundNode) result.push(foundNode);

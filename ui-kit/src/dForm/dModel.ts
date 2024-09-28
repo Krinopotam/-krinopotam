@@ -14,7 +14,7 @@ import {BaseValidator} from './validators/baseValidator';
 import React from 'react';
 import {IAnyFieldProps, IBaseField} from '@src/dForm/fields/base/baseField';
 import {IDFormApi, IDFormDataSet, IDFormFieldsProps, IDFormProps} from '@src/dForm/index';
-import {IError} from '@krinopotam/service-types';
+import {AnyType, IError} from '@krinopotam/service-types';
 import {InlineGroupField} from '@src/dForm/fields/inlineGroup/inlineGroupField';
 import {IDFormMode} from '@src/dForm/types/dFormTypes';
 import {CallbackControl} from '@src/_shared/classes/callbackControl';
@@ -43,7 +43,7 @@ export class DModel {
     private _labels: Record<string, React.ReactNode | undefined> = {};
 
     /** Field values */
-    private _values: Record<string, unknown> = {};
+    private _values: Record<string, AnyType> = {};
 
     /** Touched field statuses */
     private _touched: Record<string, boolean | undefined> = {};
@@ -229,12 +229,12 @@ export class DModel {
         mode: IDFormMode;
     }): [
         Record<string, React.ReactNode | undefined>,
-        Record<string, unknown>,
+        Record<string, AnyType>,
         Record<string, boolean | undefined>,
         Record<string, boolean | undefined>,
         Record<string, boolean | undefined>,
     ] {
-        const values: Record<string, unknown> = {};
+        const values: Record<string, AnyType> = {};
         const hidden: Record<string, boolean | undefined> = {};
         const readOnly: Record<string, boolean | undefined> = {};
         const disabled: Record<string, boolean | undefined> = {};
@@ -667,7 +667,7 @@ export class DModel {
         if (!dataSource) return;
 
         dataSource.then(
-            (result: {data: Record<string, unknown>}) => {
+            (result: {data: Record<string, AnyType>}) => {
                 if (!this.isFormMounted()) return;
                 this.setFormFetching(false);
                 this.setFormFetchingFailed(false);
@@ -704,9 +704,9 @@ export class DModel {
         onSubmitError,
         onSubmitComplete,
     }: {
-        onSubmitSuccess?: (values: Record<string, unknown>, dataSet: IDFormDataSet, result: Record<string, unknown> | undefined, model: DModel) => void;
-        onSubmitError?: (values: Record<string, unknown>, dataSet: IDFormDataSet, error: IError, model: DModel) => void;
-        onSubmitComplete?: (values: Record<string, unknown>, dataSet: IDFormDataSet, errors: Record<string, string | undefined>, model: DModel) => void;
+        onSubmitSuccess?: (values: Record<string, AnyType>, dataSet: IDFormDataSet, result: Record<string, AnyType> | undefined, model: DModel) => void;
+        onSubmitError?: (values: Record<string, AnyType>, dataSet: IDFormDataSet, error: IError, model: DModel) => void;
+        onSubmitComplete?: (values: Record<string, AnyType>, dataSet: IDFormDataSet, errors: Record<string, string | undefined>, model: DModel) => void;
     } = {}) {
         if (this.isFormSubmitting()) return;
 

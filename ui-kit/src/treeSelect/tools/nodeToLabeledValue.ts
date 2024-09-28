@@ -1,5 +1,5 @@
 import {ILabeledValue} from '@src/treeSelect/types/types';
-import {IKey} from '@krinopotam/service-types';
+import {AnyType, IKey} from '@krinopotam/service-types';
 import React from 'react';
 
 /**
@@ -8,7 +8,7 @@ import React from 'react';
  * @param fieldNames
  */
 export const nodeToLabeledValue = (
-    node: Record<string, unknown>,
+    node: Record<string, AnyType>,
     fieldNames: {
         key: string;
         title: string;

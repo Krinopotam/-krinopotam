@@ -1,3 +1,4 @@
+import {AnyType} from "@krinopotam/service-types";
 import React, {MutableRefObject, useRef, useState} from 'react';
 import {GetNanoId} from '@krinopotam/js-helpers/helpersString/getNanoId';
 
@@ -61,7 +62,7 @@ export const useInitGridApi = ({
 
     const dataSetRef = useRef<IGridProps['dataSet']>(undefined);
     const curDataFetchHandler = useRef<IGridProps['onDataFetch'] | undefined>();
-    const curDataFetchParams = useRef<Record<string, unknown> | undefined>();
+    const curDataFetchParams = useRef<Record<string, AnyType> | undefined>();
 
     const [isLoading, setIsLoading] = useState(false);
 

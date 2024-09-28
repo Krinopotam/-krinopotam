@@ -1,5 +1,5 @@
 import {IDFormDataSet, IDFormDataSourcePromise} from '@src/dForm/types/dFormTypes';
-import {IError} from '@krinopotam/service-types';
+import {AnyType, IError} from '@krinopotam/service-types';
 import {DModel} from '@src/dForm';
 import {CallbackControl} from '@src/_shared/classes/callbackControl';
 
@@ -24,7 +24,7 @@ export interface IDFormBaseCallbacks<T> {
     onFormReadyStateChanged?: (state: boolean, api: T, cbControl: CallbackControl) => void;
 
     /** fires when the form values changed  */
-    onFormValuesChanged?: (fieldName: string, values: Record<string, unknown>, api: T, cbControl: CallbackControl) => void;
+    onFormValuesChanged?: (fieldName: string, values: Record<string, AnyType>, api: T, cbControl: CallbackControl) => void;
 
     /**
      * fires when the form validated
@@ -35,7 +35,7 @@ export interface IDFormBaseCallbacks<T> {
      * @param api form api instance
      */
     onFormValidated?: (
-        values: Record<string, unknown>,
+        values: Record<string, AnyType>,
         dataSet: IDFormDataSet,
         errors: Record<string, string>,
         isSubmit: boolean,
@@ -49,20 +49,20 @@ export interface IDFormBaseCallbacks<T> {
      * @param errors errors
      * @param api form api instance
      */
-    onFormHasErrors?: (values: Record<string, unknown>, dataSet: IDFormDataSet, errors: Record<string, unknown>, api: T, cbControl: CallbackControl) => void;
+    onFormHasErrors?: (values: Record<string, AnyType>, dataSet: IDFormDataSet, errors: Record<string, AnyType>, api: T, cbControl: CallbackControl) => void;
 
     /** fires when the form has no errors
      * @param values form only values
      * @param dataSet form dataSet merged with form values
      * @param api form api instance
      */
-    onFormHasNoErrors?: (values: Record<string, unknown>, dataSet: IDFormDataSet, api: T, cbControl: CallbackControl) => void;
+    onFormHasNoErrors?: (values: Record<string, AnyType>, dataSet: IDFormDataSet, api: T, cbControl: CallbackControl) => void;
 
     /** fires when the form trying to fetch data */
     onDataFetch?: (api: T, cbControl: CallbackControl) => IDFormDataSourcePromise | undefined;
 
     /** fires when the form fetch success */
-    onDataFetchSuccess?: (result: {data: Record<string, unknown>}, api: T, cbControl: CallbackControl) => void;
+    onDataFetchSuccess?: (result: {data: Record<string, AnyType>}, api: T, cbControl: CallbackControl) => void;
 
     /** fires when the form fetch failed */
     onDataFetchError?: (error: IError, api: T, cbControl: CallbackControl) => void;
@@ -76,7 +76,7 @@ export interface IDFormBaseCallbacks<T> {
      * @param api form api instance
      */
     onSubmit?: (
-        values: Record<string, unknown>,
+        values: Record<string, AnyType>,
         dataSet: IDFormDataSet,
         api: T,
         cbControl: CallbackControl
@@ -89,7 +89,7 @@ export interface IDFormBaseCallbacks<T> {
      * @param api form api instance
      */
     onSubmitValidation?: (
-        values: Record<string, unknown>,
+        values: Record<string, AnyType>,
         dataSet: IDFormDataSet,
         errors: Record<string, string | undefined>,
         api: T,
@@ -103,9 +103,9 @@ export interface IDFormBaseCallbacks<T> {
      * @param api form api instance
      */
     onSubmitSuccess?: (
-        values: Record<string, unknown>,
+        values: Record<string, AnyType>,
         dataSet: IDFormDataSet,
-        resultData: Record<string, unknown> | undefined,
+        resultData: Record<string, AnyType> | undefined,
         api: T,
         cbControl: CallbackControl
     ) => void;
@@ -116,7 +116,7 @@ export interface IDFormBaseCallbacks<T> {
      * @param error error
      * @param api form api instance
      */
-    onSubmitError?: (values: Record<string, unknown>, dataSet: IDFormDataSet, error: IError, api: T, cbControl: CallbackControl) => void;
+    onSubmitError?: (values: Record<string, AnyType>, dataSet: IDFormDataSet, error: IError, api: T, cbControl: CallbackControl) => void;
 
     /** fires, when the submitting finishes, whether in failure or success.
      * @param values form only values
@@ -125,7 +125,7 @@ export interface IDFormBaseCallbacks<T> {
      * @param api form api instance
      */
     onSubmitComplete?: (
-        values: Record<string, unknown>,
+        values: Record<string, AnyType>,
         dataSet: IDFormDataSet,
         errors: Record<string, string | undefined>,
         api: T,
@@ -138,5 +138,5 @@ export interface IDFormBaseCallbacks<T> {
 
 export type IDFormModelCallbacks = IDFormBaseCallbacks<DModel>;
 
-export type IDFormSubmitResultPromise = Promise<{data: Record<string, unknown>} | void>;
-export type IDFormSubmitResultObject = {data?: Record<string, unknown>; error?: IError};
+export type IDFormSubmitResultPromise = Promise<{data: Record<string, AnyType>} | void>;
+export type IDFormSubmitResultObject = {data?: Record<string, AnyType>; error?: IError};

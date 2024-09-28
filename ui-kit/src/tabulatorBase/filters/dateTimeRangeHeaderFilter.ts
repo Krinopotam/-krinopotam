@@ -1,6 +1,6 @@
 import {CellComponent, EmptyCallback, FilterType, ValueBooleanCallback, ValueVoidCallback} from 'tabulator-tables';
 import dayjs from 'dayjs';
-import {IKeyboardKey} from "@krinopotam/service-types";
+import {AnyType, IKeyboardKey} from "@krinopotam/service-types";
 
 export interface IDateTimeRangeHeaderFilterParams {
     /** Filter type */
@@ -151,7 +151,7 @@ export const DateTimeRangeHeaderFilter = (
 export const DateTimeRangeHeaderFilterFunc = (
     headerValue: string,
     rowValue: string,
-    rowData: Record<string, unknown>,
+    rowData: Record<string, AnyType>,
     filterParams: IDateTimeRangeHeaderFilterParams
 ) => {
     if (!headerValue) return true;
@@ -183,7 +183,7 @@ export const DateTimeRangeHeaderFilterFunc = (
 };
 
 export const DateTimeRangeHeaderFilterFunc2 = (
-    data: Record<string, unknown>,
+    data: Record<string, AnyType>,
     filterParams: IDateTimeRangeHeaderFilterParams & {
         field: string;
         type: FilterType;

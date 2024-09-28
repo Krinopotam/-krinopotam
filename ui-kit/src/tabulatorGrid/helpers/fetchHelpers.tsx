@@ -1,9 +1,10 @@
+import {AnyType} from "@krinopotam/service-types";
 import {IGridApi, IGridProps, IGridRowData} from '@src/tabulatorGrid';
 import {IAjaxConfig, IRequestProps} from '@src/tabulatorBase';
 import {IsArray} from '@krinopotam/js-helpers/helpersObjects/isArray';
 import {IsPromise} from '@krinopotam/js-helpers/helpersObjects/isPromise';
 
-export const GenerateAjaxRequestFunc = (gridApi: IGridApi, onDataFetch: IGridProps['onDataFetch'], extraParams?: Record<string, unknown>) => {
+export const GenerateAjaxRequestFunc = (gridApi: IGridApi, onDataFetch: IGridProps['onDataFetch'], extraParams?: Record<string, AnyType>) => {
     if (!onDataFetch) return undefined;
     const gridProps = gridApi.getProps();
     gridApi.setCurrentDataFetchHandler(onDataFetch, extraParams);

@@ -33,7 +33,7 @@ export class AdvancedHeaderFilterModule extends Module {
     public table: IAdvancedHeaderFilterTabulator;
 
     private headerFilterStatus: boolean = false;
-    private curHeaderFilterValues: Record<string, unknown> = {};
+    private curHeaderFilterValues: Record<string, AnyType> = {};
     private filteredCacheMap: Record<string, Record<string | number, boolean>> = {};
 
     /** The field that was last filtered by the user */
@@ -171,7 +171,7 @@ export class AdvancedHeaderFilterModule extends Module {
 
     private onFilterChanged() {
         const headerFilters = this.table.getHeaderFilters();
-        const curHeaderFilterValues: Record<string, unknown> = {};
+        const curHeaderFilterValues: Record<string, AnyType> = {};
         for (const filter of headerFilters) {
             if (this.curHeaderFilterValues[filter.field] !== filter.value) {
                 //the filter value for this field has changed

@@ -8,6 +8,7 @@
  * @license MIT
  */
 
+import {AnyType} from "@krinopotam/service-types";
 import dayjs from 'dayjs';
 import {DModel} from "@src/dForm";
 
@@ -55,7 +56,7 @@ export interface IRuleCustom {
 export type IRuleType = IRuleString | IRuleNumber | IRuleDate | IRuleFile | IRuleObject | IRuleCustom;
 //endregion
 export class BaseValidator {
-    public validate(values: Record<string, unknown>, formModel:DModel, validationRules?: Record<string, IRuleType[]>, hidden?: Record<string, boolean>): Record<string, string> {
+    public validate(values: Record<string, AnyType>, formModel:DModel, validationRules?: Record<string, IRuleType[]>, hidden?: Record<string, boolean>): Record<string, string> {
         const errors: Record<string, string> = {};
         if (!values || !validationRules) return errors;
 

@@ -126,7 +126,7 @@ export interface IExtTreeButton extends IFormButton {
 
 export type IExtTreeButtons = Record<string, IExtTreeButton | null>;
 
-export type ITreeDeletePromise = Promise<{data: Record<string, unknown>}>;
+export type ITreeDeletePromise = Promise<{data: Record<string, AnyType>}>;
 
 interface IExtTreeNodeBase extends Omit<TreeDataNode, 'key' | 'children'> {
     /** Node id */
@@ -145,7 +145,7 @@ interface IExtTreeNodeBase extends Omit<TreeDataNode, 'key' | 'children'> {
     [key: string]: AnyType;
 }
 
-export type IExtTreeNode<T = Record<string, unknown>> = IExtTreeNodeBase & T;
+export type IExtTreeNode<T = Record<string, AnyType>> = IExtTreeNodeBase & T;
 
 export interface IExtTreeApi extends ITreeComponentApi<IExtTreeNode, IExtTreeProps> {
     /** Tree ref */

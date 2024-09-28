@@ -5,7 +5,7 @@ import {ITreeSelectApi, ITreeSelectNode, ITreeSelectProps} from '@src/treeSelect
 import {ILabeledValue} from '@src/treeSelect/types/types';
 import {IFieldNames} from '@src/_shared/hooks/treeComponentApiMethods/types/treeApiTypes';
 import {TreeSelectContext} from '@src/treeSelect/context/context';
-import {IKey} from '@krinopotam/service-types';
+import {AnyType, IKey} from '@krinopotam/service-types';
 
 export const useGetEditFormProps = (treeApi: ITreeSelectApi, treeSelectProps: ITreeSelectProps, forGroup: boolean) => {
     const {dialogOpenedRef} = useContext(TreeSelectContext);
@@ -26,7 +26,7 @@ export const useGetEditFormProps = (treeApi: ITreeSelectApi, treeSelectProps: IT
             const formMode = formApi.model.getFormMode();
             const fieldNames = treeApi.getFieldNames();
 
-            const updatedNode = {...resultData} as ITreeSelectNode & {parent?: Record<string, unknown>; parentId?: IKey};
+            const updatedNode = {...resultData} as ITreeSelectNode & {parent?: Record<string, AnyType>; parentId?: IKey};
 
             let targetKey: IKey | undefined;
             if (IsObjectHasOwnProperty(updatedNode, fieldNames.parent)) targetKey = updatedNode[fieldNames.parent]?.[fieldNames.key] as IKey;

@@ -1,7 +1,8 @@
+import {AnyType} from "@krinopotam/service-types";
 import {IFindNodeOptions} from '@src/_shared/hooks/treeComponentApiMethods/types/treeApiTypes';
 
 export const isNodeCanBeSelected = (
-    node: Record<string, unknown>,
+    node: Record<string, AnyType>,
     fieldNames: {
         disabled: string;
         selectable: string;

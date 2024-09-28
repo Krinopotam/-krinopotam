@@ -1,11 +1,11 @@
-import {IKey} from '@krinopotam/service-types';
+import {AnyType, IKey} from '@krinopotam/service-types';
 import {getNodeFromTree} from '@src/_shared/hooks/treeComponentApiMethods/serviceMethods/getNodeFromTree';
 import {IsArray} from '@krinopotam/js-helpers/helpersObjects/isArray';
 
 export const isDescendant = (
-    parent: Record<string, unknown> | IKey | undefined,
-    child: Record<string, unknown> | IKey | undefined,
-    dataSet: Record<string, unknown>[],
+    parent: Record<string, AnyType> | IKey | undefined,
+    child: Record<string, AnyType> | IKey | undefined,
+    dataSet: Record<string, AnyType>[],
     fieldNames: {
         key: string;
         children: string;
@@ -17,8 +17,8 @@ export const isDescendant = (
     if (!parentKey || !childKey) return false;
 
     const parentNode = getNodeFromTree(parentKey, dataSet, fieldNames);
-    if (!IsArray(parentNode?.[fieldNames.children])) return false;
+    if (!parentNode || !IsArray(parentNode[fieldNames.children])) return false;
 
-    const foundNode = getNodeFromTree(childKey, parentNode[fieldNames.children] as Record<string, unknown>[], fieldNames);
+    const foundNode = getNodeFromTree(childKey, parentNode[fieldNames.children] as Record<string, AnyType>[], fieldNames);
     return !!foundNode;
 };

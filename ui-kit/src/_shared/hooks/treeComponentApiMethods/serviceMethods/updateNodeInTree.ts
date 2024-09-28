@@ -1,12 +1,12 @@
-import {IKey} from '@krinopotam/service-types';
+import {AnyType, IKey} from '@krinopotam/service-types';
 import {getNodeFromTree} from '@src/_shared/hooks/treeComponentApiMethods/serviceMethods/getNodeFromTree';
 import {getParentNode} from '@src/_shared/hooks/treeComponentApiMethods/serviceMethods/getParentNode';
 import {moveNode} from '@src/_shared/hooks/treeComponentApiMethods/serviceMethods/moveNode';
 
 export const updateNodeInTree = (
-    node: Record<string, unknown> | undefined,
-    target: IKey | Record<string, unknown> | undefined,
-    dataSet: Record<string, unknown>[] | undefined,
+    node: Record<string, AnyType> | undefined,
+    target: IKey | Record<string, AnyType> | undefined,
+    dataSet: Record<string, AnyType>[] | undefined,
     fieldNames: {
         key: string;
         children: string;
@@ -28,7 +28,7 @@ export const updateNodeInTree = (
     return moveNode(node, targetNode, dataSet, fieldNames, 'insideBottom', groupsMode) ?? [];
 };
 
-const updateValues = (source: Record<string, unknown>, target: Record<string, unknown>, childrenField: string) => {
+const updateValues = (source: Record<string, AnyType>, target: Record<string, AnyType>, childrenField: string) => {
     for (const field in target) {
         if (field === childrenField) continue;
         source[field] = target[field];

@@ -1,3 +1,4 @@
+import {AnyType} from "@krinopotam/service-types";
 import {ILabeledValue} from '@src/treeSelect/types/types';
 import {getNodeIndex} from '@src/_shared/hooks/treeComponentApiMethods/serviceMethods/getNodeIndex';
 
@@ -12,13 +13,13 @@ import {getNodeIndex} from '@src/_shared/hooks/treeComponentApiMethods/serviceMe
  */
 export const labeledValueToNode = (
     val: ILabeledValue,
-    dataSet: Record<string, unknown>[] | undefined,
+    dataSet: Record<string, AnyType>[] | undefined,
     fieldNames: {
         key: string;
         title: string;
         children: string;
     }
-): Record<string, unknown> => {
+): Record<string, AnyType> => {
     const baseNode = {[fieldNames.key]: val.value, [fieldNames.title]: val.label};
     const {idx, nodes} = getNodeIndex(dataSet, val.value, fieldNames);
     if (idx < 0 || !nodes?.[idx]) return baseNode;

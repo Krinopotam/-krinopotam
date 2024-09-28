@@ -1,3 +1,4 @@
+import {AnyType} from "@krinopotam/service-types";
 import {ITreeSelectValue} from '@src/treeSelect';
 import {ILabeledValue} from '@src/treeSelect/types/types';
 import {IsArray} from '@krinopotam/js-helpers/helpersObjects/isArray';

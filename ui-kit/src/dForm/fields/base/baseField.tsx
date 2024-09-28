@@ -18,7 +18,7 @@ import {IRuleType} from '@src/dForm/validators/baseValidator';
 import {IsArray} from '@krinopotam/js-helpers/helpersObjects/isArray';
 import {CallbackControl} from '@src/_shared/classes/callbackControl';
 
-export interface IBaseFieldProps<TField extends IBaseField, TValue> extends Record<string, unknown> {
+export interface IBaseFieldProps<TField extends IBaseField, TValue> extends Record<string, AnyType> {
     /** Field React component */
     component: new (fieldName: string, fieldProps: AnyType, model: DModel, parent?: IBaseField) => TField;
 
@@ -249,7 +249,7 @@ export class BaseField<TFieldProps extends IAnyFieldProps> {
         const val = this.getValue();
         if (val === null) return true;
         if (IsArray(val) && val.length === 0) return true;
-        if (typeof val === 'object' && Object.keys(val as Record<string, unknown>).length === 0) return true;
+        if (typeof val === 'object' && Object.keys(val as Record<string, AnyType>).length === 0) return true;
         return val !== 0 && !val;
     }
 

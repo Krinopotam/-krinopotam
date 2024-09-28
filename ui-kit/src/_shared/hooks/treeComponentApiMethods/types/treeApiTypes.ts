@@ -1,5 +1,5 @@
 import {IBaseComponentApi} from '@src/_shared/hooks/componentApiMethods/types/apiTypes';
-import {IKey} from '@krinopotam/service-types';
+import {AnyType, IKey} from '@krinopotam/service-types';
 
 export interface IFindNodeOptions {
     /** If true, search will be performed only in the same level */
@@ -27,7 +27,7 @@ export type IFieldNames = {
 
 export type INodePosition = 'below' | 'above' | 'insideTop' | 'insideBottom';
 
-export interface ITreeComponentApi<TNode extends Record<string, unknown> = Record<string, unknown>, TProps extends object = object>
+export interface ITreeComponentApi<TNode extends Record<string, AnyType> = Record<string, AnyType>, TProps extends object = object>
     extends IBaseComponentApi<TProps> {
     /** Get node fields names */
     getFieldNames: () => IFieldNames;
@@ -210,7 +210,7 @@ export interface ITreeComponentApi<TNode extends Record<string, unknown> = Recor
      * @param opts
      * @param externalDataset - if not set, search will be performed in current data set. If set - in this data set
      */
-    getNextNodeKey: (key: IKey | Record<string, unknown> | undefined, opts?: IFindNodeOptions, externalDataset?: TNode[]) => IKey | undefined;
+    getNextNodeKey: (key: IKey | Record<string, AnyType> | undefined, opts?: IFindNodeOptions, externalDataset?: TNode[]) => IKey | undefined;
 
     /**
      * Returns prev node key
@@ -218,7 +218,7 @@ export interface ITreeComponentApi<TNode extends Record<string, unknown> = Recor
      * @param opts
      * @param externalDataset - if not set, search will be performed in current data set. If set - in this data set
      */
-    getPrevNodeKey: (node: IKey | Record<string, unknown> | undefined, opts?: IFindNodeOptions, externalDataset?: TNode[]) => IKey | undefined;
+    getPrevNodeKey: (node: IKey | Record<string, AnyType> | undefined, opts?: IFindNodeOptions, externalDataset?: TNode[]) => IKey | undefined;
 
     /**
      * Returns next node

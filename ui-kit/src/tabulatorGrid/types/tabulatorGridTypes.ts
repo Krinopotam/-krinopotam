@@ -1,3 +1,4 @@
+import {AnyType} from "@krinopotam/service-types";
 import React from 'react';
 import {IButtonsRowApi, IFormButton} from '@src/buttonsRow';
 import {IDFormModalApi, IDFormModalProps} from '@src/dFormModal';
@@ -7,7 +8,7 @@ import {IBreakpoints} from '@krinopotam/common-hooks/useResponsive';
 import {translations} from '@src/tabulatorGrid/translations/translations';
 import {IBaseComponentApi} from "@src/_shared/hooks/componentApiMethods/types/apiTypes";
 
-export interface IGridRowData extends Record<string, unknown> {
+export interface IGridRowData extends Record<string, AnyType> {
     /** Row id */
     id: string | number;
     children?: IGridRowData[];
@@ -204,7 +205,7 @@ export interface IGridApi extends IBaseComponentApi<IGridProps>{
         selfParent?: boolean,
         parentOnly?: boolean,
         withChildren?: boolean
-    ) => Record<string, unknown>;
+    ) => Record<string, AnyType>;
 
     /** Open columns properties dialog */
     openColumnDialog: (open: boolean) => void;
@@ -237,16 +238,16 @@ export interface IGridApi extends IBaseComponentApi<IGridProps>{
     getButtonsApi: () => IButtonsRowApi & { refreshButtons: () => void };
 
     /** Fetch data. If onDataFetch callback  is undefined,the request will use the previously set onDataFetch callback  */
-    fetchData: (onDataFetch?: IGridProps['onDataFetch'], params?: Record<string, unknown>) => void;
+    fetchData: (onDataFetch?: IGridProps['onDataFetch'], params?: Record<string, AnyType>) => void;
 
     /** Retry fetch data (with last fetch function) */
     retryFetchData: () => void;
 
     /** Set current data fetch handler */
-    setCurrentDataFetchHandler: (dataFetchHandler: IGridProps['onDataFetch'], params?: Record<string, unknown>) => void;
+    setCurrentDataFetchHandler: (dataFetchHandler: IGridProps['onDataFetch'], params?: Record<string, AnyType>) => void;
 
     /** Get current data fetch handler */
-    getCurrentDataFetchHandler: () => [IGridProps['onDataFetch'], Record<string, unknown> | undefined];
+    getCurrentDataFetchHandler: () => [IGridProps['onDataFetch'], Record<string, AnyType> | undefined];
 }
 
 export interface ITabulatorButton extends IFormButton {

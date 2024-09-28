@@ -19,11 +19,11 @@ type _ITabulator = IAdvancedHeaderFilterTabulator & IActiveSelectionTabulator & 
 export type ITabulatorFilterFunc = (
     headerValue: AnyType,
     rowValue: AnyType,
-    rowData: Record<string, unknown>,
-    filterParams: Record<string, unknown>
+    rowData: Record<string, AnyType>,
+    filterParams: Record<string, AnyType>
 ) => boolean;
 
-export interface IRequestProps extends Record<string, unknown> {
+export interface IRequestProps extends Record<string, AnyType> {
     page?: number;
     size?: number;
     sort?: {field: string; dir: 'asc' | 'desc'}[];
@@ -34,7 +34,7 @@ export interface IRequestProps extends Record<string, unknown> {
     };
 }
 
-export interface IAjaxConfig extends Record<string, unknown> {
+export interface IAjaxConfig extends Record<string, AnyType> {
     method?: 'GET' | 'POST' | 'PUT' | 'DELETE';
     /** set request mode to cors */
     mode?: string;
@@ -53,21 +53,21 @@ export interface ITabulator extends _ITabulator {
     updateColumnDefinition: (column: ColumnLookup, definition: Partial<ColumnDefinition>) => Promise<void>;
 
     /** Ajax request handler */
-    //ajaxRequestFunc?: (url: string, config: IAjaxConfig, params: IRequestProps) => Promise<{data: Record<string, unknown>[]; last_page: number}>;
+    //ajaxRequestFunc?: (url: string, config: IAjaxConfig, params: IRequestProps) => Promise<{data: Record<string, AnyType>[]; last_page: number}>;
 }
 
 export interface ITabulatorColumn extends Omit<ColumnDefinition, 'headerPopup'> {
     /** type patches */
-    headerFilterParams?:ColumnDefinition['headerFilterParams'] | Record<string, unknown>;
-    formatterParams?:ColumnDefinition['formatterParams'] | Record<string, unknown>;
-    sorterParams?:ColumnDefinition['sorterParams'] | Record<string, unknown>;
-    headerFilterFuncParams?:ColumnDefinition['headerFilterFuncParams'] | Record<string, unknown>;
-    editorParams?:ColumnDefinition['editorParams'] | Record<string, unknown>;
-    mutatorDataParams?:ColumnDefinition['mutatorDataParams'] | Record<string, unknown>;
-    mutatorEditParams?:ColumnDefinition['mutatorEditParams'] | Record<string, unknown>;
-    mutatorParams?:ColumnDefinition['mutatorParams'] | Record<string, unknown>;
-    titleFormatterParams?:ColumnDefinition['titleFormatterParams'] | Record<string, unknown>;
-    topCalcFormatterParams?:ColumnDefinition['topCalcFormatterParams'] | Record<string, unknown>;
+    headerFilterParams?:ColumnDefinition['headerFilterParams'] | Record<string, AnyType>;
+    formatterParams?:ColumnDefinition['formatterParams'] | Record<string, AnyType>;
+    sorterParams?:ColumnDefinition['sorterParams'] | Record<string, AnyType>;
+    headerFilterFuncParams?:ColumnDefinition['headerFilterFuncParams'] | Record<string, AnyType>;
+    editorParams?:ColumnDefinition['editorParams'] | Record<string, AnyType>;
+    mutatorDataParams?:ColumnDefinition['mutatorDataParams'] | Record<string, AnyType>;
+    mutatorEditParams?:ColumnDefinition['mutatorEditParams'] | Record<string, AnyType>;
+    mutatorParams?:ColumnDefinition['mutatorParams'] | Record<string, AnyType>;
+    titleFormatterParams?:ColumnDefinition['titleFormatterParams'] | Record<string, AnyType>;
+    topCalcFormatterParams?:ColumnDefinition['topCalcFormatterParams'] | Record<string, AnyType>;
 
     headerPopup?: ((e: MouseEvent, column: ColumnComponent, onRendered: EmptyCallback) => HTMLElement) | string | React.ReactNode;
 }
