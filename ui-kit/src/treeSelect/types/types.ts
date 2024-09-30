@@ -158,7 +158,7 @@ export interface ITreeSelectBaseProps {
     onReady?: () => void;
 
     /** Fires when the TreeSelect value is changed */
-    onChange?: (valueType: ILabeledValue | ILabeledValue[], keys: IKey[], nodes: ITreeSelectNode[]) => void;
+    onChange?: (valueType: ILabeledValue | ILabeledValue[] | null, keys: IKey[], nodes: ITreeSelectNode[]) => void;
 
     /** Fires when the TreeSelect dataSet is changed */
     onDataSetChanged?: (dataSet: ITreeSelectNode[] | undefined) => void;
@@ -191,7 +191,7 @@ export interface ILabeledValue {
     label?: React.ReactNode;
 }
 
-export type ITreeSelectValue = IKey | IKey[] | ILabeledValue | ILabeledValue[] | Record<string, AnyType> | Record<string, AnyType>[] | null | undefined;
+export type ITreeSelectValue = IKey | IKey[] | ILabeledValue | ILabeledValue[] | Record<string, AnyType> | Record<string, AnyType>[] | null;
 
 export interface ITreeSelectApi extends Omit<ITreeComponentApi<ITreeSelectNode, ITreeSelectProps>, 'setSelectedKeys' | 'getSelectedKeys' | 'getSelectedNodes'> {
     /** Tree ref */
@@ -201,7 +201,7 @@ export interface ITreeSelectApi extends Omit<ITreeComponentApi<ITreeSelectNode, 
     t: (str: keyof (typeof translations)['en']) => string;
 
     /** Get values (values always in IBaseValueWithLabel array) */
-    getValues: () => ILabeledValue[] | undefined;
+    getValues: () => ILabeledValue[] | null;
 
     /** Set values (values may be  as Key or IBaseValueWithLabel or array) */
     setValues: (value: ITreeSelectValue) => void;

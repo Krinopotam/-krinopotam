@@ -8,8 +8,8 @@ describe('anyValueToValuesWithLabel', () => {
         title: 'title',
     };
 
-    it('should return undefined if val is falsy', () => {
-        expect(anyValueToValuesWithLabel(undefined, fieldNames)).toBeUndefined();
+    it('should return null if val is falsy', () => {
+        expect(anyValueToValuesWithLabel(undefined, fieldNames)).toBeNull();
     });
 
     it('should convert a single primitive value to ILabeledValue', () => {

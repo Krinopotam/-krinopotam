@@ -41,7 +41,7 @@ describe('updateNodeInTree', () => {
         ]);
     });
 
-    it('should not move updated node if target node is undefined', () => {
+    it('should move updated node to the root if target node is undefined', () => {
         const dataSet = [
             {id: 1, children: [{id: 2, oldField: 'oldValue'}, {id: 3}]},
             {id: 4, children: [{id: 5}, {id: 6}]},
@@ -52,8 +52,9 @@ describe('updateNodeInTree', () => {
         const updatedDataSet = updateNodeInTree(nodeToUpdate, undefined, dataSet, fieldNames);
 
         expect(updatedDataSet).toEqual([
-            {id: 1, children: [{id: 2, oldField: 'updated oldValue', newField: 'newValue'}, {id: 3}]},
+            {id: 1, children: [{id: 3}]},
             {id: 4, children: [{id: 5}, {id: 6}]},
+            {id: 2, oldField: 'updated oldValue', newField: 'newValue'}
         ]);
     });
 

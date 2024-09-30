@@ -8,8 +8,8 @@ import {anyValueToValuesWithLabel} from "@src/treeSelect/tools/anyValueToValuesW
 export const useValuesState = (
     {value}: ITreeSelectProps,
     fieldNames: IFieldNames
-): [value: ILabeledValue[] | undefined, setValue: React.Dispatch<React.SetStateAction<ILabeledValue[] | undefined>>] => {
-    const valuesWithLabel = useValueWithLabel(value, fieldNames);
+): [value: ILabeledValue[] | null, setValue: React.Dispatch<React.SetStateAction<ILabeledValue[] | null>>] => {
+    const valuesWithLabel = useValueWithLabel(value ?? null, fieldNames);
     const [val, setVal] = useState(valuesWithLabel);
 
     useUpdateEffect(() => {

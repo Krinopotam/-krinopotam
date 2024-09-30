@@ -5,9 +5,9 @@ import {useRef} from 'react';
 import {IsArray} from '@krinopotam/js-helpers/helpersObjects/isArray';
 import {labeledValueToNode} from '@src/treeSelect/tools/labeledValueToNode';
 
-export const useApiGetSelectedNodes = (api: ITreeSelectApi, value?: ILabeledValue | ILabeledValue[]): ITreeSelectApi['getSelectedNodes'] => {
+export const useApiGetSelectedNodes = (api: ITreeSelectApi, value: ILabeledValue | ILabeledValue[] | null): ITreeSelectApi['getSelectedNodes'] => {
     const prevDataRef = useRef<Record<string, AnyType>[] | undefined>(undefined);
-    const prevValsRef = useRef<ILabeledValue | ILabeledValue[] | undefined>(undefined);
+    const prevValsRef = useRef<ILabeledValue | ILabeledValue[] | null>(null);
     const prevNodesRef = useRef<Record<string, AnyType>[] | undefined>(undefined);
     return (extDataset?: ITreeSelectNode[], extValue?: ILabeledValue | ILabeledValue[]) => {
         const dataSet = api.getDataSet();

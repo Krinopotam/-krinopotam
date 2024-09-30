@@ -9,15 +9,15 @@ export const useOnChange = (field: TreeSelectField, fieldProps: ITreeSelectField
                 switch (fieldProps.valueType) {
                     case undefined:
                     case 'node':
-                        if (fieldProps.multiple) field.setValue(nodes ?? undefined);
-                        else field.setValue(nodes?.length ? nodes[0] : undefined);
+                        if (fieldProps.multiple) field.setValue(nodes ?? null);
+                        else field.setValue(nodes?.length ? nodes[0] : null);
                         break;
                     case 'labeledValue':
-                        field.setValue(labeledVal ?? undefined);
+                        field.setValue(labeledVal ?? null);
                         break;
                     case 'key':
-                        if (fieldProps.multiple) field.setValue(keys ?? undefined);
-                        else field.setValue(keys?.length ? keys[0] : undefined);
+                        if (fieldProps.multiple) field.setValue(keys ?? null);
+                        else field.setValue(keys?.length ? keys[0] : null);
                         break;
                 }
 

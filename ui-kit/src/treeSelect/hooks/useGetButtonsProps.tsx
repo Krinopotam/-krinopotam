@@ -98,7 +98,7 @@ const useGetCreateButton = (api: ITreeSelectApi, props: ITreeSelectProps): ITree
                 const activeNode = api.getActiveNode(false);
                 let parent: ITreeSelectNode | undefined = undefined;
                 if (activeNode) {
-                    if (!activeNode.isLeaf) parent = activeNode;
+                    if (!activeNode.isLeaf && (!props.groupsMode || activeNode[fieldNames.isGroup])) parent = activeNode;
                     else parent = api.getParentNode(activeNode);
                 }
                 api.getEditFormApi().open('create', {defaultValues: {[fieldNames.parent]: parent}});
@@ -120,7 +120,7 @@ const useGetCreateGroupButton = (api: ITreeSelectApi, props: ITreeSelectProps): 
                 const activeNode = api.getActiveNode(false);
                 let parent: ITreeSelectNode | undefined = undefined;
                 if (activeNode) {
-                    if (!activeNode.isLeaf) parent = activeNode;
+                    if (!activeNode.isLeaf && (!props.groupsMode || activeNode[fieldNames.isGroup])) parent = activeNode;
                     else parent = api.getParentNode(activeNode);
                 }
                 api.getEditGroupFormApi().open('create', {defaultValues: {[fieldNames.parent]: parent}});

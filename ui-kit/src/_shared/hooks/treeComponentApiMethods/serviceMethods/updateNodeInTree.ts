@@ -24,7 +24,7 @@ export const updateNodeInTree = (
 
     const targetNode = getNodeFromTree(target, dataSet, fieldNames);
     const parentNode = getParentNode(node, dataSet, fieldNames);
-    if (!targetNode || targetNode === parentNode) return dataSet;
+    if (targetNode === parentNode) return dataSet;
     return moveNode(node, targetNode, dataSet, fieldNames, 'insideBottom', groupsMode) ?? [];
 };
 

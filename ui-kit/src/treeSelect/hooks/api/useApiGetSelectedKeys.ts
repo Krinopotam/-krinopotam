@@ -2,7 +2,7 @@ import {ILabeledValue, ITreeSelectApi} from '@src/treeSelect/types/types';
 import {IKey} from '@krinopotam/service-types';
 import {IsArray} from '@krinopotam/js-helpers/helpersObjects/isArray';
 
-export const useApiGetSelectedKeys = (value?: ILabeledValue | ILabeledValue[]): ITreeSelectApi['getSelectedKeys'] => {
+export const useApiGetSelectedKeys = (value: ILabeledValue | ILabeledValue[] | null): ITreeSelectApi['getSelectedKeys'] => {
     return (extraValue?: ILabeledValue | ILabeledValue[]) => {
         const val = extraValue ?? value;
         if (!val) return undefined;

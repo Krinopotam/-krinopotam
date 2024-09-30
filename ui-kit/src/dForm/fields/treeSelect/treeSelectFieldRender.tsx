@@ -14,7 +14,7 @@ export const TreeSelectFieldRender = ({field}: {field: TreeSelectField}): React.
     const fieldProps = field.getProps();
 
 
-    const value = field.getValue();
+    const value = field.getValue() ?? null;
 
     const onBlur = useOnBlur(field);
     const onClear = useOnClear(field);

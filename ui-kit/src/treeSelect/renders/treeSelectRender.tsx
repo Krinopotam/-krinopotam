@@ -108,7 +108,7 @@ const useDropdownRender = ({api}: {api: ITreeSelectApi}) => {
 
 const useOnClear = (api: ITreeSelectApi) => {
     return useCallback(() => {
-        api.setValues(undefined);
+        api.setValues(null);
         const props = api.getProps();
         props.onClear?.();
     }, [api]);
@@ -118,7 +118,7 @@ const useOnChange = (api: ITreeSelectApi) => {
     return useCallback<(value: unknown) => void>(
         value => {
             const val = value as ILabeledValue | ILabeledValue[];
-            api.setValues(val);
+            api.setValues(val ?? null);
             const props = api.getProps();
             const keys = !val ? [] : (api.getSelectedKeys(val) ?? []);
             const nodes = !val ? [] : (api.getSelectedNodes(undefined, val) ?? []);

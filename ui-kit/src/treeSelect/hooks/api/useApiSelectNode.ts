@@ -3,8 +3,8 @@ import {useCallback} from 'react';
 import {ITreeComponentApi} from '@src/_shared/hooks/treeComponentApiMethods/types/treeApiTypes';
 import {ITreeSelectApi} from '@src/treeSelect';
 import {ILabeledValue} from '@src/treeSelect/types/types';
-import {IKey} from "@krinopotam/service-types";
-import {anyValueToValuesWithLabel} from "@src/treeSelect/tools/anyValueToValuesWithLabel";
+import {IKey} from '@krinopotam/service-types';
+import {anyValueToValuesWithLabel} from '@src/treeSelect/tools/anyValueToValuesWithLabel';
 
 export const useApiSelectNode = (
     api: {
@@ -27,7 +27,7 @@ export const useApiSelectNode = (
                 else api.setValues([newVal]);
             } else {
                 if (!isValuesIncludes(values, newVal.value)) return;
-                if (multiple) api.setValues(values?.filter(curValue => curValue.value !== newVal.value));
+                if (multiple) api.setValues(values?.filter(curValue => curValue.value !== newVal.value) ?? null);
                 else api.setValues([]);
             }
         },
@@ -35,7 +35,7 @@ export const useApiSelectNode = (
     );
 };
 
-const isValuesIncludes = (values: ILabeledValue[] | undefined, key: IKey) => {
+const isValuesIncludes = (values: ILabeledValue[] | null | undefined, key: IKey) => {
     if (!values) return false;
     for (const val of values) {
         if (val.value === key) return true;

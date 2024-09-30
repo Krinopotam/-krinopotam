@@ -1,11 +1,10 @@
-import {useContext, useMemo} from 'react';
 import {GetUuid} from '@krinopotam/js-helpers/helpersString/getUuid';
-import {IsObjectHasOwnProperty} from '@krinopotam/js-helpers/helpersObjects/isObjectHasOwnProperty';
-import {ITreeSelectApi, ITreeSelectNode, ITreeSelectProps} from '@src/treeSelect';
-import {ILabeledValue} from '@src/treeSelect/types/types';
-import {IFieldNames} from '@src/_shared/hooks/treeComponentApiMethods/types/treeApiTypes';
-import {TreeSelectContext} from '@src/treeSelect/context/context';
 import {AnyType, IKey} from '@krinopotam/service-types';
+import {IFieldNames} from '@src/_shared/hooks/treeComponentApiMethods/types/treeApiTypes';
+import {ITreeSelectApi, ITreeSelectNode, ITreeSelectProps} from '@src/treeSelect';
+import {TreeSelectContext} from '@src/treeSelect/context/context';
+import {ILabeledValue} from '@src/treeSelect/types/types';
+import {useContext, useMemo} from 'react';
 
 export const useGetEditFormProps = (treeApi: ITreeSelectApi, treeSelectProps: ITreeSelectProps, forGroup: boolean) => {
     const {dialogOpenedRef} = useContext(TreeSelectContext);
@@ -26,15 +25,22 @@ export const useGetEditFormProps = (treeApi: ITreeSelectApi, treeSelectProps: IT
             const formMode = formApi.model.getFormMode();
             const fieldNames = treeApi.getFieldNames();
 
-            const updatedNode = {...resultData} as ITreeSelectNode & {parent?: Record<string, AnyType>; parentId?: IKey};
+            const updatedNode = {...dataSet, ...resultData} as ITreeSelectNode & {
+                parent?: Record<string, AnyType>;
+                parentId?: IKey;
+            };
 
             let targetKey: IKey | undefined;
-            if (IsObjectHasOwnProperty(updatedNode, fieldNames.parent)) targetKey = updatedNode[fieldNames.parent]?.[fieldNames.key] as IKey;
+            if (updatedNode[fieldNames.parent]) targetKey = updatedNode[fieldNames.parent]?.[fieldNames.key] as IKey;
+            else if (updatedNode[fieldNames.parent] === null) targetKey = undefined;
             else targetKey = treeApi.getActiveNodeKey();
 
             if (formMode === 'create' || formMode === 'clone') {
                 if (!updatedNode[fieldNames.key]) updatedNode[fieldNames.key] = GetUuid();
-                treeApi.addNode(updatedNode, targetKey, 'insideBottom', {ensureVisible: true, select: !!treeSelectProps.selectNewNode});
+                treeApi.addNode(updatedNode, targetKey, 'insideBottom', {
+                    ensureVisible: true,
+                    select: !!treeSelectProps.selectNewNode,
+                });
             } else if (formMode === 'update') {
                 treeApi.updateNode(updatedNode, targetKey, {ensureVisible: true});
                 const curValues = treeApi.getValues();
@@ -76,8 +82,8 @@ export const useGetEditFormProps = (treeApi: ITreeSelectApi, treeSelectProps: IT
  * Therefore, we use a workaround: we overwrite the selected labeledValue, but only with value, without label.
  * Then treeSelect itself will update the selected label from the dataSet
  * */
-const refreshSelectedValues = (vals: ILabeledValue[] | undefined, updatedNode: ITreeSelectNode, fieldNames: IFieldNames) => {
-    if (!vals) return undefined;
+const refreshSelectedValues = (vals: ILabeledValue[] | undefined | null, updatedNode: ITreeSelectNode, fieldNames: IFieldNames) => {
+    if (!vals) return null;
     const result: ILabeledValue[] = [];
     for (const val of vals) {
         if (val.value === updatedNode[fieldNames.key]) result.push({value: val.value});

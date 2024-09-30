@@ -114,7 +114,7 @@ const useGetCreateButton = (api: IExtTreeApi, props: IExtTreeProps): IExtTreeBut
                 const activeNode = api.getActiveNode(false);
                 let parent: IExtTreeNode | undefined = undefined;
                 if (activeNode) {
-                    if (!activeNode.isLeaf) parent = activeNode;
+                    if (!activeNode.isLeaf && (!props.groupsMode || activeNode[fieldNames.isGroup])) parent = activeNode;
                     else parent = api.getParentNode(activeNode);
                 }
                 api.getEditFormApi().open('create', {defaultValues: {[fieldNames.parent]: parent}});
@@ -136,7 +136,7 @@ const useGetCreateGroupButton = (api: IExtTreeApi, props: IExtTreeProps): IExtTr
                 const activeNode = api.getActiveNode(false);
                 let parent: IExtTreeNode | undefined = undefined;
                 if (activeNode) {
-                    if (!activeNode.isLeaf) parent = activeNode;
+                    if (!activeNode.isLeaf && (!props.groupsMode || activeNode[fieldNames.isGroup])) parent = activeNode;
                     else parent = api.getParentNode(activeNode);
                 }
                 api.getEditGroupFormApi().open('create', {defaultValues: {[fieldNames.parent]: parent}});

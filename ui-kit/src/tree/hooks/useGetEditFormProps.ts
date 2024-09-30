@@ -1,8 +1,7 @@
-import {useMemo} from 'react';
-import {IExtTreeApi, IExtTreeNode, IExtTreeProps} from '@src/tree/types/types';
 import {GetUuid} from '@krinopotam/js-helpers';
 import {AnyType, IKey} from '@krinopotam/service-types';
-import {IsObjectHasOwnProperty} from '@krinopotam/js-helpers/helpersObjects/isObjectHasOwnProperty';
+import {IExtTreeApi, IExtTreeNode, IExtTreeProps} from '@src/tree/types/types';
+import {useMemo} from 'react';
 
 export const useGetEditFormProps = (treeApi: IExtTreeApi, treeProps: IExtTreeProps, forGroup: boolean) => {
     return useMemo(() => {
@@ -21,15 +20,22 @@ export const useGetEditFormProps = (treeApi: IExtTreeApi, treeProps: IExtTreePro
             const formMode = formApi.model.getFormMode();
             const fieldNames = treeApi.getFieldNames();
 
-            const updatedNode = {...resultData} as IExtTreeNode & {parent?: Record<string, AnyType>; parentId?: IKey};
+            const updatedNode = {...dataSet, ...resultData} as IExtTreeNode & {
+                parent?: Record<string, AnyType>;
+                parentId?: IKey;
+            };
 
             let targetKey: IKey | undefined;
-            if (IsObjectHasOwnProperty(updatedNode, fieldNames.parent)) targetKey = updatedNode[fieldNames.parent]?.[fieldNames.key] as IKey;
+            if (updatedNode[fieldNames.parent]) targetKey = updatedNode[fieldNames.parent]?.[fieldNames.key] as IKey;
+            else if (updatedNode[fieldNames.parent] === null) targetKey = undefined;
             else targetKey = treeApi.getActiveNodeKey();
 
             if (formMode === 'create' || formMode === 'clone') {
                 if (!updatedNode[fieldNames.key]) updatedNode[fieldNames.key] = GetUuid();
-                treeApi.addNode(updatedNode, targetKey, 'insideBottom', {ensureVisible: true, select: !!treeProps.selectNewNode});
+                treeApi.addNode(updatedNode, targetKey, 'insideBottom', {
+                    ensureVisible: true,
+                    select: !!treeProps.selectNewNode,
+                });
             } else if (formMode === 'update') {
                 treeApi.updateNode(updatedNode, targetKey, {ensureVisible: true});
             }

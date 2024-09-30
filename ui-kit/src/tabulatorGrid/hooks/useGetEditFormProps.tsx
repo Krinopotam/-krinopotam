@@ -15,7 +15,7 @@ export const useGetEditFormProps = (gridApi: IGridApi, gridProps: IGridProps) =>
         formProps.onSubmitSuccess = (values, dataSet, resultData, formApi, cbControl) => {
             propsOnSubmitSuccess?.(values, dataSet, resultData, formApi, cbControl);
             if (cbControl.isPrevented()) return;
-            const updatedRow = {...resultData} as IGridRowData;
+            const updatedRow = {...dataSet, ...resultData} as IGridRowData;
 
             const formMode = formApi.model.getFormMode();
 
