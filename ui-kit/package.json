@@ -1,6 +1,6 @@
 {
   "name": "@krinopotam/ui-kit",
-  "version": "2.0.246",
+  "version": "2.0.247",
   "description": "UI kit for Krinopotam's projects",
   "private": false,
   "author": "Maxim Zaytsev",
@@ -9,8 +9,8 @@
   "homepage": "https://krinopotam.github.io/-krinopotam/",
   "type": "module",
   "scripts": {
-    "build_old": "tsc -p tsconfig.json && tsc-alias",
-    "build": "tsc -p tsconfig.json && vite build --mode build-lib",
+    "build_old": "tsc -p tsconfig.build.json && tsc-alias",
+    "build": "tsc -p tsconfig.build.json && vite build --mode build-lib",
     "demo": "vite --mode demo",
     "build-demo-generator": "tsc -p ./demo/_generator/src/tsconfig.json",
     "build-demo": "node ./demo/_generator/build/generateDemo.js && tsc --noEmit && tsc-alias && vite build --mode demo",

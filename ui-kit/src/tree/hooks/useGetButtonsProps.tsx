@@ -22,17 +22,18 @@ import {IExtTreeApi, IExtTreeButton, IExtTreeButtons, IExtTreeNode, IExtTreeProp
 
 export const useGetButtonsProps = (api: IExtTreeApi, props: IExtTreeProps) => {
     api.getButtonsApi().refreshButtons = useRefreshButtons();
+    const fieldNames = api.getFieldNames();
 
     const activeNode = api.getActiveNode(true);
-    const isGroup = props.groupsMode && (!activeNode?.isLeaf || activeNode?.isGroup);
+    const isGroup = !activeNode?.isLeaf && (!props.groupsMode || activeNode?.[fieldNames.isGroup]);
 
     const propsButtons = props.buttons;
     const buttonsSize = props.buttonsSize ?? 'small';
     const buttonsPos = props.buttonsPosition ?? 'right';
 
     const headerLabel = useGetHeaderLabel(props);
-    const createButton = useGetCreateButton(api, props);
-    const createGroupButton = useGetCreateGroupButton(api, props);
+    const createButton = useGetCreateButton(api, props, isGroup);
+    const createGroupButton = useGetCreateGroupButton(api, props, isGroup);
     const viewButton = useGetViewButton(api, props, activeNode, isGroup);
     const cloneButton = useGetCloneButton(api, props, activeNode, isGroup);
     const updateButton = useGetUpdateButton(api, props, activeNode, isGroup);
@@ -102,7 +103,7 @@ const useGetHeaderLabel = (props: IExtTreeProps): IExtTreeButton | undefined => 
 };
 
 /** Get create button props */
-const useGetCreateButton = (api: IExtTreeApi, props: IExtTreeProps): IExtTreeButton | undefined => {
+const useGetCreateButton = (api: IExtTreeApi, props: IExtTreeProps, isGroup: boolean): IExtTreeButton | undefined => {
     return useMemo(() => {
         if (!props.editFormProps || props.disabled || props.readOnly || props.buttons?.create === null) return undefined;
         return {
@@ -113,18 +114,16 @@ const useGetCreateButton = (api: IExtTreeApi, props: IExtTreeProps): IExtTreeBut
                 const fieldNames = api.getFieldNames();
                 const activeNode = api.getActiveNode(false);
                 let parent: IExtTreeNode | undefined = undefined;
-                if (activeNode) {
-                    if (!activeNode.isLeaf && (!props.groupsMode || activeNode[fieldNames.isGroup])) parent = activeNode;
-                    else parent = api.getParentNode(activeNode);
-                }
+                if (activeNode) parent = activeNode && isGroup ? activeNode : api.getParentNode(activeNode);
+
                 api.getEditFormApi().open('create', {defaultValues: {[fieldNames.parent]: parent}});
             },
         } satisfies IExtTreeButton;
-    }, [api, props.disabled, props.buttons?.create, props.editFormProps, props.readOnly]);
+    }, [props.editFormProps, props.disabled, props.readOnly, props.buttons?.create, api, isGroup]);
 };
 
 /** Get create group button props */
-const useGetCreateGroupButton = (api: IExtTreeApi, props: IExtTreeProps): IExtTreeButton | undefined => {
+const useGetCreateGroupButton = (api: IExtTreeApi, props: IExtTreeProps, isGroup: boolean): IExtTreeButton | undefined => {
     return useMemo(() => {
         if (!props.editGroupFormProps || !props.groupsMode || props.disabled || props.readOnly || props.buttons?.createGroup === null) return undefined;
         return {
@@ -135,14 +134,12 @@ const useGetCreateGroupButton = (api: IExtTreeApi, props: IExtTreeProps): IExtTr
                 const fieldNames = api.getFieldNames();
                 const activeNode = api.getActiveNode(false);
                 let parent: IExtTreeNode | undefined = undefined;
-                if (activeNode) {
-                    if (!activeNode.isLeaf && (!props.groupsMode || activeNode[fieldNames.isGroup])) parent = activeNode;
-                    else parent = api.getParentNode(activeNode);
-                }
+                if (activeNode) parent = activeNode && isGroup ? activeNode : api.getParentNode(activeNode);
+
                 api.getEditGroupFormApi().open('create', {defaultValues: {[fieldNames.parent]: parent}});
             },
         } satisfies IExtTreeButton;
-    }, [props.editGroupFormProps, props.groupsMode, props.disabled, props.readOnly, props.buttons?.createGroup, api]);
+    }, [props.editGroupFormProps, props.groupsMode, props.disabled, props.readOnly, props.buttons?.createGroup, api, isGroup]);
 };
 
 /** Get view button props */
@@ -232,6 +229,7 @@ const useGetDeleteButton = (api: IExtTreeApi, props: IExtTreeProps, activeNode: 
                 const messageBox = MessageBox.confirmWaiter({
                     language: props.language,
                     content: props.nodeDeleteMessage ?? api.t('deleteSelectedRecordQt'),
+                    colorType: 'danger',
                     onOk: () => {
                         deleteNode(activeNode, props, api, api.t('error'), messageBox);
                     },

@@ -67,6 +67,7 @@ const formProps: IDFormProps = {
         ok: {position: 'right'},
         rerenderTab1: {
             position: 'left',
+            title: 'Rerender Tab 1',
             onClick: () => {
                 const tabField = api.model.getField('field2') as TabsField;
                 tabField.emitTabRender('Tab 1');
@@ -74,6 +75,7 @@ const formProps: IDFormProps = {
         },
         rerenderTabField: {
             position: 'left',
+            title: 'Rerender field2',
             onClick: () => {
                 const tabField = api.model.getField('field2') as TabsField;
                 tabField.emitRender();
@@ -81,6 +83,7 @@ const formProps: IDFormProps = {
         },
         rerenderForm: {
             position: 'left',
+            title: 'Rerender Form',
             onClick: () => {
                 api.model.emitFormRender();
             },

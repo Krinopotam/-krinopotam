@@ -107,7 +107,7 @@ export interface IOwnExtTreeProps {
     onDataSetChanged?: (dataSet: IExtTreeNode[] | undefined) => void;
 
     /** Callback executed when selected node delete */
-    onDelete?: (selectedNodes: IExtTreeNode, api: IExtTreeApi) => ITreeDeletePromise | void | undefined;
+    onDelete?: (node: IExtTreeNode, api: IExtTreeApi) => ITreeDeletePromise | void | undefined;
 }
 
 export type IExtTreeProps = Omit<

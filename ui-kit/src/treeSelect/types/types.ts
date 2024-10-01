@@ -176,7 +176,7 @@ export interface ITreeSelectBaseProps {
     onDataFetchComplete?: (api: ITreeSelectApi) => boolean | void;
 
     /** Callback executed when selected node delete */
-    onDelete?: (selectedNodes: ITreeSelectNode, api: ITreeSelectApi) => ITreeSelectDeletePromise | void | undefined;
+    onDelete?: (node: ITreeSelectNode, api: ITreeSelectApi) => ITreeSelectDeletePromise | void | undefined;
 
     /** Callback to get the label of the node's set value. Called when the value set in the TreeSelect is changed */
     onGetLabelCallback?: (key: IKey, dataSet: ITreeSelectNode[] | undefined) => React.ReactNode;

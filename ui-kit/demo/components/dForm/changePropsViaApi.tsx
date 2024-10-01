@@ -61,12 +61,12 @@ const changeLayout = () => {
     })
 }
 
-export const FormSimple = (): React.JSX.Element => {
+export const Example = (): React.JSX.Element => {
     return (
         <>
             {/*Description Start*/}
-            <h1>Пример изменения пропсов формы через Api</h1>
-            <p> Если идентификатор поля и тип его компонента не изменяется, то форма сохраняет установленные значения полей, и их состояния (disabled, readOnly, visible)</p>
+            <h1>Example of changing form props via Api</h1>
+            <p> If the field identifier and the type of its component do not change, then the form retains the set field values and their states (disabled, readOnly, visible)</p>
             {/*Description End*/}
             <div style={{maxWidth: 500}}>
                 <Space>
