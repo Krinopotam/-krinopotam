@@ -19,6 +19,7 @@ export const BaseFieldRender = ({field, altLabel, children}: { field: IBaseField
 /*        flexGrow: fieldProps.width ? 0 : 1,
         flexShrink: fieldProps.width ? 0 : 1,
         flexBasis: fieldProps.width ? undefined : 0,*/
+        //border: '1px solid red',
         height:'100%',
         ...fieldProps.rowStyle,
     };
