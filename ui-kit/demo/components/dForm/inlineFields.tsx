@@ -31,7 +31,7 @@ export const Example = (): React.JSX.Element => {
     );
 };
 
-const useFormProps = (horizontal: boolean) => {
+export const useFormProps = (horizontal: boolean) => {
     return {
         layout: horizontal ? 'horizontal' : 'vertical',
         fieldsProps: {

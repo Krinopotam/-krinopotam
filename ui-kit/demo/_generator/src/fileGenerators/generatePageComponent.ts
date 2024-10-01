@@ -61,6 +61,6 @@ export default ${pageComponentName};
     const routeStr = `                        {path:"${menuItemLink}", element:<ComponentLoader pageName="${pageComponentName}" darkMode={props.darkMode} />},`;
     // language=text
     const componentMapStr = `    '${pageComponentName}': lazy(() => import('${pageImportPath}')),`;
-    console.log(' '.repeat(level * 4), file.componentName);
+    console.log(' '.repeat(level * 4), file.menuItemName);
     return [routeStr, componentMapStr];
 };

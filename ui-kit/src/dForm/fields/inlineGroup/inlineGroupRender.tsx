@@ -17,53 +17,55 @@ export const InlineGroupRender = ({field}: {field: InlineGroupField}): React.JSX
     const formProps = model.getFormProps();
     const fieldProps = field.getProps();
 
-    const childFields = field.getRootFields();
+    const childrenFields = field.getRootFields();
 
     let firstField: IBaseField | undefined;
-    for (const fieldName in childFields) {
-        const childrenField = childFields[fieldName];
+    for (const fieldName in childrenFields) {
+        const childrenField = childrenFields[fieldName];
         if (!childrenField.isHidden()) {
             firstField = childrenField;
             break;
         }
     }
 
-    const isHidden = field.isHidden() || !firstField;
+    const isHidden = field.isHidden() || !firstField; //has visible field
 
     const groupName = field.getLabel();
 
     let groupLabel: React.ReactNode = '';
     if (formProps.layout === 'horizontal') groupLabel = groupName ?? firstField?.getLabel();
 
-    const defStyle: CSSProperties = {margin: 0, marginBottom: 0};
-    if (fieldProps.width) defStyle.width = fieldProps.width;
+    const defStyle: CSSProperties = {width: field.getWidth(), margin: 0, marginBottom: 0};
     if (fieldProps.autoHeightResize) defStyle.height = '100%';
     const groupItemStyle = {...defStyle, ...fieldProps.style};
 
+    const gap = 24;
     const groupContainerStyle: React.CSSProperties = {
         display: 'flex',
         flexDirection: 'row',
         flexWrap: 'nowrap',
-        gap: '24px',
+        gap: gap + 'px',
         alignItems: 'top',
         width: '100%',
     };
     if (fieldProps.autoHeightResize) groupContainerStyle.height = '100%';
+
+    const gapOffset = getGapOffset(childrenFields, gap);
 
     return (
         <Animate component="" transitionName="zoom">
             {!isHidden ? (
                 <Form.Item label={groupLabel} style={groupItemStyle}>
                     <div style={groupContainerStyle}>
-                        {Object.keys(childFields).map(fieldName => {
-                            const childField = childFields[fieldName];
+                        {Object.keys(childrenFields).map(fieldName => {
+                            const childField = childrenFields[fieldName];
                             const childProps = childField.getProps();
 
                             if (childField.isHidden()) return null;
 
                             const style: React.CSSProperties = {
-                                flex: childProps.width || childField.noGrowWidth() ? '0 0 auto' : '1 1 0',
-                                width:childProps.width
+                                flex: childProps.width || childField.noGrowWidth() ? `0 0 auto` : '1 1 auto',
+                                width: parseWidth(childField, gapOffset),
                             };
 
                             const altLabel = formProps.layout === 'horizontal' && childField === firstField ? null : undefined;
@@ -78,4 +80,21 @@ export const InlineGroupRender = ({field}: {field: InlineGroupField}): React.JSX
             ) : null}
         </Animate>
     );
+};
+
+const getGapOffset = (childrenFields: Record<string, IBaseField>, gap: number) => {
+    const totalFields = Object.keys(childrenFields).length;
+    return totalFields > 0 ? ((totalFields - 1) * gap) / totalFields : 0;
+};
+
+const parseWidth = (field: IBaseField, gapOffset: number) => {
+    const childProps = field.getProps();
+    if (!childProps.width) return undefined;
+    if (strIsNumber(childProps.width)) return childProps.width + 'px';
+    return `calc(${childProps.width} - ${gapOffset}px)`;
+};
+
+const strIsNumber = (s: string | number) => {
+    if (typeof s === 'number') return true;
+    return s.length > 0 && !isNaN(Number(s[s.length - 1]));
 };
