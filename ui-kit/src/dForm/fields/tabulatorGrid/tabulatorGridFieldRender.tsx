@@ -30,21 +30,12 @@ export const TabulatorGridFieldRender = ({field, gridApi: gridApiBase}: {field: 
 
     const callbacks = usePrepareCallbacks(field, fieldProps);
 
-    let height = fieldProps.height;
-
-    if (fieldProps.autoHeightResize) height = '100%';
-
-    const containerStyle = useMemo((): React.CSSProperties => {
-        return fieldProps.autoHeightResize
-            ? {
-                  position: 'absolute',
-                  inset: 0,
-              }
-            : {};
-    }, [fieldProps.autoHeightResize]);
+    const width = field.getWidth() ?? '100%';
+    const height = fieldProps.autoHeightResize ? '100%' : fieldProps.height;
+    const containerStyle: React.CSSProperties = fieldProps.autoHeightResize ? {position: 'absolute', inset: 0} : {};
 
     return (
-        <div  style={containerStyle}>
+        <div style={containerStyle}>
             <TabulatorGrid
                 {...tabulatorProps}
                 {...callbacks}
@@ -52,7 +43,7 @@ export const TabulatorGridFieldRender = ({field, gridApi: gridApiBase}: {field: 
                 dataSet={curDataSetRef.current}
                 readOnly={fieldProps.readOnly}
                 placeholder={fieldProps.placeholder}
-                width={fieldProps.width}
+                width={width}
                 height={height}
                 resizeHeightWithParent={fieldProps.resizeHeightWithForm ? '#' + field.getModel().getFormId() : fieldProps.resizeHeightWithParent}
             />
@@ -90,13 +81,14 @@ const useSplitTabulatorProps = (props: ITabulatorGridFieldProps) => {
             helpClass: true,
             hidden: true,
             label: true,
-            nonEditable:true,
+            nonEditable: true,
             inlineGroup: true,
             onDirtyStateChanged: true,
             onDisabledStateChanged: true,
             onErrorChanged: true,
             onHiddenStateChanged: true,
             onLabelChanged: true,
+            ajaxRequestFunc: true,
             onReadOnlyStateChanged: true,
             placeholder: true,
             onTouchedStateChanged: true,
@@ -113,68 +105,66 @@ const useSplitTabulatorProps = (props: ITabulatorGridFieldProps) => {
 };
 
 const usePrepareCallbacks = (field: TabulatorGridField, fieldProps: ITabulatorGridFieldProps) => {
-    return useMemo(() => {
-        const model = field.getModel();
-        const formMode = model.getFormMode();
-        return {
-            onDataChanged: (dataSet: IGridRowData[] | undefined, gridApi: IGridApi) => {
-                if (field.isReady()) {
-                    if (!fieldProps.selectionMode) {
-                        field.setValue(dataSet ?? [], false, true, true);
-                        field.setDirty(true);
-                    }
+    const model = field.getModel();
+    const formMode = model.getFormMode();
+    return {
+        onDataChanged: (dataSet: IGridRowData[] | undefined, gridApi: IGridApi) => {
+            if (field.isReady()) {
+                if (!fieldProps.selectionMode) {
+                    field.setValue(dataSet ?? [], false, true, true);
+                    field.setDirty(true);
                 }
-                return fieldProps.onDataChanged?.(dataSet, gridApi, field);
-            },
-            onSelectionChange: (selectedData, rows, selectedRows, deselectedRows, gridApi: IGridApi) => {
-                if (field.isReady()) {
-                    if (fieldProps.selectionMode) {
-                        field.setValue(selectedData ?? [], false, true, true);
-                        field.setDirty(true);
-                    }
-
-                    field.setTouched(true);
+            }
+            return fieldProps.onDataChanged?.(dataSet, gridApi, field);
+        },
+        onSelectionChange: (selectedData, rows, selectedRows, deselectedRows, gridApi: IGridApi) => {
+            if (field.isReady()) {
+                if (fieldProps.selectionMode) {
+                    field.setValue(selectedData ?? [], false, true, true);
+                    field.setDirty(true);
                 }
-                return fieldProps.onSelectionChange?.(selectedData, rows, selectedRows, deselectedRows, gridApi, field);
-            },
-            onDataLoading: (dataSet: IGridRowData[] | undefined, gridApi: IGridApi) => {
-                field.setReady(false);
-                return fieldProps.onDataLoading?.(dataSet, gridApi, field);
-            },
 
-            onDataLoaded: (dataSet: IGridRowData[] | undefined, gridApi: IGridApi) => {
-                field.setReady(true);
-                const fieldProps = field.getProps();
-                if (!fieldProps.selectionMode) field.setValue(dataSet ?? [], false, true, true);
-                return fieldProps.onDataLoaded?.(dataSet, gridApi, field);
-            },
-            onDataProcessed: (dataSet: IGridRowData[] | undefined, gridApi: IGridApi) => {
-                const fieldProps = field.getProps();
-                if (fieldProps.selectionMode) gridApi.setSelectedRows(field.getValue() as IGridRowData[]);
-                return fieldProps.onDataProcessed?.(dataSet, gridApi, field);
-            },
-            onDataLoadError: (message: string, code: number, gridApi: IGridApi) => {
-                field.setReady(false);
-                return fieldProps.onDataLoadError?.(message, code, gridApi, field);
-            },
-            onDataFetch:
-                !fieldProps.onDataFetch || (formMode === 'create' && !fieldProps.fetchInCreateMode)
-                    ? undefined
-                    : (params: IRequestProps, gridApi: IGridApi) => {
-                          return fieldProps.onDataFetch!(params, gridApi, field);
-                      },
-            onDataFetching: !fieldProps.onDataFetching
+                field.setTouched(true);
+            }
+            return fieldProps.onSelectionChange?.(selectedData, rows, selectedRows, deselectedRows, gridApi, field);
+        },
+        onDataLoading: (dataSet: IGridRowData[] | undefined, gridApi: IGridApi) => {
+            field.setReady(false);
+            return fieldProps.onDataLoading?.(dataSet, gridApi, field);
+        },
+
+        onDataLoaded: (dataSet: IGridRowData[] | undefined, gridApi: IGridApi) => {
+            field.setReady(true);
+            const fieldProps = field.getProps();
+            if (!fieldProps.selectionMode) field.setValue(dataSet ?? [], false, true, true);
+            return fieldProps.onDataLoaded?.(dataSet, gridApi, field);
+        },
+        onDataProcessed: (dataSet: IGridRowData[] | undefined, gridApi: IGridApi) => {
+            const fieldProps = field.getProps();
+            if (fieldProps.selectionMode) gridApi.setSelectedRows(field.getValue() as IGridRowData[]);
+            return fieldProps.onDataProcessed?.(dataSet, gridApi, field);
+        },
+        onDataLoadError: (message: string, code: number, gridApi: IGridApi) => {
+            field.setReady(false);
+            return fieldProps.onDataLoadError?.(message, code, gridApi, field);
+        },
+        onDataFetch:
+            !fieldProps.onDataFetch || (formMode === 'create' && !fieldProps.fetchInCreateMode)
                 ? undefined
-                : (url, params: IRequestProps, gridApi: IGridApi) => {
-                      return fieldProps.onDataFetching!(url, params, gridApi, field);
+                : (params: IRequestProps, gridApi: IGridApi) => {
+                      return fieldProps.onDataFetch!(params, gridApi, field);
                   },
-            onDataFetchResponse: !fieldProps.onDataFetchResponse
-                ? undefined
-                : (dataSet, params, gridApi) => fieldProps?.onDataFetchResponse?.(dataSet, params, gridApi, field) ?? dataSet,
-            onMenuVisibilityChanged: !fieldProps.onMenuVisibilityChanged
-                ? undefined
-                : (isVisible, gridApi) => fieldProps?.onMenuVisibilityChanged?.(isVisible, gridApi, field),
-            onDelete: !fieldProps.onDelete ? undefined : (selectedRows, gridApi) => fieldProps?.onDelete?.(selectedRows, gridApi, field),
-        } as Required<IGridPropsCallbacks>;
-    }, [fieldProps, field]);
+        onDataFetching: !fieldProps.onDataFetching
+            ? undefined
+            : (url, params: IRequestProps, gridApi: IGridApi) => {
+                  return fieldProps.onDataFetching!(url, params, gridApi, field);
+              },
+        onDataFetchResponse: !fieldProps.onDataFetchResponse
+            ? undefined
+            : (dataSet, params, gridApi) => fieldProps?.onDataFetchResponse?.(dataSet, params, gridApi, field) ?? dataSet,
+        onMenuVisibilityChanged: !fieldProps.onMenuVisibilityChanged
+            ? undefined
+            : (isVisible, gridApi) => fieldProps?.onMenuVisibilityChanged?.(isVisible, gridApi, field),
+        onDelete: !fieldProps.onDelete ? undefined : (selectedRows, gridApi) => fieldProps?.onDelete?.(selectedRows, gridApi, field),
+    } satisfies IGridPropsCallbacks;
 };

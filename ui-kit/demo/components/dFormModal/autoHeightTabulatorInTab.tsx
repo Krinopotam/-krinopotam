@@ -55,7 +55,7 @@ const formProps: IDFormModalProps = {
                     field3: {
                         component: PasswordField,
                         label: 'field3',
-                        width: 50,
+                        width: 100,
                         rules: [{type: 'string', rule: 'not-empty', message: 'Поле не должно быть пустым'}],
                     } as IPasswordFieldProps,
                 },
@@ -68,7 +68,7 @@ const formProps: IDFormModalProps = {
                     password: {
                         component: PasswordField,
                         label: 'Password',
-                        width: 50,
+                        width: 100,
                         rules: [{type: 'string', rule: 'not-empty', message: 'Поле не должно быть пустым'}],
                     } as IPasswordFieldProps,
                 }

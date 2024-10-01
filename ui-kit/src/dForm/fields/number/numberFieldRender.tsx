@@ -26,7 +26,8 @@ export const NumberFieldRender = ({field}: {field: NumberField}): React.JSX.Elem
         field.setReady(true);
     }, [field]);
 
-    const style: CSSProperties = {width: '100%', ...fieldProps.style};
+    const defStyle: CSSProperties = {width: field.getWidth() ?? '100%'};
+    const style: CSSProperties = {...defStyle, ...fieldProps.style};
 
     return (
         <InputNumber
@@ -57,7 +58,6 @@ export const NumberFieldRender = ({field}: {field: NumberField}): React.JSX.Elem
             style={style}
             upHandler={fieldProps.upHandler}
             value={value}
-            width={fieldProps.width}
         />
     );
 };

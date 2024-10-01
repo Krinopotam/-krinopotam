@@ -33,12 +33,8 @@ export const QuillEditorFieldRender = ({field}: {field: QuillEditorField}): Reac
         field.setReady(true);
     }, [field]);
 
-    let defStyle: CSSProperties = {};
-    if (fieldProps.width) {
-        defStyle = {width: fieldProps.width};
-    }
-
-    const style = {...defStyle, ...fieldProps.style};
+    const defStyle: CSSProperties = {width: field.getWidth() ?? '100%'};
+    const style: React.CSSProperties = {...defStyle, ...fieldProps.style};
 
     return (
         <QuillEditor

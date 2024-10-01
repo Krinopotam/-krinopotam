@@ -25,11 +25,7 @@ export const CheckboxFieldRender = ({field}:{field:CheckboxField}):React.JSX.Ele
         field.setReady(true)
     }, [field, fieldName]);
 
-    let defStyle: CSSProperties = {};
-    if (fieldProps.width) {
-        defStyle = {width: fieldProps.width};
-    }
-
+    const defStyle: CSSProperties = {width: field.getWidth()};
     const style = {...defStyle, ...fieldProps.style};
 
     return (

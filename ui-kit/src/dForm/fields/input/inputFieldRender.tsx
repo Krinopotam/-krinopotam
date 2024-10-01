@@ -1,8 +1,8 @@
-import React, {useCallback, useEffect, useSyncExternalStore} from "react";
-import {Input} from "antd";
-import {InputField} from "@src/dForm/fields/input/inputField";
+import React, {CSSProperties, useCallback, useEffect, useSyncExternalStore} from 'react';
+import {Input} from 'antd';
+import {InputField} from '@src/dForm/fields/input/inputField';
 
-export const InputFieldRender = ({field}:{field:InputField}):React.JSX.Element =>{
+export const InputFieldRender = ({field}: {field: InputField}): React.JSX.Element => {
     useSyncExternalStore(field.subscribe.bind(field), field.getSnapshot.bind(field));
 
     const fieldName = field.getName();
@@ -13,18 +13,21 @@ export const InputFieldRender = ({field}:{field:InputField}):React.JSX.Element =
     const onChange = useCallback(
         (e: React.ChangeEvent<HTMLInputElement>) => {
             if (!field.isReady()) return;
-            field.setValue( e.target.value)
-            field.setDirty(true)
+            field.setValue(e.target.value);
+            field.setDirty(true);
         },
         [field]
     );
     const onBlur = useCallback(() => {
-        field.setTouched(true)
+        field.setTouched(true);
     }, [field]);
 
     useEffect(() => {
-        field.setReady(true)
+        field.setReady(true);
     }, [field]);
+
+    const defStyle: CSSProperties = {width: field.getWidth() ?? '100%'};
+    const style: React.CSSProperties = {...defStyle, ...fieldProps.style};
 
     return (
         <Input
@@ -38,10 +41,9 @@ export const InputFieldRender = ({field}:{field:InputField}):React.JSX.Element =
             placeholder={fieldProps.placeholder}
             showCount={fieldProps.showCount}
             value={value}
-            style={fieldProps.style}
-            width={fieldProps.width}
+            style={style}
             autoComplete={fieldProps.autocomplete}
             spellCheck={fieldProps.spellcheck}
         />
     );
-}
+};

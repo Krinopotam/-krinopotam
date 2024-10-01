@@ -20,11 +20,7 @@ export const LinkFieldRender = ({field}: {field: LinkField}): React.JSX.Element 
         field.setReady(true);
     }, [field]);
 
-    let defStyle: CSSProperties = {};
-    if (fieldProps.width) {
-        defStyle = {width: fieldProps.width};
-    }
-
+    const defStyle: CSSProperties = {width: field.getWidth() ?? '100%'};
     const style = {...defStyle, ...fieldProps.style};
 
     return (
@@ -48,6 +44,8 @@ export const LinkFieldRender = ({field}: {field: LinkField}): React.JSX.Element 
             onMouseMove={e => fieldProps?.onMouseMove?.(e, field)}
             onMouseOut={e => fieldProps?.onMouseOut?.(e, field)}
             onMouseOver={e => fieldProps?.onMouseOver?.(e, field)}
+            onBlur={e => fieldProps?.onBlur?.(e, field)}
+            onFocus={e => fieldProps?.onFocus?.(e, field)}
             onMouseUp={e => fieldProps?.onMouseUp?.(e, field)}
         >
             {value}

@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useSyncExternalStore} from 'react';
+import React, {CSSProperties, useCallback, useEffect, useSyncExternalStore} from 'react';
 import {Switch} from 'antd';
 import {SwitchField} from '@src/dForm/fields/switch/switchField';
 
@@ -23,6 +23,9 @@ export const SwitchFieldRender = ({field}: {field: SwitchField}): React.JSX.Elem
         field.setReady(true);
     }, [field]);
 
+    const defStyle: CSSProperties = {width: field.getWidth()};
+    const style = {...defStyle, ...fieldProps.style};
+
     return (
         <Switch
             autoFocus={fieldProps.autoFocus}
@@ -32,7 +35,7 @@ export const SwitchFieldRender = ({field}: {field: SwitchField}): React.JSX.Elem
             loading={fieldProps.loading}
             onChange={onChange}
             unCheckedChildren={fieldProps.unCheckedChildren}
-            style={fieldProps.style}
+            style={style}
         />
     );
 };

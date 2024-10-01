@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useSyncExternalStore} from "react";
+import React, {CSSProperties, useCallback, useEffect, useSyncExternalStore} from "react";
 import {Input} from "antd";
 import {PasswordField} from "@src/dForm/fields/password/passwordField";
 
@@ -26,6 +26,9 @@ export const PasswordFieldRender = ({field}:{field:PasswordField}):React.JSX.Ele
         field.setReady(true)
     }, [field]);
 
+    const defStyle: CSSProperties = {width: field.getWidth() ?? '100%'};
+    const style: React.CSSProperties = {...defStyle, ...fieldProps.style};
+
     return (
         <Input.Password
             autoFocus={fieldProps.autoFocus}
@@ -39,8 +42,7 @@ export const PasswordFieldRender = ({field}:{field:PasswordField}):React.JSX.Ele
             readOnly={field.isReadOnly()}
             showCount={fieldProps.showCount}
             value={value}
-            style={fieldProps.style}
-            width={fieldProps.width}
+            style={style}
             autoComplete={fieldProps.autocomplete}
             spellCheck={fieldProps.spellcheck}
         />

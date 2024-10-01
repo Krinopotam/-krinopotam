@@ -13,7 +13,6 @@ export const TreeSelectFieldRender = ({field}: {field: TreeSelectField}): React.
 
     const fieldProps = field.getProps();
 
-
     const value = field.getValue() ?? null;
 
     const onBlur = useOnBlur(field);
@@ -28,7 +27,8 @@ export const TreeSelectFieldRender = ({field}: {field: TreeSelectField}): React.
         field.setReady(true);
     }, [field]);
 
-    const style: CSSProperties = {width: fieldProps.width ?? '100%', ...fieldProps.style};
+    const defStyle: CSSProperties = {width: field.getWidth() ?? '100%'};
+    const style: React.CSSProperties = {...defStyle, ...fieldProps.style};
 
     const treeProps = useSplitTreeSelectProps(fieldProps);
 
@@ -57,13 +57,9 @@ export const TreeSelectFieldRender = ({field}: {field: TreeSelectField}): React.
 export const useDataSet = (field: TreeSelectField, dataSet: ITreeSelectFieldProps['dataSet']) => {
     return useMemo(() => {
         if (typeof dataSet !== 'function') return dataSet;
-        else
-            return () => {
-                return dataSet(field);
-            };
+        else return () => dataSet(field);
     }, [dataSet, field]);
 };
-
 
 export const useOnDataFetch = (field: TreeSelectField, fieldProps: ITreeSelectFieldProps) => {
     return useCallback<NonNullable<ITreeSelectProps['onDataFetch']>>((search, api) => fieldProps.onDataFetch?.(search, api, field), [field, fieldProps]);

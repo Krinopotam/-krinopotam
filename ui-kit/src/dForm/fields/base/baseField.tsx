@@ -163,6 +163,22 @@ export class BaseField<TFieldProps extends IAnyFieldProps> {
         if (!noRerender) this.emitRender();
     }
 
+    /** A sign that the component should not grow in width if free space is available. Relevant for narrow components such as CheckBox or Switch */
+    noGrowWidth() {
+        return false
+    }
+
+    /** A sign that this component itself controls the width of its child components, and they should not have their own width parameters (for example, inlineGroupField) */
+    managesChildWidth  () {
+        return false
+    }
+
+    /** Get field width property */
+    getWidth() {
+        if (this.parent?.managesChildWidth()) return undefined;
+        return this.fieldProps.width;
+    }
+
     /**
      * Set current field properties
      * @param updatedProps - partial field properties to update

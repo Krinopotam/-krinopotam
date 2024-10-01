@@ -8,6 +8,10 @@ export interface ICheckboxFieldProps extends IBaseFieldProps<CheckboxField, bool
 }
 
 export class CheckboxField extends BaseField<ICheckboxFieldProps> {
+    noGrowWidth() {
+        return true
+    }
+
     protected render() {
         return <CheckboxFieldRender field={this} />
     }

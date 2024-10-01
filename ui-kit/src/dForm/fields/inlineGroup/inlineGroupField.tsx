@@ -59,6 +59,11 @@ export class InlineGroupField extends BaseField<IInlineGroupFieldProps> {
         return false;
     }
 
+    /** Child fields can't have own width settings (must be 100% width) */
+    managesChildWidth() {
+        return true
+    }
+
     /**
      * Sets a disabled status to the field
      * @param value - disabled status

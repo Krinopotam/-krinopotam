@@ -14,6 +14,10 @@ export interface ISwitchFieldProps extends IBaseFieldProps<SwitchField, boolean>
 }
 
 export class SwitchField extends BaseField<ISwitchFieldProps> {
+    noGrowWidth() {
+        return true
+    }
+
     protected render() {
         return <SwitchFieldRender field={this} />
     }

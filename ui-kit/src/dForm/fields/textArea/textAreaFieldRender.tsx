@@ -29,12 +29,8 @@ export const TextAreaFieldRender = ({field}: {field: TextAreaField}): React.JSX.
         field.setReady(true);
     }, [field]);
 
-    let defStyle: CSSProperties = {};
-    if (fieldProps.width) {
-        defStyle = {width: fieldProps.width};
-    }
-
-    const style = {...defStyle, ...fieldProps.style};
+    const defStyle: CSSProperties = {width: field.getWidth() ?? '100%'};
+    const style: React.CSSProperties = {...defStyle, ...fieldProps.style};
 
     return (
         <TextArea

@@ -21,7 +21,7 @@ export const DateTimeFieldRender = ({field}: {field: DateTimeField}): React.JSX.
         field.setValue(value, true);
     }
 
-    if (fieldProps.nowIfEmpty !==false && !value && !field.isDirty() && !field.isTouched()) {
+    if (fieldProps.nowIfEmpty !== false && !value && !field.isDirty() && !field.isTouched()) {
         value = dayjs(new Date()).format(fieldFormat);
         field.setValue(value, true);
     }
@@ -43,7 +43,7 @@ export const DateTimeFieldRender = ({field}: {field: DateTimeField}): React.JSX.
         field.setReady(true);
     }, [field]);
 
-    const defStyle: CSSProperties = {width: fieldProps.width ?? '100%'};
+    const defStyle: CSSProperties = {width: field.getWidth() ?? '100%'};
 
     const style = {...defStyle, ...fieldProps.style};
 

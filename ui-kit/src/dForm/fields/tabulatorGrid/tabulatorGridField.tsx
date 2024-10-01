@@ -2,7 +2,7 @@ import {BaseField, IBaseFieldProps} from '@src/dForm/fields/base/baseField';
 import React from 'react';
 import {TabulatorGridFieldRender} from '@src/dForm/fields/tabulatorGrid/tabulatorGridFieldRender';
 import {IGridApi, IGridDataSourcePromise, IGridDeletePromise, IGridProps, IGridRowData} from '@src/tabulatorGrid';
-import {IRequestProps} from '@src/tabulatorBase';
+import {IAjaxConfig, IRequestProps} from '@src/tabulatorBase';
 import {RowComponent} from 'tabulator-tables';
 
 export interface ITabulatorGridFieldPropsBase extends IBaseFieldProps<TabulatorGridField, IGridRowData[]> {
@@ -50,6 +50,8 @@ export interface ITabulatorGridFieldPropsCallbacks {
         gridApi: IGridApi,
         field: TabulatorGridField
     ) => void;
+
+    ajaxRequestFunc?: (url: string, config: IAjaxConfig, params: IRequestProps) => IGridDataSourcePromise | undefined;
 
     /** Callback executed when selected rows delete */
     onDelete?: (selectedRows: IGridRowData[], gridApi: IGridApi, field: TabulatorGridField) => IGridDeletePromise | void | undefined;

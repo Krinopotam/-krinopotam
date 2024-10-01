@@ -62,9 +62,8 @@ export const InlineGroupRender = ({field}: {field: InlineGroupField}): React.JSX
                             if (childField.isHidden()) return null;
 
                             const style: React.CSSProperties = {
-                                flexGrow: childProps.width ? 0 : 1,
-                                flexShrink: childProps.width ? 0 : 1,
-                                flexBasis: childProps.width ? undefined : 0,
+                                flex: childProps.width || childField.noGrowWidth() ? '0 0 auto' : '1 1 0',
+                                width:childProps.width
                             };
 
                             const altLabel = formProps.layout === 'horizontal' && childField === firstField ? null : undefined;

@@ -6,7 +6,7 @@ import {IDFormModalApi, DFormModal, IDFormModalProps} from '@src/dFormModal';
 import {InputField} from '@src/dForm/fields/input/inputField';
 import {DateTimeField} from '@src/dForm/fields/dateTime/dateTimeField';
 import {TabsField} from '@src/dForm/fields/tabs/tabsField';
-import {FormLayoutSwitch} from "../../common/buttonsProps";
+import {FormLayoutSwitch} from '../../common/buttonsProps';
 
 const formApi = {} as IDFormModalApi;
 
@@ -33,7 +33,7 @@ const formProps: IDFormModalProps = {
                                 subDateOut1: {component: DateTimeField, label: 'Дата ухода', width: 150},
                             },
                         },
-                    }
+                    },
                 },
                 ' Выходы1 ': {
                     nameOut1: {component: InputField, label: 'Имя выходящего'},
@@ -56,7 +56,8 @@ const formProps: IDFormModalProps = {
         },
     },
     height: 250,
-    modalStyle: {maxWidth: 500, maxHeight: 500},
+    maxWidth: 500,
+    maxHeight: 500,
     buttons: FormLayoutSwitch(formApi),
 };
 
@@ -65,11 +66,10 @@ export const SeveralTabs = (): React.JSX.Element => {
         formApi.open('create');
     }, []);
 
-
     return (
         <div style={{maxWidth: 500}}>
             <Button onClick={onClick}>Open form</Button>
-            <DFormModal  {...formProps} />
+            <DFormModal {...formProps} />
         </div>
     );
 };

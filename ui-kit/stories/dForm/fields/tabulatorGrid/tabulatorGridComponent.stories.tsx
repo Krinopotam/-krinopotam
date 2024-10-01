@@ -105,11 +105,11 @@ export const PaginationRemote: Story = {
         filterMode: 'remote',
         sortMode: 'remote',
         ajaxURL: '-', //ajax URL. Workaround: if you need to use your own fetcher (for example Axios), then you must specify any non-empty string
-        ajaxRequestFunc: (url, config, params) => {
+        ajaxRequestFunc: (_url, _config, params) => {
             return new Promise(resolve => {
                 setTimeout(() => {
                     //make any remote fetch
-                    const dataSet = TabulatorTreeDataset.slice((params.page - 1) * params.size, params.page * params.size); //remote fetch imitation
+                    const dataSet = TabulatorTreeDataset.slice((params.page! - 1) * params.size!, params.page! * params.size!); //remote fetch imitation
                     resolve({data: dataSet, last_page: 4});
                 }, 1000);
             });

@@ -1,7 +1,7 @@
 import {Switch} from 'antd';
 import React from 'react';
 import {IFormButton} from '@src/buttonsRow';
-import {IBaseComponentApi} from "../../src/_shared/hooks/componentApiMethods/types/apiTypes";
+import {IBaseComponentApi} from "@src/_shared/hooks/componentApiMethods/types/apiTypes";
 
 export const FormLayoutSwitch = (formApi: IBaseComponentApi): {layout: IFormButton} => {
     return {

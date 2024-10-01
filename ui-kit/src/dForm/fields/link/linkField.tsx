@@ -1,5 +1,5 @@
 import {BaseField, IBaseFieldProps} from '@src/dForm/fields/base/baseField';
-import React, {DragEvent, MouseEvent} from 'react';
+import React, {DragEvent, MouseEvent, FocusEvent} from 'react';
 import {LinkFieldRender} from '@src/dForm/fields/link/linkFieldRender';
 
 export interface ILinkFieldProps extends IBaseFieldProps<LinkField, string> {
@@ -26,6 +26,8 @@ export interface ILinkFieldProps extends IBaseFieldProps<LinkField, string> {
     onMouseMove?: (event: MouseEvent, field: LinkField) => void;
     onMouseOut?: (event: MouseEvent, field: LinkField) => void;
     onMouseOver?: (event: MouseEvent, field: LinkField) => void;
+    onBlur?: (event: FocusEvent, field: LinkField) => void;
+    onFocus?: (event: FocusEvent, field: LinkField) => void;
     onMouseUp?: (event: MouseEvent, field: LinkField) => void;
 }
 

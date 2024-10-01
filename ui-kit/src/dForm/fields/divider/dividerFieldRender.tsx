@@ -11,10 +11,7 @@ export const DividerFieldRender = ({field}: {field: DividerField}): React.JSX.El
         field.setReady(true);
     }, [field]);
 
-    let defStyle: CSSProperties = {};
-    if (fieldProps.width) {
-        defStyle = {width: fieldProps.width, margin: 0};
-    }
+    const defStyle: CSSProperties = {width: field.getWidth() ?? '100%', margin: 0};
 
     const style = {...defStyle, ...fieldProps.style};
 
@@ -26,7 +23,7 @@ export const DividerFieldRender = ({field}: {field: DividerField}): React.JSX.El
             dashed={fieldProps.dashed}
             style={style}
         >
-            {fieldProps.value}
+            {fieldProps.label}
         </Divider>
     );
 };

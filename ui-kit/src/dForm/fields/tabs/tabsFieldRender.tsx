@@ -42,7 +42,7 @@ export const TabsFieldRender = ({field}: {field: TabsField}): React.JSX.Element 
             key: tabName,
             tabKey: tabName,
             label: tabName,
-            className:fieldProps.autoHeightResize ? 'auto-height' : '',
+            className: fieldProps.autoHeightResize ? 'auto-height' : '',
             forceRender: true,
             disabled: field.isDisabled(),
             style: {...tabStyleDef, ...fieldProps.tabsStyle},
@@ -61,13 +61,11 @@ export const TabsFieldRender = ({field}: {field: TabsField}): React.JSX.Element 
 
     const tabBarRender = (props: TabNavListProps, DefaultTabBar: ComponentType<TabNavListProps>) => TabBarRender(props, DefaultTabBar, field);
 
-    const styleDef: CSSProperties = {};
-    if (fieldProps.width) styleDef.width = fieldProps.width;
-    if (fieldProps.autoHeightResize) styleDef.height = '100%';
+    const defStyle: CSSProperties = {width: field.getWidth() ?? '100%'};
+    if (fieldProps.autoHeightResize) defStyle.height = '100%';
 
-    const style = {...styleDef, ...fieldProps.style};
+    const style: React.CSSProperties = {...defStyle, ...fieldProps.style};
 
-    //return <Tabs type="card" size="small" renderTabBar={tabBarRender} items={items} />;
     return (
         <Tabs
             type={fieldProps.type ?? 'card'}
