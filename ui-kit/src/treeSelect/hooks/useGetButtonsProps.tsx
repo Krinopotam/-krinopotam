@@ -25,7 +25,7 @@ import {TreeSelectContext} from '@src/treeSelect/context/context';
 export const useGetButtonsProps = (api: ITreeSelectApi, props: ITreeSelectProps) => {
     api.getButtonsApi().refreshButtons = useRefreshButtons();
     const fieldNames = api.getFieldNames();
-    
+
     const activeNode = api.getActiveNode(true);
     const isGroup = !activeNode?.isLeaf && (!props.groupsMode || activeNode?.[fieldNames.isGroup]);
 
@@ -99,7 +99,7 @@ const useGetCreateButton = (api: ITreeSelectApi, props: ITreeSelectProps, isGrou
                 const activeNode = api.getActiveNode(false);
                 let parent: ITreeSelectNode | undefined = undefined;
                 if (activeNode) parent = activeNode && isGroup ? activeNode : api.getParentNode(activeNode);
-                
+
                 api.getEditFormApi().open('create', {defaultValues: {[fieldNames.parent]: parent}});
             },
         } satisfies ITreeSelectButton;
@@ -119,7 +119,7 @@ const useGetCreateGroupButton = (api: ITreeSelectApi, props: ITreeSelectProps, i
                 const activeNode = api.getActiveNode(false);
                 let parent: ITreeSelectNode | undefined = undefined;
                 if (activeNode) parent = activeNode && isGroup ? activeNode : api.getParentNode(activeNode);
-                
+
                 api.getEditGroupFormApi().open('create', {defaultValues: {[fieldNames.parent]: parent}});
             },
         } satisfies ITreeSelectButton;
@@ -134,13 +134,7 @@ const useGetViewButton = (
     isGroup?: boolean
 ): ITreeSelectButton | undefined => {
     return useMemo(() => {
-        if (
-            (!isGroup && !props.editFormProps) ||
-            (isGroup && !props.editGroupFormProps) ||
-            !props.readOnly ||
-            props.disabled ||
-            props.buttons?.view === null
-        )
+        if ((!isGroup && !props.editFormProps) || (isGroup && !props.editGroupFormProps) || !props.readOnly || props.disabled || props.buttons?.view === null)
             return undefined;
         return {
             ...defaultButtonView,
@@ -168,13 +162,7 @@ const useGetCloneButton = (
     return useMemo(() => {
         const editGroupFormProps = props.editGroupFormProps;
 
-        if (
-            (!isGroup && !props.editFormProps) ||
-            (isGroup && !props.editGroupFormProps) ||
-            props.disabled ||
-            props.readOnly ||
-            props.buttons?.clone === null
-        )
+        if ((!isGroup && !props.editFormProps) || (isGroup && !props.editGroupFormProps) || props.disabled || props.readOnly || props.buttons?.clone === null)
             return undefined;
 
         return {
@@ -203,13 +191,7 @@ const useGetUpdateButton = (
     return useMemo(() => {
         const editGroupFormProps = props.editGroupFormProps;
 
-        if (
-            (!isGroup && !props.editFormProps) ||
-            (isGroup && !props.editGroupFormProps) ||
-            props.disabled ||
-            props.readOnly ||
-            props.buttons?.update === null
-        )
+        if ((!isGroup && !props.editFormProps) || (isGroup && !props.editGroupFormProps) || props.disabled || props.readOnly || props.buttons?.update === null)
             return undefined;
         return {
             ...defaultButtonUpdate,
@@ -246,7 +228,7 @@ const useGetDeleteButton = (
                 if (!activeNode) return;
                 dialogOpenedRef.current = true;
                 if (!props.confirmDelete) {
-                    deleteNode(activeNode, props, api, dialogOpenedRef, api.t('error'));
+                    deleteNode(activeNode, props, api, dialogOpenedRef);
                     dialogOpenedRef.current = false;
                     return;
                 }
@@ -256,7 +238,7 @@ const useGetDeleteButton = (
                     content: props.nodeDeleteMessage ?? api.t('deleteSelectedRecordQt'),
                     colorType: 'danger',
                     onOk: () => {
-                        deleteNode(activeNode, props, api, dialogOpenedRef, api.t('error'), messageBox);
+                        deleteNode(activeNode, props, api, dialogOpenedRef, messageBox);
                     },
                     onCancel: () => {
                         messageBox.destroy();
@@ -273,7 +255,6 @@ const deleteNode = (
     props: ITreeSelectProps,
     api: ITreeSelectApi,
     dialogOpenedRef: React.MutableRefObject<boolean>,
-    errorMsg: string,
     messageBox?: MessageBoxApi
 ) => {
     const buttonsApi: IButtonsRowApi = api.getButtonsApi();
@@ -312,7 +293,7 @@ const deleteNode = (
 
             MessageBox.alert({
                 language: props.language,
-                title: errorMsg,
+                title: api.t('error'),
                 content: <ErrorMessage error={error} />,
                 colorType: 'danger',
                 onOk: () => {

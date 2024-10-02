@@ -67,6 +67,7 @@ import {useApiGetSelectedKeys} from '@src/treeSelect/hooks/api/useApiGetSelected
 import {useApiGetSelectedNodes} from '@src/treeSelect/hooks/api/useApiGetSelectedNodes';
 import {useApiSelectNode} from '@src/treeSelect/hooks/api/useApiSelectNode';
 import {useApiT} from '@src/treeSelect/hooks/api/useApiT';
+import {useApiGetGroupsOnly} from "@src/_shared/hooks/treeComponentApiMethods/useApiGroupsOnly";
 
 export const useInitApi = ({
     props,
@@ -106,6 +107,7 @@ export const useInitApi = ({
         getFieldNames: useApiGetFieldNames(props),
         getDataSet: useApiGetDataSet(dataSet),
         setDataSet: useApiSetDataset(setDataset, props?.onDataSetChanged),
+        getGroupsOnly: useApiGetGroupsOnly(dataSet, api),
         getValues: useApiGetValues(value),
         setValues: useApiSetValues(setValue, fieldNames),
         isDataPlainList: useApiGetIsDataPlain(isDataPlain),

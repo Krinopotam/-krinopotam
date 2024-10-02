@@ -55,6 +55,7 @@ import {useSelectedState} from '@src/_shared/hooks/treeComponentApiMethods/useSe
 import {useApiSetSelectedKeys} from '@src/_shared/hooks/treeComponentApiMethods/useApiSetSelectedKeys';
 import {useApiGetIsLoading} from '@src/tree/hooks/api/useApiGetIsLoading';
 import {useApiSetIsLoading} from '@src/tree/hooks/api/useApiSetIsLoading';
+import {useApiGetGroupsOnly} from "@src/_shared/hooks/treeComponentApiMethods/useApiGroupsOnly";
 
 export const useInitApi = ({
     props,
@@ -88,6 +89,7 @@ export const useInitApi = ({
         getFieldNames: useApiGetFieldNames(props),
         getDataSet: useApiGetDataSet(dataSet),
         setDataSet: useApiSetDataset(setDataset, props?.onDataSetChanged),
+        getGroupsOnly: useApiGetGroupsOnly(dataSet, api),
         isDataPlainList: useApiGetIsDataPlain(isDataPlain),
         getEditFormApi: useApiGetEditFormApi(editFormApi),
         getEditGroupFormApi: useApiGetEditGroupFormApi(editGroupFormApi),

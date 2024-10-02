@@ -222,7 +222,7 @@ const useGetDeleteButton = (api: IExtTreeApi, props: IExtTreeProps, activeNode: 
             onClick: () => {
                 if (!activeNode) return;
                 if (!props.confirmDelete) {
-                    deleteNode(activeNode, props, api, api.t('error'));
+                    deleteNode(activeNode, props, api);
                     return;
                 }
 
@@ -231,7 +231,7 @@ const useGetDeleteButton = (api: IExtTreeApi, props: IExtTreeProps, activeNode: 
                     content: props.nodeDeleteMessage ?? api.t('deleteSelectedRecordQt'),
                     colorType: 'danger',
                     onOk: () => {
-                        deleteNode(activeNode, props, api, api.t('error'), messageBox);
+                        deleteNode(activeNode, props, api, messageBox);
                     },
                     onCancel: () => {
                         messageBox.destroy();
@@ -242,7 +242,7 @@ const useGetDeleteButton = (api: IExtTreeApi, props: IExtTreeProps, activeNode: 
     }, [props, isGroup, api, activeNode]);
 };
 
-const deleteNode = (node: IExtTreeNode, props: IExtTreeProps, api: IExtTreeApi, errorMsg: string, messageBox?: MessageBoxApi) => {
+const deleteNode = (node: IExtTreeNode, props: IExtTreeProps, api: IExtTreeApi, messageBox?: MessageBoxApi) => {
     const buttonsApi: IButtonsRowApi = api.getButtonsApi();
     const deleteResult = props?.onDelete?.(node, api);
 
@@ -277,7 +277,7 @@ const deleteNode = (node: IExtTreeNode, props: IExtTreeProps, api: IExtTreeApi, 
 
             MessageBox.alert({
                 language: props.language,
-                title: errorMsg,
+                title: api.t('error'),
                 content: <ErrorMessage error={error} />,
                 colorType: 'danger',
             });

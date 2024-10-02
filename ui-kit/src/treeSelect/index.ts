@@ -8,6 +8,11 @@ export type {
     IAntTreeSelectProps,
     ITreeSelectValue,
     ITreeSelectNode,
-    ITreeSelectApi
+    ITreeSelectApi,
+    ILabeledValue,
+    ITreeSelectButton,
+    ITreeSelectButtons
 } from "@src/treeSelect/types/types";
+
+export type {INodePosition} from '@src/_shared/hooks/treeComponentApiMethods/types/treeApiTypes';
 

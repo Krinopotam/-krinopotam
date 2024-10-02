@@ -38,6 +38,9 @@ export interface ITreeComponentApi<TNode extends Record<string, AnyType> = Recor
     /** Set data set */
     setDataSet: (dataSet: TNode[] | undefined) => void;
 
+    /** Returns groups only data set */
+    getGroupsOnly: (removeBranchId?: IKey | TNode) => TNode[] | undefined;
+
     /** Returns selected keys */
     getSelectedKeys: () => IKey[] | undefined;
 
@@ -52,7 +55,7 @@ export interface ITreeComponentApi<TNode extends Record<string, AnyType> = Recor
     /** Get node selected status
      * @param externalDataset - if not set, current data set will be used, if set, node will be searched in this data set
      * */
-    isNodeSelected: (node: IKey | TNode | undefined) => boolean;
+    isNodeSelected: (node?: IKey | TNode) => boolean;
 
     /**
      * Select/deselect node

@@ -5,7 +5,7 @@ import React from 'react';
 import {IButtonsRowApi, IFormButton} from '@src/buttonsRow/types/types';
 import {IBreakpoints} from '@krinopotam/common-hooks/useResponsive';
 import {TreeProps} from 'antd/es/tree/Tree';
-import {ITreeComponentApi} from '@src/_shared/hooks/treeComponentApiMethods/types/treeApiTypes';
+import {INodePosition, ITreeComponentApi} from '@src/_shared/hooks/treeComponentApiMethods/types/treeApiTypes';
 import {AnyType, IKey} from '@krinopotam/service-types';
 
 export interface IOwnExtTreeProps {
@@ -44,6 +44,18 @@ export interface IOwnExtTreeProps {
     /** Confirm message before node delete */
     nodeDeleteMessage?: React.ReactNode;
 
+    /** Confirm message before node drag and drop */
+    nodeMoveMessage?: React.ReactNode;
+
+    /** Confirm message before node delete */
+    deleteMessage?: React.ReactNode;
+
+    /** Should confirm before delete */
+    confirmDelete?: boolean;
+
+    /** Should confirm before node drag and drop */
+    confirmMove?: boolean;
+
     /** Default expanded keys */
     defaultExpandedKeys?: IKey[];
 
@@ -70,12 +82,6 @@ export interface IOwnExtTreeProps {
     /** Groups only has children. Group is node which has no isLeaf:true property */
     groupsMode?: boolean;
 
-    /** Confirm message before node delete */
-    deleteMessage?: React.ReactNode;
-
-    /** Should confirm before delete */
-    confirmDelete?: boolean;
-
     /** Should select new node after create or clone node */
     selectNewNode?:boolean
 
@@ -100,14 +106,20 @@ export interface IOwnExtTreeProps {
     /** You cannot remove the node selection, you can only change it to another selection */
     noDeselect?: boolean;
 
+    /** Allow to drag move node on the same level (change node order) */
+    draggableOrder?: boolean;
+
     /** Data mutator function (mutates original data) */
     dataMutator?: (node: IExtTreeNode) => IExtTreeNode;
 
     /** Fires when the Tree dataSet is changed */
     onDataSetChanged?: (dataSet: IExtTreeNode[] | undefined) => void;
 
-    /** Callback executed when selected node delete */
+    /** Callback executed when node delete */
     onDelete?: (node: IExtTreeNode, api: IExtTreeApi) => ITreeDeletePromise | void | undefined;
+
+    /** Callback executed when node move */
+    onNodeMove?: (node: IExtTreeNode, targetNode: IExtTreeNode | undefined, pos:INodePosition, api: IExtTreeApi) => ITreeMovePromise | void | undefined;
 }
 
 export type IExtTreeProps = Omit<
@@ -127,6 +139,7 @@ export interface IExtTreeButton extends IFormButton {
 export type IExtTreeButtons = Record<string, IExtTreeButton | null>;
 
 export type ITreeDeletePromise = Promise<{data: Record<string, AnyType>}>;
+export type ITreeMovePromise = Promise<{data: Record<string, AnyType>}>;
 
 interface IExtTreeNodeBase extends Omit<TreeDataNode, 'key' | 'children'> {
     /** Node id */

@@ -1,17 +1,16 @@
 // noinspection DuplicatedCode
 
-import React, {useMemo, useState} from 'react';
+import React, {useState} from 'react';
 import {IDFormModalProps} from '@src/dFormModal';
 import {IInputFieldProps, InputField} from '@src/dForm/fields/input/inputField';
 import {ITreeSelectFieldProps, TreeSelectField} from '@src/dForm/fields/treeSelect/treeSelectField';
-import {ITreeSelectApi, ITreeSelectNode} from '@src/treeSelect';
+import {ITreeSelectNode} from '@src/treeSelect';
+import {IExtTreeApi, IExtTreeProps, Tree} from '@src/tree';
+import {Space, Switch} from 'antd';
+import {FolderOutlined} from '@ant-design/icons';
+import {AnyType} from '@krinopotam/service-types';
 
-import {removeFromTree} from '@src/_shared/hooks/treeComponentApiMethods/serviceMethods/removeFromTree';
-import {CloneObject} from '@krinopotam/js-helpers';
-import {IExtTreeProps, Tree} from '@src/tree';
-import {Space, Switch} from "antd";
-
-export const TreeWithForm = (): React.JSX.Element => {
+export const Example = (): React.JSX.Element => {
     const treeProps = useTreeProps();
     const [readOnly, setReadOnly] = useState(false);
     const [disabled, setDisabled] = useState(false);
@@ -19,7 +18,7 @@ export const TreeWithForm = (): React.JSX.Element => {
     return (
         <>
             {/*Description Start*/}
-            <h1>Пример Extended Tree с формой редактирования</h1>
+            <h1>Example of Extended Tree in group mode with edit form</h1>
             {/*Description End*/}
 
             <Space style={{paddingBottom: 10}}>
@@ -40,62 +39,81 @@ export const TreeWithForm = (): React.JSX.Element => {
     );
 };
 
-const departmentsApi = {} as ITreeSelectApi;
-
+const departmentsApi = {} as IExtTreeApi;
 const useTreeProps = () => {
-    const editFormProps = useTreeEditFormProps();
+    const editFormProps = useGetEditFormProps(false, departmentsApi);
+    const editGroupFormProps = useGetEditFormProps(true, departmentsApi);
     return {
         apiRef: departmentsApi,
         dataSet: dataSet,
         defaultExpandAll: true,
         confirmDelete: true,
+        confirmMove: true,
         editFormProps: editFormProps,
+        editGroupFormProps: editGroupFormProps,
         selectNewNode: true,
+        titleRender: groupNodeRender,
+        buttonsIconsOnly: true,
+        groupsMode: true,
+
     } satisfies IExtTreeProps;
 };
 
-const useTreeEditFormProps = () => {
-    return useMemo(
-        (): IDFormModalProps => ({
-            onFormInit: formApi => {
-                const model = formApi.model;
-                const field = model.getField('parent');
+export const groupNodeRender = (node: Record<string, AnyType>) => {
+    if (node.isGroup)
+        return (
+            <>
+                <FolderOutlined /> {node.title}
+            </>
+        );
+    return node.title;
+};
 
-                const data = departmentsApi.getDataSet();
-                const formMode = model.getFormMode();
-                if (formMode !== 'update') {
-                    field.updateProps({dataSet: data});
-                    return;
-                }
-                /** modify dataset for update to avoid the possibility of a parent node choosing itself or its own child node */
-                const id = model.getFormDataSet()['id'];
-                const clonedData = CloneObject(data);
-                removeFromTree(id, clonedData, {key: 'id', children: 'children'});
-
-                field.updateProps({dataSet: clonedData});
-            },
-            formId: 'EditForm',
-            confirmChanges: true,
-            fieldsProps: {
-                title: {component: InputField, label: 'Подразделение'} satisfies IInputFieldProps,
-                parent: {
-                    component: TreeSelectField,
-                    label: 'Родитель',
-                } satisfies ITreeSelectFieldProps,
-            },
-        }),
-        []
-    );
+const useGetEditFormProps = (isGroup: boolean, treeApi: IExtTreeApi): IDFormModalProps => {
+    const name = isGroup ? 'Group' : 'Department';
+    return {
+        confirmChanges: true,
+        fieldsProps: {
+            title: {
+                component: InputField,
+                label: name,
+                rules: [{type: 'string', rule: 'not-empty', message: name + ' is required'}],
+                autoFocus: true,
+            } satisfies IInputFieldProps,
+            parent: {
+                component: TreeSelectField,
+                label: 'Group',
+                placeholder: 'Choose parent group',
+                groupsMode: true,
+                titleRender: groupNodeRender,
+                selectedRender: groupNodeRender,
+            } as ITreeSelectFieldProps,
+        },
+        onFormInit: formApi => {
+            const model = formApi.model;
+            const field = model.getField('parent');
+            const formMode = model.getFormMode();
+            const id = model.getFormDataSet()['id'];
+            /** modify dataset for update to avoid the possibility of a parent node choosing itself or its own child node */
+            const dataSet = treeApi.getGroupsOnly(formMode !== 'update' ? undefined : id);
+            field.updateProps({dataSet: dataSet});
+        },
+        onSubmit: values => {
+            return {data: {...values, isGroup: isGroup}};
+        },
+    };
 };
 
 const dataSet: ITreeSelectNode[] = [
     {
         id: '01',
         title: 'Департамент аналитики данных',
+        isGroup: true,
         children: [
             {
                 id: '01-01',
                 title: 'Управление аналитики продаж',
+                isGroup: true,
                 children: [
                     {id: '01-01-01', title: 'Отдел продаж север'},
                     {id: '01-01-02', title: 'Отдел продаж юг'},
@@ -105,6 +123,7 @@ const dataSet: ITreeSelectNode[] = [
             {
                 id: '01-02',
                 title: 'Управление аналитики закупок',
+                isGroup: true,
                 children: [
                     {id: '01-02-01', title: 'Отдел закупок север'},
                     {id: '01-02-02', title: 'Отдел закупок юг'},
@@ -114,6 +133,7 @@ const dataSet: ITreeSelectNode[] = [
             {
                 id: '01-03',
                 title: 'Управление аналитики производства',
+                isGroup: true,
                 children: [
                     {id: '01-03-01', title: 'Отдел производства север'},
                     {id: '01-03-02', title: 'Отдел производства юг'},
@@ -125,10 +145,12 @@ const dataSet: ITreeSelectNode[] = [
     {
         id: '02',
         title: 'Департамент инженерных работ',
+        isGroup: true,
         children: [
             {
                 id: '02-01',
                 title: 'Управление строительства',
+                isGroup: true,
                 children: [
                     {id: '02-01-01', title: 'Отдел строительства север'},
                     {id: '02-01-02', title: 'Отдел строительства юг'},
@@ -138,6 +160,7 @@ const dataSet: ITreeSelectNode[] = [
             {
                 id: '02-02',
                 title: 'Управление демонтажа',
+                isGroup: true,
                 children: [
                     {id: '02-02-01', title: 'Отдел демонтажа север'},
                     {id: '02-02-02', title: 'Отдел демонтажа юг'},
@@ -147,6 +170,7 @@ const dataSet: ITreeSelectNode[] = [
             {
                 id: '02-03',
                 title: 'Управление реконструкции',
+                isGroup: true,
                 children: [
                     {id: '02-03-01', title: 'Отдел реконструкции север'},
                     {id: '02-03-02', title: 'Отдел реконструкции юг'},
@@ -158,10 +182,12 @@ const dataSet: ITreeSelectNode[] = [
     {
         id: '03',
         title: 'Департамент проектных работ',
+        isGroup: true,
         children: [
             {
                 id: '03-01',
                 title: 'Управление проектирования',
+                isGroup: true,
                 children: [
                     {id: '03-01-01', title: 'Отдел проектирования север'},
                     {id: '03-01-02', title: 'Отдел проектирования юг'},
@@ -171,6 +197,7 @@ const dataSet: ITreeSelectNode[] = [
             {
                 id: '03-02',
                 title: 'Управление согласования',
+                isGroup: true,
                 children: [
                     {id: '03-02-01', title: 'Отдел согласования север'},
                     {id: '03-02-02', title: 'Отдел согласования юг'},
@@ -180,6 +207,7 @@ const dataSet: ITreeSelectNode[] = [
             {
                 id: '03-03',
                 title: 'Управление анализа проектов',
+                isGroup: true,
                 children: [
                     {id: '03-03-01', title: 'Отдел анализа север'},
                     {id: '03-03-02', title: 'Отдел анализа юг'},

@@ -25,6 +25,7 @@ export const cn =  {
     cancel: '取消',
     tryAgainQt: '再试一次',
     deleteSelectedRecordQt: '删除选定的记录',
+    moveRecordQt: '删除此记录',
     error: '错误',
     dataNotFound: '数据未找到',
 }

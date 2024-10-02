@@ -40,10 +40,15 @@ const useSeparateProps = (props: IExtTreeProps) => {
             dataMutator: true,
             noDeselect: true,
             groupsMode: true,
+            selectNewNode: true,
+            confirmMove: true,
+            nodeMoveMessage: true,
+            draggableOrder: true,
             onDataSetChanged: true,
             nodeDeleteMessage: true,
             onDelete: true,
-            selectNewNode: true,
+            onNodeMove: true,
+
             /** common props */
             fieldNames: true,
             defaultCheckedKeys: true,
