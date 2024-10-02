@@ -9,11 +9,14 @@ export const useApiAddNode = (api: {
     getFieldNames: ITreeComponentApi['getFieldNames'];
     ensureNodeVisible: ITreeComponentApi['ensureNodeVisible'];
     selectNode: ITreeComponentApi['selectNode'];
+    sortTree: ITreeComponentApi['sortTree'];
 }): ITreeComponentApi['addNode'] => {
     return (node, target, position, opts, externalDataset) => {
         const props = api.getProps()
-        const dataSet = externalDataset ?? CloneObject(api.getDataSet() ?? []);
+        let dataSet = externalDataset ?? CloneObject(api.getDataSet() ?? []);
+
         addNodeToTree(node, target, dataSet, api.getFieldNames(), position, props.groupsMode);
+        if (opts?.sortNodes) dataSet = api.sortTree('asc', dataSet)!;
 
         if (!externalDataset) api.setDataSet(dataSet);
         if (opts?.ensureVisible) api.ensureNodeVisible(node, dataSet);

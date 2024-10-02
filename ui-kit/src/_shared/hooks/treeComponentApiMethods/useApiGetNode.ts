@@ -5,10 +5,10 @@ export const useApiGetNode = (api: {
     getFieldNames: ITreeComponentApi['getFieldNames'];
     getDataSet: ITreeComponentApi['getDataSet'];
 }): ITreeComponentApi['getNode'] => {
-    return (key, externalDataset) => {
+    return (key, extDataset) => {
         const fieldNames = api.getFieldNames();
         if (!key) return undefined;
-        const data = externalDataset ?? api.getDataSet();
+        const data = extDataset ?? api.getDataSet();
         const {idx, nodes} = getNodeIndex(data, key, fieldNames);
         return idx > -1 ? nodes![idx] : undefined;
     };

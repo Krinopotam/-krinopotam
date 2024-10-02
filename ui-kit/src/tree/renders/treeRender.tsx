@@ -123,7 +123,7 @@ const moveNode = (node: IExtTreeNode, targetNode: IExtTreeNode, pos: INodePositi
     const moveResult = props?.onNodeMove?.(node, targetNode, pos, api);
 
     if (!IsPromise(moveResult)) {
-        api.moveNode(node, targetNode, pos, {ensureVisible: ensureVisible});
+        api.moveNode(node, targetNode, pos, {ensureVisible: ensureVisible, sortNodes: props.sortOnChange});
         if (messageBox) messageBox.destroy();
         return;
     }
@@ -132,7 +132,7 @@ const moveNode = (node: IExtTreeNode, targetNode: IExtTreeNode, pos: INodePositi
         .then(() => {
             messageBox?.destroy();
             if (!api.getIsMounted()) return;
-            api.moveNode(node, targetNode, pos, {ensureVisible: ensureVisible});
+            api.moveNode(node, targetNode, pos, {ensureVisible: ensureVisible, sortNodes: props.sortOnChange});
         })
         .catch((error: IError) => {
             messageBox?.destroy();

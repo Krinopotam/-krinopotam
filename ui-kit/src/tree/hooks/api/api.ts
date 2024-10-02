@@ -1,5 +1,6 @@
 // noinspection DuplicatedCode
 
+import {useApiSortTree} from "@src/_shared/hooks/treeComponentApiMethods/useApiSortTree";
 import {useRef, useState} from 'react';
 import {GetNanoId} from '@krinopotam/js-helpers/helpersString/getNanoId';
 import {IDFormModalApi} from '@src/dFormModal';
@@ -55,7 +56,7 @@ import {useSelectedState} from '@src/_shared/hooks/treeComponentApiMethods/useSe
 import {useApiSetSelectedKeys} from '@src/_shared/hooks/treeComponentApiMethods/useApiSetSelectedKeys';
 import {useApiGetIsLoading} from '@src/tree/hooks/api/useApiGetIsLoading';
 import {useApiSetIsLoading} from '@src/tree/hooks/api/useApiSetIsLoading';
-import {useApiGetGroupsOnly} from "@src/_shared/hooks/treeComponentApiMethods/useApiGroupsOnly";
+import {useApiGetGroupsOnly} from "@src/_shared/hooks/treeComponentApiMethods/useApiGetGroupsOnly";
 
 export const useInitApi = ({
     props,
@@ -89,7 +90,8 @@ export const useInitApi = ({
         getFieldNames: useApiGetFieldNames(props),
         getDataSet: useApiGetDataSet(dataSet),
         setDataSet: useApiSetDataset(setDataset, props?.onDataSetChanged),
-        getGroupsOnly: useApiGetGroupsOnly(dataSet, api),
+        getGroupsOnly: useApiGetGroupsOnly(api),
+        sortTree: useApiSortTree(dataSet, props.sortComparator, api),
         isDataPlainList: useApiGetIsDataPlain(isDataPlain),
         getEditFormApi: useApiGetEditFormApi(editFormApi),
         getEditGroupFormApi: useApiGetEditGroupFormApi(editGroupFormApi),

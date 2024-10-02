@@ -42,7 +42,7 @@ export interface ITreeSelectButton extends IFormButton {
 
 export type ITreeSelectButtons = Record<string, ITreeSelectButton | null>;
 
-export interface ITreeSelectBaseProps {
+export interface ITreeSelectOwnProps {
     /** A mutable object to merge with these controls api */
     apiRef?: ITreeSelectApi;
 
@@ -67,6 +67,12 @@ export interface ITreeSelectBaseProps {
 
     /** Groups only has children. Group is node which has no isLeaf:true property */
     groupsMode?: boolean;
+
+    /** Sort nodes on change (create new or update) */
+    sortOnChange?: boolean;
+
+    /** Sort comparator */
+    sortComparator?:(keyof ITreeSelectNode)[] | ((a: ITreeSelectNode, b: ITreeSelectNode) => number);
 
     /** Value */
     value?: ITreeSelectValue;
@@ -182,7 +188,7 @@ export interface ITreeSelectBaseProps {
     onGetLabelCallback?: (key: IKey, dataSet: ITreeSelectNode[] | undefined) => React.ReactNode;
 }
 
-export type ITreeSelectProps = ITreeSelectBaseProps & IAntTreeSelectProps;
+export type ITreeSelectProps = ITreeSelectOwnProps & IAntTreeSelectProps;
 export type ITreeSelectSourcePromise = Promise<{data: ITreeSelectNode[]}>;
 export type ITreeSelectDeletePromise = Promise<{data: Record<string, AnyType>}>;
 

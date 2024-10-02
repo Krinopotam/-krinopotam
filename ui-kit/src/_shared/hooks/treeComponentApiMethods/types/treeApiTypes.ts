@@ -21,8 +21,8 @@ export type IFieldNames = {
     parent: string;
     isLeaf: string;
     isGroup: string;
-    disabled: string,
-    selectable: string
+    disabled: string;
+    selectable: string;
 };
 
 export type INodePosition = 'below' | 'above' | 'insideTop' | 'insideBottom';
@@ -38,19 +38,31 @@ export interface ITreeComponentApi<TNode extends Record<string, AnyType> = Recor
     /** Set data set */
     setDataSet: (dataSet: TNode[] | undefined) => void;
 
-    /** Returns groups only data set */
-    getGroupsOnly: (removeBranchId?: IKey | TNode) => TNode[] | undefined;
+    /** Returns groups only data set
+     * @param removeBranch - this branch will be removed in result data set
+     * @param extDataset - if not set, current data set will be used, if set, will return only groups in this data set
+     */
+    getGroupsOnly: (removeBranch?: IKey | TNode, extDataset?: TNode[]) => TNode[] | undefined;
+
+    /** Sort data set
+     * @param order - sort order
+     * @param extDataset - if not set, current data set will be used, if set, will be sorted in this data set
+     * @param extComparator - external comparator function or array of fields names to sort by. If not set will be used props comparator
+     */
+    sortTree: (order: 'asc' | 'desc', extDataset?: TNode[], extComparator?: (keyof TNode)[] | ((a: TNode, b: TNode) => number)) => TNode[] | undefined;
 
     /** Returns selected keys */
     getSelectedKeys: () => IKey[] | undefined;
 
-    /** Set selected keys */
+    /** Set selected keys
+     * @param keys - array of selected keys
+     */
     setSelectedKeys: (keys: IKey | IKey[] | null | undefined) => void;
 
     /** Returns selected nodes
-     * @param externalDataset - if not set, current data set will be used, if set, node will be searched in this data set
+     * @param extDataset - if not set, current data set will be used, if set, node will be searched in this data set
      * */
-    getSelectedNodes: (externalDataset?: TNode[]) => TNode[] | undefined;
+    getSelectedNodes: (extDataset?: TNode[]) => TNode[] | undefined;
 
     /** Get node selected status
      * @param externalDataset - if not set, current data set will be used, if set, node will be searched in this data set
@@ -62,17 +74,17 @@ export interface ITreeComponentApi<TNode extends Record<string, AnyType> = Recor
      * @param node - node or key
      * @param select - if true, node will be selected (default true)
      * @param withChildren - select/deselect whole subtree
-     * @param externalDataset - if not set, current data set will be used, if set, node will be searched in this data set
+     * @param extDataSet - if not set, current data set will be used, if set, node will be searched in this data set
      */
-    selectNode: (node: IKey | TNode | undefined, select?: boolean, withChildren?: boolean,  externalDataset?: TNode[]) => void;
+    selectNode: (node: IKey | TNode | undefined, select?: boolean, withChildren?: boolean, extDataSet?: TNode[]) => void;
 
     /**
      * Returns active node
      * By default, active node is last selected node.
      * @param singleOnly - component have active node if only one node is selected
-     * @param externalDataset - if not set, current data set will be used, if set, node will be searched in this data set
+     * @param extDataSet - if not set, current data set will be used, if set, node will be searched in this data set
      */
-    getActiveNode: (singleOnly?: boolean, withChildren?: boolean, externalDataset?: TNode[]) => TNode | undefined;
+    getActiveNode: (singleOnly?: boolean, withChildren?: boolean, extDataSet?: TNode[]) => TNode | undefined;
 
     /** Returns active node key (last selected) */
     getActiveNodeKey: (singleOnly?: boolean) => IKey | undefined;
@@ -101,9 +113,9 @@ export interface ITreeComponentApi<TNode extends Record<string, AnyType> = Recor
     /**
      * Returns node
      * @param key - node key
-     * @param externalDataset - if not set, current data set will be used, if set, node will be searched in this data set
+     * @param extDataSet - if not set, current data set will be used, if set, node will be searched in this data set
      */
-    getNode: (key: IKey | undefined, externalDataset?: TNode[]) => TNode | undefined;
+    getNode: (key: IKey | undefined, extDataSet?: TNode[]) => TNode | undefined;
 
     /**
      * Returns the nodes by key value
@@ -115,9 +127,9 @@ export interface ITreeComponentApi<TNode extends Record<string, AnyType> = Recor
     /**
      * Returns parent node
      * @param node - node or key
-     * @param externalDataset - if not set, current data set will be used, if set, node will be searched in this data set
+     * @param extDataSet - if not set, current data set will be used, if set, node will be searched in this data set
      */
-    getParentNode: (node: IKey | TNode, externalDataset?: TNode[]) => TNode | undefined;
+    getParentNode: (node: IKey | TNode, extDataSet?: TNode[]) => TNode | undefined;
 
     /** Add node */
     /**
@@ -126,7 +138,7 @@ export interface ITreeComponentApi<TNode extends Record<string, AnyType> = Recor
      * @param target- target node or key
      * @param position - node position: below target, above target, insideTop - first position inside target, insideBottom -  last position inside target
      * @param opts - options {ensureVisible - if true, node will be visible after adding (expanded parent nodes), select - if true, node will be selected after adding}
-     * @param externalDataset - if not set, node will be added to current data set. If set - to this data set, component will not be updated
+     * @param extDataSet - if not set, node will be added to current data set. If set - to this data set, component will not be updated
      * @returns changed data set
      */
     addNode: (
@@ -136,8 +148,9 @@ export interface ITreeComponentApi<TNode extends Record<string, AnyType> = Recor
         opts?: {
             ensureVisible?: boolean;
             select?: boolean;
+            sortNodes?: boolean;
         },
-        externalDataset?: TNode[]
+        extDataSet?: TNode[]
     ) => TNode[] | undefined;
 
     /** Update node */
@@ -146,7 +159,7 @@ export interface ITreeComponentApi<TNode extends Record<string, AnyType> = Recor
      * @param node updated node
      * @param target node or key
      * @param opts
-     * @param externalDataset - if not set, node will be updated in current data set. If set - in this data set, component will not be updated
+     * @param extDataSet - if not set, node will be updated in current data set. If set - in this data set, component will not be updated
      */
     updateNode: (
         node: TNode,
@@ -154,8 +167,9 @@ export interface ITreeComponentApi<TNode extends Record<string, AnyType> = Recor
         opts?: {
             ensureVisible?: boolean;
             select?: boolean;
+            sortNodes?: boolean;
         },
-        externalDataset?: TNode[]
+        extDataSet?: TNode[]
     ) => TNode[] | undefined;
 
     /**
@@ -164,7 +178,7 @@ export interface ITreeComponentApi<TNode extends Record<string, AnyType> = Recor
      * @param target - target node or key
      * @param position - move position: below target, above target, insideTop - first position inside target, insideBottom -  last position inside target
      * @param opts - options
-     * @param externalDataset - if not set, node will be moved in current data set. If set - in this data set, component will not be updated
+     * @param extDataSet - if not set, node will be moved in current data set. If set - in this data set, component will not be updated
      * @returns changed data set
      */
     moveNode: (
@@ -174,15 +188,16 @@ export interface ITreeComponentApi<TNode extends Record<string, AnyType> = Recor
         opts?: {
             ensureVisible?: boolean;
             select?: boolean;
+            sortNodes?: boolean;
         },
-        externalDataset?: TNode[]
+        extDataSet?: TNode[]
     ) => TNode[] | undefined;
 
     /**
      * Remove node from data set
      * @param node - node or key
      * @param opts - options
-     * @param externalDataset - if not set, node will be deleted in current data set. If set -  in this data set, component will not be updated
+     * @param extDataSet - if not set, node will be deleted in current data set. If set -  in this data set, component will not be updated
      * @returns changed data set
      */
     removeNode: (
@@ -190,54 +205,54 @@ export interface ITreeComponentApi<TNode extends Record<string, AnyType> = Recor
         opts?: {
             select?: 'prev' | 'next';
         },
-        externalDataset?: TNode[]
+        extDataSet?: TNode[]
     ) => TNode[] | undefined;
 
     /**
      * Expand parent nodes
      * @param node - node pr key
-     * @param externalDataset - if not set, node will be expanded in current data set. If set - in this data set, component will not be updated
+     * @param extDataSet - if not set, node will be expanded in current data set. If set - in this data set, component will not be updated
      */
-    expandParentNodes: (node: IKey | TNode, externalDataset?: TNode[]) => void;
+    expandParentNodes: (node: IKey | TNode, extDataSet?: TNode[]) => void;
 
     /**
      * Ensure node visible
      * @param node - node or key
      * @param externalDataset - if not set, node will be made visible in current data set. If set - in this data set, component will not be updated
      */
-    ensureNodeVisible: (node: IKey | TNode, externalDataset?: TNode[]) => void;
+    ensureNodeVisible: (node: IKey | TNode, extDataSet?: TNode[]) => void;
 
     /**
      * Returns next node key
      * @param node - node or key
      * @param opts
-     * @param externalDataset - if not set, search will be performed in current data set. If set - in this data set
+     * @param extDataSet - if not set, search will be performed in current data set. If set - in this data set
      */
-    getNextNodeKey: (key: IKey | Record<string, AnyType> | undefined, opts?: IFindNodeOptions, externalDataset?: TNode[]) => IKey | undefined;
+    getNextNodeKey: (key: IKey | Record<string, AnyType> | undefined, opts?: IFindNodeOptions, extDataSet?: TNode[]) => IKey | undefined;
 
     /**
      * Returns prev node key
      * @param node - node or key
      * @param opts
-     * @param externalDataset - if not set, search will be performed in current data set. If set - in this data set
+     * @param extDataSet - if not set, search will be performed in current data set. If set - in this data set
      */
-    getPrevNodeKey: (node: IKey | Record<string, AnyType> | undefined, opts?: IFindNodeOptions, externalDataset?: TNode[]) => IKey | undefined;
+    getPrevNodeKey: (node: IKey | Record<string, AnyType> | undefined, opts?: IFindNodeOptions, extDataSet?: TNode[]) => IKey | undefined;
 
     /**
      * Returns next node
      * @param key
      * @param opts
-     * @param externalDataset - if not set, search will be performed in current data set. If set - in this data set
+     * @param extDataSet - if not set, search will be performed in current data set. If set - in this data set
      */
-    getNextNode: (node: TNode, opts?: IFindNodeOptions, externalDataset?: TNode[]) => TNode | undefined;
+    getNextNode: (node: TNode, opts?: IFindNodeOptions, extDataSet?: TNode[]) => TNode | undefined;
 
     /**
      * Returns prev node
      * @param key
      * @param opts
-     * @param externalDataset - if not set, search will be performed in current data set. If set - in this data set
+     * @param extDataSet - if not set, search will be performed in current data set. If set - in this data set
      */
-    getPrevNode: (node: TNode, opts?: IFindNodeOptions, externalDataset?: TNode[]) => TNode | undefined;
+    getPrevNode: (node: TNode, opts?: IFindNodeOptions, extDataSet?: TNode[]) => TNode | undefined;
 
     /** Check if data set is plain list (has no children) */
     isDataPlainList: () => boolean;

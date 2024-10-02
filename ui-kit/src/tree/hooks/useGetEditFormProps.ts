@@ -35,9 +35,10 @@ export const useGetEditFormProps = (treeApi: IExtTreeApi, treeProps: IExtTreePro
                 treeApi.addNode(updatedNode, targetKey, 'insideBottom', {
                     ensureVisible: true,
                     select: !!treeProps.selectNewNode,
+                    sortNodes: treeProps.sortOnChange,
                 });
             } else if (formMode === 'update') {
-                treeApi.updateNode(updatedNode, targetKey, {ensureVisible: true});
+                treeApi.updateNode(updatedNode, targetKey, {ensureVisible: true, sortNodes: treeProps.sortOnChange});
             }
         };
 

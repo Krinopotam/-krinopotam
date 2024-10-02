@@ -1,5 +1,6 @@
 // noinspection DuplicatedCode
 
+import {useApiSortTree} from "@src/_shared/hooks/treeComponentApiMethods/useApiSortTree";
 import {ITreeSelectProps} from '@src/treeSelect';
 import {useRef, useState} from 'react';
 import {useDataFetcher} from '@src/treeSelect/hooks/useDataFetcher';
@@ -67,7 +68,7 @@ import {useApiGetSelectedKeys} from '@src/treeSelect/hooks/api/useApiGetSelected
 import {useApiGetSelectedNodes} from '@src/treeSelect/hooks/api/useApiGetSelectedNodes';
 import {useApiSelectNode} from '@src/treeSelect/hooks/api/useApiSelectNode';
 import {useApiT} from '@src/treeSelect/hooks/api/useApiT';
-import {useApiGetGroupsOnly} from "@src/_shared/hooks/treeComponentApiMethods/useApiGroupsOnly";
+import {useApiGetGroupsOnly} from "@src/_shared/hooks/treeComponentApiMethods/useApiGetGroupsOnly";
 
 export const useInitApi = ({
     props,
@@ -107,7 +108,8 @@ export const useInitApi = ({
         getFieldNames: useApiGetFieldNames(props),
         getDataSet: useApiGetDataSet(dataSet),
         setDataSet: useApiSetDataset(setDataset, props?.onDataSetChanged),
-        getGroupsOnly: useApiGetGroupsOnly(dataSet, api),
+        getGroupsOnly: useApiGetGroupsOnly(api),
+        sortTree: useApiSortTree(dataSet, props.sortComparator, api),
         getValues: useApiGetValues(value),
         setValues: useApiSetValues(setValue, fieldNames),
         isDataPlainList: useApiGetIsDataPlain(isDataPlain),

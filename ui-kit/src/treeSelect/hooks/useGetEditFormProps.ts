@@ -6,15 +6,15 @@ import {TreeSelectContext} from '@src/treeSelect/context/context';
 import {ILabeledValue} from '@src/treeSelect/types/types';
 import {useContext, useMemo} from 'react';
 
-export const useGetEditFormProps = (treeApi: ITreeSelectApi, treeSelectProps: ITreeSelectProps, forGroup: boolean) => {
+export const useGetEditFormProps = (treeApi: ITreeSelectApi, treeProps: ITreeSelectProps, forGroup: boolean) => {
     const {dialogOpenedRef} = useContext(TreeSelectContext);
 
     return useMemo(() => {
-        const editFormProps = !forGroup ? treeSelectProps?.editFormProps : treeSelectProps?.editGroupFormProps;
+        const editFormProps = !forGroup ? treeProps?.editFormProps : treeProps?.editGroupFormProps;
         if (!editFormProps) return undefined;
 
         const formProps = {...editFormProps};
-        if (treeSelectProps.language && !formProps.language) formProps.language = treeSelectProps.language;
+        if (treeProps.language && !formProps.language) formProps.language = treeProps.language;
 
         const propsOnSubmitSuccess = editFormProps?.onSubmitSuccess;
 
@@ -39,10 +39,11 @@ export const useGetEditFormProps = (treeApi: ITreeSelectApi, treeSelectProps: IT
                 if (!updatedNode[fieldNames.key]) updatedNode[fieldNames.key] = GetUuid();
                 treeApi.addNode(updatedNode, targetKey, 'insideBottom', {
                     ensureVisible: true,
-                    select: !!treeSelectProps.selectNewNode,
+                    select: !!treeProps.selectNewNode,
+                    sortNodes: treeProps.sortOnChange,
                 });
             } else if (formMode === 'update') {
-                treeApi.updateNode(updatedNode, targetKey, {ensureVisible: true});
+                treeApi.updateNode(updatedNode, targetKey, {ensureVisible: true, sortNodes: treeProps.sortOnChange});
                 const curValues = treeApi.getValues();
                 treeApi.setValues(refreshSelectedValues(curValues, updatedNode, fieldNames));
             }
@@ -66,15 +67,7 @@ export const useGetEditFormProps = (treeApi: ITreeSelectApi, treeSelectProps: IT
         };
 
         return formProps;
-    }, [
-        forGroup,
-        treeSelectProps?.editFormProps,
-        treeSelectProps?.editGroupFormProps,
-        treeSelectProps.language,
-        treeSelectProps.selectNewNode,
-        treeApi,
-        dialogOpenedRef,
-    ]);
+    }, [forGroup, treeProps?.editFormProps, treeProps?.editGroupFormProps, treeProps.language, treeProps.selectNewNode, treeApi, dialogOpenedRef]);
 };
 
 /** WORKAROUND:

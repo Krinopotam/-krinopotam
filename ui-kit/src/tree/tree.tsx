@@ -44,6 +44,8 @@ const useSeparateProps = (props: IExtTreeProps) => {
             confirmMove: true,
             nodeMoveMessage: true,
             draggableOrder: true,
+            sortComparator: true,
+            sortOnChange: true,
             onDataSetChanged: true,
             nodeDeleteMessage: true,
             onDelete: true,

@@ -1,3 +1,4 @@
+import {ITreeSelectNode} from "@src/treeSelect";
 import {GetRef, Tree as AntdTree, type TreeDataNode} from 'antd';
 import {translations} from '@src/tree/translations/translations';
 import {IDFormModalApi, IDFormModalProps} from '@src/dFormModal/types/dFormModalTypes';
@@ -55,6 +56,12 @@ export interface IOwnExtTreeProps {
 
     /** Should confirm before node drag and drop */
     confirmMove?: boolean;
+
+    /** Sort nodes on change (create new or update) */
+    sortOnChange?: boolean;
+
+    /** Sort comparator */
+    sortComparator?:(keyof ITreeSelectNode)[] | ((a: ITreeSelectNode, b: ITreeSelectNode) => number);
 
     /** Default expanded keys */
     defaultExpandedKeys?: IKey[];

@@ -4,7 +4,7 @@ export type {
     ITreeSelectDeletePromise,
     ITreeSelectSourcePromise,
     ITreeSelectProps,
-    ITreeSelectBaseProps,
+    ITreeSelectOwnProps,
     IAntTreeSelectProps,
     ITreeSelectValue,
     ITreeSelectNode,

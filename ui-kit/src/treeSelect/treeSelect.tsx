@@ -4,7 +4,7 @@ import {TreeSelectRender} from '@src/treeSelect/renders/treeSelectRender';
 import {useInitApi} from '@src/treeSelect/hooks/api/api';
 import {useGetActualProps} from '@krinopotam/common-hooks';
 
-import {IAntTreeSelectProps, ITreeSelectBaseProps, ITreeSelectProps} from '@src/treeSelect/types/types';
+import {IAntTreeSelectProps, ITreeSelectOwnProps, ITreeSelectProps} from '@src/treeSelect/types/types';
 import {TreeSelectProvider} from '@src/treeSelect/context/context';
 
 export const TreeSelect = (props: ITreeSelectProps): React.JSX.Element => {
@@ -31,7 +31,7 @@ export const TreeSelect = (props: ITreeSelectProps): React.JSX.Element => {
 
 const useSplitProps = (props: ITreeSelectProps) => {
     return useMemo((): IAntTreeSelectProps => {
-        const result = SplitObject<ITreeSelectBaseProps, IAntTreeSelectProps>(props, {
+        const result = SplitObject<ITreeSelectOwnProps, IAntTreeSelectProps>(props, {
             apiRef: true,
             componentId: true,
             dataMutator: true,
@@ -70,6 +70,8 @@ const useSplitProps = (props: ITreeSelectProps) => {
             translation: true,
             selectNewNode: true,
             groupsMode: true,
+            sortOnChange: true,
+            sortComparator: true,
             onChange: true,
             onGetLabelCallback: true,
             onDataSetChanged: true,

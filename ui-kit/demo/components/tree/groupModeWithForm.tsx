@@ -52,6 +52,7 @@ const useTreeProps = () => {
         editFormProps: editFormProps,
         editGroupFormProps: editGroupFormProps,
         selectNewNode: true,
+        sortOnChange: true,
         titleRender: groupNodeRender,
         buttonsIconsOnly: true,
         groupsMode: true,
