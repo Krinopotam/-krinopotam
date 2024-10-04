@@ -40,7 +40,7 @@ export interface ISelectBaseProps extends Record<string, AnyType> {
     dataSet?: ISelectNode[];
 
     /** Selected values */
-    value?: ISelectValue;
+    value?: ISelectValue | ISelectNode | ISelectNode[];
 
     /** Read only state */
     readOnly?: boolean;

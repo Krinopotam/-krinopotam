@@ -1,4 +1,6 @@
+import {IInlineGroupFieldProps, InlineGroupField} from '@src/dForm/fields/inlineGroup';
 import {IPasswordFieldProps, PasswordField} from '@src/dForm/fields/password';
+import {ITreeSelectFieldProps, TreeSelectField} from '@src/dForm/fields/treeSelect';
 import React from 'react';
 import {TabulatorGrid} from '@src/tabulatorGrid';
 import {ITabulatorColumn} from '@src/tabulatorBase';
@@ -7,7 +9,7 @@ import {TabsField} from '@src/dForm/fields/tabs/tabsField';
 import {IInputFieldProps, InputField} from '@src/dForm/fields/input/inputField';
 import {ITextAreaFieldProps, TextAreaField} from '@src/dForm/fields/textArea/textAreaField';
 import {ITabulatorGridFieldProps, TabulatorGridField} from '@src/dForm/fields/tabulatorGrid/tabulatorGridField';
-import {SelectField} from '@src/dForm/fields/select';
+import {ISelectFieldProps, SelectField} from '@src/dForm/fields/select';
 
 export const TagsColumns: ITabulatorColumn[] = [
     {field: 'num', title: '№', formatter: 'rownum', accessor: 'rownum', width: 50},
@@ -59,13 +61,36 @@ const FormatsList = [
     {id: '05', label: 'JPEG', description: 'Файлы в формате JPEG'},
 ];
 
+const tagsList = [
+    {id: '01', title: 'Тег 1'},
+    {id: '02', title: 'Тег 2'},
+    {id: '03', title: 'Тег 3'},
+    {id: '04', title: 'Тег 4'},
+    {id: '05', title: 'Тег 5'},
+    {id: '06', title: 'Тег 6'},
+    {id: '07', title: 'Тег 7'},
+    {id: '08', title: 'Тег 8'},
+    {id: '09', title: 'Тег 9'},
+    {id: '10', title: 'Тег 10'},
+    {id: '11', title: 'Тег 11'},
+    {id: '12', title: 'Тег 12'},
+    {id: '13', title: 'Тег 13'},
+    {id: '14', title: 'Тег 14'},
+    {id: '15', title: 'Тег 15'},
+    {id: '16', title: 'Тег 16'},
+];
+
 const inputsFormProps: IDFormModalProps = {
-    confirmChanges: true,
+    confirmChanges: false,
     height: 400,
     fieldsProps: {
-        name: {component: InputField, label: 'Наименование'},
-        shortName: {component: InputField, label: 'Краткое наименование'},
-        format: {component: SelectField, label: 'Формат', dataSet: FormatsList, fullItemValue: true},
+        inline1: {
+            component: InlineGroupField,
+            fieldsProps: {
+                name: {component: InputField, label: 'Наименование'},
+                format: {component: SelectField, label: 'Формат', dataSet: FormatsList, fullItemValue: true} satisfies ISelectFieldProps,
+            },
+        } satisfies IInlineGroupFieldProps,
         description: {component: TextAreaField, label: 'Описание', autoSize: true},
     },
 };
@@ -81,9 +106,20 @@ const useEditFormProps = () => {
                 autoHeightResize: true,
                 tabs: {
                     ['Основные']: {
-                        name: {component: InputField, label: 'Наименование'} satisfies IInputFieldProps,
-                        shortName: {component: InputField, label: 'Краткое наименование'} satisfies IInputFieldProps,
-                        code: {component: InputField, label: 'Код'} satisfies IInputFieldProps,
+                        inline1: {
+                            component: InlineGroupField,
+                            fieldsProps: {
+                                code: {component: InputField, label: 'Код', width: 100} satisfies IInputFieldProps,
+                                shortName: {component: InputField, label: 'Наименование'} satisfies IInputFieldProps,
+                            },
+                        } satisfies IInlineGroupFieldProps,
+                        name: {component: InputField, label: 'Полное наименование'} satisfies IInputFieldProps,
+                        tags: {
+                            component: TreeSelectField,
+                            label: 'Теги',
+                            multiple: true,
+                            dataSet: tagsList,
+                        } satisfies ITreeSelectFieldProps,
                         description: {
                             component: TextAreaField,
                             label: 'Описание',

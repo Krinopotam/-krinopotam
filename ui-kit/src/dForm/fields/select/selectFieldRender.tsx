@@ -10,9 +10,10 @@ export const SelectFieldRender = ({field}: {field: SelectField}): React.JSX.Elem
     const value = field.getValue();
 
     const onChange = useCallback<NonNullable<ISelectFieldProps['onChange']>>(
-        value => {
+        (val, option) => {
             if (!field.isReady()) return;
-            field.setValue(value);
+            if (fieldProps.fullItemValue) field.setValue(option);
+            else field.setValue(val);
             field.setDirty(true);
         },
         [field]

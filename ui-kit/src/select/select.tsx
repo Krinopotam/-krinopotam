@@ -47,11 +47,11 @@ const useGetOptions = (props: ISelectProps) => {
     }, [props.dataSet]);
 };
 
-const useConvertToBaseVal = (_props: ISelectProps, val: ISelectValue | undefined) => {
+const useConvertToBaseVal = (_props: ISelectProps, val: ISelectValue | ISelectNode | ISelectNode[] | undefined) => {
     return useMemo((): ISelectBaseValue | undefined => {
         if (typeof val === 'undefined') return undefined;
         if (!IsArray(val)) {
-            if (typeof val === 'object') return {value: val.id, label: val.label};
+            if (typeof val === 'object') return {value: val.id ?? '0', label: val.label};
             return val;
         }
 
