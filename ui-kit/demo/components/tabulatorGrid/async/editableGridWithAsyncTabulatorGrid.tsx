@@ -21,7 +21,6 @@ const editFormProps: IDFormModalProps = {
             headerFilterHidden: true,
             autoHeightResize: true,
             height: '100%',
-            resizeHeightWithForm: true,
             layout: 'fitColumns',
             onDataFetch: () => {
                 return new Promise((resolve, reject) => {

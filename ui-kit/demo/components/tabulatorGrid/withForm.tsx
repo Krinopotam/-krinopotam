@@ -37,7 +37,7 @@ export const WithForm = (): React.JSX.Element => {
             {/*Description Start*/}
             <h1>Пример простого грида Tabulator с формой редактирование</h1>
             {/*Description End*/}
-            <div style={{backgroundColor: 'bisque', padding: 5, height: 300}}>
+            <div style={{padding: 5, height: 300}}>
                 <TabulatorGrid {...props} />
             </div>
         </>

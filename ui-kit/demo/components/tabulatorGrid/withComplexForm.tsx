@@ -1,10 +1,11 @@
+import {IPasswordFieldProps, PasswordField} from '@src/dForm/fields/password';
 import React from 'react';
 import {TabulatorGrid} from '@src/tabulatorGrid';
 import {ITabulatorColumn} from '@src/tabulatorBase';
 import {IDFormModalProps} from '@src/dFormModal';
 import {TabsField} from '@src/dForm/fields/tabs/tabsField';
-import {InputField} from '@src/dForm/fields/input/inputField';
-import { TextAreaField} from '@src/dForm/fields/textArea/textAreaField';
+import {IInputFieldProps, InputField} from '@src/dForm/fields/input/inputField';
+import {ITextAreaFieldProps, TextAreaField} from '@src/dForm/fields/textArea/textAreaField';
 import {ITabulatorGridFieldProps, TabulatorGridField} from '@src/dForm/fields/tabulatorGrid/tabulatorGridField';
 import {SelectField} from '@src/dForm/fields/select';
 
@@ -60,7 +61,7 @@ const FormatsList = [
 
 const inputsFormProps: IDFormModalProps = {
     confirmChanges: true,
-    height: 300,
+    height: 400,
     fieldsProps: {
         name: {component: InputField, label: 'Наименование'},
         shortName: {component: InputField, label: 'Краткое наименование'},
@@ -69,49 +70,63 @@ const inputsFormProps: IDFormModalProps = {
     },
 };
 
-const editFormProps: IDFormModalProps = {
-    confirmChanges: true,
-    height: 400,
-    width: 600,
-    fieldsProps: {
-        tabs1: {
-            component: TabsField,
-            autoResize:true,
-            tabs: {
-                /*                " Основные ": {
-                                    name: {component: InputField, label: 'Наименование'},
-                                    shortName: {component: InputField, label: 'Краткое наименование'},
-                                    code: {component: InputField, label: 'Код'},
-                                    description: {component: TextAreaField, label: 'Описание', autoSize: true} as ITextAreaFieldProps,
-                                },
-                
-                                " Доступ ": {
-                                    address: {component: InputField, label: 'Адрес'},
-                                    login: {component: InputField, label: 'Логин'},
-                                    password: {component: PasswordField, label: 'Пароль'},
-                                },*/
-                ' Входы ': {
-                    inputs: {
-                        component: TabulatorGridField,
-                        columns: TagsColumns,
-                        headerFilterHidden: true,
-                        height: '320px',
-                        autoResize:true,
-                        //resizeHeightWithForm: true,
-                        layout: 'fitColumns',
-                        editFormProps: inputsFormProps,
-                        //value: [{id: '111', name: '3232', format: {id: 1, label: '111'}}],
-                    } satisfies ITabulatorGridFieldProps,
+const useEditFormProps = () => {
+    return {
+        confirmChanges: true,
+        height: 500,
+        width: 600,
+        fieldsProps: {
+            tabs1: {
+                component: TabsField,
+                autoHeightResize: true,
+                tabs: {
+                    ['Основные']: {
+                        name: {component: InputField, label: 'Наименование'} satisfies IInputFieldProps,
+                        shortName: {component: InputField, label: 'Краткое наименование'} satisfies IInputFieldProps,
+                        code: {component: InputField, label: 'Код'} satisfies IInputFieldProps,
+                        description: {
+                            component: TextAreaField,
+                            label: 'Описание',
+                            autoSize: true,
+                        } satisfies ITextAreaFieldProps,
+                    },
+
+                    ['Доступ']: {
+                        address: {component: InputField, label: 'Адрес'} satisfies IInputFieldProps,
+                        login: {component: InputField, label: 'Логин'} satisfies IInputFieldProps,
+                        password: {component: PasswordField, label: 'Пароль'} satisfies IPasswordFieldProps,
+                    },
+                    ['Входы']: {
+                        inputs: {
+                            component: TabulatorGridField,
+                            columns: TagsColumns,
+                            headerFilterHidden: true,
+                            height: '300px',
+                            autoHeightResize: true,
+                            layout: 'fitColumns',
+                            editFormProps: inputsFormProps,
+                            //value: [{id: '111', name: '3232', format: {id: 1, label: '111'}}],
+                        } satisfies ITabulatorGridFieldProps,
+                    },
+                    ['Выходы']: {
+                        outputs: {
+                            component: TabulatorGridField,
+                            columns: TagsColumns,
+                            headerFilterHidden: true,
+                            height: '300px',
+                            autoHeightResize: true,
+                            layout: 'fitColumns',
+                            editFormProps: inputsFormProps,
+                        } as ITabulatorGridFieldProps,
+                    },
                 },
-                /*                " Выходы ": {
-                                    outputs: {component: TabulatorGridField, columns: TagsColumns, headerFilterHidden: true, height: '320px', resizeHeightWithForm: true, layout: 'fitColumns',editFormProps: inputsFormProps} as ITabulatorGridFieldProps,
-                                }*/
             },
         },
-    },
+    } satisfies IDFormModalProps;
 };
 
 export const WithComplexForm = (): React.JSX.Element => {
+    const editFormProps = useEditFormProps();
     return (
         <TabulatorGrid
             columns={columns}
