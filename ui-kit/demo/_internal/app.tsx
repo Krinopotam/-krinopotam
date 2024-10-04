@@ -12,6 +12,7 @@ export const DemoApp = (): React.JSX.Element => {
         <ConfigProvider
             locale={ruRU}
             theme={{
+                cssVar:true,
                 token: {
                     colorPrimary: '#0d6efd',
                     borderRadius: 4,
