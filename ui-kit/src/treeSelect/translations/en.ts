@@ -1,6 +1,8 @@
 export const en = {
     view: 'View',
+    viewGroup: 'View group',
     viewRecord: 'View record',
+    viewRecordsGroup: 'View records group',
     create: 'Create',
     createRecord: 'Create record',
     createGroup: 'Create group',

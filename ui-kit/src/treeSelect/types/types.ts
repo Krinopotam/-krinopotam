@@ -68,6 +68,9 @@ export interface ITreeSelectOwnProps {
     /** Groups only has children. Group is node which has no isLeaf:true property */
     groupsMode?: boolean;
 
+    /** Should select new node after create, clone or delete node */
+    selectNewNode?:boolean
+
     /** Sort nodes on change (create new or update) */
     sortOnChange?: boolean;
 
@@ -149,8 +152,6 @@ export interface ITreeSelectOwnProps {
     /** Should confirm before delete */
     confirmDelete?: boolean;
 
-    /** Should select new node after create or clone node */
-    selectNewNode?:boolean
     //endregion
 
     /**---unchecked -----*/

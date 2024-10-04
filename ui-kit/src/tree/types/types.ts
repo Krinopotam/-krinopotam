@@ -89,7 +89,7 @@ export interface IOwnExtTreeProps {
     /** Groups only has children. Group is node which has no isLeaf:true property */
     groupsMode?: boolean;
 
-    /** Should select new node after create or clone node */
+    /** Should select new node after create, clone or delete node */
     selectNewNode?:boolean
 
     /** Language */

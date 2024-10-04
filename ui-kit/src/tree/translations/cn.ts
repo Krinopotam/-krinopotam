@@ -1,6 +1,8 @@
 export const cn =  {
     view: '查看',
+    viewGroup: '查看组',
     viewRecord: '查看记录',
+    viewRecordsGroup: '查看记录组',
     create: '创建',
     createRecord: '创建记录',
     createGroup: '创建组',

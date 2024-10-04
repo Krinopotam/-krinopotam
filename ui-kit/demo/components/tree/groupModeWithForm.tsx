@@ -49,13 +49,14 @@ const useTreeProps = () => {
         defaultExpandAll: true,
         confirmDelete: true,
         confirmMove: true,
-        editFormProps: editFormProps,
-        editGroupFormProps: editGroupFormProps,
         selectNewNode: true,
         sortOnChange: true,
-        titleRender: groupNodeRender,
         buttonsIconsOnly: true,
         groupsMode: true,
+        titleRender: groupNodeRender,
+        editFormProps: editFormProps,
+        editGroupFormProps: editGroupFormProps,
+        onDelete: () => {},
 
     } satisfies IExtTreeProps;
 };
@@ -83,7 +84,7 @@ const useGetEditFormProps = (isGroup: boolean, treeApi: IExtTreeApi): IDFormModa
             } satisfies IInputFieldProps,
             parent: {
                 component: TreeSelectField,
-                label: 'Group',
+                label: 'Parent Group',
                 placeholder: 'Choose parent group',
                 groupsMode: true,
                 titleRender: groupNodeRender,

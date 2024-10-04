@@ -9,7 +9,7 @@ import {ITreeSelectApi, ITreeSelectNode} from '@src/treeSelect';
 import {removeFromTree} from '@src/_shared/hooks/treeComponentApiMethods/serviceMethods/removeFromTree';
 import {CloneObject} from '@krinopotam/js-helpers';
 import {IExtTreeProps, Tree} from '@src/tree';
-import {Space, Switch} from "antd";
+import {Space, Switch} from 'antd';
 
 export const TreeWithForm = (): React.JSX.Element => {
     const treeProps = useTreeProps();
@@ -49,8 +49,10 @@ const useTreeProps = () => {
         dataSet: dataSet,
         defaultExpandAll: true,
         confirmDelete: true,
-        editFormProps: editFormProps,
         selectNewNode: true,
+        buttonsIconsOnly: true,
+        editFormProps: editFormProps,
+        onDelete: () => {},
     } satisfies IExtTreeProps;
 };
 

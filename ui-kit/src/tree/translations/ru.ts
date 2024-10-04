@@ -1,6 +1,8 @@
 export const ru = {
     view: 'Просмотр',
+    viewGroup: 'Просмотр группы',
     viewRecord: 'Просмотр записи',
+    viewRecordsGroup: 'Просмотр группы записей',
     create: 'Создать',
     createRecord: 'Создать запись',
     createGroup: 'Создать группу',
