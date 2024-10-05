@@ -1,0 +1,44 @@
+import{j as e}from"./extends-BRD_ACZV.js";import{r as i}from"./index-uubelm5h.js";import{S as d,B as a}from"./button-_CIw3y7K.js";import{u as f,m as g}from"./updateModalTheme-DldygGJf.js";import"./buttonsRow-CDOKnM2T.js";import"./compact-item-Cc18Jwjb.js";import"./useToken-5hoSZr8q.js";import"./index-DaxZXI7c.js";import"./assertThisInitialized-C7eLZ5Vw.js";import"./button-Cxc_PIz_.js";import"./index-IYDviCHk.js";import"./headerRender-B7O_KtQC.js";import"./index-B7x7O6v2.js";import"./ExclamationCircleFilled-DfdUTXTz.js";import"./pickAttrs-CgiZ8JxW.js";import"./context-B9fTWsvw.js";import"./wrapNativeSuper-CxOa5OEc.js";import"./motion-882RPeBL.js";import"./CloseOutlined-C4rdU_UQ.js";import"./KeyCode-DNlgD2sM.js";import"./ContextIsolator-DOOW9rnJ.js";import"./useClosable-B_cjSSA6.js";import"./zoom-BAlMIi5O.js";import"./DownOutlined-CLv9oSrw.js";import"./index-DSOWIBN6.js";import"./index-D3eZ-H7s.js";import"./InfoCircleOutlined-DRg6sOvc.js";import"./getNanoId-DD8laUaD.js";import"./QuestionCircleOutlined-Bk-29y8U.js";import"./index-DdcAgIgo.js";import"./Sider-CC_ePe8H.js";import"./row-B5tJJ9FS.js";import"./roundedArrow-BEYe8rhY.js";import"./colors-C2uSR3nC.js";const l=o=>{var s;f();const r=i.useRef(null);r.current&&((s=r.current)==null||s.update(o));const t=i.useCallback(m=>{r.current=g.alert({...o,colorType:m})},[o]);return e.jsxs(d,{children:[e.jsx(a,{onClick:()=>t(),children:"Open alert"}),e.jsx(a,{type:"primary",colorType:"info",onClick:()=>t("info"),children:"Open alert"}),e.jsx(a,{type:"primary",colorType:"warning",onClick:()=>t("warning"),children:"Open alert"}),e.jsx(a,{type:"primary",colorType:"success",onClick:()=>t("success"),children:"Open alert"}),e.jsx(a,{type:"primary",colorType:"danger",onClick:()=>t("danger"),children:"Open alert"})]})},y=l;try{l.displayName="AlertMessageBoxComponent",l.__docgenInfo={description:"MessageBox Alert component",displayName:"AlertMessageBoxComponent",props:{okText:{defaultValue:null,description:"",name:"okText",required:!1,type:{name:"string"}},onOk:{defaultValue:null,description:"",name:"onOk",required:!1,type:{name:"((messageBox: MessageBoxApi) => boolean | void)"}},title:{defaultValue:null,description:"Form title",name:"title",required:!1,type:{name:"ReactNode"}},icon:{defaultValue:null,description:"Form icon",name:"icon",required:!1,type:{name:"ReactNode"}},content:{defaultValue:null,description:"Form content",name:"content",required:!1,type:{name:"ReactNode"}},colorType:{defaultValue:null,description:"Form type",name:"colorType",required:!1,type:{name:"enum",value:[{value:'"neutral"'},{value:'"info"'},{value:'"success"'},{value:'"warning"'},{value:'"danger"'}]}},buttons:{defaultValue:null,description:"Form buttons",name:"buttons",required:!1,type:{name:"IFormButtons"}},centered:{defaultValue:null,description:"Center modal",name:"centered",required:!1,type:{name:"boolean"}},closable:{defaultValue:null,description:"Whether a close (x) button is visible on top right of the modal dialog or not",name:"closable",required:!1,type:{name:"boolean"}},maskClosable:{defaultValue:null,description:"Whether to close the modal dialog when the mask (area outside the modal) is clicked",name:"maskClosable",required:!1,type:{name:"boolean"}},onAfterClose:{defaultValue:null,description:"After controls close callback",name:"onAfterClose",required:!1,type:{name:"(() => void)"}},onCrossClose:{defaultValue:null,description:"On form close by close cross pressed callback",name:"onCrossClose",required:!1,type:{name:"(() => void)"}},language:{defaultValue:null,description:"Language",name:"language",required:!1,type:{name:"enum",value:[{value:'"ru"'},{value:'"en"'},{value:'"cn"'}]}},translation:{defaultValue:null,description:"Custom translation",name:"translation",required:!1,type:{name:"Partial<{ ok: string; cancel: string; attention: string; processing: string; pleaseWait: string; }>"}}}}}catch{}try{alertMessageBox.displayName="alertMessageBox",alertMessageBox.__docgenInfo={description:"MessageBox Alert component",displayName:"alertMessageBox",props:{okText:{defaultValue:null,description:"",name:"okText",required:!1,type:{name:"string"}},onOk:{defaultValue:null,description:"",name:"onOk",required:!1,type:{name:"((messageBox: MessageBoxApi) => boolean | void)"}},title:{defaultValue:null,description:"Form title",name:"title",required:!1,type:{name:"ReactNode"}},icon:{defaultValue:null,description:"Form icon",name:"icon",required:!1,type:{name:"ReactNode"}},content:{defaultValue:null,description:"Form content",name:"content",required:!1,type:{name:"ReactNode"}},colorType:{defaultValue:null,description:"Form type",name:"colorType",required:!1,type:{name:"enum",value:[{value:'"neutral"'},{value:'"info"'},{value:'"success"'},{value:'"warning"'},{value:'"danger"'}]}},buttons:{defaultValue:null,description:"Form buttons",name:"buttons",required:!1,type:{name:"IFormButtons"}},centered:{defaultValue:null,description:"Center modal",name:"centered",required:!1,type:{name:"boolean"}},closable:{defaultValue:null,description:"Whether a close (x) button is visible on top right of the modal dialog or not",name:"closable",required:!1,type:{name:"boolean"}},maskClosable:{defaultValue:null,description:"Whether to close the modal dialog when the mask (area outside the modal) is clicked",name:"maskClosable",required:!1,type:{name:"boolean"}},onAfterClose:{defaultValue:null,description:"After controls close callback",name:"onAfterClose",required:!1,type:{name:"(() => void)"}},onCrossClose:{defaultValue:null,description:"On form close by close cross pressed callback",name:"onCrossClose",required:!1,type:{name:"(() => void)"}},language:{defaultValue:null,description:"Language",name:"language",required:!1,type:{name:"enum",value:[{value:'"ru"'},{value:'"en"'},{value:'"cn"'}]}},translation:{defaultValue:null,description:"Custom translation",name:"translation",required:!1,type:{name:"Partial<{ ok: string; cancel: string; attention: string; processing: string; pleaseWait: string; }>"}}}}}catch{}const Q={title:"Controls/MessageBox/Alert",component:y,tags:["autodocs"],parameters:{docs:{source:{language:"tsx",format:!0,code:`
+                    import React, {useCallback, useRef} from 'react';
+                    import {Button} from @krinopotam/ui-kit/button';
+                    import {IModalAlertConfig, MessageBox, MessageBoxApi, useUpdateMessageBoxTheme} from @krinopotam/ui-kit/messageBox';
+                    import {Space} from 'antd';
+                    import {IColorType} from @krinopotam/ui-kit/button/button';
+                    type IComponent = IModalAlertConfig;
+                    /** MessageBox Alert component */
+                    export const AlertMessageBoxComponent = (props: IComponent): React.JSX.Element => {
+                        useUpdateMessageBoxTheme(); //set current theme to messageBox
+                        const curMessageBox = useRef<MessageBoxApi|null>(null);
+                        if (curMessageBox.current) curMessageBox.current?.update(props)
+                        const onClick = useCallback(
+                            (colorType?: IColorType) => {
+                                curMessageBox.current = MessageBox.alert({...props, colorType: colorType});
+                            },
+                            [props]
+                        );
+                        return (
+                            <Space>
+                                <Button onClick={() => onClick()}>
+                                    Open alert
+                                </Button>
+                                <Button type={'primary'} colorType="info" onClick={() => onClick('info')}>
+                                    Open alert
+                                </Button>
+                                <Button type={'primary'} colorType="warning" onClick={() => onClick('warning')}>
+                                    Open alert
+                                </Button>
+                                <Button type={'primary'} colorType="success" onClick={() => onClick('success')}>
+                                    Open alert
+                                </Button>
+                                <Button type={'primary'} colorType="danger" onClick={() => onClick('danger')}>
+                                    Open alert
+                                </Button>
+                            </Space>
+                        );
+                    };
+                    export default AlertMessageBoxComponent;
+                `}}}},n={args:{content:"Info"}};var u,p,c;n.parameters={...n.parameters,docs:{...(u=n.parameters)==null?void 0:u.docs,source:{originalSource:`{
+  args: {
+    content: 'Info'
+  }
+}`,...(c=(p=n.parameters)==null?void 0:p.docs)==null?void 0:c.source}}};const Y=["Alert"];export{n as Alert,Y as __namedExportsOrder,Q as default};
