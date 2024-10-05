@@ -2,7 +2,6 @@ import fs from 'fs';
 import crypto from 'crypto';
 import { getFileInfo } from './getFileInfo.js';
 import { upperFirstLetter } from '../tools/upperFirstLetter.js';
-import { camelCaseSplit } from '../tools/camelCaseSplit.js';
 export const getDirFilesInfo = (curDir, curDirFromRoot, filesInfo) => {
     const fileList = fs.readdirSync(curDir, { withFileTypes: true });
     if (!filesInfo)
@@ -20,7 +19,7 @@ export const getDirFilesInfo = (curDir, curDirFromRoot, filesInfo) => {
             fileExt: '',
             fileDir: curDir,
             fullFilePath: curDirFromRoot,
-            menuItemName: upperFirstLetter(camelCaseSplit(entity.name)),
+            menuItemName: upperFirstLetter(entity.name),
         };
         folder.children = getDirFilesInfo(curDir + '/' + entity.name, curDirFromRoot + '/' + entity.name);
         filesInfo.push(folder);

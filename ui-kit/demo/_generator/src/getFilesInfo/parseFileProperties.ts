@@ -9,6 +9,6 @@ export const parseFileProperties = (fileName: string, fileContent: string) => {
     const fName = getFileNameMainPart(fileName);
     if (!componentName) componentName = upperFirstLetter(fName);
 
-    const menuItemName = upperFirstLetter(camelCaseSplit(fName));
+    const menuItemName = upperFirstLetter(camelCaseSplit(fName).toLowerCase());
     return [componentName, menuItemName];
 };

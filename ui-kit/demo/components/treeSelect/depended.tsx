@@ -117,6 +117,7 @@ const formProps: IDFormProps = {
             component: TreeSelectField,
             label: 'Департамент',
             dataSet: departments,
+            valueType: 'key',
             onValueChanged: (value, _prevValue, field) => {
                 let newDataSet: ITreeSelectFieldProps['dataSet'];
                 if (!value) newDataSet = [];
@@ -135,6 +136,7 @@ const formProps: IDFormProps = {
             component: TreeSelectField,
             label: 'Управления',
             dependsOn: ['department'],
+            valueType: 'key',
         } satisfies ITreeSelectFieldProps,
     },
 

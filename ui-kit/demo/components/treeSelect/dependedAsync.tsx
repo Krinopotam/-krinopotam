@@ -119,6 +119,7 @@ const formProps: IDFormProps = {
         department: {
             component: TreeSelectField,
             label: 'Департамент',
+            valueType: 'key',
             fetchMode: 'onUse',
             onDataFetch: () => {
                 return new Promise((resolve, reject) => {
@@ -138,6 +139,7 @@ const formProps: IDFormProps = {
             label: 'Управления',
             fetchMode: 'onUse',
             dependsOn: ['department'],
+            valueType: 'key',
             noCacheFetchedData: true,
             onDataFetch: () => {
                 return new Promise(resolve => {

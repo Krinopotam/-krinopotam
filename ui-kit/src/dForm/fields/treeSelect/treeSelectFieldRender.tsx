@@ -1,11 +1,11 @@
-import React, {CSSProperties, useCallback, useEffect, useMemo, useState, useSyncExternalStore} from 'react';
-import {ITreeSelectFieldProps, TreeSelectField} from '@src/dForm/fields/treeSelect/treeSelectField';
-import {ITreeSelectApi, ITreeSelectProps, TreeSelect} from '@src/treeSelect';
-import {useOnChange} from '@src/dForm/fields/treeSelect/hooks/useOnChange';
 import {useOnBlur} from '@src/dForm/fields/treeSelect/hooks/useOnBlur';
+import {useOnChange} from '@src/dForm/fields/treeSelect/hooks/useOnChange';
 import {useOnClear} from '@src/dForm/fields/treeSelect/hooks/useOnClear';
 import {useOnDataSetChanged} from '@src/dForm/fields/treeSelect/hooks/useOnDataSetChanged';
 import {useSplitTreeSelectProps} from '@src/dForm/fields/treeSelect/hooks/useSplitTreeSelectProps';
+import {ITreeSelectFieldProps, TreeSelectField} from '@src/dForm/fields/treeSelect/treeSelectField';
+import {ITreeSelectApi, ITreeSelectProps, TreeSelect} from '@src/treeSelect';
+import React, {CSSProperties, useEffect, useMemo, useState, useSyncExternalStore} from 'react';
 
 export const TreeSelectFieldRender = ({field}: {field: TreeSelectField}): React.JSX.Element => {
     useSyncExternalStore(field.subscribe.bind(field), field.getSnapshot.bind(field));
@@ -61,10 +61,10 @@ export const useDataSet = (field: TreeSelectField, dataSet: ITreeSelectFieldProp
     }, [dataSet, field]);
 };
 
-export const useOnDataFetch = (field: TreeSelectField, fieldProps: ITreeSelectFieldProps) => {
-    return useCallback<NonNullable<ITreeSelectProps['onDataFetch']>>((search, api) => fieldProps.onDataFetch?.(search, api, field), [field, fieldProps]);
+export const useOnDataFetch = (field: TreeSelectField, fieldProps: ITreeSelectFieldProps): ITreeSelectProps['onDataFetch'] => {
+    return (search, api) => fieldProps.onDataFetch?.(search, api, field);
 };
 
-export const useOnReady = (field: TreeSelectField, fieldProps: ITreeSelectFieldProps) => {
-    return useCallback<NonNullable<ITreeSelectProps['onReady']>>(() => fieldProps.onReady?.(field), [field, fieldProps]);
+export const useOnReady = (field: TreeSelectField, fieldProps: ITreeSelectFieldProps): ITreeSelectProps['onReady'] => {
+    return () => fieldProps.onReady?.(field);
 };

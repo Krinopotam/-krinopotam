@@ -56,7 +56,8 @@ export interface ITabulator extends _ITabulator {
     //ajaxRequestFunc?: (url: string, config: IAjaxConfig, params: IRequestProps) => Promise<{data: Record<string, AnyType>[]; last_page: number}>;
 }
 
-export interface ITabulatorColumn extends Omit<ColumnDefinition, 'headerPopup'> {
+export interface ITabulatorColumn<TColumns extends Record<string, AnyType> = Record<string, AnyType>> extends Omit<ColumnDefinition, 'headerPopup'| 'field'> {
+    field?: keyof TColumns;
     /** type patches */
     headerFilterParams?:ColumnDefinition['headerFilterParams'] | Record<string, AnyType>;
     formatterParams?:ColumnDefinition['formatterParams'] | Record<string, AnyType>;

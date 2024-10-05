@@ -1,8 +1,7 @@
 import {TreeSelectField} from '@src/dForm/fields/treeSelect/treeSelectField';
-import {useCallback} from 'react';
 
 export const useOnBlur = (field: TreeSelectField) => {
-    return useCallback(() => {
+    return () => {
         field.setTouched(true);
-    }, [field]);
+    };
 };

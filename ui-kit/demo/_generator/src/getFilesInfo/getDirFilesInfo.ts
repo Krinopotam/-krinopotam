@@ -23,7 +23,7 @@ export const getDirFilesInfo = (curDir: string, curDirFromRoot: string, filesInf
             fileExt: '',
             fileDir: curDir,
             fullFilePath: curDirFromRoot,
-            menuItemName: upperFirstLetter(camelCaseSplit(entity.name)),
+            menuItemName: upperFirstLetter(entity.name),
         };
         folder.children = getDirFilesInfo(curDir + '/' + entity.name, curDirFromRoot + '/' + entity.name);
         filesInfo.push(folder);
