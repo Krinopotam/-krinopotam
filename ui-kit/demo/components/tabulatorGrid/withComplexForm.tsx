@@ -141,6 +141,7 @@ const useEditFormProps = () => {
                             autoHeightResize: true,
                             layout: 'fitColumns',
                             editFormProps: inputsFormProps,
+                            onDelete: () => {},
                             //value: [{id: '111', name: '3232', format: {id: 1, label: '111'}}],
                         } satisfies ITabulatorGridFieldProps,
                     },
@@ -153,6 +154,7 @@ const useEditFormProps = () => {
                             autoHeightResize: true,
                             layout: 'fitColumns',
                             editFormProps: inputsFormProps,
+                            onDelete: () => {},
                         } as ITabulatorGridFieldProps,
                     },
                 },
@@ -171,6 +173,7 @@ export const WithComplexForm = (): React.JSX.Element => {
             movableColumns
             buttonsSize={'middle'}
             editFormProps={editFormProps}
+            onDelete={ () => {}}
             height={'100%'}
             buttons={{title: {type: 'element', title: <b style={{fontSize: 18}}>Системы</b>, position: 'left'}}}
         />

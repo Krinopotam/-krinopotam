@@ -6,7 +6,7 @@ import {DFormModal, IDFormModalApi, IDFormModalProps} from '@src/dFormModal';
 import {ITabulatorGridFieldProps, TabulatorGridField} from '@src/dForm/fields/tabulatorGrid/tabulatorGridField';
 import {FormLayoutSwitch} from '../../../common/buttonsProps';
 import {TabulatorBaseColumns, TabulatorPlainData} from '../../../data/tabulatorData';
-import {IGridDataSourcePromise} from "@src/tabulatorGrid";
+import {IGridDataSourcePromise} from '@src/tabulatorGrid';
 
 const formApi = {} as IDFormModalApi;
 
@@ -38,16 +38,16 @@ const formProps: IDFormModalProps = {
             layout: 'fitColumns',
             height: 300,
             selectionFormProps: selectionFormProps,
-            confirmDelete: true,
+            confirmDelete: false,
+            onDelete: () => {},
             onDataFetch: () => {
                 return new Promise((resolve, reject) => {
                     setTimeout(() => {
                         if (Math.random() < 0.1) reject({message: 'Ошибка загрузки данных', code: 400});
-                        else resolve({data: TabulatorPlainData}) ;
+                        else resolve({data: TabulatorPlainData});
                     }, 500);
                 }) as IGridDataSourcePromise;
-            } ,
-
+            },
         },
     },
     width: 900,

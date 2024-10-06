@@ -43,6 +43,7 @@ const formProps: IDFormModalProps = {
             height: 300,
             editFormProps: editFormProps,
             confirmDelete: true,
+            onDelete: () => {},
             onDataFetch: () => {
                 return new Promise((resolve, reject) => {
                     setTimeout(() => {

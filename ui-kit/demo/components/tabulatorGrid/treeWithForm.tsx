@@ -29,8 +29,19 @@ const props: IGridProps = {
     dataSet: TabulatorTreeData,
     dataTree: true,
     height: 500,
+    buttons:{
+        delete:{
+            icon: <div>111</div>,
+        },
+        system:{
+            children:{
+                toCSV:{icon: <div>222</div>}}
+            }
+
+        }    ,
     layout: 'fitColumns',
     editFormProps: editFormConfig,
+    onDelete: () => {},
     confirmDelete: true,
     multiSelect: true,
 };

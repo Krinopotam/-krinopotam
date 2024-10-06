@@ -1,4 +1,6 @@
-import merge from "lodash.merge";
+//import merge from "lodash.merge";
+
+import deepmerge from "deepmerge";
 
 /**
  * Deep merge objects (mutate object)
@@ -29,4 +31,8 @@ import merge from "lodash.merge";
  * _.merge(users, ages);
  * // => { 'data': [{ 'user': 'barney', 'age': 36 }, { 'user': 'fred', 'age': 40 }] }
  */
-export const MergeObjects = <TObject, TSource>(object: TObject, source: TSource): TObject & TSource => merge(object, source);
+//export const MergeObjects = <TObject, TSource>(object: TObject, source: TSource): TObject & TSource => merge(object, source);
+
+export const MergeObjects = <T1 extends object, T2 extends object >(object:T1, source:T2 | undefined, opt?:deepmerge.Options):T1 & T2=>{
+    return deepmerge(object, source ?? {}, opt) as T1 & T2
+}

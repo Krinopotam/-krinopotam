@@ -27,6 +27,7 @@ const props: IGridProps = {
     multiSelect: true,
     editFormProps: editFormConfig,
     confirmDelete: true,
+    onDelete: () => {},
     height: '100%',
     layout: 'fitColumns',
     language: 'en',
