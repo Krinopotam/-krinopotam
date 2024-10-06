@@ -15,9 +15,9 @@ export type IDFormValidationRules = Record<string, IRuleType[]>;
 export type IDFormMode = 'view' | 'create' | 'update' | 'clone' | 'delete';
 
 /** Fields properties collection */
-export type IDFormFieldsProps = Record<string, IAnyFieldProps>;
+export type IDFormFieldsProps<TFields extends string | number | symbol = string | number | symbol> = Record<TFields, IAnyFieldProps>;
 
-export interface IDFormPropsNoCB {
+export interface IDFormPropsNoCB<TFieldsProps extends Record<string, AnyType> = Record<string, AnyType>> {
     /** A mutable object to merge with these controls api */
     apiRef?: unknown;
 
@@ -53,7 +53,7 @@ export interface IDFormPropsNoCB {
     parentDataSet?: IDFormDataSet;
 
     /** Fields properties */
-    fieldsProps?: IDFormFieldsProps;
+    fieldsProps?: IDFormFieldsProps<keyof TFieldsProps>;
 
     /** Form color type */
     colorType?: IColorType;
@@ -130,7 +130,7 @@ export interface IDFormCallbacks<TApi = IDFormApi, TProps = IDFormProps> extends
     onFirstRender?: (props: TProps) => IDFormProps | void;
 }
 
-export type IDFormProps = IDFormPropsNoCB & IDFormCallbacks;
+export type IDFormProps<TFieldsProps extends Record<string, AnyType> = Record<string, AnyType>> = IDFormPropsNoCB<TFieldsProps> & IDFormCallbacks;
 
 /** Form data set type */
 export interface IDFormDataSet extends Record<string, AnyType> {

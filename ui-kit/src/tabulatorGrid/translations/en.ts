@@ -14,6 +14,7 @@ export const en = {
     go: 'Go',
     filter: 'Filter',
     exportXls: 'Export to Excel',
+    exportCsv: 'Export to CSV',
     columnsSettings: 'Columns settings',
     columns: 'Columns',
     ok: 'OK',

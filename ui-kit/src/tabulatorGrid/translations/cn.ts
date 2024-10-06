@@ -14,6 +14,7 @@ export const cn = {
     go: '执行',
     filter: '过滤',
     exportXls: '导出到Excel',
+    exportCsv: '导出到CSV',
     columnsSettings: '列设置',
     columns: '列',
     ok: '确定',

@@ -42,8 +42,11 @@ export interface IGridPropsBase {
     /** If true, only button icons will be displayed, without title */
     buttonsIconsOnly?: boolean;
 
-    /** Grid header buttons size. Default: 'right'*/
+    /** Grid edit buttons position. Default: 'right'*/
     buttonsPosition?: ITabulatorButton['position'];
+
+    /** Grid system buttons position (filter, settings). Default: 'right'*/
+    systemButtonsPosition?: ITabulatorButton['position'];
 
     /** Table can't be edited */
     readOnly?: boolean;
@@ -74,6 +77,9 @@ export interface IGridPropsBase {
 
     /** Breakpoint for responsive design */
     responsiveBreakpoint?: IBreakpoints;
+
+    /** Export options (default allowed all) */
+    export?:{CSV?:boolean, XlS?:boolean}
 
     /** Language */
     language?: keyof typeof translations;

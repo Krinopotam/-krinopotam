@@ -14,6 +14,7 @@ export const ru = {
     go: 'Перейти',
     filter: 'Фильтр',
     exportXls:'Экспортировать в Excel',
+    exportCsv: 'Экспортировать в CSV',
     columnsSettings:'Настройки столбцов',
     columns:'Columns',
     ok:'ОК',
