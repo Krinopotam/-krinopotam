@@ -1,12 +1,13 @@
+import {AnyType} from "@krinopotam/service-types";
 import {BaseField, IBaseFieldProps} from '@src/dForm/fields/base/baseField';
 import {TabsFieldRender} from '@src/dForm/fields/tabs/tabsFieldRender';
 import React from 'react';
 
 import {IDFormFieldsProps} from "@src/dForm";
 
-export interface ITabsFieldProps extends IBaseFieldProps<TabsField, undefined> {
+export interface ITabsFieldProps<TFieldsProps extends Record<string, AnyType> = Record<string, AnyType>> extends IBaseFieldProps<TabsField, undefined> {
     /** Tabs fields properties */
-    tabs: Record<string, IDFormFieldsProps>;
+    tabs: Record<string, IDFormFieldsProps<TFieldsProps>>;
 
     /** Tabs size (default small) */
     size?: 'small' | 'middle' | 'large';

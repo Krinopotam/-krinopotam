@@ -1,17 +1,15 @@
 import {BaseField, IBaseFieldProps} from '@src/dForm/fields/base/baseField';
-import React from 'react';
 import {SelectFieldRender} from '@src/dForm/fields/select/selectFieldRender';
 
-import {ISelectNode, ISelectProps} from '@src/select';
+import {ISelectProps} from '@src/select';
+import React from 'react';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-interface ISelectFieldOwnProps extends IBaseFieldProps<SelectField, ISelectProps['value']> {
-
-}
+interface ISelectFieldOwnProps extends IBaseFieldProps<SelectField, ISelectProps['value']> {}
 
 export type ISelectFieldProps = ISelectFieldOwnProps & ISelectProps;
 
-export class SelectField extends BaseField<ISelectFieldProps > {
+export class SelectField extends BaseField<ISelectFieldProps> {
     protected render() {
         return <SelectFieldRender field={this} />;
     }

@@ -1,21 +1,23 @@
-import {DModel, IDFormBaseCallbacks, IRuleType} from '@src/dForm';
-import {IButtonsRowApi, IFormButtons} from '@src/buttonsRow';
-import React, {CSSProperties} from 'react';
-import {IColorType} from '@src/button';
-import {ColProps} from 'antd';
-import {FormLabelAlign} from 'antd/es/form/interface';
-import {RequiredMark} from 'antd/es/form/Form';
-import {translations} from '@src/dForm/translations/translations';
-import {IBaseComponentApi} from '@src/_shared/hooks/componentApiMethods/types/apiTypes';
-import {IAnyFieldProps} from '@src/dForm/fields/base';
 import {AnyType, IKey} from '@krinopotam/service-types';
+import {IBaseComponentApi} from '@src/_shared/hooks/componentApiMethods/types/apiTypes';
+import {IColorType} from '@src/button';
+import {IButtonsRowApi, IFormButtons} from '@src/buttonsRow';
+import {DModel, IDFormBaseCallbacks, IRuleType} from '@src/dForm';
+import {IBaseFieldProps} from '@src/dForm/fields/base';
+import {translations} from '@src/dForm/translations/translations';
+import {ColProps} from 'antd';
+import {RequiredMark} from 'antd/es/form/Form';
+import {FormLabelAlign} from 'antd/es/form/interface';
+import React, {CSSProperties} from 'react';
 
 export type IDFormValidationRules = Record<string, IRuleType[]>;
 
 export type IDFormMode = 'view' | 'create' | 'update' | 'clone' | 'delete';
 
 /** Fields properties collection */
-export type IDFormFieldsProps<TFields extends string | number | symbol = string | number | symbol> = Record<TFields, IAnyFieldProps>;
+export type IDFormFieldsProps<TFieldsProps extends Record<string, AnyType> = Record<string, AnyType>> = {
+    [K in keyof TFieldsProps]: IBaseFieldProps<AnyType, TFieldsProps[K]>;
+};
 
 export interface IDFormPropsNoCB<TFieldsProps extends Record<string, AnyType> = Record<string, AnyType>> {
     /** A mutable object to merge with these controls api */
@@ -53,7 +55,7 @@ export interface IDFormPropsNoCB<TFieldsProps extends Record<string, AnyType> = 
     parentDataSet?: IDFormDataSet;
 
     /** Fields properties */
-    fieldsProps?: IDFormFieldsProps<keyof TFieldsProps>;
+    fieldsProps?: IDFormFieldsProps<TFieldsProps>;
 
     /** Form color type */
     colorType?: IColorType;

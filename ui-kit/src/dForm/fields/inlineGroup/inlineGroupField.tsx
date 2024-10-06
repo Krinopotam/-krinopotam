@@ -1,11 +1,12 @@
+import {AnyType} from "@krinopotam/service-types";
 import {BaseField, IBaseFieldProps} from '@src/dForm/fields/base/baseField';
 import React from 'react';
 import {InlineGroupRender} from '@src/dForm/fields/inlineGroup/inlineGroupRender';
 import {IDFormFieldsProps} from "@src/dForm";
 
-export interface IInlineGroupFieldProps extends IBaseFieldProps<InlineGroupField, undefined> {
+export interface IInlineGroupFieldProps<TFieldsProps extends Record<string, AnyType> = Record<string, AnyType>> extends IBaseFieldProps<InlineGroupField, undefined> {
     /** Inline fields properties */
-    fieldsProps: IDFormFieldsProps;
+    fieldsProps: IDFormFieldsProps<TFieldsProps>;
 }
 
 export class InlineGroupField extends BaseField<IInlineGroupFieldProps> {

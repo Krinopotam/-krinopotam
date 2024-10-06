@@ -108,7 +108,7 @@ export interface IBaseFieldProps<TField extends IBaseField, TValue> extends Reco
     onValidated?: (value: TValue, error: string, isSubmit: boolean, field: TField) => void;
 }
 
-export type IAnyFieldProps = IBaseFieldProps<AnyType, AnyType>;
+export type IAnyFieldProps<TField extends IBaseField = AnyType, TValue = AnyType> = IBaseFieldProps<TField, TValue>;
 
 export type IBaseField = BaseField<IAnyFieldProps>;
 

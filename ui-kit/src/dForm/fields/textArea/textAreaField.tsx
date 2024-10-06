@@ -3,7 +3,7 @@ import React from 'react';
 import {TextAreaFieldRender} from '@src/dForm/fields/textArea/textAreaFieldRender';
 import {TextAreaProps} from 'antd/es/input/TextArea';
 
-export interface ITextAreaFieldProps extends IBaseFieldProps<TextAreaField, string | number> {
+export interface ITextAreaFieldProps extends IBaseFieldProps<TextAreaField, string> {
     /** Whether show text count */
     showCount?: boolean;
 

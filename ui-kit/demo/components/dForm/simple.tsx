@@ -1,10 +1,10 @@
 // noinspection DuplicatedCode
 
-import React from 'react';
 import {DForm, IDFormProps} from '@src/dForm';
-import {InputField} from '@src/dForm/fields/input/inputField';
-import {PasswordField} from '@src/dForm/fields/password/passwordField';
+import {IInputFieldProps, InputField} from '@src/dForm/fields/input/inputField';
+import {IPasswordFieldProps, PasswordField} from '@src/dForm/fields/password/passwordField';
 import {Space, Switch} from 'antd';
+import React from 'react';
 
 export const Example = (): React.JSX.Element => {
     const [horizontal, setHorizontal] = React.useState(false);
@@ -25,14 +25,18 @@ export const Example = (): React.JSX.Element => {
     );
 };
 
+type IFieldTypes = {
+    login: string;
+    password: string;
+};
+
 const useFormProps = (horizontal: boolean) => {
     return {
         layout: horizontal ? 'horizontal' : 'vertical',
         fieldsProps: {
-            login: {component: InputField, label: 'Login', autoFocus: true},
-            password: {component: PasswordField, label: 'Password'},
+            login: {component: InputField, label: 'Login', autoFocus: true} satisfies IInputFieldProps,
+            password: {component: PasswordField, label: 'Password'} satisfies IPasswordFieldProps,
         },
-
         buttons: {ok: {position: 'right'}},
-    } satisfies IDFormProps;
+    } satisfies IDFormProps<IFieldTypes>;
 };
