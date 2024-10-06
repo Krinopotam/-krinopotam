@@ -16,7 +16,7 @@ export type IDFormMode = 'view' | 'create' | 'update' | 'clone' | 'delete';
 
 /** Fields properties collection */
 export type IDFormFieldsProps<TFieldsProps extends Record<string, AnyType> = Record<string, AnyType>> = {
-    [K in keyof TFieldsProps]: IBaseFieldProps<AnyType, TFieldsProps[K]>;
+    [K in keyof TFieldsProps]: IBaseFieldProps<AnyType, AnyType>;
 };
 
 export interface IDFormPropsNoCB<TFieldsProps extends Record<string, AnyType> = Record<string, AnyType>> {
