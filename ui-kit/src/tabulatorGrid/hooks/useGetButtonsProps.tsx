@@ -1,5 +1,4 @@
 import {FilterOutlined, MenuOutlined} from '@ant-design/icons';
-//import {MergeObjects} from '@krinopotam/js-helpers/helpersObjects/mergeObjects';
 import {
     defaultButtonClone,
     defaultButtonCreate,
@@ -9,7 +8,7 @@ import {
     defaultButtonView,
     defaultHeaderLabel,
 } from '@src/_shared/hooks/buttons/defaultButtonsProps';
-import {MergeObjects} from "@src/buttonsRow/tools/mergeButton";
+import {mergeButtons} from '@src/buttonsRow';
 import {IGridApi, IGridProps, IGridRowData, ITabulator} from '@src/tabulatorGrid';
 import {ITabulatorButton, ITabulatorButtons} from '@src/tabulatorGrid/types/tabulatorGridTypes';
 import React, {useCallback, useState} from 'react';
@@ -46,7 +45,7 @@ export const useInitButtons = (api: IGridApi): ITabulatorButtons => {
         system: systemButtons,
     } as ITabulatorButtons;
 
-    const resultButtons = MergeObjects(defaultButtons, buttons);
+    const resultButtons = mergeButtons(defaultButtons, buttons);
 
     for (const buttonId in resultButtons) {
         const btn = resultButtons[buttonId];
@@ -176,7 +175,7 @@ const useGetSelectionButton = (api: IGridApi): ITabulatorButton | undefined => {
 const useGetDeleteButton = (api: IGridApi, selectedRows: IGridRowData[]): ITabulatorButton | undefined => {
     const props = api.getProps();
 
-    if ((!props.onDelete) || props.readOnly || props.buttons?.delete === null) return undefined;
+    if (!props.onDelete || props.readOnly || props.buttons?.delete === null) return undefined;
 
     return {
         ...defaultButtonDelete,

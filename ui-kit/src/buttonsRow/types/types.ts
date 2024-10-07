@@ -99,7 +99,7 @@ export interface IFormButton {
     onClick?: (buttonName: string, button: IFormButton, context?: AnyType) => void;
 }
 
-export type IFormButtons = Record<string, IFormButton | null>;
+export type IFormButtons = Record<string, IFormButton | null | undefined>;
 
 export interface IButtonRowProps {
     /** Component id */

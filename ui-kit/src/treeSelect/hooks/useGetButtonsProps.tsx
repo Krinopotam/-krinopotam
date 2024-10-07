@@ -1,6 +1,5 @@
 // noinspection DuplicatedCode
 
-import {MergeObjects} from '@krinopotam/js-helpers/helpersObjects/mergeObjects';
 import {useGetCloneButton} from '@src/_shared/hooks/buttons/useGetCloneButton';
 import {useGetCreateButton} from '@src/_shared/hooks/buttons/useGetCreateButton';
 import {useGetCreateGroupButton} from '@src/_shared/hooks/buttons/useGetCreateGroupButton';
@@ -13,6 +12,7 @@ import {ITreeSelectApi, ITreeSelectNode, ITreeSelectProps} from '@src/treeSelect
 import {TreeSelectContext} from '@src/treeSelect/context/context';
 import {ITreeSelectButtons} from '@src/treeSelect/types/types';
 import {useCallback, useContext, useMemo, useState} from 'react';
+import {mergeButtons} from '@src/buttonsRow';
 
 export const useGetButtonsProps = (api: ITreeSelectApi, props: ITreeSelectProps) => {
     const {dialogOpenedRef} = useContext(TreeSelectContext);
@@ -56,7 +56,7 @@ export const useGetButtonsProps = (api: ITreeSelectApi, props: ITreeSelectProps)
             delete: deleteButton,
         } as ITreeSelectButtons;
 
-        const resultButtons = MergeObjects(defaultButtons, propsButtons);
+        const resultButtons = mergeButtons(defaultButtons, propsButtons);
 
         for (const buttonId in resultButtons) {
             const btn = resultButtons[buttonId];

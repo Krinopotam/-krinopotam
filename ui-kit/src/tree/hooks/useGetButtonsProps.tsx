@@ -1,6 +1,5 @@
 // noinspection DuplicatedCode
 
-import {MergeObjects} from '@krinopotam/js-helpers/helpersObjects/mergeObjects';
 import {useGetCloneButton} from '@src/_shared/hooks/buttons/useGetCloneButton';
 import {useGetCreateButton} from '@src/_shared/hooks/buttons/useGetCreateButton';
 import {useGetCreateGroupButton} from '@src/_shared/hooks/buttons/useGetCreateGroupButton';
@@ -11,6 +10,7 @@ import {useGetViewButton} from '@src/_shared/hooks/buttons/useGetViewButton';
 import {IDFormDataSet} from '@src/dForm';
 import {IExtTreeApi, IExtTreeButton, IExtTreeButtons, IExtTreeNode, IExtTreeProps} from '@src/tree';
 import {useCallback, useMemo, useState} from 'react';
+import {mergeButtons} from '@src/buttonsRow';
 
 export const useGetButtonsProps = (api: IExtTreeApi, props: IExtTreeProps) => {
     api.getButtonsApi().refreshButtons = useRefreshButtons();
@@ -46,7 +46,7 @@ export const useGetButtonsProps = (api: IExtTreeApi, props: IExtTreeProps) => {
             arrowDown: arrowDownHotkey,
         } as IExtTreeButtons;
 
-        const resultButtons = MergeObjects(defaultButtons, propsButtons);
+        const resultButtons = mergeButtons(defaultButtons, propsButtons);
 
         for (const buttonId in resultButtons) {
             const btn = resultButtons[buttonId];

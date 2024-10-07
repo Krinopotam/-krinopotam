@@ -18,18 +18,10 @@ import {ContentRender} from './renders/contentRender';
 import {MessageBoxApi} from './messageBoxApi';
 import React from 'react';
 import {GetNanoId} from '@krinopotam/js-helpers/helpersString/getNanoId';
-import {MergeObjects} from '@krinopotam/js-helpers/helpersObjects/mergeObjects';
 import {QuestionCircleOutlined} from '@ant-design/icons';
-import {
-    IModalAlertConfig,
-    IModalBaseConfig,
-    IModalConfig,
-    IModalConfirmConfig,
-    IModalConfirmWaiterConfig,
-    ModalType,
-} from '@src/messageBox/types/messageBoxTypes';
+import {IModalAlertConfig, IModalBaseConfig, IModalConfig, IModalConfirmConfig, IModalConfirmWaiterConfig, ModalType,} from '@src/messageBox/types/messageBoxTypes';
 import {translations} from '@src/messageBox/translations/translations';
-import {IFormButton, IFormButtons} from "@src/buttonsRow";
+import {IFormButton, IFormButtons, mergeButtons} from "@src/buttonsRow";
 
 class MessageBox {
     private static _instance: MessageBox; //singleton instance
@@ -63,7 +55,7 @@ class MessageBox {
         };
 
         const config: IModalConfirmConfig = {...props};
-        const buttons = MergeObjects(defaultButtons, config.buttons);
+        const buttons = mergeButtons(defaultButtons, config.buttons);
 
         if (!config.onCrossClose) config.onCrossClose = () => this.triggerButtonClick('ok', buttons.ok);
 
@@ -102,7 +94,7 @@ class MessageBox {
         };
 
         // noinspection DuplicatedCode
-        const buttons = MergeObjects(defaultButtons, props.buttons);
+        const buttons = mergeButtons(defaultButtons, props.buttons);
 
         if (!props.onCrossClose) props.onCrossClose = () => this.triggerButtonClick('cancel', buttons.cancel);
 
@@ -153,7 +145,7 @@ class MessageBox {
         const props: IModalConfirmConfig = {...otherProps};
 
         // noinspection DuplicatedCode
-        const buttons = MergeObjects(defaultButtons, props.buttons);
+        const buttons = mergeButtons(defaultButtons, props.buttons);
 
         if (!props.onCrossClose) props.onCrossClose = () => this.triggerButtonClick('cancel', buttons.cancel);
 

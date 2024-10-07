@@ -28,7 +28,7 @@ const commonCfg: UserConfig = {
                 //preserveModulesRoot: "",
             },
             //external:  (moduleName:string) => moduleName.includes('node_modules'),
-            external: ['deep-object-diff', 'lodash.clonedeep', 'lodash.isequal', 'lodash.merge', 'nanoid', 'object-hash', 'uuid'],
+            external: ['deep-object-diff', 'lodash.clonedeep', 'lodash.isequal', 'lodash.merge', 'nanoid', 'object-hash', 'uuid', 'deepmerge-ts'],
         },
     },
 };

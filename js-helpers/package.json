@@ -1,6 +1,6 @@
 {
   "name": "@krinopotam/js-helpers",
-  "version": "1.0.61",
+  "version": "1.0.69",
   "description": "Common helpers for Krinopotam's projects",
   "private": false,
   "author": "Maxim Zaytsev",
@@ -39,10 +39,8 @@
   },
   "dependencies": {
     "deep-object-diff": "^1.1.9",
-    "deepmerge": "^4.3.1",
-    "lodash.clonedeep": "^4.5.0",
+    "deepmerge-ts": "^7.1.1",
     "lodash.isequal": "^4.5.0",
-    "lodash.merge": "^4.6.2",
     "nanoid": "^5.0.7",
     "object-hash": "^3.0.0",
     "uuidv4": "^6.2.13"

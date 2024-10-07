@@ -8,7 +8,7 @@ describe('MergeObjects', () => {
         const result = MergeObjects(object, source);
 
         expect(result).toEqual({
-            'data': [{'user': 'barney', 'age': 36}]
+            'data': [{'user': 'barney'}, {'age': 36}]
         });
     });
 
@@ -28,11 +28,11 @@ describe('MergeObjects', () => {
 
     it('should deeply override with subsequent sources', () => {
         const object = {'data': [{'user': 'barney'}, {'age': 15}]};
-        const source = {'data': [{'user': 'barney'}, {'age': 36}]};
+        const source = {'data': [{'user': 'max'}, {'age': 36}]};
         const result = MergeObjects(object, source);
 
         expect(result).toEqual({
-            'data': [{'user': 'barney'}, {'age': 36}]
+            'data': [{'user': 'barney'}, {'age': 15}, {'user': 'max'}, {'age': 36}]
         });
     });
 

@@ -2,9 +2,8 @@ import {ButtonsRow} from '@src/buttonsRow/buttonsRow';
 import {PopconfirmProps, Popover} from 'antd';
 import React, {useEffect, useRef, useState} from 'react';
 import {GetNanoId} from '@krinopotam/js-helpers/helpersString/getNanoId';
-import {MergeObjects} from '@krinopotam/js-helpers/helpersObjects/mergeObjects';
-import {ButtonsRowWrapper, IFormButton, IFormButtons} from "@src/buttonsRow";
-import {IColorType} from "@src/button/button";
+import {ButtonsRowWrapper, IFormButton, IFormButtons, mergeButtons} from '@src/buttonsRow';
+import {IColorType} from '@src/button/button';
 
 export interface IPopConfirmProps extends Omit<PopconfirmProps, 'okType' | 'okButtonProps' | 'cancelButtonProps'> {
     content?: React.ReactNode;
@@ -28,16 +27,14 @@ export const PopConfirm = ({content, ...props}: IPopConfirmProps): React.JSX.Ele
         <>
             {content ?? null}
             <div ref={buttonsRowRef} tabIndex={-1}>
-                <ButtonsRow buttons={buttons}/>
+                <ButtonsRow buttons={buttons} />
             </div>
         </>
     );
 
     return (
         <Popover {...props} content={_content} title={props.title}>
-            <ButtonsRowWrapper>
-                {props.children}
-            </ButtonsRowWrapper>
+            <ButtonsRowWrapper>{props.children}</ButtonsRowWrapper>
         </Popover>
     );
 };
@@ -70,7 +67,7 @@ const useInitButtons = ({okText, cancelText, onConfirm, onCancel, okButtonProps,
             },
         };
 
-        const resultButtons = MergeObjects(defaultButtons, {ok: okButtonProps, cancel: cancelButtonProps});
+        const resultButtons = mergeButtons(defaultButtons, {ok: okButtonProps, cancel: cancelButtonProps});
         setFormButtons(resultButtons);
     }, [okText, cancelText, onConfirm, onCancel, okButtonProps, cancelButtonProps]);
 
