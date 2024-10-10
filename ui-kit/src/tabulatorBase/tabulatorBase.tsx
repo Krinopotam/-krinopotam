@@ -53,7 +53,7 @@ export const TabulatorBase = (props: ITabulatorProps) => {
 
     if (!isChanged) {
         if (prevDataRef.current !== props.data) {
-            tableRef.current?.deselectRow();
+            tableRef.current?.deselectRow();//TODO: keep selected abd active rows to implement react behavior on update props
             tableRef.current?.setData(props.data);
         }
         newProps.data = prevPropsRef.current.data;

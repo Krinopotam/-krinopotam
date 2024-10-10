@@ -116,6 +116,9 @@ export interface IGridPropsCallbacks {
     /** Fires before the data change (the data set updated, rows added/deleted, etc.) */
     onDataChanged?: (dataSet: IGridRowData[] | undefined, gridApi: IGridApi) => void;
 
+    /** Callback executed when active row changed */
+    onActiveRowChanged?: (row: RowComponent, gridApi: IGridApi) => void;
+
     /** Callback executed when selected rows change */
     onSelectionChange?: (data: IGridRowData[], rows: RowComponent[], selectedRows: RowComponent[], deselectedRows: RowComponent[], gridApi: IGridApi) => void;
 
@@ -262,6 +265,12 @@ export interface ITabulatorButton extends IFormButton {
 
     /** if no row is selected in the grid, hide the button */
     checkHidden?: boolean;
+
+    /** Callback executed when active row changed */
+    onActiveRowChanged?: (buttonName:string, button:ITabulatorButton, row: RowComponent, gridApi: IGridApi) => void;
+
+    /** Callback executed when selected rows change */
+    onSelectionChange?: (buttonName:string, button:ITabulatorButton, data: IGridRowData[], rows: RowComponent[], selectedRows: RowComponent[], deselectedRows: RowComponent[], gridApi: IGridApi) => void;
 }
 
 export type ITabulatorButtons = Record<string, ITabulatorButton | null>;

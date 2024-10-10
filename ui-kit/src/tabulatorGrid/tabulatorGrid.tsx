@@ -51,6 +51,7 @@ const useSplitTabulatorProps = (props: IGridProps) => {
             onDataFetching: true,
             onDataFetchResponse: true,
             onSelectionChange: true,
+            onActiveRowChanged: true,
             onDelete: true,
             resizeHeightWithParent: true,
             responsiveBreakpoint: true,

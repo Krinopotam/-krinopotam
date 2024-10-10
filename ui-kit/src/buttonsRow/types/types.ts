@@ -77,7 +77,7 @@ export interface IFormButton {
     rel?: string;
 
     /** Button dropDown children*/
-    children?: Record<string, Omit<IFormButton, 'expandIcon' | 'danger' | 'width'> | null>;
+    children?: Record<string, Omit<IFormButton, 'expandIcon' | 'danger' | 'width'> | null | undefined>;
 
     /** Button style*/
     style?: CSSProperties;

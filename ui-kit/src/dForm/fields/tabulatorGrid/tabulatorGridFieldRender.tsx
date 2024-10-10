@@ -1,4 +1,4 @@
-import React, {useMemo, useRef, useState, useSyncExternalStore} from 'react';
+import {SplitObject} from '@krinopotam/js-helpers/helpersObjects/splitObject';
 import {
     ITabulatorGridFieldProps,
     ITabulatorGridFieldPropsBase,
@@ -6,8 +6,7 @@ import {
     TabulatorGridField,
 } from '@src/dForm/fields/tabulatorGrid/tabulatorGridField';
 import {IGridApi, IGridPropsCallbacks, IGridRowData, ITabulatorProps, TabulatorGrid} from '@src/tabulatorGrid';
-import {SplitObject} from '@krinopotam/js-helpers/helpersObjects/splitObject';
-import {IRequestProps} from '@src/tabulatorBase';
+import React, {useMemo, useRef, useState, useSyncExternalStore} from 'react';
 
 export const TabulatorGridFieldRender = ({field, gridApi: gridApiBase}: {field: TabulatorGridField; gridApi: IGridApi}): React.JSX.Element => {
     useSyncExternalStore(field.subscribe.bind(field), field.getSnapshot.bind(field));
@@ -67,6 +66,7 @@ const useSplitTabulatorProps = (props: ITabulatorGridFieldProps) => {
             onDataFetching: true,
             fetchInCreateMode: true,
             onSelectionChange: true,
+            onActiveRowChanged: true,
             onDelete: true,
             readOnly: true,
             onValueChanged: true,
@@ -108,7 +108,7 @@ const usePrepareCallbacks = (field: TabulatorGridField, fieldProps: ITabulatorGr
     const model = field.getModel();
     const formMode = model.getFormMode();
     return {
-        onDataChanged: (dataSet: IGridRowData[] | undefined, gridApi: IGridApi) => {
+        onDataChanged: (dataSet, gridApi) => {
             if (field.isReady()) {
                 if (!fieldProps.selectionMode) {
                     field.setValue(dataSet ?? [], false, true, true);
@@ -117,7 +117,10 @@ const usePrepareCallbacks = (field: TabulatorGridField, fieldProps: ITabulatorGr
             }
             return fieldProps.onDataChanged?.(dataSet, gridApi, field);
         },
-        onSelectionChange: (selectedData, rows, selectedRows, deselectedRows, gridApi: IGridApi) => {
+
+        onActiveRowChanged: (row, gridApi) => fieldProps.onActiveRowChanged?.(row, gridApi, field),
+
+        onSelectionChange: (selectedData, rows, selectedRows, deselectedRows, gridApi) => {
             if (field.isReady()) {
                 if (fieldProps.selectionMode) {
                     field.setValue(selectedData ?? [], false, true, true);
@@ -128,35 +131,35 @@ const usePrepareCallbacks = (field: TabulatorGridField, fieldProps: ITabulatorGr
             }
             return fieldProps.onSelectionChange?.(selectedData, rows, selectedRows, deselectedRows, gridApi, field);
         },
-        onDataLoading: (dataSet: IGridRowData[] | undefined, gridApi: IGridApi) => {
+        onDataLoading: (dataSet, gridApi) => {
             field.setReady(false);
             return fieldProps.onDataLoading?.(dataSet, gridApi, field);
         },
 
-        onDataLoaded: (dataSet: IGridRowData[] | undefined, gridApi: IGridApi) => {
+        onDataLoaded: (dataSet, gridApi) => {
             field.setReady(true);
             const fieldProps = field.getProps();
             if (!fieldProps.selectionMode) field.setValue(dataSet ?? [], false, true, true);
             return fieldProps.onDataLoaded?.(dataSet, gridApi, field);
         },
-        onDataProcessed: (dataSet: IGridRowData[] | undefined, gridApi: IGridApi) => {
+        onDataProcessed: (dataSet, gridApi) => {
             const fieldProps = field.getProps();
             if (fieldProps.selectionMode) gridApi.setSelectedRows(field.getValue() as IGridRowData[]);
             return fieldProps.onDataProcessed?.(dataSet, gridApi, field);
         },
-        onDataLoadError: (message: string, code: number, gridApi: IGridApi) => {
+        onDataLoadError: (message, code, gridApi) => {
             field.setReady(false);
             return fieldProps.onDataLoadError?.(message, code, gridApi, field);
         },
         onDataFetch:
             !fieldProps.onDataFetch || (formMode === 'create' && !fieldProps.fetchInCreateMode)
                 ? undefined
-                : (params: IRequestProps, gridApi: IGridApi) => {
+                : (params, gridApi) => {
                       return fieldProps.onDataFetch!(params, gridApi, field);
                   },
         onDataFetching: !fieldProps.onDataFetching
             ? undefined
-            : (url, params: IRequestProps, gridApi: IGridApi) => {
+            : (url, params, gridApi) => {
                   return fieldProps.onDataFetching!(url, params, gridApi, field);
               },
         onDataFetchResponse: !fieldProps.onDataFetchResponse

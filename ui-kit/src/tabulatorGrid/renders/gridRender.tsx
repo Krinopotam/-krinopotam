@@ -15,7 +15,7 @@ export const GridRender = ({
     gridProps: IGridProps;
     tabulatorProps: ITabulatorProps;
 }): React.JSX.Element => {
-    const events = useEvents(api, gridProps);
+    const events = useEvents(api, gridProps.events);
     const resizeObserverRef = useRef<ResizeObserver | undefined>(undefined);
     const onTableRef = useCallback(
         (tabulatorRef: React.MutableRefObject<ITabulator>) => {

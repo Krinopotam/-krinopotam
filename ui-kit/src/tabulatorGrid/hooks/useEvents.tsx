@@ -1,11 +1,11 @@
+import {AnyType} from '@krinopotam/service-types';
 import {ITabulatorProps} from '@src/tabulatorBase';
 import React, {useMemo} from 'react';
 import {MessageBox} from '@src/messageBox';
 import {IsDebugMode} from '@krinopotam/common-hooks';
-import {IGridApi, IGridProps} from '@src/tabulatorGrid';
+import {IGridApi, IGridProps, ITabulatorButtons} from '@src/tabulatorGrid';
 
-export const useEvents = (api: IGridApi, gridProps: IGridProps): ITabulatorProps['events'] => {
-    const events = gridProps.events;
+export const useEvents = (api: IGridApi, events: IGridProps['events']): ITabulatorProps['events'] => {
     return useMemo(() => {
         return {
             tableBuilt: () => {
@@ -69,12 +69,28 @@ export const useEvents = (api: IGridApi, gridProps: IGridProps): ITabulatorProps
             },
             activeRowChanged: row => {
                 events?.activeRowChanged?.(row);
+                api.getProps().onActiveRowChanged?.(row, api);
                 api.getButtonsApi().refreshButtons();
+                triggerButtonEvent(api, 'onActiveRowChanged', [row, api]);
             },
             rowSelectionChanged: (data, rows, selectedRows, deselectedRows) => {
                 events?.rowSelectionChanged?.(data, rows, selectedRows, deselectedRows);
                 api.getProps().onSelectionChange?.(data, rows, selectedRows, deselectedRows, api);
+                triggerButtonEvent(api, 'onSelectionChange', [data, rows, selectedRows, deselectedRows, api]);
             },
         };
     }, [events, api]);
+};
+
+const triggerButtonEvent = (api: IGridApi, name: 'onActiveRowChanged' | 'onSelectionChange', params: AnyType[]) => {
+    const buttons = api.getButtonsApi().buttons() as ITabulatorButtons;
+    if (!buttons) return;
+
+    for (const key in buttons) {
+        const button = buttons[key];
+        if (button?.[name]) {
+            // @ts-expect-error - pass dynamic params
+            button?.[name](key, button, ...params);
+        }
+    }
 };
