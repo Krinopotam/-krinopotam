@@ -27,21 +27,47 @@ export const ButtonColors: Story = {
     args: {...commonArgs},
 
     render: args => (
-        <Space>
-            <Button {...args}>Button</Button>
-            <Divider type="vertical"></Divider>
-            <Button {...args} type="primary" colorType="info">
-                Button
-            </Button>
-            <Button {...args} type="primary" colorType="success">
-                Button
-            </Button>
-            <Button {...args} type="primary" colorType="warning">
-                Button
-            </Button>
-            <Button {...args} type="primary" colorType="danger">
-                Button
-            </Button>
+        <Space direction={"vertical"}>
+            <Space>
+                <Button {...args} color="default" variant="solid">Button</Button>
+                <Button {...args} color="default" variant="outlined">Button</Button>
+                <Button {...args} color="default" variant="dashed">Button</Button>
+                <Button {...args} color="default" variant="filled">Button</Button>
+                <Button {...args} color="default" variant="text">Button</Button>
+                <Button {...args} color="default" variant="link">Button</Button>
+            </Space>
+            <Space>
+                <Button {...args} color="primary" variant="solid">Button</Button>
+                <Button {...args} color="primary" variant="outlined">Button</Button>
+                <Button {...args} color="primary" variant="dashed">Button</Button>
+                <Button {...args} color="primary" variant="filled">Button</Button>
+                <Button {...args} color="primary" variant="text">Button</Button>
+                <Button {...args} color="primary" variant="link">Button</Button>
+            </Space>
+            <Space>
+                <Button {...args} color="danger" variant="solid">Button</Button>
+                <Button {...args} color="danger" variant="outlined">Button</Button>
+                <Button {...args} color="danger" variant="dashed">Button</Button>
+                <Button {...args} color="danger" variant="filled">Button</Button>
+                <Button {...args} color="danger" variant="text">Button</Button>
+                <Button {...args} color="danger" variant="link">Button</Button>
+            </Space>
+            <Space>
+                <Button {...args} color="warning" variant="solid">Button</Button>
+                <Button {...args} color="warning" variant="outlined">Button</Button>
+                <Button {...args} color="warning" variant="dashed">Button</Button>
+                <Button {...args} color="warning" variant="filled">Button</Button>
+                <Button {...args} color="warning" variant="text">Button</Button>
+                <Button {...args} color="warning" variant="link">Button</Button>
+            </Space>
+            <Space>
+                <Button {...args} color="success" variant="solid">Button</Button>
+                <Button {...args} color="success" variant="outlined">Button</Button>
+                <Button {...args} color="success" variant="dashed">Button</Button>
+                <Button {...args} color="success" variant="filled">Button</Button>
+                <Button {...args} color="success" variant="text">Button</Button>
+                <Button {...args} color="success" variant="link">Button</Button>
+            </Space>
         </Space>
     ),
 };

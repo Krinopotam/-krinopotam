@@ -1,27 +1,25 @@
 // noinspection DuplicatedCode
 
-import React, {useCallback, useState} from 'react';
-import {Button} from '@src/button';
-import {Space} from 'antd';
-import {IColorType} from '@src/button/button';
-import {Modal} from '@src/modal/modal';
+import {Button, IButtonProps} from '@src/button';
 import {ButtonsRow} from '@src/buttonsRow';
-import {IExtendedModalProps} from "@src/modal";
+import {IExtendedModalProps} from '@src/modal';
+import {Modal} from '@src/modal/modal';
+import {Space} from 'antd';
+import React, {useCallback, useState} from 'react';
 
 /** Modal component */
 export const ModalComponent = (props?: IExtendedModalProps): React.JSX.Element => {
     const [open, setOpen] = useState(false);
-    const [colorType, setColorType] = useState<IColorType | undefined>(undefined);
+    const [colorType, setColorType] = useState<IButtonProps['color'] | undefined>(undefined);
 
     const defProps: IExtendedModalProps = {
         modalId: 'testForm',
-
         colorType: colorType,
     };
 
     const compProps = {...defProps, ...props};
 
-    const onClick = useCallback((colorType?: IColorType) => {
+    const onClick = useCallback((colorType?: IButtonProps['color']) => {
         setOpen(true);
         setColorType(colorType);
     }, []);
@@ -30,16 +28,16 @@ export const ModalComponent = (props?: IExtendedModalProps): React.JSX.Element =
         <>
             <Space>
                 <Button onClick={() => onClick()}>Open modal</Button>
-                <Button type="primary" onClick={() => onClick('info')} colorType="info">
+                <Button color="info" variant="solid"  onClick={() => onClick('info')}>
                     Open modal
                 </Button>
-                <Button type="primary" onClick={() => onClick('success')} colorType="success">
+                <Button color="success" variant="solid"   onClick={() => onClick('success')}>
                     Open modal
                 </Button>
-                <Button type="primary" onClick={() => onClick('warning')} colorType="warning">
+                <Button color="warning" variant="solid"   onClick={() => onClick('warning')}>
                     Open modal
                 </Button>
-                <Button type="primary" onClick={() => onClick('danger')} colorType="danger">
+                <Button color="danger" variant="solid"  onClick={() => onClick('danger')}>
                     Open modal
                 </Button>
             </Space>
@@ -48,7 +46,7 @@ export const ModalComponent = (props?: IExtendedModalProps): React.JSX.Element =
                 {...compProps}
                 open={open}
                 onCancel={() => setOpen(false)}
-                footer={<ButtonsRow colorType={compProps.colorType} buttons={{close: {title: 'Close', active: true, onClick: () => setOpen(false)}}} />}
+                footer={<ButtonsRow color={compProps.colorType} buttons={{close: {title: 'Close', active: true, onClick: () => setOpen(false)}}} />}
             >
                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas rutrum mattis tempor. Nam a vulputate sem, et hendrerit lectus. Duis nec dictum ipsum, at luctus dui.</p>
                 <p>

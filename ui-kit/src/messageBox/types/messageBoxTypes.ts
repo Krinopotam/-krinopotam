@@ -1,9 +1,9 @@
-import React from "react";
-import {IColorType} from "@src/button";
-import {IFormButtons} from "@src/buttonsRow";
-import {MessageBoxApi} from "@src/messageBox";
-import {ModalStaticFunctions} from "antd/es/modal/confirm";
-import {translations} from "@src/messageBox/translations/translations";
+import {IButtonProps} from '@src/button';
+import {IFormButtons} from '@src/buttonsRow';
+import {MessageBoxApi} from '@src/messageBox';
+import {translations} from '@src/messageBox/translations/translations';
+import {ModalStaticFunctions} from 'antd/es/modal/confirm';
+import React from 'react';
 
 export interface IModalBaseConfig {
     /** Form id */
@@ -15,7 +15,7 @@ export interface IModalBaseConfig {
     /** Form content */
     content?: React.ReactNode;
     /** Form type */
-    colorType?: IColorType;
+    colorType?: IButtonProps['color'];
     /** Form buttons */
     buttons?: IFormButtons;
     /** Center modal */
@@ -31,7 +31,7 @@ export interface IModalBaseConfig {
     /** Language */
     language?: keyof typeof translations;
     /** Custom translation */
-    translation?: Partial<typeof translations.en>
+    translation?: Partial<typeof translations.en>;
 }
 
 export type IModalConfig = Omit<IModalBaseConfig, 'formId'>;

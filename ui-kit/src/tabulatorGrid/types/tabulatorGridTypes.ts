@@ -1,4 +1,4 @@
-import {AnyType} from "@krinopotam/service-types";
+import {AnyType} from '@krinopotam/service-types';
 import React from 'react';
 import {IButtonsRowApi, IFormButton} from '@src/buttonsRow';
 import {IDFormModalApi, IDFormModalProps} from '@src/dFormModal';
@@ -6,7 +6,7 @@ import {IRequestProps, ITabulator, ITabulatorProps} from '@src/tabulatorBase';
 import {RowComponent, ScrollToRowPosition} from 'tabulator-tables';
 import {IBreakpoints} from '@krinopotam/common-hooks/useResponsive';
 import {translations} from '@src/tabulatorGrid/translations/translations';
-import {IBaseComponentApi} from "@src/_shared/hooks/componentApiMethods/types/apiTypes";
+import {IBaseComponentApi} from '@src/_shared/hooks/componentApiMethods/types/apiTypes';
 
 export interface IGridRowData extends Record<string, AnyType> {
     /** Row id */
@@ -79,13 +79,13 @@ export interface IGridPropsBase {
     responsiveBreakpoint?: IBreakpoints;
 
     /** Export options (default allowed all) */
-    export?:{CSV?:boolean, XlS?:boolean}
+    export?: {CSV?: boolean; XlS?: boolean};
 
     /** Language */
     language?: keyof typeof translations;
 
     /** Custom translation */
-    translation?: Partial<typeof translations.en>
+    translation?: Partial<typeof translations.en>;
 }
 
 export interface IGridPropsCallbacks {
@@ -127,13 +127,13 @@ export interface IGridPropsCallbacks {
 }
 
 export type IGridProps = IGridPropsBase & IGridPropsCallbacks & Omit<ITabulatorProps, 'data' | 'ajaxURL' | 'ajaxRequestFunc' | 'ajaxResponse'>;
-export type IGridDataSourcePromise = Promise<{ data: IGridRowData[]; last_page?: number }>;
-export type IGridDeletePromise = Promise<{ data: boolean; last_page?: number }>;
+export type IGridDataSourcePromise = Promise<{data: IGridRowData[]; last_page?: number}>;
+export type IGridDeletePromise = Promise<{data: boolean; last_page?: number}>;
 
 export type IRowKey = IGridRowData['id'];
 export type IRowKeys = IRowKey | IRowKey[];
 
-export interface IGridApi extends IBaseComponentApi<IGridProps>{
+export interface IGridApi extends IBaseComponentApi<IGridProps> {
     /** Component table instance (Tabulator) */
     tableApi: ITabulator | undefined;
 
@@ -244,7 +244,7 @@ export interface IGridApi extends IBaseComponentApi<IGridProps>{
     selectionFormApi: IDFormModalApi;
 
     /** Get buttons api */
-    getButtonsApi: () => IButtonsRowApi & { refreshButtons: () => void };
+    getButtonsApi: () => IButtonsRowApi & {refreshButtons: () => void};
 
     /** Fetch data. If onDataFetch callback  is undefined,the request will use the previously set onDataFetch callback  */
     fetchData: (onDataFetch?: IGridProps['onDataFetch'], params?: Record<string, AnyType>) => void;
@@ -266,11 +266,28 @@ export interface ITabulatorButton extends IFormButton {
     /** if no row is selected in the grid, hide the button */
     checkHidden?: boolean;
 
+    /** Callback executed on button click */
+    onClick?: (buttonName: string, button: IFormButton, api: IGridApi) => void;
+
+    /** Callback executed on button render. If returns false, the button will not be rendered */
+    onHiddenCheck?: (buttonName: string, button: ITabulatorButton, row: RowComponent | undefined, gridApi: IGridApi) => boolean;
+
+    /** Callback executed on button render. If returns false, the button will be disabled */
+    onDisabledCheck?: (buttonName: string, button: ITabulatorButton, row: RowComponent | undefined, gridApi: IGridApi) => boolean;
+
     /** Callback executed when active row changed */
-    onActiveRowChanged?: (buttonName:string, button:ITabulatorButton, row: RowComponent, gridApi: IGridApi) => void;
+    onActiveRowChanged?: (buttonName: string, button: ITabulatorButton, row: RowComponent | undefined, gridApi: IGridApi) => void;
 
     /** Callback executed when selected rows change */
-    onSelectionChange?: (buttonName:string, button:ITabulatorButton, data: IGridRowData[], rows: RowComponent[], selectedRows: RowComponent[], deselectedRows: RowComponent[], gridApi: IGridApi) => void;
+    onSelectionChange?: (
+        buttonName: string,
+        button: ITabulatorButton,
+        data: IGridRowData[],
+        rows: RowComponent[],
+        selectedRows: RowComponent[],
+        deselectedRows: RowComponent[],
+        gridApi: IGridApi
+    ) => void;
 }
 
 export type ITabulatorButtons = Record<string, ITabulatorButton | null>;

@@ -1,6 +1,6 @@
 import {AnyType, IKey} from '@krinopotam/service-types';
 import {IBaseComponentApi} from '@src/_shared/hooks/componentApiMethods/types/apiTypes';
-import {IColorType} from '@src/button';
+import {IButtonProps} from '@src/button';
 import {IButtonsRowApi, IFormButtons} from '@src/buttonsRow';
 import {DModel, IDFormBaseCallbacks, IRuleType} from '@src/dForm';
 import {IBaseFieldProps} from '@src/dForm/fields/base';
@@ -58,7 +58,7 @@ export interface IDFormPropsNoCB<TFieldsProps extends Record<string, AnyType> = 
     fieldsProps?: IDFormFieldsProps<TFieldsProps>;
 
     /** Form color type */
-    colorType?: IColorType;
+    colorType?: IButtonProps['color'];
 
     /** label column parameters, for example span:'8' */
     labelCol?: ColProps;

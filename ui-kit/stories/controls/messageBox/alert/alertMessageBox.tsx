@@ -1,9 +1,7 @@
-import React, {useCallback, useRef} from 'react';
-
-import {Button} from '@src/button';
+import {Button, IButtonProps} from '@src/button';
 import {IModalAlertConfig, MessageBox, MessageBoxApi, useUpdateMessageBoxTheme} from '@src/messageBox';
 import {Space} from 'antd';
-import {IColorType} from '@src/button/button';
+import React, {useCallback, useRef} from 'react';
 
 type IComponent = IModalAlertConfig;
 
@@ -11,11 +9,11 @@ type IComponent = IModalAlertConfig;
 export const AlertMessageBoxComponent = (props: IComponent): React.JSX.Element => {
     useUpdateMessageBoxTheme(); //set current theme to messageBox
 
-    const curMessageBox = useRef<MessageBoxApi|null>(null);
-    if (curMessageBox.current) curMessageBox.current?.update(props)
+    const curMessageBox = useRef<MessageBoxApi | null>(null);
+    if (curMessageBox.current) curMessageBox.current?.update(props);
 
     const onClick = useCallback(
-        (colorType?: IColorType) => {
+        (colorType?: IButtonProps['color']) => {
             curMessageBox.current = MessageBox.alert({...props, colorType: colorType});
         },
         [props]
@@ -23,19 +21,17 @@ export const AlertMessageBoxComponent = (props: IComponent): React.JSX.Element =
 
     return (
         <Space>
-            <Button onClick={() => onClick()}>
+            <Button onClick={() => onClick()}>Open alert</Button>
+            <Button color="primary" variant="solid" onClick={() => onClick('info')}>
                 Open alert
             </Button>
-            <Button type={'primary'} colorType="info" onClick={() => onClick('info')}>
+            <Button color="warning" variant="solid" onClick={() => onClick('warning')}>
                 Open alert
             </Button>
-            <Button type={'primary'} colorType="warning" onClick={() => onClick('warning')}>
+            <Button color="success" variant="solid" onClick={() => onClick('success')}>
                 Open alert
             </Button>
-            <Button type={'primary'} colorType="success" onClick={() => onClick('success')}>
-                Open alert
-            </Button>
-            <Button type={'primary'} colorType="danger" onClick={() => onClick('danger')}>
+            <Button color="danger" variant="solid" onClick={() => onClick('danger')}>
                 Open alert
             </Button>
         </Space>

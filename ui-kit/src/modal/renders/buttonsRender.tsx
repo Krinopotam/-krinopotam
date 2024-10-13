@@ -6,11 +6,11 @@
  * @license MIT
  */
 
+import {IButtonProps} from "@src/button/button";
+import {IButtonsRowApi, IFormButtons} from "@src/buttonsRow";
 import {ButtonsRow} from '@src/buttonsRow/buttonsRow';
 
 import React from 'react';
-import {IColorType} from "@src/button/button";
-import {IButtonsRowApi, IFormButtons} from "@src/buttonsRow";
 
 interface IFormButtonsRenderProps {
     /** form buttons collection */
@@ -20,7 +20,7 @@ interface IFormButtonsRenderProps {
     buttonsApi?: IButtonsRowApi;
 
     /** form type */
-    colorType?: IColorType;
+    colorType?: IButtonProps['color'];
 
     /** buttons container style */
     containerStyle?: React.CSSProperties;
@@ -43,7 +43,7 @@ export const ButtonsRender = ({
     if (!buttons || Object.keys(buttons).length === 0) return null;
     return (
         <div style={containerStyle}>
-            <ButtonsRow buttons={buttons} apiRef={buttonsApi} colorType={colorType} arrowsSelection={arrowsSelection} context={context} />
+            <ButtonsRow buttons={buttons} apiRef={buttonsApi} color={colorType} arrowsSelection={arrowsSelection} context={context} />
         </div>
     );
 };

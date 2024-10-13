@@ -1,13 +1,13 @@
+import {GetNanoId} from '@krinopotam/js-helpers/helpersString/getNanoId';
+import {IButtonProps} from '@src/button/button';
+import {ButtonsRowWrapper, IFormButton, IFormButtons, mergeButtons} from '@src/buttonsRow';
 import {ButtonsRow} from '@src/buttonsRow/buttonsRow';
 import {PopconfirmProps, Popover} from 'antd';
 import React, {useEffect, useRef, useState} from 'react';
-import {GetNanoId} from '@krinopotam/js-helpers/helpersString/getNanoId';
-import {ButtonsRowWrapper, IFormButton, IFormButtons, mergeButtons} from '@src/buttonsRow';
-import {IColorType} from '@src/button/button';
 
 export interface IPopConfirmProps extends Omit<PopconfirmProps, 'okType' | 'okButtonProps' | 'cancelButtonProps'> {
     content?: React.ReactNode;
-    colorType?: IColorType;
+    colorType?: IButtonProps['color'];
     okButtonProps?: IFormButton;
     cancelButtonProps?: IFormButton;
 }

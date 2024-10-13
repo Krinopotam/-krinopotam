@@ -1,29 +1,28 @@
 // noinspection DuplicatedCode
 
-import React, {useCallback, useState} from 'react';
+import {Button, IButtonProps} from '@src/button';
+import {InputField} from '@src/dForm/fields/input/inputField';
+import {PasswordField} from '@src/dForm/fields/password/passwordField';
 import {DFormModal, IDFormModalProps} from '@src/dFormModal';
-import {Button} from '@src/button';
 import {Space} from 'antd';
-import {IColorType} from '@src/button/button';
-import {InputField} from "@src/dForm/fields/input/inputField";
-import {PasswordField} from "@src/dForm/fields/password/passwordField";
+import React, {useCallback, useState} from 'react';
 
 /** Simple Dynamic form example */
 export const SimpleForm = (props?: IDFormModalProps): React.JSX.Element => {
     const [open, setOpen] = useState(false);
-    const [colorType, setColorType] = useState<IColorType | undefined>(undefined);
+    const [colorType, setColorType] = useState<IButtonProps['color'] | undefined>(undefined);
 
     const formProps: IDFormModalProps = {
         fieldsProps: {
             field1: {component: InputField, label: 'login', tooltip: 'Login input'},
-            field2: {component: PasswordField, label: 'password', tooltip: 'Password input'}
+            field2: {component: PasswordField, label: 'password', tooltip: 'Password input'},
         },
         colorType: colorType,
     };
 
     const compProps = {...formProps, ...props};
 
-    const onClick = useCallback((colorType?: IColorType) => {
+    const onClick = useCallback((colorType?: IButtonProps['color']) => {
         setOpen(true);
         setColorType(colorType);
     }, []);
@@ -32,16 +31,16 @@ export const SimpleForm = (props?: IDFormModalProps): React.JSX.Element => {
         <>
             <Space>
                 <Button onClick={() => onClick()}>Open form</Button>
-                <Button type="primary" onClick={() => onClick('info')} colorType="info">
+                <Button color="info" variant="solid" onClick={() => onClick('info')}>
                     Open form
                 </Button>
-                <Button type="primary" onClick={() => onClick('success')} colorType="success">
+                <Button color="success" variant="solid" onClick={() => onClick('success')}>
                     Open form
                 </Button>
-                <Button type="primary" onClick={() => onClick('warning')} colorType="warning">
+                <Button color="warning" variant="solid" onClick={() => onClick('warning')}>
                     Open form
                 </Button>
-                <Button type="primary" onClick={() => onClick('danger')} colorType="danger">
+                <Button color="danger" variant="solid" onClick={() => onClick('danger')}>
                     Open form
                 </Button>
             </Space>

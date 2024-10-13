@@ -6,18 +6,18 @@
  * @license MIT
  */
 
-import {WarningOutlined, ExclamationCircleOutlined, InfoCircleOutlined, CheckCircleOutlined} from '@ant-design/icons';
+import {CheckCircleOutlined, ExclamationCircleOutlined, InfoCircleOutlined, WarningOutlined} from '@ant-design/icons';
+import {IButtonProps} from '@src/button/button';
+import {Space, theme} from 'antd';
 
 import React from 'react';
-import {Space, theme} from 'antd';
-import {IColorType} from '@src/button/button';
 
 const {useToken} = theme;
 
 interface IHeaderRenderProps {
     draggableId: string;
     title: string | React.ReactNode;
-    colorType?: IColorType;
+    colorType?: IButtonProps['color'];
     style?: React.CSSProperties;
     icon?: React.ReactNode;
 }

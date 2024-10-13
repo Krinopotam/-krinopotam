@@ -1,9 +1,7 @@
-import React, {useCallback, useRef} from 'react';
-
-import {Button} from '@src/button';
+import {Button, IButtonProps} from '@src/button';
 import {IModalConfirmConfig, MessageBox, MessageBoxApi, useUpdateMessageBoxTheme} from '@src/messageBox';
 import {Space} from 'antd';
-import {IColorType} from '@src/button/button';
+import React, {useCallback, useRef} from 'react';
 
 type IComponent = IModalConfirmConfig;
 
@@ -15,7 +13,7 @@ export const ConfirmMessageBoxComponent = (props: IComponent): React.JSX.Element
     if (curMessageBox.current) curMessageBox.current?.update(props);
 
     const onClick = useCallback(
-        (colorType?: IColorType) => {
+        (colorType?: IButtonProps['color']) => {
             curMessageBox.current = MessageBox.confirm({
                 ...props,
                 title: 'Please confirm',
@@ -29,16 +27,16 @@ export const ConfirmMessageBoxComponent = (props: IComponent): React.JSX.Element
     return (
         <Space>
             <Button onClick={() => onClick()}>Open confirm</Button>
-            <Button type={'primary'} colorType="info" onClick={() => onClick('info')}>
+            <Button color="info" variant="solid" onClick={() => onClick('info')}>
                 Open confirm
             </Button>
-            <Button type={'primary'} colorType="warning" onClick={() => onClick('warning')}>
+            <Button color="warning" variant="solid" onClick={() => onClick('warning')}>
                 Open confirm
             </Button>
-            <Button type={'primary'} colorType="success" onClick={() => onClick('success')}>
+            <Button color="success" variant="solid" onClick={() => onClick('success')}>
                 Open confirm
             </Button>
-            <Button type={'primary'} colorType="danger" onClick={() => onClick('danger')}>
+            <Button color="danger" variant="solid" onClick={() => onClick('danger')}>
                 Open confirm
             </Button>
         </Space>

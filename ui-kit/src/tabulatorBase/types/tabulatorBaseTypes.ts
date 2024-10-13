@@ -1,18 +1,23 @@
 import {AnyType} from '@krinopotam/service-types';
 import {
+    CellComponent,
     ColumnComponent,
     ColumnDefinition,
     ColumnLookup,
+    CustomMutatorParams,
+    EditorParams,
     EmptyCallback,
     EventCallBackMethods,
     FilterType,
+    Formatter,
+    FormatterParams,
     RowComponent,
 } from 'tabulator-tables';
 
 import React, {MouseEvent} from 'react';
 import {IActiveSelectionModuleRow, IActiveSelectionModuleTableEvents, IActiveSelectionTabulator} from '@src/tabulatorBase/modules/activeSelectionModule';
 import {IAdvancedHeaderFilterTabulator} from '@src/tabulatorBase/modules/advancedHeaderFilterModule';
-import {ITabulatorCore} from "@src/tabulatorBase/types/tabulatorCoreTypes";
+import {ITabulatorCore} from '@src/tabulatorBase/types/tabulatorCoreTypes';
 
 type _ITabulator = IAdvancedHeaderFilterTabulator & IActiveSelectionTabulator & ITabulatorCore;
 
@@ -56,19 +61,28 @@ export interface ITabulator extends _ITabulator {
     //ajaxRequestFunc?: (url: string, config: IAjaxConfig, params: IRequestProps) => Promise<{data: Record<string, AnyType>[]; last_page: number}>;
 }
 
-export interface ITabulatorColumn<TColumns extends Record<string, AnyType> = Record<string, AnyType>> extends Omit<ColumnDefinition, 'headerPopup'| 'field'> {
+export interface ITabulatorColumn<TColumns extends Record<string, AnyType> = Record<string, AnyType>> extends Omit<ColumnDefinition, 'headerPopup' | 'field'> {
     field?: keyof TColumns;
     /** type patches */
-    headerFilterParams?:ColumnDefinition['headerFilterParams'] | Record<string, AnyType>;
-    formatterParams?:ColumnDefinition['formatterParams'] | Record<string, AnyType>;
-    sorterParams?:ColumnDefinition['sorterParams'] | Record<string, AnyType>;
-    headerFilterFuncParams?:ColumnDefinition['headerFilterFuncParams'] | Record<string, AnyType>;
-    editorParams?:ColumnDefinition['editorParams'] | Record<string, AnyType>;
-    mutatorDataParams?:ColumnDefinition['mutatorDataParams'] | Record<string, AnyType>;
-    mutatorEditParams?:ColumnDefinition['mutatorEditParams'] | Record<string, AnyType>;
-    mutatorParams?:ColumnDefinition['mutatorParams'] | Record<string, AnyType>;
-    titleFormatterParams?:ColumnDefinition['titleFormatterParams'] | Record<string, AnyType>;
-    topCalcFormatterParams?:ColumnDefinition['topCalcFormatterParams'] | Record<string, AnyType>;
+    headerFilterParams?: ColumnDefinition['headerFilterParams'] | Record<string, AnyType>;
+    // eslint-disable-next-line @typescript-eslint/no-empty-object-type
+    formatter?: // eslint-disable-next-line @typescript-eslint/no-empty-object-type
+    | Exclude<Formatter, (cell: CellComponent, formatterParams: {}, onRendered: EmptyCallback) => string | HTMLElement>
+        | ((
+              cell: CellComponent,
+              formatterParams: // eslint-disable-next-line @typescript-eslint/no-empty-object-type
+              Exclude<FormatterParams, (cell: CellComponent) => {}> | ((cell: CellComponent) => AnyType) | AnyType,
+              onRendered: EmptyCallback
+          ) => string | HTMLElement);
+    formatterParams?: FormatterParams | Record<string, AnyType>;
+    sorterParams?: ColumnDefinition['sorterParams'] | Record<string, AnyType>;
+    headerFilterFuncParams?: ColumnDefinition['headerFilterFuncParams'] | Record<string, AnyType>;
+    editorParams?: EditorParams | Record<string, AnyType>;
+    mutatorDataParams?: CustomMutatorParams | Record<string, AnyType>;
+    mutatorEditParams?: CustomMutatorParams | Record<string, AnyType>;
+    mutatorParams?: CustomMutatorParams | Record<string, AnyType>;
+    titleFormatterParams?: FormatterParams | Record<string, AnyType>;
+    topCalcFormatterParams?: FormatterParams | Record<string, AnyType>;
 
     headerPopup?: ((e: MouseEvent, column: ColumnComponent, onRendered: EmptyCallback) => HTMLElement) | string | React.ReactNode;
 }

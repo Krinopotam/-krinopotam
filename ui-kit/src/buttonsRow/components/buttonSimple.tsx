@@ -37,7 +37,6 @@ export const ButtonSimple = ({
 
     const title = !iconOnly ?  button.title : '';
     const disabled = rowProps.disableAll || button.disabled;
-
     return (
         <Button
             ref={btnRef}
@@ -47,13 +46,15 @@ export const ButtonSimple = ({
             disabled={disabled}
             ghost={button.ghost}
             loading={button.loading}
-            colorType={button.colorType}
             onClick={onClick}
+            color={button.color}
+            variant={button.variant}
             size={button.size}
             rel={button.rel}
             style={style}
             className={button.className}
             icon={button.icon}
+            iconPosition={button.iconPosition}
             shape={button.shape}
             squareSize={!title && ((!!button.icon && !button.expandIcon) || (!button.icon && !!button.expandIcon))}
         >

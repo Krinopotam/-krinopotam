@@ -13,7 +13,7 @@ export const prepareButtons = (buttons: IFormButtons | undefined, props: IButton
         if (!button) continue;
         if (!button.type) button.type = 'button';
         if (!button.position) button.position = 'right';
-        if (props.colorType) button.colorType = props.colorType;
+        if (props.color) button.color = props.color;
 
         if (button.position === 'left') leftButtons[key] = button;
         else if (button.position === 'center') centerButtons[key] = button;

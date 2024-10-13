@@ -6,7 +6,7 @@ import {TabulatorBaseColumns, TabulatorBaseColumnsDef, TabulatorPlainData} from 
 
 
 const props: IGridProps = {
-    id: 'TabulatorGridSimple',
+    id: 'TabulatorGridButtons',
     columnDefaults: TabulatorBaseColumnsDef,
     columns: TabulatorBaseColumns,
     dataSet: TabulatorPlainData,

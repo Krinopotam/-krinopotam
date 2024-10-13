@@ -18,7 +18,8 @@ export const useInitButtons = (api: IGridApi): ITabulatorButtons => {
     const buttons = props.buttons;
     const buttonsSize = props.buttonsSize ?? 'small';
     const buttonsPos = props.buttonsPosition ?? 'right';
-    const activeRow = api.getActiveRow();
+    const activeNode = api.getActiveNode();
+    const activeRow = activeNode?.getData() as IGridRowData | undefined;
     const selectedRows = api.getSelectedRows();
 
     api.getButtonsApi().refreshButtons = useRefreshButtons();
@@ -45,15 +46,19 @@ export const useInitButtons = (api: IGridApi): ITabulatorButtons => {
         system: systemButtons,
     } as ITabulatorButtons;
 
-    const resultButtons = mergeButtons(defaultButtons, buttons);
+    const resultButtons: ITabulatorButtons = mergeButtons(defaultButtons, buttons);
 
     for (const buttonId in resultButtons) {
         const btn = resultButtons[buttonId];
         if (!btn || buttonId === 'headerLabel' || btn.type === 'hotkey') continue;
         btn.size = btn.size ?? buttonsSize;
         btn.position = btn.position ?? buttonsPos;
+
         if (btn.checkDisabled) btn.disabled = !activeRow || selectedRows.length !== 1;
+        if (btn.onDisabledCheck) btn.disabled = btn.onDisabledCheck(buttonId, btn, activeNode, api);
+
         if (btn.checkHidden) btn.hidden = !activeRow || selectedRows.length !== 1;
+        if (btn.onHiddenCheck) btn.hidden = btn.onHiddenCheck(buttonId, btn, activeNode, api);
     }
 
     return resultButtons;

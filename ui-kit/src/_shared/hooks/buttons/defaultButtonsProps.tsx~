@@ -46,6 +46,6 @@ export const defaultButtonUpdate: IFormButton = {
 export const defaultButtonDelete: IFormButton = {
     weight: 150,
     icon: <DeleteOutlined />,
-    color: 'danger',
+    colorType: 'danger',
     hotKeys: [{key: 'Delete', ctrl: true}],
 };

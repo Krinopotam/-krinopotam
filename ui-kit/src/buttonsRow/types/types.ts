@@ -28,8 +28,11 @@ export interface IFormButton {
      */
     type?: 'button' | 'link' | 'text' | 'divider' | 'group' | 'element' | 'hotkey';
 
-    /** Color type*/
-    colorType?: IButtonProps['colorType'];
+    /** Button color type */
+    color?:IButtonProps['color'];
+
+    /** Button variant type*/
+    variant?:IButtonProps['variant'];
 
     /** Is button active (set primary style) */
     active?: boolean;
@@ -54,6 +57,9 @@ export interface IFormButton {
 
     /** Button icon */
     icon?: string | React.ReactNode;
+
+    /** Button icon position */
+    iconPosition?: 'start' | 'end'
 
     /** Icon for expand DropDown menu (right side icon)/ Default: <DownOutlined />*/
     expandIcon?: React.ReactNode;
@@ -114,8 +120,8 @@ export interface IButtonRowProps {
     /** Buttons row container style */
     style?: React.CSSProperties;
 
-    /** Form type */
-    colorType?: IButtonProps['colorType'];
+    /** Form buttons whole row color */
+    color?: IButtonProps['color'];
 
     /** A mutable object to merge with these controls api */
     apiRef?: IButtonsRowApi;

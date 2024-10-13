@@ -1,6 +1,6 @@
 import {ModalProps as AntModalProps} from "antd/es/modal/interface";
 import React from "react";
-import {IColorType} from "@src/button";
+import {IButtonProps} from "@src/button";
 
 export interface IExtendedModalProps
     extends Omit<AntModalProps, 'afterOpenChange' | 'okButtonProps' | 'okType' | 'okText' | 'onOk' | 'cancelText' | 'cancelButtonProps' | 'bodyStyle' | 'onClose' | 'footer' | 'height' | 'width'> {
@@ -13,7 +13,7 @@ export interface IExtendedModalProps
     /** Is the for can be resized (show the resize handler). Default: true */
     resizable?: boolean;
     /** Form color type */
-    colorType?: IColorType;
+    colorType?: IButtonProps['color'];
     /**Form header icon */
     headerIcon?: React.ReactNode;
     /** Is the form draggable */
