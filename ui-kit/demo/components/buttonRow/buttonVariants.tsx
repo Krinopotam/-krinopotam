@@ -5,12 +5,12 @@ import {ButtonsRow, IFormButtons} from '@src/buttonsRow';
 import {IButtonColorType} from "@src/button";
 
 export const Example = (): React.JSX.Element => {
-    const buttonsDefault = useButtons1('default');
-    const buttonsPrimary = useButtons1('primary');
-    const buttonsDanger = useButtons1('danger');
-    const buttonsInfo = useButtons1('info');
-    const buttonsWarning = useButtons1('warning');
-    const buttonsSuccess = useButtons1('success');
+    const buttonsDefault = useButtons('default');
+    const buttonsPrimary = useButtons('primary');
+    const buttonsDanger = useButtons('danger');
+    const buttonsInfo = useButtons('info');
+    const buttonsWarning = useButtons('warning');
+    const buttonsSuccess = useButtons('success');
     return (
         <>
             {/*Description Start*/}
@@ -28,7 +28,7 @@ export const Example = (): React.JSX.Element => {
     );
 };
 
-const useButtons1 = (color:IButtonColorType): IFormButtons => {
+const useButtons = (color:IButtonColorType): IFormButtons => {
     return {
         button1: {
             type: 'button',

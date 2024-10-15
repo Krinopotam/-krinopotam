@@ -28,22 +28,24 @@ const useButtons = (): IFormButtons => {
     return {
         buttonLeft: {
             type: 'button',
+            color: 'primary',
             variant: 'solid',
             title: 'Left',
             position: 'left',
+            onClick:()=>alert('Button is clicked'),
         },
         buttonCenter: {
             type: 'button',
-            variant: 'solid',
             title: 'Center',
             position: 'center',
+            onClick:()=>alert('Button is clicked'),
         },
 
         buttonRight: {
             type: 'button',
-            variant: 'solid',
             title: 'Right',
             position: 'right',
+            onClick:()=>alert('Button is clicked'),
         },
     };
 };

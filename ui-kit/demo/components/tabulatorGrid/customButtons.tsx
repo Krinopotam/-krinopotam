@@ -29,7 +29,7 @@ const props: IGridProps = {
                 const buttonsApi = gridApi.getButtonsApi();
                 buttonsApi.updateButtons({
                     button2: {
-                        title: row.getData().name,
+                        title: row?.getData().name ?? ' --- ',
                     },
                 })
             }

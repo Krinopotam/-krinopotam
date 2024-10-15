@@ -80,9 +80,7 @@ const prepareDropdownItems = (buttons: IFormButton['children'], parentId: string
                 disabled: disabled,
                 style: button.type !== 'link' ? button.style : undefined,
                 className: button.className,
-                danger: button.color === 'danger',
-                dashed: button.variant === 'dashed',
-                    onClick: () => {
+                onClick: () => {
                     button.onClick?.(id, button, context);
                 },
             } satisfies ItemType;

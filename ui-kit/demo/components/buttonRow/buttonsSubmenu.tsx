@@ -21,9 +21,10 @@ const useButtons = (): IFormButtons => {
     return {
         menu1: {
             type: 'button',
-            title: 'Menu',
+            title: 'Clickable Menu',
             position: 'left',
             variant:'filled',
+            onClick:()=>alert('Button is clicked'),
             children: {
                 sub1: {
                     title: 'Item 1',
@@ -78,7 +79,6 @@ const useButtons = (): IFormButtons => {
                     children: {
                         sub1: {
                             title: 'Item 1',
-                            color:'danger',
                         },
                         sub2: {
                             title: 'Item 2',

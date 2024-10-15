@@ -1,13 +1,16 @@
-import React, {CSSProperties, useMemo, useRef, useState} from 'react';
-import {GetNanoId} from '@krinopotam/js-helpers/helpersString/getNanoId';
 import {IsDescendant} from '@krinopotam/js-helpers/helpersDOM/isDescendant';
+import {GetNanoId} from '@krinopotam/js-helpers/helpersString/getNanoId';
+import React, {CSSProperties, forwardRef, RefObject, useEffect, useMemo, useRef, useState} from 'react';
 
 export interface IButtonRowWrapperContext {
     wrapperId: string;
     wrapperRef: React.RefObject<HTMLDivElement> | undefined;
 }
 
-export const ButtonRowWrapperContext = React.createContext<IButtonRowWrapperContext>({wrapperId: '', wrapperRef: undefined});
+export const ButtonRowWrapperContext = React.createContext<IButtonRowWrapperContext>({
+    wrapperId: '',
+    wrapperRef: undefined,
+});
 
 export interface IButtonRowWrapperRemoteCallbacks {
     /** Callback called by the parent component when it is fully rendered (exist in DOM) */
@@ -20,7 +23,8 @@ export interface IButtonRowWrapperProps extends React.HTMLAttributes<HTMLDivElem
     keepFocus?: boolean;
 }
 
-export const ButtonsRowWrapper = (props: IButtonRowWrapperProps): React.JSX.Element => {
+export const ButtonsRowWrapper = forwardRef<HTMLDivElement, IButtonRowWrapperProps>((props, ref): React.JSX.Element => {
+    const defaultRef = useRef<HTMLDivElement>(null); //used in case ref is not provided
     const [wrapperId] = useState(GetNanoId());
 
     const defStyle: CSSProperties = {
@@ -37,18 +41,17 @@ export const ButtonsRowWrapper = (props: IButtonRowWrapperProps): React.JSX.Elem
         */
     };
 
-    if (props.remoteCallbacksRef?.current && typeof props.remoteCallbacksRef?.current === 'object') {
-        props.remoteCallbacksRef.current.onParentComponentRendered = () => ensureWrapperFocus(wrapperRef.current, props);
-    }
-
-    if (props.keepFocus !== false) {
-        setTimeout(() => {
+    useEffect(() => {
+        if (props.keepFocus !== false) {
             //WORKAROUND: MessageBox cannot tell when it is open. But when opening the MessageBox we need to set focus to the Wrapper for the arrow controls to work
-            ensureWrapperFocus(wrapperRef.current, props);
-        }, 0);
-    }
+            ensureWrapperFocus(ref ? (ref as RefObject<HTMLDivElement>).current : defaultRef.current, props);
+        }
+    }, [props, ref]);
 
-    const wrapperRef = useRef<HTMLDivElement>(null);
+    if (props.remoteCallbacksRef?.current && typeof props.remoteCallbacksRef?.current === 'object') {
+        props.remoteCallbacksRef.current.onParentComponentRendered = () =>
+            ensureWrapperFocus(ref ? (ref as RefObject<HTMLDivElement>).current : defaultRef.current, props);
+    }
 
     // eslint-disable-next-line react/prop-types
     const style = {...defStyle, ...props?.style};
@@ -56,22 +59,23 @@ export const ButtonsRowWrapper = (props: IButtonRowWrapperProps): React.JSX.Elem
     const wrapperContext = useMemo(() => {
         return {
             wrapperId: wrapperId,
-            wrapperRef: wrapperRef,
+            wrapperRef: (ref as RefObject<HTMLDivElement>) ?? defaultRef,
         };
-    }, [wrapperId]);
+    }, [ref, wrapperId]);
 
     return (
-        <div ref={wrapperRef} className={'buttons-row-wrapper-' + wrapperId} tabIndex={-1} style={style}>
+        <div ref={ref ?? defaultRef} className={'buttons-row-wrapper-' + wrapperId} tabIndex={-1} style={style}>
             <ButtonRowWrapperContext.Provider value={wrapperContext}>{props.children}</ButtonRowWrapperContext.Provider>
         </div>
     );
-};
+});
+ButtonsRowWrapper.displayName = 'ButtonsRowWrapper';
 
 // noinspection JSUnusedGlobalSymbols
 export default ButtonsRowWrapper;
 
 const ensureWrapperFocus = (wrapper: HTMLElement | null, props: IButtonRowWrapperProps) => {
     if (!wrapper || props.keepFocus === false) return;
-    if (IsDescendant(wrapper, document.activeElement)) return;
+    if (IsDescendant(wrapper, document.activeElement)) return; //if content inside the wrapper already has focus, do not set it again
     wrapper.focus();
 };
