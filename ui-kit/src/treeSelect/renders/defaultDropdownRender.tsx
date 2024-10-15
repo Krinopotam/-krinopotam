@@ -27,7 +27,7 @@ export const DefaultDropdownRender = ({api, children}: {api: ITreeSelectApi; chi
 const ButtonsWrapper = ({api, children}: {api: ITreeSelectApi; children: React.ReactNode}): React.JSX.Element => {
     const allProps = api.getProps();
     return (
-        <ButtonsRowWrapper style={{display: 'flex', flexDirection: 'column', ...allProps.buttonsRowWrapperStyle}} noKeepFocus>
+        <ButtonsRowWrapper style={{display: 'flex', flexDirection: 'column', ...allProps.buttonsRowWrapperStyle}} keepFocus={false}>
             <MenuRow treeApi={api} treeProps={allProps} />
             {children}
             <DropdownStatus api={api} />

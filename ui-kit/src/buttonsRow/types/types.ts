@@ -1,7 +1,7 @@
 import React, {CSSProperties, HTMLAttributeAnchorTarget} from 'react';
 import {IButtonProps} from '@src/button';
 import {IBreakpoints} from '@krinopotam/common-hooks/useResponsive';
-import {AnyType} from '@krinopotam/service-types';
+import {AnyType, IKeyboardKey} from '@krinopotam/service-types';
 import {IBaseComponentApi} from "@src/_shared/hooks/componentApiMethods/types/apiTypes";
 
 interface IHotKey {
@@ -9,7 +9,7 @@ interface IHotKey {
     alt?: boolean;
     shift?: boolean;
     meta?: boolean;
-    key: string;
+    key: IKeyboardKey | string;
 }
 
 export interface IFormButton {
@@ -20,13 +20,12 @@ export interface IFormButton {
     /**
      * - `button`: A standard button
      * - `link`: A hyperlink styled as a button
-     * - `text`: A text element
      * - `divider`: A divider line
-     * - `group`: A group of buttons
+     * - `group`: A group of buttons (for dropdown buttons)
      * - `element`: A custom element
      * - `hotkey`: not displaying button working like a hotkey
      */
-    type?: 'button' | 'link' | 'text' | 'divider' | 'group' | 'element' | 'hotkey';
+    type?: 'button' | 'link' | 'divider' | 'group' | 'element' | 'hotkey';
 
     /** Button color type */
     color?:IButtonProps['color'];
@@ -39,9 +38,6 @@ export interface IFormButton {
 
     /** Is button has ghost (outline) style */
     ghost?: boolean;
-
-    /** is button or divider dashed */
-    dashed?: boolean;
 
     /** Is button disabled */
     disabled?: boolean;
@@ -119,6 +115,12 @@ export interface IButtonRowProps {
 
     /** Buttons row container style */
     style?: React.CSSProperties;
+
+    styles?: {
+        leftBlockStyle?: React.CSSProperties;
+        centerBlockStyle?: React.CSSProperties;
+        rightBlockStyle?: React.CSSProperties;
+    }
 
     /** Form buttons whole row color */
     color?: IButtonProps['color'];

@@ -14,11 +14,10 @@ export default {
                 format: true,
                 // language=text
                 code: `
-                    import React, {useCallback, useRef} from 'react';
-                    import {Button} from @krinopotam/ui-kit/button';
+                    import {Button, IButtonProps} from @krinopotam/ui-kit/button';
                     import {IModalConfirmConfig, MessageBox, MessageBoxApi, useUpdateMessageBoxTheme} from @krinopotam/ui-kit/messageBox';
                     import {Space} from 'antd';
-                    import {IColorType} from @krinopotam/ui-kit/button/button';
+                    import React, {useCallback, useRef} from 'react';
                     type IComponent = IModalConfirmConfig;
                     /** MessageBox Confirm Wait component */
                     export const ConfirmWaiterMessageBoxComponent = (props: IComponent): React.JSX.Element => {
@@ -26,7 +25,7 @@ export default {
                         const curMessageBox = useRef<MessageBoxApi | null>(null);
                         if (curMessageBox.current) curMessageBox.current?.update(props);
                         const onClick = useCallback(
-                            (colorType?: IColorType) => {
+                            (colorType?: IButtonProps['color']) => {
                                 curMessageBox.current = MessageBox.confirmWaiter({
                                     ...props,
                                     title: 'Please confirm',
@@ -46,16 +45,16 @@ export default {
                         return (
                             <Space>
                                 <Button onClick={() => onClick()}>Open confirm waiter</Button>
-                                <Button type={'primary'} colorType="info" onClick={() => onClick('info')}>
+                                <Button color="info" variant="solid" onClick={() => onClick('info')}>
                                     Open confirm waiter
                                 </Button>
-                                <Button type={'primary'} colorType="warning" onClick={() => onClick('warning')}>
+                                <Button color="warning" variant="solid" onClick={() => onClick('warning')}>
                                     Open confirm waiter
                                 </Button>
-                                <Button type={'primary'} colorType="success" onClick={() => onClick('success')}>
+                                <Button color="success" variant="solid" onClick={() => onClick('success')}>
                                     Open confirm waiter
                                 </Button>
-                                <Button type={'primary'} colorType="danger" onClick={() => onClick('danger')}>
+                                <Button color="danger" variant="solid" onClick={() => onClick('danger')}>
                                     Open confirm waiter
                                 </Button>
                             </Space>

@@ -11,12 +11,14 @@ import React, {Ref} from 'react';
 
 const {useToken} = theme;
 
+export type IButtonColorType = AntButtonProps['color']  | 'info' | 'success' | 'warning';
+
 export interface IButtonProps extends Omit<AntButtonProps, 'danger' | 'color'> {
     /** button must be just square (length and width are the same) */
     squareSize?: boolean;
 
     /** Button color */
-    color?: AntButtonProps['color'] | 'info' | 'success' | 'warning';
+    color?: IButtonColorType;
 }
 
 export const Button = React.forwardRef(({color, variant, children, squareSize, ...props}: IButtonProps, ref: Ref<HTMLButtonElement> | undefined) => {

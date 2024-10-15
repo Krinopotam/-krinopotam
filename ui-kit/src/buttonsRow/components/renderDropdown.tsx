@@ -6,6 +6,7 @@ import {ButtonDropdownLink} from '@src/buttonsRow/components/buttonDropdownLink'
 import {ButtonDropdown} from '@src/buttonsRow/components/buttonDropdown';
 import {getSortedButtonsKeys} from '@src/buttonsRow/helpers/buttonMethods';
 import {ItemType, MenuDividerType, MenuItemGroupType} from 'antd/es/menu/interface';
+import {RenderLink} from '@src/buttonsRow/components/renderLink';
 
 export const RenderDropdown = ({
     id,
@@ -34,7 +35,7 @@ export const RenderDropdown = ({
     return <ButtonDropdown id={id} button={button} context={context} menuProps={menuProps} rowProps={rowProps} iconOnly={iconOnly} />;
 };
 
-const prepareDropdownItems = (buttons: IFormButton['children'], parentId: string,  rowProps: IButtonRowProps, context: unknown) => {
+const prepareDropdownItems = (buttons: IFormButton['children'], parentId: string, rowProps: IButtonRowProps, context: unknown) => {
     const result: MenuProps['items'] = [];
     if (!buttons) return result;
 
@@ -57,7 +58,7 @@ const prepareDropdownItems = (buttons: IFormButton['children'], parentId: string
             item = {
                 key: key,
                 type: 'divider',
-                dashed: button.dashed,
+                dashed: button.variant === 'dashed',
                 style: button.style,
                 className: button.className,
             } satisfies MenuDividerType;
@@ -73,20 +74,15 @@ const prepareDropdownItems = (buttons: IFormButton['children'], parentId: string
         } else {
             item = {
                 key: key,
-                label:
-                    button.type !== 'link' ? (
-                        button.title
-                    ) : (
-                        <a href={button.href} target={button.target} rel={button.rel} style={button.style}>
-                            {button.title}
-                        </a>
-                    ),
+                label: button.type !== 'link' ? button.title : <RenderLink {...button} />,
                 icon: button.icon,
                 children: children,
                 disabled: disabled,
                 style: button.type !== 'link' ? button.style : undefined,
                 className: button.className,
-                onClick: () => {
+                danger: button.color === 'danger',
+                dashed: button.variant === 'dashed',
+                    onClick: () => {
                     button.onClick?.(id, button, context);
                 },
             } satisfies ItemType;

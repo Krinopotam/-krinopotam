@@ -1,5 +1,5 @@
 import {Col, Row} from 'antd';
-import React, {useContext, useEffect, useRef, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {RenderButtonGroup} from '@src/buttonsRow/components/renderButtonGroup';
 import {useApi} from '@src/buttonsRow/hooks/api/api';
 import {ButtonRowWrapperContext} from '@src/buttonsRow/components/buttonsRowWrapper';
@@ -21,13 +21,13 @@ export const ButtonsRow = (props: IButtonRowProps): React.JSX.Element => {
     return (
         <div style={{display: 'block', ...allProps.style}} className={'controls-buttons-dynamic-row ' + (allProps.className ?? '')}>
             <Row wrap={false}>
-                <Col flex="auto" style={{textAlign: 'left'}}>
+                <Col flex="auto" style={{textAlign: 'left', ...props.styles?.leftBlockStyle}}>
                     <RenderButtonGroup key="leftButtons" buttons={curButtons} position="left" context={allProps.context} rowProps={allProps} />
                 </Col>
-                <Col flex="auto" style={{textAlign: 'center'}}>
+                <Col flex="auto" style={{textAlign: 'center', ...props.styles?.centerBlockStyle}}>
                     <RenderButtonGroup key="centerButtons" buttons={curButtons} position="center" context={allProps.context} rowProps={allProps} />
                 </Col>
-                <Col flex="auto" style={{textAlign: 'right'}}>
+                <Col flex="auto" style={{textAlign: 'right', ...props.styles?.rightBlockStyle}}>
                     <RenderButtonGroup key="rightButtons" buttons={curButtons} position="right" context={allProps.context} rowProps={allProps} />
                 </Col>
             </Row>
@@ -38,10 +38,6 @@ export const ButtonsRow = (props: IButtonRowProps): React.JSX.Element => {
 export default ButtonsRow;
 
 const useSubscribeToKeyDownEvent = (props: IButtonRowProps, api: IButtonsRowApi) => {
-    //We use refs, since the subscription for the event occurs only 1 time, and Props can change
-    const propsRef = useRef(props);
-    propsRef.current = props;
-
     const wrapperContext = useContext(ButtonRowWrapperContext);
 
     useAddEventListener('keydown', (e: KeyboardEvent) => keyDownHandler(e, props, api, wrapperContext.wrapperId), wrapperContext?.wrapperRef);

@@ -4,12 +4,12 @@ import {Dropdown, MenuProps} from 'antd';
 import {IButtonRowProps, IFormButton} from '@src/buttonsRow';
 
 export const ButtonDropdownClickable = ({
-                                            id,
-                                            button,
-                                            context,
-                                            menuProps,
-                                            rowProps,
-                                        }: {
+    id,
+    button,
+    context,
+    menuProps,
+    rowProps,
+}: {
     id: string;
     button: IFormButton;
     context: unknown;
@@ -17,10 +17,11 @@ export const ButtonDropdownClickable = ({
     rowProps: IButtonRowProps;
 }): React.JSX.Element => {
     let type: IButtonType = 'default';
+
     if (rowProps.makeActivePrimary !== false && button.active) type = 'primary';
-    else if (button.type === 'text') type = 'text';
-    else if (button.type === 'link') type = 'link';
-    else if (button.dashed) type = 'dashed';
+    else if (button.variant === 'text') type = 'text';
+    else if (button.variant === 'link') type = 'link';
+    else if (button.variant === 'dashed') type = 'dashed';
 
     const onClick = useCallback(() => {
         button.onClick?.(id, button, context);

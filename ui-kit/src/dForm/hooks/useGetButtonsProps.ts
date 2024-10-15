@@ -11,9 +11,9 @@ export const useGetButtonsProps = (formProps: IDFormProps, api: IDFormApi): IFor
                 active: true,
                 title: api.t('confirm'),
                 hotKeys: [
-                    {key: 'enter', ctrl: true},
-                    {key: 's', ctrl: true},
-                    {key: 'ы', ctrl: true},
+                    {key: 'Enter', ctrl: true},
+                    {key: 'S', ctrl: true},
+                    {key: 'Ы', ctrl: true},
                 ],
                 onClick: () => {
                     api.submitForm();

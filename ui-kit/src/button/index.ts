@@ -1,3 +1,3 @@
 export {Button} from "./button";
-export type {IButtonProps} from "./button";
-export type {ButtonType as IButtonType} from 'antd/es/button';
+export type {IButtonProps, IButtonColorType} from "./button";
+export type {ButtonType as IButtonType, ButtonVariantType as IButtonVariantType} from 'antd/es/button';

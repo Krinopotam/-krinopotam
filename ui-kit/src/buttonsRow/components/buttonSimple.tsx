@@ -1,6 +1,6 @@
 import {IButtonRowProps, IFormButton} from '@src/buttonsRow';
 import React, {CSSProperties, useCallback, useEffect, useRef} from 'react';
-import {Button, IButtonType} from '@src/button';
+import {Button, IButtonColorType, IButtonVariantType} from '@src/button';
 
 export const ButtonSimple = ({
     id,
@@ -26,29 +26,29 @@ export const ButtonSimple = ({
         if (button.active && rowProps.makeActivePrimary === false) btnRef.current?.focus();
     }, [button.active, rowProps.makeActivePrimary]);
 
-    let type: IButtonType | undefined;
-    if (rowProps.makeActivePrimary !== false && button.active) type = 'primary';
-    else if (button.type === 'text') type = 'text';
-    else if (button.type === 'link') type = 'link';
-    else if (button.dashed) type = 'dashed';
+    let forceVariant: IButtonVariantType | undefined;
+    let forceColor: IButtonColorType | undefined;
+    if (rowProps.makeActivePrimary !== false && button.active) {
+        forceVariant = 'solid';
+        forceColor = 'primary';
+    }
 
     const style: CSSProperties = {...button.style};
     if (typeof button.width !== 'undefined') style.width = button.width;
 
-    const title = !iconOnly ?  button.title : '';
+    const title = !iconOnly ? button.title : '';
     const disabled = rowProps.disableAll || button.disabled;
     return (
         <Button
             ref={btnRef}
-            type={type}
             href={button.href}
             target={button.target}
             disabled={disabled}
             ghost={button.ghost}
             loading={button.loading}
             onClick={onClick}
-            color={button.color}
-            variant={button.variant}
+            color={forceColor ?? button.color ?? 'default'}
+            variant={forceVariant ?? button.variant}
             size={button.size}
             rel={button.rel}
             style={style}

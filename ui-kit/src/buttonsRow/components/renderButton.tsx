@@ -4,6 +4,7 @@ import {IButtonRowProps, IFormButton} from '@src/buttonsRow';
 import {ButtonSimple} from '@src/buttonsRow/components/buttonSimple';
 import {RenderDropdown} from '@src/buttonsRow/components/renderDropdown';
 import {useResponsive} from '@krinopotam/common-hooks';
+import {RenderLink} from '@src/buttonsRow/components/renderLink';
 
 export const RenderButton = ({
     id,
@@ -45,6 +46,17 @@ export const RenderButton = ({
                 </Tooltip>
             );
         else return <RenderDropdown id={id} button={button} context={context} rowProps={rowProps} iconOnly={iconOnly} />;
+    }
+
+    /******** Link element *********/
+    if (button.type === 'link') {
+        if (tooltip)
+            return (
+                <Tooltip title={tooltip}>
+                    <RenderLink {...button} />
+                </Tooltip>
+            );
+        return <RenderLink {...button} />;
     }
 
     /******** Simple button ********/
