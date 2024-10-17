@@ -46,6 +46,7 @@ export const useApiDeleteRows = (api: IGridApi, gridProps: IGridProps): IGridApi
             messageBox = MessageBox.confirmWaiter({
                 language: gridProps.language,
                 content: gridProps.rowDeleteMessage ?? api.t('deleteSelectedRecordsQt'),
+                colorType: 'danger',
                 onOk: removeRows,
             });
         } else {

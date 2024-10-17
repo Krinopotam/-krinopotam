@@ -30,7 +30,7 @@ export const ButtonSimple = ({
     let forceColor: IButtonColorType | undefined;
     if (rowProps.makeActivePrimary !== false && button.active) {
         forceVariant = 'solid';
-        forceColor = 'primary';
+        forceColor =!button.color || button.color === 'default' ? 'primary' : undefined;
     }
 
     const style: CSSProperties = {...button.style};
