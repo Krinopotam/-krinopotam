@@ -1,0 +1,1 @@
+import{j as o,a as r}from"./index-fLDE7RV8.js";const i=t=>({layout:{type:"element",title:o.jsx(r,{checkedChildren:"hor",unCheckedChildren:"ver",onChange:e=>{t.updateProps({layout:e?"horizontal":"vertical"})}}),position:"left"}});export{i as F};
