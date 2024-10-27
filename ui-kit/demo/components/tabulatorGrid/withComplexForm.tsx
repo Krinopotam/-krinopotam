@@ -18,10 +18,10 @@ export const TagsColumns: ITabulatorColumn[] = [
 ];
 
 const columns: ITabulatorColumn[] = [
-    {field: 'num', title: '№', formatter: 'rownum', accessor: 'rownum', width: 50},
-    {field: 'name', title: 'Наименование', headerFilter: true, headerFilterFunc: 'like'},
-    {field: 'shortName', title: 'Краткое наименование', headerFilter: true, headerFilterFunc: 'like'},
-    {field: 'code', title: 'Код', headerFilter: true, headerFilterFunc: 'like'},
+    {field: 'num', title: '№', formatter: 'rownum', accessor: 'rownum', width: 50, vertAlign: 'middle'},
+    {field: 'name', title: 'Наименование', headerFilter: true, headerFilterFunc: 'like', vertAlign: 'middle'},
+    {field: 'shortName', title: 'Краткое наименование', headerFilter: true, headerFilterFunc: 'like', vertAlign: 'middle'},
+    {field: 'code', title: 'Код', headerFilter: true, headerFilterFunc: 'like', vertAlign: 'middle'},
 ];
 
 const dataSet = [
@@ -51,6 +51,8 @@ const dataSet = [
     },
     {id: '02', name: '1С Бухгалтерия', shortName: '1С BuNU', code: '1C_BUNU'},
     {id: '03', name: 'SAP Кадровый модуль', shortName: 'SAP HT', code: 'SAP_HR'},
+    {id: '04', name: 'Галактика', shortName: 'Galaxy', code: 'GAL'},
+    {id: '05', name: 'Босс кадровик', shortName: 'BOSS', code: 'BOSS'},
 ];
 
 const FormatsList = [
@@ -128,9 +130,9 @@ const useEditFormProps = () => {
                     },
 
                     ['Доступ']: {
-                        address: {component: InputField, label: 'Адрес'} satisfies IInputFieldProps,
-                        login: {component: InputField, label: 'Логин'} satisfies IInputFieldProps,
-                        password: {component: PasswordField, label: 'Пароль'} satisfies IPasswordFieldProps,
+                        address: {component: InputField, label: 'Адрес', dependsOn:['name']} satisfies IInputFieldProps,
+                        login: {component: InputField, label: 'Логин', dependsOn:['name']} satisfies IInputFieldProps,
+                        password: {component: PasswordField, label: 'Пароль', dependsOn:['name']} satisfies IPasswordFieldProps,
                     },
                     ['Входы']: {
                         inputs: {
@@ -175,6 +177,8 @@ export const WithComplexForm = (): React.JSX.Element => {
             editFormProps={editFormProps}
             onDelete={ () => {}}
             height={'100%'}
+            rowHeight={50}
+            confirmDelete={true}
             buttons={{title: {type: 'element', title: <b style={{fontSize: 18}}>Системы</b>, position: 'left'}}}
         />
     );

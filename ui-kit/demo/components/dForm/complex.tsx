@@ -34,9 +34,9 @@ export const Example = (): React.JSX.Element => {
     );
 };
 
-const useFormProps = (horizontal: boolean) => {
+export const useFormProps = (horizontal: boolean, forModal?: boolean) => {
     const configTab = useConfigTab();
-    const gridTab = useGridTab();
+    const gridTab = useGridTab(forModal);
     return {
         layout: horizontal ? 'horizontal' : 'vertical',
         fieldsProps: {
@@ -46,6 +46,7 @@ const useFormProps = (horizontal: boolean) => {
                     ['Config']: configTab,
                     ['Grid']: gridTab,
                 },
+                autoHeightResize: true,
             } satisfies ITabsFieldProps,
         },
 
@@ -61,16 +62,16 @@ const useConfigTab = () => {
                 field1: {component: DateTimeField, label: 'Date', placeholder: 'Date', width: 150} satisfies IDateTimeFieldProps,
                 field2: {component: InputField, label: 'Operation', placeholder: 'Operation name'} satisfies IInputFieldProps,
                 field3: {component: SelectField, label: 'Type', placeholder: 'Type', width:100} satisfies ISelectFieldProps,
-                field4: {component: SwitchField, label: 'Active'} satisfies ISwitchFieldProps,
+                field4: {component: SwitchField, label: 'Active', dependsOn: ['field2']} satisfies ISwitchFieldProps,
             },
         } satisfies IInlineGroupFieldProps,
         field5: {component: TextAreaField, label: 'Notes', autoSize: true} satisfies ITextAreaFieldProps,
-        divider: {component: DividerField, label: 'Optional part', autoSize: true} satisfies IDividerFieldProps,
-        field6: {component: QuillEditorField, label: 'Comments'} satisfies IQuillEditorFieldProps,
+        divider: {component: DividerField, label: 'Optional part', autoSize: true, dependsOn: ['field5']} satisfies IDividerFieldProps,
+        field6: {component: QuillEditorField, label: 'Comments', dependsOn: ['field5']} satisfies IQuillEditorFieldProps,
     } satisfies IDFormFieldsProps;
 };
 
-const useGridTab = () => {
+const useGridTab = (forModal?: boolean) => {
     return {
         Grid1: {
             component: TabulatorGridField,
@@ -79,7 +80,8 @@ const useGridTab = () => {
             columns: TabulatorBaseColumns,
             value: TabulatorPlainData,
             layout: 'fitColumns',
-            height: 300,
+            height: !forModal ? 300 : undefined,
+            autoHeightResize: !!forModal,
         } satisfies ITabulatorGridFieldProps,
     } satisfies IDFormFieldsProps;
 };
