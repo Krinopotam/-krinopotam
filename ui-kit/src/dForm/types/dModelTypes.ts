@@ -21,7 +21,7 @@ export interface IDFormBaseCallbacks<T> {
     onFormModelInitialized?: (api: T, cbControl: CallbackControl) => void;
 
     /** fires when the form ready status changed (form ready means form is rendered, initialized and all fields data are loaded) */
-    onFormReadyStateChanged?: (state: boolean, api: T, cbControl: CallbackControl) => void;
+    onFormReadyChanged?: (state: boolean, api: T, cbControl: CallbackControl) => void;
 
     /** fires when the form values changed  */
     onFormValuesChanged?: (fieldName: string, values: Record<string, AnyType>, api: T, cbControl: CallbackControl) => void;

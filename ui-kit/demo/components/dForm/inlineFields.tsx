@@ -48,7 +48,7 @@ export const useFormProps = (horizontal: boolean) => {
                 fieldsProps: {
                     field2_1: {component: TreeSelectField, label: 'Field2_1', placeholder: '50%', width: '50%'} satisfies ITreeSelectFieldProps,
                     field2_2: {component: SelectField, label: 'Field2_2', placeholder: 'auto (not set)'} satisfies ISelectFieldProps,
-                    field2_3: {component: LinkField, label: 'Field2_3', href: 'https://test.ru/link', value:'https://test.ru/link', placeholder: '20%', width: '20%'} satisfies ILinkFieldProps,
+                    field2_3: {component: LinkField, label: 'Field2_3', href: 'https://test.ru/link', defaultValue:'https://test.ru/link', placeholder: '20%', width: '20%'} satisfies ILinkFieldProps,
                 },
             } satisfies IInlineGroupFieldProps,
             inline3: {

@@ -53,7 +53,7 @@ export const TabulatorGridFieldRender = ({field, gridApi: gridApiBase}: {field: 
 const useSplitTabulatorProps = (props: ITabulatorGridFieldProps) => {
     return useMemo((): ITabulatorProps => {
         const result = SplitObject<ITabulatorGridFieldPropsBase & ITabulatorGridFieldPropsCallbacks, ITabulatorProps>(props, {
-            value: true,
+            defaultValue: true,
             dataSet: true,
             onMenuVisibilityChanged: true,
             onDataLoading: true,
@@ -121,7 +121,8 @@ const usePrepareCallbacks = (field: TabulatorGridField, fieldProps: ITabulatorGr
         onActiveRowChanged: (row, gridApi) => fieldProps.onActiveRowChanged?.(row, gridApi, field),
 
         onSelectionChange: (selectedData, rows, selectedRows, deselectedRows, gridApi) => {
-            if (field.isReady()) {
+            //if (field.isReady()) {
+            if (field.getModel().isFormReady()) {
                 if (fieldProps.selectionMode) {
                     field.setValue(selectedData ?? [], false, true, true);
                     field.setDirty(true);
@@ -132,11 +133,13 @@ const usePrepareCallbacks = (field: TabulatorGridField, fieldProps: ITabulatorGr
             return fieldProps.onSelectionChange?.(selectedData, rows, selectedRows, deselectedRows, gridApi, field);
         },
         onDataLoading: (dataSet, gridApi) => {
+            console.log('treeGrid onDataLoading setReady', false);
             field.setReady(false);
             return fieldProps.onDataLoading?.(dataSet, gridApi, field);
         },
 
         onDataLoaded: (dataSet, gridApi) => {
+            console.log('treeGrid onDataLoaded setReady', true);
             field.setReady(true);
             const fieldProps = field.getProps();
             if (!fieldProps.selectionMode) field.setValue(dataSet ?? [], false, true, true);
@@ -148,6 +151,7 @@ const usePrepareCallbacks = (field: TabulatorGridField, fieldProps: ITabulatorGr
             return fieldProps.onDataProcessed?.(dataSet, gridApi, field);
         },
         onDataLoadError: (message, code, gridApi) => {
+            console.log('treeGrid onDataLoadError setReady', false);
             field.setReady(false);
             return fieldProps.onDataLoadError?.(message, code, gridApi, field);
         },

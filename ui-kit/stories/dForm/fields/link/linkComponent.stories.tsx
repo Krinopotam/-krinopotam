@@ -34,7 +34,7 @@ export const Playground: Story = {
     args: {
         label: 'Link field',
         href: 'https://ya.ru',
-        value: 'Click me',
+        defaultValue: 'Click me',
         target: '_blank',
     },
 };

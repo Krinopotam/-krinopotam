@@ -77,8 +77,8 @@ export class DModel {
     /** the form dirty status */
     private _formDirty = false;
 
-    /** the form ready status */
-    private _formReady: boolean = false;
+    /** the previous form ready status */
+    private _formReadyState: boolean | undefined = undefined;
 
     /** the form component mounted status */
     private _isFormMounted = false;
@@ -265,7 +265,7 @@ export class DModel {
             if (!field.canHaveValue()) continue;
 
             let fieldValue: unknown = undefined;
-            if (mode === 'create') fieldValue = fieldProps.value ?? this._formProps.defaultValues?.[fieldName];
+            if (mode === 'create') fieldValue = fieldProps.defaultValue ?? this._formProps.defaultValues?.[fieldName];
             else fieldValue = dataSet?.[fieldName];
             values[fieldName] = fieldValue;
         }
@@ -520,7 +520,6 @@ export class DModel {
      * The form began initialization (renders for the first time)
      */
     setFormInit() {
-        this.setFormReady(false); //At the time of initialization, the form is not yet ready
         this._formProps?.onFormInit?.(this._formApi, new CallbackControl());
     }
 
@@ -530,46 +529,36 @@ export class DModel {
      * @returns Form ready status
      */
     isFormReady(): boolean {
-        return this._formReady;
+        return !!this._formReadyState;
     }
 
-    checkIsFormReady() {
-
-    }
+    /** Timeout ID for form ready state */
+    private _readyTimeout: number | undefined;
 
     /**
-     * Trying to set a ready status to the form  (all fields are completely initialized, data are loaded)
-     * Can be set true only if the form is initialized and all visible fields has ready status
-     * *this function doesn't call onFieldReady callbacks of the fields
-     * @param value - ready status
-     * @param noEvents - do not emit onReady callback
+     * Trying to call onFormReadyChanged callback(all fields are completely initialized, data are loaded)
+     * Will call if previous form ready state is not the same
      */
-    setFormReady(value: boolean, noEvents?: boolean) {
-        setTimeout(() => {
-            const prevValue = this.isFormReady();
-
-            if (this.isFormFetching() || this.isFormFetchingFailed()) value = false;
-
-            if (!value) {
-                this._formReady = value;
-                if (prevValue !== value && !noEvents) this._formProps?.onFormReadyStateChanged?.(value, this._formApi, new CallbackControl());
-                return;
-            }
-
-            //set form ready status only if every visible field from fieldsProps has set ready status
-            for (const fieldName in this._fieldsMap) {
-                const field = this._fieldsMap[fieldName];
-                if (field.isHidden()) continue;
-                if (!field.isReady()) {
-                    value = false;
-                    break;
+    updateFormReadyState(state:boolean) {
+        if (typeof this._readyTimeout !== 'undefined') clearTimeout(this._readyTimeout);
+        this._readyTimeout = setTimeout(() => {
+            this._readyTimeout = undefined;
+            let isFormReady = true;
+            if (!state ||  this.isFormFetching() || this.isFormFetchingFailed()) isFormReady = false;
+            else {
+                for (const fieldName in this._fieldsMap) {
+                    const field = this._fieldsMap[fieldName];
+                    if (field.isHidden()) continue;
+                    if (!field.isReady()) isFormReady = false;
                 }
             }
 
-            this._formReady = value;
+            if (isFormReady === this._formReadyState) return;
 
-            if (prevValue !== value && !noEvents) this._formProps?.onFormReadyStateChanged?.(value, this._formApi, new CallbackControl());
-        }, 0);
+            this._formReadyState = isFormReady;
+            console.log('run onFormReadyChanged', isFormReady);
+            this._formProps?.onFormReadyChanged?.(isFormReady, this._formApi, new CallbackControl());
+        }, 10) as unknown as number;
     }
 
     // Validation
@@ -669,6 +658,9 @@ export class DModel {
     fetchData() {
         const dataSource = this._formProps.onDataFetch?.(this._formApi, new CallbackControl());
         if (!dataSource) return;
+        this.setFormFetching(true);
+        this.setFormFetchingFailed(false);
+        this.updateFormReadyState(false);
 
         dataSource.then(
             (result: {data: Record<string, AnyType>}) => {
@@ -681,7 +673,8 @@ export class DModel {
                 const values = result.data as IDFormDataSet;
                 this.setValues(values);
 
-                this.setFormReady(true);
+                console.log('fetchData success');
+                this.updateFormReadyState(true);
             },
             (error: IError) => {
                 if (!this.isFormMounted()) return;
@@ -689,12 +682,10 @@ export class DModel {
                 this.setFormFetchingFailed(true);
                 this._formProps.onDataFetchError?.(error, this._formApi, new CallbackControl());
                 this._formProps.onDataFetchComplete?.(this._formApi, new CallbackControl());
+
+                this.updateFormReadyState(true);
             }
         );
-
-        this.setFormReady(false);
-        this.setFormFetching(true);
-        this.setFormFetchingFailed(false);
     }
 
     //endregion

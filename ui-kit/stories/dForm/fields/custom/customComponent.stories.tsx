@@ -40,7 +40,7 @@ type Story = StoryObj<typeof CustomComponent>;
 export const Playground: Story = {
     args: {
         label: 'Custom field',
-        value: (
+        defaultValue: (
             <h3>
                 Any <span style={{color: 'red'}}>react</span> component or <span style={{color: 'blue'}}>string</span>{' '}
             </h3>

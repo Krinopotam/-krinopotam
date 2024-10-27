@@ -35,7 +35,7 @@ export interface IBaseFieldProps<TField extends IBaseField, TValue> extends Reco
     inlineGroup?: string;
 
     /** Field default value */
-    value?: TValue;
+    defaultValue?: TValue;
 
     /** Whether the field default state is hidden */
     hidden?: boolean;
@@ -230,7 +230,7 @@ export class BaseField<TFieldProps extends IAnyFieldProps> {
     }
 
     /** @return field value */
-    getValue(): TFieldProps['value'] | undefined {
+    getValue(): TFieldProps['defaultValue'] | undefined {
         const formValues = this.model.getValues();
         return formValues[this.fieldName];
     }
@@ -242,7 +242,7 @@ export class BaseField<TFieldProps extends IAnyFieldProps> {
      * @param noEvents - do not emit onValueChanged callback
      * @param noRerender - do not emit re-rendering
      */
-    setValue(value: TFieldProps['value'] | undefined, noEvents?: boolean, noRerender?: boolean) {
+    setValue(value: TFieldProps['defaultValue'] | undefined, noEvents?: boolean, noRerender?: boolean) {
         const prevValue = this.getValue();
         if (prevValue === value) return;
 
@@ -393,6 +393,7 @@ export class BaseField<TFieldProps extends IAnyFieldProps> {
 
     /** @returns field ready status  */
     isReady(): boolean {
+        if (this.model.isFormFetching() || this.model.isFormFetchingFailed()) return false;
         return this.model.getReadyFields()[this.fieldName] ?? false;
     }
 
@@ -407,8 +408,11 @@ export class BaseField<TFieldProps extends IAnyFieldProps> {
 
         this.model.getReadyFields()[this.fieldName] = value;
 
-        if (!noEvents) this.getProps()?.onReadyStateChanged?.(value, this);
-        this.model.setFormReady(value, noEvents);
+        if (!noEvents) {
+            this.getProps()?.onReadyStateChanged?.(value, this);
+            console.log('field ' + this.getName(), value);
+            this.model.updateFormReadyState(value)
+        }
     }
 
     /** @returns the error text of the field  */

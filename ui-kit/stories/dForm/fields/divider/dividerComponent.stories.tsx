@@ -42,14 +42,14 @@ export default {
 type Story = StoryObj<typeof DividerComponent>;
 export const WithTitle: Story = {
     args: {
-        value: 'Divider',
+        defaultValue: 'Divider',
         plain: true,
     },
 };
 
 export const TitleLeft: Story = {
     args: {
-        value: 'Divider',
+        defaultValue: 'Divider',
         orientation: 'left',
         plain: true,
     },
@@ -57,7 +57,7 @@ export const TitleLeft: Story = {
 
 export const TitleRight: Story = {
     args: {
-        value: 'Divider',
+        defaultValue: 'Divider',
         orientation: 'right',
         plain: true,
     },

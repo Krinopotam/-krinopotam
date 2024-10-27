@@ -38,7 +38,7 @@ export default {
 } satisfies Meta<typeof TabulatorGridComponent>;
 
 const baseArgs: Story['args'] = {
-    value: TabulatorTreeDataset,
+    defaultValue: TabulatorTreeDataset,
     columns: TabulatorGridColumns,
     columnDefaults: {
         resizable: 'header',

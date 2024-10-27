@@ -78,7 +78,7 @@ const useGridTab = (forModal?: boolean) => {
             label: 'Users',
             columnDefaults: TabulatorBaseColumnsDef,
             columns: TabulatorBaseColumns,
-            value: TabulatorPlainData,
+            defaultValue: TabulatorPlainData,
             layout: 'fitColumns',
             height: !forModal ? 300 : undefined,
             autoHeightResize: !!forModal,

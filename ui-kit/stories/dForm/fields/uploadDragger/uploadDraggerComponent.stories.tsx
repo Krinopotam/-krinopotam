@@ -45,7 +45,7 @@ export const Default: Story = {
 export const DefaultValues: Story = {
     args: {
         ...baseArgs,
-        value: [
+        defaultValue: [
             {
                 uid: '1',
                 name: 'xxx.png',

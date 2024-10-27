@@ -114,7 +114,7 @@ const formProps: IDFormProps = {
             component: TreeSelectField,
             label: 'Подразделения',
             dataSet: dataSet,
-            value: '03-03-01',
+            defaultValue: '03-03-01',
         } satisfies ITreeSelectFieldProps,
     },
     formMode: 'create',

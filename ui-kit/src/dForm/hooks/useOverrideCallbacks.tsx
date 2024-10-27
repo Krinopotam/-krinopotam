@@ -11,8 +11,8 @@ export const useOverrideCallbacks = (props: IDFormProps) => {
     return useMemo((): IDFormProps => {
         const callbacks: IDFormBaseCallbacks<IDFormApi> = {
             /** fires when a form ready state changed */
-            onFormReadyStateChanged: (state, api, cbControl) => {
-                props?.onFormReadyStateChanged?.(state, api, cbControl);
+            onFormReadyChanged: (state, api, cbControl) => {
+                props?.onFormReadyChanged?.(state, api, cbControl);
                 if (cbControl.isPrevented()) return;
 
                 if (state) api.getButtonsApi().disabled?.('ok', false);
