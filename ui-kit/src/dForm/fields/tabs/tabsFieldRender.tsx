@@ -69,8 +69,10 @@ export const TabsFieldRender = ({field}: {field: TabsField}): React.JSX.Element 
     return (
         <Tabs
             type={fieldProps.type ?? 'card'}
-            tabBarStyle={fieldProps.tabBarStyle}
             size={fieldProps.size ?? 'small'}
+            tabBarStyle={fieldProps.tabBarStyle}
+            tabBarExtraContent={fieldProps.tabBarExtraContent}
+            tabBarGutter={fieldProps.tabBarGutter}
             items={items}
             style={style}
             renderTabBar={tabBarRender}

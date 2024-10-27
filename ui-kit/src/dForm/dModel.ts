@@ -78,7 +78,7 @@ export class DModel {
     private _formDirty = false;
 
     /** the form ready status */
-    private _formReady: boolean | undefined = undefined;
+    private _formReady: boolean = false;
 
     /** the form component mounted status */
     private _isFormMounted = false;
@@ -529,8 +529,12 @@ export class DModel {
      * Gets the current ready status of the form (all fields are completely initialized, data are loaded)
      * @returns Form ready status
      */
-    isFormReady(): boolean | undefined {
+    isFormReady(): boolean {
         return this._formReady;
+    }
+
+    checkIsFormReady() {
+
     }
 
     /**

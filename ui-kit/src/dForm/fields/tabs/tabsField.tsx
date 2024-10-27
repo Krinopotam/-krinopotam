@@ -1,6 +1,7 @@
 import {AnyType} from "@krinopotam/service-types";
 import {BaseField, IBaseFieldProps} from '@src/dForm/fields/base/baseField';
 import {TabsFieldRender} from '@src/dForm/fields/tabs/tabsFieldRender';
+import {TabBarExtraContent} from "rc-tabs/lib/interface";
 import React from 'react';
 
 import {IDFormFieldsProps} from "@src/dForm";
@@ -32,6 +33,12 @@ export interface ITabsFieldProps<TFieldsProps extends Record<string, AnyType> = 
 
     /** Tab panels min height */
     panelsMinHeight?: string | number;
+
+    /** Tab bar extra content */
+    tabBarExtraContent?:TabBarExtraContent
+
+    /** Tab bar gutter */
+    tabBarGutter?:number
 
     /*************** Callbacks *****************/
     /** Fires when the disable state of a tab changes  */

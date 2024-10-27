@@ -62,7 +62,7 @@ export const TabulatorBase = (props: ITabulatorProps) => {
     prevDataRef.current = props.data
     prevPropsRef.current = newProps;
 
-    return <TabulatorBaseMemo {...newProps} />;
+    return <TabulatorBaseMemo {...newProps} data={prevDataRef.current} />;
 };
 
 const isPropsChanged = (newProps: ITabulatorProps, oldProps: ITabulatorProps) => {
