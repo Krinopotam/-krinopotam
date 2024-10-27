@@ -1,6 +1,6 @@
 import React from "react";
 import {Space} from "antd";
-import {IButtonRowProps, IFormButtons} from "@src/buttonsRow";
+import {IButtonRowProps, IFormButtons} from "@src/buttonsRow/types/types";
 import {RenderButton} from "@src/buttonsRow/components/renderButton";
 
 export const RenderButtonGroup = ({

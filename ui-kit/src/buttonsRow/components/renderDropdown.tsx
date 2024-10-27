@@ -1,4 +1,4 @@
-import {IButtonRowProps, IFormButton} from '@src/buttonsRow';
+import {IButtonRowProps, IFormButton} from '@src/buttonsRow/types/types';
 import {MenuProps} from 'antd';
 import React from 'react';
 import {ButtonDropdownClickable} from '@src/buttonsRow/components/buttonDropdownClickable';

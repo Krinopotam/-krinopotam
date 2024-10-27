@@ -1,7 +1,7 @@
 import {IButtonType} from '@src/button';
 import React, {CSSProperties, useCallback} from 'react';
 import {Dropdown, MenuProps} from 'antd';
-import {IButtonRowProps, IFormButton} from '@src/buttonsRow';
+import {IButtonRowProps, IFormButton} from '@src/buttonsRow/types/types';
 
 export const ButtonDropdownClickable = ({
     id,

@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {Divider, Tooltip} from 'antd';
-import {IButtonRowProps, IFormButton} from '@src/buttonsRow';
+import {IButtonRowProps, IFormButton} from '@src/buttonsRow/types/types';
 import {ButtonSimple} from '@src/buttonsRow/components/buttonSimple';
 import {RenderDropdown} from '@src/buttonsRow/components/renderDropdown';
 import {useResponsive} from '@krinopotam/common-hooks';

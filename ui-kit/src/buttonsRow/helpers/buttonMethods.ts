@@ -1,4 +1,4 @@
-import {IButtonRowProps, IFormButton, IFormButtons} from '@src/buttonsRow';
+import {IButtonRowProps, IFormButton, IFormButtons} from '@src/buttonsRow/types/types';
 
 export const prepareButtons = (buttons: IFormButtons | undefined, props: IButtonRowProps) => {
     const clonedButtons = buttons ? {...buttons} : {};

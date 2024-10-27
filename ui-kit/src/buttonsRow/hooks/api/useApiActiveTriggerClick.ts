@@ -1,4 +1,4 @@
-import {IButtonsRowApi} from '@src/buttonsRow';
+import {IButtonsRowApi} from '@src/buttonsRow/types/types';
 
 export const useApiActiveTriggerClick = (api: IButtonsRowApi): IButtonsRowApi['activeTriggerClick'] => {
     return () => {

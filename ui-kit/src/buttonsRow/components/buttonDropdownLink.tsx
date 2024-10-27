@@ -1,7 +1,7 @@
 import {DownOutlined} from '@ant-design/icons';
 import {Dropdown, MenuProps, Space} from 'antd';
 import React, {CSSProperties} from 'react';
-import {IButtonRowProps, IFormButton} from '@src/buttonsRow';
+import {IButtonRowProps, IFormButton} from '@src/buttonsRow/types/types';
 
 export const ButtonDropdownLink = ({
     button,

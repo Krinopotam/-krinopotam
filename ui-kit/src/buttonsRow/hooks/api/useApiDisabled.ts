@@ -1,4 +1,4 @@
-import {IButtonsRowApi, IFormButton} from '@src/buttonsRow';
+import {IButtonsRowApi, IFormButton} from '@src/buttonsRow/types/types';
 
 export const useApiDisabled = (api: IButtonsRowApi): IButtonsRowApi['disabled'] => {
     return (buttonId: string, disabled?: IFormButton['disabled']): boolean => {

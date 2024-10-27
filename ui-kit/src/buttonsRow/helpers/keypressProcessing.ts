@@ -1,4 +1,4 @@
-import {IButtonRowProps, IButtonsRowApi} from '@src/buttonsRow';
+import {IButtonRowProps, IButtonsRowApi} from '@src/buttonsRow/types/types';
 
 export const keyDownHandler = (e: KeyboardEvent, props: IButtonRowProps, api: IButtonsRowApi, wrapperId: string) => {
     const target = e.target as HTMLElement;

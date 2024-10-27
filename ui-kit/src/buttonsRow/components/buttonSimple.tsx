@@ -1,4 +1,4 @@
-import {IButtonRowProps, IFormButton} from '@src/buttonsRow';
+import {IButtonRowProps, IFormButton} from '@src/buttonsRow/types/types';
 import React, {CSSProperties, useCallback, useEffect, useRef} from 'react';
 import {Button, IButtonColorType, IButtonVariantType} from '@src/button';
 

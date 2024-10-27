@@ -1,6 +1,6 @@
 import React from 'react';
 import {Dropdown, MenuProps, Space} from 'antd';
-import {IButtonRowProps, IFormButton} from '@src/buttonsRow';
+import {IButtonRowProps, IFormButton} from '@src/buttonsRow/types/types';
 import {DownOutlined} from '@ant-design/icons';
 import {ButtonSimple} from '@src/buttonsRow/components/buttonSimple';
 

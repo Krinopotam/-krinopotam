@@ -1,4 +1,4 @@
-import {IButtonsRowApi} from '@src/buttonsRow';
+import {IButtonsRowApi} from '@src/buttonsRow/types/types';
 
 export const useApiLoading = (api: IButtonsRowApi): IButtonsRowApi['loading'] => {
     return (buttonId: string, loading?: boolean): boolean => {

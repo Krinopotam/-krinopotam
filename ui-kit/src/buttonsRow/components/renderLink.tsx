@@ -1,5 +1,5 @@
 import React from "react";
-import {IFormButton} from "@src/buttonsRow";
+import {IFormButton} from "@src/buttonsRow/types/types";
 
 
 export const RenderLink = (button:IFormButton): React.JSX.Element => {

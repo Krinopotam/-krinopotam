@@ -1,5 +1,6 @@
+import {mergeButtons} from "@src/buttonsRow/tools/mergeButtons";
 import {prepareButtons} from '@src/buttonsRow/helpers/buttonMethods';
-import {IButtonsRowApi, mergeButtons} from '@src/buttonsRow';
+import {IButtonsRowApi} from '@src/buttonsRow/types/types';
 
 export const useApiUpdateButtons = (api: IButtonsRowApi): IButtonsRowApi['updateButtons'] => {
     return buttons => {

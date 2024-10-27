@@ -1,5 +1,5 @@
 import {useMemo} from 'react';
-import {IButtonRowProps, IFormButtons} from '@src/buttonsRow';
+import {IButtonRowProps, IFormButtons} from '@src/buttonsRow/types/types';
 import {prepareButtons} from '@src/buttonsRow/helpers/buttonMethods';
 
 export const useGetPreparedButtons = (buttons: IFormButtons | undefined, props: IButtonRowProps) => {

@@ -1,4 +1,4 @@
-import {IButtonsRowApi, IFormButton} from '@src/buttonsRow';
+import {IButtonsRowApi, IFormButton} from '@src/buttonsRow/types/types';
 
 export const useApiHidden = (api: IButtonsRowApi): IButtonsRowApi['hidden'] => {
     return (buttonId: string, hidden?: IFormButton['hidden']): boolean => {

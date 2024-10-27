@@ -1,6 +1,6 @@
 import {useState} from 'react';
 import {GetNanoId} from '@krinopotam/js-helpers/helpersString/getNanoId';
-import {IButtonRowProps, IButtonsRowApi, IFormButtons} from '@src/buttonsRow';
+import {IButtonRowProps, IButtonsRowApi, IFormButtons} from '@src/buttonsRow/types/types';
 import {useApiGetId} from '@src/_shared/hooks/componentApiMethods/useApiGetId';
 import {useApiGetProps} from '@src/_shared/hooks/componentApiMethods/useApiGetProps';
 import {useApiSetProps} from '@src/_shared/hooks/componentApiMethods/useApiSetProps';
