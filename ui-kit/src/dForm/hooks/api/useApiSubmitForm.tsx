@@ -3,8 +3,6 @@ import {MessageBox} from '@src/messageBox';
 
 export const useApiSubmitForm = (api: IDFormApi) => {
     return () => {
-        api.model.incrementSubmitCount();
-
         const errors = api.validateForm(true);
         if (Object.keys(errors).length > 0) return;
 

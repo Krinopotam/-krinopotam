@@ -13,7 +13,7 @@ import {IsPromise} from '@krinopotam/js-helpers/helpersObjects/isPromise';
 import {BaseValidator} from './validators/baseValidator';
 import React from 'react';
 import {IAnyFieldProps, IBaseField} from '@src/dForm/fields/base/baseField';
-import {IDFormApi, IDFormDataSet, IDFormFieldsProps, IDFormProps} from '@src/dForm/index';
+import {IDFormApi, IDFormDataSet, IDFormFieldsProps, IDFormProps, IDFormSubmitResultObject, IDFormSubmitResultPromise} from '@src/dForm/index';
 import {AnyType, IError} from '@krinopotam/service-types';
 import {InlineGroupField} from '@src/dForm/fields/inlineGroup/inlineGroupField';
 import {IDFormMode} from '@src/dForm/types/dFormTypes';
@@ -46,13 +46,13 @@ export class DModel {
     private _values: Record<string, AnyType> = {};
 
     /** Touched field statuses */
-    private _touched: Record<string, boolean | undefined> = {};
+    private readonly _touched: Record<string, boolean | undefined> = {};
 
     /** Dirty field statuses */
-    private _dirty: Record<string, boolean | undefined> = {};
+    private readonly _dirty: Record<string, boolean | undefined> = {};
 
     /** Error field statuses */
-    private _errors: Record<string, string> = {};
+    private readonly _errors: Record<string, string> = {};
 
     /** Hidden field statuses */
     private _hidden: Record<string, boolean | undefined> = {};
@@ -64,7 +64,7 @@ export class DModel {
     private _disabled: Record<string, boolean | undefined> = {};
 
     /** Readiness field statuses (the field is completely initialized, its data is loaded) */
-    private _ready: Record<string, boolean | undefined> = {};
+    private readonly _ready: Record<string, boolean | undefined> = {};
     //endregion
 
     //region Form properties
@@ -363,7 +363,7 @@ export class DModel {
     }
 
     /** @return form labels collection */
-    getFormLabels() {
+    getLabels() {
         return this._labels;
     }
 
@@ -372,7 +372,7 @@ export class DModel {
      * @return the dataset that was passed to the form merged with current form values
      */
     getFormDataSet() {
-        const values = this.getFormValues();
+        const values = this.getValues();
         return {...this._dataSet, ...values};
     }
 
@@ -380,7 +380,7 @@ export class DModel {
      * Not to be confused with dataSet:
      * @returns collection of field values present on the form only. DataSet values will be skipped
      */
-    getFormValues() {
+    getValues() {
         return this._values;
     }
 
@@ -389,7 +389,7 @@ export class DModel {
      * @param noEvents - do not emit onValueChanged callback
      * @param noRerender - do not emit re-rendering
      */
-    setFormValues(dataSet: IDFormDataSet | undefined, noEvents?: boolean, noRerender?: boolean) {
+    setValues(dataSet: IDFormDataSet | undefined, noEvents?: boolean, noRerender?: boolean) {
         const newDataSet = noEvents ? dataSet : (this._formProps.onDataSetChange?.(dataSet, this._formApi, new CallbackControl()) ?? dataSet);
 
         this._dataSet = newDataSet;
@@ -401,37 +401,37 @@ export class DModel {
     }
 
     /** @return form touched fields collection */
-    getFormTouchedFields() {
+    getTouchedFields() {
         return this._touched;
     }
 
     /** @return form dirty fields collection */
-    getFormDirtyFields() {
+    getDirtyFields() {
         return this._dirty;
     }
 
     /** @return form disabled fields collection */
-    getFormDisabledFields() {
+    getDisabledFields() {
         return this._disabled;
     }
 
     /** @return form read only fields collection */
-    getFormReadOnlyFields() {
+    getReadOnlyFields() {
         return this._readOnly;
     }
 
     /** @return form hidden fields collection */
-    getFormHiddenFields() {
+    getHiddenFields() {
         return this._hidden;
     }
 
     /** @return form ready fields collection (the field is completely initialized, its data is loaded) */
-    getFormReadyFields() {
+    getReadyFields() {
         return this._ready;
     }
 
     /** @returns a collection of errors of only those visible fields for which there are errors (hidden fields have no errors) */
-    getFormErrors() {
+    getErrors() {
         return this._errors;
     }
 
@@ -584,14 +584,14 @@ export class DModel {
         this.emitFormRender();
 
         this._formProps.onFormValidated?.(
-            this.getFormValues(),
+            this.getValues(),
             this.getFormDataSet(),
-            this.getFormErrors(),
+            this.getErrors(),
             this.isFormSubmitting(),
             this._formApi,
             new CallbackControl()
         );
-        return this.getFormErrors();
+        return this.getErrors();
     }
 
     /**
@@ -636,7 +636,7 @@ export class DModel {
      * @returns is the form has error
      */
     isFormHasError() {
-        const errors = this.getFormErrors();
+        const errors = this.getErrors();
         for (const fieldName in errors) {
             if (errors[fieldName]) return true;
         }
@@ -675,7 +675,7 @@ export class DModel {
                 this._formProps.onDataFetchComplete?.(this._formApi, new CallbackControl());
 
                 const values = result.data as IDFormDataSet;
-                this.setFormValues(values);
+                this.setValues(values);
 
                 this.setFormReady(true);
             },
@@ -696,31 +696,26 @@ export class DModel {
     //endregion
 
     //region Submit
-    /**
-     * Submit form
-     */
-    submit({
-        onSubmitSuccess,
-        onSubmitError,
-        onSubmitComplete,
-    }: {
-        onSubmitSuccess?: (values: Record<string, AnyType>, dataSet: IDFormDataSet, result: Record<string, AnyType> | undefined, model: DModel) => void;
-        onSubmitError?: (values: Record<string, AnyType>, dataSet: IDFormDataSet, error: IError, model: DModel) => void;
-        onSubmitComplete?: (values: Record<string, AnyType>, dataSet: IDFormDataSet, errors: Record<string, string | undefined>, model: DModel) => void;
-    } = {}) {
+    /** Submit form */
+    submit(
+        callbacks: {
+            onValidationFailed?: (validationErrors: Record<string, string>) => void;
+            onSubmitSuccess?: IDFormProps['onSubmitSuccess'];
+            onSubmitError?: IDFormProps['onSubmitError'];
+            onSubmitComplete?: IDFormProps['onSubmitComplete'];
+        } = {}
+    ) {
         if (this.isFormSubmitting()) return;
 
         this.incrementSubmitCount();
 
         this.setFormSubmitting(true);
 
-        const formValues = this.getFormValues();
+        const formValues = this.getValues();
         const dataSet = this.getFormDataSet();
 
         if (this._formMode === 'clone' && this._formProps.assignExtraValues?.clone) dataSet[this._formProps.assignExtraValues.clone] = dataSet.id;
-
         if (this._formMode === 'update' && this._formProps.assignExtraValues?.update) dataSet[this._formProps.assignExtraValues.update] = true;
-
         if (this._formMode === 'create' || this._formMode === 'clone') {
             if (this._formProps.assignExtraValues?.create) dataSet[this._formProps.assignExtraValues.create] = true;
             delete dataSet.id;
@@ -732,142 +727,207 @@ export class DModel {
 
         if (this.isFormHasError()) {
             this.setFormSubmitting(false);
-            onSubmitComplete?.(formValues, dataSet, validationErrors, this);
+            callbacks.onValidationFailed?.(validationErrors);
+            callbacks.onSubmitComplete?.(formValues, dataSet, validationErrors, this._formApi, new CallbackControl());
             this._formProps?.onSubmitComplete?.(formValues, dataSet, validationErrors, this._formApi, new CallbackControl());
             return;
         }
 
-        if (!this._formProps?.onSubmit) {
-            this.setFormSubmitting(false);
-            onSubmitError?.(
+        if (!this._formProps?.onSubmit) return this.submitUnhandled(validationErrors, callbacks);
+
+        const result = this._formProps?.onSubmit(formValues, dataSet, this._formApi, new CallbackControl());
+
+        if (IsPromise(result)) this.submitPromise(result, validationErrors, callbacks);
+        else if (typeof result === 'object') this.submitObject(result, validationErrors, callbacks);
+        else if (typeof result === 'boolean') this.submitBoolean(result, validationErrors, callbacks);
+        else if (typeof result === 'undefined') this.submitUndefined(validationErrors, callbacks);
+    }
+
+    /** Submit form if submit handler not specified */
+    private submitUnhandled(
+        validationErrors: Record<string, string>,
+        callbacks: {
+            onSubmitSuccess?: IDFormProps['onSubmitSuccess'];
+            onSubmitError?: IDFormProps['onSubmitError'];
+            onSubmitComplete?: IDFormProps['onSubmitComplete'];
+        } = {}
+    ) {
+        const formValues = this.getValues();
+        const dataSet = this.getFormDataSet();
+        this.setFormSubmitting(false);
+        callbacks.onSubmitError?.(
+            formValues,
+            dataSet,
+            {
+                message: 'The onSubmit callback not specified',
+                error: 'ERR_SUBMIT_NOT_SPECIFIED',
+                code: 405,
+                stack: Error().stack,
+            },
+            this._formApi,
+            new CallbackControl()
+        );
+        callbacks.onSubmitComplete?.(formValues, dataSet, validationErrors, this._formApi, new CallbackControl());
+        this._formProps?.onSubmitError?.(
+            formValues,
+            dataSet,
+            {
+                message: 'The onSubmit callback not specified',
+                error: 'ERR_SUBMIT_NOT_SPECIFIED',
+                code: 405,
+                stack: Error().stack,
+            },
+            this._formApi,
+            new CallbackControl()
+        );
+        this._formProps?.onSubmitComplete?.(formValues, dataSet, validationErrors, this._formApi, new CallbackControl());
+    }
+
+    /** Submit form if submit handler callback returns promise */
+    private submitPromise(
+        result: IDFormSubmitResultPromise,
+        validationErrors: Record<string, string>,
+        callbacks: {
+            onSubmitSuccess?: IDFormProps['onSubmitSuccess'];
+            onSubmitError?: IDFormProps['onSubmitError'];
+            onSubmitComplete?: IDFormProps['onSubmitComplete'];
+        } = {}
+    ) {
+        const formValues = this.getValues();
+        const dataSet = this.getFormDataSet();
+
+        result
+            .then(result => {
+                if (!this.isFormMounted()) return;
+                this.setFormSubmitting(false);
+                callbacks.onSubmitSuccess?.(formValues, dataSet, result?.data || dataSet, this._formApi, new CallbackControl());
+                callbacks.onSubmitComplete?.(formValues, dataSet, validationErrors, this._formApi, new CallbackControl());
+                this._formProps?.onSubmitSuccess?.(formValues, dataSet, result?.data || dataSet, this._formApi, new CallbackControl());
+                this._formProps?.onSubmitComplete?.(formValues, dataSet, validationErrors, this._formApi, new CallbackControl());
+            })
+            .catch((error: IError) => {
+                if (!this.isFormMounted()) return;
+                this.setFormSubmitting(false);
+                callbacks.onSubmitError?.(formValues, dataSet, error, this._formApi, new CallbackControl());
+                callbacks.onSubmitComplete?.(formValues, dataSet, validationErrors, this._formApi, new CallbackControl());
+                this._formProps?.onSubmitError?.(formValues, dataSet, error, this._formApi, new CallbackControl());
+                this._formProps?.onSubmitComplete?.(formValues, dataSet, validationErrors, this._formApi, new CallbackControl());
+            });
+    }
+
+    /** Submit form if submit handler callback returns object */
+    private submitObject(
+        result: IDFormSubmitResultObject,
+        validationErrors: Record<string, string>,
+        callbacks: {
+            onSubmitSuccess?: IDFormProps['onSubmitSuccess'];
+            onSubmitError?: IDFormProps['onSubmitError'];
+            onSubmitComplete?: IDFormProps['onSubmitComplete'];
+        } = {}
+    ) {
+        const formValues = this.getValues();
+        const dataSet = this.getFormDataSet();
+
+        this.setFormSubmitting(false);
+
+        if (result.error?.message) {
+            callbacks.onSubmitError?.(
                 formValues,
                 dataSet,
                 {
-                    message: 'The onSubmit callback not specified',
-                    error: 'ERR_SUBMIT_NOT_SPECIFIED',
-                    code: 405,
-                    stack: Error().stack,
+                    message: result.error.message || '',
+                    error: result.error.error,
+                    code: result.error.code || 400,
                 },
-                this
+                this._formApi,
+                new CallbackControl()
             );
-            onSubmitComplete?.(formValues, dataSet, validationErrors, this);
             this._formProps?.onSubmitError?.(
                 formValues,
                 dataSet,
                 {
-                    message: 'The onSubmit callback not specified',
-                    error: 'ERR_SUBMIT_NOT_SPECIFIED',
-                    code: 405,
+                    message: result.error.message || '',
+                    error: result.error.error,
+                    code: result.error.code || 400,
+                },
+                this._formApi,
+                new CallbackControl()
+            );
+        } else {
+            callbacks.onSubmitSuccess?.(formValues, dataSet, result.data ?? dataSet, this._formApi, new CallbackControl());
+            this._formProps?.onSubmitSuccess?.(formValues, dataSet, result.data ?? dataSet, this._formApi, new CallbackControl());
+        }
+
+        callbacks.onSubmitComplete?.(formValues, dataSet, validationErrors, this._formApi, new CallbackControl());
+        this._formProps?.onSubmitComplete?.(formValues, dataSet, validationErrors, this._formApi, new CallbackControl());
+    }
+
+    /** Submit form if submit handler callback returns boolean */
+    private submitBoolean(
+        result: boolean,
+        validationErrors: Record<string, string>,
+        callbacks: {
+            onSubmitSuccess?: IDFormProps['onSubmitSuccess'];
+            onSubmitError?: IDFormProps['onSubmitError'];
+            onSubmitComplete?: IDFormProps['onSubmitComplete'];
+        } = {}
+    ) {
+        const formValues = this.getValues();
+        const dataSet = this.getFormDataSet();
+
+        this.setFormSubmitting(false);
+
+        if (result) {
+            callbacks.onSubmitSuccess?.(formValues, dataSet, dataSet, this._formApi, new CallbackControl());
+            this._formProps?.onSubmitSuccess?.(formValues, dataSet, dataSet, this._formApi, new CallbackControl());
+        } else {
+            callbacks.onSubmitError?.(
+                formValues,
+                dataSet,
+                {
+                    message: 'Unknown error',
+                    error: 'ERR_UNKNOWN',
+                    code: 520,
                     stack: Error().stack,
                 },
                 this._formApi,
                 new CallbackControl()
             );
-            this._formProps?.onSubmitComplete?.(formValues, dataSet, validationErrors, this._formApi, new CallbackControl());
-            return;
+            this._formProps?.onSubmitError?.(
+                formValues,
+                dataSet,
+                {
+                    message: 'Unknown error',
+                    error: 'ERR_UNKNOWN',
+                    code: 520,
+                    stack: Error().stack,
+                },
+                this._formApi,
+                new CallbackControl()
+            );
         }
 
-        const result = this._formProps?.onSubmit(formValues, dataSet, this._formApi, new CallbackControl());
+        callbacks.onSubmitComplete?.(formValues, dataSet, validationErrors, this._formApi, new CallbackControl());
+        this._formProps?.onSubmitComplete?.(formValues, dataSet, validationErrors, this._formApi, new CallbackControl());
+    }
 
-        if (IsPromise(result)) {
-            result
-                .then(result => {
-                    if (!this.isFormMounted()) return;
-                    this.setFormSubmitting(false);
-                    onSubmitSuccess?.(formValues, dataSet, result?.data || dataSet, this);
-                    onSubmitComplete?.(formValues, dataSet, validationErrors, this);
-                    this._formProps?.onSubmitSuccess?.(formValues, dataSet, result?.data || dataSet, this._formApi, new CallbackControl());
-                    this._formProps?.onSubmitComplete?.(formValues, dataSet, validationErrors, this._formApi, new CallbackControl());
-                })
-                .catch((error: IError) => {
-                    if (!this.isFormMounted()) return;
-                    this.setFormSubmitting(false);
-                    onSubmitError?.(formValues, dataSet, error, this);
-                    onSubmitComplete?.(formValues, dataSet, validationErrors, this);
-                    this._formProps?.onSubmitError?.(formValues, dataSet, error, this._formApi, new CallbackControl());
-                    this._formProps?.onSubmitComplete?.(formValues, dataSet, validationErrors, this._formApi, new CallbackControl());
-                });
-
-            return;
-        }
-
-        if (typeof result === 'object') {
-            this.setFormSubmitting(false);
-            if (result.error?.message) {
-                onSubmitError?.(
-                    formValues,
-                    dataSet,
-                    {
-                        message: result.error.message || '',
-                        error: result.error.error,
-                        code: result.error.code || 400,
-                    },
-                    this
-                );
-                this._formProps?.onSubmitError?.(
-                    formValues,
-                    dataSet,
-                    {
-                        message: result.error.message || '',
-                        error: result.error.error,
-                        code: result.error.code || 400,
-                    },
-                    this._formApi,
-                    new CallbackControl()
-                );
-            } else {
-                onSubmitSuccess?.(formValues, dataSet, result.data ?? dataSet, this);
-                this._formProps?.onSubmitSuccess?.(formValues, dataSet, result.data ?? dataSet, this._formApi, new CallbackControl());
-            }
-
-            onSubmitComplete?.(formValues, dataSet, validationErrors, this);
-            this._formProps?.onSubmitComplete?.(formValues, dataSet, validationErrors, this._formApi, new CallbackControl());
-
-            return;
-        }
-
+    /** Submit form if submit handler callback returns undefined */
+    private submitUndefined(
+        validationErrors: Record<string, string>,
+        callbacks: {
+            onSubmitSuccess?: IDFormProps['onSubmitSuccess'];
+            onSubmitError?: IDFormProps['onSubmitError'];
+            onSubmitComplete?: IDFormProps['onSubmitComplete'];
+        } = {}
+    ) {
         this.setFormSubmitting(false);
-        if (typeof result === 'boolean') {
-            if (result) {
-                onSubmitSuccess?.(formValues, dataSet, dataSet, this);
-                this._formProps?.onSubmitSuccess?.(formValues, dataSet, dataSet, this._formApi, new CallbackControl());
-            } else {
-                onSubmitError?.(
-                    formValues,
-                    dataSet,
-                    {
-                        message: 'Unknown error',
-                        error: 'ERR_UNKNOWN',
-                        code: 520,
-                        stack: Error().stack,
-                    },
-                    this
-                );
-                this._formProps?.onSubmitError?.(
-                    formValues,
-                    dataSet,
-                    {
-                        message: 'Unknown error',
-                        error: 'ERR_UNKNOWN',
-                        code: 520,
-                        stack: Error().stack,
-                    },
-                    this._formApi,
-                    new CallbackControl()
-                );
-            }
 
-            onSubmitComplete?.(formValues, dataSet, validationErrors, this);
-            this._formProps?.onSubmitComplete?.(formValues, dataSet, validationErrors, this._formApi, new CallbackControl());
-            return;
-        }
-
-        if (typeof result === 'undefined') {
-            onSubmitSuccess?.(formValues, dataSet, dataSet, this);
-            onSubmitComplete?.(formValues, dataSet, validationErrors, this);
-            this._formProps?.onSubmitSuccess?.(formValues, dataSet, dataSet, this._formApi, new CallbackControl());
-            this._formProps?.onSubmitComplete?.(formValues, dataSet, validationErrors, this._formApi, new CallbackControl());
-        }
+        const formValues = this.getValues();
+        const dataSet = this.getFormDataSet();
+        callbacks.onSubmitSuccess?.(formValues, dataSet, dataSet, this._formApi, new CallbackControl());
+        this._formProps?.onSubmitSuccess?.(formValues, dataSet, dataSet, this._formApi, new CallbackControl());
+        callbacks.onSubmitComplete?.(formValues, dataSet, validationErrors, this._formApi, new CallbackControl());
+        this._formProps?.onSubmitComplete?.(formValues, dataSet, validationErrors, this._formApi, new CallbackControl());
     }
 
     /**

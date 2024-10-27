@@ -154,14 +154,8 @@ const usePrepareCallbacks = (field: TabulatorGridField, fieldProps: ITabulatorGr
         onDataFetch:
             !fieldProps.onDataFetch || (formMode === 'create' && !fieldProps.fetchInCreateMode)
                 ? undefined
-                : (params, gridApi) => {
-                      return fieldProps.onDataFetch!(params, gridApi, field);
-                  },
-        onDataFetching: !fieldProps.onDataFetching
-            ? undefined
-            : (url, params, gridApi) => {
-                  return fieldProps.onDataFetching!(url, params, gridApi, field);
-              },
+                : (params, gridApi) => fieldProps.onDataFetch!(params, gridApi, field),
+        onDataFetching: !fieldProps.onDataFetching ? undefined : (url, params, gridApi) => fieldProps.onDataFetching!(url, params, gridApi, field),
         onDataFetchResponse: !fieldProps.onDataFetchResponse
             ? undefined
             : (dataSet, params, gridApi) => fieldProps?.onDataFetchResponse?.(dataSet, params, gridApi, field) ?? dataSet,

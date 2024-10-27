@@ -211,7 +211,7 @@ export class BaseField<TFieldProps extends IAnyFieldProps> {
 
     /** @returns field label */
     getLabel() {
-        return this.model.getFormLabels()[this.fieldName];
+        return this.model.getLabels()[this.fieldName];
     }
 
     /**
@@ -223,7 +223,7 @@ export class BaseField<TFieldProps extends IAnyFieldProps> {
     setLabel(value: React.ReactNode | undefined, noEvents?: boolean, noRerender?: boolean) {
         const prevValue = this.getLabel();
         if (prevValue === value) return;
-        this.model.getFormLabels()[this.fieldName] = value;
+        this.model.getLabels()[this.fieldName] = value;
 
         if (!noEvents) this.getProps()?.onLabelChanged?.(value, prevValue, this);
         if (!noRerender) this.emitRender();
@@ -231,7 +231,7 @@ export class BaseField<TFieldProps extends IAnyFieldProps> {
 
     /** @return field value */
     getValue(): TFieldProps['value'] | undefined {
-        const formValues = this.model.getFormValues();
+        const formValues = this.model.getValues();
         return formValues[this.fieldName];
     }
 
@@ -246,7 +246,7 @@ export class BaseField<TFieldProps extends IAnyFieldProps> {
         const prevValue = this.getValue();
         if (prevValue === value) return;
 
-        const formValues = this.model.getFormValues();
+        const formValues = this.model.getValues();
         formValues[this.fieldName] = value;
 
         if (!noEvents) {
@@ -271,7 +271,7 @@ export class BaseField<TFieldProps extends IAnyFieldProps> {
 
     /** @returns the field touched status (a user has set focus to the field) */
     isTouched(): boolean {
-        return this.model.getFormTouchedFields()[this.fieldName] ?? false;
+        return this.model.getTouchedFields()[this.fieldName] ?? false;
     }
 
     /**
@@ -283,14 +283,14 @@ export class BaseField<TFieldProps extends IAnyFieldProps> {
         const prevValue = this.isTouched();
         if (prevValue === value) return;
 
-        this.model.getFormTouchedFields()[this.fieldName] = value;
+        this.model.getTouchedFields()[this.fieldName] = value;
 
         if (!noEvents) this.getProps()?.onTouchedStateChanged?.(value, this);
     }
 
     /** @returns field dirty status */
     isDirty(): boolean {
-        return this.model.getFormDirtyFields()[this.fieldName] ?? false;
+        return this.model.getDirtyFields()[this.fieldName] ?? false;
     }
 
     /**
@@ -302,14 +302,14 @@ export class BaseField<TFieldProps extends IAnyFieldProps> {
         const prevValue = this.isDirty();
         if (prevValue === value) return;
 
-        this.model.getFormDirtyFields()[this.fieldName] = value;
+        this.model.getDirtyFields()[this.fieldName] = value;
 
         if (!noEvents) this.getProps()?.onDirtyStateChanged?.(value, this);
 
         let formDirty = value;
         if (!value) {
-            for (const key in this.model.getFormDirtyFields()) {
-                const dirty = this.model.getFormDirtyFields()[key];
+            for (const key in this.model.getDirtyFields()) {
+                const dirty = this.model.getDirtyFields()[key];
                 if (dirty) {
                     formDirty = true;
                     break;
@@ -323,7 +323,7 @@ export class BaseField<TFieldProps extends IAnyFieldProps> {
     /** @returns field disable status */
     isDisabled(): boolean {
         if (this.model.isFormDisabled()) return true;
-        return this.model.getFormDisabledFields()[this.fieldName] ?? false;
+        return this.model.getDisabledFields()[this.fieldName] ?? false;
     }
 
     /**
@@ -335,7 +335,7 @@ export class BaseField<TFieldProps extends IAnyFieldProps> {
     setDisabled(value: boolean, noEvents?: boolean, noRerender?: boolean) {
         const prevValue = this.isDisabled();
         if (prevValue === value) return;
-        this.model.getFormDisabledFields()[this.fieldName] = value;
+        this.model.getDisabledFields()[this.fieldName] = value;
 
         if (!noEvents) this.getProps()?.onDisabledStateChanged?.(value, this);
         if (!noRerender) this.model.emitFormRender(); //it is necessary to re-render the entire form, since disabled fields may change the behavior of containers
@@ -344,7 +344,7 @@ export class BaseField<TFieldProps extends IAnyFieldProps> {
     /** @returns field read only status  */
     isReadOnly(): boolean {
         if (this.model.isFormReadOnly() || (this.getProps().nonEditable && this.model.getFormMode() === 'update')) return true;
-        return this.model.getFormReadOnlyFields()[this.fieldName] ?? false;
+        return this.model.getReadOnlyFields()[this.fieldName] ?? false;
     }
 
     /**
@@ -354,11 +354,11 @@ export class BaseField<TFieldProps extends IAnyFieldProps> {
      * @param noRerender - do not emit re-rendering
      */
     setReadOnly(value: boolean, noEvents?: boolean, noRerender?: boolean) {
-        const prevValue = this.model.getFormReadOnlyFields()[this.fieldName];
+        const prevValue = this.model.getReadOnlyFields()[this.fieldName];
 
         if (prevValue === value) return;
 
-        this.model.getFormReadOnlyFields()[this.fieldName] = value;
+        this.model.getReadOnlyFields()[this.fieldName] = value;
 
         if (!noEvents) this.getProps()?.onReadOnlyStateChanged?.(value, this);
         if (!noRerender) this.emitRender();
@@ -366,7 +366,7 @@ export class BaseField<TFieldProps extends IAnyFieldProps> {
 
     /** @returns field hidden status  */
     isHidden(): boolean {
-        return this.model.getFormHiddenFields()[this.fieldName] ?? false;
+        return this.model.getHiddenFields()[this.fieldName] ?? false;
     }
 
     /**
@@ -379,7 +379,7 @@ export class BaseField<TFieldProps extends IAnyFieldProps> {
         const prevValue = this.isHidden();
         if (prevValue === value) return;
 
-        this.model.getFormHiddenFields()[this.fieldName] = value;
+        this.model.getHiddenFields()[this.fieldName] = value;
         this.model.lockDependedFields(this, noEvents, noRerender);
 
         if (value) {
@@ -393,7 +393,7 @@ export class BaseField<TFieldProps extends IAnyFieldProps> {
 
     /** @returns field ready status  */
     isReady(): boolean {
-        return this.model.getFormReadyFields()[this.fieldName] ?? false;
+        return this.model.getReadyFields()[this.fieldName] ?? false;
     }
 
     /**
@@ -405,7 +405,7 @@ export class BaseField<TFieldProps extends IAnyFieldProps> {
         const prevValue = this.isReady();
         if (prevValue === value) return;
 
-        this.model.getFormReadyFields()[this.fieldName] = value;
+        this.model.getReadyFields()[this.fieldName] = value;
 
         if (!noEvents) this.getProps()?.onReadyStateChanged?.(value, this);
         this.model.setFormReady(value, noEvents);
@@ -413,7 +413,7 @@ export class BaseField<TFieldProps extends IAnyFieldProps> {
 
     /** @returns the error text of the field  */
     getError(): string {
-        return this.model.getFormErrors()[this.fieldName] ?? '';
+        return this.model.getErrors()[this.fieldName] ?? '';
     }
 
     /**
@@ -426,7 +426,7 @@ export class BaseField<TFieldProps extends IAnyFieldProps> {
         const prevValue = this.getError();
         if (prevValue === value) return;
 
-        const errors = this.model.getFormErrors();
+        const errors = this.model.getErrors();
 
         if (!value) delete errors[this.fieldName];
         else errors[this.fieldName] = value;
@@ -435,7 +435,7 @@ export class BaseField<TFieldProps extends IAnyFieldProps> {
             const fieldProps = this.getProps();
             fieldProps?.onErrorChanged?.(value, this);
             const formProps = this.model.getFormProps();
-            const values = this.model.getFormValues();
+            const values = this.model.getValues();
             const dataSet = this.model.getFormDataSet();
             if (this.model.isFormHasError()) formProps.onFormHasErrors?.(values, dataSet, errors, this.model.getFormApi(), new CallbackControl());
             else formProps.onFormHasNoErrors?.(values, dataSet, this.model.getFormApi(), new CallbackControl());
