@@ -165,12 +165,12 @@ export class BaseField<TFieldProps extends IAnyFieldProps> {
 
     /** A sign that the component should not grow in width if free space is available. Relevant for narrow components such as CheckBox or Switch */
     noGrowWidth() {
-        return false
+        return false;
     }
 
     /** A sign that this component itself controls the width of its child components, and they should not have their own width parameters (for example, inlineGroupField) */
-    managesChildWidth  () {
-        return false
+    managesChildWidth() {
+        return false;
     }
 
     /** Get field width property */
@@ -384,7 +384,7 @@ export class BaseField<TFieldProps extends IAnyFieldProps> {
 
         if (value) {
             this.setError('', noEvents, noRerender); //hidden fields can't have error
-            this.setReady(false, true); //the hidden fields are not ready because they are not rendered, but form ready status not changed
+            this.setReady(false, true); //the hidden fields are not ready because they are not rendered
         }
 
         if (!noEvents) this.getProps()?.onHiddenStateChanged?.(value, this);
@@ -408,11 +408,8 @@ export class BaseField<TFieldProps extends IAnyFieldProps> {
 
         this.model.getReadyFields()[this.fieldName] = value;
 
-        if (!noEvents) {
-            this.getProps()?.onReadyStateChanged?.(value, this);
-            console.log('field ' + this.getName(), value);
-            this.model.updateFormReadyState(value)
-        }
+        if (!noEvents) this.getProps()?.onReadyStateChanged?.(value, this);
+        this.model.checkFormReadyState();
     }
 
     /** @returns the error text of the field  */
@@ -468,6 +465,8 @@ export class BaseField<TFieldProps extends IAnyFieldProps> {
         return error;
     }
 
+    /** Will called on form initialization data fetch */
+    onInitialFetch() {}
     //endregion
 
     //region Fields collection methods (if the field is container)

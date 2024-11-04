@@ -19,6 +19,9 @@ export const useApiFormOpen = (api: IDFormModalApi): IDFormModalApi['open'] => {
             open: true,
             formMode: formMode,
             dataSet: clonedDataSet,
+            buttons:{
+              ok:{disabled: true}, //OK button is disabled by default. It will be enabled when the form will be ready
+            },
             ...extraProps,
         };
 

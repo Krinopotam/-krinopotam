@@ -11,6 +11,7 @@ export const useGetButtonsProps = (api: IDFormModalApi, props: IDFormModalProps)
                 active: props.formMode !== 'view',
                 hidden: props.formMode === 'view',
                 title: api.t('ok'),
+                disabled: true,
                 hotKeys: [
                     {key: 'enter', ctrl: true},
                     {key: 's', ctrl: true},
@@ -30,7 +31,6 @@ export const useGetButtonsProps = (api: IDFormModalApi, props: IDFormModalProps)
                 },
             },
         };
-
         return mergeButtons(defaultButtons, props.buttons);
     }, [api, props.buttons, props.formMode]);
 };

@@ -133,13 +133,11 @@ const usePrepareCallbacks = (field: TabulatorGridField, fieldProps: ITabulatorGr
             return fieldProps.onSelectionChange?.(selectedData, rows, selectedRows, deselectedRows, gridApi, field);
         },
         onDataLoading: (dataSet, gridApi) => {
-            console.log('treeGrid onDataLoading setReady', false);
             field.setReady(false);
             return fieldProps.onDataLoading?.(dataSet, gridApi, field);
         },
 
         onDataLoaded: (dataSet, gridApi) => {
-            console.log('treeGrid onDataLoaded setReady', true);
             field.setReady(true);
             const fieldProps = field.getProps();
             if (!fieldProps.selectionMode) field.setValue(dataSet ?? [], false, true, true);
@@ -151,7 +149,6 @@ const usePrepareCallbacks = (field: TabulatorGridField, fieldProps: ITabulatorGr
             return fieldProps.onDataProcessed?.(dataSet, gridApi, field);
         },
         onDataLoadError: (message, code, gridApi) => {
-            console.log('treeGrid onDataLoadError setReady', false);
             field.setReady(false);
             return fieldProps.onDataLoadError?.(message, code, gridApi, field);
         },

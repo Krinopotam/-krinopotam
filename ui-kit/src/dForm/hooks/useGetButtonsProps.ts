@@ -10,6 +10,7 @@ export const useGetButtonsProps = (formProps: IDFormProps, api: IDFormApi): IFor
                 position: 'left',
                 active: true,
                 title: api.t('confirm'),
+                disabled: true,
                 hotKeys: [
                     {key: 'Enter', ctrl: true},
                     {key: 'S', ctrl: true},

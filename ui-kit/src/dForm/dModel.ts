@@ -117,7 +117,6 @@ export class DModel {
 
     initModel(formProps: IDFormProps) {
         if (this._formProps === formProps) return;
-
         this._formProps = formProps;
         this._formMode = formProps.formMode ?? 'create';
         this._formReadOnly = !!formProps.readOnly;
@@ -519,7 +518,8 @@ export class DModel {
     /**
      * The form began initialization (renders for the first time)
      */
-    setFormInit() {
+    onFormInit() {
+        console.log('onFormInit');
         this._formProps?.onFormInit?.(this._formApi, new CallbackControl());
     }
 
@@ -536,15 +536,15 @@ export class DModel {
     private _readyTimeout: number | undefined;
 
     /**
-     * Trying to call onFormReadyChanged callback(all fields are completely initialized, data are loaded)
-     * Will call if previous form ready state is not the same
+     * Check form ready state (all fields are completely initialized, data are loaded). If state has changed call onFormReadyChanged
+     * We use a timeout of 100 ms because some complex grid-type fields can start their initialization cycle during this time
      */
-    updateFormReadyState(state:boolean) {
+    checkFormReadyState() {
         if (typeof this._readyTimeout !== 'undefined') clearTimeout(this._readyTimeout);
         this._readyTimeout = setTimeout(() => {
             this._readyTimeout = undefined;
             let isFormReady = true;
-            if (!state ||  this.isFormFetching() || this.isFormFetchingFailed()) isFormReady = false;
+            if (this.isFormFetching() || this.isFormFetchingFailed()) isFormReady = false;
             else {
                 for (const fieldName in this._fieldsMap) {
                     const field = this._fieldsMap[fieldName];
@@ -556,9 +556,8 @@ export class DModel {
             if (isFormReady === this._formReadyState) return;
 
             this._formReadyState = isFormReady;
-            console.log('run onFormReadyChanged', isFormReady);
             this._formProps?.onFormReadyChanged?.(isFormReady, this._formApi, new CallbackControl());
-        }, 10) as unknown as number;
+        }, 100) as unknown as number;
     }
 
     // Validation
@@ -651,16 +650,24 @@ export class DModel {
     getFormMode() {
         return this._formMode;
     }
-
     //endregion
 
     //region Fetch
+    /** Will called on form initialization data fetch */
+    onInitialFetch() {
+        const props = this._formProps;
+        const formMode =this._formMode;
+
+        if (!props.fetchOnCreate && formMode !== 'update' && formMode !== 'clone' && formMode !== 'view') return;
+        this.fetchData()
+    }
+
     fetchData() {
         const dataSource = this._formProps.onDataFetch?.(this._formApi, new CallbackControl());
         if (!dataSource) return;
         this.setFormFetching(true);
         this.setFormFetchingFailed(false);
-        this.updateFormReadyState(false);
+        this.checkFormReadyState();
 
         dataSource.then(
             (result: {data: Record<string, AnyType>}) => {
@@ -673,8 +680,7 @@ export class DModel {
                 const values = result.data as IDFormDataSet;
                 this.setValues(values);
 
-                console.log('fetchData success');
-                this.updateFormReadyState(true);
+                this.checkFormReadyState();
             },
             (error: IError) => {
                 if (!this.isFormMounted()) return;
@@ -683,7 +689,7 @@ export class DModel {
                 this._formProps.onDataFetchError?.(error, this._formApi, new CallbackControl());
                 this._formProps.onDataFetchComplete?.(this._formApi, new CallbackControl());
 
-                this.updateFormReadyState(true);
+                this.checkFormReadyState();
             }
         );
     }

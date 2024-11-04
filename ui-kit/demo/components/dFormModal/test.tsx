@@ -99,6 +99,9 @@ const formProps: IDFormModalProps = {
             }, 5000);
         });
     },
+    onSubmitSuccess: (values) => {
+        console.log(values)
+    },
 };
 
 export const FormWithGridInTabs = (): React.JSX.Element => {

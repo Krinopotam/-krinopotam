@@ -73,7 +73,7 @@ export const FormRender = ({formProps, formApi, formButtons}: IFormRenderProps):
 /** Special component to fire onFormInit event before another events*/
 const FormInit = ({model}: {model: DModel}): React.JSX.Element | null => {
     useEffect(() => {
-        model.setFormInit();
+        model.onFormInit();
     }, [model]);
 
     return null;

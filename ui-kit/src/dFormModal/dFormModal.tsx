@@ -6,6 +6,7 @@
  * @license MIT
  */
 
+import {mergeButtons} from "@src/buttonsRow";
 import {IDFormProps} from '@src/dForm';
 import {useInitApi} from './hooks/api/api';
 import React, {useMemo} from 'react';
@@ -28,7 +29,6 @@ export const DFormModal = (props: IDFormModalProps): React.JSX.Element => {
 
     const api = useInitApi({props: allPropsUpd, setProps: setAllProps});
     const buttons = useGetButtonsProps(api, allPropsUpd);
-
     return <DFormModalRender formApi={api} modalFormProps={allPropsUpd} formProps={formProps} buttons={buttons} />;
 };
 

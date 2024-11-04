@@ -117,13 +117,16 @@ export interface IDFormPropsNoCB<TFieldsProps extends Record<string, AnyType> = 
         update?: string;
     };
 
+    /** If true, the form will fetch data in any form mode, including 'create' */
+    fetchOnCreate?: boolean;
+
     /** Language */
     language?: keyof typeof translations;
 
     /** Custom translation */
     translation?: Partial<typeof translations.en>;
 
-    /** @private O A service property meaning that the form is used in another component that overrides the api part (for example DModalForm)  */
+    /** @private A service property meaning that the form is used in another component that overrides the api part (for example DModalForm)  */
     _overriddenApi?: {[K in keyof IDFormApi as string extends K ? never : K]?: boolean};
 }
 

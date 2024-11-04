@@ -70,8 +70,6 @@ const useFormMounted = (formApi: IDFormApi) => {
 
 const useInitialFetchData = (formApi: IDFormApi) => {
     useEffect(() => {
-        const formMode = formApi.model.getFormMode();
-        if (formMode !== 'update' && formMode !== 'clone' && formMode !== 'view') return;
-        formApi.model.fetchData();
+        formApi.model.onInitialFetch()
     }, [formApi]);
 };
