@@ -98,9 +98,6 @@ const useSplitTabulatorProps = (props: ITabulatorGridFieldProps) => {
             style: true,
             tooltip: true,
             resizeHeightWithForm: true,
-            onFieldDataFetch: true,
-            onFieldDataFetchError: true,
-            onFieldDataFetchSuccess: true,
         });
 
         return result[1];

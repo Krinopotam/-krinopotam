@@ -527,7 +527,6 @@ export class DModel {
      * The form began initialization (renders for the first time)
      */
     onFormInit() {
-        console.log('onFormInit');
         this._formProps?.onFormInit?.(this._formApi, new CallbackControl());
     }
 

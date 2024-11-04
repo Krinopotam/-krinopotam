@@ -390,7 +390,7 @@ export class BaseField<TFieldProps extends IAnyFieldProps> {
     }
 
     fetchData() {
-        const dataSource = this.fieldProps.onDataFetch?.(this);
+        const dataSource = this.fieldProps.onFieldDataFetch?.(this);
         if (!dataSource) return;
         const fetchingFields = this.model.getFetchingFields();
         fetchingFields[this.fieldName] = 1;
@@ -401,7 +401,7 @@ export class BaseField<TFieldProps extends IAnyFieldProps> {
             (result: {data: Record<string, AnyType>}) => {
                 if (!this.model.isFormMounted()) return;
                 fetchingFields[this.fieldName] = 0;
-                this.fieldProps.onDataFetchSuccess?.(result, this);
+                this.fieldProps.onFieldDataFetchSuccess?.(result, this);
 
                 const values = result.data as IDFormDataSet;
                 this.model.setValues(values);
@@ -412,7 +412,7 @@ export class BaseField<TFieldProps extends IAnyFieldProps> {
             (error: IError) => {
                 if (!this.model.isFormMounted()) return;
                 fetchingFields[this.fieldName] = -1;
-                this.fieldProps.onDataFetchError?.(error, this);
+                this.fieldProps.onFieldDataFetchError?.(error, this);
 
                 this.model.checkFormReadyState();
                 this.emitRender();

@@ -43,6 +43,9 @@ export const useSplitTreeSelectProps = (props: IAnyFieldProps) => {
             onChange: true,
             dataSet: true,
             onDataFetch: true,
+            onFieldDataFetch: true,
+            onFieldDataFetchError: true,
+            onFieldDataFetchSuccess: true,
         });
 
         return result[1];

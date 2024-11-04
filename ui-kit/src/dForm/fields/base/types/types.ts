@@ -94,13 +94,13 @@ export interface IBaseFieldProps<TField extends IBaseField, TValue> extends Reco
     onValidated?: (value: TValue, error: string, isSubmit: boolean, field: TField) => void;
 
     /** fires when the field trying to fetch data */
-    onDataFetch?: (field: TField) => IDFormDataSourcePromise | undefined;
+    onFieldDataFetch?: (field: TField) => IDFormDataSourcePromise | undefined;
 
     /** fires when the field fetch success */
-    onDataFetchSuccess?: (result: { data: Record<string, AnyType> }, field: TField) => void;
+    onFieldDataFetchSuccess?: (result: { data: Record<string, AnyType> }, field: TField) => void;
 
     /** fires when the field fetch failed */
-    onDataFetchError?: (error: IError, field: TField) => void;
+    onFieldDataFetchError?: (error: IError, field: TField) => void;
 }
 
 export type IAnyFieldProps<TField extends IBaseField = AnyType, TValue = AnyType> = IBaseFieldProps<TField, TValue>;
