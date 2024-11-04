@@ -47,7 +47,7 @@ const formProps: IDFormModalProps = {
             onDataFetch: () => {
                 return new Promise((resolve, reject) => {
                     setTimeout(() => {
-                        if (Math.random() < 0.3) reject({message: 'Ошибка загрузки данных', code: 400});
+                        if (Math.random() < 0.3) reject({message: 'Random loading data error', code: 400});
                         else resolve({data: TabulatorPlainData}) ;
                     }, 500);
                 }) as IGridDataSourcePromise;

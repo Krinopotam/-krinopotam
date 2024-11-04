@@ -1,4 +1,5 @@
-import {BaseField, IBaseFieldProps} from '@src/dForm/fields/base/baseField';
+import {IBaseFieldProps} from "@src/dForm/fields/base";
+import {BaseField} from '@src/dForm/fields/base/baseField';
 import {SelectFieldRender} from '@src/dForm/fields/select/selectFieldRender';
 
 import {ISelectProps} from '@src/select';

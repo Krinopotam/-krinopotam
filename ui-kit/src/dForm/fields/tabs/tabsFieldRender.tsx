@@ -1,9 +1,12 @@
-import React, {ComponentType, CSSProperties, useCallback, useEffect, useSyncExternalStore} from 'react';
-import {Tabs, TabsProps, theme} from 'antd';
+import {LoadingOutlined, CloseCircleFilled} from '@ant-design/icons';
+import {IBaseField} from '@src/dForm/fields/base';
 import {TabsField} from '@src/dForm/fields/tabs/tabsField';
 import {FieldsRender} from '@src/dForm/renders/fieldsRender';
-import StickyBox from 'react-sticky-box';
+import {LoadingContainer} from '@src/loadingContainer';
+import {Tabs, TabsProps, theme} from 'antd';
 import {TabNavListProps} from 'rc-tabs/lib/TabNavList';
+import React, {ComponentType, CSSProperties, useCallback, useEffect, useSyncExternalStore} from 'react';
+import StickyBox from 'react-sticky-box';
 
 const {useToken} = theme;
 export const TabsFieldRender = ({field}: {field: TabsField}): React.JSX.Element => {
@@ -41,15 +44,16 @@ export const TabsFieldRender = ({field}: {field: TabsField}): React.JSX.Element 
         items.push({
             key: tabName,
             tabKey: tabName,
-            label: tabName,
+            label: <TabLabel field={field} tabName={tabName} subscribe={field.tabSubscribe(tabName)} getSnapshot={field.getTabSnapshot(tabName)} />,
             className: fieldProps.autoHeightResize ? 'auto-height' : '',
             forceRender: true,
             disabled: field.isDisabled(),
             style: {...tabStyleDef, ...fieldProps.tabsStyle},
             children: (
-                <FieldsRender
-                    fields={childrenFields}
-                    formProps={field.getFormProps()}
+                <TabContent
+                    field={field}
+                    tabName={tabName}
+                    childrenFields={childrenFields}
                     subscribe={field.tabSubscribe(tabName)}
                     getSnapshot={field.getTabSnapshot(tabName)}
                     containerStyle={containerStyle}
@@ -78,6 +82,76 @@ export const TabsFieldRender = ({field}: {field: TabsField}): React.JSX.Element 
             renderTabBar={tabBarRender}
             onChange={onChange}
         />
+    );
+};
+
+const TabLabel = ({
+    field,
+    tabName,
+    subscribe,
+    getSnapshot,
+}: {
+    field: TabsField;
+    tabName: string;
+    subscribe: (listener: () => void) => () => void;
+    getSnapshot: () => Record<never, never>;
+}): React.ReactElement => {
+    useSyncExternalStore(subscribe, getSnapshot);
+
+    const isFetching = field.isTabFetching(tabName);
+    const isError = field.isTabFetchingFailed(tabName);
+
+    const {
+        token: {colorError},
+    } = theme.useToken();
+
+    if (isFetching)
+        return (
+            <>
+                <LoadingOutlined /> {tabName}
+            </>
+        );
+
+    if (isError)
+        return (
+            <>
+                <CloseCircleFilled style={{color: colorError}} /> {tabName}
+            </>
+        );
+
+    return <>{tabName}</>;
+};
+
+const TabContent = ({
+    field,
+    tabName,
+    childrenFields,
+    containerStyle,
+    subscribe,
+    getSnapshot,
+}: {
+    field: TabsField;
+    tabName: string;
+    childrenFields: Record<string, IBaseField>;
+    containerStyle: CSSProperties;
+    subscribe: (listener: () => void) => () => void;
+    getSnapshot: () => Record<never, never>;
+}): React.ReactElement => {
+    useSyncExternalStore(subscribe, getSnapshot);
+
+    const formProps = field.getFormProps();
+    const error = field.getTabFetchingError(tabName);
+    const isLoading = field.isTabFetching(tabName);
+    return (
+        <LoadingContainer
+            isLoading={isLoading}
+            error={error}
+            retryHandler={() => field.fetchTabData(tabName)}
+            notHideContent={true}
+            language={formProps.language}
+        >
+            <FieldsRender fields={childrenFields} formProps={field.getFormProps()} containerStyle={containerStyle} />
+        </LoadingContainer>
     );
 };
 

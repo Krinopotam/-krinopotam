@@ -79,7 +79,7 @@ const config: StorybookConfig = {
         //config.build.outDir = 'deploy/ui-kit/storybook';
         return config;
     },
-    //exclude: [/node_modules/, '/src/**/*/*.test.ts', '/src/**/*/*.test.tsx'],
+    //exclude: [/node_modules/, '/src/**/*/*.test.ts', '/src/**/*/*.asyncTabWithSelectionForm.tsx'],
 };
 
 export default config;

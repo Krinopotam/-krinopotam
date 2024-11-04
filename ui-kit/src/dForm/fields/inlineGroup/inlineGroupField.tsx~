@@ -11,7 +11,7 @@ export interface IInlineGroupFieldProps<TFieldsProps extends Record<string, AnyT
 }
 
 export class InlineGroupField extends BaseField<IInlineGroupFieldProps> {
-    override initChildrenFields(): [InlineGroupField['fieldsMap'], InlineGroupField['rootFields']] {
+    initChildrenFields(): [InlineGroupField['fieldsMap'], InlineGroupField['rootFields']] {
         const groupProps = this.getProps();
         const fieldsProps = groupProps.fieldsProps;
         if (!groupProps.fieldsProps) return [{}, {}];
@@ -20,22 +20,22 @@ export class InlineGroupField extends BaseField<IInlineGroupFieldProps> {
         return [this.fieldsMap, this.rootFields];
     }
 
-    protected override render() {
+    protected render() {
         return <InlineGroupRender field={this} />;
     }
 
-    override renderField(): React.ReactNode {
+    renderField(): React.ReactNode {
         return this.render();
     }
 
     //region Fields collection getters
     /** return@ field collection (plain list of all fields in all component tabs, including child fields) */
-    override getFieldsMap() {
+    getFieldsMap() {
         return this.fieldsMap;
     }
 
     /** @return root fields collection (only root fields, without children) */
-    override getRootFields() {
+    getRootFields() {
         return this.rootFields;
     }
 
@@ -45,24 +45,24 @@ export class InlineGroupField extends BaseField<IInlineGroupFieldProps> {
     /**
      * Handling an erroneous InlineGroup value get
      */
-    override getValue() {
+    getValue() {
         return undefined;
     }
 
     /**
      * Handling an erroneous InlineGroup value setting
      */
-    override setValue() {
+    setValue() {
         /* field can't have value */
     }
 
     /** Is field can has value */
-    override canHaveValue() {
+    canHaveValue() {
         return false;
     }
 
     /** Child fields can't have own width settings (must be 100% width) */
-    override managesChildWidth() {
+    managesChildWidth() {
         return true
     }
 
@@ -72,7 +72,7 @@ export class InlineGroupField extends BaseField<IInlineGroupFieldProps> {
      * @param noEvents - do not emit onDisabledStateChanged and onTabDisabledStateChanged callbacks
      * @param noRerender - do not emit re-rendering
      */
-    override setDisabled(value: boolean, noEvents?: boolean, noRerender?: boolean) {
+    setDisabled(value: boolean, noEvents?: boolean, noRerender?: boolean) {
         const prevValue = this.isDisabled();
         if (prevValue === value) return;
 
@@ -90,7 +90,7 @@ export class InlineGroupField extends BaseField<IInlineGroupFieldProps> {
      * @param noEvents - do not emit onReadOnlyStateChanged callback
      * @param noRerender - do not emit re-rendering
      */
-    override setReadOnly(value: boolean, noEvents?: boolean, noRerender?: boolean) {
+    setReadOnly(value: boolean, noEvents?: boolean, noRerender?: boolean) {
         const prevValue = this.isReadOnly();
         if (prevValue === value) return;
 

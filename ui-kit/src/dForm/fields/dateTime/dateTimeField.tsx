@@ -1,4 +1,5 @@
-import {BaseField, IBaseFieldProps} from '@src/dForm/fields/base/baseField';
+import {IBaseFieldProps} from "@src/dForm/fields/base";
+import {BaseField} from '@src/dForm/fields/base/baseField';
 import React from 'react';
 import {DateTimeFieldRender} from '@src/dForm/fields/dateTime/dateTimeFieldRender';
 import {IDatePickerProps} from '@src/datePicker';

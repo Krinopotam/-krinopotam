@@ -1,10 +1,11 @@
-import {AnyType} from "@krinopotam/service-types";
-import {BaseField, IBaseFieldProps} from '@src/dForm/fields/base/baseField';
+import {AnyType, IError} from '@krinopotam/service-types';
+import {IBaseFieldProps} from '@src/dForm/fields/base';
+import {BaseField} from '@src/dForm/fields/base/baseField';
 import {TabsFieldRender} from '@src/dForm/fields/tabs/tabsFieldRender';
-import {TabBarExtraContent} from "rc-tabs/lib/interface";
+import {TabBarExtraContent} from 'rc-tabs/lib/interface';
 import React from 'react';
 
-import {IDFormFieldsProps} from "@src/dForm";
+import {IDFormDataSet, IDFormDataSourcePromise, IDFormFieldsProps} from '@src/dForm';
 
 export interface ITabsFieldProps<TFieldsProps extends Record<string, AnyType> = Record<string, AnyType>> extends IBaseFieldProps<TabsField, undefined> {
     /** Tabs fields properties */
@@ -35,10 +36,10 @@ export interface ITabsFieldProps<TFieldsProps extends Record<string, AnyType> = 
     panelsMinHeight?: string | number;
 
     /** Tab bar extra content */
-    tabBarExtraContent?:TabBarExtraContent
+    tabBarExtraContent?: TabBarExtraContent;
 
     /** Tab bar gutter */
-    tabBarGutter?:number
+    tabBarGutter?: number;
 
     /*************** Callbacks *****************/
     /** Fires when the disable state of a tab changes  */
@@ -52,6 +53,15 @@ export interface ITabsFieldProps<TFieldsProps extends Record<string, AnyType> = 
 
     /** Fires when the active tab changes  */
     onActiveTabChanged?: (tabName: string, field: TabsField) => void;
+
+    /** fires when the tab trying to fetch data */
+    onTabDataFetch?: (tabName: string, field: TabsField) => IDFormDataSourcePromise | undefined;
+
+    /** fires when the tab fetch success */
+    onTabDataFetchSuccess?: (tabName: string, result: {data: Record<string, AnyType>}, field: TabsField) => void;
+
+    /** fires when the tab fetch failed */
+    onTabDataFetchError?: (tabName: string, error: IError, field: TabsField) => void;
 }
 
 export class TabsField extends BaseField<ITabsFieldProps> {
@@ -76,6 +86,8 @@ export class TabsField extends BaseField<ITabsFieldProps> {
     /** read only tabs statuses */
     private _readOnlyTabs: Record<string, boolean | undefined> = {};
 
+    /** fetching tabs statuses */
+    private _fetchingTabs: Record<string, 0 | 1 | IError | undefined> = {};
     //endregion
 
     //region Tab re-render
@@ -87,7 +99,7 @@ export class TabsField extends BaseField<ITabsFieldProps> {
 
     //endregion
 
-    initChildrenFields(): [TabsField['fieldsMap'], TabsField['rootFields']] {
+    override initChildrenFields(): [TabsField['fieldsMap'], TabsField['rootFields']] {
         const tabsProps = this.getProps();
         if (!tabsProps.tabs) return [{}, {}];
 
@@ -112,27 +124,27 @@ export class TabsField extends BaseField<ITabsFieldProps> {
     /**
      * Handling an erroneous TabsField value get
      */
-    getValue() {
+    override getValue() {
         return undefined;
     }
 
     /**
      * Handling an erroneous TabsField value setting
      */
-    setValue() {
+    override setValue() {
         /* field can't have value */
     }
 
     /** Is field can have value */
-    canHaveValue() {
+    override canHaveValue() {
         return false;
     }
 
-    protected render() {
+    protected override render() {
         return <TabsFieldRender field={this} />;
     }
 
-    renderField(): React.ReactNode {
+    override renderField(): React.ReactNode {
         if (this.parent) return super.renderField();
         return this.render();
     }
@@ -282,6 +294,67 @@ export class TabsField extends BaseField<ITabsFieldProps> {
         return false;
     }
 
+    /** @returns tab fetching status  */
+    isTabFetching(tabName: string) {
+        return this._fetchingTabs[tabName] === 1;
+    }
+
+    /** @returns tab fetching failed status  */
+    isTabFetchingFailed(tabName: string) {
+        return !!this._fetchingTabs[tabName] && this._fetchingTabs[tabName] !== 1;
+    }
+
+    /** @returns tab fetching error  */
+    getTabFetchingError(tabName: string) {
+        if (!this.isTabFetchingFailed(tabName)) return undefined;
+        return this._fetchingTabs[tabName] as IError;
+    }
+
+    isReady(): boolean {
+        const isReady = super.isReady();
+        if (!isReady) return false;
+        for (const tabName in this._tabsFieldsMap) {
+            if (this._fetchingTabs[tabName]) return false;
+        }
+
+        return true;
+    }
+
+    override onInitialFetch() {
+        super.onInitialFetch();
+        for (const tabName in this._tabsFieldsMap) this.fetchTabData(tabName);
+    }
+
+    fetchTabData(tabName: string) {
+        const dataSource = this.fieldProps.onTabDataFetch?.(tabName, this);
+        if (!dataSource) return;
+        this._fetchingTabs[tabName] = 1;
+        this.model.checkFormReadyState();
+        this.emitTabRender(tabName);
+
+        dataSource.then(
+            (result: {data: Record<string, AnyType>}) => {
+                if (!this.model.isFormMounted()) return;
+                this._fetchingTabs[tabName] = 0;
+                this.fieldProps.onTabDataFetchSuccess?.(tabName, result, this);
+
+                const values = result.data as IDFormDataSet;
+                this.model.setValues(values);
+
+                this.model.checkFormReadyState();
+                this.emitTabRender(tabName);
+            },
+            (error: IError) => {
+                if (!this.model.isFormMounted()) return;
+                this._fetchingTabs[tabName] = error;
+                this.fieldProps.onTabDataFetchError?.(tabName, error, this);
+
+                this.model.checkFormReadyState();
+                this.emitTabRender(tabName);
+            }
+        );
+    }
+
     //endregion
 
     //region Field methods
@@ -291,7 +364,7 @@ export class TabsField extends BaseField<ITabsFieldProps> {
      * @param noEvents - do not emit onDisabledStateChanged and onTabDisabledStateChanged callbacks
      * @param noRerender - do not emit re-rendering
      */
-    setDisabled(value: boolean, noEvents?: boolean, noRerender?: boolean) {
+    override setDisabled(value: boolean, noEvents?: boolean, noRerender?: boolean) {
         const prevValue = this.isDisabled();
         if (prevValue === value) return;
 
@@ -308,7 +381,7 @@ export class TabsField extends BaseField<ITabsFieldProps> {
      * @param noEvents - do not emit onReadOnlyStateChanged callback
      * @param noRerender - do not emit re-rendering
      */
-    setReadOnly(value: boolean, noEvents?: boolean, noRerender?: boolean) {
+    override setReadOnly(value: boolean, noEvents?: boolean, noRerender?: boolean) {
         const prevValue = this.isReadOnly();
         if (prevValue === value) return;
 

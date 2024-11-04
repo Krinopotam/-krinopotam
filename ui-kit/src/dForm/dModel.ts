@@ -9,10 +9,10 @@
  */
 
 import {IsPromise} from '@krinopotam/js-helpers/helpersObjects/isPromise';
+import {IAnyFieldProps, IBaseField} from "@src/dForm/fields/base";
 
 import {BaseValidator} from './validators/baseValidator';
 import React from 'react';
-import {IAnyFieldProps, IBaseField} from '@src/dForm/fields/base/baseField';
 import {IDFormApi, IDFormDataSet, IDFormFieldsProps, IDFormProps, IDFormSubmitResultObject, IDFormSubmitResultPromise} from '@src/dForm/index';
 import {AnyType, IError} from '@krinopotam/service-types';
 import {InlineGroupField} from '@src/dForm/fields/inlineGroup/inlineGroupField';
@@ -65,6 +65,9 @@ export class DModel {
 
     /** Readiness field statuses (the field is completely initialized, its data is loaded) */
     private readonly _ready: Record<string, boolean | undefined> = {};
+
+    /** Field fetching states (0 - no fetching, 1 - fetching in progress, -1 - fetching failed) */
+    private readonly _fetching: Record<string, 0 | 1 | -1 | undefined> = {};
     //endregion
 
     //region Form properties
@@ -439,6 +442,11 @@ export class DModel {
         return this._validator;
     }
 
+    /** @return form fields fetching states */
+    getFetchingFields() {
+        return this._fetching;
+    }
+
     /** @return form API instance */
     getFormApi() {
         return this._formApi;
@@ -650,16 +658,22 @@ export class DModel {
     getFormMode() {
         return this._formMode;
     }
+
     //endregion
 
     //region Fetch
     /** Will called on form initialization data fetch */
     onInitialFetch() {
         const props = this._formProps;
-        const formMode =this._formMode;
+        const formMode = this._formMode;
 
         if (!props.fetchOnCreate && formMode !== 'update' && formMode !== 'clone' && formMode !== 'view') return;
-        this.fetchData()
+        this.fetchData();
+
+        for (const fieldName in this._fieldsMap) {
+            const field = this._fieldsMap[fieldName];
+            field.onInitialFetch();
+        }
     }
 
     fetchData() {

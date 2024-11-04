@@ -33,7 +33,7 @@ export const ContainerRender = ({
             className="tabulator-grid-container"
             style={{height: gridProps.height || undefined, minHeight: gridProps.minHeight, maxHeight: gridProps.maxHeight}}
         >
-            <LoadingContainer isLoading={gridApi.getIsLoading()} notHideContent={true} spinStyle={{height: '100%'}}>
+            <LoadingContainer isLoading={gridApi.getIsLoading()} notHideContent={true} spinStyle={{height: '100%'}} language={gridProps.language}>
                 <ButtonsRowWrapper style={{display: 'flex', flexDirection: 'column'}}>
                     <MenuRow gridApi={gridApi} />
                     <GridRender tableRef={tableRef} api={gridApi} gridProps={gridProps} tabulatorProps={tabulatorProps} />

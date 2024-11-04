@@ -1,4 +1,7 @@
-import {Card, Col, Row, Typography} from 'antd';
+import {CloseCircleFilled} from '@ant-design/icons';
+import {useTranslate} from '@src/_shared/hooks/useTranslate';
+import {translations} from '@src/loadingError/translations/translations';
+import {Alert, Col, Row, Typography} from 'antd';
 import React, {CSSProperties, useCallback} from 'react';
 import {Button} from '../button';
 
@@ -9,9 +12,12 @@ export interface ILoadingErrorProps {
     retryHandler?: () => void;
     style?: CSSProperties;
     children: React.ReactNode;
+    language?: keyof typeof translations;
 }
 
-export const LoadingError = ({errorMessage, children, retryHandler, style}: ILoadingErrorProps): React.JSX.Element => {
+export const LoadingError = ({errorMessage, children, retryHandler, style, language}: ILoadingErrorProps): React.JSX.Element => {
+    const t = useTranslate(language, translations);
+
     const onRetryHandler = useCallback(() => {
         if (retryHandler) retryHandler();
     }, [retryHandler]);
@@ -21,26 +27,34 @@ export const LoadingError = ({errorMessage, children, retryHandler, style}: ILoa
     return (
         <Row justify="center" align="middle" style={{height: '100%', ...style}}>
             <Col>
-                <Card role="alert" title={<div>Error loading data</div>}
-                      styles={{header: {backgroundColor: '#ff7875', textAlign: 'center'}}}>
-                    <Row justify="center" align="middle">
-                        <Col>
-                            <Text type="danger">{errorMessage}</Text>
-                        </Col>
-                    </Row>
-                    <Row justify="center" align="middle" style={{paddingTop: '20px'}}>
-                        <Col>
-                            {retryHandler ? (
-                                <Button type={'primary'} onClick={onRetryHandler}>
-                                    Try again
-                                </Button>
-                            ) : (
-                                <Text>Try reloading the page (F5)</Text>
-                            )}
-                        </Col>
-                    </Row>
-                </Card>
+                <Alert
+                    message={t('loadingError')}
+                    showIcon
+                    icon={<CloseCircleFilled />}
+                    description={
+                        <>
+                            {errorMessage}
+                            <Row justify="center" align="middle" style={{marginTop: 16}}>
+                                <Col style={{marginLeft: -24}}>
+                                    {retryHandler ? (
+                                        <Button color={'danger'} variant={'solid'} onClick={onRetryHandler}>
+                                            {t('tryAgain')}
+                                        </Button>
+                                    ) : (
+                                        <Text>{t('tryReload')}</Text>
+                                    )}
+                                </Col>
+                            </Row>
+                        </>
+                    }
+                    type="error"
+                />
             </Col>
         </Row>
     );
 };
+/**
+
+
+
+ * */

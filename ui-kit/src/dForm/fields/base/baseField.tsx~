@@ -400,7 +400,7 @@ export class BaseField<TFieldProps extends IAnyFieldProps> {
         dataSource.then(
             (result: {data: Record<string, AnyType>}) => {
                 if (!this.model.isFormMounted()) return;
-                fetchingFields[this.fieldName] = 0;
+                fetchingFields[this.fieldName] = undefined;
                 this.fieldProps.onDataFetchSuccess?.(result, this);
 
                 const values = result.data as IDFormDataSet;

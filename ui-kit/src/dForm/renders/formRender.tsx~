@@ -37,11 +37,7 @@ export const FormRender = ({formProps, formApi, formButtons}: IFormRenderProps):
 
     return (
         <div className={formProps.containerClassName ?? ''} style={formProps.containerStyle}>
-            <LoadingContainer
-                isLoading={model.isFormFetching() || (model.isFormSubmitting() && !formProps.confirmChanges)}
-                notHideContent={true}
-                language={formProps.language}
-            >
+            <LoadingContainer isLoading={model.isFormFetching() || (model.isFormSubmitting() && !formProps.confirmChanges)} notHideContent={true}>
                 <ButtonsRowWrapper>
                     <Form
                         colon={false}

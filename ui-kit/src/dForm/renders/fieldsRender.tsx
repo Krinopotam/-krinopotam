@@ -6,8 +6,8 @@
  * @license MIT
  */
 
+import {IBaseField} from "@src/dForm/fields/base";
 import React, {CSSProperties, useSyncExternalStore} from 'react';
-import {IBaseField} from '@src/dForm/fields/base/baseField';
 import {IDFormProps} from "@src/dForm";
 
 /** Render form body */

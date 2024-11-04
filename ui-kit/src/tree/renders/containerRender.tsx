@@ -22,7 +22,7 @@ export const ContainerRender = ({
     const editGroupFormProps = useGetEditFormProps(api, allProps, true);
     return (
         <div className="extended-tree-container">
-            <LoadingContainer isLoading={api.getIsLoading()} notHideContent={true} spinStyle={{height: '100%'}}>
+            <LoadingContainer isLoading={api.getIsLoading()} notHideContent={true} spinStyle={{height: '100%'}} language={allProps.language}>
                 <ButtonsRowWrapper style={{display: 'flex', flexDirection: 'column', ...allProps.buttonsRowWrapperStyle}}>
                     <StickyBox style={{zIndex: 15}}>
                         <MenuRow api={api} treeProps={allProps} />

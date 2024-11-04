@@ -1,6 +1,7 @@
+import {translations} from '@src/loadingError/translations/translations';
+import {Spin} from 'antd';
 import React, {CSSProperties} from 'react';
 import {LoadingError} from '../loadingError';
-import {Spin} from 'antd';
 
 import './css/loadingContainer.css';
 
@@ -17,6 +18,7 @@ export interface ILoadingContainerProps {
     spinStyle?: CSSProperties;
     /** By default, spinner will have 100% height */
     noFullHeight?: boolean;
+    language?: keyof typeof translations;
 }
 
 export const LoadingContainer = ({
@@ -30,10 +32,12 @@ export const LoadingContainer = ({
     spinStyle,
     errorStyle,
     noFullHeight,
+    language,
 }: ILoadingContainerProps): React.JSX.Element => {
     const tip = caption ?? 'Please wait...';
+
     return (
-        <LoadingError errorMessage={error?.message} retryHandler={retryHandler} style={errorStyle}>
+        <LoadingError errorMessage={error?.message} retryHandler={retryHandler} style={errorStyle} language={language}>
             {
                 <Spin spinning={isLoading} delay={0} tip={tip} style={spinStyle} wrapperClassName={!noFullHeight ? 'wrapper-full-height-grid-spinner' : ''}>
                     {isLoading && !notHideContent ? (

@@ -1,7 +1,7 @@
-import {IBaseField} from "@src/dForm/fields/base";
 import React, {CSSProperties, useEffect, useSyncExternalStore} from 'react';
 import {Form} from 'antd';
 import {InlineGroupField} from '@src/dForm/fields/inlineGroup/inlineGroupField';
+import {IBaseField} from '@src/dForm/fields/base/baseField';
 import Animate from 'rc-animate';
 
 export const InlineGroupRender = ({field}: {field: InlineGroupField}): React.JSX.Element => {
