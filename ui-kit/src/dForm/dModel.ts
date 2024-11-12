@@ -9,7 +9,7 @@
  */
 
 import {IsPromise} from '@krinopotam/js-helpers/helpersObjects/isPromise';
-import {IAnyFieldProps, IBaseField} from "@src/dForm/fields/base";
+import {IAnyFieldProps, IBaseField} from '@src/dForm/fields/base';
 
 import {BaseValidator} from './validators/baseValidator';
 import React from 'react';
@@ -398,7 +398,8 @@ export class DModel {
 
         for (const fieldName in this._fieldsMap) {
             const field = this._fieldsMap[fieldName];
-            field.setValue(newDataSet?.[fieldName], noEvents, noRerender);
+            if (!newDataSet || !(fieldName in newDataSet)) continue;
+            field.setValue(newDataSet[fieldName], noEvents, noRerender);
         }
     }
 

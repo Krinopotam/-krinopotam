@@ -35,7 +35,7 @@ const formProps: IDFormModalProps = {
                         const usersField = field.getModel().getField('users');
                         const dataSet = CloneObject(TabulatorPlainData);
                         usersField.updateProps({dataSet: dataSet});
-                        resolve({data: {users: [{id: '1'}]}});
+                        resolve({data: {users: [{id: '1'}], name:'newName'}});
                     }, 2000);
                 });
             },

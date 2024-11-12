@@ -339,8 +339,22 @@ export class TabsField extends BaseField<ITabsFieldProps> {
                 this.fieldProps.onTabDataFetchSuccess?.(tabName, result, this);
 
                 const values = result.data as IDFormDataSet;
-                this.model.setValues(values);
 
+/*                const tabFields = this._tabsFieldsMap[tabName] ?? {};
+                for (const fieldName in values) {
+                    const val = values[fieldName];
+
+                    if (tabFields[fieldName]) {
+                        /!** if field belongs to current tab, replace its current value to the new one *!/
+                        tabFields[fieldName].setValue(val);
+                    }
+                    else {
+                        /!** for other fields replace their values when current value is undefined only *!/
+                        const curField = this.model.getField(fieldName);
+                        if (curField && typeof curField.getValue() === 'undefined') curField.setValue(val);
+                    }
+                }*/
+                this.model.setValues(values)
                 this.model.checkFormReadyState();
                 this.emitTabRender(tabName);
             },
