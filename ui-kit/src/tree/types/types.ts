@@ -1,4 +1,3 @@
-import {ITreeSelectNode} from "@src/treeSelect";
 import {GetRef, Tree as AntdTree, type TreeDataNode} from 'antd';
 import {translations} from '@src/tree/translations/translations';
 import {IDFormModalApi, IDFormModalProps} from '@src/dFormModal/types/dFormModalTypes';
@@ -61,7 +60,7 @@ export interface IOwnExtTreeProps {
     sortOnChange?: boolean;
 
     /** Sort comparator */
-    sortComparator?:(keyof ITreeSelectNode)[] | ((a: ITreeSelectNode, b: ITreeSelectNode) => number);
+    sortComparator?: (keyof IExtTreeNode)[] | ((a: IExtTreeNode, b: IExtTreeNode) => number);
 
     /** Default expanded keys */
     defaultExpandedKeys?: IKey[];
@@ -90,7 +89,7 @@ export interface IOwnExtTreeProps {
     groupsMode?: boolean;
 
     /** Should select new node after create, clone or delete node */
-    selectNewNode?:boolean
+    selectNewNode?: boolean;
 
     /** Language */
     language?: keyof typeof translations;
@@ -126,7 +125,7 @@ export interface IOwnExtTreeProps {
     onDelete?: (node: IExtTreeNode, api: IExtTreeApi) => ITreeDeletePromise | void | undefined;
 
     /** Callback executed when node move */
-    onNodeMove?: (node: IExtTreeNode, targetNode: IExtTreeNode | undefined, pos:INodePosition, api: IExtTreeApi) => ITreeMovePromise | void | undefined;
+    onNodeMove?: (node: IExtTreeNode, targetNode: IExtTreeNode | undefined, pos: INodePosition, api: IExtTreeApi) => ITreeMovePromise | void | undefined;
 }
 
 export type IExtTreeProps = Omit<

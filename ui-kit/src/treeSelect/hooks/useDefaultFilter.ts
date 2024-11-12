@@ -1,12 +1,12 @@
 import {ITreeSelectApi} from '@src/treeSelect';
-import {DefaultOptionType} from 'rc-tree-select/es/TreeSelect';
+import {DataNode} from "rc-tree-select/lib/interface";
 
 export const useDefaultFilter = (api: ITreeSelectApi) => {
     const fields = api.getFieldNames();
     const titleField = fields.title;
-    return (inputValue: string, treeNode: DefaultOptionType) => {
+    return (inputValue: string, treeNode: DataNode) => {
         if (!treeNode || typeof treeNode[titleField] !== 'string') return false;
-        const title = treeNode[titleField] as string;
+        const title = treeNode[titleField];
         return title.toLowerCase().indexOf(inputValue.toLowerCase()) >= 0;
     };
 };

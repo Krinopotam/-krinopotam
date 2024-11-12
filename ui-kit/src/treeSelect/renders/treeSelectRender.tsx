@@ -11,7 +11,7 @@ import {DropdownRender} from '@src/treeSelect/renders/dropdownRender';
 import {NotFound} from '@src/treeSelect/renders/dropdownStatus';
 import {ILabeledValue} from '@src/treeSelect/types/types';
 import {TreeSelect as AntdTreeSelect} from 'antd';
-import {DefaultOptionType} from 'rc-tree-select/es/TreeSelect';
+import {DataNode} from "rc-tree-select/lib/interface";
 import React, {useCallback, useContext} from 'react';
 
 // For clarity. Antd has labels for a node(1) and for the selected value(2). fieldNames.label property sets the node label(1) and treeNodeLabelProp sets the selected value label(2)
@@ -155,7 +155,7 @@ const useOnSearch = (api: ITreeSelectApi): IAntTreeSelectProps['onSearch'] => {
 
 const useOnFilterTreeNode = (api: ITreeSelectApi) => {
     const defaultFilter = useDefaultFilter(api);
-    return (inputValue: string, treeNode: DefaultOptionType) => {
+    return (inputValue: string, treeNode: DataNode) => {
         //Whether to filter treeNodes by input value. The value of treeNodeFilterProp is used for filtering by default
         if (!api.getIsAllFetched()) return true; //Data filtration when requested from the server is carried out by a server
         const props = api.getProps();

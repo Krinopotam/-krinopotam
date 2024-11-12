@@ -3,13 +3,12 @@ import React from 'react';
 import {GetProps, GetRef, TreeSelect} from 'antd';
 import {IDFormModalApi, IDFormModalProps} from '@src/dFormModal';
 import {IButtonsRowApi, IFormButton} from '@src/buttonsRow';
-import {DefaultOptionType} from 'rc-tree-select/es/TreeSelect';
-
 import {IFieldNames, ITreeComponentApi} from '@src/_shared/hooks/treeComponentApiMethods/types/treeApiTypes';
 import {translations} from '@src/treeSelect/translations/translations';
 import {AnyType, IKey} from '@krinopotam/service-types';
+import {DataNode} from "rc-tree-select/lib/interface";
 
-interface ITreeSelectNodeBase extends Omit<DefaultOptionType, 'children'> {
+interface ITreeSelectNodeBase extends Omit<DataNode, 'children'> {
     /** Node id */
     id?: IKey;
     /** Node disabled status */

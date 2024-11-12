@@ -1,7 +1,7 @@
 import esLint from '@eslint/js';
-import tsEsLint from 'typescript-eslint';
-import eslintReact from 'eslint-plugin-react';
-import hooksPlugin from 'eslint-plugin-react-hooks';
+import tsEslint from 'typescript-eslint';
+import eslintPluginReact from 'eslint-plugin-react';
+import eslintPluginReactHooks from 'eslint-plugin-react-hooks';
 import eslintConfigPrettier from 'eslint-config-prettier';
 
 import globals from 'globals';
@@ -13,17 +13,17 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 //
 
-export default tsEsLint.config(
+export default tsEslint.config(
     {
         ignores: ['**/build/**', '**/dist/**', 'node_modules', 'eslint.config.js', 'eslint.config.mjs'],
     },
     esLint.configs.recommended,
-    ...tsEsLint.configs.recommended,
+    ...tsEslint.configs.recommended,
     {
         plugins: {
-            '@typescript-eslint': tsEsLint.plugin,
-            react: eslintReact,
-            'react-hooks': hooksPlugin,
+            '@typescript-eslint': tsEslint.plugin,
+            'react': eslintPluginReact,
+            'react-hooks': eslintPluginReactHooks,
         },
 
         languageOptions: {
@@ -31,7 +31,7 @@ export default tsEsLint.config(
                 ...globals.browser,
                 ...globals.es2021,
             },
-            parser: tsEsLint.parser,
+            parser: tsEslint.parser,
             parserOptions: {
                 ecmaFeatures: {
                     jsx: true,
@@ -46,15 +46,15 @@ export default tsEsLint.config(
             sourceType: 'module',
         },
         rules: {
-            ...hooksPlugin.configs.recommended.rules,
-            ...eslintReact.configs.recommended.rules,
+            ...eslintPluginReactHooks.configs.recommended.rules,
+            ...eslintPluginReact.configs.recommended.rules,
             'react-hooks/exhaustive-deps': ['warn', {additionalHooks: '(useUpdateEffect)'}],
         },
     },
     {
         // disable type-aware linting on JS files
         files: ['**!/!*.js'],
-        ...tsEsLint.configs.disableTypeChecked,
+        ...tsEslint.configs.disableTypeChecked,
     },
     eslintConfigPrettier
 );
