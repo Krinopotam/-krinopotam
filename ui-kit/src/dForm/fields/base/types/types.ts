@@ -32,8 +32,8 @@ export interface IBaseFieldProps<TField extends IBaseField, TValue> extends Reco
     /** Whether the field default state is readonly */
     readOnly?: boolean;
 
-    /** Whether the field can not be edited (the field will have readOnly state if formMode is 'update') */
-    nonEditable?: boolean;
+    /** Whether the field can not be edited (the field will have readOnly or disabled state if formMode is 'update') */
+    nonEditable?: boolean | 'readOnly' | 'disabled';
 
     /** List of fields that must be filled in order to display this field */
     dependsOn?: string[];

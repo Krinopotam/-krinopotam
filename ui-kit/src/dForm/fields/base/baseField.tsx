@@ -227,7 +227,7 @@ export class BaseField<TFieldProps extends IAnyFieldProps> {
 
     /** @returns field disable status */
     isDisabled(): boolean {
-        if (this.model.isFormDisabled()) return true;
+        if (this.model.isFormDisabled() || (this.getProps().nonEditable === 'disabled' && this.model.getFormMode() === 'update')) return true;
         return this.model.getDisabledFields()[this.fieldName] ?? false;
     }
 
@@ -248,7 +248,11 @@ export class BaseField<TFieldProps extends IAnyFieldProps> {
 
     /** @returns field read only status  */
     isReadOnly(): boolean {
-        if (this.model.isFormReadOnly() || (this.getProps().nonEditable && this.model.getFormMode() === 'update')) return true;
+        if (
+            this.model.isFormReadOnly() ||
+            ((this.getProps().nonEditable === true || this.getProps().nonEditable === 'readOnly') && this.model.getFormMode() === 'update')
+        )
+            return true;
         return this.model.getReadOnlyFields()[this.fieldName] ?? false;
     }
 
