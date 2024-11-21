@@ -1,6 +1,6 @@
 import {CellComponent, EmptyCallback, FilterType, ValueBooleanCallback, ValueVoidCallback} from 'tabulator-tables';
 import dayjs from 'dayjs';
-import {AnyType, IKeyboardKey} from "@krinopotam/service-types";
+import {AnyType, IKeyboardKey} from '@krinopotam/service-types';
 
 export interface IDateTimeRangeHeaderFilterParams {
     /** Filter type */
@@ -55,7 +55,7 @@ export const DateTimeRangeHeaderFilter = (
             initialRowValue = rowVal; //persist value if successfully validated in case editor is used as header filter
         }
     };
-/*    const inputFromOnChange = () => {
+    /*    const inputFromOnChange = () => {
         onChange(true);
     };
     const inputToOnChange = () => {
@@ -101,8 +101,12 @@ export const DateTimeRangeHeaderFilter = (
     const filterDom = document.createElement('div');
     filterDom.style.display = 'flex';
     filterDom.style.flexDirection = 'row';
-    filterDom.addEventListener("keyup", (e)=>{e.stopPropagation(); });
-    filterDom.addEventListener("search", (e)=>{e.stopPropagation(); });
+    filterDom.addEventListener('keyup', e => {
+        e.stopPropagation();
+    });
+    filterDom.addEventListener('search', e => {
+        e.stopPropagation();
+    });
 
     const fieldType = editorParams?.filterType === 'datetime' ? 'datetime-local' : 'date';
     const fieldStep = editorParams?.filterType === 'datetime' && editorParams?.showSeconds ? '1' : '';
@@ -146,40 +150,6 @@ export const DateTimeRangeHeaderFilter = (
     });
 
     return filterDom;
-};
-
-export const DateTimeRangeHeaderFilterFunc = (
-    headerValue: string,
-    rowValue: string,
-    rowData: Record<string, AnyType>,
-    filterParams: IDateTimeRangeHeaderFilterParams
-) => {
-    if (!headerValue) return true;
-    if (!rowValue) return !!filterParams.keepEmpty;
-
-    const filterValParts = headerValue.split(' - ');
-    const filterFromVal = filterValParts[0];
-    const filterToVal = filterValParts[1];
-    const filterFromDate = dayjs(filterFromVal);
-    const filterToDate = dayjs(filterToVal);
-    if (!filterFromDate.isValid() && !filterToDate.isValid()) return true;
-
-    let dataFormat = filterParams.valuesFormat;
-    if (!dataFormat) {
-        if (rowValue.length === 10) dataFormat = 'DD.MM.YYYY';
-        else if (rowValue.length === 16) dataFormat = 'DD.MM.YYYY HH:mm';
-        else dataFormat = 'DD.MM.YYYY HH:mm:ss';
-    }
-
-    const valueDate = dayjs(rowValue, dataFormat);
-
-    if (!valueDate.isValid()) return !!filterParams.keepEmpty;
-
-    let result: undefined | boolean = undefined;
-    if (filterFromDate.isValid()) result = valueDate.isAfter(filterFromDate) || valueDate.isSame(filterFromDate);
-    if (filterToDate.isValid() && result !== false) result = valueDate.isBefore(filterToDate) || valueDate.isSame(filterToDate);
-
-    return !!result;
 };
 
 export const DateTimeRangeHeaderFilterFunc2 = (

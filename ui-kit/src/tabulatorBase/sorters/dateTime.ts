@@ -2,16 +2,11 @@ import {ColumnDefinition} from "tabulator-tables";
 import dayjs from "dayjs";
 
 export interface IDateTimeSorterParams {
-    format?: string | undefined;
+    format?: string;
     alignEmptyValues?: 'top'|'bottom';
 }
-export const DateTimeSorter: ColumnDefinition['sorter'] = function (a, b, aRow, bRow, column, dir, params:IDateTimeSorterParams) {
-    let format = params.format;
-    if (!format) {
-        if (a.length === 10) format = 'DD.MM.YYYY';
-        else if (a.length === 16) format = 'DD.MM.YYYY HH:mm';
-        else format = "DD.MM.YYYY HH:mm:ss";
-    }
+export const DateTimeSorter: ColumnDefinition['sorter'] = function (a, b, _aRow, _bRow, _column, dir, params:IDateTimeSorterParams) {
+    const format = params.format ?? getDefaultDateFormat(a);
 
     const alignEmptyValues = params.alignEmptyValues;
     let emptyAlign = 0;
@@ -36,4 +31,10 @@ export const DateTimeSorter: ColumnDefinition['sorter'] = function (a, b, aRow, 
     }
 
     return emptyAlign;
+}
+
+const getDefaultDateFormat = (value: string) => {
+    if (value.length === 10) return 'DD.MM.YYYY';
+    else if (value.length === 16) return 'DD.MM.YYYY HH:mm';
+    else return 'DD.MM.YYYY HH:mm:ss';
 }

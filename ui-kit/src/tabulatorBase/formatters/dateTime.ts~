@@ -12,22 +12,27 @@ export const DateTimeFormatter: ColumnDefinition['formatter'] = function (cell, 
     //cell - the cell component
     //formatterParams - parameters set for the column
     //onRendered - function to call when the formatter has been rendered
-    const cellVal = cell.getValue();
-    if (!cellVal) return '';
+    const value = cell.getValue();
+    if (!value) return '';
 
-    const inputFormat = formatterParams.inputFormat ?? getDefaultDateFormat(cellVal);
-    const outputFormat = formatterParams.outputFormat ?? getDefaultDateFormat(cellVal);
+    let inputFormat = formatterParams.inputFormat;
+    let outputFormat = formatterParams.outputFormat;
+    if (!inputFormat) {
+        if (value.length === 10) inputFormat = 'DD.MM.YYYY';
+        else if (value.length === 16) inputFormat = 'DD.MM.YYYY HH:mm';
+        else inputFormat = 'DD.MM.YYYY HH:mm:ss';
+    }
+
+    if (!outputFormat) {
+        if (value.length === 10) outputFormat = 'DD.MM.YYYY';
+        else if (value.length === 16) outputFormat = 'DD.MM.YYYY HH:mm';
+        else outputFormat = 'DD.MM.YYYY HH:mm:ss';
+    }
 
     const invalid = typeof formatterParams.invalidPlaceholder !== 'undefined' ? formatterParams.invalidPlaceholder : '';
 
-    const dt = dayjs(cellVal, inputFormat);
-    if (!dt.isValid()) return typeof invalid === 'function' ? invalid(cellVal) : invalid.toString();
+    const dt = dayjs(value, inputFormat);
+    if (!dt.isValid()) return typeof invalid === 'function' ? invalid(value) : invalid.toString();
 
     return dt.format(outputFormat);
 };
-
-const getDefaultDateFormat = (value: string) => {
-    if (value.length === 10) return 'DD.MM.YYYY';
-    else if (value.length === 16) return 'DD.MM.YYYY HH:mm';
-    else return 'DD.MM.YYYY HH:mm:ss';
-}

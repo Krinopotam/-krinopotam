@@ -23,7 +23,7 @@ type _ITabulator = IAdvancedHeaderFilterTabulator & IActiveSelectionTabulator & 
 
 export type ITabulatorFilterFunc = (
     headerValue: AnyType,
-    rowValue: AnyType,
+    cellValue: AnyType,
     rowData: Record<string, AnyType>,
     filterParams: Record<string, AnyType>
 ) => boolean;
@@ -64,8 +64,6 @@ export interface ITabulator extends _ITabulator {
 export interface ITabulatorColumn<TColumns extends Record<string, AnyType> = Record<string, AnyType>> extends Omit<ColumnDefinition, 'headerPopup' | 'field'> {
     field?: keyof TColumns;
     /** type patches */
-    headerFilterParams?: ColumnDefinition['headerFilterParams'] | Record<string, AnyType>;
-    // eslint-disable-next-line @typescript-eslint/no-empty-object-type
     formatter?: // eslint-disable-next-line @typescript-eslint/no-empty-object-type
     | Exclude<Formatter, (cell: CellComponent, formatterParams: {}, onRendered: EmptyCallback) => string | HTMLElement>
         | ((
@@ -77,6 +75,7 @@ export interface ITabulatorColumn<TColumns extends Record<string, AnyType> = Rec
     formatterParams?: FormatterParams | Record<string, AnyType>;
     sorterParams?: ColumnDefinition['sorterParams'] | Record<string, AnyType>;
     headerFilterFuncParams?: ColumnDefinition['headerFilterFuncParams'] | Record<string, AnyType>;
+    headerFilterParams?: ColumnDefinition['headerFilterParams'] | Record<string, AnyType>;
     editorParams?: EditorParams | Record<string, AnyType>;
     mutatorDataParams?: CustomMutatorParams | Record<string, AnyType>;
     mutatorEditParams?: CustomMutatorParams | Record<string, AnyType>;
