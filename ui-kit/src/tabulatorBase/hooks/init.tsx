@@ -32,7 +32,6 @@ export const useInit = ({
                 tableRef.current?.off(eventName as keyof EventCallBackMethods, handler);
             }
 
-            // eslint-disable-next-line react-hooks/exhaustive-deps
             tableRef.current?.destroy();
         };
     }, [props, onTableRef, containerRef, tableRef, events]);

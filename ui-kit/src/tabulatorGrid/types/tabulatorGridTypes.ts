@@ -269,10 +269,10 @@ export interface ITabulatorButton extends IFormButton {
     /** Callback executed on button click */
     onClick?: (buttonName: string, button: IFormButton, api: IGridApi) => void;
 
-    /** Callback executed on button render. If returns false, the button will not be rendered */
+    /** Callback executed on button render. If returns true, the button will not be rendered */
     onHiddenCheck?: (buttonName: string, button: ITabulatorButton, row: RowComponent | undefined, gridApi: IGridApi) => boolean;
 
-    /** Callback executed on button render. If returns false, the button will be disabled */
+    /** Callback executed on button render. If returns true, the button will be disabled */
     onDisabledCheck?: (buttonName: string, button: ITabulatorButton, row: RowComponent | undefined, gridApi: IGridApi) => boolean;
 
     /** Callback executed when active row changed */
