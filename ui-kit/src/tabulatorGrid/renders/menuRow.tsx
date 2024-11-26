@@ -26,15 +26,15 @@ export const MenuRow = ({gridApi}: IGridMenuProps): React.JSX.Element | null => 
         if (!buttons) return null;
 
         return (
-            <div style={{paddingBottom: 8, paddingTop: 8}}>
-                <ButtonsRow
-                    buttons={buttons}
-                    apiRef={gridApi.getButtonsApi()}
-                    context={gridApi}
-                    responsiveBreakpoint={gridProps.responsiveBreakpoint}
-                    iconsOnly={gridProps.buttonsIconsOnly}
-                />
-            </div>
+            <ButtonsRow
+                buttons={buttons}
+                apiRef={gridApi.getButtonsApi()}
+                context={gridApi}
+                responsiveBreakpoint={gridProps.responsiveBreakpoint}
+                iconsOnly={gridProps.buttonsIconsOnly}
+                style={{paddingBottom: 8, paddingTop: 8, ...gridProps.buttonsRowStyle}}
+                styles={gridProps.buttonsRowStyles}
+            />
         );
     }, [buttons, gridApi, gridProps.buttonsIconsOnly, gridProps.responsiveBreakpoint]);
 };

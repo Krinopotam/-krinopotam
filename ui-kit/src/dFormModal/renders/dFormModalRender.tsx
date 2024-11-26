@@ -1,10 +1,9 @@
 import {DForm, IDFormProps} from '@src/dForm';
 
 import {Modal} from '@src/modal/modal';
-import {ButtonsRender} from '@src/modal/renders/buttonsRender';
 import React from 'react';
 import {IDFormModalApi, IDFormModalProps} from '@src/dFormModal';
-import {IFormButtons} from '@src/buttonsRow';
+import {ButtonsRow, IFormButtons} from '@src/buttonsRow';
 
 interface IDFormModalRenderProps {
     /** form buttons collection */
@@ -48,11 +47,13 @@ export const DFormModalRender = ({buttons, formApi, formProps, modalFormProps}: 
             title={formApi.getTitle()}
             onCancel={formApi.close}
             footer={
-                <ButtonsRender
+                <ButtonsRow
                     buttons={buttons}
-                    colorType={modalFormProps.colorType}
-                    buttonsApi={formApi.getButtonsApi()}
-                    arrowsSelection={modalFormProps.arrowsButtonsSelection}
+                    apiRef={formApi.getButtonsApi()}
+                    color={formProps.colorType}
+                    arrowsSelection={formProps.arrowsButtonsSelection}
+                    style={formProps.buttonsRowStyle}
+                    styles={formProps.buttonsRowStyles}
                     context={formApi}
                 />
             }

@@ -53,7 +53,6 @@ export const ButtonsRowWrapper = forwardRef<HTMLDivElement, IButtonRowWrapperPro
             ensureWrapperFocus(ref ? (ref as RefObject<HTMLDivElement>).current : defaultRef.current, props);
     }
 
-    // eslint-disable-next-line react/prop-types
     const style = {...defStyle, ...props?.style};
 
     const wrapperContext = useMemo(() => {

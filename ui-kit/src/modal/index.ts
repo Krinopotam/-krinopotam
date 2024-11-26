@@ -1,6 +1,5 @@
 export {Modal} from "./modal";
 export type {IExtendedModalProps} from "./types/types";
-export {ButtonsRender} from "./renders/buttonsRender";
 export {FooterRender} from "./renders/footerRender";
 export {DraggableRender} from "./renders/draggableRender";
 export {HeaderRender} from "./renders/headerRender";

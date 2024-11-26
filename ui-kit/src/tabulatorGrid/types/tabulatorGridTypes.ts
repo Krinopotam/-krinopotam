@@ -1,6 +1,6 @@
 import {AnyType} from '@krinopotam/service-types';
-import React from 'react';
-import {IButtonsRowApi, IFormButton} from '@src/buttonsRow';
+import React, {CSSProperties} from 'react';
+import {IButtonRowProps, IButtonsRowApi, IFormButton} from '@src/buttonsRow';
 import {IDFormModalApi, IDFormModalProps} from '@src/dFormModal';
 import {IRequestProps, ITabulator, ITabulatorProps} from '@src/tabulatorBase';
 import {RowComponent, ScrollToRowPosition} from 'tabulator-tables';
@@ -35,6 +35,12 @@ export interface IGridPropsBase {
 
     /** Grid header buttons */
     buttons?: Record<'view' | 'create' | 'clone' | 'update' | 'delete' | 'select' | 'filterToggle' | 'system', ITabulatorButton | null> | ITabulatorButtons;
+
+    /** Grid header buttons row style */
+    buttonsRowStyle?: CSSProperties;
+
+    /** Grid header buttons styles for each block (left, center, right) */
+    buttonsRowStyles?: IButtonRowProps['styles'];
 
     /** Grid header buttons size. Default: 'small'*/
     buttonsSize?: ITabulatorButton['size'];

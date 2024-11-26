@@ -13,15 +13,21 @@ import {Modal, ModalFuncProps, Spin} from 'antd';
 
 import {ModalRender} from '@src/modal/renders/modalRender';
 import {HeaderRender} from '@src/modal/renders/headerRender';
-import {ButtonsRender} from '@src/modal/renders/buttonsRender';
 import {ContentRender} from './renders/contentRender';
 import {MessageBoxApi} from './messageBoxApi';
 import React from 'react';
 import {GetNanoId} from '@krinopotam/js-helpers/helpersString/getNanoId';
 import {QuestionCircleOutlined} from '@ant-design/icons';
-import {IModalAlertConfig, IModalBaseConfig, IModalConfig, IModalConfirmConfig, IModalConfirmWaiterConfig, ModalType,} from '@src/messageBox/types/messageBoxTypes';
+import {
+    IModalAlertConfig,
+    IModalBaseConfig,
+    IModalConfig,
+    IModalConfirmConfig,
+    IModalConfirmWaiterConfig,
+    ModalType,
+} from '@src/messageBox/types/messageBoxTypes';
 import {translations} from '@src/messageBox/translations/translations';
-import {IFormButton, IFormButtons, mergeButtons} from "@src/buttonsRow";
+import {ButtonsRow, IFormButton, IFormButtons, mergeButtons} from '@src/buttonsRow';
 
 class MessageBox {
     private static _instance: MessageBox; //singleton instance
@@ -214,11 +220,11 @@ class MessageBox {
             ),
 
             footer: (
-                <ButtonsRender
+                <ButtonsRow
                     buttons={buttons}
-                    colorType={colorType}
+                    color={colorType}
                     arrowsSelection={true}
-                    containerStyle={{
+                    style={{
                         marginTop: '32px',
                         marginLeft: paddingLeft,
                         marginRight: paddingRight,

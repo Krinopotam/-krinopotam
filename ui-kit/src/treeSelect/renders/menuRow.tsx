@@ -14,21 +14,18 @@ export const MenuRow = ({treeApi, treeProps}: {treeApi: ITreeSelectApi; treeProp
     return useMemo(() => {
         if (!buttons) return null;
         return (
-            <div
+            <ButtonsRow
+                buttons={buttons}
+                apiRef={treeApi.getButtonsApi()}
                 style={{
                     padding: '0 4px 6px 4px',
                     borderBottom: `1px solid ${colorBorderSecondary}`,
-                    ...treeProps.buttonsRowWrapperStyle,
+                    ...treeProps.buttonsRowStyle,
                 }}
-            >
-                <ButtonsRow
-                    buttons={buttons}
-                    apiRef={treeApi.getButtonsApi()}
-                    style={treeProps.buttonsRowStyle}
-                    context={treeApi}
-                    iconsOnly={treeProps.buttonsIconsOnly !== false}
-                />
-            </div>
+                styles={treeProps.buttonsRowStyles}
+                context={treeApi}
+                iconsOnly={treeProps.buttonsIconsOnly !== false}
+            />
         );
     }, [buttons, colorBorderSecondary, treeApi, treeProps.buttonsIconsOnly, treeProps.buttonsRowStyle, treeProps.buttonsRowWrapperStyle]);
 };

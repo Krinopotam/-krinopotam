@@ -6,10 +6,9 @@
  * @license MIT
  */
 
-import {ButtonsRowWrapper, IFormButtons} from '@src/buttonsRow';
+import {ButtonsRow, ButtonsRowWrapper, IFormButtons} from '@src/buttonsRow';
 import React, {useEffect, useSyncExternalStore} from 'react';
 
-import {ButtonsRender} from '@src/modal';
 import {Form} from 'antd';
 import {FieldsRender} from './fieldsRender';
 import {DModel, IDFormApi, IDFormProps} from '@src/dForm';
@@ -60,11 +59,13 @@ export const FormRender = ({formProps, formApi, formButtons}: IFormRenderProps):
 
                         <FieldsRender fields={model.getRootFields()} formProps={formProps} />
 
-                        <ButtonsRender
+                        <ButtonsRow
                             buttons={formButtons}
-                            colorType={formProps.colorType}
-                            buttonsApi={formApi.getButtonsApi()}
+                            apiRef={formApi.getButtonsApi()}
+                            color={formProps.colorType}
                             arrowsSelection={formProps.arrowsButtonsSelection}
+                            style={formProps.buttonsRowStyle}
+                            styles={formProps.buttonsRowStyles}
                             context={formApi}
                         />
                     </Form>

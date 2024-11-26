@@ -61,6 +61,7 @@ const useSplitProps = (props: ITreeSelectProps) => {
             defaultExpandedKeys: true,
             expandedKeys: true,
             buttonsRowStyle: true,
+            buttonsRowStyles: true,
             buttonsRowWrapperStyle: true,
             buttonsIconsOnly: true,
             buttonsPosition: true,

@@ -1,7 +1,7 @@
 import {AnyType, IKey} from '@krinopotam/service-types';
 import {IBaseComponentApi} from '@src/_shared/hooks/componentApiMethods/types/apiTypes';
 import {IButtonProps} from '@src/button';
-import {IButtonsRowApi, IFormButtons} from '@src/buttonsRow';
+import {IButtonRowProps, IButtonsRowApi, IFormButtons} from '@src/buttonsRow';
 import {DModel, IDFormBaseCallbacks, IRuleType} from '@src/dForm';
 import {IBaseFieldProps} from '@src/dForm/fields/base';
 import {translations} from '@src/dForm/translations/translations';
@@ -28,6 +28,12 @@ export interface IDFormPropsNoCB<TFieldsProps extends Record<string, AnyType> = 
 
     /** Buttons properties */
     buttons?: IFormButtons | null;
+
+    /** Buttons row style */
+    buttonsRowStyle?: CSSProperties;
+
+    /** Buttons row styles for each block (left, center, right) */
+    buttonsRowStyles?: IButtonRowProps['styles'];
 
     /** Form CSS class */
     className?: string;

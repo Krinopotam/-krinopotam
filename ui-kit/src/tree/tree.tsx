@@ -35,6 +35,7 @@ const useSeparateProps = (props: IExtTreeProps) => {
             headerLabel: true,
             responsiveBreakpoint: true,
             buttonsRowStyle: true,
+            buttonsRowStyles: true,
             buttonsRowWrapperStyle: true,
             dataSet: true,
             dataMutator: true,

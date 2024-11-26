@@ -28,6 +28,8 @@ const useSplitTabulatorProps = (props: IGridProps) => {
             className: true,
             headerLabel: true,
             buttons: true,
+            buttonsRowStyle: true,
+            buttonsRowStyles: true,
             buttonsSize: true,
             buttonsPosition: true,
             systemButtonsPosition: true,

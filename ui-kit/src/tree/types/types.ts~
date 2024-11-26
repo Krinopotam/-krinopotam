@@ -103,7 +103,7 @@ export interface IOwnExtTreeProps {
     /** Buttons row style */
     buttonsRowStyle?: React.CSSProperties;
 
-    /** Buttons row styles for each block (left, center, right) */
+    /** Buttons row styles for each position */
     buttonsRowStyles?: IButtonRowProps['styles'];
 
     /** Buttons row wrapper style */

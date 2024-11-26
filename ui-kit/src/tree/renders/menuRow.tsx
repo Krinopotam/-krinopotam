@@ -10,16 +10,15 @@ export const MenuRow = ({api, treeProps}: {api: IExtTreeApi; treeProps: IExtTree
         if (!buttons) return null;
 
         return (
-            <div style={{width: '100%', padding: '8px'}}>
-                <ButtonsRow
-                    buttons={buttons}
-                    apiRef={api.getButtonsApi()}
-                    style={treeProps.buttonsRowStyle}
-                    context={api}
-                    responsiveBreakpoint={treeProps.responsiveBreakpoint}
-                    iconsOnly={treeProps.buttonsIconsOnly}
-                />
-            </div>
+            <ButtonsRow
+                buttons={buttons}
+                apiRef={api.getButtonsApi()}
+                style={{padding: '8px', ...treeProps.buttonsRowStyle}}
+                styles={treeProps.buttonsRowStyles}
+                context={api}
+                responsiveBreakpoint={treeProps.responsiveBreakpoint}
+                iconsOnly={treeProps.buttonsIconsOnly}
+            />
         );
-    }, [buttons, api, treeProps.buttonsIconsOnly, treeProps.buttonsRowStyle, treeProps.responsiveBreakpoint]);
+    }, [buttons, api, treeProps.buttonsRowStyle, treeProps.buttonsRowStyles, treeProps.responsiveBreakpoint, treeProps.buttonsIconsOnly]);
 };

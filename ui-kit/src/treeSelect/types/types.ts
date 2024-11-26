@@ -2,7 +2,7 @@
 import React from 'react';
 import {GetProps, GetRef, TreeSelect} from 'antd';
 import {IDFormModalApi, IDFormModalProps} from '@src/dFormModal';
-import {IButtonsRowApi, IFormButton} from '@src/buttonsRow';
+import {IButtonRowProps, IButtonsRowApi, IFormButton} from '@src/buttonsRow';
 import {IFieldNames, ITreeComponentApi} from '@src/_shared/hooks/treeComponentApiMethods/types/treeApiTypes';
 import {translations} from '@src/treeSelect/translations/translations';
 import {AnyType, IKey} from '@krinopotam/service-types';
@@ -138,6 +138,9 @@ export interface ITreeSelectOwnProps {
 
     /** Buttons row style */
     buttonsRowStyle?: React.CSSProperties;
+
+    /** Buttons row styles for each block (left, center, right) */
+    buttonsRowStyles: IButtonRowProps['styles']
 
     /** Edit item controls props. If not set then component not editable */
     editFormProps?: IDFormModalProps;
