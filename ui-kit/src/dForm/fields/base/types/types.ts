@@ -14,6 +14,12 @@ export interface IBaseFieldProps<TField extends IBaseField, TValue> extends Reco
     /** Field label */
     label?: string | React.ReactNode;
 
+    /** Field item class name */
+    itemClassName?: string;
+
+    /** Field class name */
+    className?: string;
+
     /** Field placeholder*/
     placeholder?: string;
 

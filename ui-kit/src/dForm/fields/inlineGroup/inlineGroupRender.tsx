@@ -55,7 +55,7 @@ export const InlineGroupRender = ({field}: {field: InlineGroupField}): React.JSX
     return (
         <Animate component="" transitionName="zoom">
             {!isHidden ? (
-                <Form.Item label={groupLabel} style={groupItemStyle}>
+                <Form.Item label={groupLabel} style={groupItemStyle} className={fieldProps.className}>
                     <div style={groupContainerStyle}>
                         {Object.keys(childrenFields).map(fieldName => {
                             const childField = childrenFields[fieldName];

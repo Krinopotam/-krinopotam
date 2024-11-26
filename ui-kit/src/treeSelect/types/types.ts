@@ -140,7 +140,7 @@ export interface ITreeSelectOwnProps {
     buttonsRowStyle?: React.CSSProperties;
 
     /** Buttons row styles for each block (left, center, right) */
-    buttonsRowStyles: IButtonRowProps['styles']
+    buttonsRowStyles?: IButtonRowProps['styles']
 
     /** Edit item controls props. If not set then component not editable */
     editFormProps?: IDFormModalProps;

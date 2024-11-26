@@ -25,6 +25,7 @@ export const LinkFieldRender = ({field}: {field: LinkField}): React.JSX.Element 
 
     return (
         <a
+            className={fieldProps.className}
             href={fieldProps.href}
             target={fieldProps.target}
             style={style}

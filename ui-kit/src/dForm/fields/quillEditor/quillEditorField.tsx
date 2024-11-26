@@ -10,8 +10,6 @@ import {Range, UnprivilegedEditor} from 'react-quill';
 export interface IQuillEditorFieldProps extends IBaseFieldProps<QuillEditorField, string> {
     bounds?: IQuillEditorProps['bounds'];
 
-    className?: IQuillEditorProps['className'];
-
     /** Allowed formats. This is separate from adding a control in the Toolbar. For example, you can configure Quill to allow bolded content to be pasted into an editor that has no bold button in the toolbar */
     formats?: IQuillEditorProps['formats'];
 

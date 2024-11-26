@@ -38,11 +38,11 @@ export const QuillEditorFieldRender = ({field}: {field: QuillEditorField}): Reac
 
     return (
         <QuillEditor
+            className={fieldProps.className}
             theme={fieldProps.theme}
             value={value}
             formats={fieldProps.formats}
             toolbar={fieldProps.toolbar}
-            className={fieldProps.className}
             preserveWhitespace={fieldProps.preserveWhitespace}
             tabIndex={fieldProps.tabIndex}
             bounds={fieldProps.bounds}

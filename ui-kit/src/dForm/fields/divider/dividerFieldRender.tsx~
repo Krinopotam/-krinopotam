@@ -22,7 +22,6 @@ export const DividerFieldRender = ({field}: {field: DividerField}): React.JSX.El
         <Animate component="" transitionName="zoom">
             {!fieldHidden ? (
                 <Divider
-                    className={fieldProps.className}
                     orientation={fieldProps.orientation}
                     orientationMargin={fieldProps.orientationMargin}
                     plain={fieldProps.plain}

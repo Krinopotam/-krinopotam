@@ -31,10 +31,10 @@ export const NumberFieldRender = ({field}: {field: NumberField}): React.JSX.Elem
 
     return (
         <InputNumber
+            className={fieldProps.className}
             addonAfter={fieldProps.addonAfter}
             addonBefore={fieldProps.addonBefore}
             autoFocus={fieldProps.autoFocus}
-            className={fieldProps.className}
             controls={fieldProps.controls}
             decimalSeparator={fieldProps.decimalSeparator}
             disabled={field.isDisabled()}

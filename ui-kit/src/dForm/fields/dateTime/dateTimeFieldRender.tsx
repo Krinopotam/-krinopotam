@@ -50,6 +50,7 @@ export const DateTimeFieldRender = ({field}: {field: DateTimeField}): React.JSX.
     return (
         <DatePicker
             {...fieldProps}
+            className={fieldProps.className}
             disabled={field.isDisabled()}
             readOnly={field.isReadOnly()}
             name={fieldName}

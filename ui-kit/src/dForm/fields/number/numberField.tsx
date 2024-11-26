@@ -52,9 +52,6 @@ export interface INumberFieldProps extends IBaseFieldProps<NumberField, string |
     /** Down handler */
     downHandler?: React.ReactNode;
 
-    /** Class name */
-    className?: string;
-
     /** Prefix class name */
     prefixCls?: string;
 }

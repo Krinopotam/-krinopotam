@@ -16,5 +16,5 @@ export const CustomFieldRender = ({field}: {field: CustomField}): React.JSX.Elem
     const defStyle: CSSProperties = {width: field.getWidth() ?? '100%'};
     const style: CSSProperties = {...defStyle, ...fieldProps.style};
 
-    return <div style={style}>{curValue}</div>;
+    return <div style={style} className={fieldProps.className}>{curValue}</div>;
 };

@@ -38,6 +38,7 @@ export const TabulatorGridFieldRender = ({field, gridApi: gridApiBase}: {field: 
             <TabulatorGrid
                 {...tabulatorProps}
                 {...callbacks}
+                className={fieldProps.className}
                 apiRef={gridApi}
                 dataSet={curDataSetRef.current}
                 readOnly={fieldProps.readOnly}
@@ -101,6 +102,8 @@ const useSplitTabulatorProps = (props: ITabulatorGridFieldProps) => {
             onFieldDataFetch: true,
             onFieldDataFetchError: true,
             onFieldDataFetchSuccess: true,
+            className: true,
+            itemClassName: true,
         });
 
         return result[1];

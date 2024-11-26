@@ -31,6 +31,7 @@ export const SelectFieldRender = ({field}: {field: SelectField}): React.JSX.Elem
 
     return (
         <Select
+            className={fieldProps.className}
             allowClear
             {...fieldProps}
             disabled={field.isDisabled()}

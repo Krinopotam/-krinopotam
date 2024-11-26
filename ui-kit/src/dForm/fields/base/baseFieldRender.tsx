@@ -33,6 +33,7 @@ export const BaseFieldRender = ({field, altLabel, children}: { field: IBaseField
             {!fieldHidden ? (
                 <Form.Item
                     label={label}
+                    className={fieldProps.itemClassName}
                     //name={fieldName} //!Do not specify "name". Components inside Form.Item with "name" property will turn into controlled mode, which makes "defaultValue" and "value" not work anymore
                     help={error || undefined}
                     validateStatus={error ? 'error' : undefined}

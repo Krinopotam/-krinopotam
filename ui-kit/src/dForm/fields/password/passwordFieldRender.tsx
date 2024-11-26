@@ -31,6 +31,7 @@ export const PasswordFieldRender = ({field}:{field:PasswordField}):React.JSX.Ele
 
     return (
         <Input.Password
+            className={fieldProps.className}
             autoFocus={fieldProps.autoFocus}
             disabled={field.isDisabled()}
             iconRender={fieldProps.iconRender}

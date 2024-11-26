@@ -34,6 +34,7 @@ export const TreeSelectFieldRender = ({field}: {field: TreeSelectField}): React.
 
     return (
         <TreeSelect
+            className={fieldProps.className}
             apiRef={api}
             style={style}
             {...treeProps}

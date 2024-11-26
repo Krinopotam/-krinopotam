@@ -34,6 +34,7 @@ export const TextAreaFieldRender = ({field}: {field: TextAreaField}): React.JSX.
 
     return (
         <TextArea
+            className={fieldProps.className}
             autoFocus={fieldProps.autoFocus}
             autoSize={fieldProps.autoSize}
             cols={fieldProps.cols}

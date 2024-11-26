@@ -28,6 +28,7 @@ export const SwitchFieldRender = ({field}: {field: SwitchField}): React.JSX.Elem
 
     return (
         <Switch
+            className={fieldProps.className}
             autoFocus={fieldProps.autoFocus}
             checked={value}
             checkedChildren={fieldProps.checkedChildren}

@@ -30,6 +30,7 @@ export const CheckboxFieldRender = ({field}:{field:CheckboxField}):React.JSX.Ele
 
     return (
         <Checkbox
+            className={fieldProps.className}
             checked={value}
             disabled={field.isDisabled() || field.isReadOnly()}
             onChange={onChange}
