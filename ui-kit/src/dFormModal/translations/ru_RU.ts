@@ -1,4 +1,4 @@
-import {ru_RU as dFormRu} from '@src/dForm/translations/ru__r_u';
+import {ru_RU as dFormRu} from '@src/dForm/translations/ru_RU';
 
 export const ru_RU = {
     ...dFormRu,

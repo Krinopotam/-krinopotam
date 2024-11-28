@@ -95,7 +95,7 @@ export interface IOwnExtTreeProps {
     language?: keyof typeof translations;
 
     /** Custom translation */
-    translation?: Partial<typeof translations.en_GB>;
+    translation?: Partial<typeof translations.en_US>;
 
     /** Breakpoint for responsive design */
     responsiveBreakpoint?: IBreakpoints;
@@ -174,7 +174,7 @@ export interface IExtTreeApi extends ITreeComponentApi<IExtTreeNode, IExtTreePro
     treeRef: React.RefObject<GetRef<typeof AntdTree>>;
 
     /** Get translation */
-    t: (str: keyof (typeof translations)['en_GB']) => string;
+    t: (str: keyof (typeof translations)['en_US']) => string;
 
     /** Get current loading state */
     getIsLoading: () => boolean;

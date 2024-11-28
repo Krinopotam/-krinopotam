@@ -42,7 +42,6 @@ export {ParseJwt} from "@src/helpersObjects/parseJwt";
 
 /** HelpersEnvironment */
 export {isMobileBrowser} from "@src/helpersEnvironment/isMobileBrowser";
-export {IsDebugMode} from "@src/helpersEnvironment/isDebugMode";
 export {measureTime} from "@src/helpersEnvironment/measureTime";
 
 

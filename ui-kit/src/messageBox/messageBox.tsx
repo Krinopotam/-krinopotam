@@ -250,11 +250,11 @@ class MessageBox {
     }
 
     private getTranslator(language: IModalConfig['language'], extTranslation: IModalConfig['translation']) {
-        return (val: keyof typeof translations.en_GB) => {
-            const lang = language ?? 'en_GB';
-            const builtInTranslation = translations[lang] ?? translations.en_GB;
+        return (val: keyof typeof translations.en_US) => {
+            const lang = language ?? 'en_US';
+            const builtInTranslation = translations[lang] ?? translations.en_US;
             const translation = {...builtInTranslation, ...extTranslation};
-            return translation[val] ?? translations.en_GB[val] ?? val;
+            return translation[val] ?? translations.en_US[val] ?? val;
         };
     }
 }

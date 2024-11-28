@@ -7,8 +7,8 @@ import {Tree, TreeProps} from 'antd';
 import type {DataNode} from 'antd/es/tree';
 import {ColumnComponent, ColumnDefinition} from 'tabulator-tables';
 import {FolderOutlined} from '@ant-design/icons';
-import {IsDebugMode} from '@krinopotam/common-hooks';
 import {IsArray} from '@krinopotam/js-helpers/helpersObjects/isArray';
+import {IsDebugMode} from "@src/_shared/tool/isDebugMode";
 
 //region Types
 export interface IColumnsDialogProps {

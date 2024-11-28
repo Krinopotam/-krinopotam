@@ -38,5 +38,4 @@ export { AddElementToArray } from './helpersObjects/addElementToArray';
 export { ParseJwt } from './helpersObjects/parseJwt';
 /** HelpersEnvironment */
 export { isMobileBrowser } from './helpersEnvironment/isMobileBrowser';
-export { IsDebugMode } from './helpersEnvironment/isDebugMode';
 export { measureTime } from './helpersEnvironment/measureTime';

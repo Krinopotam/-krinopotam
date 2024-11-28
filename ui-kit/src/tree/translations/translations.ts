@@ -1,9 +1,9 @@
 import {ru_RU} from './ru_RU';
-import {en_GB} from './en_GB';
+import {en_US} from './en_US';
 import {zh_CN} from './zh_CN';
 
 export const translations = {
     ru_RU,
-    en_GB,
+    en_US,
     zh_CN,
 };

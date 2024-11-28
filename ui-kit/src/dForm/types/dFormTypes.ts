@@ -130,7 +130,7 @@ export interface IDFormPropsNoCB<TFieldsProps extends Record<string, AnyType> = 
     language?: keyof typeof translations;
 
     /** Custom translation */
-    translation?: Partial<typeof translations.en_GB>;
+    translation?: Partial<typeof translations.en_US>;
 
     /** @private A service property meaning that the form is used in another component that overrides the api part (for example DModalForm)  */
     _overriddenApi?: {[K in keyof IDFormApi as string extends K ? never : K]?: boolean};
@@ -152,7 +152,7 @@ export type IDFormDataSourcePromise = Promise<{data: Record<string, AnyType>}>;
 
 export interface IDFormApi<TProps extends object = IDFormProps> extends IBaseComponentApi<TProps> {
     /** Get translation */
-    t: (str: keyof (typeof translations)['en_GB']) => string;
+    t: (str: keyof (typeof translations)['en_US']) => string;
 
     /** Form model instance */
     model: DModel;

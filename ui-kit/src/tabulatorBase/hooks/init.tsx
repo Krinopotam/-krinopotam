@@ -6,8 +6,8 @@ import {AdvancedHeaderFilterModule} from '../modules/advancedHeaderFilterModule'
 import {collapseButton, expandButton} from '../parts/icons';
 import {setPatches} from '../patches/setPatches';
 import {BaseHOC} from '@src/tabulatorBase/parts/baseHOC';
-import {IsDebugMode} from '@krinopotam/common-hooks';
 import {ITabulator, ITabulatorColumn, ITabulatorProps} from "@src/tabulatorBase";
+import {IsDebugMode} from "@src/_shared/tool/isDebugMode";
 
 export const useInit = ({
     props,

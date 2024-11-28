@@ -1,7 +1,7 @@
 import {Collapse, Typography} from 'antd';
 import React from 'react';
 import {IError} from '@krinopotam/service-types';
-import {IsDebugMode} from '@krinopotam/common-hooks';
+import {IsDebugMode} from "@src/_shared/tool/isDebugMode";
 
 const {Text} = Typography;
 

@@ -3,8 +3,8 @@ import {INodePosition} from '@src/_shared/hooks/treeComponentApiMethods/types/tr
 import {removeFromTree} from '@src/_shared/hooks/treeComponentApiMethods/serviceMethods/removeFromTree';
 import {addNodeToTree} from '@src/_shared/hooks/treeComponentApiMethods/serviceMethods/addNodeToTree';
 import {getNodeFromTree} from '@src/_shared/hooks/treeComponentApiMethods/serviceMethods/getNodeFromTree';
-import {IsDebugMode} from '@krinopotam/common-hooks';
 import {isDescendant} from '@src/_shared/hooks/treeComponentApiMethods/serviceMethods/isDescendant';
+import {IsDebugMode} from "@src/_shared/tool/isDebugMode";
 
 export const moveNode = (
     node: Record<string, AnyType> | IKey,

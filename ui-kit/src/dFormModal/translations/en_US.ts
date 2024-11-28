@@ -1,6 +1,6 @@
-import {en_GB as dFormEn} from '@src/dForm/translations/en_GB';
+import {en_US as dFormEn} from '@src/dForm/translations/en_US';
 
-export const en_GB = {
+export const en_US = {
     ...dFormEn,
     cancelChangesQn: 'Cancel the changes made?',
     viewing: 'Viewing',

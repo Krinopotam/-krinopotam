@@ -2,8 +2,8 @@ import {AnyType} from '@krinopotam/service-types';
 import {ITabulatorProps} from '@src/tabulatorBase';
 import React, {useMemo} from 'react';
 import {MessageBox} from '@src/messageBox';
-import {IsDebugMode} from '@krinopotam/common-hooks';
 import {IGridApi, IGridProps, ITabulatorButtons} from '@src/tabulatorGrid';
+import {IsDebugMode} from "@src/_shared/tool/isDebugMode";
 
 export const useEvents = (api: IGridApi, events: IGridProps['events']): ITabulatorProps['events'] => {
     return useMemo(() => {

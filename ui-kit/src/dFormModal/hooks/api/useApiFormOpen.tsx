@@ -1,8 +1,8 @@
 import {IDFormModalApi, IDFormModalProps} from '@src/dFormModal';
 import {IDFormProps} from '@src/dForm';
-import {IsDebugMode} from '@krinopotam/common-hooks';
 import {CloneObject} from '@krinopotam/js-helpers/helpersObjects/cloneObject';
 import {CallbackControl} from "@src/_shared/classes/callbackControl";
+import {IsDebugMode} from "@src/_shared/tool/isDebugMode";
 
 export const useApiFormOpen = (api: IDFormModalApi): IDFormModalApi['open'] => {
     return (formMode: IDFormProps['formMode'], extraProps?: Partial<IDFormModalProps>) => {
