@@ -1,4 +1,4 @@
-export const en = {
+export const en_GB = {
     ok:'OK',
     cancel:'Cancel',
     attention:'Attention',

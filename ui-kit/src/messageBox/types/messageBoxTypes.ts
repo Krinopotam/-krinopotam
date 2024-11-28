@@ -31,7 +31,7 @@ export interface IModalBaseConfig {
     /** Language */
     language?: keyof typeof translations;
     /** Custom translation */
-    translation?: Partial<typeof translations.en>;
+    translation?: Partial<typeof translations.en_GB>;
 }
 
 export type IModalConfig = Omit<IModalBaseConfig, 'formId'>;

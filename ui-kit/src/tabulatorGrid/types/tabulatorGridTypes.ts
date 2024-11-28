@@ -91,7 +91,7 @@ export interface IGridPropsBase {
     language?: keyof typeof translations;
 
     /** Custom translation */
-    translation?: Partial<typeof translations.en>;
+    translation?: Partial<typeof translations.en_GB>;
 }
 
 export interface IGridPropsCallbacks {
@@ -144,7 +144,7 @@ export interface IGridApi extends IBaseComponentApi<IGridProps> {
     tableApi: ITabulator | undefined;
 
     /** Get translation */
-    t: (str: keyof (typeof translations)['en']) => string;
+    t: (str: keyof (typeof translations)['en_GB']) => string;
 
     /** Get current data set*/
     getDataSet: () => IGridRowData[] | undefined;

@@ -1,6 +1,6 @@
-import {cn as dFormCn} from '@src/dForm/translations/cn';
+import {zh_CN as dFormCn} from '@src/dForm/translations/zh_CN';
 
-export const cn = {
+export const zh_CN = {
     ...dFormCn,
     cancelChangesQn: '取消已做的更改？',
     viewing: '查看',

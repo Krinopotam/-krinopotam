@@ -1,4 +1,4 @@
-export const ru = {
+export const ru_RU = {
     view: 'Просмотр',
     viewRecord: 'Просмотреть запись',
     create: 'Создать',

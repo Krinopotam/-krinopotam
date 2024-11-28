@@ -1,4 +1,4 @@
-export const en = {
+export const en_GB = {
     view: 'View',
     viewRecord: 'View record',
     create: 'Create',

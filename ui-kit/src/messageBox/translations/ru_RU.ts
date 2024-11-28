@@ -1,4 +1,4 @@
-export const ru = {
+export const ru_RU = {
     ok:'ОК',
     cancel:'Отмена',
     attention:'Внимание',

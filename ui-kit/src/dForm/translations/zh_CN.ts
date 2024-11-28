@@ -1,4 +1,4 @@
-export const cn =  {
+export const zh_CN =  {
     ok: '确定',
     cancel: '取消',
     yes: '是',

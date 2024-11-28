@@ -113,7 +113,7 @@ export interface ITreeSelectOwnProps {
     language?: keyof typeof translations;
 
     /** Custom translation */
-    translation?: Partial<typeof translations.en>;
+    translation?: Partial<typeof translations.en_GB>;
 
     //region Edit module
     /** Label in header buttons row */
@@ -207,7 +207,7 @@ export interface ITreeSelectApi extends Omit<ITreeComponentApi<ITreeSelectNode, 
     treeSelectRef: React.RefObject<GetRef<typeof TreeSelect>>;
 
     /** Get translation */
-    t: (str: keyof (typeof translations)['en']) => string;
+    t: (str: keyof (typeof translations)['en_GB']) => string;
 
     /** Get values (values always in IBaseValueWithLabel array) */
     getValues: () => ILabeledValue[] | null;

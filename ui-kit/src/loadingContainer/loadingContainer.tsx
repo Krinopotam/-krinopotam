@@ -11,7 +11,6 @@ export interface ILoadingContainerProps {
     retryHandler?: () => void;
     children: React.ReactNode;
     skeleton?: React.ReactNode;
-    allowNotLogged?: boolean;
     notHideContent?: boolean;
     caption?: React.ReactNode;
     errorStyle?: CSSProperties;

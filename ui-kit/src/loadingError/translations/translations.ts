@@ -1,9 +1,9 @@
-import {cn} from "@src/loadingError/translations/cn";
-import {en} from "@src/loadingError/translations/en";
-import {ru} from "@src/loadingError/translations/ru";
+import {zh_CN} from "@src/loadingError/translations/zh_CN";
+import {en_GB} from "@src/loadingError/translations/en_GB";
+import {ru_RU} from "@src/loadingError/translations/ru_RU";
 
 export const translations = {
-    ru,
-    en,
-    cn,
+    ru_RU,
+    en_GB,
+    zh_CN,
 };

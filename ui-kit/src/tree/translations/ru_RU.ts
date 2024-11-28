@@ -1,4 +1,4 @@
-export const ru = {
+export const ru_RU = {
     view: 'Просмотр',
     viewGroup: 'Просмотр группы',
     viewRecord: 'Просмотр записи',
@@ -27,6 +27,7 @@ export const ru = {
     cancel: 'Отмена',
     tryAgainQt: 'Попробовать еще раз?',
     deleteSelectedRecordQt: 'Удалить выбранную запись?',
+    moveRecordQt: 'Удалить данную запись?',
     error: 'Ошибка',
     dataNotFound: 'Данные не найдены',
 };

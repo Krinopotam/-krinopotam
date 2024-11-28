@@ -1,9 +1,9 @@
-import {ru} from '@src/messageBox/translations/ru';
-import {en} from '@src/messageBox/translations/en';
-import {cn} from '@src/messageBox/translations/cn';
+import {ru_RU} from '@src/messageBox/translations/ru_RU';
+import {en_GB} from '@src/messageBox/translations/en_GB';
+import {zh_CN} from '@src/messageBox/translations/zh_CN';
 
 export const translations = {
-    ru,
-    en,
-    cn,
+    ru_RU,
+    en_GB,
+    zh_CN,
 };

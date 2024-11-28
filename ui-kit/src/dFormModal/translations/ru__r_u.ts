@@ -1,6 +1,6 @@
-import {ru as dFormRu} from '@src/dForm/translations/ru';
+import {ru_RU as dFormRu} from '@src/dForm/translations/ru__r_u';
 
-export const ru = {
+export const ru_RU = {
     ...dFormRu,
     cancelChangesQn:'Отменить сделанные изменения?',
     viewing: 'Просмотр',

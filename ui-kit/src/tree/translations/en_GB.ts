@@ -1,4 +1,4 @@
-export const en = {
+export const en_GB = {
     view: 'View',
     viewGroup: 'View group',
     viewRecord: 'View record',
@@ -27,6 +27,7 @@ export const en = {
     cancel: 'Cancel',
     tryAgainQt: 'Try again?',
     deleteSelectedRecordQt: 'Delete selected record?',
+    moveRecordQt: 'Move the record?',
     error:'Error',
     dataNotFound: 'Data not found',
 }

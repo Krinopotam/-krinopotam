@@ -1,9 +1,9 @@
-import {ru} from '@src/dFormModal/translations/ru';
-import {en} from '@src/dFormModal/translations/en';
-import {cn} from '@src/dFormModal/translations/cn';
+import {ru_RU} from '@src/dFormModal/translations/ru__r_u';
+import {en_GB} from '@src/dFormModal/translations/en_GB';
+import {zh_CN} from '@src/dFormModal/translations/zh_CN';
 
 export const translations = {
-    ru,
-    en,
-    cn,
+    ru_RU,
+    en_GB,
+    zh_CN,
 };

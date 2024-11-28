@@ -44,7 +44,7 @@ export type IDFormModalOwnPropsNoCB = {
     /** Language */
     language?: keyof typeof translations;
     /** Custom translation */
-    translation?: Partial<typeof translations.en>;
+    translation?: Partial<typeof translations.en_GB>;
     /** Modal component properties */
     modalProps?: IExtendedModalProps;
 };
@@ -57,7 +57,7 @@ export type IDFormModalProps<TFieldsProps extends Record<string, AnyType> = Reco
 
 export interface IDFormModalApi extends IDFormApi<IDFormModalProps> {
     /** Get translation */
-    t: (str: keyof (typeof translations)['en']) => string;
+    t: (str: keyof (typeof translations)['en_GB']) => string;
 
     /** Open controls */
     open: (formMode: IDFormProps['formMode'], extraProps?: Partial<Omit<IDFormModalProps, 'formMode' | 'open'>>) => void;
