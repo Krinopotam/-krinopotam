@@ -108,6 +108,8 @@ const propsToOptions = async (props: ITabulatorProps) => {
                     rowRange: 'active', //only toggle the values of the active filtered rows
                 },
                 hozAlign: 'center',
+                vertAlign: 'middle',
+                headerHozAlign: 'center',
                 headerSort: false,
                 width: 35,
             },
