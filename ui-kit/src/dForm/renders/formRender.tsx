@@ -58,16 +58,17 @@ export const FormRender = ({formProps, formApi, formButtons}: IFormRenderProps):
                         <FormInit model={model} />
 
                         <FieldsRender fields={model.getRootFields()} formProps={formProps} />
-
-                        <ButtonsRow
-                            buttons={formButtons}
-                            apiRef={formApi.getButtonsApi()}
-                            color={formProps.colorType}
-                            arrowsSelection={formProps.arrowsButtonsSelection}
-                            style={formProps.buttonsRowStyle}
-                            styles={formProps.buttonsRowStyles}
-                            context={formApi}
-                        />
+                        {!formProps._overriddenApi?.getButtonsApi && (
+                            <ButtonsRow
+                                buttons={formButtons}
+                                apiRef={formApi.getButtonsApi()}
+                                color={formProps.colorType}
+                                arrowsSelection={formProps.arrowsButtonsSelection}
+                                style={formProps.buttonsRowStyle}
+                                styles={formProps.buttonsRowStyles}
+                                context={formApi}
+                            />
+                        )}
                     </Form>
                 </ButtonsRowWrapper>
             </LoadingContainer>

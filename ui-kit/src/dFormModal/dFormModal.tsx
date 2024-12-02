@@ -6,7 +6,6 @@
  * @license MIT
  */
 
-import {mergeButtons} from "@src/buttonsRow";
 import {IDFormProps} from '@src/dForm';
 import {useInitApi} from './hooks/api/api';
 import React, {useMemo} from 'react';
@@ -17,7 +16,7 @@ import {useOverrideCallbacks} from './hooks/useOverrideCallbacks';
 import {useGetButtonsProps} from './hooks/useGetButtonsProps';
 import {useUpdateMessageBoxTheme} from '@src/messageBox';
 import {useGetActualProps} from '@krinopotam/common-hooks';
-import {IDFormModalProps, IDFormModalOwnPropsNoCB, IDFormModalOwnProps} from '@src/dFormModal/types/dFormModalTypes';
+import {IDFormModalOwnProps, IDFormModalOwnPropsNoCB, IDFormModalProps} from '@src/dFormModal/types/dFormModalTypes';
 
 export const DFormModal = (props: IDFormModalProps): React.JSX.Element => {
     useUpdateMessageBoxTheme(); //set current theme to messageBox
