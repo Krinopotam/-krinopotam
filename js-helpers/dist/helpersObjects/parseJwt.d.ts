@@ -3,4 +3,6 @@
  * @param token
  * @constructor
  */
-export declare const ParseJwt: <T extends Record<string, unknown>>(token: string | undefined) => T | undefined;
+export declare const ParseJwt: <T extends object = {
+    [key: string]: unknown;
+}>(token: string | undefined) => T | undefined;

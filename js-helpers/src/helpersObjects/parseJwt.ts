@@ -3,7 +3,7 @@
  * @param token
  * @constructor
  */
-export const ParseJwt = <T extends Record<string, unknown>>(token: string | undefined): T | undefined => {
+export const ParseJwt = <T extends object = { [key: string]: unknown }>(token: string | undefined): T | undefined => {
     if (!token) return undefined
     try {
         const base64Url = token.split('.')[1];
