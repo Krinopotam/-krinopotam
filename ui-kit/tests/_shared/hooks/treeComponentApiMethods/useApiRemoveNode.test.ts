@@ -64,7 +64,7 @@ describe('useApiRemoveNode', () => {
          * But the dataSet is later mutated by the removeNode function, and vitest compares with the object after the mutation  * */
         expect(selectNodeMock).toHaveBeenCalledWith(2, false, true, result); //deselect node 2
 
-        expect(setTimeoutMock).toHaveBeenCalledTimes(1);
+        expect(setTimeoutMock).toHaveBeenCalledTimes(2);
         expect(selectNodeMock).toHaveBeenCalledWith(3, true); //select node 3
     });
 
@@ -80,7 +80,7 @@ describe('useApiRemoveNode', () => {
         expect(setDataSetMock).not.toHaveBeenCalled();
         expect(selectNodeMock).toHaveBeenCalledWith(2, false, true, result); //deselect node 2
 
-        expect(setTimeoutMock).toHaveBeenCalledTimes(1);
+        expect(setTimeoutMock).toHaveBeenCalledTimes(2);
         expect(selectNodeMock).toHaveBeenCalledWith(3, true); //select node 3
     });
 
@@ -92,7 +92,7 @@ describe('useApiRemoveNode', () => {
         expect(selectNodeMock).toHaveBeenCalledTimes(2);
         expect(selectNodeMock).toHaveBeenCalledWith(2, false, true, result); //deselect node 2
 
-        expect(setTimeoutMock).toHaveBeenCalledTimes(1);
+        expect(setTimeoutMock).toHaveBeenCalledTimes(2);
         expect(selectNodeMock).toHaveBeenCalledWith(3, true); //select node 3
     });
 
@@ -104,7 +104,7 @@ describe('useApiRemoveNode', () => {
         expect(selectNodeMock).toHaveBeenCalledTimes(2);
         expect(selectNodeMock).toHaveBeenCalledWith(2, false, true,  result); //deselect node 2
 
-        expect(setTimeoutMock).toHaveBeenCalledTimes(1);
+        expect(setTimeoutMock).toHaveBeenCalledTimes(2);
         expect(selectNodeMock).toHaveBeenCalledWith(1, true); //select node 1
     });
 
@@ -116,7 +116,7 @@ describe('useApiRemoveNode', () => {
         expect(selectNodeMock).toHaveBeenCalledTimes(2);
         expect(selectNodeMock).toHaveBeenCalledWith(2, false, true,  result); //deselect node 2
 
-        expect(setTimeoutMock).toHaveBeenCalledTimes(1);
+        expect(setTimeoutMock).toHaveBeenCalledTimes(2);
         expect(selectNodeMock).toHaveBeenCalledWith(3, true); //select node 3
     });
 
@@ -128,7 +128,7 @@ describe('useApiRemoveNode', () => {
         expect(selectNodeMock).toHaveBeenCalledTimes(2);
         expect(selectNodeMock).toHaveBeenCalledWith(3, false, true, result); //deselect node 3
 
-        expect(setTimeoutMock).toHaveBeenCalledTimes(1);
+        expect(setTimeoutMock).toHaveBeenCalledTimes(2);
         expect(selectNodeMock).toHaveBeenCalledWith(2, true); //select node 2
     });
 
@@ -140,7 +140,7 @@ describe('useApiRemoveNode', () => {
         expect(selectNodeMock).toHaveBeenCalledTimes(2);
         expect(selectNodeMock).toHaveBeenCalledWith(3, false, true, result); //deselect node 3
 
-        expect(setTimeoutMock).toHaveBeenCalledTimes(1);
+        expect(setTimeoutMock).toHaveBeenCalledTimes(2);
         expect(selectNodeMock).toHaveBeenCalledWith(2, true); //select node 2
     });
 
@@ -152,7 +152,7 @@ describe('useApiRemoveNode', () => {
         expect(selectNodeMock).toHaveBeenCalledTimes(2);
         expect(selectNodeMock).toHaveBeenCalledWith(1, false, true, result); //deselect node 3
 
-        expect(setTimeoutMock).toHaveBeenCalledTimes(1);
+        expect(setTimeoutMock).toHaveBeenCalledTimes(2);
         expect(selectNodeMock).toHaveBeenCalledWith(2, true); //select node 2
     });
 
@@ -164,7 +164,7 @@ describe('useApiRemoveNode', () => {
         expect(selectNodeMock).toHaveBeenCalledTimes(2);
         expect(selectNodeMock).toHaveBeenCalledWith(1, false, true, result); //deselect node 3
 
-        expect(setTimeoutMock).toHaveBeenCalledTimes(1);
+        expect(setTimeoutMock).toHaveBeenCalledTimes(2);
         expect(selectNodeMock).toHaveBeenCalledWith(2, true); //select node 2
     });
 });

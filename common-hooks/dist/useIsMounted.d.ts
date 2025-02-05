@@ -1,1 +1,1 @@
-export declare const useIsMountedRef: () => import('react').MutableRefObject<boolean>;
+export declare const useIsMountedRef: () => import('react').RefObject<boolean>;

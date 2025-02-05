@@ -204,7 +204,7 @@ export type ITreeSelectValue = IKey | IKey[] | ILabeledValue | ILabeledValue[] |
 
 export interface ITreeSelectApi extends Omit<ITreeComponentApi<ITreeSelectNode, ITreeSelectProps>, 'setSelectedKeys' | 'getSelectedKeys' | 'getSelectedNodes'> {
     /** Tree ref */
-    treeSelectRef: React.RefObject<GetRef<typeof TreeSelect>>;
+    treeSelectRef: React.RefObject<GetRef<typeof TreeSelect> | null>;
 
     /** Get translation */
     t: (str: keyof (typeof translations)['en_US']) => string;

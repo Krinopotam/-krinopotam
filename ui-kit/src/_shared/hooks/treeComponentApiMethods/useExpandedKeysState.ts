@@ -14,6 +14,6 @@ export const useExpandedKeysState = (
     useUpdateEffect(() => {
         if (expKeys) return;
         setExpKeys(expandedKeys ?? defaultExpandedKeys ?? allExpanded); //user can update expandedKeys via props
-    }, [allExpanded, defaultExpandedKeys, expandedKeys]);
+    }, [allExpanded, defaultExpandedKeys, expKeys, expandedKeys]);
     return [expKeys, setExpKeys];
 };

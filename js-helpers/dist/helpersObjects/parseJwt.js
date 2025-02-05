@@ -1,14 +1,14 @@
-const n = (r) => {
-  if (r)
+const a = (e) => {
+  if (e)
     try {
-      const t = r.split(".")[1].replace(/-/g, "+").replace(/_/g, "/"), o = decodeURIComponent(
-        window.atob(t).split("").map((a) => "%" + ("00" + a.charCodeAt(0).toString(16)).slice(-2)).join("")
+      const t = e.split(".")[1].replace(/-/g, "+").replace(/_/g, "/"), n = decodeURIComponent(
+        window.atob(t).split("").map((o) => "%" + ("00" + o.charCodeAt(0).toString(16)).slice(-2)).join("")
       );
-      return JSON.parse(o);
+      return JSON.parse(n);
     } catch {
       return;
     }
 };
 export {
-  n as ParseJwt
+  a as ParseJwt
 };

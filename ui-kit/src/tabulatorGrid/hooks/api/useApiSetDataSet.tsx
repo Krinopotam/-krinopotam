@@ -1,7 +1,7 @@
 import React from 'react';
 import {IGridApi, IGridProps} from '@src/tabulatorGrid';
 
-export const useApiSetDataSet = (curDataSetRef: React.MutableRefObject<IGridProps['dataSet']>, api: IGridApi): IGridApi['setDataSet'] => {
+export const useApiSetDataSet = (curDataSetRef: React.RefObject<IGridProps['dataSet']>, api: IGridApi): IGridApi['setDataSet'] => {
     return (dataSet: IGridProps['dataSet'] | null) => {
         if (!api.tableApi) return;
 

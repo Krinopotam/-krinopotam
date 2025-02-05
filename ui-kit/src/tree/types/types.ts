@@ -171,7 +171,7 @@ export type IExtTreeNode<T = Record<string, AnyType>> = IExtTreeNodeBase & T;
 
 export interface IExtTreeApi extends ITreeComponentApi<IExtTreeNode, IExtTreeProps> {
     /** Tree ref */
-    treeRef: React.RefObject<GetRef<typeof AntdTree>>;
+    treeRef: React.RefObject<GetRef<typeof AntdTree> | null>;
 
     /** Get translation */
     t: (str: keyof (typeof translations)['en_US']) => string;

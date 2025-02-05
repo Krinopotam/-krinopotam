@@ -69,6 +69,7 @@ import {useApiGetSelectedNodes} from '@src/treeSelect/hooks/api/useApiGetSelecte
 import {useApiSelectNode} from '@src/treeSelect/hooks/api/useApiSelectNode';
 import {useApiT} from '@src/treeSelect/hooks/api/useApiT';
 import {useApiGetGroupsOnly} from "@src/_shared/hooks/treeComponentApiMethods/useApiGetGroupsOnly";
+import {GetRef, TreeSelect} from "antd";
 
 export const useInitApi = ({
     props,
@@ -144,7 +145,7 @@ export const useInitApi = ({
 
         /** Component own api methods */
         t: useApiT(props),
-        treeSelectRef: useRef(null),
+        treeSelectRef: useRef<GetRef<typeof TreeSelect>>(null),
         getButtonsApi: useApiGetButtonsApi<IButtonsRowApi & {refreshButtons: () => void}>(),
         getIsReady: useApiGetIsReady(isReady),
         setIsReady: useApiSetIsReady(setIsReady),

@@ -6,7 +6,7 @@
  * @license MIT
  */
 
-import React, {useCallback, useRef, useState} from 'react';
+import React, {RefObject, useCallback, useRef, useState} from 'react';
 import Draggable, {DraggableData} from 'react-draggable';
 import {IsDescendant} from '@krinopotam/js-helpers/helpersDOM/isDescendant';
 
@@ -22,7 +22,7 @@ export const DraggableRender = ({node, targetId, onStartCallback}: { node: React
     const onStart = useOnStart(draggableNodeRef, setBounds, onStartCallback);
 
     return (
-        <Draggable nodeRef={draggableNodeRef} handle={targetId ? '#' + targetId : undefined} bounds={bounds} onStart={(_event, uiData) => onStart(uiData)}>
+        <Draggable nodeRef={draggableNodeRef as RefObject<HTMLElement> } handle={targetId ? '#' + targetId : undefined} bounds={bounds} onStart={(_event, uiData) => onStart(uiData)}>
             <div
                 ref={draggableNodeRef}
                 style={draggableStyle}
@@ -36,7 +36,7 @@ export const DraggableRender = ({node, targetId, onStartCallback}: { node: React
 };
 
 const useOnStart = (
-    draggableNodeRef: React.RefObject<HTMLDivElement>,
+    draggableNodeRef: React.RefObject<HTMLDivElement | null>,
     setBounds: React.Dispatch<React.SetStateAction<{ left: number; top: number; bottom: number; right: number }>>,
     onStartCallback?: () => void
 ) => {

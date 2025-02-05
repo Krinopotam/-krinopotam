@@ -1,8 +1,12 @@
 import React, {CSSProperties, useCallback, useEffect, useSyncExternalStore} from 'react';
 import {QuillEditorField} from '@src/dForm/fields/quillEditor/quillEditorField';
-import Quill, {Sources} from 'quill';
-import {IDeltaStatic, QuillEditor} from '@src/quillEditor/quillEditor';
-import {Range, UnprivilegedEditor} from 'react-quill';
+import Quill from 'quill';
+import {QuillEditor} from '@src/quillEditor/quillEditor';
+import ReactQuill, {DeltaStatic} from 'react-quill-new';
+
+import Range = ReactQuill.Range;
+import UnprivilegedEditor = ReactQuill.UnprivilegedEditor;
+type Sources = "api" | "user" | "silent";
 
 export const QuillEditorFieldRender = ({field}: {field: QuillEditorField}): React.JSX.Element => {
     useSyncExternalStore(field.subscribe.bind(field), field.getSnapshot.bind(field));
@@ -12,7 +16,7 @@ export const QuillEditorFieldRender = ({field}: {field: QuillEditorField}): Reac
     const value = field.getValue();
 
     const onChange = useCallback(
-        function (this: Quill, value: string, delta: IDeltaStatic, source: Sources, editor: UnprivilegedEditor) {
+        function (this: Quill, value: string, delta: DeltaStatic, source: Sources, editor: UnprivilegedEditor) {
             if (!field.isReady()) return;
             field.setValue(value || undefined);
             field.setDirty(true);
@@ -46,7 +50,6 @@ export const QuillEditorFieldRender = ({field}: {field: QuillEditorField}): Reac
             preserveWhitespace={fieldProps.preserveWhitespace}
             tabIndex={fieldProps.tabIndex}
             bounds={fieldProps.bounds}
-            scrollingContainer={fieldProps.scrollingContainer}
             style={style}
             disabled={field.isDisabled()}
             readOnly={field.isReadOnly()}

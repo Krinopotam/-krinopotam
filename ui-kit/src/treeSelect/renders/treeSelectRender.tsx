@@ -85,7 +85,7 @@ export const TreeSelectRender = ({
 
 const EmptyDropdown = (): React.JSX.Element => <></>;
 
-const useCtrPressed = (ctrlPressedRef: React.MutableRefObject<boolean>) => {
+const useCtrPressed = (ctrlPressedRef: React.RefObject<boolean>) => {
     useAddEventListener('keydown', e => {
         if ((e.key as IKeyboardKey) === 'Control') ctrlPressedRef.current = true;
     });
@@ -127,8 +127,8 @@ const useOnChange = (api: ITreeSelectApi): ((value: unknown) => void) => {
 
 const useOnDropdownVisibleChange = (
     api: ITreeSelectApi,
-    ctrlPressedRef: React.MutableRefObject<boolean>,
-    dialogOpenedRef: React.MutableRefObject<boolean>
+    ctrlPressedRef: React.RefObject<boolean>,
+    dialogOpenedRef: React.RefObject<boolean>
 ): IAntTreeSelectProps['onDropdownVisibleChange'] => {
     return open => {
         const props = api.getProps();

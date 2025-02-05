@@ -1,8 +1,8 @@
 import React, {createContext, useMemo, useRef} from 'react';
 
 interface ITreeSelectContext {
-    ctrlPressedRef: React.MutableRefObject<boolean>;
-    dialogOpenedRef: React.MutableRefObject<boolean>;
+    ctrlPressedRef: React.RefObject<boolean>;
+    dialogOpenedRef: React.RefObject<boolean>;
 }
 
 export const TreeSelectContext = createContext<ITreeSelectContext>(undefined as unknown as ITreeSelectContext);

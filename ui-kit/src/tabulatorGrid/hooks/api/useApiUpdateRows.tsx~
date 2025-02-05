@@ -3,7 +3,7 @@ import {IGridApi, IGridProps, IGridRowData} from '@src/tabulatorGrid';
 import {IsArray} from '@krinopotam/js-helpers/helpersObjects/isArray';
 import {updateTreeRows} from '@src/tabulatorGrid/helpers/updateTreeRows';
 
-export const useApiUpdateRows = (dataSetRef: React.RefObject<IGridProps['dataSet'] | undefined>, api: IGridApi): IGridApi['updateRows'] => {
+export const useApiUpdateRows = (dataSetRef: React.MutableRefObject<IGridProps['dataSet'] | undefined>, api: IGridApi): IGridApi['updateRows'] => {
     return (rows: IGridRowData[] | IGridRowData, updateActiveRow?: boolean) => {
         if (!api.tableApi) return;
         const dataTree = api.getProps().dataTree;

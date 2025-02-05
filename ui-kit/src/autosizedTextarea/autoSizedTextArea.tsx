@@ -2,7 +2,7 @@ import React, {CSSProperties, ChangeEvent, useEffect, useMemo, useRef, useState}
 import {TextAreaProps, TextAreaRef} from 'antd/es/input/TextArea';
 
 import {Input} from 'antd';
-import {MergeObjects} from "@krinopotam/js-helpers/helpersObjects/mergeObjects";
+import {MergeObjects} from '@krinopotam/js-helpers/helpersObjects/mergeObjects';
 import styled from 'styled-components';
 
 const {TextArea} = Input;
@@ -37,32 +37,22 @@ interface IInputBoundsStyle {
 
 //region Css
 const SizerDiv = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  visibility: hidden;
-  //border-style: solid;
-  //border-color: aqua;
-  white-space: pre;
+    position: absolute;
+    top: 0;
+    left: 0;
+    visibility: hidden;
+    //border-style: solid;
+    //border-color: aqua;
+    white-space: pre;
 
-  &:after {
-    content: ' ';
-  }
+    &:after {
+        content: ' ';
+    }
 `;
 //endregion
 
 export const AutoSizedTextArea = React.forwardRef<TextAreaRef, IAutoSizedTextAreaProps>(
-    ({
-         textStyleRef,
-         style,
-         value,
-         onChange,
-         multiline,
-         extraHeight,
-         extraWidth,
-         placeholder,
-         ...props
-     }, ref): React.JSX.Element => {
+    ({textStyleRef, style, value, onChange, multiline, extraHeight, extraWidth, placeholder, ...props}, ref): React.JSX.Element => {
         const sizerRef = useRef<HTMLDivElement>(null);
         const placeholderSizerRef = useRef<HTMLDivElement>(null);
         const inputBoundsStyle = useGetInputBoundsStyle(ref as React.RefObject<TextAreaRef>);
@@ -77,8 +67,7 @@ export const AutoSizedTextArea = React.forwardRef<TextAreaRef, IAutoSizedTextAre
 
         return (
             <>
-                <TextArea {...props} placeholder={placeholder} ref={ref} style={_style} onChange={_onChange}
-                          value={value}/>
+                <TextArea {...props} placeholder={placeholder} ref={ref} style={_style} onChange={_onChange} value={value} />
                 <SizerDiv ref={sizerRef}>{value}</SizerDiv>
                 {placeholder && <SizerDiv ref={placeholderSizerRef}>{placeholder}</SizerDiv>}
             </>
@@ -117,14 +106,13 @@ const useGetInputBoundsStyle = (textAreaRef: React.RefObject<TextAreaRef>): IInp
 };
 
 const useCopyTextAreaStyles = (
-    sizerRef: React.RefObject<HTMLDivElement>,
-    placeholderSizerRef: React.RefObject<HTMLDivElement>,
+    sizerRef: React.RefObject<HTMLDivElement | null>,
+    placeholderSizerRef: React.RefObject<HTMLDivElement | null>,
     textAreaRef: React.RefObject<TextAreaRef>,
     textStyleRef: React.RefObject<CSSStyleDeclaration>
 ) => {
     useEffect(() => {
-        if (!sizerRef.current || !textAreaRef || !textAreaRef.current || !textAreaRef.current.resizableTextArea || !textStyleRef || !textStyleRef.current)
-            return;
+        if (!sizerRef?.current || !textAreaRef?.current?.resizableTextArea || !textStyleRef?.current) return;
         copyStyles(textStyleRef.current, textAreaRef.current.resizableTextArea.textArea.style);
         copyStyles(textStyleRef.current, sizerRef.current.style);
         if (placeholderSizerRef.current) copyStyles(textStyleRef.current, placeholderSizerRef.current.style);
@@ -132,8 +120,8 @@ const useCopyTextAreaStyles = (
 };
 
 const useCalculateSize = (
-    sizerRef: React.RefObject<HTMLDivElement>,
-    placeholderSizerRef: React.RefObject<HTMLDivElement>,
+    sizerRef: React.RefObject<HTMLDivElement | null>,
+    placeholderSizerRef: React.RefObject<HTMLDivElement | null>,
     value: string,
     inputBoundsStyle: IInputBoundsStyle,
     extraHeight: number | undefined,
@@ -181,7 +169,7 @@ const usePrepareInputStyles = (style: CSSProperties | undefined, inputHeight: nu
             width: inputWidth,
             transition: 'none',
             overflow: 'hidden',
-            resize: 'none'
+            resize: 'none',
         });
     }, [style, inputWidth, inputHeight]);
 };

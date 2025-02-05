@@ -3,8 +3,8 @@ import React from 'react';
 import {IGridProps} from '@src/tabulatorGrid';
 
 export const useSetCurrentDataFetchHandler = (
-    curDataFetchHandler: React.MutableRefObject<IGridProps['onDataFetch'] | undefined>,
-    curDataFetchParams: React.MutableRefObject<Record<string, AnyType> | undefined>
+    curDataFetchHandler: React.RefObject<IGridProps['onDataFetch'] | undefined>,
+    curDataFetchParams: React.RefObject<Record<string, AnyType> | undefined>
 ) => {
     return (dataFetchFunc?: IGridProps['onDataFetch'], params?: Record<string, AnyType>) => {
         curDataFetchHandler.current = dataFetchFunc;

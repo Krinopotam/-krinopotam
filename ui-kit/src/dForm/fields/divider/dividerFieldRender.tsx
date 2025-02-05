@@ -1,7 +1,7 @@
-import React, {CSSProperties, useEffect, useSyncExternalStore} from 'react';
+import React, {CSSProperties, useEffect, useRef, useSyncExternalStore} from 'react';
+import {CSSTransition} from 'react-transition-group';
 import {DividerField} from '@src/dForm/fields/divider/dividerField';
 import {Divider} from 'antd';
-import Animate from 'rc-animate';
 
 export const DividerFieldRender = ({field}: {field: DividerField}): React.JSX.Element => {
     useSyncExternalStore(field.subscribe.bind(field), field.getSnapshot.bind(field));
@@ -18,9 +18,10 @@ export const DividerFieldRender = ({field}: {field: DividerField}): React.JSX.El
 
     const style = {...defStyle, ...fieldProps.style};
 
+    const nodeRef = useRef(null);
     return (
-        <Animate component="" transitionName="zoom">
-            {!fieldHidden ? (
+        <CSSTransition nodeRef={nodeRef} in={!fieldHidden} timeout={300} classNames="zoom" unmountOnExit>
+            <div ref={nodeRef}>
                 <Divider
                     className={fieldProps.className}
                     orientation={fieldProps.orientation}
@@ -31,7 +32,7 @@ export const DividerFieldRender = ({field}: {field: DividerField}): React.JSX.El
                 >
                     {fieldProps.label}
                 </Divider>
-            ) : null}
-        </Animate>
+            </div>
+        </CSSTransition>
     );
 };

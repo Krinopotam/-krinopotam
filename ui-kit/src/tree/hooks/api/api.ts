@@ -57,6 +57,7 @@ import {useApiSetSelectedKeys} from '@src/_shared/hooks/treeComponentApiMethods/
 import {useApiGetIsLoading} from '@src/tree/hooks/api/useApiGetIsLoading';
 import {useApiSetIsLoading} from '@src/tree/hooks/api/useApiSetIsLoading';
 import {useApiGetGroupsOnly} from "@src/_shared/hooks/treeComponentApiMethods/useApiGetGroupsOnly";
+import {GetRef, Tree as AntdTree} from "antd";
 
 export const useInitApi = ({
     props,
@@ -125,7 +126,7 @@ export const useInitApi = ({
 
         /** Component own api methods */
         t: useT(props),
-        treeRef: useRef(null),
+        treeRef: useRef<GetRef<typeof AntdTree>>(null),
         getButtonsApi: useApiGetButtonsApi<IButtonsRowApi & {refreshButtons: () => void}>(),
         getIsReady: useApiGetIsReady(isReady),
         setIsReady: useApiSetIsReady(setIsReady),

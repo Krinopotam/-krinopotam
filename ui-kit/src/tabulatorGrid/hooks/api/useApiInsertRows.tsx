@@ -3,7 +3,7 @@ import {IGridApi, IGridProps, IGridRowData, IRowKey} from '@src/tabulatorGrid';
 import {IsArray} from '@krinopotam/js-helpers/helpersObjects/isArray';
 import {addTreeRows} from '@src/tabulatorGrid/helpers/addTreeRows';
 
-export const useApiInsertRows = (dataSetRef: React.MutableRefObject<IGridProps['dataSet'] | undefined>, api: IGridApi): IGridApi['insertRows'] => {
+export const useApiInsertRows = (dataSetRef: React.RefObject<IGridProps['dataSet'] | undefined>, api: IGridApi): IGridApi['insertRows'] => {
     return (rows: IGridRowData[] | IGridRowData, place?: 'above' | 'below', target?: IRowKey, updateActiveRow?: boolean) => {
         const tableApi = api.tableApi;
         if (!tableApi) return;

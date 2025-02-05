@@ -19,8 +19,8 @@ export const useInit = ({
     props: ITabulatorProps;
     events?: Partial<EventCallBackMethods>;
     containerRef: React.RefObject<HTMLDivElement | null>;
-    tableRef: React.MutableRefObject<ITabulator | undefined>;
-    onTableRef?: (ref: React.MutableRefObject<ITabulator>) => void;
+    tableRef: React.RefObject<ITabulator | null>;
+    onTableRef?: (ref: React.RefObject<ITabulator>) => void;
 }) => {
     React.useEffect(() => {
         initTabulator({props, events, containerRef, tableRef, onTableRef}).then();
@@ -47,15 +47,15 @@ const initTabulator = async ({
     props: ITabulatorProps;
     events?: Partial<EventCallBackMethods>;
     containerRef: React.RefObject<HTMLDivElement | null>;
-    tableRef: React.MutableRefObject<ITabulator | undefined>;
-    onTableRef?: (ref: React.MutableRefObject<ITabulator>) => void;
+    tableRef: React.RefObject<ITabulator | null>;
+    onTableRef?: (ref: React.RefObject<ITabulator>) => void;
 }) => {
     const $container = containerRef.current as HTMLDivElement; // mounted DOM element
     const propOptions = await propsToOptions(props);
 
     //tableRef.current = await initTabulatorClass($container, tableRef, propOptions, props, events);
     await initTabulatorClass($container, tableRef, onTableRef, propOptions, props, events);
-    //onTableRef?.(tableRef as React.MutableRefObject<ITabulator>);
+    //onTableRef?.(tableRef as React.RefObject<ITabulator>);
 };
 
 const syncRender = async (component: React.ReactNode, container: HTMLElement): Promise<HTMLElement> => {
@@ -162,8 +162,8 @@ const columnPropsToOptions = async (props: ITabulatorProps) => {
 
 const initTabulatorClass = async (
     $container: HTMLDivElement,
-    tableRef: React.MutableRefObject<ITabulator | undefined>,
-    onTableRef: ((ref: React.MutableRefObject<ITabulator>) => void) | undefined,
+    tableRef: React.RefObject<ITabulator | null>,
+    onTableRef: ((ref: React.RefObject<ITabulator>) => void) | undefined,
     options: ITabulator['options'],
     props: ITabulatorProps,
     events?: Partial<EventCallBackMethods>
@@ -175,7 +175,7 @@ const initTabulatorClass = async (
         const tableApi = new Tabulator($container, options) as ITabulator;
 
         tableRef.current = tableApi;
-        onTableRef?.(tableRef as React.MutableRefObject<ITabulator>);
+        onTableRef?.(tableRef as React.RefObject<ITabulator>);
 
         setPatches(tableApi); //TODO: Monkey patches. Check if the developer fixed it
 

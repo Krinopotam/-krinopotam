@@ -1,8 +1,8 @@
-import {IBaseField} from "@src/dForm/fields/base";
-import React, {CSSProperties, useEffect, useSyncExternalStore} from 'react';
+import {IBaseField} from '@src/dForm/fields/base';
+import React, {CSSProperties, useEffect, useRef, useSyncExternalStore} from 'react';
 import {Form} from 'antd';
 import {InlineGroupField} from '@src/dForm/fields/inlineGroup/inlineGroupField';
-import Animate from 'rc-animate';
+import {CSSTransition} from 'react-transition-group';
 
 export const InlineGroupRender = ({field}: {field: InlineGroupField}): React.JSX.Element => {
     useSyncExternalStore(field.subscribe.bind(field), field.getSnapshot.bind(field));
@@ -10,6 +10,8 @@ export const InlineGroupRender = ({field}: {field: InlineGroupField}): React.JSX
     useEffect(() => {
         field.setReady(true);
     }, [field]);
+
+    const nodeRef = useRef(null);
 
     if (!field.hasVisibleChildren()) return <> </>;
 
@@ -22,13 +24,11 @@ export const InlineGroupRender = ({field}: {field: InlineGroupField}): React.JSX
     let firstField: IBaseField | undefined;
     for (const fieldName in childrenFields) {
         const childrenField = childrenFields[fieldName];
-        if (!childrenField.isHidden()) {
-            firstField = childrenField;
-            break;
-        }
+        if (childrenField.isHidden()) continue;
+        firstField = childrenField;
     }
 
-    const isHidden = field.isHidden() || !firstField; //has visible field
+    const fieldHidden = field.isHidden() ; //has visible field
 
     const groupName = field.getLabel();
 
@@ -53,8 +53,8 @@ export const InlineGroupRender = ({field}: {field: InlineGroupField}): React.JSX
     const gapOffset = getGapOffset(childrenFields, gap);
 
     return (
-        <Animate component="" transitionName="zoom">
-            {!isHidden ? (
+        <CSSTransition nodeRef={nodeRef} in={!fieldHidden} timeout={300} classNames="zoom" unmountOnExit>
+            <div ref={nodeRef} className="dform-field-animation-container">
                 <Form.Item label={groupLabel} style={groupItemStyle} className={fieldProps.className}>
                     <div style={groupContainerStyle}>
                         {Object.keys(childrenFields).map(fieldName => {
@@ -77,8 +77,8 @@ export const InlineGroupRender = ({field}: {field: InlineGroupField}): React.JSX
                         })}
                     </div>
                 </Form.Item>
-            ) : null}
-        </Animate>
+            </div>
+        </CSSTransition>
     );
 };
 

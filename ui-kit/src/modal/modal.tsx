@@ -35,7 +35,7 @@ export const Modal = (props: IExtendedModalProps): React.JSX.Element => {
 
     const wrapperRemoteCallbacksRef = useRef<IButtonRowWrapperRemoteCallbacks>({});
 
-    const prevFocusedRef = useRef<Element | null>();
+    const prevFocusedRef = useRef<Element | null>(null);
 
     useEffect(() => {
         if (modalProps.open) prevFocusedRef.current = document.activeElement;

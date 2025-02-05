@@ -49,7 +49,7 @@ const useOnFirstRender = (formProps: IDFormProps): IDFormProps => {
 };
 
 const useInitFormModel = (formApi: IDFormApi, formProps: IDFormProps) => {
-    const modelRef = useRef<DModel>();
+    const modelRef = useRef<DModel>(null);
     return useMemo(() => {
         if (!modelRef.current) modelRef.current = new DModel(formApi);
         if (!formProps._overriddenApi?.model) formApi.model = modelRef.current;

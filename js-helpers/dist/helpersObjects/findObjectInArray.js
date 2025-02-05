@@ -1,10 +1,10 @@
-import { IsArray as n } from "./isArray.js";
-const f = (r, o, i) => {
-  if (n(r)) {
-    for (const t of r)
-      if (t[o] === i) return t;
+import { IsArray as f } from "./isArray.js";
+const o = (r, e, t) => {
+  if (f(r)) {
+    for (const n of r)
+      if (n[e] === t) return n;
   }
 };
 export {
-  f as FindObjectInArray
+  o as FindObjectInArray
 };

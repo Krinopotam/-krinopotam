@@ -1,5 +1,5 @@
 import {AnyType} from "@krinopotam/service-types";
-import React, {MutableRefObject, useRef, useState} from 'react';
+import React, {useRef, useState} from 'react';
 import {GetNanoId} from '@krinopotam/js-helpers/helpersString/getNanoId';
 
 import {TabulatorFull as Tabulator} from 'tabulator-tables';
@@ -53,7 +53,7 @@ export const useInitGridApi = ({
 }: {
     props: IGridProps;
     setProps: (props: IGridProps | ((prevValue: IGridProps) => IGridProps)) => void;
-    tableRef: MutableRefObject<Tabulator | undefined>;
+    tableRef: React.RefObject<Tabulator | undefined>;
     setColumnsDialog: React.Dispatch<React.SetStateAction<boolean>>;
 }): IGridApi => {
     const [editFormApi] = useState<IDFormModalApi>((props.editFormProps?.apiRef ?? {}) as IDFormModalApi);
@@ -61,8 +61,8 @@ export const useInitGridApi = ({
     const [api] = useState((props.apiRef || {}) as IGridApi);
 
     const dataSetRef = useRef<IGridProps['dataSet']>(undefined);
-    const curDataFetchHandler = useRef<IGridProps['onDataFetch'] | undefined>();
-    const curDataFetchParams = useRef<Record<string, AnyType> | undefined>();
+    const curDataFetchHandler = useRef<IGridProps['onDataFetch'] | undefined>(undefined);
+    const curDataFetchParams = useRef<Record<string, AnyType> | undefined>(undefined);
 
     const [isLoading, setIsLoading] = useState(false);
 

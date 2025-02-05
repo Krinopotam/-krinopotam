@@ -17,7 +17,7 @@ export const ContainerRender = ({
     tabulatorProps,
     columnsDialog,
 }: {
-    tableRef: React.MutableRefObject<ITabulator | undefined>;
+    tableRef: React.RefObject<ITabulator | undefined>;
     gridApi: IGridApi;
     gridProps: IGridProps;
     tabulatorProps: ITabulatorProps;

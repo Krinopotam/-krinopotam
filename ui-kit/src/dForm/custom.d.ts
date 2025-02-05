@@ -5,4 +5,3 @@ declare module '*.svg' {
   export default content;
 }
 declare module "*.png";
-declare module 'rc-animate';

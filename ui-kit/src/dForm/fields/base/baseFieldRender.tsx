@@ -1,11 +1,19 @@
 // noinspection DuplicatedCode
 
-import React, {useSyncExternalStore} from 'react';
-import Animate from 'rc-animate';
+import React, {useRef, useSyncExternalStore} from 'react';
+import {CSSTransition} from 'react-transition-group';
 import {Form} from 'antd';
-import {IBaseField} from "@src/dForm/fields/base";
+import {IBaseField} from '@src/dForm/fields/base';
 
-export const BaseFieldRender = ({field, altLabel, children}: { field: IBaseField; altLabel?: React.ReactNode; children?: React.ReactNode }): React.JSX.Element => {
+export const BaseFieldRender = ({
+    field,
+    altLabel,
+    children,
+}: {
+    field: IBaseField;
+    altLabel?: React.ReactNode;
+    children?: React.ReactNode;
+}): React.JSX.Element => {
     const fieldProps = field.getProps();
     const formProps = field.getFormProps();
 
@@ -16,21 +24,23 @@ export const BaseFieldRender = ({field, altLabel, children}: { field: IBaseField
 
     const style: React.CSSProperties = {
         //marginBottom: formProps.layout !== 'horizontal' ? 0 : undefined,
-/*        flexGrow: fieldProps.width ? 0 : 1,
-        flexShrink: fieldProps.width ? 0 : 1,
-        flexBasis: fieldProps.width ? undefined : 0,*/
+        /*        flexGrow: fieldProps.width ? 0 : 1,
+                flexShrink: fieldProps.width ? 0 : 1,
+                flexBasis: fieldProps.width ? undefined : 0,*/
         //border: '1px solid red',
-        height:'100%',
+        height: '100%',
         ...fieldProps.rowStyle,
     };
 
     let emptyLabel: string | undefined = undefined;
-    if (formProps.layout === 'horizontal') emptyLabel = ' '
-    const label = typeof altLabel !== 'undefined' ? altLabel : fieldProps.label ?? emptyLabel
+    if (formProps.layout === 'horizontal') emptyLabel = ' ';
+    const label = typeof altLabel !== 'undefined' ? altLabel : (fieldProps.label ?? emptyLabel);
+
+    const nodeRef = useRef(null);
 
     return (
-        <Animate component="" transitionName="zoom">
-            {!fieldHidden ? (
+        <CSSTransition nodeRef={nodeRef} in={!fieldHidden} timeout={300} classNames="zoom" unmountOnExit>
+            <div ref={nodeRef} className="dform-field-animation-container">
                 <Form.Item
                     label={label}
                     className={fieldProps.itemClassName}
@@ -43,7 +53,7 @@ export const BaseFieldRender = ({field, altLabel, children}: { field: IBaseField
                 >
                     {children}
                 </Form.Item>
-            ) : null}
-        </Animate>
+            </div>
+        </CSSTransition>
     );
 };

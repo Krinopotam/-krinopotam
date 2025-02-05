@@ -30,13 +30,13 @@ const props: IGridProps = {
     onDelete: () => {},
     height: '100%',
     layout: 'fitColumns',
-    language: 'en',
+    language: 'en_US',
 };
 export const WithForm = (): React.JSX.Element => {
     return (
         <>
             {/*Description Start*/}
-            <h1>Пример простого грида Tabulator с формой редактирование</h1>
+            <h1>An example of a simple grid Tabulator with a form editing</h1>
             {/*Description End*/}
             <div style={{padding: 5, height: 300}}>
                 <TabulatorGrid {...props} />

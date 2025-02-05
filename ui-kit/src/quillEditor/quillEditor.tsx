@@ -6,14 +6,18 @@
  * @license MIT
  */
 
-import 'react-quill/dist/quill.snow.css';
+import 'react-quill-new/dist/quill.snow.css';
 import {Stylization} from './stylization';
 
 import React from 'react';
 
-import ReactQuill, {Range, UnprivilegedEditor, Value} from 'react-quill';
-import Quill, {DeltaOperation, Sources, StringMap} from "quill";
-import {AnyType} from "@krinopotam/service-types";
+import ReactQuill, {DeltaStatic} from 'react-quill-new';
+import Quill from "quill";
+
+import Range = ReactQuill.Range;
+import Value = ReactQuill.Value;
+import UnprivilegedEditor = ReactQuill.UnprivilegedEditor;
+type Sources = "api" | "user" | "silent";
 
 export interface IQuillEditorProps {
     id?: string;
@@ -47,9 +51,6 @@ export interface IQuillEditorProps {
     /** Whether to instantiate the editor to disabled mode */
     disabled?: boolean;
 
-    /** DOM Element or a CSS selector for a DOM Element, specifying which container has the scrollbars (i.e. overflow-y: auto) */
-    scrollingContainer?: string | HTMLElement;
-
     style?: React.CSSProperties;
 
     tabIndex?: number;
@@ -58,7 +59,7 @@ export interface IQuillEditorProps {
     theme?: string;
 
     /** ------ Callbacks --------*/
-    onChange?: (value: string, delta: IDeltaStatic, source: Sources, editor: UnprivilegedEditor) => void;
+    onChange?: (value: string, delta: DeltaStatic, source: Sources, editor: UnprivilegedEditor) => void;
     onChangeSelection?: (selection: Range, source: Sources, editor: UnprivilegedEditor) => void;
     onFocus?: (selection: Range, source: Sources, editor: UnprivilegedEditor) => void;
     onBlur?: (previousSelection: Range, source: Sources, editor: UnprivilegedEditor) => void;
@@ -67,45 +68,7 @@ export interface IQuillEditorProps {
     onKeyUp?: React.KeyboardEventHandler<HTMLElement>;
 }
 
-export interface IDeltaStatic {
-    ops?: DeltaOperation[];
 
-    retain(length: number, attributes?: StringMap): IDeltaStatic;
-
-    delete(length: number): IDeltaStatic;
-
-    filter(predicate: (op: DeltaOperation) => boolean): DeltaOperation[];
-
-    forEach(predicate: (op: DeltaOperation) => void): void;
-
-    insert(text: AnyType, attributes?: StringMap): IDeltaStatic;
-
-    map<T>(predicate: (op: DeltaOperation) => T): T[];
-
-    partition(predicate: (op: DeltaOperation) => boolean): [DeltaOperation[], DeltaOperation[]];
-
-    reduce<T>(predicate: (acc: T, curr: DeltaOperation, idx: number, arr: DeltaOperation[]) => T, initial: T): T;
-
-    chop(): IDeltaStatic;
-
-    length(): number;
-
-    slice(start?: number, end?: number): IDeltaStatic;
-
-    compose(other: IDeltaStatic): IDeltaStatic;
-
-    concat(other: IDeltaStatic): IDeltaStatic;
-
-    diff(other: IDeltaStatic, index?: number): IDeltaStatic;
-
-    eachLine(predicate: (line: IDeltaStatic, attributes: StringMap, idx: number) => AnyType, newline?: string): IDeltaStatic;
-
-    transform(index: number, priority?: boolean): number;
-
-    transform(other: IDeltaStatic, priority: boolean): IDeltaStatic;
-
-    transformPosition(index: number, priority?: boolean): number;
-}
 
 type IToolbarHeader = { header: 1 | 2 | 3 | 4 | 5 | 6 } | { header: (1 | 2 | 3 | 4 | 5 | 6 | boolean)[] }
 type IToolbarList = { list: 'ordered' | 'bullet' }
@@ -205,18 +168,16 @@ export const QuillEditor = React.forwardRef((props: IQuillEditorProps, ref: Reac
                 preserveWhitespace={props.preserveWhitespace}
                 //TODO improve disabled mode
                 readOnly={props.readOnly || props.disabled}
-                scrollingContainer={props.scrollingContainer}
+                //scrollingContainer={props.scrollingContainer}
                 style={props.style}
                 tabIndex={props.tabIndex}
-
-
 
                 /** ------ Callbacks --------*/
                 onChange={props.onChange}
                 onBlur={props.onBlur}
                 onChangeSelection={props.onChangeSelection}
                 onFocus={props.onFocus}
-                onKeyDown={props.onKeyUp}
+                onKeyDown={props.onKeyDown}
                 onKeyPress={props.onKeyPress}
                 onKeyUp={props.onKeyUp}
             />

@@ -10,7 +10,7 @@ export const GridRender = ({
     gridProps,
     tabulatorProps,
 }: {
-    tableRef: React.MutableRefObject<ITabulator | undefined>;
+    tableRef: React.RefObject<ITabulator | undefined>;
     api: IGridApi;
     gridProps: IGridProps;
     tabulatorProps: ITabulatorProps;
@@ -18,7 +18,7 @@ export const GridRender = ({
     const events = useEvents(api, gridProps.events);
     const resizeObserverRef = useRef<ResizeObserver | undefined>(undefined);
     const onTableRef = useCallback(
-        (tabulatorRef: React.MutableRefObject<ITabulator>) => {
+        (tabulatorRef: React.RefObject<ITabulator>) => {
             tableRef.current = tabulatorRef.current;
             api.tableApi = tabulatorRef.current;
             if (gridProps.resizeHeightWithParent) resizeObserverRef.current = resizeObserver(tableRef, gridProps.resizeHeightWithParent);
@@ -65,7 +65,7 @@ export const GridRender = ({
 };
 
 /** Resize tabulator grid if parent container resized */
-const resizeObserver = (tableRef: React.MutableRefObject<ITabulator | undefined>, parentClassName: string) => {
+const resizeObserver = (tableRef: React.RefObject<ITabulator | undefined>, parentClassName: string) => {
     const gridContainer: HTMLElement | undefined | null = tableRef.current?.element?.closest('.tabulator-grid-container');
     const observableElement = gridContainer?.closest(parentClassName);
 

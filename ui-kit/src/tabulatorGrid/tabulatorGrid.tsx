@@ -9,7 +9,7 @@ import {useGetActualProps} from '@krinopotam/common-hooks';
 export const TabulatorGrid = (props: IGridProps): React.JSX.Element => {
     const [allProps, setAllProps] = useGetActualProps(props); //props can be set both by parent component and via api
     const tabulatorProps = useSplitTabulatorProps(allProps);
-    const tableRef = useRef<ITabulator>();
+    const tableRef = useRef<ITabulator>(undefined);
     const [columnsDialog, setColumnsDialog] = useState(false);
     const api = useInitGridApi({props: allProps, setProps: setAllProps, tableRef, setColumnsDialog});
 

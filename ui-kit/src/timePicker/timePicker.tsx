@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-empty-interface */
 import * as React from 'react';
 import {TimePicker as AntTimePicker} from 'antd';
 

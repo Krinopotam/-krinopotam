@@ -95,7 +95,7 @@ export type ITabulatorEvents = Partial<EventCallBackMethods> & IActiveSelectionM
  */
 export interface ITabulatorProps extends Omit<ITabulator['options'], 'footerElement' | 'resizableRows' | 'columns'> {
     /** On the tableRef ready callback */
-    onTableRef?: (ref: React.MutableRefObject<ITabulator>) => void;
+    onTableRef?: (ref: React.RefObject<ITabulator>) => void;
 
     /** Grid ID*/
     id?: string;

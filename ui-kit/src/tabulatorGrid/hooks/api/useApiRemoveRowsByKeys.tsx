@@ -3,7 +3,7 @@ import {IGridApi, IGridProps, IGridRowData, IRowKeys} from '@src/tabulatorGrid';
 import {IsArray} from '@krinopotam/js-helpers/helpersObjects/isArray';
 import {RowComponent} from 'tabulator-tables';
 
-export const useApiRemoveRowsByKeys = (dataSetRef: React.MutableRefObject<IGridProps['dataSet'] | undefined>, api: IGridApi): IGridApi['removeRowsByKeys'] => {
+export const useApiRemoveRowsByKeys = (dataSetRef: React.RefObject<IGridProps['dataSet'] | undefined>, api: IGridApi): IGridApi['removeRowsByKeys'] => {
     return (keys: IRowKeys) => {
         const table = api.tableApi;
         if (!table) return;

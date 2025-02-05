@@ -36,5 +36,5 @@ export const MenuRow = ({gridApi}: IGridMenuProps): React.JSX.Element | null => 
                 styles={gridProps.buttonsRowStyles}
             />
         );
-    }, [buttons, gridApi, gridProps.buttonsIconsOnly, gridProps.responsiveBreakpoint]);
+    }, [buttons, gridApi, gridProps.buttonsIconsOnly, gridProps.buttonsRowStyle, gridProps.buttonsRowStyles, gridProps.responsiveBreakpoint]);
 };

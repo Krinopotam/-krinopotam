@@ -67,7 +67,7 @@ export const useGetEditFormProps = (treeApi: ITreeSelectApi, treeProps: ITreeSel
         };
 
         return formProps;
-    }, [forGroup, treeProps?.editFormProps, treeProps?.editGroupFormProps, treeProps.language, treeProps.selectNewNode, treeApi, dialogOpenedRef]);
+    }, [forGroup, treeProps?.editFormProps, treeProps?.editGroupFormProps, treeProps.language, treeProps.selectNewNode, treeProps.sortOnChange, treeApi, dialogOpenedRef]);
 };
 
 /** WORKAROUND:

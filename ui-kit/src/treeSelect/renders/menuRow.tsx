@@ -27,5 +27,5 @@ export const MenuRow = ({treeApi, treeProps}: {treeApi: ITreeSelectApi; treeProp
                 iconsOnly={treeProps.buttonsIconsOnly !== false}
             />
         );
-    }, [buttons, colorBorderSecondary, treeApi, treeProps.buttonsIconsOnly, treeProps.buttonsRowStyle, treeProps.buttonsRowWrapperStyle]);
+    }, [buttons, colorBorderSecondary, treeApi, treeProps.buttonsIconsOnly, treeProps.buttonsRowStyle, treeProps.buttonsRowStyles]);
 };

@@ -43,5 +43,5 @@ export const useGetEditFormProps = (treeApi: IExtTreeApi, treeProps: IExtTreePro
         };
 
         return formProps;
-    }, [forGroup, treeProps?.editFormProps, treeProps?.editGroupFormProps, treeProps.language, treeProps.selectNewNode, treeApi]);
+    }, [forGroup, treeProps?.editFormProps, treeProps?.editGroupFormProps, treeProps.language, treeProps.selectNewNode, treeProps.sortOnChange, treeApi]);
 };

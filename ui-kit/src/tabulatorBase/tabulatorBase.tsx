@@ -7,7 +7,7 @@ import {ITabulator, ITabulatorProps} from '@src/tabulatorBase/types/tabulatorBas
 
 const TabulatorBase_ = ({onTableRef, events, containerClassName, width, minWidth, maxWidth, ...props}: ITabulatorProps): React.JSX.Element => {
     const containerRef = React.useRef<HTMLDivElement>(null);
-    const tableRef = React.useRef<ITabulator>();
+    const tableRef = React.useRef<ITabulator>(null);
 
     const [newId] = React.useState(props.id ?? GetNanoId());
 
@@ -40,10 +40,10 @@ export const TabulatorBase = (props: ITabulatorProps) => {
     const isChanged = isPropsChanged(props, prevPropsRef.current)
     const prevDataRef = useRef(props.data)
 
-    const tableRef = React.useRef<ITabulator>();
+    const tableRef = React.useRef<ITabulator>(null);
 
     newProps.onTableRef = useCallback(
-        (ref: React.MutableRefObject<ITabulator>) => {
+        (ref: React.RefObject<ITabulator>) => {
             tableRef.current = ref.current;
             props.onTableRef?.(ref);
         },

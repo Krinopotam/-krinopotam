@@ -16,7 +16,7 @@ export const SelectFieldRender = ({field}: {field: SelectField}): React.JSX.Elem
             else field.setValue(val);
             field.setDirty(true);
         },
-        [field]
+        [field, fieldProps.fullItemValue]
     );
     const onBlur = useCallback<NonNullable<ISelectFieldProps['onBlur']>>(() => {
         field.setTouched(true);

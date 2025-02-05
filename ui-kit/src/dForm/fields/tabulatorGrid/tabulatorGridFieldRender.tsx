@@ -18,7 +18,7 @@ export const TabulatorGridFieldRender = ({field, gridApi: gridApiBase}: {field: 
 
     const value = field.getValue() as IGridRowData[];
 
-    const curDataSetRef = useRef<IGridRowData[] | undefined>();
+    const curDataSetRef = useRef<IGridRowData[] | undefined>(undefined);
 
     /** On the form we use a memoized TabulatorGrid, therefore the dataSet passed to the Grid should not change after the first initialization to avoid grid rerender
      * All changes to grid data must be made by internal grid methods without component rerendering  */
