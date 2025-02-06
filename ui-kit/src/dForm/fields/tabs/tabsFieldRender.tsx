@@ -151,7 +151,7 @@ const TabContent = ({
             notHideContent={true}
             language={formProps.language}
         >
-            <FieldsRender fields={childrenFields} formProps={field.getFormProps()} containerStyle={containerStyle} />
+            <FieldsRender fields={childrenFields} containerStyle={containerStyle} />
         </LoadingContainer>
     );
 };

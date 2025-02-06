@@ -22,6 +22,7 @@ export class DividerField extends BaseField<IDividerFieldProps> {
         return <DividerFieldRender field={this} />;
     }
 
+    /** In the base class, almost all components are wrapped in the BaseField wrapper. This component is displayed without wrapping */
     renderField(): React.ReactNode {
         return this.render();
     }

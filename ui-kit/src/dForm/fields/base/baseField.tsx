@@ -14,7 +14,7 @@ import {AnyType, IError} from '@krinopotam/service-types';
 import {CallbackControl} from '@src/_shared/classes/callbackControl';
 import {DModel, IDFormDataSet} from '@src/dForm';
 import {IAnyFieldProps, IBaseField} from '@src/dForm/fields/base/types/types';
-import React from 'react';
+import React, {CSSProperties} from 'react';
 import {BaseFieldRender} from './baseFieldRender';
 
 export class BaseField<TFieldProps extends IAnyFieldProps> {
@@ -456,16 +456,27 @@ export class BaseField<TFieldProps extends IAnyFieldProps> {
 
     //region Component render implementation
     protected render(): React.ReactNode {
-        return null;
+        throw new Error('Render method must be implemented in a derived class of the BaseField class')
     }
 
-    renderField(altLabel?: React.ReactNode): React.ReactNode {
-        return this.renderFieldWrapper(this.render(), altLabel);
+    renderField({
+        altLabel = undefined,
+        fieldContainerStyle = undefined,
+    }: {altLabel?: React.ReactNode; fieldContainerStyle?: CSSProperties} = {}): React.ReactNode {
+        return this.renderFieldWrapper({field: this.render(), altLabel, fieldContainerStyle});
     }
 
-    protected renderFieldWrapper(field: React.ReactNode, altLabel?: React.ReactNode) {
+    protected renderFieldWrapper({
+        field,
+        altLabel,
+        fieldContainerStyle,
+    }: {
+        field: React.ReactNode;
+        altLabel?: React.ReactNode;
+        fieldContainerStyle?: CSSProperties;
+    }) {
         return (
-            <BaseFieldRender key={this.getName()} field={this} altLabel={altLabel}>
+            <BaseFieldRender key={this.getName()} field={this} altLabel={altLabel} fieldContainerStyle={fieldContainerStyle}>
                 {field}
             </BaseFieldRender>
         );

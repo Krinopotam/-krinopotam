@@ -3,6 +3,12 @@ import {CSSTransition} from 'react-transition-group';
 import {DividerField} from '@src/dForm/fields/divider/dividerField';
 import {Divider} from 'antd';
 
+/*
+* Divider Field
+* Unlike other fields, this field during rendering does not wrap into Basefield. Therefore, his own processing of animation
+*/
+
+
 export const DividerFieldRender = ({field}: {field: DividerField}): React.JSX.Element => {
     useSyncExternalStore(field.subscribe.bind(field), field.getSnapshot.bind(field));
 
@@ -21,7 +27,7 @@ export const DividerFieldRender = ({field}: {field: DividerField}): React.JSX.El
     const nodeRef = useRef(null);
     return (
         <CSSTransition nodeRef={nodeRef} in={!fieldHidden} timeout={300} classNames="zoom" unmountOnExit>
-            <div ref={nodeRef}>
+            <div ref={nodeRef} className={'dform-field-container'}>
                 <Divider
                     className={fieldProps.className}
                     orientation={fieldProps.orientation}

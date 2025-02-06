@@ -4,6 +4,11 @@ import {Form} from 'antd';
 import {InlineGroupField} from '@src/dForm/fields/inlineGroup/inlineGroupField';
 import {CSSTransition} from 'react-transition-group';
 
+/*
+ * inline group Field (for horizontal field display)
+ * Unlike other fields, this field during rendering does not wrap into BaseField. Therefore, his own processing of animation
+ */
+
 export const InlineGroupRender = ({field}: {field: InlineGroupField}): React.JSX.Element => {
     useSyncExternalStore(field.subscribe.bind(field), field.getSnapshot.bind(field));
 
@@ -12,8 +17,6 @@ export const InlineGroupRender = ({field}: {field: InlineGroupField}): React.JSX
     }, [field]);
 
     const nodeRef = useRef(null);
-
-    if (!field.hasVisibleChildren()) return <> </>;
 
     const model = field.getModel();
     const formProps = model.getFormProps();
@@ -28,7 +31,7 @@ export const InlineGroupRender = ({field}: {field: InlineGroupField}): React.JSX
         firstField = childrenField;
     }
 
-    const fieldHidden = field.isHidden() ; //has visible field
+    const fieldHidden = field.isHidden() || !field.hasVisibleChildren(); //has visible field
 
     const groupName = field.getLabel();
 
@@ -54,25 +57,21 @@ export const InlineGroupRender = ({field}: {field: InlineGroupField}): React.JSX
 
     return (
         <CSSTransition nodeRef={nodeRef} in={!fieldHidden} timeout={300} classNames="zoom" unmountOnExit>
-            <div ref={nodeRef} className="dform-field-animation-container">
+            <div ref={nodeRef} className={'dform-field-container'}>
                 <Form.Item label={groupLabel} style={groupItemStyle} className={fieldProps.className}>
                     <div style={groupContainerStyle}>
                         {Object.keys(childrenFields).map(fieldName => {
                             const childField = childrenFields[fieldName];
                             const childProps = childField.getProps();
 
-                            if (childField.isHidden()) return null;
-
-                            const style: React.CSSProperties = {
+                            const fieldContainerStyle: React.CSSProperties = {
                                 flex: childProps.width || childField.noGrowWidth() ? `0 0 auto` : '1 1 auto',
                                 width: parseWidth(childField, gapOffset),
                             };
 
                             const altLabel = formProps.layout === 'horizontal' && childField === firstField ? null : undefined;
                             return (
-                                <div key={'item_' + childField.getName()} style={style}>
-                                    {childField.renderField(altLabel)}
-                                </div>
+                                <React.Fragment key={`item_${field.getName()}_subitem_${childField.getName()}`}>{childField.renderField({altLabel, fieldContainerStyle})}</React.Fragment>
                             );
                         })}
                     </div>

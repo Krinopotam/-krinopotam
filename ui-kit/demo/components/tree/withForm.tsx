@@ -52,6 +52,7 @@ const useTreeProps = () => {
         selectNewNode: true,
         buttonsIconsOnly: true,
         editFormProps: editFormProps,
+        draggableOrder:true,
         onDelete: () => {},
     } satisfies IExtTreeProps;
 };

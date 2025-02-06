@@ -24,6 +24,7 @@ export class InlineGroupField extends BaseField<IInlineGroupFieldProps> {
         return <InlineGroupRender field={this} />;
     }
 
+    /** In the base class, almost all components are wrapped in the BaseField wrapper. This component is displayed without wrapping */
     override renderField(): React.ReactNode {
         return this.render();
     }

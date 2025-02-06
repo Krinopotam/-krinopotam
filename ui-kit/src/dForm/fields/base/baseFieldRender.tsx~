@@ -1,6 +1,6 @@
 // noinspection DuplicatedCode
 
-import React, {CSSProperties, useRef, useSyncExternalStore} from 'react';
+import React, {useRef, useSyncExternalStore} from 'react';
 import {CSSTransition} from 'react-transition-group';
 import {Form} from 'antd';
 import {IBaseField} from '@src/dForm/fields/base';
@@ -9,12 +9,10 @@ export const BaseFieldRender = ({
     field,
     altLabel,
     children,
-    fieldContainerStyle,
 }: {
     field: IBaseField;
     altLabel?: React.ReactNode;
     children?: React.ReactNode;
-    fieldContainerStyle?: CSSProperties;
 }): React.JSX.Element => {
     const fieldProps = field.getProps();
     const formProps = field.getFormProps();
@@ -44,7 +42,7 @@ export const BaseFieldRender = ({
 
     return (
         <CSSTransition nodeRef={nodeRef} in={!fieldHidden} timeout={300} classNames="zoom" unmountOnExit>
-            <div ref={nodeRef} className={'dform-field-container' + autoHeightClass} style={fieldContainerStyle}>
+            <div ref={nodeRef} className={'dform-field-container' + autoHeightClass}>
                 <Form.Item
                     label={label}
                     className={fieldProps.itemClassName}

@@ -6,9 +6,8 @@
  * @license MIT
  */
 
-import {IBaseField} from "@src/dForm/fields/base";
+import {IBaseField} from '@src/dForm/fields/base';
 import React, {CSSProperties, useSyncExternalStore} from 'react';
-import {IDFormProps} from "@src/dForm";
 
 /** Render form body */
 export const FieldsRender = ({
@@ -18,7 +17,6 @@ export const FieldsRender = ({
     containerStyle,
 }: {
     fields: Record<string, IBaseField>;
-    formProps:IDFormProps;
     subscribe?: (listener: () => void) => () => void;
     getSnapshot?: () => Record<never, never>;
     containerStyle?: CSSProperties;
@@ -38,16 +36,7 @@ export const FieldsRender = ({
         <div className={'dform-fields-container'} style={style}>
             {Object.keys(fields).map(fieldName => {
                 const field = fields[fieldName];
-
-                const fieldStyle: React.CSSProperties = {};
-                const fieldProps = field.getProps();
-                const autoHeightClass= fieldProps.autoHeightResize ? ' auto-height' : '';
-
-                return (
-                    <div key={'field_' + field.getName()} className={'dform-field-container' + autoHeightClass} style={fieldStyle}>
-                        {field.renderField()}{' '}
-                    </div>
-                );
+                return <React.Fragment key={'field_' + fieldName}>{field.renderField()}</React.Fragment>;
             })}
         </div>
     );

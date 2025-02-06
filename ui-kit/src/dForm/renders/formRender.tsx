@@ -57,7 +57,7 @@ export const FormRender = ({formProps, formApi, formButtons}: IFormRenderProps):
                     >
                         <FormInit model={model} />
 
-                        <FieldsRender fields={model.getRootFields()} formProps={formProps} />
+                        <FieldsRender fields={model.getRootFields()} />
                         {!formProps._overriddenApi?.getButtonsApi && (
                             <ButtonsRow
                                 buttons={formButtons}
