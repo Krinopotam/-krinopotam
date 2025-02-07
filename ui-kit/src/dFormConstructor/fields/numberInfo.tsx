@@ -1,12 +1,20 @@
-import {BaseFieldInfo, IFieldPropsInfo} from '@src/dFormConstructor/fields/baseFieldInfo';
+import {BaseComponentInfo, IComponentPropsInfo} from '@src/dFormConstructor/fields/baseComponentInfo';
 import {INumberFieldProps, NumberField} from '@src/dForm/fields/number';
+import {Space} from "antd";
+import {FieldNumberOutlined} from "@ant-design/icons";
+import React from "react";
 
-export class NumberInfo extends BaseFieldInfo {
-    override getFieldClass() {
-        return NumberField;
-    }
+export class NumberInfo extends BaseComponentInfo {
+    public override readonly CODE = 'number';
+    public override readonly TITLE = (
+        <Space>
+            <FieldNumberOutlined />
+            Number input
+        </Space>
+    );
+    public override readonly CLASS = NumberField;
 
-    override getFieldPropsInfo() {
+    override getComponentPropsInfo() {
         return {
             id: 'string',
             label: 'string',
@@ -17,6 +25,6 @@ export class NumberInfo extends BaseFieldInfo {
             disabled: 'boolean',
             hidden: 'boolean',
             tooltip: 'string',
-        } satisfies IFieldPropsInfo<INumberFieldProps>;
+        } satisfies IComponentPropsInfo<INumberFieldProps>;
     }
 }

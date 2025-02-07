@@ -1,12 +1,21 @@
-import {BaseFieldInfo, IFieldPropsInfo} from '@src/dFormConstructor/fields/baseFieldInfo';
+import {BaseComponentInfo, IComponentPropsInfo} from '@src/dFormConstructor/fields/baseComponentInfo';
 import {DateTimeField, IDateTimeFieldProps} from '@src/dForm/fields/dateTime';
+import {Space} from 'antd';
+import {CalendarOutlined} from '@ant-design/icons';
+import React from 'react';
 
-export class DateTimeInfo extends BaseFieldInfo {
-    override getFieldClass() {
-        return DateTimeField;
-    }
+export class DateTimeInfo extends BaseComponentInfo {
+    public override readonly CODE = 'dateTime';
+    public override readonly TITLE = (
+        <Space>
+            <CalendarOutlined />
+            Date/Time input
+        </Space>
+    );
 
-    override getFieldPropsInfo() {
+    public override readonly CLASS = DateTimeField;
+
+    override getComponentPropsInfo() {
         return {
             id: 'string',
             label: 'string',
@@ -17,6 +26,6 @@ export class DateTimeInfo extends BaseFieldInfo {
             disabled: 'boolean',
             hidden: 'boolean',
             tooltip: 'string',
-        } satisfies IFieldPropsInfo<IDateTimeFieldProps>;
+        } satisfies IComponentPropsInfo<IDateTimeFieldProps>;
     }
 }

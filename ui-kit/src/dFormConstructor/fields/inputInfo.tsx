@@ -1,12 +1,20 @@
-import {BaseFieldInfo, IFieldPropsInfo} from '@src/dFormConstructor/fields/baseFieldInfo';
+import {BaseComponentInfo, IComponentPropsInfo} from '@src/dFormConstructor/fields/baseComponentInfo';
 import {IInputFieldProps, InputField} from '@src/dForm/fields/input';
+import {FieldStringOutlined} from '@ant-design/icons';
+import React from 'react';
+import {Space} from 'antd';
 
-export class InputInfo extends BaseFieldInfo {
-    override getFieldClass() {
-        return InputField;
-    }
+export class InputInfo extends BaseComponentInfo {
+    public override readonly CODE = 'input';
+    public override readonly TITLE = (
+        <Space>
+            <FieldStringOutlined />
+            Text input
+        </Space>
+    );
+    public override readonly CLASS = InputField;
 
-    override getFieldPropsInfo() {
+    override getComponentPropsInfo() {
         return {
             id: 'string',
             label: 'string',
@@ -17,6 +25,6 @@ export class InputInfo extends BaseFieldInfo {
             disabled: 'boolean',
             hidden: 'boolean',
             tooltip: 'string',
-        } satisfies IFieldPropsInfo<IInputFieldProps>;
+        } satisfies IComponentPropsInfo<IInputFieldProps>;
     }
 }
