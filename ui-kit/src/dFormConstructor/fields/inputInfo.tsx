@@ -9,22 +9,17 @@ export class InputInfo extends BaseComponentInfo {
     public override readonly TITLE = (
         <Space>
             <FieldStringOutlined />
-            Text input
+            Input
         </Space>
     );
     public override readonly CLASS = InputField;
 
     override getPropsInfo() {
+        const baseProps = super.getPropsInfo()
         return {
-            id: 'string',
-            label: 'string',
+            ...baseProps,
+            showCount: 'boolean',
             maxLength: 'number',
-            width: 'string',
-            placeholder: 'string',
-            readOnly: 'boolean',
-            disabled: 'boolean',
-            hidden: 'boolean',
-            tooltip: 'string',
         } satisfies IComponentPropsInfo<IInputFieldProps>;
     }
 }

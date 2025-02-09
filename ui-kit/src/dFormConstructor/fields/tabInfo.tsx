@@ -2,7 +2,6 @@ import {FolderOutlined} from '@ant-design/icons';
 import {AnyType} from '@krinopotam/service-types';
 import {IDFormFieldsProps} from '@src/dForm';
 import {IBaseFieldProps} from '@src/dForm/fields/base';
-import {IInlineGroupFieldProps} from '@src/dForm/fields/inlineGroup';
 import {BaseComponentInfo, IComponentPropsInfo} from '@src/dFormConstructor/fields/baseComponentInfo';
 import {Space} from 'antd';
 import React from 'react';
@@ -12,7 +11,7 @@ export class TabInfo extends BaseComponentInfo {
     public override readonly TITLE = (
         <Space>
             <FolderOutlined />
-            <b>Tab</b>
+            Tab
         </Space>
     );
     public override readonly CLASS = null;
@@ -22,13 +21,11 @@ export class TabInfo extends BaseComponentInfo {
     }
 
     override mustHaveParent(): boolean | string {
-        return 'tabsContainer';
+        return 'tabs';
     }
 
     override getPropsInfo() {
-        return {
-            id: 'string',
-        } satisfies IComponentPropsInfo<IInlineGroupFieldProps>;
+        return {label: 'string'} satisfies IComponentPropsInfo<Record<string, unknown>>;
     }
 
     /** @returns field instance props */

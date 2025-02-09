@@ -23,7 +23,7 @@ export const useGetDeleteButton = (
         language?: AnyType;
         buttons?: IFormButtons;
         nodeDeleteMessage?: React.ReactNode;
-        onDelete?: (node: Record<string, AnyType>, api: AnyType) => Promise<AnyType> | void | undefined;
+        onDelete?: (node: Record<string, AnyType>, api: AnyType) => Promise<AnyType> | void  | boolean| undefined;
     },
     activeNode: Record<string, AnyType> | undefined,
     isLeaf?: boolean,
@@ -68,7 +68,7 @@ const deleteNode = (
         confirmDelete?: boolean;
         selectNewNode?: boolean;
         language?: AnyType;
-        onDelete?: (node: Record<string, AnyType>, api: AnyType) => Promise<AnyType> | void | undefined;
+        onDelete?: (node: Record<string, AnyType>, api: AnyType) => Promise<AnyType> | void | boolean | undefined;
     },
     api: {
         t: (str: 'error' | 'delete' | 'deleteGroup' | 'deleteRecord' | 'deleteRecordsGroup' | 'deleteSelectedRecordQt') => string;
@@ -83,6 +83,7 @@ const deleteNode = (
     const deleteResult = props?.onDelete?.(node, api);
 
     if (!IsPromise(deleteResult)) {
+        if (deleteResult === false) return;
         api.removeNode(node, {select: props.selectNewNode ? 'next' : undefined});
         if (messageBox) messageBox.destroy();
         onComplete?.();

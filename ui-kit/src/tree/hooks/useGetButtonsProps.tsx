@@ -55,6 +55,9 @@ export const useGetButtonsProps = (api: IExtTreeApi, props: IExtTreeProps) => {
             btn.position = btn.position ?? buttonsPos;
             if (btn.checkDisabled) btn.disabled = !activeNode;
             if (btn.checkHidden) btn.hidden = !activeNode;
+
+            if (btn.onDisabledCheck) btn.disabled = btn.onDisabledCheck?.(buttonId, btn, activeNode, api);
+            if (btn.onHiddenCheck) btn.hidden = btn.onHiddenCheck?.(buttonId, btn, activeNode, api);
         }
 
         return resultButtons;

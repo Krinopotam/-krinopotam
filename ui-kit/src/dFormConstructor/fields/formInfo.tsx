@@ -13,7 +13,7 @@ export class FormInfo extends BaseComponentInfo {
     public override readonly TITLE = (
         <Space>
             <FormOutlined />
-            <b>Form</b>
+            Form
         </Space>
     );
 
@@ -30,12 +30,24 @@ export class FormInfo extends BaseComponentInfo {
     override getPropsInfo() {
         return {
             id: 'string',
+            disabled: 'boolean',
+            readOnly: 'boolean',
+            unfilledForm: 'boolean',
+            confirmChanges: 'boolean',
+            formMode: ['view', 'create', 'clone', 'update'],
+            colorType: ['', 'info', 'success', 'warning'],
+            className: 'string',
+            layout: ['horizontal', 'vertical'],
+            labelAlign: ['left', 'right'],
+            disableDepended: 'boolean',
+            tabsHeight: 'number',
+            submitConfirmMessage: 'string',
         } satisfies IComponentPropsInfo<IDFormProps>;
     }
 
     /** @returns field instance props */
     override getProps(): Record<string, unknown> & IDFormProps {
-        return {...this.props};
+        return {...this.props, formId:this.getId()};
     }
 
     override getLabel() {
@@ -64,7 +76,7 @@ export class FormInfo extends BaseComponentInfo {
                 const id = fieldInfo.getId();
                 const title = (
                     <>
-                        {fieldInfo.TITLE}: [{fieldInfo.getLabel()}]
+                        {fieldInfo.TITLE}: <b>{fieldInfo.getLabel()}</b>
                     </>
                 );
                 const isLeaf = !fieldInfo.canHaveChildren() || undefined;

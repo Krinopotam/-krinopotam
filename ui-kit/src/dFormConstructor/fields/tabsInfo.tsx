@@ -1,18 +1,17 @@
 import {FolderOpenOutlined} from '@ant-design/icons';
 import {AnyType} from '@krinopotam/service-types';
-import {IDFormFieldsProps} from '@src/dForm';
 import {IBaseFieldProps} from '@src/dForm/fields/base';
 import {ITabsFieldProps, TabsField} from '@src/dForm/fields/tabs';
 import {BaseComponentInfo, IComponentPropsInfo} from '@src/dFormConstructor/fields/baseComponentInfo';
 import {Space} from 'antd';
 import React from 'react';
 
-export class TabsContainerInfo extends BaseComponentInfo {
-    public override readonly CODE = 'tabsContainer';
+export class TabsInfo extends BaseComponentInfo {
+    public override readonly CODE = 'tabs';
     public override readonly TITLE = (
         <Space>
             <FolderOpenOutlined />
-            <b>Tabs container</b>
+            Tabs
         </Space>
     );
     public override readonly CLASS = TabsField;
@@ -25,13 +24,14 @@ export class TabsContainerInfo extends BaseComponentInfo {
         return {
             id: 'string',
             label: 'string',
-            maxLength: 'number',
-            width: 'string',
-            placeholder: 'string',
-            readOnly: 'boolean',
-            disabled: 'boolean',
-            hidden: 'boolean',
-            tooltip: 'string',
+            size: ['small' , 'middle' , 'large'],
+            type: ['line' , 'card' , 'editable-card'],
+            activeTab: 'string',
+            panelsHeight: 'number',
+            panelsMaxHeight:  'number',
+            panelsMinHeight:  'number',
+            tabBarGutter: 'number',
+            className: 'string',
         } satisfies IComponentPropsInfo<ITabsFieldProps>;
     }
 
@@ -41,7 +41,7 @@ export class TabsContainerInfo extends BaseComponentInfo {
         for (const tabInfo of this.getChildren()) {
             if (tabInfo.CODE !== 'tab') continue;
 
-            const tabId = tabInfo.getId();
+            const tabId = tabInfo.getLabel() ?? tabInfo.getId();
             tabsProps[tabId] = {...(tabInfo.getProps() as IBaseFieldProps<AnyType, AnyType>)};
         }
         return {component: this.CLASS, tabs: tabsProps} satisfies ITabsFieldProps;

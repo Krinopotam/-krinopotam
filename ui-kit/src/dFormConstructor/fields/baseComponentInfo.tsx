@@ -4,11 +4,9 @@ import {DModel} from '@src/dForm';
 import {IBaseField, IBaseFieldProps} from '@src/dForm/fields/base';
 import React from 'react';
 
-export type IPropsType = 'string' | 'number' | 'boolean' | string[];
+export type IPropsType = 'string' | 'number' | 'boolean' | 'fieldCodes' | string[];
 
-export type IComponentPropsInfo<TFieldProps> = {
-    id: 'string';
-} & {
+export type IComponentPropsInfo<TFieldProps> = {id?: 'string'} & {
     [K in keyof TFieldProps]?: IPropsType;
 };
 
@@ -19,7 +17,7 @@ export class BaseComponentInfo {
 
     protected readonly props: {[key: string]: unknown} = {};
     private id: string = '';
-    private label: string | React.ReactNode = '';
+    protected label: string | React.ReactNode = '';
     private children: BaseComponentInfo[] = [];
     private parent: BaseComponentInfo | undefined;
 
@@ -42,7 +40,24 @@ export class BaseComponentInfo {
 
     /** @returns field props info */
     getPropsInfo(): IComponentPropsInfo<AnyType> {
-        throw new Error('Method getFieldPropsInfo must be implemented in derived class');
+        return {
+            id: 'string',
+            label: 'string',
+            placeholder: 'string',
+            tooltip: 'string',
+            width: 'string',
+            defaultValue: 'string',
+            readOnly: 'boolean',
+            disabled: 'boolean',
+            hidden: 'boolean',
+            nonEditable: 'boolean',
+            dependsOn: 'fieldCodes',
+            itemClassName: 'string',
+            className: 'string',
+            autoHeightResize: 'boolean',
+            autoFocus: 'boolean',
+            requiredMark: 'boolean',
+        } satisfies IComponentPropsInfo<IBaseFieldProps<AnyType, AnyType>>;
     }
 
     /** @returns field instance id */
@@ -56,7 +71,7 @@ export class BaseComponentInfo {
     }
 
     /** @returns field instance label */
-    getLabel(): string | React.ReactNode | undefined {
+    getLabel(): string | undefined {
         return (this.label ?? this.getId()) as string;
     }
 
@@ -70,9 +85,9 @@ export class BaseComponentInfo {
     }
 
     /** Set component prop */
-    setProp (name:string, val:unknown){
-        if (name === 'label') this.label = val as string
-        this.props[name] = val
+    setProp(name: string, val: unknown) {
+        if (name === 'label') this.label = val as string;
+        this.props[name] = val;
     }
 
     getParent() {

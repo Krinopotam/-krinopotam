@@ -1,12 +1,12 @@
-import {GetRef, Tree as AntdTree, type TreeDataNode} from 'antd';
-import {translations} from '@src/tree/translations/translations';
-import {IDFormModalApi, IDFormModalProps} from '@src/dFormModal/types/dFormModalTypes';
-import React from 'react';
-import {IButtonRowProps, IButtonsRowApi, IFormButton} from '@src/buttonsRow/types/types';
 import {IBreakpoints} from '@krinopotam/common-hooks/useResponsive';
-import {TreeProps} from 'antd/es/tree/Tree';
-import {INodePosition, ITreeComponentApi} from '@src/_shared/hooks/treeComponentApiMethods/types/treeApiTypes';
 import {AnyType, IKey} from '@krinopotam/service-types';
+import {INodePosition, ITreeComponentApi} from '@src/_shared/hooks/treeComponentApiMethods/types/treeApiTypes';
+import {IButtonRowProps, IButtonsRowApi, IFormButton} from '@src/buttonsRow/types/types';
+import {IDFormModalApi, IDFormModalProps} from '@src/dFormModal/types/dFormModalTypes';
+import {translations} from '@src/tree/translations/translations';
+import {GetRef, Tree as AntdTree, type TreeDataNode} from 'antd';
+import {TreeProps} from 'antd/es/tree/Tree';
+import React from 'react';
 
 export interface IOwnExtTreeProps {
     /** A mutable object to merge with these controls api */
@@ -125,7 +125,7 @@ export interface IOwnExtTreeProps {
     onDataSetChanged?: (dataSet: IExtTreeNode[] | undefined) => void;
 
     /** Callback executed when node delete */
-    onDelete?: (node: IExtTreeNode, api: IExtTreeApi) => ITreeDeletePromise | void | undefined;
+    onDelete?: (node: IExtTreeNode, api: IExtTreeApi) => ITreeDeletePromise | void | boolean | undefined;
 
     /** Callback executed when node move */
     onNodeMove?: (node: IExtTreeNode, targetNode: IExtTreeNode | undefined, pos: INodePosition, api: IExtTreeApi) => ITreeMovePromise | void | undefined;
@@ -143,6 +143,12 @@ export interface IExtTreeButton extends IFormButton {
 
     /** if no row is selected in the grid, hide the button */
     checkHidden?: boolean;
+
+    /** Callback executed on button render. If returns true, the button will not be rendered */
+    onHiddenCheck?: (buttonName: string, button: IExtTreeButton, node: IExtTreeNode | undefined, treeApi: IExtTreeApi) => boolean;
+
+    /** Callback executed on button render. If returns true, the button will be disabled */
+    onDisabledCheck?: (buttonName: string, button: IExtTreeButton, node: IExtTreeNode | undefined, treeApi: IExtTreeApi) => boolean;
 }
 
 export type IExtTreeButtons = Record<string, IExtTreeButton | null>;

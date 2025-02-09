@@ -16,15 +16,32 @@ export const useGetTreeProps = (
     return {
         apiRef: treeApi,
         defaultExpandAll: true,
-        autoExpandParent:true,
+        autoExpandParent: true,
         defaultExpandParent: true,
         buttonsIconsOnly: true,
         draggableOrder: true,
-        buttons: {update: null, clone: null, create: {tooltip: 'Добавить поле'}},
-        onDelete: () => {},
+        buttons: {
+            update: null,
+            clone: null,
+            create: {tooltip: 'Add field'},
+            delete: {
+                tooltip: 'Remove the field',
+                onDisabledCheck: (_btName, _button, node) => {
+                    const componentInfo = node?.['fieldInfo'] as BaseComponentInfo;
+                    return !componentInfo?.getParent();
+                },
+            },
+        },
         confirmDelete: false,
         editFormProps: editFormProps,
         dataSet: dataSet,
+        onDelete: node => {
+            const componentInfo = node['fieldInfo'] as BaseComponentInfo;
+            if (!componentInfo.getParent()) return false;
+            componentInfo.removeFromTree();
+            setRerenderTree({});
+            setFormProps(formInfo.toFormProps());
+        },
         allowDrop: info => {
             const dragNode = info.dragNode['fieldInfo'] as BaseComponentInfo;
             const dropNode = info.dropNode['fieldInfo'] as BaseComponentInfo;
