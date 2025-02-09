@@ -1,21 +1,20 @@
 import React from 'react';
-import {Space, Switch} from 'antd';
+import {Space, Switch, Typography} from 'antd';
 import {DForm, IDFormProps} from '@src/dForm';
 
 export const FormPreview = ({formProps}: {formProps: IDFormProps}): React.JSX.Element => {
     const [horizontal, setHorizontal] = React.useState(false);
     const fProps: IDFormProps = {layout: horizontal ? 'horizontal' : 'vertical', ...formProps};
-    console.log(fProps)
 
     return (
-        <div style={{border: 'solid 1px grey', padding:20}}>
-            <h1>Form preview</h1>
-            <div style={{maxWidth: 500, minWidth:300, border: 'solid 1px grey'}}>
-                <Space style={{marginBottom: 30}}>
-                    <Switch checkedChildren={'Horizontal'} unCheckedChildren={'Vertical'} onChange={() => setHorizontal(cur => !cur)} />
-                </Space>
+        <>
+            <Space style={{marginBottom:10, paddingLeft:20}}>
+                <Typography.Title level={3} style={{margin:0}}>Form Preview</Typography.Title>
+                <Switch checkedChildren={'Horizontal'} unCheckedChildren={'Vertical'} onChange={() => setHorizontal(cur => !cur)} />
+            </Space>
+            <div style={{padding: 20, overflow: 'auto', scrollbarColor: 'rgb(234, 234, 234)', scrollbarGutter: 'stable', scrollbarWidth: 'thin'}}>
                 <DForm {...fProps} />
             </div>
-        </div>
+        </>
     );
 };

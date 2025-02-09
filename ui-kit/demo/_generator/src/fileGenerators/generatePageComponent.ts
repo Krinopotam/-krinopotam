@@ -16,13 +16,27 @@ export const generatePageComponent = (file: IFileInfo, pagesDirName: string, pag
     source = source.replaceAll(/\$\{/g, '\\${');
     source = source.replaceAll(/`/g, '\\`');
 
+    const noSource = source.indexOf('/*{DO-NOT-SHOW-SOURCE}*/') > -1;
+
+    // language=text
+    const showSourceCode =`
+            <Divider />
+            <div>
+                <Collapse 
+                    items={[{key: 1, label: 'Show source', children: <Suspense fallback={<div>Loading source...</div>}>
+                        <SyntaxHighlighter language="tsx" style={props.darkMode ? darcula : coy} showLineNumbers={true}>{source}</SyntaxHighlighter>
+                    </Suspense>}]}>
+                </Collapse>
+            </div>
+    `
+
     // language=text
     const importStr = `
     import React, {lazy, Suspense} from 'react';
     import {${componentName}} from '${componentImportPath}';
     import {PageLayout} from '../../_internal/pageLayout'
-    import { Divider, Collapse } from 'antd';
-    import { darcula, coy } from 'react-syntax-highlighter/dist/esm/styles/prism';
+    ${noSource ? '' : "import { Divider, Collapse } from 'antd';" }
+    ${noSource ? '' : "import { darcula, coy } from 'react-syntax-highlighter/dist/esm/styles/prism';" }
     
     //const SyntaxHighlighter = lazy(() => import('react-syntax-highlighter'));
     const SyntaxHighlighter = lazy(() => import('react-syntax-highlighter').then(module => ({ default: module.Prism })));
@@ -36,17 +50,8 @@ export const generatePageComponent = (file: IFileInfo, pagesDirName: string, pag
     const source = \`${source}\`
     return (
         <PageLayout>
-            <div>
-                <${componentName} />
-            </div>
-            <Divider />
-            <div>
-                <Collapse 
-                    items={[{key: 1, label: 'Show source', children: <Suspense fallback={<div>Loading source...</div>}>
-                        <SyntaxHighlighter language="tsx" style={props.darkMode ? darcula : coy} showLineNumbers={true}>{source}</SyntaxHighlighter>
-                    </Suspense>}]}>
-                </Collapse>
-            </div>
+            <${componentName} />
+            ${noSource ? '' : showSourceCode }
         </PageLayout>
     );
 };
