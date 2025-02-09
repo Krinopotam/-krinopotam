@@ -81,7 +81,7 @@
   },
   "dependencies": {
     "@krinopotam/common-hooks": "^1.1.1",
-    "@krinopotam/js-helpers": "^1.0.73",
+    "@krinopotam/js-helpers": "^1.0.74",
     "@krinopotam/service-types": "^1.0.21",
     "ahooks": "^3.8.4",
     "antd": "^5.23.4",

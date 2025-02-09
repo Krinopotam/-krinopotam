@@ -13,7 +13,7 @@ export class FormInfo extends BaseComponentInfo {
     public override readonly TITLE = (
         <Space>
             <FormOutlined />
-            Form
+            <b>Form</b>
         </Space>
     );
 
@@ -21,6 +21,10 @@ export class FormInfo extends BaseComponentInfo {
 
     override canHaveChildren(): boolean | string {
         return true;
+    }
+
+    override mustHaveParent(): boolean | string {
+        return false;
     }
 
     override getComponentPropsInfo() {
@@ -44,7 +48,7 @@ export class FormInfo extends BaseComponentInfo {
         const fieldProps: IDFormProps['fieldsProps'] = {};
 
         for (const fieldInfo of this.getChildren()) {
-            const id = fieldInfo.getComponentId();
+            const id = fieldInfo.getId();
             if (!fieldInfo.CLASS) continue;
             fieldProps[id] = {...fieldInfo.getComponentProps() as  IBaseFieldProps<AnyType, AnyType>};
         }
@@ -57,7 +61,7 @@ export class FormInfo extends BaseComponentInfo {
         const recursive = (fields: BaseComponentInfo[]) => {
             const result: IExtTreeNode[] = [];
             for (const fieldInfo of fields) {
-                const id = fieldInfo.getComponentId();
+                const id = fieldInfo.getId();
                 const title = (
                     <>
                         {fieldInfo.TITLE}: [{fieldInfo.getComponentLabel()}]

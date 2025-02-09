@@ -1,9 +1,11 @@
-import { describe, it, expect } from 'vitest';
-import { CloneObject } from '@src/helpersObjects/cloneObject';
+import {describe, it, expect} from 'vitest';
+import {CloneObject} from '@src/helpersObjects/cloneObject';
+
+class TestClass {}
 
 describe('CloneObject', () => {
     it('should deep clone a simple object', () => {
-        const obj = { a: 1, b: 2 };
+        const obj = {a: 1, b: 2};
         const clonedObj = CloneObject(obj);
 
         expect(clonedObj).toEqual(obj);
@@ -11,7 +13,7 @@ describe('CloneObject', () => {
     });
 
     it('should deep clone a nested object', () => {
-        const obj = { a: 1, b: { c: 2, d: 3 } };
+        const obj = {a: 1, b: {c: 2, d: 3}};
         const clonedObj = CloneObject(obj);
 
         expect(clonedObj).toEqual(obj);
@@ -20,15 +22,15 @@ describe('CloneObject', () => {
     });
 
     it('should respect the maxLevel parameter', () => {
-        const obj = { a: { b: { c: { d: 4 } } } };
+        const obj = {a: {b: {c: {d: 4}}}};
         const clonedObj = CloneObject(obj, 2);
 
-        expect(clonedObj).toEqual({ a: { b: { c: obj.a.b.c } } });
+        expect(clonedObj).toEqual({a: {b: {c: obj.a.b.c}}});
         expect(clonedObj.a.b.c).toBe(obj.a.b.c); // Ensure nested object at maxLevel is the same reference
     });
 
     it('should handle arrays correctly', () => {
-        const obj = { a: [1, 2, { b: 3 }] };
+        const obj = {a: [1, 2, {b: 3}]};
         const clonedObj = CloneObject(obj);
 
         expect(clonedObj).toEqual(obj);
@@ -48,8 +50,22 @@ describe('CloneObject', () => {
         expect(CloneObject(true)).toBe(true);
     });
 
+    it('should not clone class instance', () => {
+        const classInstance = new TestClass();
+        expect(CloneObject(classInstance)).toBe(classInstance);
+    });
+
+    it('should not clone class instance in object', () => {
+        const classInstance = new TestClass();
+        const original = {a: 1, b: classInstance};
+        const clone = CloneObject(original);
+        expect(clone).toEqual(original);
+        expect(clone.b === classInstance).toBe(true);
+        expect(clone === original).toBe(false);
+    });
+
     it('should handle circular references', () => {
-        const obj: any = { a: 1 };
+        const obj: any = {a: 1};
         obj.self = obj;
 
         const clonedObj = CloneObject(obj);
@@ -60,20 +76,20 @@ describe('CloneObject', () => {
     });
 
     it('should handle complex circular references', () => {
-        const r1:any = {r1: 1};
-        const r2:any = {r2: 2};
-        const r1c1:any = {r1c1: 1, root: r1, parent: r1};
-        const r1c2:any = {r1c2: 2, root: r1, parent: r1};
-        const r2c1:any = {r2c1: 1, root: r2, parent: r2};
-        const r2c2:any = {r2c2: 2, root: r2, parent: r2};
-        const r1c1g1:any = {r1c1g1: 1, root: r1, parent: r1c1};
-        const r1c2g1:any = {r1c2g1: 2, root: r1, parent: r1c2};
-        r1.children = [r1c1, r1c2]
-        r2.children = [r2c1, r2c2]
+        const r1: any = {r1: 1};
+        const r2: any = {r2: 2};
+        const r1c1: any = {r1c1: 1, root: r1, parent: r1};
+        const r1c2: any = {r1c2: 2, root: r1, parent: r1};
+        const r2c1: any = {r2c1: 1, root: r2, parent: r2};
+        const r2c2: any = {r2c2: 2, root: r2, parent: r2};
+        const r1c1g1: any = {r1c1g1: 1, root: r1, parent: r1c1};
+        const r1c2g1: any = {r1c2g1: 2, root: r1, parent: r1c2};
+        r1.children = [r1c1, r1c2];
+        r2.children = [r2c1, r2c2];
         r1c1.children = [r1c1g1];
         r1c2.children = [r1c2g1];
 
-        const obj: any = [r1,  r2];
+        const obj: any = [r1, r2];
 
         const clonedObj = CloneObject(obj);
 

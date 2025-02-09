@@ -1,28 +1,29 @@
-import { IsArray as p } from "./isArray.js";
-import { IsObjectHasOwnProperty as y } from "./isObjectHasOwnProperty.js";
-const m = (c, i) => {
-  const f = /* @__PURE__ */ new Map(), e = (n, s) => {
-    if (!n) return n;
-    if (f.has(n)) return f.get(n);
-    const o = {};
-    f.set(n, o), s++;
-    for (const r in n) {
-      if (!y(n, r)) continue;
-      const t = n[r];
-      !t || typeof t != "object" || i && s > i ? o[r] = t : o[r] = p(t) ? u(t, s) : e(t, s);
+import { isInstanceOfClass as y } from "./isInstanceOfClass.js";
+import { IsArray as i } from "./isArray.js";
+import { IsObjectHasOwnProperty as a } from "./isObjectHasOwnProperty.js";
+const d = (s, o) => {
+  const f = /* @__PURE__ */ new Map(), u = (r, c) => {
+    if (!r) return r;
+    if (f.has(r)) return f.get(r);
+    const e = {};
+    f.set(r, e), c++;
+    for (const n in r) {
+      if (!a(r, n)) continue;
+      const t = r[n];
+      !t || typeof t != "object" || !i(t) && y(t) || o && c > o ? e[n] = t : e[n] = i(t) ? p(t, c) : u(t, c);
     }
-    return o;
-  }, u = (n, s) => {
-    const o = [];
-    s++;
-    for (let r = 0; r < n.length; r++) {
-      const t = n[r];
-      !t || typeof t != "object" || i && s > i ? o[r] = t : o[r] = p(t) ? u(t, s) : e(t, s);
+    return e;
+  }, p = (r, c) => {
+    const e = [];
+    c++;
+    for (let n = 0; n < r.length; n++) {
+      const t = r[n];
+      !t || typeof t != "object" || !i(t) && y(t) || o && c > o ? e[n] = t : e[n] = i(t) ? p(t, c) : u(t, c);
     }
-    return o;
+    return e;
   };
-  return typeof c != "object" || c === null ? c : p(c) ? u(c, 0) : e(c, 0);
+  return typeof s != "object" || s === null || !i(s) && y(s) ? s : i(s) ? p(s, 0) : u(s, 0);
 };
 export {
-  m as CloneObject
+  d as CloneObject
 };

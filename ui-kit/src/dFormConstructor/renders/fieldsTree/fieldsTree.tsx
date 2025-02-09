@@ -11,6 +11,6 @@ export const FieldsTree = (props:{setFormProps: React.Dispatch<React.SetStateAct
     const [formInfo] = useState<FormInfo>(new FormInfo({componentId: 'form1'}));
     const dataSet = formInfo.toTreeDataSet();
     const editFormProps = useGetTreeEditFormProps(treeApi, formInfo, setRerenderTree, props.setFormProps);
-    const treeProps = useGetTreeProps(treeApi, editFormProps, dataSet);
+    const treeProps = useGetTreeProps(treeApi, formInfo, editFormProps, dataSet, setRerenderTree, props.setFormProps);
     return <Tree {...treeProps} />;
 };

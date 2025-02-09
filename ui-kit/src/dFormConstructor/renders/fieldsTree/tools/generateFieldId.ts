@@ -1,11 +1,11 @@
 import {BaseComponentInfo} from '@src/dFormConstructor/fields/baseComponentInfo';
-import {FormInfo} from "@src/dFormConstructor/fields/formInfo";
+import {FormInfo} from '@src/dFormConstructor/fields/formInfo';
 
 export const generateFieldId = (formInfo: FormInfo, prefix: string = 'Field'): string => {
     const recursiveSearch = (fields: BaseComponentInfo[], searchId: string) => {
         for (const fieldInfo of fields) {
-            if (fieldInfo.getComponentId() === searchId) return true;
-            if (fieldInfo.getChildren().length > 0) return recursiveSearch(fieldInfo.getChildren(), searchId);
+            if (fieldInfo.getId() === searchId) return true;
+            if (fieldInfo.getChildren().length > 0 && recursiveSearch(fieldInfo.getChildren(), searchId)) return true;
         }
 
         return false;
