@@ -14,7 +14,7 @@ export class InputInfo extends BaseComponentInfo {
     );
     public override readonly CLASS = InputField;
 
-    override getComponentPropsInfo() {
+    override getPropsInfo() {
         return {
             id: 'string',
             label: 'string',

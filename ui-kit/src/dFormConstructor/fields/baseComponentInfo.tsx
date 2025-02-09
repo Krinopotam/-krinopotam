@@ -17,14 +17,17 @@ export class BaseComponentInfo {
     public readonly TITLE: string | React.ReactNode = 'base';
     public readonly CLASS: (new (fieldName: string, fieldProps: AnyType, model: DModel, parent?: IBaseField) => IBaseField) | null = null;
 
-    protected readonly componentProps: {[key: string]: unknown} = {};
+    protected readonly props: {[key: string]: unknown} = {};
     private id: string = '';
+    private label: string | React.ReactNode = '';
     private children: BaseComponentInfo[] = [];
     private parent: BaseComponentInfo | undefined;
 
-    constructor(props: {componentId: string}) {
-        this.id = props.componentId;
-        this.setComponentLabel(props.componentId);
+    constructor(params?: {id: string; label: string | React.ReactNode}) {
+        if (params) {
+            this.id = params.id;
+            this.label = params.label;
+        }
     }
 
     /** @returns true if field can have any children fields or fieldInfo code if field can have children only with same code */
@@ -38,7 +41,7 @@ export class BaseComponentInfo {
     }
 
     /** @returns field props info */
-    getComponentPropsInfo(): IComponentPropsInfo<AnyType> {
+    getPropsInfo(): IComponentPropsInfo<AnyType> {
         throw new Error('Method getFieldPropsInfo must be implemented in derived class');
     }
 
@@ -53,17 +56,23 @@ export class BaseComponentInfo {
     }
 
     /** @returns field instance label */
-    getComponentLabel(): string | React.ReactNode | undefined {
-        return (this.getComponentProps().label ?? this.getId()) as string;
+    getLabel(): string | React.ReactNode | undefined {
+        return (this.label ?? this.getId()) as string;
     }
 
-    setComponentLabel(label: string) {
-        this.componentProps['label'] = label;
+    setLabel(label: string) {
+        this.label = label;
     }
 
     /** @returns field instance props */
-    getComponentProps(): IBaseFieldProps<AnyType, AnyType> | Record<string, unknown> {
-        return {...this.componentProps, component: this.CLASS};
+    getProps(): IBaseFieldProps<AnyType, AnyType> | Record<string, unknown> {
+        return {component: this.CLASS, label: this.getLabel(), ...this.props};
+    }
+
+    /** Set component prop */
+    setProp (name:string, val:unknown){
+        if (name === 'label') this.label = val as string
+        this.props[name] = val
     }
 
     getParent() {

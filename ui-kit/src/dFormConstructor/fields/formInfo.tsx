@@ -27,30 +27,30 @@ export class FormInfo extends BaseComponentInfo {
         return false;
     }
 
-    override getComponentPropsInfo() {
+    override getPropsInfo() {
         return {
             id: 'string',
         } satisfies IComponentPropsInfo<IDFormProps>;
     }
 
     /** @returns field instance props */
-    override getComponentProps(): Record<string, unknown> & IDFormProps {
-        return {...this.componentProps};
+    override getProps(): Record<string, unknown> & IDFormProps {
+        return {...this.props};
     }
 
-    override getComponentLabel() {
+    override getLabel() {
         return 'My form';
     }
 
     toFormProps(): IDFormProps {
-        const result = this.getComponentProps();
+        const result = this.getProps();
 
         const fieldProps: IDFormProps['fieldsProps'] = {};
 
         for (const fieldInfo of this.getChildren()) {
             const id = fieldInfo.getId();
             if (!fieldInfo.CLASS) continue;
-            fieldProps[id] = {...fieldInfo.getComponentProps() as  IBaseFieldProps<AnyType, AnyType>};
+            fieldProps[id] = {...fieldInfo.getProps() as  IBaseFieldProps<AnyType, AnyType>};
         }
 
         result.fieldsProps = fieldProps;
@@ -64,7 +64,7 @@ export class FormInfo extends BaseComponentInfo {
                 const id = fieldInfo.getId();
                 const title = (
                     <>
-                        {fieldInfo.TITLE}: [{fieldInfo.getComponentLabel()}]
+                        {fieldInfo.TITLE}: [{fieldInfo.getLabel()}]
                     </>
                 );
                 const isLeaf = !fieldInfo.canHaveChildren() || undefined;

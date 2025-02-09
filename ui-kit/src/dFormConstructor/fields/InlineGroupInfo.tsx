@@ -21,7 +21,7 @@ export class InlineGroupInfo extends BaseComponentInfo {
         return true;
     }
 
-    override getComponentPropsInfo() {
+    override getPropsInfo() {
         return {
             id: 'string',
             label: 'string',
@@ -36,12 +36,12 @@ export class InlineGroupInfo extends BaseComponentInfo {
     }
 
     /** @returns field instance props */
-    getComponentProps(): IInlineGroupFieldProps | Record<string, unknown> {
+    getProps(): IInlineGroupFieldProps | Record<string, unknown> {
         const fieldProps:IDFormFieldsProps = {}
         for (const fieldInfo of this.getChildren()) {
             const id = fieldInfo.getId();
             if (!fieldInfo.CLASS) continue;
-            fieldProps[id] = {...fieldInfo.getComponentProps() as  IBaseFieldProps<AnyType, AnyType>}
+            fieldProps[id] = {...fieldInfo.getProps() as  IBaseFieldProps<AnyType, AnyType>}
         }
         return {component: this.CLASS, fieldsProps: fieldProps} satisfies IInlineGroupFieldProps;
     }

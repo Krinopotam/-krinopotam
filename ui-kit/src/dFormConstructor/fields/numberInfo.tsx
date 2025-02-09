@@ -14,7 +14,7 @@ export class NumberInfo extends BaseComponentInfo {
     );
     public override readonly CLASS = NumberField;
 
-    override getComponentPropsInfo() {
+    override getPropsInfo() {
         return {
             id: 'string',
             label: 'string',

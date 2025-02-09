@@ -16,6 +16,8 @@ export const useGetTreeProps = (
     return {
         apiRef: treeApi,
         defaultExpandAll: true,
+        autoExpandParent:true,
+        defaultExpandParent: true,
         buttonsIconsOnly: true,
         draggableOrder: true,
         buttons: {update: null, clone: null, create: {tooltip: 'Добавить поле'}},
@@ -30,7 +32,6 @@ export const useGetTreeProps = (
 
             const targetNode = dropPosition === 0 ? dropNode : dropNode.getParent();
 
-            console.log(dragNode.mustHaveParent() === true || dragNode.mustHaveParent() === targetNode?.CODE, dragNode, targetNode)
             return (
                 !!targetNode &&
                 (targetNode.canHaveChildren() === true || targetNode.canHaveChildren() === dragNode.CODE) &&

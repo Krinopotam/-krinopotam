@@ -23,13 +23,33 @@ export const useGetTreeEditFormProps = (
                 component: SelectField,
                 label: 'Компонент',
                 dataSet: getFieldsListForSelect(),
-                rules: [{type: 'string', rule: 'not-empty', message: 'Необходимо указать тип поля'}],
+                rules: [
+                    {type: 'string', rule: 'not-empty', message: 'You need to choose a field'},
+                    {
+                        type: 'custom',
+                        callback: (selectedCode, formModel) => {
+                            const selectedFieldInfoClass = findFieldInfoByCode(selectedCode as string);
+                            const selectedFieldInfo = new selectedFieldInfoClass();
+                            const parentFieldInfo = formModel.getField('parent')?.getValue()?.['fieldInfo'] as BaseComponentInfo;
+                            if (!parentFieldInfo) return '';
+
+                            if (
+                                (parentFieldInfo.canHaveChildren() !== true && parentFieldInfo.canHaveChildren() !== selectedFieldInfo.CODE) ||
+                                (selectedFieldInfo.mustHaveParent() !== true && selectedFieldInfo.mustHaveParent() !== parentFieldInfo.CODE)
+                            ) {
+                                return 'This field type can not belong to the specified parent';
+                            }
+
+                            return '';
+                        },
+                    },
+                ],
             } satisfies ISelectFieldProps,
 
             parent: {
                 component: TreeSelectField,
                 label: 'Родительский компонент',
-                rules: [{type: 'object', rule: 'not-empty', message: 'Необходимо указать родительский компонент'}],
+                rules: [{type: 'object', rule: 'not-empty', message: 'You need to choose a parent field'}],
             } satisfies ITreeSelectFieldProps,
         },
 
@@ -50,14 +70,18 @@ export const useGetTreeEditFormProps = (
             const formMode = api.model.getFormMode();
             if (formMode === 'create' || formMode === 'clone') {
                 const fieldInfoClass = findFieldInfoByCode(values.componentInfoCode);
-                const newFieldId = generateFieldId(formInfo);
-                const fieldInfoClassInstance = new fieldInfoClass({componentId: newFieldId});
+                const fieldInfo = new fieldInfoClass();
+                const newId = generateFieldId(formInfo, fieldInfo.CODE);
+                fieldInfo.setId(newId);
+                fieldInfo.setLabel(newId);
+
                 const parentFieldInfo: BaseComponentInfo = dataSet['parent']?.['fieldInfo'];
                 if (!parentFieldInfo) return;
-                parentFieldInfo.addChild(fieldInfoClassInstance);
+                parentFieldInfo.addChild(fieldInfo);
                 setRerenderTree({});
-                treeApi.selectNode(newFieldId);
-                treeApi.ensureNodeVisible(newFieldId);
+                treeApi.selectNode(newId);
+                treeApi.ensureNodeVisible(newId);
+                treeApi.expandNode(parentFieldInfo.getId());
                 setFormProps(formInfo.toFormProps());
             }
         },

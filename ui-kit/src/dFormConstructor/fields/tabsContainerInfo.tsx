@@ -21,7 +21,7 @@ export class TabsContainerInfo extends BaseComponentInfo {
         return 'tab';
     }
 
-    override getComponentPropsInfo() {
+    override getPropsInfo() {
         return {
             id: 'string',
             label: 'string',
@@ -36,13 +36,13 @@ export class TabsContainerInfo extends BaseComponentInfo {
     }
 
     /** @returns field instance props */
-    getComponentProps(): ITabsFieldProps | Record<string, unknown> {
+    getProps(): ITabsFieldProps | Record<string, unknown> {
         const tabsProps: ITabsFieldProps['tabs'] = {};
         for (const tabInfo of this.getChildren()) {
             if (tabInfo.CODE !== 'tab') continue;
 
             const tabId = tabInfo.getId();
-            tabsProps[tabId] = {...(tabInfo.getComponentProps() as IBaseFieldProps<AnyType, AnyType>)};
+            tabsProps[tabId] = {...(tabInfo.getProps() as IBaseFieldProps<AnyType, AnyType>)};
         }
         return {component: this.CLASS, tabs: tabsProps} satisfies ITabsFieldProps;
     }

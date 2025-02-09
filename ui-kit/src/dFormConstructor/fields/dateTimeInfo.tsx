@@ -15,7 +15,7 @@ export class DateTimeInfo extends BaseComponentInfo {
 
     public override readonly CLASS = DateTimeField;
 
-    override getComponentPropsInfo() {
+    override getPropsInfo() {
         return {
             id: 'string',
             label: 'string',

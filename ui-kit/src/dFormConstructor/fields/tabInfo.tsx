@@ -25,20 +25,20 @@ export class TabInfo extends BaseComponentInfo {
         return 'tabsContainer';
     }
 
-    override getComponentPropsInfo() {
+    override getPropsInfo() {
         return {
             id: 'string',
         } satisfies IComponentPropsInfo<IInlineGroupFieldProps>;
     }
 
     /** @returns field instance props */
-    getComponentProps(): IDFormFieldsProps | Record<string, unknown> {
+    getProps(): IDFormFieldsProps | Record<string, unknown> {
         const fieldProps: IDFormFieldsProps = {};
 
         for (const fieldInfo of this.getChildren()) {
             const id = fieldInfo.getId();
             if (!fieldInfo.CLASS) continue;
-            fieldProps[id] = {...(fieldInfo.getComponentProps() as IBaseFieldProps<AnyType, AnyType>)};
+            fieldProps[id] = {...(fieldInfo.getProps() as IBaseFieldProps<AnyType, AnyType>)};
         }
         return fieldProps;
     }
