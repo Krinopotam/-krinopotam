@@ -4,6 +4,7 @@ import {theme} from 'antd';
 import {editor} from 'monaco-editor';
 import {formPropsToSource} from '@src/dFormConstructor/renders/codeEditor/tools/formPropsToSource';
 import {FormPropsContext} from '@src/dFormConstructor/context/formPropsProvider';
+import * as ts from 'typescript';
 
 export const CodeEditor = (): React.JSX.Element => {
     const {formProps} = useContext(FormPropsContext);
@@ -42,34 +43,65 @@ export const CodeEditor = (): React.JSX.Element => {
         }
     });
 
-    return (
-        <Editor
-            defaultLanguage="typescript"
-            defaultValue={'const f =' + formPropsToSource(formProps)}
-            height="100vh"
-            wrapperProps={{
-                style: {
-                    display: 'flex',
-                    position: 'relative',
-                    textAlign: 'initial',
-                    width: '100%',
-                    height: '100vh',
+    function showValue() {
+        // Создаем исходный файл в памяти
+        const sourceFile = ts.createSourceFile(
+            'inMemory.ts', // Имя файла используется для ссылок внутри компилятора
+            editorRef.current?.getValue() ?? '',
+            ts.ScriptTarget.Latest,
+            true
+        );
 
-                    border: '1px solid ' + colorBorder,
-                },
-            }}
-            options={{
-                formatOnType: true,
-                automaticLayout: true,
-                language: 'typescript',
-                minimap: {
-                    enabled: false,
-                },
-                //wordWrap: 'on',
-                //tabSize: 2,
-                //'editor.formatOnType': true,
-            }}
-            onMount={handleEditorDidMount}
-        />
+        // Функция для обхода AST
+        function visit(node: ts.Node) {
+            // Обработка узла
+            console.log(`Visiting ${ts.SyntaxKind[node.kind]}`, node);
+            if (ts.isIdentifier(node) || ts.isStringLiteral(node) || ts.isNumericLiteral(node)) {
+                console.log(`Value: ${node.text}`);
+            }
+
+            // Рекурсивно обходим дочерние узлы
+            ts.forEachChild(node, visit);
+        }
+
+// Начало обхода с корневого узла AST
+        visit(sourceFile);
+
+        console.log(visit(sourceFile));
+    }
+
+    return (
+        <>
+            <button onClick={showValue}>Show value</button>
+
+            <Editor
+                defaultLanguage="typescript"
+                defaultValue={'const f =' + formPropsToSource(formProps)}
+                height="100vh"
+                wrapperProps={{
+                    style: {
+                        display: 'flex',
+                        position: 'relative',
+                        textAlign: 'initial',
+                        width: '100%',
+                        height: '100vh',
+
+                        border: '1px solid ' + colorBorder,
+                    },
+                }}
+                options={{
+                    formatOnType: true,
+                    automaticLayout: true,
+                    language: 'typescript',
+                    minimap: {
+                        enabled: false,
+                    },
+                    //wordWrap: 'on',
+                    //tabSize: 2,
+                    //'editor.formatOnType': true,
+                }}
+                onMount={handleEditorDidMount}
+            />
+        </>
     );
 };
