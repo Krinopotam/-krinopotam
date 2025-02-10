@@ -9,13 +9,14 @@ import React from 'react';
 
 export class InlineGroupInfo extends BaseComponentInfo {
     public override readonly CODE = 'inlineGroup';
+    public override readonly CLASS = InlineGroupField;
+    public override readonly INTERFACE_NAME = 'IInlineGroupFieldProps';
     public override readonly TITLE = (
         <Space>
             <SplitCellsOutlined />
             Inline group
         </Space>
     );
-    public override readonly CLASS = InlineGroupField;
 
     override canHaveChildren(): boolean | string {
         return true;
@@ -29,7 +30,7 @@ export class InlineGroupInfo extends BaseComponentInfo {
     }
 
     /** @returns field instance props */
-    getProps(): IInlineGroupFieldProps | Record<string, unknown> {
+    override getProps(): IInlineGroupFieldProps | Record<string, unknown> {
         const fieldProps: IDFormFieldsProps = {};
         for (const fieldInfo of this.getChildren()) {
             const id = fieldInfo.getId();

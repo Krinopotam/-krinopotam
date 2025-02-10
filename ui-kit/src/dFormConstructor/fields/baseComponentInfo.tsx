@@ -14,6 +14,7 @@ export class BaseComponentInfo {
     public readonly CODE: string = 'base';
     public readonly TITLE: string | React.ReactNode = 'base';
     public readonly CLASS: (new (fieldName: string, fieldProps: AnyType, model: DModel, parent?: IBaseField) => IBaseField) | null = null;
+    public readonly INTERFACE_NAME:string = 'IBaseFieldProps'
 
     protected readonly props: {[key: string]: unknown} = {};
     private id: string = '';

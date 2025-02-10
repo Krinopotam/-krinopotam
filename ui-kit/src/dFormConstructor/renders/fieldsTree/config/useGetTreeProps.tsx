@@ -3,16 +3,11 @@ import {FormInfo} from '@src/dFormConstructor/fields/formInfo';
 import {IDFormModalProps} from '@src/dFormModal';
 import {IExtTreeNode, IExtTreeProps, INodePosition} from '@src/tree';
 import {ITreeSelectApi} from '@src/treeSelect';
-import React from 'react';
+import {useContext} from 'react';
+import {FormPropsContext} from '@src/dFormConstructor/context/formPropsProvider';
 
-export const useGetTreeProps = (
-    treeApi: ITreeSelectApi,
-    formInfo: FormInfo,
-    editFormProps: IDFormModalProps,
-    dataSet: IExtTreeNode[],
-    setRerenderTree: React.Dispatch<React.SetStateAction<object>>,
-    setFormProps: React.Dispatch<React.SetStateAction<object>>
-) => {
+export const useGetTreeProps = (treeApi: ITreeSelectApi, formInfo: FormInfo, editFormProps: IDFormModalProps, dataSet: IExtTreeNode[]) => {
+    const {setFormProps} = useContext(FormPropsContext);
     return {
         apiRef: treeApi,
         defaultExpandAll: true,
@@ -39,8 +34,7 @@ export const useGetTreeProps = (
             const componentInfo = node['fieldInfo'] as BaseComponentInfo;
             if (!componentInfo.getParent()) return false;
             componentInfo.removeFromTree();
-            setRerenderTree({});
-            setFormProps(formInfo.toFormProps());
+            setFormProps(formInfo.toFormProps(), 'fieldsTree');
         },
         allowDrop: info => {
             const dragNode = info.dragNode['fieldInfo'] as BaseComponentInfo;
@@ -67,8 +61,7 @@ export const useGetTreeProps = (
             if (pos === 'insideTop') dropNode.addChild(dragNode, undefined, 'top');
             else if (pos === 'below') dropNode.getParent()?.addChild(dragNode, dropNode, 'below');
             else if (pos === 'above') dropNode.getParent()?.addChild(dragNode, dropNode, 'above');
-            setRerenderTree({});
-            setFormProps(formInfo.toFormProps());
+            setFormProps(formInfo.toFormProps(), 'fieldsTree');
         },
     } satisfies IExtTreeProps;
 };

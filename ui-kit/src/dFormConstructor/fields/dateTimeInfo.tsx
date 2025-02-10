@@ -6,14 +6,15 @@ import React from 'react';
 
 export class DateTimeInfo extends BaseComponentInfo {
     public override readonly CODE = 'dateTime';
+    public override readonly CLASS = DateTimeField;
+    public override readonly INTERFACE_NAME = 'IDateTimeFieldProps';
+
     public override readonly TITLE = (
         <Space>
             <CalendarOutlined />
             Date/Time
         </Space>
     );
-
-    public override readonly CLASS = DateTimeField;
 
     override getPropsInfo() {
         const baseProps = super.getPropsInfo();

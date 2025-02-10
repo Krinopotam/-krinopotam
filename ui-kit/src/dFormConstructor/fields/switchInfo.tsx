@@ -6,13 +6,14 @@ import React from 'react';
 
 export class SwitchInfo extends BaseComponentInfo {
     public override readonly CODE = 'switch';
+    public override readonly CLASS = SwitchField;
+    public override readonly INTERFACE_NAME = 'ISwitchFieldProps';
     public override readonly TITLE = (
         <Space>
             <SwitcherOutlined />
             Switch
         </Space>
     );
-    public override readonly CLASS = SwitchField;
 
     override getPropsInfo() {
         return super.getPropsInfo();

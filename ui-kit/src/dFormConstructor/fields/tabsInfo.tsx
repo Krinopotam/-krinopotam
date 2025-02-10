@@ -8,13 +8,14 @@ import React from 'react';
 
 export class TabsInfo extends BaseComponentInfo {
     public override readonly CODE = 'tabs';
+    public override readonly CLASS = TabsField;
+    public override readonly INTERFACE_NAME = 'ITabsFieldProps';
     public override readonly TITLE = (
         <Space>
             <FolderOpenOutlined />
             Tabs
         </Space>
     );
-    public override readonly CLASS = TabsField;
 
     override canHaveChildren(): boolean | string {
         return 'tab';
@@ -36,7 +37,7 @@ export class TabsInfo extends BaseComponentInfo {
     }
 
     /** @returns field instance props */
-    getProps(): ITabsFieldProps | Record<string, unknown> {
+    override getProps(): ITabsFieldProps | Record<string, unknown> {
         const tabsProps: ITabsFieldProps['tabs'] = {};
         for (const tabInfo of this.getChildren()) {
             if (tabInfo.CODE !== 'tab') continue;

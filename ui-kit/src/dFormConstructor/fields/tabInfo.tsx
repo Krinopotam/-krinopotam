@@ -8,13 +8,14 @@ import React from 'react';
 
 export class TabInfo extends BaseComponentInfo {
     public override readonly CODE = 'tab';
+    public override readonly CLASS = null;
+    public override readonly INTERFACE_NAME = '';
     public override readonly TITLE = (
         <Space>
             <FolderOutlined />
             Tab
         </Space>
     );
-    public override readonly CLASS = null;
 
     override canHaveChildren(): boolean | string {
         return true;
@@ -29,7 +30,7 @@ export class TabInfo extends BaseComponentInfo {
     }
 
     /** @returns field instance props */
-    getProps(): IDFormFieldsProps | Record<string, unknown> {
+    override getProps(): IDFormFieldsProps | Record<string, unknown> {
         const fieldProps: IDFormFieldsProps = {};
 
         for (const fieldInfo of this.getChildren()) {

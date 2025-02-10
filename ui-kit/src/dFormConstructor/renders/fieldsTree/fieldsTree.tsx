@@ -1,21 +1,20 @@
 import {Typography} from 'antd';
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {Tree} from '@src/tree';
 import {ITreeSelectApi} from '@src/treeSelect';
 import {useGetTreeProps} from '@src/dFormConstructor/renders/fieldsTree/config/useGetTreeProps';
 import {useGetTreeEditFormProps} from '@src/dFormConstructor/renders/fieldsTree/config/useGetTreeEditFormProps';
-import {FormInfo} from '@src/dFormConstructor/fields/formInfo';
+import {FormInfoContext} from '@src/dFormConstructor/context/formInfoProvider';
 
-export const FieldsTree = (props: {setFormProps: React.Dispatch<React.SetStateAction<object>>}): React.JSX.Element => {
+export const FieldsTree = (): React.JSX.Element => {
     const [treeApi] = useState({} as ITreeSelectApi);
-    const [, setRerenderTree] = useState({});
-    const [formInfo] = useState<FormInfo>(new FormInfo({id: 'form1', label: 'My form'}));
+    const {formInfo} = useContext(FormInfoContext);
     const dataSet = formInfo.toTreeDataSet();
-    const editFormProps = useGetTreeEditFormProps(treeApi, formInfo, setRerenderTree, props.setFormProps);
-    const treeProps = useGetTreeProps(treeApi, formInfo, editFormProps, dataSet, setRerenderTree, props.setFormProps);
+    const editFormProps = useGetTreeEditFormProps(treeApi, formInfo);
+    const treeProps = useGetTreeProps(treeApi, formInfo, editFormProps, dataSet);
     return (
         <>
-            <Typography.Title level={3} style={{marginBottom: 10, marginTop:0}}>
+            <Typography.Title level={3} style={{marginBottom: 10, marginTop: 0}}>
                 Fields
             </Typography.Title>
             <div

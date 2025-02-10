@@ -6,13 +6,14 @@ import React from 'react';
 
 export class DividerInfo extends BaseComponentInfo {
     public override readonly CODE = 'divider';
+    public override readonly CLASS = DividerField;
+    public override readonly INTERFACE_NAME = 'IDividerFieldProps';
     public override readonly TITLE = (
         <Space>
             <LineOutlined />
             Divider
         </Space>
     );
-    public override readonly CLASS = DividerField;
 
     override getPropsInfo() {
         return {

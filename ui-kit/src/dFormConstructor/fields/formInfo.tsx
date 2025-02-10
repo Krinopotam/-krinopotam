@@ -1,23 +1,22 @@
 import {BaseComponentInfo, IComponentPropsInfo} from '@src/dFormConstructor/fields/baseComponentInfo';
-import {DateTimeField} from '@src/dForm/fields/dateTime';
 import {IDFormProps} from '@src/dForm';
 import {Space} from 'antd';
 import {FormOutlined} from '@ant-design/icons';
 import React from 'react';
 import {IExtTreeNode} from '@src/tree';
-import {IBaseFieldProps} from "@src/dForm/fields/base";
-import {AnyType} from "@krinopotam/service-types";
+import {IBaseFieldProps} from '@src/dForm/fields/base';
+import {AnyType} from '@krinopotam/service-types';
 
 export class FormInfo extends BaseComponentInfo {
     public override readonly CODE = 'form';
+    public override readonly CLASS = null;
+    public override readonly INTERFACE_NAME = 'IDFormProps';
     public override readonly TITLE = (
         <Space>
             <FormOutlined />
             Form
         </Space>
     );
-
-    public override readonly CLASS = DateTimeField;
 
     override canHaveChildren(): boolean | string {
         return true;
@@ -47,22 +46,23 @@ export class FormInfo extends BaseComponentInfo {
 
     /** @returns field instance props */
     override getProps(): Record<string, unknown> & IDFormProps {
-        return {...this.props, formId:this.getId()};
+        return {...this.props, formId: this.getId()};
     }
+
 
     override getLabel() {
         return 'My form';
     }
 
     toFormProps(): IDFormProps {
-        const result = this.getProps();
+        const result = {...this.getProps()};
 
         const fieldProps: IDFormProps['fieldsProps'] = {};
 
         for (const fieldInfo of this.getChildren()) {
             const id = fieldInfo.getId();
             if (!fieldInfo.CLASS) continue;
-            fieldProps[id] = {...fieldInfo.getProps() as  IBaseFieldProps<AnyType, AnyType>};
+            fieldProps[id] = {...(fieldInfo.getProps() as IBaseFieldProps<AnyType, AnyType>)};
         }
 
         result.fieldsProps = fieldProps;

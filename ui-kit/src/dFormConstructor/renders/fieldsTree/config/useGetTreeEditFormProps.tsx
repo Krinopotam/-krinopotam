@@ -6,16 +6,13 @@ import {ITreeSelectApi} from '@src/treeSelect';
 import {getFieldsListForSelect} from '@src/dFormConstructor/renders/fieldsTree/tools/getFieldsListForSelect';
 import {findFieldInfoByCode} from '@src/dFormConstructor/renders/fieldsTree/tools/findFieldInfoByCode';
 import {generateFieldId} from '@src/dFormConstructor/renders/fieldsTree/tools/generateFieldId';
-import React from 'react';
+import {useContext} from 'react';
 import {FormInfo} from '@src/dFormConstructor/fields/formInfo';
 import {BaseComponentInfo} from '@src/dFormConstructor/fields/baseComponentInfo';
+import {FormPropsContext} from '@src/dFormConstructor/context/formPropsProvider';
 
-export const useGetTreeEditFormProps = (
-    treeApi: ITreeSelectApi,
-    formInfo: FormInfo,
-    setRerenderTree: React.Dispatch<React.SetStateAction<object>>,
-    setFormProps: React.Dispatch<React.SetStateAction<object>>
-): IDFormModalProps => {
+export const useGetTreeEditFormProps = (treeApi: ITreeSelectApi, formInfo: FormInfo): IDFormModalProps => {
+    const {setFormProps} = useContext(FormPropsContext);
     return {
         formId: 'EditForm',
         fieldsProps: {
@@ -78,11 +75,10 @@ export const useGetTreeEditFormProps = (
                 const parentFieldInfo: BaseComponentInfo = dataSet['parent']?.['fieldInfo'];
                 if (!parentFieldInfo) return;
                 parentFieldInfo.addChild(fieldInfo);
-                setRerenderTree({});
                 treeApi.selectNode(newId);
                 treeApi.ensureNodeVisible(newId);
                 treeApi.expandNode(parentFieldInfo.getId());
-                setFormProps(formInfo.toFormProps());
+                setFormProps(formInfo.toFormProps(), 'fieldsTree');
             }
         },
     };

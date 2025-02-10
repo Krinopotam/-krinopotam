@@ -6,13 +6,14 @@ import React from 'react';
 
 export class NumberInfo extends BaseComponentInfo {
     public override readonly CODE = 'number';
+    public override readonly CLASS = NumberField;
+    public override readonly INTERFACE_NAME = 'INumberFieldProps';
     public override readonly TITLE = (
         <Space>
             <FieldNumberOutlined />
-            Input
+            Number
         </Space>
     );
-    public override readonly CLASS = NumberField;
 
     override getPropsInfo() {
         const baseProps = super.getPropsInfo();

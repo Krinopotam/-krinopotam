@@ -6,13 +6,14 @@ import {Space} from 'antd';
 
 export class InputInfo extends BaseComponentInfo {
     public override readonly CODE = 'input';
+    public override readonly CLASS = InputField;
+    public override readonly INTERFACE_NAME = 'IInputFieldProps';
     public override readonly TITLE = (
         <Space>
             <FieldStringOutlined />
             Input
         </Space>
     );
-    public override readonly CLASS = InputField;
 
     override getPropsInfo() {
         const baseProps = super.getPropsInfo()
