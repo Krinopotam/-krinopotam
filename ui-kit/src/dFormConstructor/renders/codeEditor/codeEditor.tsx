@@ -5,6 +5,8 @@ import {editor} from 'monaco-editor';
 import {formPropsToSource} from '@src/dFormConstructor/renders/codeEditor/tools/formPropsToSource';
 import {FormPropsContext} from '@src/dFormConstructor/context/formPropsProvider';
 import * as ts from 'typescript';
+import {AnyType} from "@krinopotam/service-types";
+import {parseSourceToFormProps} from "@src/dFormConstructor/renders/codeEditor/tools/parseSourceToFormProps";
 
 export const CodeEditor = (): React.JSX.Element => {
     const {formProps} = useContext(FormPropsContext);
@@ -35,7 +37,7 @@ export const CodeEditor = (): React.JSX.Element => {
 
     useEffect(() => {
         if (editorRef.current) {
-            editorRef.current.setValue('const f =' + formPropsToSource(formProps));
+            editorRef.current.setValue('const formProps =' + formPropsToSource(formProps));
             setTimeout(() => {
                 editorRef.current?.getAction?.('editor.action.formatDocument')?.run();
                 //editorRef.current?.trigger?.('anyString', 'editor.action.formatDocument');
@@ -44,30 +46,8 @@ export const CodeEditor = (): React.JSX.Element => {
     });
 
     function showValue() {
-        // Создаем исходный файл в памяти
-        const sourceFile = ts.createSourceFile(
-            'inMemory.ts', // Имя файла используется для ссылок внутри компилятора
-            editorRef.current?.getValue() ?? '',
-            ts.ScriptTarget.Latest,
-            true
-        );
-
-        // Функция для обхода AST
-        function visit(node: ts.Node) {
-            // Обработка узла
-            console.log(`Visiting ${ts.SyntaxKind[node.kind]}`, node);
-            if (ts.isIdentifier(node) || ts.isStringLiteral(node) || ts.isNumericLiteral(node)) {
-                console.log(`Value: ${node.text}`);
-            }
-
-            // Рекурсивно обходим дочерние узлы
-            ts.forEachChild(node, visit);
-        }
-
-// Начало обхода с корневого узла AST
-        visit(sourceFile);
-
-        console.log(visit(sourceFile));
+        const formProps = parseSourceToFormProps(editorRef.current?.getValue() ?? '');
+        console.log(formProps);
     }
 
     return (
@@ -76,7 +56,7 @@ export const CodeEditor = (): React.JSX.Element => {
 
             <Editor
                 defaultLanguage="typescript"
-                defaultValue={'const f =' + formPropsToSource(formProps)}
+                defaultValue={'const formProps =' + formPropsToSource(formProps)}
                 height="100vh"
                 wrapperProps={{
                     style: {
