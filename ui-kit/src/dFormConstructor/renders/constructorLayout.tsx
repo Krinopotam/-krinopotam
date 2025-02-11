@@ -1,15 +1,36 @@
-import {FieldsTree} from '@src/dFormConstructor/renders/fieldsTree/fieldsTree';
-import {FormPreview} from '@src/dFormConstructor/renders/formPreview/formPreview';
-import {Space, Switch, theme, Typography} from 'antd';
-import React from 'react';
-import {CodeEditor} from '@src/dFormConstructor/renders/codeEditor/codeEditor';
+import {CustomField, ICustomFieldProps} from '@src/dForm/fields/custom';
+import {FormPropsContext} from "@src/dFormConstructor/context/formPropsProvider";
+import {CodeEditor, ICodeEditorApi} from '@src/dFormConstructor/renders/codeEditor/codeEditor';
+import {parseSourceToFormProps} from "@src/dFormConstructor/renders/codeEditor/tools/parseSourceToFormProps";
+import {FieldsTreeLayout} from '@src/dFormConstructor/renders/fieldsTree/fieldsTreeLayout';
+import {FormPreviewLayout} from '@src/dFormConstructor/renders/formPreview/formPreviewLayout';
+import {PropsEditorLayout} from '@src/dFormConstructor/renders/propsEditor/propsEditorLayout';
+import {DFormModal, IDFormModalApi, IDFormModalProps} from '@src/dFormModal';
+import {Typography} from 'antd';
+import React, {useContext, useState} from 'react';
 
 export const ConstructorLayout = (): React.JSX.Element => {
-    const {
-        token: {colorBgContainer, colorBorder},
-    } = theme.useToken();
+    const [sourceFormApi] = useState({} as IDFormModalApi);
+    const [codeEditorApi] = useState({} as ICodeEditorApi);
+    const {setFormProps} = useContext(FormPropsContext);
 
-    const [codeView, setCodeView] = React.useState(false);
+    const formProps: IDFormModalProps = {
+        apiRef: sourceFormApi,
+        height: 500,
+        width: 700,
+        confirmChanges: false,
+        fieldsProps: {
+            codeEditor: {component: CustomField, onRender: () => <CodeEditor apiRef={codeEditorApi} />} as ICustomFieldProps,
+        },
+
+buttons:{temp: {position: 'left', title: 'Save'}},
+/*        buttons:{ok:{
+                onClick: () => {
+                    const formProps = parseSourceToFormProps(codeEditorApi.getSource());
+                    setFormProps(formProps ?? {}, 'codeEditor');
+                }
+            }}*/
+    };
 
     return (
         <div style={{display: 'flex', flexDirection: 'column', height: '100%'}}>
@@ -17,48 +38,11 @@ export const ConstructorLayout = (): React.JSX.Element => {
                 Form constructor
             </Typography.Title>
             <div style={{display: 'flex', flex: 1, flexDirection: 'row', minHeight: 0}}>
-                <div
-                    style={{
-                        minWidth: 300,
-                        background: colorBgContainer,
-                        borderRight: 'solid 1px ' + colorBorder,
-                        display: 'flex',
-                        flexDirection: 'column',
-                        minHeight: 0,
-                    }}
-                >
-                    <FieldsTree />
-                </div>
-                <div
-                    style={{
-                        flex: 1,
-                        display: 'flex',
-                        flexDirection: 'column',
-                        background: colorBgContainer,
-                        marginLeft: 20,
-                        marginRight: 20,
-                        minHeight: 0,
-                    }}
-                >
-                    <Space style={{marginBottom: 10, paddingLeft: 20}}>
-                        <Typography.Title level={3} style={{margin: 0}}>
-                            {codeView ? 'Form code' : 'Form Preview'}
-                        </Typography.Title>
-                        <Switch checkedChildren={'Code'} unCheckedChildren={'Form'} onChange={() => setCodeView(cur => !cur)} />
-                    </Space>
-                    {codeView ? <CodeEditor /> : <FormPreview />}
-                </div>
-                <div
-                    style={{
-                        minWidth: 300,
-                        background: colorBgContainer,
-                        borderLeft: 'solid 1px ' + colorBorder,
-                        display: 'flex',
-                        flexDirection: 'column',
-                        minHeight: 0,
-                    }}
-                ></div>
+                <FieldsTreeLayout />
+                <FormPreviewLayout sourceFormApi={sourceFormApi} />
+                <PropsEditorLayout />
             </div>
+            <DFormModal {...formProps} />
         </div>
     );
 };
