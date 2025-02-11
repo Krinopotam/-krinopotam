@@ -4,7 +4,7 @@ import {ITreeSelectFieldProps, TreeSelectField} from '@src/dForm/fields/treeSele
 import {getCanHaveChildrenOnly} from '@src/_shared/hooks/treeComponentApiMethods/serviceMethods/getCanHaveChildrenOnly';
 import {ITreeSelectApi} from '@src/treeSelect';
 import {getFieldsListForSelect} from '@src/dFormConstructor/renders/fieldsTree/tools/getFieldsListForSelect';
-import {findFieldInfoByCode} from '@src/dFormConstructor/renders/fieldsTree/tools/findFieldInfoByCode';
+import {getFieldInfoByCode} from '@src/dFormConstructor/renders/fieldsTree/tools/getFieldInfoByCode';
 import {generateFieldId} from '@src/dFormConstructor/renders/fieldsTree/tools/generateFieldId';
 import {useContext} from 'react';
 import {FormInfo} from '@src/dFormConstructor/fields/formInfo';
@@ -25,7 +25,7 @@ export const useGetTreeEditFormProps = (treeApi: ITreeSelectApi, formInfo: FormI
                     {
                         type: 'custom',
                         callback: (selectedCode, formModel) => {
-                            const selectedFieldInfoClass = findFieldInfoByCode(selectedCode as string);
+                            const selectedFieldInfoClass = getFieldInfoByCode(selectedCode as string);
                             const selectedFieldInfo = new selectedFieldInfoClass();
                             const parentFieldInfo = formModel.getField('parent')?.getValue()?.['fieldInfo'] as BaseComponentInfo;
                             if (!parentFieldInfo) return '';
@@ -66,7 +66,7 @@ export const useGetTreeEditFormProps = (treeApi: ITreeSelectApi, formInfo: FormI
 
             const formMode = api.model.getFormMode();
             if (formMode === 'create' || formMode === 'clone') {
-                const fieldInfoClass = findFieldInfoByCode(values.componentInfoCode);
+                const fieldInfoClass = getFieldInfoByCode(values.componentInfoCode);
                 const fieldInfo = new fieldInfoClass();
                 const newId = generateFieldId(formInfo, fieldInfo.CODE);
                 fieldInfo.setId(newId);

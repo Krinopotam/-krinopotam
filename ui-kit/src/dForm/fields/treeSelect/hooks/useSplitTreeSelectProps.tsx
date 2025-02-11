@@ -14,7 +14,6 @@ export const useSplitTreeSelectProps = (props: IAnyFieldProps) => {
             disabled: true,
             helpClass: true,
             hidden: true,
-            inlineGroup: true,
             label: true,
             nonEditable: true,
             onDirtyStateChanged: true,

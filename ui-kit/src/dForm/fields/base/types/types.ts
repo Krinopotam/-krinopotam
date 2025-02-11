@@ -23,9 +23,6 @@ export interface IBaseFieldProps<TField extends IBaseField, TValue> extends Reco
     /** Field placeholder*/
     placeholder?: string;
 
-    /** inline group name */
-    inlineGroup?: string;
-
     /** Field default value */
     defaultValue?: TValue;
 

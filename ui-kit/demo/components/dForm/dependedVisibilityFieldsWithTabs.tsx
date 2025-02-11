@@ -5,6 +5,7 @@ import {DForm, IDFormProps} from '@src/dForm';
 import {InputField} from '@src/dForm/fields/input/inputField';
 import {TabsField} from '@src/dForm/fields/tabs/tabsField';
 import {Space, Switch} from 'antd';
+import {IInlineGroupFieldProps, InlineGroupField} from '@src/dForm/fields/inlineGroup';
 
 export const Example = (): React.JSX.Element => {
     const [horizontal, setHorizontal] = React.useState(false);
@@ -31,16 +32,21 @@ const useFormProps = (horizontal: boolean) => {
         confirmChanges: true,
         //disableDepended:true,
         fieldsProps: {
-            field1: {component: InputField, label: 'Field1 (the Field2 depends on it)', placeholder:'Enter something'},
-            field2: {component: InputField, label: 'Field2 (the Field3 depends on it)', placeholder:'Enter something', inlineGroup:'row1', dependsOn:['field1']},
-            field3: {component: InputField, label: 'Field3 (the Tab1 fields depends on it)', placeholder:'Enter something', inlineGroup:'row1', dependsOn:['field2']},
+            field1: {component: InputField, label: 'Field1 (the Field2 depends on it)', placeholder: 'Enter something'},
+            row1: {
+                component: InlineGroupField,
+                fieldsProps: {
+                    field2: {component: InputField, label: 'Field2 (the Field3 depends on it)', placeholder: 'Enter something', dependsOn: ['field1']},
+                    field3: {component: InputField, label: 'Field3 (the Tab1 fields depends on it)', placeholder: 'Enter something', dependsOn: ['field2']},
+                },
+            } satisfies IInlineGroupFieldProps,
             tabs: {
                 component: TabsField,
                 tabs: {
                     'Tab 1': {
-                        tab_1_field1: {component: InputField, label: 'tab_1_field1', dependsOn:['field3']},
-                        tab_1_field2: {component: InputField, label: 'tab_1_field2', dependsOn:['field3']},
-                        tab_1_field3: {component: InputField, label: 'tab_1_field3', inlineGroup:'row2', dependsOn:['field3']},
+                        tab_1_field1: {component: InputField, label: 'tab_1_field1', dependsOn: ['field3']},
+                        tab_1_field2: {component: InputField, label: 'tab_1_field2', dependsOn: ['field3']},
+                        tab_1_field3: {component: InputField, label: 'tab_1_field3', dependsOn: ['field3']},
                     },
                     'Tab 2 (independent) ': {
                         tab_2_field1: {component: InputField, label: 'tab_2_field1 (independent )', showCount: true},
@@ -53,4 +59,3 @@ const useFormProps = (horizontal: boolean) => {
         buttons: {ok: {position: 'right'}},
     } satisfies IDFormProps;
 };
-

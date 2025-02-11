@@ -4,12 +4,10 @@ import {theme} from 'antd';
 import {editor} from 'monaco-editor';
 import {formPropsToSource} from '@src/dFormConstructor/renders/codeEditor/tools/formPropsToSource';
 import {FormPropsContext} from '@src/dFormConstructor/context/formPropsProvider';
-import * as ts from 'typescript';
-import {AnyType} from "@krinopotam/service-types";
-import {parseSourceToFormProps} from "@src/dFormConstructor/renders/codeEditor/tools/parseSourceToFormProps";
+import {parseSourceToFormProps} from '@src/dFormConstructor/renders/codeEditor/tools/parseSourceToFormProps';
 
 export const CodeEditor = (): React.JSX.Element => {
-    const {formProps} = useContext(FormPropsContext);
+    const {formProps, setFormProps, updatedBy} = useContext(FormPropsContext);
 
     const {
         token: {colorBorder},
@@ -18,7 +16,7 @@ export const CodeEditor = (): React.JSX.Element => {
     const editorRef = useRef<editor.IStandaloneCodeEditor>(null);
     const monacoRef = useRef<Monaco>(null);
 
-    const handleEditorDidMount: EditorProps['onMount'] = (editor, monaco) => {
+    const onMount: EditorProps['onMount'] = (editor, monaco) => {
         editorRef.current = editor;
         monacoRef.current = monaco;
 
@@ -35,18 +33,24 @@ export const CodeEditor = (): React.JSX.Element => {
         });*/
     };
 
+
     useEffect(() => {
-        if (editorRef.current) {
-            editorRef.current.setValue('const formProps =' + formPropsToSource(formProps));
-            setTimeout(() => {
-                editorRef.current?.getAction?.('editor.action.formatDocument')?.run();
-                //editorRef.current?.trigger?.('anyString', 'editor.action.formatDocument');
-            }, 100);
-        }
+        if (!editorRef.current || updatedBy === 'codeEditor') return;
+        editorRef.current.setValue('const formProps =' + formPropsToSource(formProps));
+        setTimeout(() => {
+            editorRef.current?.getAction?.('editor.action.formatDocument')?.run();
+        }, 100);
     });
+
+    const onValidate: EditorProps['onValidate'] = () => {
+        const formProps = parseSourceToFormProps(editorRef.current?.getValue() ?? '');
+        console.log(formProps)
+        setFormProps(formProps ?? {}, 'codeEditor');
+    };
 
     function showValue() {
         const formProps = parseSourceToFormProps(editorRef.current?.getValue() ?? '');
+        setFormProps(formProps ?? {}, 'codeEditor');
         console.log(formProps);
     }
 
@@ -80,7 +84,8 @@ export const CodeEditor = (): React.JSX.Element => {
                     //tabSize: 2,
                     //'editor.formatOnType': true,
                 }}
-                onMount={handleEditorDidMount}
+                onMount={onMount}
+                onValidate={onValidate}
             />
         </>
     );

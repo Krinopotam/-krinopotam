@@ -9,12 +9,13 @@
  */
 
 import {IsPromise} from '@krinopotam/js-helpers/helpersObjects/isPromise';
-import {IBaseField} from '@src/dForm/fields/base';
+import {IAnyFieldProps, IBaseField} from '@src/dForm/fields/base';
 
 import {BaseValidator} from './validators/baseValidator';
 import React from 'react';
 import {IDFormApi, IDFormDataSet, IDFormFieldsProps, IDFormProps, IDFormSubmitResultObject, IDFormSubmitResultPromise} from '@src/dForm/index';
 import {AnyType, IError} from '@krinopotam/service-types';
+import {InlineGroupField} from '@src/dForm/fields/inlineGroup/inlineGroupField';
 import {IDFormMode} from '@src/dForm/types/dFormTypes';
 import {CallbackControl} from '@src/_shared/classes/callbackControl';
 
@@ -153,8 +154,10 @@ export class DModel {
         const rootFields: DModel['_rootFields'] = {};
         if (!fieldsProps) return [fieldsMap, rootFields];
 
-        for (const fieldName in fieldsProps) {
-            const fieldProps = fieldsProps[fieldName];
+        const _fieldsProps = this.modifyFieldsProps(fieldsProps);
+
+        for (const fieldName in _fieldsProps) {
+            const fieldProps = _fieldsProps[fieldName];
             if (fieldsMap[fieldName]) console.error(`The form contains duplicate field names  "${fieldName}"!`);
             if (!fieldProps.component) continue;
             const field = new fieldProps.component(fieldName, fieldProps, this, parent) as IBaseField;
@@ -170,6 +173,42 @@ export class DModel {
             }
         }
         return [fieldsMap, rootFields];
+    }
+
+    /** Transforming field properties.
+     * If the field properties contain the short entry inlineGroup, then create additional parameters to transform to InlineGroupField  */
+    private modifyFieldsProps(fieldsProps: IDFormFieldsProps) {
+        const fieldsPropsGroups: Record<string, Record<string, IAnyFieldProps>> = {};
+        let i = 0;
+        for (const fieldName in fieldsProps) {
+            i++;
+            const fieldProps = {...fieldsProps[fieldName]};
+            let groupName = '';
+            if (fieldProps.inlineGroup) {
+                groupName = fieldProps.inlineGroup;
+                fieldProps.inlineGroup = undefined;
+            } else groupName = '[__group__]-' + i;
+
+            if (!fieldsPropsGroups[groupName]) fieldsPropsGroups[groupName] = {};
+            fieldsPropsGroups[groupName][fieldName] = fieldProps;
+        }
+
+        const result: IDFormFieldsProps = {};
+        for (const groupName in fieldsPropsGroups) {
+            const group = fieldsPropsGroups[groupName];
+
+            if (Object.keys(group).length > 1) {
+                result[groupName] = {
+                    component: InlineGroupField,
+                    fieldsProps: group,
+                };
+            } else {
+                const fieldName = Object.keys(group)[0];
+                result[fieldName] = group[fieldName];
+            }
+        }
+
+        return result;
     }
 
     /** Init fields parameters (keep fields values if field components still the same) */

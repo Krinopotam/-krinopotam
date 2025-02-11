@@ -16,6 +16,7 @@ import {SwitchField} from '@src/dForm/fields/switch/switchField';
 import {ITreeSelectNode} from '@src/treeSelect';
 import {IDFormValidationRules} from '@src/dForm';
 import {TabsField} from '@src/dForm/fields/tabs/tabsField';
+import {IInlineGroupFieldProps, InlineGroupField} from '@src/dForm/fields/inlineGroup';
 
 dayjs.locale('ru');
 
@@ -93,11 +94,21 @@ const formProps: IDFormModalProps = {
             component: TabsField,
             tabs: {
                 Tab1: {
-                    profess: {component: InputField, label: 'Профессия', showCount: true, maxLength: 50, inlineGroup: 'row1'},
-                    specialty: {component: InputField, label: 'Специализация', value: 'дефолтная специализация', dependsOn: ['profess'], inlineGroup: 'row1'},
+                    row1: {
+                        component: InlineGroupField,
+                        fieldsProps: {
+                            profess: {component: InputField, label: 'Профессия', showCount: true, maxLength: 50},
+                            specialty: {component: InputField, label: 'Специализация', value: 'дефолтная специализация', dependsOn: ['profess']},
+                        },
+                    } satisfies IInlineGroupFieldProps,
                     assignDate: {component: DateTimeField, label: 'Дата назначения'},
-                    name: {component: InputField, label: 'Имя пользователя', value: 'дефолтное имя пользователя', dependsOn: ['profess'], inlineGroup: 'row2'},
-                    login: {component: InputField, label: 'Логин', value: 'дефолтный логин', dependsOn: ['name', 'specialty'], inlineGroup: 'row2'},
+                    row2: {
+                        component: InlineGroupField,
+                        fieldsProps: {
+                            name: {component: InputField, label: 'Имя пользователя', value: 'дефолтное имя пользователя', dependsOn: ['profess']},
+                            login: {component: InputField, label: 'Логин', value: 'дефолтный логин', dependsOn: ['name', 'specialty']},
+                        },
+                    } satisfies IInlineGroupFieldProps,
                     departments: {
                         component: TreeSelectField,
                         label: 'Подразделение',

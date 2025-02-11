@@ -4,14 +4,17 @@ import {IDFormProps} from '@src/dForm';
 import {FIELDS_INFO_MAP} from '@src/dFormConstructor/renders/fieldsTree/config/fieldsList';
 
 export const parseSourceToFormProps = (source: string, targetVarName = 'formProps'): IDFormProps | null => {
-    const sourceFile: ts.SourceFile = createSourceFile(source);
+    const sourceFile: ts.SourceFile = createSourceFile(transpileTsToJs(source));
 
     let formPropsObject: IDFormProps | null = null;
 
     const visit = (node: ts.Node) => {
+        if (formPropsObject) return;
+
         if (ts.isVariableStatement(node)) {
             node.declarationList.declarations.forEach(declaration => {
                 if (
+                    !formPropsObject &&
                     ts.isIdentifier(declaration.name) &&
                     declaration.name.text === targetVarName &&
                     declaration.initializer &&
@@ -21,10 +24,12 @@ export const parseSourceToFormProps = (source: string, targetVarName = 'formProp
                 }
             });
         }
+
         ts.forEachChild(node, visit);
     };
 
     visit(sourceFile);
+
     return formPropsObject;
 };
 
@@ -38,63 +43,66 @@ const createSourceFile = (source: string) => {
 };
 
 const parseExpression = (node: ts.Expression): AnyType => {
-    // Strings
-    if (ts.isStringLiteral(node)) return node.text;
+    try {
+        // Strings
+        if (ts.isStringLiteral(node)) return node.text;
 
-    // Numbers
-    if (ts.isNumericLiteral(node)) return Number(node.text);
+        // Numbers
+        if (ts.isNumericLiteral(node)) return Number(node.text);
 
-    // Boolean true
-    if (node.kind === ts.SyntaxKind.TrueKeyword) return true;
+        // Boolean true
+        if (node.kind === ts.SyntaxKind.TrueKeyword) return true;
 
-    // Boolean false
-    if (node.kind === ts.SyntaxKind.FalseKeyword) return false;
+        // Boolean false
+        if (node.kind === ts.SyntaxKind.FalseKeyword) return false;
 
-    // Null
-    if (node.kind === ts.SyntaxKind.NullKeyword) return null;
+        // Null
+        if (node.kind === ts.SyntaxKind.NullKeyword) return null;
 
-    //Arrays (recursive)
-    if (ts.isArrayLiteralExpression(node)) return node.elements.map(parseExpression);
+        //Arrays (recursive)
+        if (ts.isArrayLiteralExpression(node)) return node.elements.map(parseExpression);
 
-    // Objects (recursive)
-    if (ts.isObjectLiteralExpression(node)) return parseObjectLiteral(node);
+        // Objects (recursive)
+        if (ts.isObjectLiteralExpression(node)) return parseObjectLiteral(node);
 
-    // Identifiers (for example, DatetimeField)
-    if (ts.isIdentifier(node)) return node.text;
+        // Identifiers (for example, DatetimeField)
+        if (ts.isIdentifier(node)) return node.text;
 
+        // Functions
+        if (ts.isArrowFunction(node) || ts.isFunctionExpression(node)) {
+            return handleFunctionValue(node);
+        }
 
-    // Functions
-    if (ts.isArrowFunction(node) || ts.isFunctionExpression(node)) {
-        return handleFunctionValue(node);
+        // Appeal to properties (for example, Obj.prop)
+        if (ts.isPropertyAccessExpression(node)) {
+            return `${parseExpression(node.expression)}.${node.name.text}`;
+        }
+
+        // Calls of functions
+        if (ts.isCallExpression(node)) {
+            return `${parseExpression(node.expression)}(${node.arguments.map(parseExpression).join(', ')})`;
+        }
+
+        return undefined; // Unknown types
+    } catch {
+        console.warn('Can not parse expression value', node);
+        return undefined;
     }
-
-    // Appeal to properties (for example, Obj.prop)
-    if (ts.isPropertyAccessExpression(node)) {
-        return `${parseExpression(node.expression)}.${node.name.text}`;
-    }
-
-    // Calls of functions
-    if (ts.isCallExpression(node)) {
-        return `${parseExpression(node.expression)}(${node.arguments.map(parseExpression).join(', ')})`;
-    }
-    return undefined; // Неизвестные типы (можно добавить поддержку других случаев)
 };
 
 const parseObjectLiteral = (node: ts.ObjectLiteralExpression): AnyType => {
     const result: AnyType = {};
+
     node.properties.forEach(prop => {
         if (ts.isPropertyAssignment(prop)) {
             const key = prop.name.getText();
             let value = parseExpression(prop.initializer);
 
-            if (key === 'component') {
-                const componentClass = getComponentClass(value);
-                if (componentClass) value = componentClass;
-            }
-
+            if (key === 'component') value = getComponentClass(value);
             result[key] = value;
         }
     });
+
     return result;
 };
 
@@ -109,7 +117,7 @@ function handleFunctionValue(node: ts.FunctionExpression | ts.ArrowFunction) {
 // Typescript transpilation in JavaScript
 function transpileTsToJs(tsCode: string): string {
     return ts.transpileModule(tsCode, {
-        compilerOptions: { module: ts.ModuleKind.CommonJS }
+        compilerOptions: {module: ts.ModuleKind.CommonJS},
     }).outputText;
 }
 
@@ -120,5 +128,5 @@ const getComponentClass = (className: string) => {
         const classInstance = new classInfo();
         if (classInstance.CLASS?.name === className) return classInstance.CLASS;
     }
-    return className;
+    return null;
 };

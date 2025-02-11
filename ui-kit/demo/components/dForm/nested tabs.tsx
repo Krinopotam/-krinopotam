@@ -5,6 +5,7 @@ import {DForm, IDFormApi, IDFormProps} from '@src/dForm';
 import {InputField} from '@src/dForm/fields/input/inputField';
 import {TabsField} from '@src/dForm/fields/tabs/tabsField';
 import {Space, Switch} from 'antd';
+import {IInlineGroupFieldProps, InlineGroupField} from "@src/dForm/fields/inlineGroup";
 
 export const Example = (): React.JSX.Element => {
     const [horizontal, setHorizontal] = React.useState(false);
@@ -41,8 +42,13 @@ const useFormProps = (horizontal: boolean) => {
                 label: 'Field2',
                 tabs: {
                     'Tab 1': {
-                        field2_1_1: {component: InputField, label: 'Field3', inlineGroup: 'row1', showCount: true},
-                        field2_1_2: {component: InputField, label: 'Field4', inlineGroup: 'row1'},
+                        row1: {
+                            component: InlineGroupField,
+                            fieldsProps: {
+                                field2_1_1: {component: InputField, label: 'Field3', showCount: true},
+                                field2_1_2: {component: InputField, label: 'Field4'},
+                            },
+                        } satisfies IInlineGroupFieldProps,
                     },
                     'Tab 2': {
                         field2_2_1: {component: InputField, label: 'Field5', showCount: true},
