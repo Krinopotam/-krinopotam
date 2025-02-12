@@ -60,5 +60,5 @@ export function formPropsToSource(obj: unknown, indent = 2, ts: boolean = true):
         return `{\n${nextPad}${entries}\n${pad}}${fieldTypeName ? ' satisfies ' + fieldTypeName : ''}`;
     }
 
-    return 'const formProps =' +serialize(obj, 0);
+    return 'const formProps = ' +serialize(obj, 0);
 }

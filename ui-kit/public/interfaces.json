@@ -1,0 +1,13 @@
+export interface IInputFieldProps extends IBaseFieldProps<InputField, string> {
+    /** Whether show text count */
+    showCount?: boolean;
+
+    /** The max length */
+    maxLength?: number;
+
+    /** The autocomplete attribute*/
+    autocomplete?: string;
+
+    /** spellcheck attribute */
+    spellcheck?: 'true' | 'false';
+}

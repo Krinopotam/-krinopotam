@@ -13,6 +13,7 @@ const commonCfg: UserConfig = {
         target: 'modules',
         emptyOutDir: true,
         outDir: 'dist',
+        sourcemap: true,
         //minify: 'terser',
 
         lib: {

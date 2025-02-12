@@ -39,3 +39,4 @@ const h = {
 export {
   m as useResponsive
 };
+//# sourceMappingURL=useResponsive.js.map

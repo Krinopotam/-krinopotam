@@ -5,13 +5,13 @@ import {theme} from 'antd';
 import {editor} from 'monaco-editor';
 import {formPropsToSource} from '@src/dFormConstructor/renders/codeEditor/tools/formPropsToSource';
 import {FormPropsContext} from '@src/dFormConstructor/context/formPropsProvider';
-import {parseSourceToFormProps} from '@src/dFormConstructor/renders/codeEditor/tools/parseSourceToFormProps';
+import {sourceToFormProps} from '@src/dFormConstructor/renders/codeEditor/tools/sourceToFormProps';
+import {generateDummyTypes} from '@src/dFormConstructor/renders/codeEditor/tools/generateDummyTypes';
 
 export interface ICodeEditorApi {
     getSource: () => string;
     setSource: (source: string) => void;
     setSourceFromProps: (props: IDFormProps, formatCode?: boolean) => void;
-
 }
 
 export const CodeEditor = (props: {apiRef?: ICodeEditorApi}): React.JSX.Element => {
@@ -29,18 +29,7 @@ export const CodeEditor = (props: {apiRef?: ICodeEditorApi}): React.JSX.Element 
     const onMount: EditorProps['onMount'] = (editor, monaco) => {
         editorRef.current = editor;
         monacoRef.current = monaco;
-
-        /*        monaco.languages.typescript.javascriptDefaults.setDiagnosticsOptions({
-            noSemanticValidation: false,
-            noSyntaxValidation: false,
-        });
-
-        monaco.languages.typescript.typescriptDefaults.setCompilerOptions({
-            target: monaco.languages.typescript.ScriptTarget.ESNext,
-            allowNonTsExtensions: true,
-
-
-        });*/
+        monaco.languages.typescript.typescriptDefaults.addExtraLib(generateDummyTypes(), 'fake.d.ts');
     };
 
     useEffect(() => {
@@ -48,14 +37,12 @@ export const CodeEditor = (props: {apiRef?: ICodeEditorApi}): React.JSX.Element 
         api.setSourceFromProps(formProps);
     });
 
-    const onValidate: EditorProps['onValidate'] = () => {
-        const formProps = parseSourceToFormProps(editorRef.current?.getValue() ?? '');
-        console.log(formProps);
-        setFormProps(formProps ?? {}, 'codeEditor');
+    const onValidate: EditorProps['onValidate'] = (markers) => {
+        console.log(markers)
     };
 
     function showValue() {
-        const formProps = parseSourceToFormProps(editorRef.current?.getValue() ?? '');
+        const formProps = sourceToFormProps(editorRef.current?.getValue() ?? '');
         setFormProps(formProps ?? {}, 'codeEditor');
         console.log(formProps);
     }
@@ -66,7 +53,7 @@ export const CodeEditor = (props: {apiRef?: ICodeEditorApi}): React.JSX.Element 
 
             <Editor
                 defaultLanguage="typescript"
-                defaultValue={'const formProps =' + formPropsToSource(formProps)}
+                defaultValue={formPropsToSource(formProps)}
                 height="100vh"
                 wrapperProps={{
                     style: {
@@ -91,7 +78,7 @@ export const CodeEditor = (props: {apiRef?: ICodeEditorApi}): React.JSX.Element 
                     //'editor.formatOnType': true,
                 }}
                 onMount={onMount}
-                //onValidate={onValidate}
+                onValidate={onValidate}
             />
         </>
     );

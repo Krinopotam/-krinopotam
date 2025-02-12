@@ -12,3 +12,4 @@ const n = (r, t) => {
 export {
   n as useUpdateEffect
 };
+//# sourceMappingURL=useUpdateEffect.js.map

@@ -8,3 +8,4 @@ const o = (e) => {
 export {
   o as useEvent
 };
+//# sourceMappingURL=useEvent.js.map

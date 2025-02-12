@@ -3,7 +3,28 @@ import {AnyType} from '@krinopotam/service-types';
 import {IDFormProps} from '@src/dForm';
 import {FIELDS_INFO_MAP} from '@src/dFormConstructor/renders/fieldsTree/config/fieldsList';
 
-export const parseSourceToFormProps = (source: string, targetVarName = 'formProps'): IDFormProps | null => {
+export const sourceToFormProps = (source: string, targetVarName = 'formProps'): IDFormProps | null => {
+    let jsSource = transpileTsToJs(source);
+    console.log(jsSource);
+    jsSource = jsSource.replace(/component:\s*(\w+)/g, 'component: "$1"');
+    const rawProps = eval(jsSource + '; ' + targetVarName);
+    console.log(jsSource, rawProps);
+    return replaceClassNameToClass(rawProps);
+};
+
+const replaceClassNameToClass = (obj: unknown): AnyType => {
+    if (Array.isArray(obj)) return obj.map(replaceClassNameToClass);
+
+    if (typeof obj !== 'object' || obj === null) return obj;
+
+    const updatedObj: {[key: string]: AnyType} = {};
+    for (const [key, value] of Object.entries(obj)) {
+        updatedObj[key] = key === 'component' ? getComponentClass(value) : replaceClassNameToClass(value);
+    }
+    return updatedObj;
+};
+
+export const sourceToFormProps2 = (source: string, targetVarName = 'formProps'): IDFormProps | null => {
     const sourceFile: ts.SourceFile = createSourceFile(transpileTsToJs(source));
 
     let formPropsObject: IDFormProps | null = null;
