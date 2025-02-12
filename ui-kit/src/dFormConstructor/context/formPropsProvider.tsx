@@ -16,7 +16,7 @@ export const FormPropsProvider = ({children}: PropsWithChildren) => {
     return <FormPropsContext.Provider value={value}>{children}</FormPropsContext.Provider>;
 };
 
-const useFormPropsState = () => {
+const useFormPropsState = ():IFormPropsContext => {
     const [formProps, setFormProps] = useState<IDFormProps>({});
     const [updatedBy, setUpdatedBy] = useState<IUpdatedBy>('default');
 

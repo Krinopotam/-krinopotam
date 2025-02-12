@@ -1,39 +1,15 @@
-import {CustomField, ICustomFieldProps} from '@src/dForm/fields/custom';
-import {FormPropsContext} from '@src/dFormConstructor/context/formPropsProvider';
-import {CodeEditor, ICodeEditorApi} from '@src/dFormConstructor/renders/codeEditor/codeEditor';
-import {sourceToFormProps} from '@src/dFormConstructor/renders/codeEditor/tools/sourceToFormProps';
 import {FieldsTreeLayout} from '@src/dFormConstructor/renders/fieldsTree/fieldsTreeLayout';
 import {FormPreviewLayout} from '@src/dFormConstructor/renders/formPreview/formPreviewLayout';
 import {PropsEditorLayout} from '@src/dFormConstructor/renders/propsEditor/propsEditorLayout';
-import {DFormModal, IDFormModalApi, IDFormModalProps} from '@src/dFormModal';
+import {IDFormModalApi} from '@src/dFormModal';
 import {Typography} from 'antd';
-import React, {useContext, useState} from 'react';
+import React, {useState} from 'react';
+import {SourceEditorModal} from '@src/dFormConstructor/renders/sourceEditor/sourceEditorModal';
 
 export const ConstructorLayout = (): React.JSX.Element => {
     const [sourceFormApi] = useState({} as IDFormModalApi);
-    const [codeEditorApi] = useState({} as ICodeEditorApi);
-    const {setFormProps} = useContext(FormPropsContext);
 
-    const formProps: IDFormModalProps = {
-        apiRef: sourceFormApi,
-        height: 500,
-        width: 700,
-        confirmChanges: false,
-        fieldsProps: {
-            codeEditor: {component: CustomField, onRender: () => <CodeEditor apiRef={codeEditorApi} />} as ICustomFieldProps,
-        },
-
-        buttons: {
-            ok: {
-                title: 'Apply',
-                onClick: () => {
-                    const formProps = sourceToFormProps(codeEditorApi.getSource());
-                    setFormProps(formProps ?? {}, 'codeEditor');
-                    sourceFormApi.forceClose()
-                },
-            },
-        },
-    };
+    console.log('ConstructorLayout');
 
     return (
         <div style={{display: 'flex', flexDirection: 'column', height: '100%'}}>
@@ -45,7 +21,7 @@ export const ConstructorLayout = (): React.JSX.Element => {
                 <FormPreviewLayout sourceFormApi={sourceFormApi} />
                 <PropsEditorLayout />
             </div>
-            <DFormModal {...formProps} />
+            <SourceEditorModal sourceFormApi={sourceFormApi} />
         </div>
     );
 };

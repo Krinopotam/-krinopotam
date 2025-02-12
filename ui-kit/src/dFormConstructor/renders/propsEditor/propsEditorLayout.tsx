@@ -5,6 +5,7 @@ export const PropsEditorLayout = (): React.JSX.Element => {
     const {
         token: {colorBgContainer, colorBorder},
     } = theme.useToken();
+    console.log('PropsEditorLayout')
     return (
         <div
             style={{

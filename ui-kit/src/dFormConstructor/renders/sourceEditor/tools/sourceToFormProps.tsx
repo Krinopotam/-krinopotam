@@ -4,6 +4,7 @@ import {IDFormProps} from '@src/dForm';
 import {FIELDS_INFO_MAP} from '@src/dFormConstructor/renders/fieldsTree/config/fieldsList';
 
 export const sourceToFormProps = (source: string, targetVarName = 'formProps'): IDFormProps | null => {
+    if (!source) return {};
     let jsSource = transpileTsToJs(source);
     console.log(jsSource);
     jsSource = jsSource.replace(/component:\s*(\w+)/g, 'component: "$1"');

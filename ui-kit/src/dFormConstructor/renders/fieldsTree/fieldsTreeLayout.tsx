@@ -6,6 +6,8 @@ export const FieldsTreeLayout = (): React.JSX.Element => {
     const {
         token: {colorBgContainer, colorBorder},
     } = theme.useToken();
+
+    console.log('FormPreview')
     return (
         <div
             style={{

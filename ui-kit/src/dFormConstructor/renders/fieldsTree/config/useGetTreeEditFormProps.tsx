@@ -10,9 +10,12 @@ import {useContext} from 'react';
 import {FormInfo} from '@src/dFormConstructor/fields/formInfo';
 import {BaseComponentInfo} from '@src/dFormConstructor/fields/baseComponentInfo';
 import {FormPropsContext} from '@src/dFormConstructor/context/formPropsProvider';
+import {FormSourceContext} from "@src/dFormConstructor/context/formSourceProvider";
+import {formPropsToSource} from "@src/dFormConstructor/renders/sourceEditor/tools/formPropsToSource";
 
 export const useGetTreeEditFormProps = (treeApi: ITreeSelectApi, formInfo: FormInfo): IDFormModalProps => {
     const {setFormProps} = useContext(FormPropsContext);
+    const {setSource} = useContext(FormSourceContext);
     return {
         formId: 'EditForm',
         fieldsProps: {
@@ -78,7 +81,9 @@ export const useGetTreeEditFormProps = (treeApi: ITreeSelectApi, formInfo: FormI
                 treeApi.selectNode(newId);
                 treeApi.ensureNodeVisible(newId);
                 treeApi.expandNode(parentFieldInfo.getId());
+                const formProps = formInfo.toFormProps()
                 setFormProps(formInfo.toFormProps(), 'fieldsTree');
+                setSource(formPropsToSource(formProps), 'fieldsTree')
             }
         },
     };
