@@ -1,8 +1,9 @@
 import React, {Component, ErrorInfo} from 'react';
-import {Result} from 'antd';
+import {ErrorMessage} from '@src/dFormConstructor/renders/formPreview/errorMessage';
 
 interface IErrorBoundaryProps {
     children: React.ReactNode;
+    clearError: object | undefined;
 }
 
 interface IErrorBoundaryState {
@@ -26,23 +27,18 @@ export class ErrorBoundary extends Component<IErrorBoundaryProps, IErrorBoundary
     }
 
     componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
-        console.error('Component error:', error, errorInfo);
+        console.warn('Component error:', error, errorInfo);
         this.setState({errorInfo});
+    }
+
+    componentDidUpdate(prevProps: IErrorBoundaryProps) {
+        if (this.props.clearError && prevProps.clearError !== this.props.clearError && this.state.hasError) {
+            this.setState({hasError: false, error: null, errorInfo: null});
+        }
     }
 
     render() {
         if (!this.state.hasError) return this.props.children;
-
-        return (
-            <Result status="error" title="Form preview failed" subTitle="Provided incorrect form properties or something goes wrong">
-                <div className="desc">
-                    <details style={{whiteSpace: 'pre-wrap'}}>
-                        {this.state.error?.toString()}
-                        <br />
-                        {this.state.errorInfo?.componentStack}
-                    </details>
-                </div>
-            </Result>
-        );
+        return <ErrorMessage error={this.state.error} errorInfo={this.state.errorInfo} />;
     }
 }

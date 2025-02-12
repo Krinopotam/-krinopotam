@@ -6,11 +6,15 @@ import {FIELDS_INFO_MAP} from '@src/dFormConstructor/renders/fieldsTree/config/f
 export const sourceToFormProps = (source: string, targetVarName = 'formProps'): IDFormProps | null => {
     if (!source) return {};
     let jsSource = transpileTsToJs(source);
-    console.log(jsSource);
-    jsSource = jsSource.replace(/component:\s*(\w+)/g, 'component: "$1"');
-    const rawProps = eval(jsSource + '; ' + targetVarName);
-    console.log(jsSource, rawProps);
-    return replaceClassNameToClass(rawProps);
+    jsSource = jsSource.replace(/component:\s*(\w+)/g, 'component: "$1"'); //add component class semicolons
+
+    try {
+        const rawProps = eval(jsSource + targetVarName);
+        return replaceClassNameToClass(rawProps);
+    } catch {
+        console.warn('The error of converting the source code into FormProps');
+    }
+    return null;
 };
 
 const replaceClassNameToClass = (obj: unknown): AnyType => {
