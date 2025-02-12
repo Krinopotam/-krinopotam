@@ -33,7 +33,7 @@ export class ErrorBoundary extends Component<IErrorBoundaryProps, IErrorBoundary
 
     componentDidUpdate(prevProps: IErrorBoundaryProps) {
         if (this.props.clearError && prevProps.clearError !== this.props.clearError && this.state.hasError) {
-            this.setState({hasError: false, error: null, errorInfo: null});
+            this.setState(null);
         }
     }
 

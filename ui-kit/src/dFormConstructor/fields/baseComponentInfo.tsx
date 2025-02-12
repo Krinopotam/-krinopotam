@@ -14,15 +14,15 @@ export class BaseComponentInfo {
     public readonly CODE: string = 'base';
     public readonly TITLE: string | React.ReactNode = 'base';
     public readonly CLASS: (new (fieldName: string, fieldProps: AnyType, model: DModel, parent?: IBaseField) => IBaseField) | null = null;
-    public readonly INTERFACE_NAME:string = 'IBaseFieldProps'
+    public readonly INTERFACE_NAME: string = 'IBaseFieldProps';
 
-    protected readonly props: {[key: string]: unknown} = {};
+    protected props: {[key: string]: unknown} = {};
     private id: string = '';
     protected label: string | React.ReactNode = '';
-    private children: BaseComponentInfo[] = [];
+    protected children: BaseComponentInfo[] = [];
     private parent: BaseComponentInfo | undefined;
 
-    constructor(params?: {id: string; label: string | React.ReactNode}) {
+    constructor(params?: {id: string; label?: string | React.ReactNode}) {
         if (params) {
             this.id = params.id;
             this.label = params.label;
@@ -89,6 +89,13 @@ export class BaseComponentInfo {
     setProp(name: string, val: unknown) {
         if (name === 'label') this.label = val as string;
         this.props[name] = val;
+    }
+
+    setProps(props: IBaseFieldProps<AnyType, AnyType> | Record<string, unknown>) {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const {component, ...fieldProps} = props;
+        this.label = fieldProps.label as string | React.ReactNode;
+        this.props = fieldProps;
     }
 
     getParent() {

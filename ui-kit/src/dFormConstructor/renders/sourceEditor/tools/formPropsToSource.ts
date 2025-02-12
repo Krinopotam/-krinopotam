@@ -1,7 +1,7 @@
-import {getFieldInfoByClassName} from '@src/dFormConstructor/renders/fieldsTree/tools/getFieldInfoByClassName';
+import {getFieldInfoClassByClassName} from '@src/dFormConstructor/renders/fieldsTree/tools/getFieldInfoClassByClassName';
 
 /**
- * 
+ *
  * @param obj
  * @param indent
  * @param ts - typescript or js
@@ -48,8 +48,11 @@ export function formPropsToSource(obj: unknown, indent = 2, ts: boolean = true):
             .map(([key, val]) => {
                 if (ts && key === 'component') {
                     const fieldInfoClassName = typeof val === 'function' ? val.name : undefined;
-                    const fieldInfo = getFieldInfoByClassName(fieldInfoClassName);
-                    fieldTypeName = fieldInfo?.INTERFACE_NAME;
+                    const fieldInfoClass = getFieldInfoClassByClassName(fieldInfoClassName);
+                    if (fieldInfoClass) {
+                        const fieldInfo = new fieldInfoClass();
+                        fieldTypeName = fieldInfo?.INTERFACE_NAME;
+                    }
                 }
 
                 const safeKey = /^[a-zA-Z_$][a-zA-Z_$0-9]*$/.test(key) ? key : `"${key}"`;
@@ -60,5 +63,5 @@ export function formPropsToSource(obj: unknown, indent = 2, ts: boolean = true):
         return `{\n${nextPad}${entries}\n${pad}}${fieldTypeName ? ' satisfies ' + fieldTypeName : ''}`;
     }
 
-    return 'const formProps = ' +serialize(obj, 0);
+    return 'const formProps = ' + serialize(obj, 0);
 }

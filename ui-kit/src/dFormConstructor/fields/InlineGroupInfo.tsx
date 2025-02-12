@@ -6,6 +6,7 @@ import {IInlineGroupFieldProps, InlineGroupField} from '@src/dForm/fields/inline
 import {BaseComponentInfo, IComponentPropsInfo} from '@src/dFormConstructor/fields/baseComponentInfo';
 import {Space} from 'antd';
 import React from 'react';
+import {getFieldInfoClassByClassName} from '@src/dFormConstructor/renders/fieldsTree/tools/getFieldInfoClassByClassName';
 
 export class InlineGroupInfo extends BaseComponentInfo {
     public override readonly CODE = 'inlineGroup';
@@ -38,5 +39,22 @@ export class InlineGroupInfo extends BaseComponentInfo {
             fieldProps[id] = {...(fieldInfo.getProps() as IBaseFieldProps<AnyType, AnyType>)};
         }
         return {component: this.CLASS, fieldsProps: fieldProps} satisfies IInlineGroupFieldProps;
+    }
+
+    override setProps(fieldProps: IInlineGroupFieldProps) {
+        const {fieldsProps, ...props} = fieldProps;
+        this.props = props;
+        this.children = [];
+        if (typeof fieldsProps !== 'object') return;
+        for (const key in fieldsProps) {
+            const fProps = fieldsProps[key];
+            if (!fProps.component) continue;
+            const componentClassName = typeof fProps.component === 'function' ? fProps.component.name : String(fProps.component);
+            const fieldInfoClass = getFieldInfoClassByClassName(componentClassName);
+            if (!fieldInfoClass) continue;
+            const fieldInfo = new fieldInfoClass({id: key, label: fProps.label});
+            fieldInfo.setProps(fProps);
+            this.addChild(fieldInfo);
+        }
     }
 }
