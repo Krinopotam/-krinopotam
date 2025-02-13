@@ -14,7 +14,7 @@ export const FieldsTree = (): React.JSX.Element => {
     const treeProps = useGetTreeProps(treeApi, editFormProps, dataSet);
     return (
         <>
-            <Typography.Title level={3} style={{marginBottom: 10, marginTop: 0}}>
+            <Typography.Title level={4} style={{marginBottom: 10, marginTop: 0}}>
                 Fields
             </Typography.Title>
             <div

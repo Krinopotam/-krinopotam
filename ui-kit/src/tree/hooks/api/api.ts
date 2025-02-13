@@ -97,7 +97,7 @@ export const useInitApi = ({
         getEditFormApi: useApiGetEditFormApi(editFormApi),
         getEditGroupFormApi: useApiGetEditGroupFormApi(editGroupFormApi),
         getSelectedKeys: useApiGetSelectedKeys(selectedKeys),
-        setSelectedKeys: useApiSetSelectedKeys(setSelectedKeys),
+        setSelectedKeys: useApiSetSelectedKeys(setSelectedKeys, props),
         getSelectedNodes: useApiGetSelectedNodes(api),
         isNodeSelected: useApiIsNodeSelected(api),
         selectNode: useApiSelectNode(api, props.multiple),

@@ -29,7 +29,7 @@ export const FormPreviewLayout = ({sourceFormApi}: {sourceFormApi: IDFormModalAp
         >
             <Flex style={{marginBottom: 10, paddingLeft: 20, display: 'flex', gap: 10, alignItems: 'center'}}>
                 {contextHolder}
-                <Typography.Title level={3} style={{margin: 0}}>
+                <Typography.Title level={4} style={{margin: 0}}>
                     Form code
                 </Typography.Title>
                 <Switch checkedChildren={'Horizontal'} unCheckedChildren={'Vertical'} onChange={() => setHorizontal(cur => !cur)} />

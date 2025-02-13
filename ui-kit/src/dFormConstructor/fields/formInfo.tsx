@@ -53,7 +53,7 @@ export class FormInfo extends BaseComponentInfo {
     override setProps(formProps: IDFormProps) {
         const {fieldsProps, ...props} = formProps;
         this.props = props;
-        if (fieldsProps) setChildrenProps(this, fieldsProps);
+        setChildrenProps(this, fieldsProps);
     }
 
     override getLabel() {
@@ -100,5 +100,22 @@ export class FormInfo extends BaseComponentInfo {
         };
 
         return recursive([this]);
+    }
+
+    getFieldInfoById(id: string) {
+        const recursive = (fields: BaseComponentInfo[]): BaseComponentInfo | undefined => {
+            for (const field of fields) {
+                if (field.getId() === id) return field;
+                if (field.canHaveChildren()) {
+                    const result = recursive(field.getChildren());
+                    if (result) return result;
+                }
+            }
+
+            return undefined;
+        };
+
+        if (this.getId() === id) return this;
+        return recursive(this.getChildren());
     }
 }

@@ -2,14 +2,18 @@ import {BaseComponentInfo} from '@src/dFormConstructor/fields/baseComponentInfo'
 import {IDFormModalProps} from '@src/dFormModal';
 import {IExtTreeNode, IExtTreeProps, INodePosition} from '@src/tree';
 import {ITreeSelectApi} from '@src/treeSelect';
-import {useContext} from 'react';
+import {useContext, useEffect} from 'react';
 import {FormPropsContext} from '@src/dFormConstructor/context/formPropsProvider';
 import {formPropsToSource} from '@src/dFormConstructor/renders/sourceEditor/tools/formPropsToSource';
 import {FormInfoContext} from '@src/dFormConstructor/context/formInfoProvider';
+import {SelectedFieldContext} from '@src/dFormConstructor/context/selectedFieldProvider';
 
 export const useGetTreeProps = (treeApi: ITreeSelectApi, editFormProps: IDFormModalProps, dataSet: IExtTreeNode[]) => {
     const {setFormProps} = useContext(FormPropsContext);
     const {formInfo} = useContext(FormInfoContext);
+    const {setFieldId} = useContext(SelectedFieldContext);
+
+    useClearDeprecatedSelection(treeApi, dataSet);
 
     return {
         apiRef: treeApi,
@@ -18,6 +22,7 @@ export const useGetTreeProps = (treeApi: ITreeSelectApi, editFormProps: IDFormMo
         defaultExpandParent: true,
         buttonsIconsOnly: true,
         draggableOrder: true,
+        selectable:true,
         buttons: {
             update: null,
             clone: null,
@@ -70,5 +75,20 @@ export const useGetTreeProps = (treeApi: ITreeSelectApi, editFormProps: IDFormMo
             const formProps = formInfo.toFormProps();
             setFormProps(formProps, formPropsToSource(formProps), 'fieldsTree');
         },
+        onSelect: (selected) => {
+            const key = selected?.[0].toString()
+            setFieldId(key);
+        },
     } satisfies IExtTreeProps;
+};
+
+const useClearDeprecatedSelection = (treeApi: ITreeSelectApi, dataSet: IExtTreeNode[]) => {
+    const {setFieldId} = useContext(SelectedFieldContext);
+    useEffect(() => {
+        const activeNode = treeApi.getActiveNode();
+        const activeKey = activeNode?.id;
+        if (!activeKey) return;
+        const existedNode = treeApi.getNode(activeKey, dataSet)
+        setFieldId(existedNode ? activeKey.toString() : undefined);
+    });
 };

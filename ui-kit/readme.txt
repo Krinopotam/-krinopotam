@@ -12,3 +12,9 @@ https://krinopotam.github.io/-krinopotam/ui-kit/storybook
 
 
 Если после обновления ph-pages начнет выдавать ошибки ENAMETOOLONG, посмотреть решение здесь https://github.com/tschaub/gh-pages/issues/585
+node_modules\gh-pages\lib\git.js
+ Git.prototype.rm = function (files) {
+ ...
+-  return this.exec('rm', '--ignore-unmatch', '-r', '-f', '--', ...files);
++  return this.exec('rm', '--ignore-unmatch', '-r', '-f', '--', '.');
+}

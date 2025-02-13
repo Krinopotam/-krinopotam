@@ -10,7 +10,6 @@ import {useContext} from 'react';
 import {FormInfo} from '@src/dFormConstructor/fields/formInfo';
 import {BaseComponentInfo} from '@src/dFormConstructor/fields/baseComponentInfo';
 import {FormPropsContext} from '@src/dFormConstructor/context/formPropsProvider';
-import {FormSourceContext} from "@src/dFormConstructor/context/formSourceProvider";
 import {formPropsToSource} from "@src/dFormConstructor/renders/sourceEditor/tools/formPropsToSource";
 
 export const useGetTreeEditFormProps = (treeApi: ITreeSelectApi, formInfo: FormInfo): IDFormModalProps => {

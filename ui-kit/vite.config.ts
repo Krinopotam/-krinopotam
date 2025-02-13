@@ -18,6 +18,7 @@ const commonCfg: UserConfig = {
     },
 };
 
+/** Demo development config */
 const devDemoCfg: UserConfig = {
     plugins: [
         react(),
@@ -31,6 +32,7 @@ const devDemoCfg: UserConfig = {
     server: {open: 'index.html'},
 };
 
+/** Demo building config */
 const buildDemoCfg: UserConfig = {
     plugins: [react()],
     resolve: {alias: {'@src': path.resolve(__dirname, './src')}},
@@ -40,9 +42,14 @@ const buildDemoCfg: UserConfig = {
         target: 'modules',
         emptyOutDir: true,
         outDir: 'deploy/ui-kit/demo',
+        minify: 'terser',
+        terserOptions: {
+            keep_classnames: true, //"We preserve class names so that in FormConstructor, the names of the displayed classes do not change after code minification
+        },
     },
 };
 
+/** uI-kit lib building config */
 const components = glob.sync('src/*/index.ts'); // get all indexes list
 const include = glob.sync('src/**/*.{ts,tsx,css,scss}', {ignore: ['lib/**/*.d.ts']}).map((file: string) => [
     path.relative('src', file.slice(0, file.length - path.extname(file).length)), // remove `src/` and the file extension from each
