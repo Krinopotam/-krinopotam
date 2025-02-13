@@ -4,16 +4,16 @@ import {theme} from 'antd';
 import {editor} from 'monaco-editor';
 import {generateDummyTypes} from '@src/dFormConstructor/renders/sourceEditor/tools/generateDummyTypes';
 import {ISourceEditorApi, usePrepareApi} from '@src/dFormConstructor/renders/sourceEditor/api/usePrepareApi';
-import {FormSourceContext} from '@src/dFormConstructor/context/formSourceProvider';
+import {FormPropsContext} from '@src/dFormConstructor/context/formPropsProvider';
 
 export const SourceEditor = (props: {apiRef?: ISourceEditorApi}): React.JSX.Element => {
-    console.log('SourceEditor')
+    console.log('SourceEditor');
 
     const {
         token: {colorBorder},
     } = theme.useToken();
 
-    const {source, updatedBy} = useContext(FormSourceContext);
+    const {source, updatedBy} = useContext(FormPropsContext);
 
     const editorRef = useRef<editor.IStandaloneCodeEditor>(null);
     const monacoRef = useRef<Monaco>(null);

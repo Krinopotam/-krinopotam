@@ -2,7 +2,9 @@ import React, {useContext, useState} from 'react';
 import {editor} from 'monaco-editor';
 import {IDFormProps} from '@src/dForm';
 import {formPropsToSource} from '@src/dFormConstructor/renders/sourceEditor/tools/formPropsToSource';
-import {FormSourceContext} from '@src/dFormConstructor/context/formSourceProvider';
+import {FormPropsContext} from '@src/dFormConstructor/context/formPropsProvider';
+import {sourceToFormProps} from '@src/dFormConstructor/renders/sourceEditor/tools/sourceToFormProps';
+import {FormInfoContext} from "@src/dFormConstructor/context/formInfoProvider";
 
 export interface ISourceEditorApi {
     getSource: () => string;
@@ -14,7 +16,8 @@ export interface ISourceEditorApi {
 export const usePrepareApi = (apiRef: ISourceEditorApi | undefined, editorRef: React.RefObject<editor.IStandaloneCodeEditor | null>) => {
     const [apiNew] = useState({} as ISourceEditorApi);
     const api = apiRef ?? apiNew;
-    const {setSource} = useContext(FormSourceContext);
+    const {setFormProps} = useContext(FormPropsContext);
+    const {formInfo} = useContext(FormInfoContext);
 
     api.getSource = () => editorRef.current?.getValue() ?? '';
     api.setSource = (source: string) => {
@@ -31,9 +34,10 @@ export const usePrepareApi = (apiRef: ISourceEditorApi | undefined, editorRef: R
     };
 
     api.apply = () => {
-        setSource(api.getSource(), 'codeEditor');
-        //const formProps = sourceToFormProps(api.getSource());
-        //setFormProps(formProps ?? {}, 'codeEditor');
+        const source = api.getSource();
+        const formProps = sourceToFormProps(source);
+        setFormProps(formProps, source, 'codeEditor');
+        formInfo.setProps(formProps ?? {});
     };
 
     return api;

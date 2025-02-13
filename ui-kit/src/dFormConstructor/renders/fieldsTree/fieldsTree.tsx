@@ -11,7 +11,7 @@ export const FieldsTree = (): React.JSX.Element => {
     const {formInfo} = useContext(FormInfoContext);
     const dataSet = formInfo.toTreeDataSet();
     const editFormProps = useGetTreeEditFormProps(treeApi, formInfo);
-    const treeProps = useGetTreeProps(treeApi, formInfo, editFormProps, dataSet);
+    const treeProps = useGetTreeProps(treeApi, editFormProps, dataSet);
     return (
         <>
             <Typography.Title level={3} style={{marginBottom: 10, marginTop: 0}}>

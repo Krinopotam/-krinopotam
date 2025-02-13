@@ -4,19 +4,17 @@ import {FormPreview} from '@src/dFormConstructor/renders/formPreview/formPreview
 import {IDFormModalApi} from '@src/dFormModal';
 import {Flex, message, Switch, theme, Tooltip, Typography} from 'antd';
 import React, {useContext} from 'react';
-import {TestContext} from '@src/dFormConstructor/context/testProvider';
-import {FormSourceContext} from '@src/dFormConstructor/context/formSourceProvider';
+import {FormPropsContext} from '@src/dFormConstructor/context/formPropsProvider';
 
 export const FormPreviewLayout = ({sourceFormApi}: {sourceFormApi: IDFormModalApi}): React.JSX.Element => {
     const {
         token: {colorBgContainer},
     } = theme.useToken();
 
-    const {source} = useContext(FormSourceContext);
+    const {source} = useContext(FormPropsContext);
     const [messageApi, contextHolder] = message.useMessage();
     const [horizontal, setHorizontal] = React.useState(false);
 
-    const {val, setVal} = useContext(TestContext);
     return (
         <div
             style={{
@@ -60,13 +58,6 @@ export const FormPreviewLayout = ({sourceFormApi}: {sourceFormApi: IDFormModalAp
                         }}
                     ></Button>
                 </Tooltip>
-                <Button
-                    onClick={() => {
-                        setVal(val + '1');
-                    }}
-                >
-                    Test
-                </Button>
             </Flex>
             <FormPreview horizontal={horizontal} />
         </div>

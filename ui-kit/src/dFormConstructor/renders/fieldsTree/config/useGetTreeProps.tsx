@@ -1,16 +1,15 @@
 import {BaseComponentInfo} from '@src/dFormConstructor/fields/baseComponentInfo';
-import {FormInfo} from '@src/dFormConstructor/fields/formInfo';
 import {IDFormModalProps} from '@src/dFormModal';
 import {IExtTreeNode, IExtTreeProps, INodePosition} from '@src/tree';
 import {ITreeSelectApi} from '@src/treeSelect';
 import {useContext} from 'react';
 import {FormPropsContext} from '@src/dFormConstructor/context/formPropsProvider';
-import {FormSourceContext} from "@src/dFormConstructor/context/formSourceProvider";
-import {formPropsToSource} from "@src/dFormConstructor/renders/sourceEditor/tools/formPropsToSource";
+import {formPropsToSource} from '@src/dFormConstructor/renders/sourceEditor/tools/formPropsToSource';
+import {FormInfoContext} from '@src/dFormConstructor/context/formInfoProvider';
 
-export const useGetTreeProps = (treeApi: ITreeSelectApi, formInfo: FormInfo, editFormProps: IDFormModalProps, dataSet: IExtTreeNode[]) => {
+export const useGetTreeProps = (treeApi: ITreeSelectApi, editFormProps: IDFormModalProps, dataSet: IExtTreeNode[]) => {
     const {setFormProps} = useContext(FormPropsContext);
-    const {setSource} = useContext(FormSourceContext);
+    const {formInfo} = useContext(FormInfoContext);
 
     return {
         apiRef: treeApi,
@@ -39,9 +38,8 @@ export const useGetTreeProps = (treeApi: ITreeSelectApi, formInfo: FormInfo, edi
             if (!componentInfo.getParent()) return false;
             componentInfo.removeFromTree();
 
-            const formProps = formInfo.toFormProps()
-            setFormProps(formInfo.toFormProps(), 'fieldsTree');
-            setSource(formPropsToSource(formProps), 'fieldsTree')
+            const formProps = formInfo.toFormProps();
+            setFormProps(formProps, formPropsToSource(formProps), 'fieldsTree');
         },
         allowDrop: info => {
             const dragNode = info.dragNode['fieldInfo'] as BaseComponentInfo;
@@ -69,9 +67,8 @@ export const useGetTreeProps = (treeApi: ITreeSelectApi, formInfo: FormInfo, edi
             else if (pos === 'below') dropNode.getParent()?.addChild(dragNode, dropNode, 'below');
             else if (pos === 'above') dropNode.getParent()?.addChild(dragNode, dropNode, 'above');
 
-            const formProps = formInfo.toFormProps()
-            setFormProps(formInfo.toFormProps(), 'fieldsTree');
-            setSource(formPropsToSource(formProps), 'fieldsTree')
+            const formProps = formInfo.toFormProps();
+            setFormProps(formProps, formPropsToSource(formProps), 'fieldsTree');
         },
     } satisfies IExtTreeProps;
 };

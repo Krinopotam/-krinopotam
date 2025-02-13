@@ -15,7 +15,6 @@ import {formPropsToSource} from "@src/dFormConstructor/renders/sourceEditor/tool
 
 export const useGetTreeEditFormProps = (treeApi: ITreeSelectApi, formInfo: FormInfo): IDFormModalProps => {
     const {setFormProps} = useContext(FormPropsContext);
-    const {setSource} = useContext(FormSourceContext);
     return {
         formId: 'EditForm',
         fieldsProps: {
@@ -82,8 +81,7 @@ export const useGetTreeEditFormProps = (treeApi: ITreeSelectApi, formInfo: FormI
                 treeApi.ensureNodeVisible(newId);
                 treeApi.expandNode(parentFieldInfo.getId());
                 const formProps = formInfo.toFormProps()
-                setFormProps(formInfo.toFormProps(), 'fieldsTree');
-                setSource(formPropsToSource(formProps), 'fieldsTree')
+                setFormProps(formProps, formPropsToSource(formProps), 'fieldsTree');
             }
         },
     };
