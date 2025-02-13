@@ -6,7 +6,7 @@ import React from 'react';
 import {IExtTreeNode} from '@src/tree';
 import {IBaseFieldProps} from '@src/dForm/fields/base';
 import {AnyType} from '@krinopotam/service-types';
-import {getFieldInfoClassByClassName} from '@src/dFormConstructor/renders/fieldsTree/tools/getFieldInfoClassByClassName';
+import {setChildrenProps} from '@src/dFormConstructor/renders/fieldsTree/tools/setChildrenProps';
 
 export class FormInfo extends BaseComponentInfo {
     public override readonly CODE = 'form';
@@ -23,7 +23,7 @@ export class FormInfo extends BaseComponentInfo {
         return true;
     }
 
-    override mustHaveParent(): boolean | string {
+    override shouldHaveParent(): boolean | string {
         return false;
     }
 
@@ -48,6 +48,12 @@ export class FormInfo extends BaseComponentInfo {
     /** @returns field instance props */
     override getProps(): Record<string, unknown> & IDFormProps {
         return {...this.props, formId: this.getId()};
+    }
+
+    override setProps(formProps: IDFormProps) {
+        const {fieldsProps, ...props} = formProps;
+        this.props = props;
+        if (fieldsProps) setChildrenProps(this, fieldsProps);
     }
 
     override getLabel() {
@@ -94,22 +100,5 @@ export class FormInfo extends BaseComponentInfo {
         };
 
         return recursive([this]);
-    }
-
-    override setProps(formProps: IDFormProps) {
-        const {fieldsProps, ...props} = formProps;
-        this.props = props;
-        this.children = [];
-        if (typeof fieldsProps !== 'object') return;
-        for (const key in fieldsProps) {
-            const fieldProps = fieldsProps[key];
-            if (!fieldProps.component) continue;
-            const componentClassName = typeof fieldProps.component === 'function' ? fieldProps.component.name : String(fieldProps.component);
-            const fieldInfoClass = getFieldInfoClassByClassName(componentClassName);
-            if (!fieldInfoClass) continue;
-            const fieldInfo = new fieldInfoClass({id: key, label: fieldProps.label});
-            fieldInfo.setProps(fieldProps);
-            this.addChild(fieldInfo);
-        }
     }
 }

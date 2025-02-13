@@ -1,7 +1,7 @@
 import esLint from '@eslint/js';
 import tsEslint from 'typescript-eslint';
-import eslintPluginReact from 'eslint-plugin-react';
-import eslintPluginReactHooks from 'eslint-plugin-react-hooks';
+import eslintReact from 'eslint-plugin-react';
+import hooksPlugin from 'eslint-plugin-react-hooks';
 import eslintConfigPrettier from 'eslint-config-prettier';
 
 import globals from 'globals';
@@ -22,8 +22,8 @@ export default tsEslint.config(
     {
         plugins: {
             '@typescript-eslint': tsEslint.plugin,
-            'react': eslintPluginReact,
-            'react-hooks': eslintPluginReactHooks,
+            'react': eslintReact,
+            'react-hooks': hooksPlugin,
         },
 
         languageOptions: {
@@ -46,8 +46,9 @@ export default tsEslint.config(
             sourceType: 'module',
         },
         rules: {
-            ...eslintPluginReactHooks.configs.recommended.rules,
-            ...eslintPluginReact.configs.recommended.rules,
+            ...hooksPlugin.configs.recommended.rules,
+            ...eslintReact.configs.recommended.rules,
+            '@typescript-eslint/no-unused-vars': ['error', {ignoreRestSiblings: true}], //no error for rest parameters
             'react-hooks/exhaustive-deps': ['warn', {additionalHooks: '(useUpdateEffect)'}],
         },
     },

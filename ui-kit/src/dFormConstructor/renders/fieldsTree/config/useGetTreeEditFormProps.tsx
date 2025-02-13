@@ -35,7 +35,7 @@ export const useGetTreeEditFormProps = (treeApi: ITreeSelectApi, formInfo: FormI
 
                             if (
                                 (parentFieldInfo.canHaveChildren() !== true && parentFieldInfo.canHaveChildren() !== selectedFieldInfo.CODE) ||
-                                (selectedFieldInfo.mustHaveParent() !== true && selectedFieldInfo.mustHaveParent() !== parentFieldInfo.CODE)
+                                (selectedFieldInfo.shouldHaveParent() !== true && selectedFieldInfo.shouldHaveParent() !== parentFieldInfo.CODE)
                             ) {
                                 return 'This field type can not belong to the specified parent';
                             }

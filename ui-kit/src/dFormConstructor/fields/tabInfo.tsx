@@ -5,6 +5,7 @@ import {IBaseFieldProps} from '@src/dForm/fields/base';
 import {BaseComponentInfo, IComponentPropsInfo} from '@src/dFormConstructor/fields/baseComponentInfo';
 import {Space} from 'antd';
 import React from 'react';
+import {setChildrenProps} from '@src/dFormConstructor/renders/fieldsTree/tools/setChildrenProps';
 
 export class TabInfo extends BaseComponentInfo {
     public override readonly CODE = 'tab';
@@ -21,7 +22,7 @@ export class TabInfo extends BaseComponentInfo {
         return true;
     }
 
-    override mustHaveParent(): boolean | string {
+    override shouldHaveParent(): boolean | string {
         return 'tabs';
     }
 
@@ -39,5 +40,9 @@ export class TabInfo extends BaseComponentInfo {
             fieldProps[id] = {...(fieldInfo.getProps() as IBaseFieldProps<AnyType, AnyType>)};
         }
         return fieldProps;
+    }
+
+    override setProps(fieldsProps: IDFormFieldsProps) {
+        setChildrenProps(this, fieldsProps);
     }
 }

@@ -53,7 +53,7 @@ export const useGetTreeProps = (treeApi: ITreeSelectApi, formInfo: FormInfo, edi
             return (
                 !!targetNode &&
                 (targetNode.canHaveChildren() === true || targetNode.canHaveChildren() === dragNode.CODE) &&
-                (dragNode.mustHaveParent() === true || dragNode.mustHaveParent() === targetNode.CODE)
+                (dragNode.shouldHaveParent() === true || dragNode.shouldHaveParent() === targetNode.CODE)
             );
         },
         onDrop: info => {
