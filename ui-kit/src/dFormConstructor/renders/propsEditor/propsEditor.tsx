@@ -3,6 +3,8 @@ import type {DescriptionsProps} from 'antd';
 import {Descriptions} from 'antd';
 import {SelectedFieldContext} from '@src/dFormConstructor/context/selectedFieldProvider';
 import {FormInfoContext} from '@src/dFormConstructor/context/formInfoProvider';
+import type {AnyType} from '@krinopotam/service-types';
+import {IComponentPropsInfo} from '@src/dFormConstructor/fields/baseComponentInfo';
 
 export const PropsEditor = (): React.JSX.Element => {
     const {fieldId} = useContext(SelectedFieldContext);
@@ -16,7 +18,7 @@ export const PropsEditor = (): React.JSX.Element => {
                 scrollbarColor: 'rgb(234, 234, 234)',
                 scrollbarGutter: 'stable',
                 scrollbarWidth: 'thin',
-                paddingRight:20
+                paddingRight: 20,
             }}
         >
             <Descriptions bordered title={title} column={1} size={'small'} items={items} />
@@ -30,14 +32,12 @@ export const usePrepareFieldsProps = (fieldId: string | undefined): Descriptions
     const fieldInfo = formInfo.getFieldInfoById(fieldId);
     if (!fieldInfo) return [];
 
-    const propsInfo = fieldInfo.getPropsInfo();
+    const propsInfo: IComponentPropsInfo<AnyType> = fieldInfo.getPropsInfo();
     const result: DescriptionsProps['items'] = [];
     for (const key in propsInfo) {
-        const dataType = propsInfo[key]
+        const dataType = propsInfo[key];
         result.push({key: key, label: key, children: dataType});
     }
 
     return result;
 };
-
-
