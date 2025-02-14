@@ -1,0 +1,1 @@
+import{j as e,a as t}from"./index-BH0IsnV8.js";const o=o=>({layout:{type:"element",title:e.jsx(t,{checkedChildren:"hor",unCheckedChildren:"ver",onChange:e=>{o.updateProps({layout:e?"horizontal":"vertical"})}}),position:"left"}});export{o as F};
