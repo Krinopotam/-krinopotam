@@ -1,9 +1,9 @@
 import {AddElementToArray} from '@krinopotam/js-helpers/helpersObjects/addElementToArray';
 import type {AnyType} from '@krinopotam/service-types';
-import type {DModel, IDFormFieldsProps} from '@src/dForm';
+import type {DModel} from '@src/dForm';
 import type {IBaseField, IBaseFieldProps} from '@src/dForm/fields/base';
 import React from 'react';
-import {getFieldInfoClassByClassName} from "@src/dFormConstructor/renders/fieldsTree/tools/getFieldInfoClassByClassName";
+import {GetNanoId} from "@krinopotam/js-helpers/helpersString/getNanoId";
 
 export type IPropsType = 'string' | 'number' | 'boolean' | 'fieldCodes' | string[];
 
@@ -16,6 +16,8 @@ export class BaseComponentInfo {
     public readonly TITLE: string | React.ReactNode = 'base';
     public readonly CLASS: (new (fieldName: string, fieldProps: AnyType, model: DModel, parent?: IBaseField) => IBaseField) | null = null;
     public readonly INTERFACE_NAME: string = 'IBaseFieldProps';
+    /** Tree node ID of the field*/
+    public readonly NODE_ID: string = '';
 
     protected props: {[key: string]: unknown} = {};
     private id: string = '';
@@ -24,6 +26,7 @@ export class BaseComponentInfo {
     private parent: BaseComponentInfo | undefined;
 
     constructor(params?: {id: string; label?: string | React.ReactNode}) {
+        this.NODE_ID = GetNanoId();
         if (params) {
             this.id = params.id;
             this.label = params.label;
@@ -98,27 +101,9 @@ export class BaseComponentInfo {
         this.props = fieldProps;
     }
 
-    clearChildren(){
-        this.children=[]
-    }
-
-/*    setChildrenProps(fieldsProps: IDFormFieldsProps) {
-        if (this.canHaveChildren() === false) return;
+    clearChildren() {
         this.children = [];
-        if (typeof fieldsProps !== 'object') return;
-        for (const key in fieldsProps) {
-            const fProps = fieldsProps[key];
-            if (!fProps.component) continue;
-            const componentClassName = typeof fProps.component === 'function' ? fProps.component.name : String(fProps.component);
-            const fieldInfoClass = getFieldInfoClassByClassName(componentClassName);
-            if (!fieldInfoClass) continue;
-            const fieldInfo = new fieldInfoClass({id: key, label: fProps.label});
-            if (this.canHaveChildren() !== true && this.canHaveChildren() !== fieldInfo.CODE) continue;
-            if (fieldInfo.shouldHaveParent() !== true && fieldInfo.shouldHaveParent() !== this.CODE) continue;
-            fieldInfo.setProps(fProps);
-            this.addChild(fieldInfo);
-        }
-    }*/
+    }
 
     getParent() {
         return this.parent;

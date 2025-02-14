@@ -7,13 +7,16 @@ import {FormPropsContext} from '@src/dFormConstructor/context/formPropsProvider'
 import {formPropsToSource} from '@src/dFormConstructor/renders/sourceEditor/tools/formPropsToSource';
 import {FormInfoContext} from '@src/dFormConstructor/context/formInfoProvider';
 import {SelectedFieldContext} from '@src/dFormConstructor/context/selectedFieldProvider';
+import {getNodeByFieldId} from '@src/dFormConstructor/renders/fieldsTree/tools/getFieldNode';
 
-export const useGetTreeProps = (treeApi: ITreeSelectApi, editFormProps: IDFormModalProps, dataSet: IExtTreeNode[]) => {
+export const useGetTreeProps = (treeApi: ITreeSelectApi, editFormProps: IDFormModalProps, dataSet: IExtTreeNode<{fieldInfo: BaseComponentInfo}>[]) => {
     const {setFormProps} = useContext(FormPropsContext);
     const {formInfo} = useContext(FormInfoContext);
     const {setFieldId} = useContext(SelectedFieldContext);
 
-    useClearDeprecatedSelection(treeApi, dataSet);
+    useTranferSelection(treeApi, dataSet);
+
+    //useClearDeprecatedSelection(treeApi, dataSet);
 
     return {
         apiRef: treeApi,
@@ -22,7 +25,7 @@ export const useGetTreeProps = (treeApi: ITreeSelectApi, editFormProps: IDFormMo
         defaultExpandParent: true,
         buttonsIconsOnly: true,
         draggableOrder: true,
-        selectable:true,
+        selectable: true,
         buttons: {
             update: null,
             clone: null,
@@ -75,20 +78,44 @@ export const useGetTreeProps = (treeApi: ITreeSelectApi, editFormProps: IDFormMo
             const formProps = formInfo.toFormProps();
             setFormProps(formProps, formPropsToSource(formProps), 'fieldsTree');
         },
-        onSelect: (selected) => {
-            const key = selected?.[0].toString()
-            setFieldId(key);
+        onSelect: selected => {
+            const key = selected?.[0]?.toString();
+            const node = treeApi.getNode(key);
+            const field = node?.fieldInfo as BaseComponentInfo | undefined;
+            setFieldId(field?.getId());
         },
     } satisfies IExtTreeProps;
 };
 
-const useClearDeprecatedSelection = (treeApi: ITreeSelectApi, dataSet: IExtTreeNode[]) => {
+/** After dataSet changed we should check, is selected node still exist in new dataSet and reselect or deselect it */
+const useClearDeprecatedSelection = (treeApi: ITreeSelectApi, newDataSet: IExtTreeNode<{fieldInfo: BaseComponentInfo}>[]) => {
     const {setFieldId} = useContext(SelectedFieldContext);
     useEffect(() => {
-        const activeNode = treeApi.getActiveNode();
-        const activeKey = activeNode?.id;
-        if (!activeKey) return;
-        const existedNode = treeApi.getNode(activeKey, dataSet)
-        setFieldId(existedNode ? activeKey.toString() : undefined);
+        const key = treeApi.getActiveNode()?.id;
+        if (!key) return;
+        const node = treeApi.getNode(key, newDataSet);
+        const field = node?.fieldInfo as BaseComponentInfo | undefined;
+        setFieldId(field?.getId());
+    });
+};
+
+/** Trying to keep selection
+ * Usually DataSet populated by new nodes with new NODE_ID.
+ * We need to find old selected node in new dataSet (by field id and code) and reselect it
+ */
+const useTranferSelection = (treeApi: ITreeSelectApi, newDataSet: IExtTreeNode<{fieldInfo: BaseComponentInfo}>[]) => {
+    const {setFieldId} = useContext(SelectedFieldContext);
+    useEffect(() => {
+        const selNode = treeApi.getSelectedNodes()?.[0] as IExtTreeNode<{fieldInfo: BaseComponentInfo}> | undefined;
+        if (!selNode) return;
+        console.log(selNode);
+        const nodeInNewDataSet = getNodeByFieldId(newDataSet, selNode.fieldInfo.getId(), selNode.fieldInfo.CODE);
+        if (nodeInNewDataSet) {
+            treeApi.selectNode(nodeInNewDataSet.id);
+            setFieldId(nodeInNewDataSet.fieldInfo.getId());
+        } else {
+            treeApi.selectNode(undefined);
+            setFieldId(undefined);
+        }
     });
 };

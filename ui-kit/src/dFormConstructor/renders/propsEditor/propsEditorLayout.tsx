@@ -11,6 +11,7 @@ export const PropsEditorLayout = (): React.JSX.Element => {
         <div
             style={{
                 minWidth: 300,
+                width:400,
                 background: colorBgContainer,
                 borderLeft: 'solid 1px ' + colorBorder,
                 paddingLeft:20,

@@ -15,7 +15,10 @@ export const useApiSelectNode = (
     return (node, isSelect = true, withChildren = false, externalDataset = undefined) => {
         const fieldNames = api.getFieldNames();
         const key = typeof node === 'object' ? (node[fieldNames.key] as IKey) : node;
-        if (!key) return;
+        if (!key) {
+            api.setSelectedKeys(undefined);
+            return;
+        }
 
         const dataSet = externalDataset ?? api.getDataSet();
 

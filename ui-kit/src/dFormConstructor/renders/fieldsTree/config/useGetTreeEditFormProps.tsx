@@ -76,9 +76,9 @@ export const useGetTreeEditFormProps = (treeApi: ITreeSelectApi, formInfo: FormI
                 const parentFieldInfo: BaseComponentInfo = dataSet['parent']?.['fieldInfo'];
                 if (!parentFieldInfo) return;
                 parentFieldInfo.addChild(fieldInfo);
-                treeApi.selectNode(newId);
-                treeApi.ensureNodeVisible(newId);
-                treeApi.expandNode(parentFieldInfo.getId());
+                treeApi.selectNode(fieldInfo.NODE_ID);
+                treeApi.ensureNodeVisible(fieldInfo.NODE_ID);
+                treeApi.expandNode(parentFieldInfo.NODE_ID);
                 const formProps = formInfo.toFormProps()
                 setFormProps(formProps, formPropsToSource(formProps), 'fieldsTree');
             }

@@ -6,7 +6,7 @@ import {IDFormFieldsProps} from "@src/dForm";
  * Had to extract into a separate function from the BaseComponentInfo class due to errors
  * related to circular referencing of the BaseComponentInfo class before its full initialization
  */
-export const setChildrenProps = (field:BaseComponentInfo,  fieldsProps: IDFormFieldsProps)=> {
+export const setChildrenProps = (field:BaseComponentInfo,  fieldsProps: IDFormFieldsProps | undefined)=> {
     if (field.canHaveChildren() === false) return;
     field.clearChildren();
 

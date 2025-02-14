@@ -75,11 +75,11 @@ export class FormInfo extends BaseComponentInfo {
         return result;
     }
 
-    toTreeDataSet(): IExtTreeNode[] {
+    toTreeDataSet(): IExtTreeNode<{fieldInfo:BaseComponentInfo}>[] {
         const recursive = (fields: BaseComponentInfo[]) => {
-            const result: IExtTreeNode[] = [];
+            const result: IExtTreeNode<{fieldInfo:BaseComponentInfo}>[] = [];
             for (const fieldInfo of fields) {
-                const id = fieldInfo.getId();
+                const id = fieldInfo.NODE_ID;
                 const title = (
                     <>
                         {fieldInfo.TITLE}: <b>{fieldInfo.getLabel()}</b>
@@ -87,7 +87,7 @@ export class FormInfo extends BaseComponentInfo {
                 );
                 const isLeaf = !fieldInfo.canHaveChildren() || undefined;
 
-                const node: IExtTreeNode = {id, title, fieldInfo, isLeaf};
+                const node: IExtTreeNode<{fieldInfo:BaseComponentInfo}> = {id, title, fieldInfo, isLeaf};
 
                 if (fieldInfo.getChildren().length > 0) {
                     node['children'] = recursive(fieldInfo.getChildren());
