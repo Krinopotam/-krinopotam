@@ -43,6 +43,15 @@ export class BaseComponentInfo {
         return true;
     }
 
+    canBeMovedTo(parent:BaseComponentInfo) {
+        return true
+    }
+
+    canBeParentOf (child:BaseComponentInfo) {
+        return false
+    }
+
+
     /** @returns field props info */
     getPropsInfo(): IComponentPropsInfo<AnyType> {
         return {

@@ -45,4 +45,11 @@ export class TabInfo extends BaseComponentInfo {
     override setProps(fieldsProps: IDFormFieldsProps) {
         setChildrenProps(this, fieldsProps);
     }
+
+/*    override getId(): string {
+        const fieldId = super.getId();
+        const parentId = this.getParent()?.getId()
+        console.log(`${parentId}_${fieldId}`)
+        return parentId ? `${parentId}_${fieldId}` : fieldId;
+    }*/
 }
