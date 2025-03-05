@@ -95,8 +95,11 @@ export interface ITreeComponentApi<TNode extends Record<string, AnyType> = Recor
     /** Set expanded keys */
     setExpandedKeys: (keys: IKey[] | undefined) => void;
 
-    /** Returns expanded nodes */
-    getExpandedNodes: () => TNode[] | undefined;
+    /**
+    * Returns expanded nodes
+    * @param extDataSet - if not set, current data set will be used, if set, node will be searched in this data set
+    */
+    getExpandedNodes: (extDataSet?: TNode[]) => TNode[] | undefined;
 
     /** Check if node is expanded */
     isNodeExpanded: (key: IKey | TNode) => boolean;

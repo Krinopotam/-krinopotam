@@ -1,13 +1,12 @@
 import {Typography} from 'antd';
 import React, {useContext, useState} from 'react';
-import {Tree} from '@src/tree';
-import {ITreeSelectApi} from '@src/treeSelect';
+import {IExtTreeApi, Tree} from '@src/tree';
 import {useGetTreeProps} from '@src/dFormConstructor/renders/fieldsTree/config/useGetTreeProps';
 import {useGetTreeEditFormProps} from '@src/dFormConstructor/renders/fieldsTree/config/useGetTreeEditFormProps';
 import {FormInfoContext} from '@src/dFormConstructor/context/formInfoProvider';
 
 export const FieldsTree = (): React.JSX.Element => {
-    const [treeApi] = useState({} as ITreeSelectApi);
+    const [treeApi] = useState({} as IExtTreeApi);
     const {formInfo} = useContext(FormInfoContext);
     const dataSet = formInfo.toTreeDataSet();
     const editFormProps = useGetTreeEditFormProps(treeApi, formInfo);

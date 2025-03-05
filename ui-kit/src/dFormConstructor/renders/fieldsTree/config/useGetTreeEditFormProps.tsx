@@ -2,7 +2,6 @@ import {IDFormModalProps} from '@src/dFormModal';
 import {ISelectFieldProps, SelectField} from '@src/dForm/fields/select';
 import {ITreeSelectFieldProps, TreeSelectField} from '@src/dForm/fields/treeSelect';
 import {getCanHaveChildrenOnly} from '@src/_shared/hooks/treeComponentApiMethods/serviceMethods/getCanHaveChildrenOnly';
-import {ITreeSelectApi} from '@src/treeSelect';
 import {getFieldsListForSelect} from '@src/dFormConstructor/renders/fieldsTree/tools/getFieldsListForSelect';
 import {getFieldInfoByCode} from '@src/dFormConstructor/renders/fieldsTree/tools/getFieldInfoByCode';
 import {generateFieldId} from '@src/dFormConstructor/renders/fieldsTree/tools/generateFieldId';
@@ -10,10 +9,13 @@ import {useContext} from 'react';
 import {FormInfo} from '@src/dFormConstructor/fields/formInfo';
 import {BaseComponentInfo} from '@src/dFormConstructor/fields/baseComponentInfo';
 import {FormPropsContext} from '@src/dFormConstructor/context/formPropsProvider';
-import {formPropsToSource} from "@src/dFormConstructor/renders/sourceEditor/tools/formPropsToSource";
+import {formPropsToSource} from '@src/dFormConstructor/renders/sourceEditor/tools/formPropsToSource';
+import {IExtTreeApi} from '@src/tree';
+import {SelectedFieldContext} from "@src/dFormConstructor/context/selectedFieldProvider";
 
-export const useGetTreeEditFormProps = (treeApi: ITreeSelectApi, formInfo: FormInfo): IDFormModalProps => {
+export const useGetTreeEditFormProps = (treeApi: IExtTreeApi, formInfo: FormInfo): IDFormModalProps => {
     const {setFormProps} = useContext(FormPropsContext);
+    const {setSelectedFieldId} = useContext(SelectedFieldContext);
     return {
         formId: 'EditForm',
         fieldsProps: {
@@ -79,8 +81,9 @@ export const useGetTreeEditFormProps = (treeApi: ITreeSelectApi, formInfo: FormI
                 treeApi.selectNode(fieldInfo.NODE_ID);
                 treeApi.ensureNodeVisible(fieldInfo.NODE_ID);
                 treeApi.expandNode(parentFieldInfo.NODE_ID);
-                const formProps = formInfo.toFormProps()
+                const formProps = formInfo.getProps();
                 setFormProps(formProps, formPropsToSource(formProps), 'fieldsTree');
+                setSelectedFieldId(fieldInfo.getId());
             }
         },
     };

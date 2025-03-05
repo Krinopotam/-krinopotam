@@ -45,9 +45,23 @@ export class FormInfo extends BaseComponentInfo {
         } satisfies IComponentPropsInfo<IDFormProps>;
     }
 
-    /** @returns form props */
+    /** @returns field instance props */
     override getProps(): Record<string, unknown> & IDFormProps {
-        const result:Record<string, unknown> & IDFormProps = {...this.props, formId: this.getId()};
+        return {...this.props, formId: this.getId()};
+    }
+
+    override setProps(formProps: IDFormProps) {
+        const {fieldsProps, ...props} = formProps;
+        this.props = props;
+        setChildrenProps(this, fieldsProps);
+    }
+
+    override getLabel() {
+        return 'My form';
+    }
+
+    toFormProps(): IDFormProps {
+        const result = {...this.getProps()};
 
         const fieldProps: IDFormProps['fieldsProps'] = {};
 
@@ -59,16 +73,6 @@ export class FormInfo extends BaseComponentInfo {
 
         result.fieldsProps = fieldProps;
         return result;
-    }
-
-    override setProps(formProps: IDFormProps) {
-        const {fieldsProps, ...props} = formProps;
-        this.props = props;
-        setChildrenProps(this, fieldsProps);
-    }
-
-    override getLabel() {
-        return 'My form';
     }
 
     toTreeDataSet(): IExtTreeNode<{fieldInfo:BaseComponentInfo}>[] {

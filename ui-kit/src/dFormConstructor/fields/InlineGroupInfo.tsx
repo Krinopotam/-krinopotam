@@ -6,8 +6,7 @@ import {IInlineGroupFieldProps, InlineGroupField} from '@src/dForm/fields/inline
 import {BaseComponentInfo, IComponentPropsInfo} from '@src/dFormConstructor/fields/baseComponentInfo';
 import {Space} from 'antd';
 import React from 'react';
-import {getFieldInfoClassByClassName} from '@src/dFormConstructor/renders/fieldsTree/tools/getFieldInfoClassByClassName';
-import {setChildrenProps} from "@src/dFormConstructor/renders/fieldsTree/tools/setChildrenProps";
+import {setChildrenProps} from '@src/dFormConstructor/renders/fieldsTree/tools/setChildrenProps';
 
 export class InlineGroupInfo extends BaseComponentInfo {
     public override readonly CODE = 'inlineGroup';
@@ -46,6 +45,6 @@ export class InlineGroupInfo extends BaseComponentInfo {
         const {component, fieldsProps, ...props} = fieldProps;
         this.props = props;
         this.label = fieldProps.label;
-        setChildrenProps(this, fieldsProps)
+        setChildrenProps(this, fieldsProps);
     }
 }

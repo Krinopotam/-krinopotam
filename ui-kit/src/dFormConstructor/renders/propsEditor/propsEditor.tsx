@@ -7,9 +7,9 @@ import type {AnyType} from '@krinopotam/service-types';
 import {IComponentPropsInfo} from '@src/dFormConstructor/fields/baseComponentInfo';
 
 export const PropsEditor = (): React.JSX.Element => {
-    const {fieldId} = useContext(SelectedFieldContext);
-    const title = fieldId;
-    const items = usePrepareFieldsProps(fieldId);
+    const {selectedFieldId} = useContext(SelectedFieldContext);
+    const title = selectedFieldId;
+    const items = usePrepareFieldsProps(selectedFieldId);
     return (
         <div
             style={{

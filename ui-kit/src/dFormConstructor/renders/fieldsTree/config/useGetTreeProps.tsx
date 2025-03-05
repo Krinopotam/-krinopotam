@@ -1,22 +1,22 @@
 import {BaseComponentInfo} from '@src/dFormConstructor/fields/baseComponentInfo';
 import {IDFormModalProps} from '@src/dFormModal';
-import {IExtTreeNode, IExtTreeProps, INodePosition} from '@src/tree';
-import {ITreeSelectApi} from '@src/treeSelect';
-import {useContext, useEffect} from 'react';
+import {IExtTreeApi, IExtTreeNode, IExtTreeProps, INodePosition} from '@src/tree';
+import {useContext, useEffect, useRef} from 'react';
 import {FormPropsContext} from '@src/dFormConstructor/context/formPropsProvider';
 import {formPropsToSource} from '@src/dFormConstructor/renders/sourceEditor/tools/formPropsToSource';
 import {FormInfoContext} from '@src/dFormConstructor/context/formInfoProvider';
 import {SelectedFieldContext} from '@src/dFormConstructor/context/selectedFieldProvider';
 import {getNodeByFieldId} from '@src/dFormConstructor/renders/fieldsTree/tools/getFieldNode';
+import {IKey} from '@krinopotam/service-types';
 
-export const useGetTreeProps = (treeApi: ITreeSelectApi, editFormProps: IDFormModalProps, dataSet: IExtTreeNode<{fieldInfo: BaseComponentInfo}>[]) => {
+export const useGetTreeProps = (treeApi: IExtTreeApi, editFormProps: IDFormModalProps, dataSet: IExtTreeNode<{fieldInfo: BaseComponentInfo}>[]) => {
     const {setFormProps} = useContext(FormPropsContext);
     const {formInfo} = useContext(FormInfoContext);
-    const {setFieldId} = useContext(SelectedFieldContext);
+    const {setSelectedFieldId} = useContext(SelectedFieldContext);
 
-    useTranferSelection(treeApi, dataSet);
-
-    //useClearDeprecatedSelection(treeApi, dataSet);
+    const prevDataSetRef = useRef(dataSet);
+    useTransferNodesState(treeApi, prevDataSetRef.current, dataSet);
+    if (prevDataSetRef.current !== dataSet) prevDataSetRef.current = dataSet;
 
     return {
         apiRef: treeApi,
@@ -46,7 +46,7 @@ export const useGetTreeProps = (treeApi: ITreeSelectApi, editFormProps: IDFormMo
             if (!componentInfo.getParent()) return false;
             componentInfo.removeFromTree();
 
-            const formProps = formInfo.toFormProps();
+            const formProps = formInfo.getProps();
             setFormProps(formProps, formPropsToSource(formProps), 'fieldsTree');
         },
         allowDrop: info => {
@@ -75,47 +75,47 @@ export const useGetTreeProps = (treeApi: ITreeSelectApi, editFormProps: IDFormMo
             else if (pos === 'below') dropNode.getParent()?.addChild(dragNode, dropNode, 'below');
             else if (pos === 'above') dropNode.getParent()?.addChild(dragNode, dropNode, 'above');
 
-            const formProps = formInfo.toFormProps();
+            const formProps = formInfo.getProps();
             setFormProps(formProps, formPropsToSource(formProps), 'fieldsTree');
         },
         onSelect: selected => {
             const key = selected?.[0]?.toString();
             const node = treeApi.getNode(key);
             const field = node?.fieldInfo as BaseComponentInfo | undefined;
-            setFieldId(field?.getId());
+            setSelectedFieldId(field?.getId());
         },
     } satisfies IExtTreeProps;
 };
 
-/** After dataSet changed we should check, is selected node still exist in new dataSet and reselect or deselect it */
-const useClearDeprecatedSelection = (treeApi: ITreeSelectApi, newDataSet: IExtTreeNode<{fieldInfo: BaseComponentInfo}>[]) => {
-    const {setFieldId} = useContext(SelectedFieldContext);
-    useEffect(() => {
-        const key = treeApi.getActiveNode()?.id;
-        if (!key) return;
-        const node = treeApi.getNode(key, newDataSet);
-        const field = node?.fieldInfo as BaseComponentInfo | undefined;
-        setFieldId(field?.getId());
-    });
-};
-
-/** Trying to keep selection
+/** Trying to keep nodes state
  * Usually DataSet populated by new nodes with new NODE_ID.
- * We need to find old selected node in new dataSet (by field id and code) and reselect it
+ * We need to get old node state in new dataSet (by field id and code) and reset it
  */
-const useTranferSelection = (treeApi: ITreeSelectApi, newDataSet: IExtTreeNode<{fieldInfo: BaseComponentInfo}>[]) => {
-    const {setFieldId} = useContext(SelectedFieldContext);
+const useTransferNodesState = (
+    treeApi: IExtTreeApi,
+    oldDataSet: IExtTreeNode<{fieldInfo: BaseComponentInfo}>[],
+    newDataSet: IExtTreeNode<{fieldInfo: BaseComponentInfo}>[]
+) => {
+    const {setSelectedFieldId} = useContext(SelectedFieldContext);
     useEffect(() => {
-        const selNode = treeApi.getSelectedNodes()?.[0] as IExtTreeNode<{fieldInfo: BaseComponentInfo}> | undefined;
-        if (!selNode) return;
-        console.log(selNode);
-        const nodeInNewDataSet = getNodeByFieldId(newDataSet, selNode.fieldInfo.getId(), selNode.fieldInfo.CODE);
-        if (nodeInNewDataSet) {
-            treeApi.selectNode(nodeInNewDataSet.id);
-            setFieldId(nodeInNewDataSet.fieldInfo.getId());
-        } else {
-            treeApi.selectNode(undefined);
-            setFieldId(undefined);
+        /* transfer selection */
+        // check if new data set already has selected node (for example, it happens when new node create)
+        const alreadySelNode = treeApi.getSelectedNodes(newDataSet)?.[0] as IExtTreeNode<{fieldInfo: BaseComponentInfo}> | undefined;
+        if (!alreadySelNode) {
+            const oldSelNode = treeApi.getSelectedNodes(oldDataSet)?.[0] as IExtTreeNode<{ fieldInfo: BaseComponentInfo }> | undefined;
+            const newSelNode = oldSelNode ? getNodeByFieldId(newDataSet, oldSelNode.fieldInfo.getId(), oldSelNode.fieldInfo.CODE) : undefined;
+            treeApi.selectNode(newSelNode ? newSelNode.id : undefined);
+            setSelectedFieldId(newSelNode ? newSelNode.fieldInfo.getId() : undefined);
         }
-    });
+
+        /* transfer expanded state */
+        const oldExpandedNodes = treeApi.getExpandedNodes(oldDataSet) as IExtTreeNode<{fieldInfo: BaseComponentInfo}>[] | undefined;
+        const newExpandedKeys: IKey[] = [];
+        if (!oldExpandedNodes) return;
+        for (const node of oldExpandedNodes) {
+            const newNode = getNodeByFieldId(newDataSet, node.fieldInfo.getId(), node.fieldInfo.CODE);
+            if (newNode && newNode.id) newExpandedKeys.push(newNode.id);
+        }
+        treeApi.setExpandedKeys(newExpandedKeys);
+    }, [newDataSet, oldDataSet, setSelectedFieldId, treeApi]);
 };
