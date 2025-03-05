@@ -11,10 +11,10 @@ export const PropsEditorLayout = (): React.JSX.Element => {
         <div
             style={{
                 minWidth: 300,
-                width:400,
+                width: 400,
                 background: colorBgContainer,
                 borderLeft: 'solid 1px ' + colorBorder,
-                paddingLeft:20,
+                paddingLeft: 20,
                 display: 'flex',
                 flexDirection: 'column',
                 minHeight: 0,

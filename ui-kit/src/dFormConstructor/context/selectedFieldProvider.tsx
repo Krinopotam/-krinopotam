@@ -1,18 +1,20 @@
 import React, {createContext, PropsWithChildren, useMemo, useState} from 'react';
 
-export interface ISelectedFieldContext {
-    selectedFieldId: string | undefined;
-    setSelectedFieldId: (val: string | undefined) => void;
+import {BaseComponentInfo} from '@src/dFormConstructor/fields/baseComponentInfo';
+
+export interface ISelectedNodeContext {
+    selectedField: BaseComponentInfo | undefined;
+    setSelectedField: (field: BaseComponentInfo | undefined) => void;
 }
 
-export const SelectedFieldContext = createContext<ISelectedFieldContext>({} as ISelectedFieldContext);
+export const SelectedFieldContext = createContext<ISelectedNodeContext>({} as ISelectedNodeContext);
 
 export const SelectedFieldProvider = ({children}: PropsWithChildren) => {
-    const [fieldId, setFieldId] = useState<string|undefined>(undefined);
+    const [field, setField] = useState<BaseComponentInfo | undefined>(undefined);
 
-    const value: ISelectedFieldContext = useMemo(() => {
-        return {selectedFieldId: fieldId, setSelectedFieldId: setFieldId};
-    }, [fieldId]);
+    const value: ISelectedNodeContext = useMemo(() => {
+        return {selectedField: field, setSelectedField: setField};
+    }, [field]);
 
     return <SelectedFieldContext.Provider value={value}>{children}</SelectedFieldContext.Provider>;
 };

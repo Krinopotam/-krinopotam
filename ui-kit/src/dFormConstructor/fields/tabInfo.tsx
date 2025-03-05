@@ -18,12 +18,14 @@ export class TabInfo extends BaseComponentInfo {
         </Space>
     );
 
-    override canHaveChildren(): boolean | string {
-        return true;
+    /** @returns true if field can be moved to the specified parent */
+    override canHaveParent(parent?:BaseComponentInfo) {
+        return parent?.CODE === 'tabs';
     }
 
-    override shouldHaveParent(): boolean | string {
-        return 'tabs';
+    /** @returns true if field can be parent of the specified child. If child is not specified, returns true if field potentially can have children */
+    canHaveChild (child?:BaseComponentInfo) {
+        return child?.CODE !== 'tab';
     }
 
     override getPropsInfo() {

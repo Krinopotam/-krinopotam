@@ -15,7 +15,7 @@ import {SelectedFieldContext} from '@src/dFormConstructor/context/selectedFieldP
 
 export const useGetTreeEditFormProps = (treeApi: IExtTreeApi, formInfo: FormInfo): IDFormModalProps => {
     const {setFormProps} = useContext(FormPropsContext);
-    const {setSelectedField} = useContext(SelectedFieldContext);
+    const {setSelectedNodeId} = useContext(SelectedFieldContext);
     return {
         formId: 'EditForm',
         fieldsProps: {
@@ -80,7 +80,7 @@ export const useGetTreeEditFormProps = (treeApi: IExtTreeApi, formInfo: FormInfo
                 treeApi.expandNode(parentFieldInfo.NODE_ID);
                 const formProps = formInfo.getProps();
                 setFormProps(formProps, formPropsToSource(formProps), 'fieldsTree');
-                setSelectedField(fieldInfo);
+                setSelectedNodeId(fieldInfo.NODE_ID);
             }
         },
     };

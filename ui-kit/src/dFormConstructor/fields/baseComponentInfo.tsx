@@ -33,21 +33,14 @@ export class BaseComponentInfo {
         }
     }
 
-    /** @returns true if field can have any children fields or fieldInfo code if field can have children only with same code */
-    canHaveChildren(): boolean | string {
-        return false;
+    /** @returns true if field can be child of the specified parent */
+    canHaveParent(parent?:BaseComponentInfo) {
+        return parent?.CODE === 'form' || parent?.CODE === 'tab' || parent?.CODE === 'inlineGroup';
     }
 
-    /** @returns true if field should have parent or the fieldInfo code that can only be a parent for this field */
-    shouldHaveParent(): boolean | string {
-        return true;
-    }
-
-    canBeMovedTo(parent:BaseComponentInfo) {
-        return true
-    }
-
-    canBeParentOf (child:BaseComponentInfo) {
+    /** @returns true if field can be parent of the specified child. If child is not specified, returns true if field potentially can have children */
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    canHaveChild (_child?:BaseComponentInfo) {
         return false
     }
 
@@ -127,8 +120,8 @@ export class BaseComponentInfo {
     }
 
     addChild(fieldInfo: BaseComponentInfo, target?: BaseComponentInfo, pos: 'bottom' | 'top' | 'below' | 'above' = 'bottom') {
-        if (this.canHaveChildren() !== true && this.canHaveChildren() !== fieldInfo.CODE) {
-            console.warn("Field can't have this type of children");
+        if (!this.canHaveChild(fieldInfo) || !fieldInfo.canHaveParent(this)) {
+            console.warn("Field can't have this type of children", this,  fieldInfo);
             return;
         }
 

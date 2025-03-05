@@ -5,7 +5,7 @@ import {FormOutlined} from '@ant-design/icons';
 import React from 'react';
 import {IExtTreeNode} from '@src/tree';
 import {IBaseFieldProps} from '@src/dForm/fields/base';
-import {AnyType} from '@krinopotam/service-types';
+import {AnyType, IKey} from '@krinopotam/service-types';
 import {setChildrenProps} from '@src/dFormConstructor/renders/fieldsTree/tools/setChildrenProps';
 
 export class FormInfo extends BaseComponentInfo {
@@ -19,12 +19,14 @@ export class FormInfo extends BaseComponentInfo {
         </Space>
     );
 
-    override canHaveChildren(): boolean | string {
-        return true;
+    /** @returns true if field can be child of the specified parent */
+    canHaveParent() {
+        return false;
     }
 
-    override shouldHaveParent(): boolean | string {
-        return false;
+    /** @returns true if field can be a parent of the specified child. If child is not specified, returns true if field potentially can have children */
+    canHaveChild(child?: BaseComponentInfo) {
+        return child?.CODE !== 'tab';
     }
 
     override getPropsInfo() {
@@ -47,7 +49,7 @@ export class FormInfo extends BaseComponentInfo {
 
     /** @returns form props */
     override getProps(): Record<string, unknown> & IDFormProps {
-        const result:Record<string, unknown> & IDFormProps = {...this.props, formId: this.getId()};
+        const result: Record<string, unknown> & IDFormProps = {...this.props, formId: this.getId()};
 
         const fieldProps: IDFormProps['fieldsProps'] = {};
 
@@ -71,9 +73,9 @@ export class FormInfo extends BaseComponentInfo {
         return 'My form';
     }
 
-    toTreeDataSet(): IExtTreeNode<{fieldInfo:BaseComponentInfo}>[] {
+    toTreeDataSet(): IExtTreeNode<{fieldInfo: BaseComponentInfo}>[] {
         const recursive = (fields: BaseComponentInfo[]) => {
-            const result: IExtTreeNode<{fieldInfo:BaseComponentInfo}>[] = [];
+            const result: IExtTreeNode<{fieldInfo: BaseComponentInfo}>[] = [];
             for (const fieldInfo of fields) {
                 const id = fieldInfo.NODE_ID;
                 const title = (
@@ -81,9 +83,9 @@ export class FormInfo extends BaseComponentInfo {
                         {fieldInfo.TITLE}: <b>{fieldInfo.getLabel()}</b>
                     </>
                 );
-                const isLeaf = !fieldInfo.canHaveChildren() || undefined;
+                const isLeaf = !fieldInfo.canHaveChild() || undefined;
 
-                const node: IExtTreeNode<{fieldInfo:BaseComponentInfo}> = {id, title, fieldInfo, isLeaf};
+                const node: IExtTreeNode<{fieldInfo: BaseComponentInfo}> = {id, title, fieldInfo, isLeaf};
 
                 if (fieldInfo.getChildren().length > 0) {
                     node['children'] = recursive(fieldInfo.getChildren());
@@ -98,20 +100,18 @@ export class FormInfo extends BaseComponentInfo {
         return recursive([this]);
     }
 
-    getFieldInfoById(id: string) {
+    getFieldInfoByNodeId(nodeId: IKey) {
         const recursive = (fields: BaseComponentInfo[]): BaseComponentInfo | undefined => {
             for (const field of fields) {
-                if (field.getId() === id) return field;
-                if (field.canHaveChildren()) {
-                    const result = recursive(field.getChildren());
-                    if (result) return result;
-                }
+                if (field.NODE_ID === nodeId) return field;
+                const result = recursive(field.getChildren());
+                if (result) return result;
             }
 
             return undefined;
         };
 
-        if (this.getId() === id) return this;
+        if (this.NODE_ID === nodeId) return this;
         return recursive(this.getChildren());
     }
 }

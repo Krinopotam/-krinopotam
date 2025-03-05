@@ -18,8 +18,9 @@ export class TabsInfo extends BaseComponentInfo {
         </Space>
     );
 
-    override canHaveChildren(): boolean | string {
-        return 'tab';
+    /** @returns true if field can be parent of the specified child. If child is not specified, returns true if field potentially can have children */
+    canHaveChild (child?:BaseComponentInfo) {
+        return !child || child.CODE === 'tab';
     }
 
     override getPropsInfo() {

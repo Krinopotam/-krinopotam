@@ -12,7 +12,7 @@ import {IKey} from '@krinopotam/service-types';
 export const useGetTreeProps = (treeApi: IExtTreeApi, editFormProps: IDFormModalProps, dataSet: IExtTreeNode<{fieldInfo: BaseComponentInfo}>[]) => {
     const {setFormProps} = useContext(FormPropsContext);
     const {formInfo} = useContext(FormInfoContext);
-    const {setSelectedFieldId} = useContext(SelectedFieldContext);
+    const {setSelectedField} = useContext(SelectedFieldContext);
 
     const prevDataSetRef = useRef(dataSet);
     useTransferNodesState(treeApi, prevDataSetRef.current, dataSet);
@@ -50,39 +50,34 @@ export const useGetTreeProps = (treeApi: IExtTreeApi, editFormProps: IDFormModal
             setFormProps(formProps, formPropsToSource(formProps), 'fieldsTree');
         },
         allowDrop: info => {
-            const dragNode = info.dragNode['fieldInfo'] as BaseComponentInfo;
-            const dropNode = info.dropNode['fieldInfo'] as BaseComponentInfo;
+            const dragField = info.dragNode['fieldInfo'] as BaseComponentInfo;
+            const dropField = info.dropNode['fieldInfo'] as BaseComponentInfo;
             const dropPosition = info.dropPosition; //1 - below the drop node, 0 - inside drop node, -1 - above the drop node (only for root)
 
-            const targetNode = dropPosition === 0 ? dropNode : dropNode.getParent();
+            const targetNode = dropPosition === 0 ? dropField : dropField.getParent();
 
-            return (
-                !!targetNode &&
-                (targetNode.canHaveChildren() === true || targetNode.canHaveChildren() === dragNode.CODE) &&
-                (dragNode.shouldHaveParent() === true || dragNode.shouldHaveParent() === targetNode.CODE)
-            );
+            return !!targetNode && targetNode.canHaveChild(dragField) && dragField.canHaveParent(targetNode);
         },
         onDrop: info => {
             let pos: INodePosition = 'insideTop';
             if (info.dropToGap) pos = info.dropPosition < 0 ? 'above' : 'below';
-            const dragNode = info.dragNode['fieldInfo'] as BaseComponentInfo;
-            const dropNode = info.node['fieldInfo'] as BaseComponentInfo;
+            const dragField = info.dragNode['fieldInfo'] as BaseComponentInfo;
+            const dropField = info.node['fieldInfo'] as BaseComponentInfo;
 
-            if (!dropNode || !dragNode.getParent()) return;
+            if (!dropField || !dragField.getParent()) return;
 
-            dragNode.removeFromTree();
-            if (pos === 'insideTop') dropNode.addChild(dragNode, undefined, 'top');
-            else if (pos === 'below') dropNode.getParent()?.addChild(dragNode, dropNode, 'below');
-            else if (pos === 'above') dropNode.getParent()?.addChild(dragNode, dropNode, 'above');
+            dragField.removeFromTree();
+            if (pos === 'insideTop') dropField.addChild(dragField, undefined, 'top');
+            else if (pos === 'below') dropField.getParent()?.addChild(dragField, dropField, 'below');
+            else if (pos === 'above') dropField.getParent()?.addChild(dragField, dropField, 'above');
 
             const formProps = formInfo.getProps();
             setFormProps(formProps, formPropsToSource(formProps), 'fieldsTree');
         },
         onSelect: selected => {
-            const key = selected?.[0]?.toString();
-            const node = treeApi.getNode(key);
-            const field = node?.fieldInfo as BaseComponentInfo | undefined;
-            setSelectedFieldId(field?.getId());
+            const key = selected?.[0] as IKey;
+            const node = treeApi.getNode(key) as IExtTreeNode<{fieldInfo: BaseComponentInfo}> | undefined;
+            setSelectedField(node?.fieldInfo);
         },
     } satisfies IExtTreeProps;
 };
@@ -96,16 +91,16 @@ const useTransferNodesState = (
     oldDataSet: IExtTreeNode<{fieldInfo: BaseComponentInfo}>[],
     newDataSet: IExtTreeNode<{fieldInfo: BaseComponentInfo}>[]
 ) => {
-    const {setSelectedFieldId} = useContext(SelectedFieldContext);
+    const {setSelectedField} = useContext(SelectedFieldContext);
     useEffect(() => {
         /* transfer selection */
         // check if new data set already has selected node (for example, it happens when new node create)
         const alreadySelNode = treeApi.getSelectedNodes(newDataSet)?.[0] as IExtTreeNode<{fieldInfo: BaseComponentInfo}> | undefined;
         if (!alreadySelNode) {
-            const oldSelNode = treeApi.getSelectedNodes(oldDataSet)?.[0] as IExtTreeNode<{ fieldInfo: BaseComponentInfo }> | undefined;
+            const oldSelNode = treeApi.getSelectedNodes(oldDataSet)?.[0] as IExtTreeNode<{fieldInfo: BaseComponentInfo}> | undefined;
             const newSelNode = oldSelNode ? getNodeByFieldId(newDataSet, oldSelNode.fieldInfo.getId(), oldSelNode.fieldInfo.CODE) : undefined;
             treeApi.selectNode(newSelNode ? newSelNode.id : undefined);
-            setSelectedFieldId(newSelNode ? newSelNode.fieldInfo.getId() : undefined);
+            setSelectedField(newSelNode ? newSelNode.fieldInfo : undefined);
         }
 
         /* transfer expanded state */
@@ -117,5 +112,5 @@ const useTransferNodesState = (
             if (newNode && newNode.id) newExpandedKeys.push(newNode.id);
         }
         treeApi.setExpandedKeys(newExpandedKeys);
-    }, [newDataSet, oldDataSet, setSelectedFieldId, treeApi]);
+    }, [newDataSet, oldDataSet, setSelectedField, treeApi]);
 };
