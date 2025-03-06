@@ -3,7 +3,8 @@ import type {AnyType} from '@krinopotam/service-types';
 import type {DModel} from '@src/dForm';
 import type {IBaseField, IBaseFieldProps} from '@src/dForm/fields/base';
 import React from 'react';
-import {GetNanoId} from "@krinopotam/js-helpers/helpersString/getNanoId";
+import {GetNanoId} from '@krinopotam/js-helpers/helpersString/getNanoId';
+import {Space} from 'antd';
 
 export type IPropsType = 'string' | 'number' | 'boolean' | 'fieldCodes' | string[];
 
@@ -13,6 +14,7 @@ export type IComponentPropsInfo<TFieldProps> = {id?: 'string'} & {
 
 export class BaseComponentInfo {
     public readonly CODE: string = 'base';
+    public readonly ICON: React.ReactNode = undefined;
     public readonly TITLE: string | React.ReactNode = 'base';
     public readonly CLASS: (new (fieldName: string, fieldProps: AnyType, model: DModel, parent?: IBaseField) => IBaseField) | null = null;
     public readonly INTERFACE_NAME: string = 'IBaseFieldProps';
@@ -21,29 +23,29 @@ export class BaseComponentInfo {
 
     protected props: {[key: string]: unknown} = {};
     private id: string = '';
-    protected label: string | React.ReactNode = '';
+    protected label: React.ReactNode | string = '';
     protected children: BaseComponentInfo[] = [];
     private parent: BaseComponentInfo | undefined;
+    private root: BaseComponentInfo | undefined;
 
-    constructor(params?: {id: string; label?: string | React.ReactNode}) {
+    constructor(params?: {id: string; label?: React.ReactNode | string}) {
         this.NODE_ID = GetNanoId();
         if (params) {
             this.id = params.id;
-            this.label = params.label;
+            this.label = params.label ?? '';
         }
     }
 
     /** @returns true if field can be child of the specified parent */
-    canHaveParent(parent?:BaseComponentInfo) {
+    canHaveParent(parent?: BaseComponentInfo) {
         return parent?.CODE === 'form' || parent?.CODE === 'tab' || parent?.CODE === 'inlineGroup';
     }
 
     /** @returns true if field can be parent of the specified child. If child is not specified, returns true if field potentially can have children */
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    canHaveChild (_child?:BaseComponentInfo) {
-        return false
+    canHaveChild(_child?: BaseComponentInfo) {
+        return false;
     }
-
 
     /** @returns field props info */
     getPropsInfo(): IComponentPropsInfo<AnyType> {
@@ -67,6 +69,25 @@ export class BaseComponentInfo {
         } satisfies IComponentPropsInfo<IBaseFieldProps<AnyType, AnyType>>;
     }
 
+    getTitleForList() {
+        return (
+            <Space>
+                {this.ICON}
+                {this.TITLE}
+            </Space>
+        );
+    }
+
+    getTitleForTree() {
+        let label = this.getLabel() || ' - ';
+        if (label.length > 20) label = `${label.slice(0, 20)}...`;
+        return (
+            <>
+                {this.ICON} {this.getId()}: <b>{label}</b>
+            </>
+        );
+    }
+
     /** @returns field instance id */
     getId(): string {
         return this.id;
@@ -78,8 +99,8 @@ export class BaseComponentInfo {
     }
 
     /** @returns field instance label */
-    getLabel(): string | undefined {
-        return (this.label ?? this.getId()) as string;
+    getLabel(): React.ReactNode | string | undefined {
+        return this.label;
     }
 
     setLabel(label: string) {
@@ -91,16 +112,16 @@ export class BaseComponentInfo {
         return {component: this.CLASS, label: this.getLabel(), ...this.props};
     }
 
+    setProps(props: IBaseFieldProps<AnyType, AnyType> | Record<string, unknown>) {
+        const {component, ...fieldProps} = props;
+        this.label = fieldProps.label as string;
+        this.props = fieldProps;
+    }
+
     /** Set component prop */
     setProp(name: string, val: unknown) {
         if (name === 'label') this.label = val as string;
         this.props[name] = val;
-    }
-
-    setProps(props: IBaseFieldProps<AnyType, AnyType> | Record<string, unknown>) {
-        const {component, ...fieldProps} = props;
-        this.label = fieldProps.label as string | React.ReactNode;
-        this.props = fieldProps;
     }
 
     clearChildren() {
@@ -115,17 +136,26 @@ export class BaseComponentInfo {
         this.parent = parent;
     }
 
+    getRoot() {
+        return this.parent ? this.root : this;
+    }
+
+    setRoot(root: BaseComponentInfo | undefined) {
+        this.root = root;
+    }
+
     getChildren() {
         return this.children;
     }
 
     addChild(fieldInfo: BaseComponentInfo, target?: BaseComponentInfo, pos: 'bottom' | 'top' | 'below' | 'above' = 'bottom') {
         if (!this.canHaveChild(fieldInfo) || !fieldInfo.canHaveParent(this)) {
-            console.warn("Field can't have this type of children", this,  fieldInfo);
+            console.warn("Field can't have this type of children", this, fieldInfo);
             return;
         }
 
         fieldInfo.setParent(this);
+        fieldInfo.setRoot(this.getRoot());
         this.children = AddElementToArray(this.children, fieldInfo, target, pos);
     }
 
@@ -139,10 +169,16 @@ export class BaseComponentInfo {
 
         recursiveRemove(this.getChildren());
         fieldInfo.setParent(undefined);
+        fieldInfo.setRoot(undefined);
     }
 
     removeFromTree() {
-        this.parent?.removeChild(this);
+        if (this.parent) {
+            this.parent?.removeChild(this);
+        } else {
+            this.setParent(undefined);
+            this.setRoot(undefined);
+        }
     }
 
     moveChild(fieldInfo: BaseComponentInfo, index: number) {

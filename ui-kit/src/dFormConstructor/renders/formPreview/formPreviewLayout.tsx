@@ -4,14 +4,14 @@ import {FormPreview} from '@src/dFormConstructor/renders/formPreview/formPreview
 import {IDFormModalApi} from '@src/dFormModal';
 import {Flex, message, Switch, theme, Tooltip, Typography} from 'antd';
 import React, {useContext} from 'react';
-import {FormPropsContext} from '@src/dFormConstructor/context/formPropsProvider';
+import {FormInfoContext} from '@src/dFormConstructor/context/formInfoProvider';
 
 export const FormPreviewLayout = ({sourceFormApi}: {sourceFormApi: IDFormModalApi}): React.JSX.Element => {
     const {
         token: {colorBgContainer},
     } = theme.useToken();
 
-    const {source} = useContext(FormPropsContext);
+    const {formInfo} = useContext(FormInfoContext);
     const [messageApi, contextHolder] = message.useMessage();
     const [horizontal, setHorizontal] = React.useState(false);
 
@@ -48,7 +48,7 @@ export const FormPreviewLayout = ({sourceFormApi}: {sourceFormApi: IDFormModalAp
                     <Button
                         icon={<CopyOutlined />}
                         onClick={() => {
-                            navigator.clipboard.writeText(source).then(() => {
+                            navigator.clipboard.writeText(formInfo.toSource()).then(() => {
                                 messageApi
                                     .success({
                                         content: 'Source code copied to clipboard',

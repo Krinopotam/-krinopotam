@@ -2,15 +2,12 @@ import {BaseComponentInfo} from '@src/dFormConstructor/fields/baseComponentInfo'
 import {IDFormModalProps} from '@src/dFormModal';
 import {IExtTreeApi, IExtTreeNode, IExtTreeProps, INodePosition} from '@src/tree';
 import {useContext, useEffect, useRef} from 'react';
-import {FormPropsContext} from '@src/dFormConstructor/context/formPropsProvider';
-import {formPropsToSource} from '@src/dFormConstructor/renders/sourceEditor/tools/formPropsToSource';
 import {FormInfoContext} from '@src/dFormConstructor/context/formInfoProvider';
 import {SelectedFieldContext} from '@src/dFormConstructor/context/selectedFieldProvider';
 import {getNodeByFieldId} from '@src/dFormConstructor/renders/fieldsTree/tools/getFieldNode';
 import {IKey} from '@krinopotam/service-types';
 
 export const useGetTreeProps = (treeApi: IExtTreeApi, editFormProps: IDFormModalProps, dataSet: IExtTreeNode<{fieldInfo: BaseComponentInfo}>[]) => {
-    const {setFormProps} = useContext(FormPropsContext);
     const {formInfo} = useContext(FormInfoContext);
     const {setSelectedField} = useContext(SelectedFieldContext);
 
@@ -43,11 +40,11 @@ export const useGetTreeProps = (treeApi: IExtTreeApi, editFormProps: IDFormModal
         dataSet: dataSet,
         onDelete: node => {
             const componentInfo = node['fieldInfo'] as BaseComponentInfo;
-            if (!componentInfo.getParent()) return false;
+            if (!componentInfo.getParent()) return false; // root field can't be removed
             componentInfo.removeFromTree();
-
-            const formProps = formInfo.getProps();
-            setFormProps(formProps, formPropsToSource(formProps), 'fieldsTree');
+            formInfo.emitFieldsTreeRerender();
+            formInfo.emitFormPreviewRerender();
+            formInfo.emitPropsEditorRerender();
         },
         allowDrop: info => {
             const dragField = info.dragNode['fieldInfo'] as BaseComponentInfo;
@@ -71,8 +68,9 @@ export const useGetTreeProps = (treeApi: IExtTreeApi, editFormProps: IDFormModal
             else if (pos === 'below') dropField.getParent()?.addChild(dragField, dropField, 'below');
             else if (pos === 'above') dropField.getParent()?.addChild(dragField, dropField, 'above');
 
-            const formProps = formInfo.getProps();
-            setFormProps(formProps, formPropsToSource(formProps), 'fieldsTree');
+            formInfo.emitFieldsTreeRerender();
+            formInfo.emitFormPreviewRerender();
+            formInfo.emitPropsEditorRerender();
         },
         onSelect: selected => {
             const key = selected?.[0] as IKey;

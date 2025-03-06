@@ -4,7 +4,6 @@ import {IDFormFieldsProps} from '@src/dForm';
 import {IBaseFieldProps} from '@src/dForm/fields/base';
 import {IInlineGroupFieldProps, InlineGroupField} from '@src/dForm/fields/inlineGroup';
 import {BaseComponentInfo, IComponentPropsInfo} from '@src/dFormConstructor/fields/baseComponentInfo';
-import {Space} from 'antd';
 import React from 'react';
 import {setChildrenProps} from '@src/dFormConstructor/renders/fieldsTree/tools/setChildrenProps';
 
@@ -12,15 +11,11 @@ export class InlineGroupInfo extends BaseComponentInfo {
     public override readonly CODE = 'inlineGroup';
     public override readonly CLASS = InlineGroupField;
     public override readonly INTERFACE_NAME = 'IInlineGroupFieldProps';
-    public override readonly TITLE = (
-        <Space>
-            <SplitCellsOutlined />
-            Inline group
-        </Space>
-    );
+    public override readonly ICON = (<SplitCellsOutlined />);
+    public override readonly TITLE = 'Inline group';
 
     /** @returns true if field can be parent of the specified child. If child is not specified, returns true if field potentially can have children */
-    canHaveChild (child?:BaseComponentInfo) {
+    override canHaveChild(child?: BaseComponentInfo) {
         return child?.CODE !== 'tab';
     }
 

@@ -3,7 +3,6 @@ import {AnyType} from '@krinopotam/service-types';
 import {IDFormFieldsProps} from '@src/dForm';
 import {IBaseFieldProps} from '@src/dForm/fields/base';
 import {BaseComponentInfo, IComponentPropsInfo} from '@src/dFormConstructor/fields/baseComponentInfo';
-import {Space} from 'antd';
 import React from 'react';
 import {setChildrenProps} from '@src/dFormConstructor/renders/fieldsTree/tools/setChildrenProps';
 
@@ -11,25 +10,29 @@ export class TabInfo extends BaseComponentInfo {
     public override readonly CODE = 'tab';
     public override readonly CLASS = null;
     public override readonly INTERFACE_NAME = '';
-    public override readonly TITLE = (
-        <Space>
-            <FolderOutlined />
-            Tab
-        </Space>
-    );
+    public override readonly ICON = (<FolderOutlined />);
+    public override readonly TITLE = 'Tab';
 
     /** @returns true if field can be moved to the specified parent */
-    override canHaveParent(parent?:BaseComponentInfo) {
+    override canHaveParent(parent?: BaseComponentInfo) {
         return parent?.CODE === 'tabs';
     }
 
     /** @returns true if field can be parent of the specified child. If child is not specified, returns true if field potentially can have children */
-    canHaveChild (child?:BaseComponentInfo) {
+    override canHaveChild(child?: BaseComponentInfo) {
         return child?.CODE !== 'tab';
     }
 
     override getPropsInfo() {
         return {label: 'string'} satisfies IComponentPropsInfo<Record<string, unknown>>;
+    }
+
+    override getTitleForTree(): React.JSX.Element {
+        return (
+            <>
+                {this.ICON} <b>{this.getId()}</b>;
+            </>
+        );
     }
 
     /** @returns field instance props */
@@ -48,10 +51,10 @@ export class TabInfo extends BaseComponentInfo {
         setChildrenProps(this, fieldsProps);
     }
 
-/*    override getId(): string {
-        const fieldId = super.getId();
-        const parentId = this.getParent()?.getId()
-        console.log(`${parentId}_${fieldId}`)
-        return parentId ? `${parentId}_${fieldId}` : fieldId;
-    }*/
+    /*    override getId(): string {
+            const fieldId = super.getId();
+            const parentId = this.getParent()?.getId()
+            console.log(`${parentId}_${fieldId}`)
+            return parentId ? `${parentId}_${fieldId}` : fieldId;
+        }*/
 }

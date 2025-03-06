@@ -9,8 +9,6 @@ import {SourceEditorModal} from '@src/dFormConstructor/renders/sourceEditor/sour
 export const ConstructorLayout = (): React.JSX.Element => {
     const [sourceFormApi] = useState({} as IDFormModalApi);
 
-    console.log('ConstructorLayout');
-
     return (
         <div style={{display: 'flex', flexDirection: 'column', height: '100%'}}>
             <Typography.Title level={1} style={{marginBottom: 10, marginTop: 0}}>

@@ -5,7 +5,7 @@ export const getFieldsListForSelect = () => {
     for (const key in FIELDS_INFO_MAP) {
         const infoClass = FIELDS_INFO_MAP[key];
         const infoClassInstance = new infoClass();
-        result.push({id: infoClassInstance.CODE, label: infoClassInstance.TITLE, infoClass});
+        result.push({id: infoClassInstance.CODE, label: infoClassInstance.getTitleForList(), infoClass});
     }
 
     return result;

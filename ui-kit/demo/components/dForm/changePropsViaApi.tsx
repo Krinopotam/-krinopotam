@@ -12,6 +12,9 @@ const formProps: IDFormProps = {
     apiRef: api,
     formId: 'Test form',
     confirmChanges: true,
+    keepReadOnlyState: true,
+    keepDisabledState: true,
+    keepHiddenState: true,
     fieldsProps: {
         field1: {component: InputField, label: 'Поле 1'},
         field2: {component: InputField, label: 'Поле 2', autoFocus: true},

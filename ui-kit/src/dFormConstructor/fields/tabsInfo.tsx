@@ -3,7 +3,6 @@ import {AnyType} from '@krinopotam/service-types';
 import {IBaseFieldProps} from '@src/dForm/fields/base';
 import {ITabsFieldProps, TabsField} from '@src/dForm/fields/tabs';
 import {BaseComponentInfo, IComponentPropsInfo} from '@src/dFormConstructor/fields/baseComponentInfo';
-import {Space} from 'antd';
 import React from 'react';
 import {TabInfo} from '@src/dFormConstructor/fields/tabInfo';
 
@@ -11,15 +10,11 @@ export class TabsInfo extends BaseComponentInfo {
     public override readonly CODE = 'tabs';
     public override readonly CLASS = TabsField;
     public override readonly INTERFACE_NAME = 'ITabsFieldProps';
-    public override readonly TITLE = (
-        <Space>
-            <FolderOpenOutlined />
-            Tabs
-        </Space>
-    );
+    public override readonly ICON = (<FolderOpenOutlined />);
+    public override readonly TITLE = 'Tabs';
 
     /** @returns true if field can be parent of the specified child. If child is not specified, returns true if field potentially can have children */
-    canHaveChild (child?:BaseComponentInfo) {
+    override canHaveChild(child?: BaseComponentInfo) {
         return !child || child.CODE === 'tab';
     }
 
@@ -45,7 +40,7 @@ export class TabsInfo extends BaseComponentInfo {
             if (tabInfo.CODE !== 'tab') continue;
 
             const tabId = tabInfo.getLabel() ?? tabInfo.getId();
-            tabsProps[tabId] = {...(tabInfo.getProps() as IBaseFieldProps<AnyType, AnyType>)};
+            tabsProps[tabId as string] = {...(tabInfo.getProps() as IBaseFieldProps<AnyType, AnyType>)};
         }
         return {component: this.CLASS, tabs: tabsProps} satisfies ITabsFieldProps;
     }
@@ -53,7 +48,7 @@ export class TabsInfo extends BaseComponentInfo {
     override setProps(fieldProps: ITabsFieldProps) {
         const {component, tabs, ...props} = fieldProps;
         this.props = props;
-        this.label = fieldProps.label;
+        this.label = fieldProps.label as string;
         this.children = [];
         if (typeof tabs !== 'object') return;
         for (const key in tabs) {

@@ -8,20 +8,18 @@ import {generateFieldId} from '@src/dFormConstructor/renders/fieldsTree/tools/ge
 import {useContext} from 'react';
 import {FormInfo} from '@src/dFormConstructor/fields/formInfo';
 import {BaseComponentInfo} from '@src/dFormConstructor/fields/baseComponentInfo';
-import {FormPropsContext} from '@src/dFormConstructor/context/formPropsProvider';
-import {formPropsToSource} from '@src/dFormConstructor/renders/sourceEditor/tools/formPropsToSource';
 import {IExtTreeApi} from '@src/tree';
 import {SelectedFieldContext} from '@src/dFormConstructor/context/selectedFieldProvider';
+import {UpperFirstLetter} from "@krinopotam/js-helpers";
 
 export const useGetTreeEditFormProps = (treeApi: IExtTreeApi, formInfo: FormInfo): IDFormModalProps => {
-    const {setFormProps} = useContext(FormPropsContext);
     const {setSelectedField} = useContext(SelectedFieldContext);
     return {
         formId: 'EditForm',
         fieldsProps: {
             componentInfoCode: {
                 component: SelectField,
-                label: 'Компонент',
+                label: 'Component',
                 dataSet: getFieldsListForSelect(),
                 rules: [
                     {type: 'string', rule: 'not-empty', message: 'You need to choose a field'},
@@ -45,7 +43,7 @@ export const useGetTreeEditFormProps = (treeApi: IExtTreeApi, formInfo: FormInfo
 
             parent: {
                 component: TreeSelectField,
-                label: 'Родительский компонент',
+                label: 'Parental component',
                 rules: [{type: 'object', rule: 'not-empty', message: 'You need to choose a parent field'}],
             } satisfies ITreeSelectFieldProps,
         },
@@ -70,7 +68,7 @@ export const useGetTreeEditFormProps = (treeApi: IExtTreeApi, formInfo: FormInfo
                 const fieldInfo = new fieldInfoClass();
                 const newId = generateFieldId(formInfo, fieldInfo.CODE);
                 fieldInfo.setId(newId);
-                fieldInfo.setLabel(newId);
+                fieldInfo.setLabel(UpperFirstLetter(newId));
 
                 const parentFieldInfo: BaseComponentInfo = dataSet['parent']?.['fieldInfo'];
                 if (!parentFieldInfo) return;
@@ -78,9 +76,10 @@ export const useGetTreeEditFormProps = (treeApi: IExtTreeApi, formInfo: FormInfo
                 treeApi.selectNode(fieldInfo.NODE_ID);
                 treeApi.ensureNodeVisible(fieldInfo.NODE_ID);
                 treeApi.expandNode(parentFieldInfo.NODE_ID);
-                const formProps = formInfo.getProps();
-                setFormProps(formProps, formPropsToSource(formProps), 'fieldsTree');
                 setSelectedField(fieldInfo);
+                formInfo.emitFieldsTreeRerender();
+                formInfo.emitFormPreviewRerender();
+                formInfo.emitPropsEditorRerender();
             }
         },
     };

@@ -114,6 +114,15 @@ export interface IDFormPropsNoCB<TFieldsProps extends Record<string, AnyType> = 
     /** allow select buttons using arrows keys */
     arrowsButtonsSelection?: boolean;
 
+    /** Keep fields read only state on form props change (rerender) */
+    keepReadOnlyState?: boolean;
+
+    /** Keep fields disabled state on form props change (rerender)   */
+    keepDisabledState?: boolean;
+
+    /** Keep fields hidden state on form props change (rerender)   */
+    keepHiddenState?: boolean;
+
     /**  If specified, additional values will be added to the resulting form data depending on the form mode
      *  @example {create:'isNew', clone?:'clonedFrom', update?:'isUpdating'}
      */

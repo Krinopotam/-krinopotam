@@ -210,14 +210,16 @@ export class DModel {
 
             const fieldProps = field.getProps();
 
+            const formProps = this.getFormProps();
+
             labels[fieldName] = fieldProps.label;
 
             if (oldField && field.constructor.name === oldField.constructor.name) {
                 //if the field type has not changed, then keep values
                 values[fieldName] = curValues[fieldName];
-                hidden[fieldName] = typeof curHidden[fieldName] === 'boolean' ? curHidden[fieldName] : fieldProps.hidden;
-                disabled[fieldName] = typeof curDisabled[fieldName] === 'boolean' ? curDisabled[fieldName] : fieldProps.disabled;
-                readOnly[fieldName] = typeof curReadOnly[fieldName] === 'boolean' ? curReadOnly[fieldName] : fieldProps.readOnly;
+                hidden[fieldName] = formProps.keepHiddenState && typeof curHidden[fieldName] === 'boolean' ? curHidden[fieldName] : fieldProps.hidden;
+                disabled[fieldName] = formProps.keepDisabledState && typeof curDisabled[fieldName] === 'boolean' ? curDisabled[fieldName] : fieldProps.disabled;
+                readOnly[fieldName] = formProps.keepReadOnlyState && typeof curReadOnly[fieldName] === 'boolean' ? curReadOnly[fieldName] : fieldProps.readOnly;
 
                 continue;
             }

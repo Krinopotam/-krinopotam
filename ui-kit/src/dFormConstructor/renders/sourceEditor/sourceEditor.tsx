@@ -1,35 +1,31 @@
-import React, {useContext, useEffect, useRef} from 'react';
+import React, {useContext, useRef} from 'react';
 import {Editor, EditorProps, Monaco} from '@monaco-editor/react';
 import {theme} from 'antd';
 import {editor} from 'monaco-editor';
 import {generateDummyTypes} from '@src/dFormConstructor/renders/sourceEditor/tools/generateDummyTypes';
 import {ISourceEditorApi, usePrepareApi} from '@src/dFormConstructor/renders/sourceEditor/api/usePrepareApi';
-import {FormPropsContext} from '@src/dFormConstructor/context/formPropsProvider';
+import {FormInfoContext} from '@src/dFormConstructor/context/formInfoProvider';
 
 export const SourceEditor = (props: {apiRef?: ISourceEditorApi}): React.JSX.Element => {
-    console.log('SourceEditor');
+    const {formInfo} = useContext(FormInfoContext);
 
     const {
         token: {colorBorder},
     } = theme.useToken();
 
-    const {source, updatedBy} = useContext(FormPropsContext);
+    //const {source, updatedBy} = useContext(FormPropsContext);
+    const source = formInfo.toSource();
 
     const editorRef = useRef<editor.IStandaloneCodeEditor>(null);
     const monacoRef = useRef<Monaco>(null);
 
-    const api = usePrepareApi(props.apiRef, editorRef);
+    usePrepareApi(props.apiRef, editorRef);
 
     const onMount: EditorProps['onMount'] = (editor, monaco) => {
         editorRef.current = editor;
         monacoRef.current = monaco;
         monaco.languages.typescript.typescriptDefaults.addExtraLib(generateDummyTypes(), 'fake.d.ts');
     };
-
-    useEffect(() => {
-        if (!editorRef.current || updatedBy === 'codeEditor') return;
-        api.setSource(source);
-    });
 
     const onValidate: EditorProps['onValidate'] = markers => {
         console.log(markers);

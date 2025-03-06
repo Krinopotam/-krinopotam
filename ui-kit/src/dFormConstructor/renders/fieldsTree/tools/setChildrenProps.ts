@@ -17,11 +17,11 @@ export const setChildrenProps = (parentField:BaseComponentInfo,  fieldsProps: ID
         const componentClassName = typeof fieldProps.component === 'function' ? fieldProps.component.name : String(fieldProps.component);
         const fieldInfoClass = getFieldInfoClassByClassName(componentClassName);
         if (!fieldInfoClass) continue;
-        const childField = new fieldInfoClass({id: key, label: fieldProps.label});
+        const childField = new fieldInfoClass({id: key, label: fieldProps.label });
 
         if (!parentField.canHaveChild(childField) || !childField.canHaveParent(parentField)) continue
 
-        childField.setProps(fieldProps);
         parentField.addChild(childField);
+        childField.setProps(fieldProps);
     }
 }
