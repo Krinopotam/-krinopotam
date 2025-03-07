@@ -19,7 +19,7 @@ export const TabsFieldRender = ({field}: {field: TabsField}): React.JSX.Element 
 
     useSyncExternalStore(field.subscribe.bind(field), field.getSnapshot.bind(field));
 
-    let activeTab = field.getActiveTab();
+    const activeTab = field.getActiveTab() || fieldProps.activeTab;
 
     const onChange = useOnChange(field);
 
@@ -33,8 +33,6 @@ export const TabsFieldRender = ({field}: {field: TabsField}): React.JSX.Element 
     //there is no sense to use memo (rendering is not very often)
     const items: TabsProps['items'] = [];
     for (const tabName in tabsRootFields) {
-        if (!activeTab) activeTab = tabName;
-
         if (!field.tabHasVisibleChildren(tabName)) continue;
         const childrenFields = tabsRootFields[tabName];
 
@@ -59,7 +57,6 @@ export const TabsFieldRender = ({field}: {field: TabsField}): React.JSX.Element 
                     containerStyle={containerStyle}
                 />
             ),
-            active: activeTab === tabName,
         });
     }
 
@@ -81,8 +78,8 @@ export const TabsFieldRender = ({field}: {field: TabsField}): React.JSX.Element 
             tabBarGutter={fieldProps.tabBarGutter}
             items={items}
             style={style}
+            activeKey={activeTab}
             renderTabBar={tabBarRender}
-            activeKey={fieldProps.activeTab}
             onChange={onChange}
         />
     );

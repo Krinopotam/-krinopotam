@@ -193,6 +193,29 @@ export class BaseComponentInfo {
         }
     }
 
+    validateProps(name: string, val: unknown) {
+        if (name === 'id') {
+            const error = this.validateId(val as string);
+            if (error) return error;
+        }
+
+        return '';
+    }
+
+    protected validateId(id: string):string | undefined {
+        const recursiveSearch = (fields: BaseComponentInfo[], searchId: string) => {
+            for (const field of fields) {
+                if (field === this) continue;
+                if (field.getId() === searchId) return true;
+                if (recursiveSearch(field.getChildren(), searchId)) return true;
+            }
+
+            return false;
+        };
+
+        if (recursiveSearch(this.root?.children ?? [], id)) return 'ID is not unique';
+    }
+
     moveChild(fieldInfo: BaseComponentInfo, index: number) {
         this.children.splice(index, 0, fieldInfo);
     }

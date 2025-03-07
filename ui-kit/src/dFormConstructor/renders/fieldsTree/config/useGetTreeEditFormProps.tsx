@@ -4,13 +4,12 @@ import {ITreeSelectFieldProps, TreeSelectField} from '@src/dForm/fields/treeSele
 import {getCanHaveChildrenOnly} from '@src/_shared/hooks/treeComponentApiMethods/serviceMethods/getCanHaveChildrenOnly';
 import {getFieldsListForSelect} from '@src/dFormConstructor/renders/fieldsTree/tools/getFieldsListForSelect';
 import {getFieldInfoByCode} from '@src/dFormConstructor/renders/fieldsTree/tools/getFieldInfoByCode';
-import {generateFieldId} from '@src/dFormConstructor/renders/fieldsTree/tools/generateFieldId';
 import {useContext} from 'react';
 import {FormInfo} from '@src/dFormConstructor/fields/formInfo';
 import {BaseComponentInfo} from '@src/dFormConstructor/fields/baseComponentInfo';
 import {IExtTreeApi} from '@src/tree';
 import {SelectedFieldContext} from '@src/dFormConstructor/context/selectedFieldProvider';
-import {UpperFirstLetter} from "@krinopotam/js-helpers";
+import {UpperFirstLetter} from '@krinopotam/js-helpers';
 
 export const useGetTreeEditFormProps = (treeApi: IExtTreeApi, formInfo: FormInfo): IDFormModalProps => {
     const {setSelectedField} = useContext(SelectedFieldContext);
@@ -66,7 +65,7 @@ export const useGetTreeEditFormProps = (treeApi: IExtTreeApi, formInfo: FormInfo
             if (formMode === 'create' || formMode === 'clone') {
                 const fieldInfoClass = getFieldInfoByCode(values.componentInfoCode);
                 const fieldInfo = new fieldInfoClass();
-                const newId = generateFieldId(formInfo, fieldInfo.CODE);
+                const newId = formInfo.generateNewFieldId(fieldInfo.CODE);
                 fieldInfo.setId(newId);
                 fieldInfo.setLabel(UpperFirstLetter(newId));
 

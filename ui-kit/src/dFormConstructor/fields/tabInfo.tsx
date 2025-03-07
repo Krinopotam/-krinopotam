@@ -18,7 +18,7 @@ export class TabInfo extends BaseComponentInfo {
         return parent?.CODE === 'tabs';
     }
 
-    /** @returns true if field can be parent of the specified child. If child is not specified, returns true if field potentially can have children */
+    /** @returns true if field can be a parent of the specified child. If child is not specified, returns true if field potentially can have children */
     override canHaveChild(child?: BaseComponentInfo) {
         return child?.CODE !== 'tab';
     }
@@ -60,10 +60,20 @@ export class TabInfo extends BaseComponentInfo {
         setChildrenProps(this, fieldsProps);
     }
 
-    /*    override getId(): string {
-            const fieldId = super.getId();
-            const parentId = this.getParent()?.getId()
-            console.log(`${parentId}_${fieldId}`)
-            return parentId ? `${parentId}_${fieldId}` : fieldId;
-        }*/
+    override validateProps(name: string, val: unknown): string {
+        if (name === 'label') {
+            const error = this.validateLabel(val as string);
+            if (error) return error;
+        }
+        return '';
+    }
+
+    private validateLabel(label: string) {
+        const parent = this.getParent();
+        if (!parent) return '';
+        for (const field of parent.getChildren()) {
+            if (field === this) continue;
+            if (field.getLabel() === label) return 'Tab label is not unique';
+        }
+    }
 }

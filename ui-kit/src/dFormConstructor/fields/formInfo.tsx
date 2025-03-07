@@ -76,6 +76,29 @@ export class FormInfo extends BaseComponentInfo {
         return 'FORM';
     }
 
+    /** Generate unique field id */
+    generateNewFieldId  (prefix: string = 'Field'): string  {
+        const recursiveSearch = (fields: BaseComponentInfo[], searchId: string) => {
+            for (const field of fields) {
+                if (field.getId().toUpperCase() === searchId.toUpperCase()) return true;
+                if (recursiveSearch(field.getChildren(), searchId)) return true;
+            }
+
+            return false;
+        };
+
+        let curNum = 1;
+        let id: string;
+
+        do {
+            id = prefix + curNum;
+            curNum++;
+        } while (recursiveSearch([this], id));
+
+        return id;
+    };
+
+
     /** Returns all field ids */
     getAllFieldIds(skip?: Record<string, boolean>) {
         const result: string[] = [];

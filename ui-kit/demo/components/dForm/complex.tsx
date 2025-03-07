@@ -48,6 +48,7 @@ export const useFormProps = (horizontal: boolean, forModal?: boolean) => {
                     ['Grid']: gridTab,
                 },
                 autoHeightResize: true,
+                activeTab:'Grid'
             } satisfies ITabsFieldProps,
         },
 
