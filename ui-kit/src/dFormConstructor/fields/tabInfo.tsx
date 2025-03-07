@@ -35,6 +35,15 @@ export class TabInfo extends BaseComponentInfo {
         );
     }
 
+    override getLabel(): string {
+        return this.getId();
+    }
+
+    override setLabel(label: string) {
+        this.label = label;
+        this.id = label;
+    }
+
     /** @returns field instance props */
     override getProps(): IDFormFieldsProps | Record<string, unknown> {
         const fieldProps: IDFormFieldsProps = {};

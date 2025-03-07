@@ -5,7 +5,7 @@ import {BaseComponentInfo} from '@src/dFormConstructor/fields/baseComponentInfo'
 import {FormInfo} from '@src/dFormConstructor/fields/formInfo';
 
 export const BooleanEditor = ({formInfo, field, propKey}: {formInfo: FormInfo; field: BaseComponentInfo; propKey: string}): React.JSX.Element => {
-    const val = field.getProps()[propKey];
+    const val = field.getProp(propKey);
     const [, setCurVal] = useState<boolean | undefined>(val);
 
     const onChange = useEvent((checked: boolean) => {

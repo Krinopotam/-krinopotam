@@ -13,7 +13,7 @@ export class TabsInfo extends BaseComponentInfo {
     public override readonly ICON = (<FolderOpenOutlined />);
     public override readonly TITLE = 'Tabs';
 
-    /** @returns true if field can be parent of the specified child. If child is not specified, returns true if field potentially can have children */
+    /** @returns true if field can be a parent of the specified child. If child is not specified, returns true if field potentially can have children */
     override canHaveChild(child?: BaseComponentInfo) {
         return !child || child.CODE === 'tab';
     }

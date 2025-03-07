@@ -22,7 +22,7 @@ export class BaseComponentInfo {
     public readonly NODE_ID: string = '';
 
     protected props: {[key: string]: unknown} = {};
-    private id: string = '';
+    protected id: string = '';
     protected label: React.ReactNode | string = '';
     protected children: BaseComponentInfo[] = [];
     private parent: BaseComponentInfo | undefined;
@@ -41,7 +41,7 @@ export class BaseComponentInfo {
         return parent?.CODE === 'form' || parent?.CODE === 'tab' || parent?.CODE === 'inlineGroup';
     }
 
-    /** @returns true if field can be parent of the specified child. If child is not specified, returns true if field potentially can have children */
+    /** @returns true if field can be a parent of the specified child. If child is not specified, returns true if field potentially can have children */
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     canHaveChild(_child?: BaseComponentInfo) {
         return false;
@@ -80,7 +80,7 @@ export class BaseComponentInfo {
 
     getTitleForTree() {
         let label = this.getLabel() || ' - ';
-        if (label.length > 20) label = `${label.slice(0, 20)}...`;
+        if (typeof label === 'string' && label.length > 20) label = `${label.slice(0, 20)}...`;
         return (
             <>
                 {this.ICON} {this.getId()}: <b>{label}</b>
@@ -105,6 +105,7 @@ export class BaseComponentInfo {
 
     setLabel(label: string) {
         this.label = label;
+        this.props['label'] = label;
     }
 
     /** @returns field instance props */
@@ -112,16 +113,27 @@ export class BaseComponentInfo {
         return {component: this.CLASS, label: this.getLabel(), ...this.props};
     }
 
+    /** Set component props */
     setProps(props: IBaseFieldProps<AnyType, AnyType> | Record<string, unknown>) {
         const {component, ...fieldProps} = props;
         this.label = fieldProps.label as string;
         this.props = fieldProps;
     }
 
-    /** Set component prop */
+    /* get component single prop */
+    getProp(name: string) {
+        if (name === 'id') return this.getId();
+        if (name === 'label') return this.getLabel();
+        return this.getProps()[name];
+    }
+
+    /** Set component single prop */
     setProp(name: string, val: unknown) {
-        if (name === 'label') this.label = val as string;
-        this.props[name] = val;
+        if (name === 'id') this.setId(val as string);
+        else {
+            if (name === 'label') this.setLabel(val as string);
+            this.props[name] = val;
+        }
     }
 
     clearChildren() {
