@@ -5,7 +5,7 @@ import {Select} from '@src/select';
 export const SelectFieldRender = ({field}: {field: SelectField}): React.JSX.Element => {
     useSyncExternalStore(field.subscribe.bind(field), field.getSnapshot.bind(field));
 
-    const fieldProps = field.getProps();
+    const {component,...fieldProps} = field.getProps();
 
     const value = field.getValue();
 

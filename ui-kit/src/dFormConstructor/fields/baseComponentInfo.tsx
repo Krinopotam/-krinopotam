@@ -6,7 +6,7 @@ import React from 'react';
 import {GetNanoId} from '@krinopotam/js-helpers/helpersString/getNanoId';
 import {Space} from 'antd';
 
-export type IPropsType = 'string' | 'number' | 'boolean' | 'fieldCodes' | string[];
+export type IPropsType = 'string' | 'number' | 'boolean' | 'fieldIds' | string[];
 
 export type IComponentPropsInfo<TFieldProps> = {id?: 'string'} & {
     [K in keyof TFieldProps]?: IPropsType;
@@ -60,7 +60,7 @@ export class BaseComponentInfo {
             disabled: 'boolean',
             hidden: 'boolean',
             nonEditable: 'boolean',
-            dependsOn: 'fieldCodes',
+            dependsOn: 'fieldIds',
             itemClassName: 'string',
             className: 'string',
             autoHeightResize: 'boolean',

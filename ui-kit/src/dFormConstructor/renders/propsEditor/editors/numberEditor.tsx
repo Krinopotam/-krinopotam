@@ -1,20 +1,21 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {Input, InputRef} from 'antd';
+import {InputNumber} from 'antd';
 import {useEvent} from '@krinopotam/common-hooks';
 import {BaseComponentInfo} from '@src/dFormConstructor/fields/baseComponentInfo';
 import {FormInfo} from '@src/dFormConstructor/fields/formInfo';
+import {InputNumberProps} from "antd/es/input-number";
 
-export const StringEditor = ({formInfo, field, propKey}: {formInfo: FormInfo; field: BaseComponentInfo; propKey: string}): React.JSX.Element => {
+export const NumberEditor = ({formInfo, field, propKey}: {formInfo: FormInfo; field: BaseComponentInfo; propKey: string}): React.JSX.Element => {
     const val = field.getProp(propKey);
 
-    const [, setCurVal] = useState<string | undefined>(val);
+    const [, setCurVal] = useState<unknown>(val);
 
-    const ref = useRef<InputRef>(null);
+    const ref = useRef<HTMLInputElement>(null);
     const changedRef = useRef(false);
-    const onChange = useEvent((e: React.ChangeEvent<HTMLInputElement>) => {
+    const onChange:InputNumberProps['onChange'] = useEvent((value) => {
         changedRef.current = true;
-        setCurVal(e.target.value); //just for input component rerender
-        field.setProp(propKey, e.target.value);
+        setCurVal(value); //just for input component rerender
+        field.setProp(propKey, value);
         formInfo.emitFormPreviewRerender();
         formInfo.emitFieldsTreeRerender();
     });
@@ -24,5 +25,5 @@ export const StringEditor = ({formInfo, field, propKey}: {formInfo: FormInfo; fi
         changedRef.current = false;
     });
 
-    return <Input ref={ref} onChange={onChange} value={val} />;
+    return <InputNumber ref={ref} onChange={onChange} defaultValue={val}  />;
 };

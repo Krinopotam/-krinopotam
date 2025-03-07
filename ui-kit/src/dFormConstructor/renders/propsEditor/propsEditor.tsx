@@ -7,13 +7,15 @@ import {BaseComponentInfo, IComponentPropsInfo} from '@src/dFormConstructor/fiel
 import {StringEditor} from '@src/dFormConstructor/renders/propsEditor/editors/stringEditor';
 import {FormInfoContext} from '@src/dFormConstructor/context/formInfoProvider';
 import {BooleanEditor} from '@src/dFormConstructor/renders/propsEditor/editors/booleanEditor';
+import {NumberEditor} from '@src/dFormConstructor/renders/propsEditor/editors/numberEditor';
+import {SelectEditor} from '@src/dFormConstructor/renders/propsEditor/editors/selectEditor';
 
 export const PropsEditor = (): React.JSX.Element => {
     const {formInfo} = useContext(FormInfoContext);
     useSyncExternalStore(formInfo.propsEditorSubscribe.bind(formInfo), formInfo.getPropsEditorRerenderSnapshot.bind(formInfo));
     const {selectedField} = useContext(SelectedFieldContext);
 
-    const title = selectedField?.getId();
+    const title = undefined; //selectedField?.getId();
     const items = usePrepareFieldsProps(selectedField);
 
     if (!selectedField) return <></>;
@@ -34,10 +36,12 @@ export const PropsEditor = (): React.JSX.Element => {
     );
 };
 
-export const usePrepareFieldsProps = (fieldInfo: BaseComponentInfo | undefined): DescriptionsProps['items'] => {
+const usePrepareFieldsProps = (fieldInfo: BaseComponentInfo | undefined): DescriptionsProps['items'] => {
     const {formInfo} = useContext(FormInfoContext);
+    const allIds = useGetAllFieldIds();
 
     if (!fieldInfo) return [];
+
     const propsInfo: IComponentPropsInfo<AnyType> = fieldInfo.getPropsInfo();
     const result: DescriptionsProps['items'] = [];
     for (const key in propsInfo) {
@@ -51,10 +55,30 @@ export const usePrepareFieldsProps = (fieldInfo: BaseComponentInfo | undefined):
 
         let editor: string | React.ReactNode = dataType;
         if (dataType === 'string') editor = <StringEditor {...editorProps} />;
+        else if (dataType === 'number') editor = <NumberEditor {...editorProps} />;
         else if (dataType === 'boolean') editor = <BooleanEditor {...editorProps} />;
+        else if (Array.isArray(dataType)) editor = <SelectEditor {...editorProps} options={dataType} />;
+        else if (dataType === 'fieldIds') editor = <SelectEditor {...editorProps} options={allIds.filter(f => f !== fieldInfo.getId())} multiple />;
 
         result.push({key, label: key, children: editor});
     }
 
+    return result;
+};
+
+const useGetAllFieldIds = () => {
+    const {formInfo} = useContext(FormInfoContext);
+
+    const result: string[] = [];
+    const recursive = (fields: BaseComponentInfo[]) => {
+        for (const field of fields) {
+            result.push(field.getId());
+            recursive(field.getChildren());
+        }
+
+        return false;
+    };
+
+    recursive(formInfo.getChildren());
     return result;
 };

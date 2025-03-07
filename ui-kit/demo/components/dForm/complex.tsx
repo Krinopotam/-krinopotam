@@ -14,6 +14,7 @@ import {ITextAreaFieldProps, TextAreaField} from '@src/dForm/fields/textArea';
 import {IQuillEditorFieldProps, QuillEditorField} from '@src/dForm/fields/quillEditor';
 import {ISelectFieldProps, SelectField} from '@src/dForm/fields/select';
 import {DividerField, IDividerFieldProps} from '@src/dForm/fields/divider';
+import {INumberFieldProps, NumberField} from "@src/dForm/fields/number";
 
 export const Example = (): React.JSX.Element => {
     const [horizontal, setHorizontal] = React.useState(false);
@@ -61,13 +62,14 @@ const useConfigTab = () => {
             fieldsProps: {
                 field1: {component: DateTimeField, label: 'Date', placeholder: 'Date', width: 150} satisfies IDateTimeFieldProps,
                 field2: {component: InputField, label: 'Operation', placeholder: 'Operation name'} satisfies IInputFieldProps,
-                field3: {component: SelectField, label: 'Type', placeholder: 'Type', width:100} satisfies ISelectFieldProps,
-                field4: {component: SwitchField, label: 'Active', dependsOn: ['field2']} satisfies ISwitchFieldProps,
+                field3: {component: NumberField, label: 'Code', placeholder: 'Code'} satisfies INumberFieldProps,
+                field4: {component: SelectField, label: 'Type', placeholder: 'Type', width:100} satisfies ISelectFieldProps,
+                field5: {component: SwitchField, label: 'Active', dependsOn: ['field2']} satisfies ISwitchFieldProps,
             },
         } satisfies IInlineGroupFieldProps,
-        field5: {component: TextAreaField, label: 'Notes', autoSize: true} satisfies ITextAreaFieldProps,
+        field6: {component: TextAreaField, label: 'Notes', autoSize: true} satisfies ITextAreaFieldProps,
         divider: {component: DividerField, label: 'Optional part', autoSize: true, dependsOn: ['field5']} satisfies IDividerFieldProps,
-        field6: {component: QuillEditorField, label: 'Comments', dependsOn: ['field5']} satisfies IQuillEditorFieldProps,
+        field7: {component: QuillEditorField, label: 'Comments', dependsOn: ['field5']} satisfies IQuillEditorFieldProps,
     } satisfies IDFormFieldsProps;
 };
 
