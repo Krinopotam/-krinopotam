@@ -70,17 +70,19 @@ export const TabsFieldRender = ({field}: {field: TabsField}): React.JSX.Element 
 
     const style: React.CSSProperties = {...defStyle, ...fieldProps.style};
 
+
     return (
         <Tabs
             className={fieldProps.className}
             type={fieldProps.type ?? 'card'}
-            size={fieldProps.size ?? 'small'}
+            size={'small'}
             tabBarStyle={fieldProps.tabBarStyle}
             tabBarExtraContent={fieldProps.tabBarExtraContent}
             tabBarGutter={fieldProps.tabBarGutter}
             items={items}
             style={style}
             renderTabBar={tabBarRender}
+            activeKey={fieldProps.activeTab}
             onChange={onChange}
         />
     );
@@ -168,11 +170,12 @@ const useOnChange = (field: TabsField) => {
 const TabBarRender = (props: TabNavListProps, DefaultTabBar: ComponentType<TabNavListProps>, field: TabsField): React.ReactElement => {
     const {token} = useToken();
     const formProps = field.getFormProps();
+    const fieldProps = field.getProps();
 
     const style = {...props.style};
     //style.backgroundColor = token.colorBgContainer;
     style.backgroundColor = token.colorBgElevated;
-    style.height = formProps?.tabsHeight ?? 35;
+    style.height = fieldProps?.tabsHeight ?? 35;
 
     const indent = formProps.contentIndent ?? 0;
     const indentStyle = {height: indent, backgroundColor: style.backgroundColor};
@@ -189,7 +192,7 @@ const TabBarRender = (props: TabNavListProps, DefaultTabBar: ComponentType<TabNa
     return (
         <StickyBox style={{zIndex: 15}}>
             <div style={indentStyle} />
-            <DefaultTabBar {...props} style={style} />
+            <DefaultTabBar {...props} style={style}/>
         </StickyBox>
     );
 };

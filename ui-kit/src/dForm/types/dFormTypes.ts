@@ -90,9 +90,6 @@ export interface IDFormPropsNoCB<TFieldsProps extends Record<string, AnyType> = 
     /** Automatically disable fields if they depend on fields whose value is not set. Otherwise, such fields will be automatically hidden */
     disableDepended?: boolean;
 
-    /** Tabs panes height (default 40)*/
-    tabsHeight?: number;
-
     /** Form parent item data */
     // formParentData?: IFormDataSet;
 

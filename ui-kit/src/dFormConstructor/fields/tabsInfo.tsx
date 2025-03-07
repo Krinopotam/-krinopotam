@@ -22,8 +22,8 @@ export class TabsInfo extends BaseComponentInfo {
         return {
             id: 'string',
             label: 'string',
-            size: ['small', 'middle', 'large'],
-            type: ['line', 'card', 'editable-card'],
+            type: ['line', 'card'],
+            tabsHeight: 'number',
             activeTab: 'string',
             panelsHeight: 'number',
             panelsMaxHeight: 'number',
@@ -42,7 +42,7 @@ export class TabsInfo extends BaseComponentInfo {
             const tabId = tabInfo.getLabel() ?? tabInfo.getId();
             tabsProps[tabId as string] = {...(tabInfo.getProps() as IBaseFieldProps<AnyType, AnyType>)};
         }
-        return {component: this.CLASS, tabs: tabsProps} satisfies ITabsFieldProps;
+        return {component: this.CLASS, tabs: tabsProps, ...this.props} satisfies ITabsFieldProps;
     }
 
     override setProps(fieldProps: ITabsFieldProps) {

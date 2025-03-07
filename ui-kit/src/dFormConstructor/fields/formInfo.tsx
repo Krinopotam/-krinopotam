@@ -47,7 +47,6 @@ export class FormInfo extends BaseComponentInfo {
             layout: ['horizontal', 'vertical'],
             labelAlign: ['left', 'right'],
             disableDepended: 'boolean',
-            tabsHeight: 'number',
             submitConfirmMessage: 'string',
         } satisfies IComponentPropsInfo<IDFormProps>;
     }
@@ -74,7 +73,23 @@ export class FormInfo extends BaseComponentInfo {
     }
 
     override getLabel() {
-        return 'My form';
+        return 'FORM';
+    }
+
+    /** Returns all field ids */
+    getAllFieldIds(skip?: Record<string, boolean>) {
+        const result: string[] = [];
+        const recursive = (fields: BaseComponentInfo[]) => {
+            for (const field of fields) {
+                if (!skip?.[field.CODE]) result.push(field.getId());
+                recursive(field.getChildren());
+            }
+
+            return false;
+        };
+
+        recursive(this.getChildren());
+        return result;
     }
 
     toTreeDataSet(): IExtTreeNode<{fieldInfo: BaseComponentInfo}>[] {
@@ -83,7 +98,7 @@ export class FormInfo extends BaseComponentInfo {
             for (const fieldInfo of fields) {
                 const id = fieldInfo.NODE_ID;
                 let label = fieldInfo.getLabel() ?? ' - ';
-                if (label.length > 20) label = `${label.slice(0, 20)}...`;
+                if (typeof label === 'string' && label.length > 20) label = `${label.slice(0, 20)}...`;
                 const title = fieldInfo.getTitleForTree();
                 const isLeaf = !fieldInfo.canHaveChild() || undefined;
 

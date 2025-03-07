@@ -14,7 +14,7 @@ export class InlineGroupInfo extends BaseComponentInfo {
     public override readonly ICON = (<SplitCellsOutlined />);
     public override readonly TITLE = 'Inline group';
 
-    /** @returns true if field can be parent of the specified child. If child is not specified, returns true if field potentially can have children */
+    /** @returns true if field can be a parent of the specified child. If child is not specified, returns true if field potentially can have children */
     override canHaveChild(child?: BaseComponentInfo) {
         return child?.CODE !== 'tab';
     }
@@ -22,8 +22,23 @@ export class InlineGroupInfo extends BaseComponentInfo {
     override getPropsInfo() {
         return {
             id: 'string',
-            label: 'string',
         } satisfies IComponentPropsInfo<IInlineGroupFieldProps>;
+    }
+
+    override setLabel() {
+        return void 0;
+    }
+
+    override getLabel() {
+        return undefined;
+    }
+
+    override getTitleForTree(): React.JSX.Element {
+        return (
+            <>
+                {this.ICON} {this.getId()};
+            </>
+        );
     }
 
     /** @returns field instance props */
@@ -34,7 +49,7 @@ export class InlineGroupInfo extends BaseComponentInfo {
             if (!fieldInfo.CLASS) continue;
             fieldProps[id] = {...(fieldInfo.getProps() as IBaseFieldProps<AnyType, AnyType>)};
         }
-        return {component: this.CLASS, fieldsProps: fieldProps} satisfies IInlineGroupFieldProps;
+        return {component: this.CLASS, fieldsProps: fieldProps, ...this.props} satisfies IInlineGroupFieldProps;
     }
 
     override setProps(fieldProps: IInlineGroupFieldProps) {

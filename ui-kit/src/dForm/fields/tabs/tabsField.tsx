@@ -14,6 +14,9 @@ export interface ITabsFieldProps<TFieldsProps extends Record<string, AnyType> = 
     /** Tabs size (default small) */
     size?: 'small' | 'middle' | 'large';
 
+    /** Tabs panes height (default 35)*/
+    tabsHeight?: number;
+
     /** Tabs type */
     type?: 'line' | 'card' | 'editable-card';
 

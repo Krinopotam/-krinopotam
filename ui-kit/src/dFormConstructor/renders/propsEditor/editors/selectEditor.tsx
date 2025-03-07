@@ -29,5 +29,5 @@ export const SelectEditor = ({
         formInfo.emitFieldsTreeRerender();
     });
 
-    return <Select onChange={onChange} dataSet={dataSet} value={val} style={{width: '100%'}} mode={multiple ? 'multiple' : undefined} />;
+    return <Select onChange={onChange} dataSet={dataSet} value={val} style={{width: '100%'}} allowClear mode={multiple ? 'multiple' : undefined} />;
 };

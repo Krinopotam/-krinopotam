@@ -38,7 +38,7 @@ export const PropsEditor = (): React.JSX.Element => {
 
 const usePrepareFieldsProps = (fieldInfo: BaseComponentInfo | undefined): DescriptionsProps['items'] => {
     const {formInfo} = useContext(FormInfoContext);
-    const allIds = useGetAllFieldIds();
+    const allIds = formInfo.getAllFieldIds({tab: true, tabs: true, inlineGroup: true});
 
     if (!fieldInfo) return [];
 
@@ -63,22 +63,5 @@ const usePrepareFieldsProps = (fieldInfo: BaseComponentInfo | undefined): Descri
         result.push({key, label: key, children: editor});
     }
 
-    return result;
-};
-
-const useGetAllFieldIds = () => {
-    const {formInfo} = useContext(FormInfoContext);
-
-    const result: string[] = [];
-    const recursive = (fields: BaseComponentInfo[]) => {
-        for (const field of fields) {
-            result.push(field.getId());
-            recursive(field.getChildren());
-        }
-
-        return false;
-    };
-
-    recursive(formInfo.getChildren());
     return result;
 };

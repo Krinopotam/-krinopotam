@@ -28,15 +28,13 @@ export const InlineGroupRender = ({field}: {field: InlineGroupField}): React.JSX
     for (const fieldName in childrenFields) {
         const childrenField = childrenFields[fieldName];
         if (childrenField.isHidden()) continue;
-        firstField = childrenField;
+        if (!firstField) firstField = childrenField;
     }
 
     const fieldHidden = field.isHidden() || !field.hasVisibleChildren(); //has visible field
 
-    const groupName = field.getLabel();
-
     let groupLabel: React.ReactNode = '';
-    if (formProps.layout === 'horizontal') groupLabel = groupName ?? firstField?.getLabel();
+    if (formProps.layout === 'horizontal') groupLabel = firstField?.getLabel();
 
     const defStyle: CSSProperties = {width: field.getWidth(), margin: 0, marginBottom: 0};
     if (fieldProps.autoHeightResize) defStyle.height = '100%';
