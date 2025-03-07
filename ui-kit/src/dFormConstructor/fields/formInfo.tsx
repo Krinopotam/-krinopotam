@@ -7,6 +7,7 @@ import {IBaseFieldProps} from '@src/dForm/fields/base';
 import {AnyType, IKey} from '@krinopotam/service-types';
 import {setChildrenProps} from '@src/dFormConstructor/renders/fieldsTree/tools/setChildrenProps';
 import {getFieldInfoClassByClassName} from '@src/dFormConstructor/renders/fieldsTree/tools/getFieldInfoClassByClassName';
+import {RemovePropertiesByValue} from '@krinopotam/js-helpers/helpersObjects/removePropertiesByValue';
 
 export class FormInfo extends BaseComponentInfo {
     public override readonly CODE = 'form';
@@ -63,7 +64,7 @@ export class FormInfo extends BaseComponentInfo {
         }
 
         result.fieldsProps = fieldProps;
-        return result;
+        return RemovePropertiesByValue(result, undefined);
     }
 
     override setProps(formProps: IDFormProps) {
@@ -77,7 +78,7 @@ export class FormInfo extends BaseComponentInfo {
     }
 
     /** Generate unique field id */
-    generateNewFieldId  (prefix: string = 'Field'): string  {
+    generateNewFieldId(prefix: string = 'Field'): string {
         const recursiveSearch = (fields: BaseComponentInfo[], searchId: string) => {
             for (const field of fields) {
                 if (field.getId().toUpperCase() === searchId.toUpperCase()) return true;
@@ -96,8 +97,7 @@ export class FormInfo extends BaseComponentInfo {
         } while (recursiveSearch([this], id));
 
         return id;
-    };
-
+    }
 
     /** Returns all field ids */
     getAllFieldIds(skip?: Record<string, boolean>) {

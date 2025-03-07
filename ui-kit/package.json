@@ -82,7 +82,7 @@
   },
   "dependencies": {
     "@krinopotam/common-hooks": "^1.1.2",
-    "@krinopotam/js-helpers": "^1.0.74",
+    "@krinopotam/js-helpers": "^1.0.76",
     "@krinopotam/service-types": "^1.0.21",
     "@monaco-editor/react": "^4.7.0-rc.0",
     "ahooks": "^3.8.4",

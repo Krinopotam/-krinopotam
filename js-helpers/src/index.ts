@@ -39,6 +39,7 @@ export {SplitObject} from "@src/helpersObjects/splitObject";
 export {ObjectDiffs} from "@src/helpersObjects/objectDiffs";
 export {AddElementToArray} from "@src/helpersObjects/addElementToArray";
 export {ParseJwt} from "@src/helpersObjects/parseJwt";
+export {RemovePropertiesByValue} from "@src/helpersObjects/removePropertiesByValue";
 
 /** HelpersEnvironment */
 export {isMobileBrowser} from "@src/helpersEnvironment/isMobileBrowser";
