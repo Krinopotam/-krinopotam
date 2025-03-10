@@ -10,11 +10,11 @@ import {getFieldInfoClassByClassName} from '@src/dFormConstructor/renders/fields
 import {RemovePropertiesByValue} from '@krinopotam/js-helpers/helpersObjects/removePropertiesByValue';
 
 export class FormInfo extends BaseComponentInfo {
+    public override readonly TITLE = 'Form';
     public override readonly CODE = 'form';
     public override readonly CLASS = null;
     public override readonly INTERFACE_NAME = 'IDFormProps';
     public override readonly ICON = (<FormOutlined />);
-    public override readonly TITLE = 'Form';
 
     private readonly fieldsTreeSubscribers = new Set<() => void>();
     private fieldsTreeRerenderSnapshot = {};

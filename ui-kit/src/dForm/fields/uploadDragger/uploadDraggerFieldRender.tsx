@@ -7,7 +7,7 @@ const {Dragger} = Upload;
 export const UploadDraggerFieldRender = ({field}: {field: UploadDraggerField}): React.JSX.Element => {
     useSyncExternalStore(field.subscribe.bind(field), field.getSnapshot.bind(field));
 
-    const fieldProps = field.getProps();
+    const {component, ...fieldProps} = field.getProps();
 
     const onChange = useCallback<NonNullable<IUploadDraggerFieldProps['onChange']>>(
         e => {

@@ -7,11 +7,11 @@ import React from 'react';
 import {TabInfo} from '@src/dFormConstructor/fields/tabInfo';
 
 export class TabsInfo extends BaseComponentInfo {
+    public override readonly TITLE = 'Tabs';
     public override readonly CODE = 'tabs';
     public override readonly CLASS = TabsField;
     public override readonly INTERFACE_NAME = 'ITabsFieldProps';
     public override readonly ICON = (<FolderOpenOutlined />);
-    public override readonly TITLE = 'Tabs';
 
     /** @returns true if field can be a parent of the specified child. If child is not specified, returns true if field potentially can have children */
     override canHaveChild(child?: BaseComponentInfo) {

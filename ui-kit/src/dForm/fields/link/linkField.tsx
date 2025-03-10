@@ -7,6 +7,9 @@ export interface ILinkFieldProps extends IBaseFieldProps<LinkField, string> {
     /** Anchor url */
     href?: string;
 
+    /** Link title */
+    title?: React.ReactNode | string;
+
     /** Anchor target */
     target?: '_blank' | '_self' | '_parent' | '_top';
 

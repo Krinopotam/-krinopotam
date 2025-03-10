@@ -67,6 +67,7 @@ const useConfigTab = () => {
                 field3: {component: NumberField, label: 'Code', placeholder: 'Code'} satisfies INumberFieldProps,
                 field4: {component: SelectField, label: 'Type', placeholder: 'Type', width:100} satisfies ISelectFieldProps,
                 field5: {component: SwitchField, label: 'Active', dependsOn: ['field2']} satisfies ISwitchFieldProps,
+                field51: {component: UploadDraggerField, label: 'Upload'} satisfies IUploadDraggerFieldProps,
             },
         } satisfies IInlineGroupFieldProps,
         field6: {component: TextAreaField, label: 'Notes', autoSize: true} satisfies ITextAreaFieldProps,

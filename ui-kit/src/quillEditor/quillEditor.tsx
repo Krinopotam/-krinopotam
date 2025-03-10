@@ -12,12 +12,13 @@ import {Stylization} from './stylization';
 import React from 'react';
 
 import ReactQuill, {DeltaStatic} from 'react-quill-new';
-import Quill from "quill";
+import Quill from 'quill';
 
 import Range = ReactQuill.Range;
 import Value = ReactQuill.Value;
 import UnprivilegedEditor = ReactQuill.UnprivilegedEditor;
-type Sources = "api" | "user" | "silent";
+
+type Sources = 'api' | 'user' | 'silent';
 
 export interface IQuillEditorProps {
     id?: string;
@@ -35,7 +36,30 @@ export interface IQuillEditorProps {
     value?: Value;
 
     /** Allowed formats. This is separate from adding a control in the Toolbar. For example, you can configure Quill to allow bolded content to be pasted into an editor that has no bold button in the toolbar */
-    formats?: ('background' | 'bold' | 'color' | 'font' | 'code' | 'italic' | 'link' | 'size' | 'strike' | 'script' | 'underline' | 'blockquote' | 'header' | 'indent' | 'list' | 'bullet' | 'align' | 'direction' | 'code-block' | 'formula' | 'image' | 'video')[];
+    formats?: (
+        | 'background'
+        | 'bold'
+        | 'color'
+        | 'font'
+        | 'code'
+        | 'italic'
+        | 'link'
+        | 'size'
+        | 'strike'
+        | 'script'
+        | 'underline'
+        | 'blockquote'
+        | 'header'
+        | 'indent'
+        | 'list'
+        | 'bullet'
+        | 'align'
+        | 'direction'
+        | 'code-block'
+        | 'formula'
+        | 'image'
+        | 'video'
+    )[];
 
     /** Toolbars buttons config */
     toolbar?: IQuilToolbar;
@@ -68,28 +92,48 @@ export interface IQuillEditorProps {
     onKeyUp?: React.KeyboardEventHandler<HTMLElement>;
 }
 
-
-
-type IToolbarHeader = { header: 1 | 2 | 3 | 4 | 5 | 6 } | { header: (1 | 2 | 3 | 4 | 5 | 6 | boolean)[] }
-type IToolbarList = { list: 'ordered' | 'bullet' }
-type IToolbarScript = { script: 'sub' | 'super' }
-type IToolbarColor = { color: `#${string}`[] }
-type IToolbarBackground = { background: `#${string}`[] }
-type IToolbarIndent = { 'indent': '-1' | '+1' }
-type IToolbarDirection = { 'direction': 'rtl' | 'ltr' }
-type IToolbarSize = { 'size': ('small' | false | 'large' | 'huge')[] }
-type IToolbarFont = { 'font': string[] }
-type IToolbarAlign = { align: '' | 'center' | 'right' | 'justify' } | { align: ('' | 'center' | 'left' | 'right' | 'justify')[] }
-type IQuilToolbarControls = (IToolbarHeader | IToolbarList | IToolbarScript | IToolbarColor | IToolbarBackground | IToolbarIndent | IToolbarDirection | IToolbarSize | IToolbarFont | IToolbarAlign | 'bold' | 'italic' | 'underline' | 'strike' | 'blockquote' | 'code-block' | 'link' | 'clean' | 'image' | 'video' | 'formula')[]
+type IToolbarHeader = {header: 1 | 2 | 3 | 4 | 5 | 6} | {header: (1 | 2 | 3 | 4 | 5 | 6 | boolean)[]};
+type IToolbarList = {list: 'ordered' | 'bullet'};
+type IToolbarScript = {script: 'sub' | 'super'};
+type IToolbarColor = {color: `#${string}`[]};
+type IToolbarBackground = {background: `#${string}`[]};
+type IToolbarIndent = {indent: '-1' | '+1'};
+type IToolbarDirection = {direction: 'rtl' | 'ltr'};
+type IToolbarSize = {size: ('small' | false | 'large' | 'huge')[]};
+type IToolbarFont = {font: string[]};
+type IToolbarAlign = {align: '' | 'center' | 'right' | 'justify'} | {align: ('' | 'center' | 'left' | 'right' | 'justify')[]};
+type IQuilToolbarControls = (
+    | IToolbarHeader
+    | IToolbarList
+    | IToolbarScript
+    | IToolbarColor
+    | IToolbarBackground
+    | IToolbarIndent
+    | IToolbarDirection
+    | IToolbarSize
+    | IToolbarFont
+    | IToolbarAlign
+    | 'bold'
+    | 'italic'
+    | 'underline'
+    | 'strike'
+    | 'blockquote'
+    | 'code-block'
+    | 'link'
+    | 'clean'
+    | 'image'
+    | 'video'
+    | 'formula'
+)[];
 type IQuilToolbarAdvanced = {
     /** Selector for toolbar container */
-    container?: string,
+    container?: string;
 
     /** Toolbar items handlers */
-    handlers?: Record<string, (this: Quill, value: string) => void>
-}
+    handlers?: Record<string, (this: Quill, value: string) => void>;
+};
 
-export type IQuilToolbar = IQuilToolbarControls | IQuilToolbarControls[] | IQuilToolbarAdvanced | string
+export type IQuilToolbar = IQuilToolbarControls | IQuilToolbarAdvanced | string;
 
 const defaultColorList: IToolbarColor['color'] = [
     '#000000',
@@ -129,9 +173,29 @@ const defaultColorList: IToolbarColor['color'] = [
     '#3d1466',
 ];
 
-const defaultFormats: IQuillEditorProps['formats'] = ['header', 'font', 'size', 'script', 'bold', 'italic', 'underline', 'strike', 'blockquote', 'code-block', 'list', 'bullet', 'indent', 'link', 'color', 'align', 'background', 'image', 'video'];
+const defaultFormats: IQuillEditorProps['formats'] = [
+    'header',
+    'font',
+    'size',
+    'script',
+    'bold',
+    'italic',
+    'underline',
+    'strike',
+    'blockquote',
+    'code-block',
+    'list',
+    'bullet',
+    'indent',
+    'link',
+    'color',
+    'align',
+    'background',
+    'image',
+    'video',
+];
 
-const defaultToolbar: IQuilToolbar = [
+const defaultToolbar: IQuilToolbar[] = [
     [{header: [1, 2, false]}],
     [{align: ['', 'center', 'right', 'justify']}],
     ['bold', 'italic', 'underline', 'strike'],
@@ -153,10 +217,10 @@ export const QuillEditor = React.forwardRef((props: IQuillEditorProps, ref: Reac
 
     return (
         <>
-            <Stylization/>
+            <Stylization />
             <ReactQuill
                 ref={ref}
-                theme={props.theme ?? "snow"}
+                theme={props.theme ?? 'snow'}
                 id={props.id}
                 bounds={props.bounds}
                 className={props.className}
@@ -171,7 +235,6 @@ export const QuillEditor = React.forwardRef((props: IQuillEditorProps, ref: Reac
                 //scrollingContainer={props.scrollingContainer}
                 style={props.style}
                 tabIndex={props.tabIndex}
-
                 /** ------ Callbacks --------*/
                 onChange={props.onChange}
                 onBlur={props.onBlur}
@@ -183,6 +246,6 @@ export const QuillEditor = React.forwardRef((props: IQuillEditorProps, ref: Reac
             />
         </>
     );
-})
+});
 
-QuillEditor.displayName = 'QuillEditor'
+QuillEditor.displayName = 'QuillEditor';

@@ -21,7 +21,7 @@ export interface ITextAreaFieldProps extends IBaseFieldProps<TextAreaField, stri
     rows?: number;
 
     /** Text wrap parameters. Specifies how the text in a text area is to be wrapped when submitted in a form */
-    wrap?: 'soft | hard';
+    wrap?: 'soft' | 'hard';
 }
 
 export class TextAreaField extends BaseField<ITextAreaFieldProps> {

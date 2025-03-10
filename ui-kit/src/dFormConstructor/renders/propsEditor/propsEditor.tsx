@@ -57,7 +57,10 @@ const usePrepareFieldsProps = (fieldInfo: BaseComponentInfo | undefined): Descri
         if (dataType === 'string') editor = <StringEditor {...editorProps} />;
         else if (dataType === 'number') editor = <NumberEditor {...editorProps} />;
         else if (dataType === 'boolean') editor = <BooleanEditor {...editorProps} />;
-        else if (Array.isArray(dataType)) editor = <SelectEditor {...editorProps} options={dataType} />;
+        else if (Array.isArray(dataType)) {
+            if (dataType[0]==='multi') editor = <SelectEditor {...editorProps} options={dataType.slice(1)} multiple />;
+            else editor = <SelectEditor {...editorProps} options={dataType} />;
+        }
         else if (dataType === 'fieldIds') editor = <SelectEditor {...editorProps} options={allIds.filter(f => f !== fieldInfo.getId())} multiple />;
 
         result.push({key, label: key, children: editor});

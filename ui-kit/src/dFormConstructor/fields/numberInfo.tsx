@@ -4,11 +4,11 @@ import {BaseComponentInfo, IComponentPropsInfo} from '@src/dFormConstructor/fiel
 import React from 'react';
 
 export class NumberInfo extends BaseComponentInfo {
+    public override readonly TITLE = 'Number';
     public override readonly CODE = 'number';
     public override readonly CLASS = NumberField;
     public override readonly INTERFACE_NAME = 'INumberFieldProps';
     public override readonly ICON = (<FieldNumberOutlined />);
-    public override readonly TITLE = 'Number';
 
     override getPropsInfo() {
         const baseProps = super.getPropsInfo();

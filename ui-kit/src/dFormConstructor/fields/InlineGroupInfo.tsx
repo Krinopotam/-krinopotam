@@ -8,12 +8,11 @@ import React from 'react';
 import {setChildrenProps} from '@src/dFormConstructor/renders/fieldsTree/tools/setChildrenProps';
 
 export class InlineGroupInfo extends BaseComponentInfo {
+    public override readonly TITLE = 'Inline group';
     public override readonly CODE = 'inlineGroup';
     public override readonly CLASS = InlineGroupField;
     public override readonly INTERFACE_NAME = 'IInlineGroupFieldProps';
     public override readonly ICON = (<SplitCellsOutlined />);
-    public override readonly TITLE = 'Inline group';
-
     /** @returns true if field can be a parent of the specified child. If child is not specified, returns true if field potentially can have children */
     override canHaveChild(child?: BaseComponentInfo) {
         return child?.CODE !== 'tab';

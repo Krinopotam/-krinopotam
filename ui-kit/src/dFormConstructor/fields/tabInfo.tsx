@@ -7,11 +7,11 @@ import React from 'react';
 import {setChildrenProps} from '@src/dFormConstructor/renders/fieldsTree/tools/setChildrenProps';
 
 export class TabInfo extends BaseComponentInfo {
+    public override readonly TITLE = 'Tab';
     public override readonly CODE = 'tab';
     public override readonly CLASS = null;
     public override readonly INTERFACE_NAME = '';
     public override readonly ICON = (<FolderOutlined />);
-    public override readonly TITLE = 'Tab';
 
     /** @returns true if field can be moved to the specified parent */
     override canHaveParent(parent?: BaseComponentInfo) {

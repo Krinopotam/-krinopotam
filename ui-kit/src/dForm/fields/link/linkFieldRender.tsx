@@ -6,8 +6,6 @@ export const LinkFieldRender = ({field}: {field: LinkField}): React.JSX.Element 
 
     const fieldProps = field.getProps();
 
-    const value = field.getValue();
-
     const onClick = useCallback(
         (e: MouseEvent) => {
             field.setTouched(true);
@@ -49,7 +47,7 @@ export const LinkFieldRender = ({field}: {field: LinkField}): React.JSX.Element 
             onFocus={e => fieldProps?.onFocus?.(e, field)}
             onMouseUp={e => fieldProps?.onMouseUp?.(e, field)}
         >
-            {value}
+            {fieldProps.title}
         </a>
     );
 };
