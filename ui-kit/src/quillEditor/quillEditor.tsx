@@ -133,7 +133,7 @@ type IQuilToolbarAdvanced = {
     handlers?: Record<string, (this: Quill, value: string) => void>;
 };
 
-export type IQuilToolbar = IQuilToolbarControls | IQuilToolbarAdvanced | string;
+export type IQuilToolbar = IQuilToolbarControls | IQuilToolbarControls[] | IQuilToolbarAdvanced | string;
 
 const defaultColorList: IToolbarColor['color'] = [
     '#000000',
@@ -195,7 +195,7 @@ const defaultFormats: IQuillEditorProps['formats'] = [
     'video',
 ];
 
-const defaultToolbar: IQuilToolbar[] = [
+const defaultToolbar: IQuilToolbar = [
     [{header: [1, 2, false]}],
     [{align: ['', 'center', 'right', 'justify']}],
     ['bold', 'italic', 'underline', 'strike'],
