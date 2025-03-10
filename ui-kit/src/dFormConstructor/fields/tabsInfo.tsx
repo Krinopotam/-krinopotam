@@ -11,7 +11,7 @@ export class TabsInfo extends BaseComponentInfo {
     public override readonly CODE = 'tabs';
     public override readonly CLASS = TabsField;
     public override readonly INTERFACE_NAME = 'ITabsFieldProps';
-    public override readonly ICON = (<FolderOpenOutlined />);
+    public override readonly ICON = (<FolderOpenOutlined/>);
 
     /** @returns true if field can be a parent of the specified child. If child is not specified, returns true if field potentially can have children */
     override canHaveChild(child?: BaseComponentInfo) {
@@ -19,9 +19,9 @@ export class TabsInfo extends BaseComponentInfo {
     }
 
     override getPropsInfo() {
+        const {placeholder, defaultValue, nonEditable, autoFocus, ...baseProps} = super.getPropsInfo();
         return {
-            id: 'string',
-            label: 'string',
+            ...baseProps,
             type: ['line', 'card'],
             tabsHeight: 'number',
             activeTab: 'string',

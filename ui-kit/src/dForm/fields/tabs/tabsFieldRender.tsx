@@ -67,7 +67,6 @@ export const TabsFieldRender = ({field}: {field: TabsField}): React.JSX.Element 
 
     const style: React.CSSProperties = {...defStyle, ...fieldProps.style};
 
-
     return (
         <Tabs
             className={fieldProps.className}

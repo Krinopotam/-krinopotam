@@ -9,6 +9,7 @@ export class InputInfo extends BaseComponentInfo {
     public override readonly CLASS = InputField;
     public override readonly INTERFACE_NAME = 'IInputFieldProps';
     public override readonly ICON = (<FieldStringOutlined />);
+
     override getPropsInfo() {
         const baseProps = super.getPropsInfo();
         return {

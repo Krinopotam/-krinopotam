@@ -4,12 +4,10 @@ import {ErrorBoundary} from '@src/dFormConstructor/renders/formPreview/errorBoun
 import {ErrorMessage} from '@src/dFormConstructor/renders/formPreview/errorMessage';
 import {FormInfoContext} from '@src/dFormConstructor/context/formInfoProvider';
 
-export const FormPreview = ({horizontal}: {horizontal: boolean}): React.JSX.Element => {
+export const FormPreview = (): React.JSX.Element => {
     const {formInfo} = useContext(FormInfoContext);
     const source = formInfo.toSource();
     const prevSourceRef = useRef(source);
-
-    const layout = horizontal ? 'horizontal' : 'vertical';
 
     useSyncExternalStore(formInfo.formPreviewSubscribe.bind(formInfo), formInfo.getFormPreviewRerenderSnapshot.bind(formInfo));
 
@@ -23,7 +21,7 @@ export const FormPreview = ({horizontal}: {horizontal: boolean}): React.JSX.Elem
                 <ErrorMessage />
             ) : (
                 <ErrorBoundary clearError={clearError}>
-                    <DForm layout={layout} {...formProps} />{' '}
+                    <DForm {...formProps} />{' '}
                 </ErrorBoundary>
             )}
         </div>

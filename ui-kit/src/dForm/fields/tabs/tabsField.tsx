@@ -3,7 +3,7 @@ import {IBaseFieldProps} from '@src/dForm/fields/base';
 import {BaseField} from '@src/dForm/fields/base/baseField';
 import {TabsFieldRender} from '@src/dForm/fields/tabs/tabsFieldRender';
 import {TabBarExtraContent} from 'rc-tabs/lib/interface';
-import React from 'react';
+import React, {CSSProperties} from 'react';
 
 import {IDFormDataSet, IDFormDataSourcePromise, IDFormFieldsProps} from '@src/dForm';
 
@@ -147,8 +147,8 @@ export class TabsField extends BaseField<ITabsFieldProps> {
         return <TabsFieldRender field={this} />;
     }
 
-    override renderField(): React.ReactNode {
-        if (this.parent) return super.renderField();
+    override renderField(props: {altLabel?: React.ReactNode; fieldContainerStyle?: CSSProperties} = {}): React.ReactNode {
+        if (this.parent) return super.renderField(props);
         return this.render();
     }
 
