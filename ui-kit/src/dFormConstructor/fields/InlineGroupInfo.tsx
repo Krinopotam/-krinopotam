@@ -41,12 +41,12 @@ export class InlineGroupInfo extends BaseComponentInfo {
     }
 
     /** @returns field instance props */
-    override getProps(): IInlineGroupFieldProps | Record<string, unknown> {
+    override getProps(_selectedField?: BaseComponentInfo): IInlineGroupFieldProps | Record<string, unknown> {
         const fieldProps: IDFormFieldsProps = {};
         for (const fieldInfo of this.getChildren()) {
             const id = fieldInfo.getId();
             if (!fieldInfo.CLASS) continue;
-            fieldProps[id] = {...(fieldInfo.getProps() as IBaseFieldProps<AnyType, AnyType>)};
+            fieldProps[id] = {...(fieldInfo.getProps(_selectedField) as IBaseFieldProps<AnyType, AnyType>)};
         }
         return {component: this.CLASS, fieldsProps: fieldProps, ...this.props} satisfies IInlineGroupFieldProps;
     }

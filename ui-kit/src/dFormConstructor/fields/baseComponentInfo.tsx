@@ -109,7 +109,8 @@ export class BaseComponentInfo {
     }
 
     /** @returns field instance props */
-    getProps(): IBaseFieldProps<AnyType, AnyType> | Record<string, unknown> {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    getProps(_selectedField?: BaseComponentInfo): IBaseFieldProps<AnyType, AnyType> | Record<string, unknown> {
         return {component: this.CLASS, label: this.getLabel(), ...this.props};
     }
 

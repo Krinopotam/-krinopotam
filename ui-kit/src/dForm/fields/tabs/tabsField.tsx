@@ -44,6 +44,9 @@ export interface ITabsFieldProps<TFieldsProps extends Record<string, AnyType> = 
     /** Tab bar gutter */
     tabBarGutter?: number;
 
+    /** CONSTRUCTOR MODE: highlighted tab */
+    highlightedTab?: string;
+
     /*************** Callbacks *****************/
     /** Fires when the disable state of a tab changes  */
     onTabDisabledStateChanged?: (tabName: string, value: boolean, field: TabsField) => void;

@@ -435,8 +435,7 @@ export class BaseField<TFieldProps extends IAnyFieldProps> {
             const prevValue = this.model.getHighlightedId();
             if (prevValue === this.getId()) return;
             this.model.setHighlightedId(this.getId());
-        }
-        else {
+        } else {
             if (this.model.getHighlightedId() !== this.getId()) return;
             this.model.setHighlightedId('');
         }
@@ -448,6 +447,7 @@ export class BaseField<TFieldProps extends IAnyFieldProps> {
     toggleHighlighted(noRerender?: boolean) {
         this.setHighlighted(!this.isHighlighted(), noRerender);
     }
+
     //endregion
 
     //region Fields collection methods (if the field is container)
@@ -480,7 +480,7 @@ export class BaseField<TFieldProps extends IAnyFieldProps> {
 
     //region Component render implementation
     protected render(): React.ReactNode {
-        throw new Error('Render method must be implemented in a derived class of the BaseField class')
+        throw new Error('Render method must be implemented in a derived class of the BaseField class');
     }
 
     renderField({
@@ -499,13 +499,7 @@ export class BaseField<TFieldProps extends IAnyFieldProps> {
         altLabel?: React.ReactNode;
         fieldContainerStyle?: CSSProperties;
     }) {
-        const highlightedFieldStyle: CSSProperties | undefined =
-            this.getId() === this.model.getHighlightedId()
-                ? {
-                    border: 'dashed 1px blue',
-                }
-                : undefined;
-
+        const highlightedFieldStyle: CSSProperties | undefined = this.getId() === this.model.getHighlightedId() ? this.getHighlightedStyle() : undefined;
         const _fieldContainerStyle: CSSProperties = {...fieldContainerStyle, ...highlightedFieldStyle};
 
         return (
@@ -513,6 +507,11 @@ export class BaseField<TFieldProps extends IAnyFieldProps> {
                 {field}
             </BaseFieldRender>
         );
+    }
+
+    /** @return field highlighted style */
+    getHighlightedStyle(): CSSProperties {
+        return {border: 'dashed 1px blue'};
     }
 
     /** Is field can have value */

@@ -40,7 +40,7 @@ export class TabsInfo extends BaseComponentInfo {
         for (const tabInfo of this.getChildren()) {
             if (tabInfo.CODE !== 'tab') continue;
 
-            if (selectedField === tabInfo) highlightedTab = tabInfo.getId();
+            if (selectedField === tabInfo) highlightedTab = tabInfo.getLabel() ?? tabInfo.getId();
             const tabId = tabInfo.getLabel() ?? tabInfo.getId();
             tabsProps[tabId as string] = {...(tabInfo.getProps(selectedField) as IBaseFieldProps<AnyType, AnyType>)};
         }

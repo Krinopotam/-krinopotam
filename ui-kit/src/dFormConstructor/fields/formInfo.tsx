@@ -53,18 +53,20 @@ export class FormInfo extends BaseComponentInfo {
     }
 
     /** @returns form props */
-    override getProps(): Record<string, unknown> & IDFormProps {
+    override getProps(selectedField?: BaseComponentInfo): Record<string, unknown> & IDFormProps {
         const result: Record<string, unknown> & IDFormProps = {...this.props, formId: this.getId()};
         const fieldProps: IDFormProps['fieldsProps'] = result.fieldsProps ?? {};
+
+        if (selectedField && selectedField.CODE !== 'tab') result.highlightedField = selectedField.getId();
 
         for (const fieldInfo of this.getChildren()) {
             const id = fieldInfo.getId();
             if (!fieldInfo.CLASS) continue;
-            fieldProps[id] = fieldInfo.getProps() as IBaseFieldProps<AnyType, AnyType>;
+            fieldProps[id] = fieldInfo.getProps(selectedField) as IBaseFieldProps<AnyType, AnyType>;
         }
 
         result.fieldsProps = fieldProps;
-        return RemovePropertiesByValue(result, undefined);
+        return RemovePropertiesByValue(result, undefined); //strip undefined values
     }
 
     override setProps(formProps: IDFormProps) {

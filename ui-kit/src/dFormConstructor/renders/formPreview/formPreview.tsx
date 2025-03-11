@@ -10,14 +10,12 @@ export const FormPreview = (): React.JSX.Element => {
     const {formInfo} = useContext(FormInfoContext);
     const {selectedField} = useContext(SelectedFieldContext);
 
-    const highlightedField = selectedField?.getId();
-
     const source = formInfo.toSource();
     const prevSourceRef = useRef(source);
 
     useSyncExternalStore(formInfo.formPreviewSubscribe.bind(formInfo), formInfo.getFormPreviewRerenderSnapshot.bind(formInfo));
 
-    const formProps = formInfo.getProps();
+    const formProps = formInfo.getProps(selectedField);
     const clearError = prevSourceRef.current !== source ? {} : undefined;
     prevSourceRef.current = source;
 
@@ -43,7 +41,7 @@ export const FormPreview = (): React.JSX.Element => {
             ) : (
                 <ErrorBoundary clearError={clearError}>
                     <div style={formWrapperStyle}>
-                        <DForm {...formProps} formMode={'constructor'} highlightedField={highlightedField} />
+                        <DForm {...formProps} formMode={'constructor'} />
                     </div>
                 </ErrorBoundary>
             )}

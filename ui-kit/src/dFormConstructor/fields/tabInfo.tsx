@@ -45,13 +45,13 @@ export class TabInfo extends BaseComponentInfo {
     }
 
     /** @returns field instance props */
-    override getProps(): IDFormFieldsProps | Record<string, unknown> {
+    override getProps(selectedField?: BaseComponentInfo): IDFormFieldsProps | Record<string, unknown> {
         const fieldProps: IDFormFieldsProps = {};
 
         for (const fieldInfo of this.getChildren()) {
             const id = fieldInfo.getId();
             if (!fieldInfo.CLASS) continue;
-            fieldProps[id] = {...(fieldInfo.getProps() as IBaseFieldProps<AnyType, AnyType>)};
+            fieldProps[id] = {...(fieldInfo.getProps(selectedField) as IBaseFieldProps<AnyType, AnyType>)};
         }
         return fieldProps;
     }

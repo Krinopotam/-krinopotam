@@ -40,8 +40,9 @@ export const TabsFieldRender = ({field}: {field: TabsField}): React.JSX.Element 
         const tabStyleDef: React.CSSProperties = {};
         if (fieldProps.autoHeightResize) tabStyleDef.height = '100%';
 
-        const highlightedTabStyle: CSSProperties | undefined = tabName === fieldProps.highlightedTab ? field.getHighlightedStyle() : undefined;
-        const _containerStyle = {...highlightedTabStyle,...containerStyle};
+        const highlightedTabStyle: CSSProperties | undefined =
+            !field.getParent() && field.getId() === model.getHighlightedId() ? field.getHighlightedStyle() : undefined;
+        const _containerStyle = {...containerStyle}
 
         items.push({
             key: tabName,
