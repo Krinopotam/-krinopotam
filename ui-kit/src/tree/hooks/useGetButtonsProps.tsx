@@ -75,6 +75,7 @@ export const useGetButtonsProps = (api: IExtTreeApi, props: IExtTreeProps) => {
         buttonsSize,
         buttonsPos,
         activeNode,
+        api,
     ]);
 };
 

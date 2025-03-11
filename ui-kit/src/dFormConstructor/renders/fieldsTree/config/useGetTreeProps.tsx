@@ -7,7 +7,13 @@ import {SelectedFieldContext} from '@src/dFormConstructor/context/selectedFieldP
 import {getNodeByFieldId} from '@src/dFormConstructor/renders/fieldsTree/tools/getFieldNode';
 import {IKey} from '@krinopotam/service-types';
 
-export const useGetTreeProps = (treeApi: IExtTreeApi, editFormProps: IDFormModalProps, dataSet: IExtTreeNode<{fieldInfo: BaseComponentInfo}>[]) => {
+export const useGetTreeProps = (
+    treeApi: IExtTreeApi,
+    editFormProps: IDFormModalProps,
+    dataSet: IExtTreeNode<{
+        fieldInfo: BaseComponentInfo;
+    }>[]
+) => {
     const {formInfo} = useContext(FormInfoContext);
     const {setSelectedField} = useContext(SelectedFieldContext);
 
@@ -18,11 +24,11 @@ export const useGetTreeProps = (treeApi: IExtTreeApi, editFormProps: IDFormModal
     return {
         apiRef: treeApi,
         defaultExpandAll: true,
-        autoExpandParent: true,
         defaultExpandParent: true,
         buttonsIconsOnly: true,
         draggableOrder: true,
         selectable: true,
+
         buttons: {
             update: null,
             clone: null,
@@ -45,6 +51,8 @@ export const useGetTreeProps = (treeApi: IExtTreeApi, editFormProps: IDFormModal
             formInfo.emitFieldsTreeRerender();
             formInfo.emitFormPreviewRerender();
             formInfo.emitPropsEditorRerender();
+
+            return false; //not use default behavior
         },
         allowDrop: info => {
             const dragField = info.dragNode['fieldInfo'] as BaseComponentInfo;
@@ -93,16 +101,28 @@ const useTransferNodesState = (
     useEffect(() => {
         /* transfer selection */
         // check if new data set already has selected node (for example, it happens when new node create)
-        const alreadySelNode = treeApi.getSelectedNodes(newDataSet)?.[0] as IExtTreeNode<{fieldInfo: BaseComponentInfo}> | undefined;
+        const alreadySelNode = treeApi.getSelectedNodes(newDataSet)?.[0] as
+            | IExtTreeNode<{
+                  fieldInfo: BaseComponentInfo;
+              }>
+            | undefined;
         if (!alreadySelNode) {
-            const oldSelNode = treeApi.getSelectedNodes(oldDataSet)?.[0] as IExtTreeNode<{fieldInfo: BaseComponentInfo}> | undefined;
+            const oldSelNode = treeApi.getSelectedNodes(oldDataSet)?.[0] as
+                | IExtTreeNode<{
+                      fieldInfo: BaseComponentInfo;
+                  }>
+                | undefined;
             const newSelNode = oldSelNode ? getNodeByFieldId(newDataSet, oldSelNode.fieldInfo.getId(), oldSelNode.fieldInfo.CODE) : undefined;
             treeApi.selectNode(newSelNode ? newSelNode.id : undefined);
             setSelectedField(newSelNode ? newSelNode.fieldInfo : undefined);
         }
 
         /* transfer expanded state */
-        const oldExpandedNodes = treeApi.getExpandedNodes(oldDataSet) as IExtTreeNode<{fieldInfo: BaseComponentInfo}>[] | undefined;
+        const oldExpandedNodes = treeApi.getExpandedNodes(oldDataSet) as
+            | IExtTreeNode<{
+                  fieldInfo: BaseComponentInfo;
+              }>[]
+            | undefined;
         const newExpandedKeys: IKey[] = [];
         if (!oldExpandedNodes) return;
         for (const node of oldExpandedNodes) {
