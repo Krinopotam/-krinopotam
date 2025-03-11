@@ -28,7 +28,6 @@ export const useGetTreeProps = (
         buttonsIconsOnly: true,
         draggableOrder: true,
         selectable: true,
-
         buttons: {
             update: null,
             clone: null,
