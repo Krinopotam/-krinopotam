@@ -16,6 +16,7 @@ export const TabsFieldRender = ({field}: {field: TabsField}): React.JSX.Element 
 
     const fieldProps = field.getProps();
     const tabsRootFields = field.getTabsRootFields();
+    const model = field.getModel();
 
     useSyncExternalStore(field.subscribe.bind(field), field.getSnapshot.bind(field));
 
@@ -65,7 +66,14 @@ export const TabsFieldRender = ({field}: {field: TabsField}): React.JSX.Element 
     const defStyle: CSSProperties = {width: field.getWidth() ?? '100%'};
     if (fieldProps.autoHeightResize) defStyle.height = '100%';
 
-    const style: React.CSSProperties = {...defStyle, ...fieldProps.style};
+    const highlightedFieldStyle: CSSProperties | undefined =
+        !field.getParent() && field.getId() === model.getHighlightedId()
+            ? {
+                border: 'dashed 1px blue',
+            }
+            : undefined;
+
+    const style: React.CSSProperties = {...defStyle, ...highlightedFieldStyle, ...fieldProps.style};
 
     return (
         <Tabs
@@ -188,7 +196,7 @@ const TabBarRender = (props: TabNavListProps, DefaultTabBar: ComponentType<TabNa
     return (
         <StickyBox style={{zIndex: 15}}>
             <div style={indentStyle} />
-            <DefaultTabBar {...props} style={style}/>
+            <DefaultTabBar {...props} style={style} />
         </StickyBox>
     );
 };

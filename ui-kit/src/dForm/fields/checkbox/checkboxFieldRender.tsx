@@ -6,7 +6,7 @@ import {CheckboxField} from "@src/dForm/fields/checkbox/checkboxField";
 export const CheckboxFieldRender = ({field}:{field:CheckboxField}):React.JSX.Element =>{
     useSyncExternalStore(field.subscribe.bind(field), field.getSnapshot.bind(field));
 
-    const fieldName = field.getName();
+    const fieldId = field.getId();
     const fieldProps = field.getProps();
 
     const value = field.getValue() as boolean;
@@ -23,7 +23,7 @@ export const CheckboxFieldRender = ({field}:{field:CheckboxField}):React.JSX.Ele
 
     useEffect(() => {
         field.setReady(true)
-    }, [field, fieldName]);
+    }, [field, fieldId]);
 
     const defStyle: CSSProperties = {width: field.getWidth()};
     const style = {...defStyle, ...fieldProps.style};

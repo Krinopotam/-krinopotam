@@ -12,7 +12,7 @@ import React, {CSSProperties} from 'react';
 
 export type IDFormValidationRules = Record<string, IRuleType[]>;
 
-export type IDFormMode = 'view' | 'create' | 'update' | 'clone' | 'delete';
+export type IDFormMode = 'view' | 'create' | 'update' | 'clone' | 'delete' | 'constructor';
 
 /** Fields properties collection */
 export type IDFormFieldsProps<TFieldsProps extends Record<string, AnyType> = Record<string, AnyType>> = {
@@ -137,6 +137,9 @@ export interface IDFormPropsNoCB<TFieldsProps extends Record<string, AnyType> = 
 
     /** Custom translation */
     translation?: Partial<typeof translations.en_US>;
+
+    /** CONSTRUCTOR MODE: highlighted field */
+    highlightedField?: string;
 
     /** @private A service property meaning that the form is used in another component that overrides the api part (for example DModalForm)  */
     _overriddenApi?: {[K in keyof IDFormApi as string extends K ? never : K]?: boolean};

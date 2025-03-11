@@ -87,7 +87,6 @@ export class DModel {
 
     /** the current form mode  */
     private _formMode: IDFormMode = 'create';
-    //endregion
 
     /** the number of attempts to submit */
     private _submitCount = 0;
@@ -109,6 +108,9 @@ export class DModel {
 
     /** form rerender key snapshot */
     private _formRenderSnapshot: Record<never, never> = {};
+
+    /** CONSTRUCTOR MODE: Selected field id */
+    private _highlightedId?: string = undefined;
     //endregion
 
     //region Init class
@@ -144,6 +146,8 @@ export class DModel {
         if (!formProps.disableDepended) this._hidden = this.calculateLockedFields();
         else this._disabled = this.calculateLockedFields();
 
+        this._highlightedId = formProps.highlightedField;
+
         this._formProps.onFormModelInitialized?.(this._formApi, new CallbackControl());
     }
 
@@ -153,14 +157,14 @@ export class DModel {
         const rootFields: DModel['_rootFields'] = {};
         if (!fieldsProps) return [fieldsMap, rootFields];
 
-        for (const fieldName in fieldsProps) {
-            const fieldProps = fieldsProps[fieldName];
-            if (fieldsMap[fieldName]) console.error(`The form contains duplicate field names  "${fieldName}"!`);
+        for (const fieldId in fieldsProps) {
+            const fieldProps = fieldsProps[fieldId];
+            if (fieldsMap[fieldId]) console.error(`The form contains duplicate field names  "${fieldId}"!`);
             if (!fieldProps.component) continue;
-            const field = new fieldProps.component(fieldName, fieldProps, this, parent) as IBaseField;
+            const field = new fieldProps.component(fieldId, fieldProps, this, parent) as IBaseField;
 
-            fieldsMap[fieldName] = field;
-            rootFields[fieldName] = field;
+            fieldsMap[fieldId] = field;
+            rootFields[fieldId] = field;
 
             const [plainChildren] = field.initChildrenFields();
 
@@ -204,36 +208,36 @@ export class DModel {
         const disabled: Record<string, boolean | undefined> = {};
         const labels: Record<string, React.ReactNode> = {};
 
-        for (const fieldName in fieldsMap) {
-            const field = fieldsMap[fieldName];
-            const oldField = prevFieldsMap[fieldName];
+        for (const fieldId in fieldsMap) {
+            const field = fieldsMap[fieldId];
+            const oldField = prevFieldsMap[fieldId];
 
             const fieldProps = field.getProps();
 
             const formProps = this.getFormProps();
 
-            labels[fieldName] = fieldProps.label;
+            labels[fieldId] = fieldProps.label;
 
             if (oldField && field.constructor.name === oldField.constructor.name) {
                 //if the field type has not changed, then keep values
-                values[fieldName] = curValues[fieldName];
-                hidden[fieldName] = formProps.keepHiddenState && typeof curHidden[fieldName] === 'boolean' ? curHidden[fieldName] : fieldProps.hidden;
-                disabled[fieldName] = formProps.keepDisabledState && typeof curDisabled[fieldName] === 'boolean' ? curDisabled[fieldName] : fieldProps.disabled;
-                readOnly[fieldName] = formProps.keepReadOnlyState && typeof curReadOnly[fieldName] === 'boolean' ? curReadOnly[fieldName] : fieldProps.readOnly;
+                values[fieldId] = curValues[fieldId];
+                hidden[fieldId] = formProps.keepHiddenState && typeof curHidden[fieldId] === 'boolean' ? curHidden[fieldId] : fieldProps.hidden;
+                disabled[fieldId] = formProps.keepDisabledState && typeof curDisabled[fieldId] === 'boolean' ? curDisabled[fieldId] : fieldProps.disabled;
+                readOnly[fieldId] = formProps.keepReadOnlyState && typeof curReadOnly[fieldId] === 'boolean' ? curReadOnly[fieldId] : fieldProps.readOnly;
 
                 continue;
             }
 
-            hidden[fieldName] = !!fieldProps.hidden;
-            disabled[fieldName] = !!fieldProps.disabled;
-            readOnly[fieldName] = !!fieldProps.readOnly;
+            hidden[fieldId] = !!fieldProps.hidden;
+            disabled[fieldId] = !!fieldProps.disabled;
+            readOnly[fieldId] = !!fieldProps.readOnly;
 
             if (!field.canHaveValue()) continue;
 
             let fieldValue: unknown = undefined;
-            if (mode === 'create') fieldValue = fieldProps.defaultValue ?? this._formProps.defaultValues?.[fieldName];
-            else fieldValue = dataSet?.[fieldName];
-            values[fieldName] = fieldValue;
+            if (mode === 'create') fieldValue = fieldProps.defaultValue ?? this._formProps.defaultValues?.[fieldId];
+            else fieldValue = dataSet?.[fieldId];
+            values[fieldId] = fieldValue;
         }
 
         return [labels, values, hidden, readOnly, disabled];
@@ -245,7 +249,7 @@ export class DModel {
      */
     private calculateLockedFields() {
         const result: Record<string, boolean> = {};
-        for (const fieldName in this._fieldsMap) result[fieldName] = this.isFieldMustBeLocked(this._fieldsMap[fieldName]);
+        for (const fieldId in this._fieldsMap) result[fieldId] = this.isFieldMustBeLocked(this._fieldsMap[fieldId]);
         return result;
     }
 
@@ -258,11 +262,11 @@ export class DModel {
      */
     lockDependedFields(field: IBaseField, noEvents?: boolean, noRerender?: boolean) {
         const disableDepended = this._formProps.disableDepended;
-        const fieldName = field.getName();
+        const fieldId = field.getId();
         for (const childName in this._fieldsMap) {
             const childField = this._fieldsMap[childName];
             const childProps = childField.getProps();
-            if (!childProps?.dependsOn || childProps.dependsOn.indexOf(fieldName) < 0) continue;
+            if (!childProps?.dependsOn || childProps.dependsOn.indexOf(fieldId) < 0) continue;
             const isLocked = this.isFieldMustBeLocked(childField);
             if (disableDepended) childField.setDisabled(isLocked, noEvents, noRerender);
             else childField.setHidden(isLocked, noEvents, noRerender);
@@ -311,8 +315,18 @@ export class DModel {
     }
 
     /** @return field by name from fields map */
-    getField<T extends IBaseField = IBaseField>(fieldName: string): T {
-        return this._fieldsMap[fieldName] as T;
+    getField<T extends IBaseField = IBaseField>(fieldId: string): T {
+        return this._fieldsMap[fieldId] as T;
+    }
+
+    /** @returns highlighted field ID in CONSTRUCTOR MODE: */
+    getHighlightedId() {
+        return this._highlightedId;
+    }
+
+    /** set selected field ID in CONSTRUCTOR MODE: */
+    setHighlightedId(id: string) {
+        this._highlightedId = id;
     }
 
     //endregion
@@ -360,10 +374,10 @@ export class DModel {
 
         this._dataSet = newDataSet;
 
-        for (const fieldName in this._fieldsMap) {
-            const field = this._fieldsMap[fieldName];
-            if (!newDataSet || !(fieldName in newDataSet)) continue;
-            field.setValue(newDataSet[fieldName], noEvents, noRerender);
+        for (const fieldId in this._fieldsMap) {
+            const field = this._fieldsMap[fieldId];
+            if (!newDataSet || !(fieldId in newDataSet)) continue;
+            field.setValue(newDataSet[fieldId], noEvents, noRerender);
         }
     }
 
@@ -518,8 +532,8 @@ export class DModel {
             let isFormReady = true;
             if (this.isFormFetching() || this.isFormFetchingFailed()) isFormReady = false;
             else {
-                for (const fieldName in this._fieldsMap) {
-                    const field = this._fieldsMap[fieldName];
+                for (const fieldId in this._fieldsMap) {
+                    const field = this._fieldsMap[fieldId];
                     if (field.isHidden()) continue;
                     if (!field.isReady()) isFormReady = false;
                 }
@@ -540,8 +554,8 @@ export class DModel {
      * @returns a collection of errors of only those visible fields for which there are errors (hidden fields have no errors)
      */
     validateForm(noEvents?: boolean, noRerender?: boolean) {
-        for (const fieldName in this._fieldsMap) {
-            const field = this._fieldsMap[fieldName];
+        for (const fieldId in this._fieldsMap) {
+            const field = this._fieldsMap[fieldId];
             field.validate(noEvents, noRerender);
         }
 
@@ -601,8 +615,8 @@ export class DModel {
      */
     isFormHasError() {
         const errors = this.getErrors();
-        for (const fieldName in errors) {
-            if (errors[fieldName]) return true;
+        for (const fieldId in errors) {
+            if (errors[fieldId]) return true;
         }
 
         return false;
@@ -634,8 +648,8 @@ export class DModel {
         if (!props.fetchOnCreate && formMode !== 'update' && formMode !== 'clone' && formMode !== 'view') return;
         this.fetchData();
 
-        for (const fieldName in this._fieldsMap) {
-            const field = this._fieldsMap[fieldName];
+        for (const fieldId in this._fieldsMap) {
+            const field = this._fieldsMap[fieldId];
             field.onInitialFetch();
         }
     }

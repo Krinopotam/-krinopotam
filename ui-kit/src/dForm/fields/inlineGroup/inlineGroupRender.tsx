@@ -53,9 +53,17 @@ export const InlineGroupRender = ({field}: {field: InlineGroupField}): React.JSX
 
     const gapOffset = getGapOffset(childrenFields, gap);
 
+    const highlightedFieldStyle: CSSProperties | undefined =
+        field.getId() === model.getHighlightedId()
+            ? {
+                border: 'dashed 1px blue',
+            }
+            : undefined;
+    const containerStyle: CSSProperties = {...highlightedFieldStyle};
+
     return (
         <CSSTransition nodeRef={nodeRef} in={!fieldHidden} timeout={300} classNames="zoom" unmountOnExit>
-            <div ref={nodeRef} className={'dform-field-container'}>
+            <div ref={nodeRef} className={'dform-field-container'} style={containerStyle}>
                 <Form.Item label={groupLabel} style={groupItemStyle} className={fieldProps.className}>
                     <div style={groupContainerStyle}>
                         {Object.keys(childrenFields).map(fieldName => {
@@ -69,7 +77,7 @@ export const InlineGroupRender = ({field}: {field: InlineGroupField}): React.JSX
 
                             const altLabel = formProps.layout === 'horizontal' && childField === firstField ? null : undefined;
                             return (
-                                <React.Fragment key={`item_${field.getName()}_subitem_${childField.getName()}`}>{childField.renderField({altLabel, fieldContainerStyle})}</React.Fragment>
+                                <React.Fragment key={`item_${field.getId()}_subitem_${childField.getId()}`}>{childField.renderField({altLabel, fieldContainerStyle})}</React.Fragment>
                             );
                         })}
                     </div>

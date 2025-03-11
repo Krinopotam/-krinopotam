@@ -6,7 +6,7 @@ const {TextArea} = Input;
 export const TextAreaFieldRender = ({field}: {field: TextAreaField}): React.JSX.Element => {
     useSyncExternalStore(field.subscribe.bind(field), field.getSnapshot.bind(field));
     
-    const fieldName = field.getName();
+    const fieldId = field.getId();
     const fieldProps = field.getProps();
 
     const value = field.getValue();
@@ -40,7 +40,7 @@ export const TextAreaFieldRender = ({field}: {field: TextAreaField}): React.JSX.
             cols={fieldProps.cols}
             disabled={field.isDisabled()}
             maxLength={fieldProps.maxLength}
-            name={fieldName}
+            name={fieldId}
             onBlur={onBlur}
             onChange={onChange}
             placeholder={fieldProps.placeholder}

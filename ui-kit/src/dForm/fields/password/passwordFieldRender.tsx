@@ -5,7 +5,7 @@ import {PasswordField} from "@src/dForm/fields/password/passwordField";
 export const PasswordFieldRender = ({field}:{field:PasswordField}):React.JSX.Element =>{
     useSyncExternalStore(field.subscribe.bind(field), field.getSnapshot.bind(field));
 
-    const fieldName = field.getName();
+    const fieldId = field.getId();
     const fieldProps = field.getProps();
 
     const value = field.getValue();
@@ -36,7 +36,7 @@ export const PasswordFieldRender = ({field}:{field:PasswordField}):React.JSX.Ele
             disabled={field.isDisabled()}
             iconRender={fieldProps.iconRender}
             maxLength={fieldProps.maxLength}
-            name={fieldName}
+            name={fieldId}
             onBlur={onBlur}
             onChange={onChange}
             placeholder={fieldProps.placeholder}

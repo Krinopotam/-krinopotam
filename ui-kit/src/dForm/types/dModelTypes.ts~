@@ -24,7 +24,7 @@ export interface IDFormBaseCallbacks<T> {
     onFormReadyChanged?: (state: boolean, api: T, cbControl: CallbackControl) => void;
 
     /** fires when the form values changed  */
-    onFormValuesChanged?: (fieldId: string, values: Record<string, AnyType>, api: T, cbControl: CallbackControl) => void;
+    onFormValuesChanged?: (fieldName: string, values: Record<string, AnyType>, api: T, cbControl: CallbackControl) => void;
 
     /**
      * fires when the form validated

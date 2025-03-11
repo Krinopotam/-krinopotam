@@ -5,7 +5,7 @@ import {NumberField} from '@src/dForm/fields/number/numberField';
 export const NumberFieldRender = ({field}: {field: NumberField}): React.JSX.Element => {
     useSyncExternalStore(field.subscribe.bind(field), field.getSnapshot.bind(field));
 
-    const fieldName = field.getName();
+    const fieldId = field.getId();
     const fieldProps = field.getProps();
 
     const value = field.getValue();
@@ -44,7 +44,7 @@ export const NumberFieldRender = ({field}: {field: NumberField}): React.JSX.Elem
             max={fieldProps.max}
             maxLength={fieldProps.maxLength}
             min={fieldProps.min}
-            name={fieldName}
+            name={fieldId}
             onBlur={onBlur}
             onChange={onChange}
             parser={fieldProps.parser}

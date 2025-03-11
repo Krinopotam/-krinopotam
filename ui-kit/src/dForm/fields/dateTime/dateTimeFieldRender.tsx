@@ -5,7 +5,7 @@ import dayjs from 'dayjs';
 
 export const DateTimeFieldRender = ({field}: {field: DateTimeField}): React.JSX.Element => {
     useSyncExternalStore(field.subscribe.bind(field), field.getSnapshot.bind(field));
-    const fieldName = field.getName();
+    const fieldId = field.getId();
     const fieldProps = field.getProps();
 
     const fieldFormat = GetDatePickerFormat(fieldProps.mode, fieldProps.timeMode, fieldProps.format);
@@ -53,7 +53,7 @@ export const DateTimeFieldRender = ({field}: {field: DateTimeField}): React.JSX.
             className={fieldProps.className}
             disabled={field.isDisabled()}
             readOnly={field.isReadOnly()}
-            name={fieldName}
+            name={fieldId}
             value={value}
             style={style}
             /** --- Callbacks ---------- */

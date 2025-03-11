@@ -21,7 +21,7 @@ export class BaseField<TFieldProps extends IAnyFieldProps> {
     /** form field props */
     protected fieldProps: TFieldProps;
     /** field name */
-    protected readonly fieldName: string;
+    protected readonly fieldId: string;
     /** form model */
     protected readonly model: DModel;
     /** parent field */
@@ -41,8 +41,8 @@ export class BaseField<TFieldProps extends IAnyFieldProps> {
 
     //endregion
 
-    constructor(fieldName: string, fieldProps: TFieldProps, model: DModel, parent?: IBaseField) {
-        this.fieldName = fieldName;
+    constructor(fieldId: string, fieldProps: TFieldProps, model: DModel, parent?: IBaseField) {
+        this.fieldId = fieldId;
         this.fieldProps = fieldProps;
         this.model = model;
         this.parent = parent;
@@ -94,9 +94,9 @@ export class BaseField<TFieldProps extends IAnyFieldProps> {
         this.setProps({...curProps, ...updatedProps}, noRerender);
     }
 
-    /** @returns field name  */
-    getName() {
-        return this.fieldName;
+    /** @returns field ID  */
+    getId() {
+        return this.fieldId;
     }
 
     /** Get form properties */
@@ -116,7 +116,7 @@ export class BaseField<TFieldProps extends IAnyFieldProps> {
 
     /** @returns field label */
     getLabel() {
-        return this.model.getLabels()[this.fieldName];
+        return this.model.getLabels()[this.fieldId];
     }
 
     /**
@@ -128,7 +128,7 @@ export class BaseField<TFieldProps extends IAnyFieldProps> {
     setLabel(value: React.ReactNode | undefined, noEvents?: boolean, noRerender?: boolean) {
         const prevValue = this.getLabel();
         if (prevValue === value) return;
-        this.model.getLabels()[this.fieldName] = value;
+        this.model.getLabels()[this.fieldId] = value;
 
         if (!noEvents) this.getProps()?.onLabelChanged?.(value, prevValue, this);
         if (!noRerender) this.emitRender();
@@ -137,7 +137,7 @@ export class BaseField<TFieldProps extends IAnyFieldProps> {
     /** @return field value */
     getValue(): TFieldProps['defaultValue'] | undefined {
         const formValues = this.model.getValues();
-        return formValues[this.fieldName];
+        return formValues[this.fieldId];
     }
 
     /**
@@ -152,11 +152,11 @@ export class BaseField<TFieldProps extends IAnyFieldProps> {
         if (prevValue === value) return;
 
         const formValues = this.model.getValues();
-        formValues[this.fieldName] = value;
+        formValues[this.fieldId] = value;
 
         if (!noEvents) {
             this.getProps()?.onValueChanged?.(value, prevValue, this);
-            this.model.getFormProps().onFormValuesChanged?.(this.fieldName, formValues, this.model.getFormApi(), new CallbackControl());
+            this.model.getFormProps().onFormValuesChanged?.(this.fieldId, formValues, this.model.getFormApi(), new CallbackControl());
             this.validate(noEvents, noRerender);
         }
 
@@ -176,7 +176,7 @@ export class BaseField<TFieldProps extends IAnyFieldProps> {
 
     /** @returns the field touched status (a user has set focus to the field) */
     isTouched(): boolean {
-        return this.model.getTouchedFields()[this.fieldName] ?? false;
+        return this.model.getTouchedFields()[this.fieldId] ?? false;
     }
 
     /**
@@ -188,14 +188,14 @@ export class BaseField<TFieldProps extends IAnyFieldProps> {
         const prevValue = this.isTouched();
         if (prevValue === value) return;
 
-        this.model.getTouchedFields()[this.fieldName] = value;
+        this.model.getTouchedFields()[this.fieldId] = value;
 
         if (!noEvents) this.getProps()?.onTouchedStateChanged?.(value, this);
     }
 
     /** @returns field dirty status */
     isDirty(): boolean {
-        return this.model.getDirtyFields()[this.fieldName] ?? false;
+        return this.model.getDirtyFields()[this.fieldId] ?? false;
     }
 
     /**
@@ -207,7 +207,7 @@ export class BaseField<TFieldProps extends IAnyFieldProps> {
         const prevValue = this.isDirty();
         if (prevValue === value) return;
 
-        this.model.getDirtyFields()[this.fieldName] = value;
+        this.model.getDirtyFields()[this.fieldId] = value;
 
         if (!noEvents) this.getProps()?.onDirtyStateChanged?.(value, this);
 
@@ -228,7 +228,7 @@ export class BaseField<TFieldProps extends IAnyFieldProps> {
     /** @returns field disable status */
     isDisabled(): boolean {
         if (this.model.isFormDisabled() || (this.getProps().nonEditable === 'disabled' && this.model.getFormMode() === 'update')) return true;
-        return this.model.getDisabledFields()[this.fieldName] ?? false;
+        return this.model.getDisabledFields()[this.fieldId] ?? false;
     }
 
     /**
@@ -240,7 +240,7 @@ export class BaseField<TFieldProps extends IAnyFieldProps> {
     setDisabled(value: boolean, noEvents?: boolean, noRerender?: boolean) {
         const prevValue = this.isDisabled();
         if (prevValue === value) return;
-        this.model.getDisabledFields()[this.fieldName] = value;
+        this.model.getDisabledFields()[this.fieldId] = value;
 
         if (!noEvents) this.getProps()?.onDisabledStateChanged?.(value, this);
         if (!noRerender) this.model.emitFormRender(); //it is necessary to re-render the entire form, since disabled fields may change the behavior of containers
@@ -253,7 +253,7 @@ export class BaseField<TFieldProps extends IAnyFieldProps> {
             ((this.getProps().nonEditable === true || this.getProps().nonEditable === 'readOnly') && this.model.getFormMode() === 'update')
         )
             return true;
-        return this.model.getReadOnlyFields()[this.fieldName] ?? false;
+        return this.model.getReadOnlyFields()[this.fieldId] ?? false;
     }
 
     /**
@@ -263,11 +263,11 @@ export class BaseField<TFieldProps extends IAnyFieldProps> {
      * @param noRerender - do not emit re-rendering
      */
     setReadOnly(value: boolean, noEvents?: boolean, noRerender?: boolean) {
-        const prevValue = this.model.getReadOnlyFields()[this.fieldName];
+        const prevValue = this.model.getReadOnlyFields()[this.fieldId];
 
         if (prevValue === value) return;
 
-        this.model.getReadOnlyFields()[this.fieldName] = value;
+        this.model.getReadOnlyFields()[this.fieldId] = value;
 
         if (!noEvents) this.getProps()?.onReadOnlyStateChanged?.(value, this);
         if (!noRerender) this.emitRender();
@@ -275,7 +275,7 @@ export class BaseField<TFieldProps extends IAnyFieldProps> {
 
     /** @returns field hidden status  */
     isHidden(): boolean {
-        return this.model.getHiddenFields()[this.fieldName] ?? false;
+        return this.model.getHiddenFields()[this.fieldId] ?? false;
     }
 
     /**
@@ -288,7 +288,7 @@ export class BaseField<TFieldProps extends IAnyFieldProps> {
         const prevValue = this.isHidden();
         if (prevValue === value) return;
 
-        this.model.getHiddenFields()[this.fieldName] = value;
+        this.model.getHiddenFields()[this.fieldId] = value;
         this.model.lockDependedFields(this, noEvents, noRerender);
 
         if (value) {
@@ -304,8 +304,8 @@ export class BaseField<TFieldProps extends IAnyFieldProps> {
     isReady(): boolean {
         if (this.model.isFormFetching() || this.model.isFormFetchingFailed()) return false;
         const fetchingFields = this.model.getFetchingFields();
-        if (fetchingFields[this.fieldName]) return false;
-        return this.model.getReadyFields()[this.fieldName] ?? false;
+        if (fetchingFields[this.fieldId]) return false;
+        return this.model.getReadyFields()[this.fieldId] ?? false;
     }
 
     /**
@@ -317,7 +317,7 @@ export class BaseField<TFieldProps extends IAnyFieldProps> {
         const prevValue = this.isReady();
         if (prevValue === value) return;
 
-        this.model.getReadyFields()[this.fieldName] = value;
+        this.model.getReadyFields()[this.fieldId] = value;
 
         if (!noEvents) this.getProps()?.onReadyStateChanged?.(value, this);
         this.model.checkFormReadyState();
@@ -325,7 +325,7 @@ export class BaseField<TFieldProps extends IAnyFieldProps> {
 
     /** @returns the error text of the field  */
     getError(): string {
-        return this.model.getErrors()[this.fieldName] ?? '';
+        return this.model.getErrors()[this.fieldId] ?? '';
     }
 
     /**
@@ -340,8 +340,8 @@ export class BaseField<TFieldProps extends IAnyFieldProps> {
 
         const errors = this.model.getErrors();
 
-        if (!value) delete errors[this.fieldName];
-        else errors[this.fieldName] = value;
+        if (!value) delete errors[this.fieldId];
+        else errors[this.fieldId] = value;
 
         if (!noEvents) {
             const fieldProps = this.getProps();
@@ -365,7 +365,7 @@ export class BaseField<TFieldProps extends IAnyFieldProps> {
     validate(noEvents?: boolean, noRerender?: boolean): string {
         //hidden fields shouldn't be validated
         const rules = this.getProps().rules ?? [];
-        const formRules = this.getFormProps().validationRules?.[this.fieldName] ?? [];
+        const formRules = this.getFormProps().validationRules?.[this.fieldId] ?? [];
         const error = !this.isHidden() ? this.model.getValidator().validateValue(this.getValue(), this.model, rules.concat(formRules)) : '';
 
         this.setError(error, noEvents);
@@ -384,27 +384,27 @@ export class BaseField<TFieldProps extends IAnyFieldProps> {
     /** @returns field fetching status  */
     isFetching() {
         const fetchingFields = this.model.getFetchingFields();
-        return fetchingFields[this.fieldName] === 1;
+        return fetchingFields[this.fieldId] === 1;
     }
 
     /** @returns field fetching failed status  */
     isFetchingFailed() {
         const fetchingFields = this.model.getFetchingFields();
-        return fetchingFields[this.fieldName] === -1;
+        return fetchingFields[this.fieldId] === -1;
     }
 
     fetchData() {
         const dataSource = this.fieldProps.onFieldDataFetch?.(this);
         if (!dataSource) return;
         const fetchingFields = this.model.getFetchingFields();
-        fetchingFields[this.fieldName] = 1;
+        fetchingFields[this.fieldId] = 1;
         this.model.checkFormReadyState();
         this.emitRender();
 
         dataSource.then(
             (result: {data: Record<string, AnyType>}) => {
                 if (!this.model.isFormMounted()) return;
-                fetchingFields[this.fieldName] = 0;
+                fetchingFields[this.fieldId] = 0;
                 this.fieldProps.onFieldDataFetchSuccess?.(result, this);
 
                 const values = result.data as IDFormDataSet;
@@ -415,7 +415,7 @@ export class BaseField<TFieldProps extends IAnyFieldProps> {
             },
             (error: IError) => {
                 if (!this.model.isFormMounted()) return;
-                fetchingFields[this.fieldName] = -1;
+                fetchingFields[this.fieldId] = -1;
                 this.fieldProps.onFieldDataFetchError?.(error, this);
 
                 this.model.checkFormReadyState();
@@ -424,6 +424,30 @@ export class BaseField<TFieldProps extends IAnyFieldProps> {
         );
     }
 
+    /** @returns field highlighted status for CONSTRUCTOR MODE  */
+    isHighlighted(): boolean {
+        return this.model.getHighlightedId() === this.fieldId;
+    }
+
+    /** Sets field highlighted status for CONSTRUCTOR MODE  */
+    setHighlighted(value: boolean, noRerender?: boolean) {
+        if (value) {
+            const prevValue = this.model.getHighlightedId();
+            if (prevValue === this.getId()) return;
+            this.model.setHighlightedId(this.getId());
+        }
+        else {
+            if (this.model.getHighlightedId() !== this.getId()) return;
+            this.model.setHighlightedId('');
+        }
+
+        if (!noRerender) this.emitRender();
+    }
+
+    /** Toggles field highlighted status for CONSTRUCTOR MODE  */
+    toggleHighlighted(noRerender?: boolean) {
+        this.setHighlighted(!this.isHighlighted(), noRerender);
+    }
     //endregion
 
     //region Fields collection methods (if the field is container)
@@ -475,8 +499,17 @@ export class BaseField<TFieldProps extends IAnyFieldProps> {
         altLabel?: React.ReactNode;
         fieldContainerStyle?: CSSProperties;
     }) {
+        const highlightedFieldStyle: CSSProperties | undefined =
+            this.getId() === this.model.getHighlightedId()
+                ? {
+                    border: 'dashed 1px blue',
+                }
+                : undefined;
+
+        const _fieldContainerStyle: CSSProperties = {...fieldContainerStyle, ...highlightedFieldStyle};
+
         return (
-            <BaseFieldRender key={this.getName()} field={this} altLabel={altLabel} fieldContainerStyle={fieldContainerStyle}>
+            <BaseFieldRender key={this.getId()} field={this} altLabel={altLabel} fieldContainerStyle={_fieldContainerStyle}>
                 {field}
             </BaseFieldRender>
         );

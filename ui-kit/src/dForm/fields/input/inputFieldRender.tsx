@@ -5,7 +5,7 @@ import {InputField} from '@src/dForm/fields/input/inputField';
 export const InputFieldRender = ({field}: {field: InputField}): React.JSX.Element => {
     useSyncExternalStore(field.subscribe.bind(field), field.getSnapshot.bind(field));
 
-    const fieldName = field.getName();
+    const fieldId = field.getId();
     const fieldProps = field.getProps();
 
     const value = field.getValue();
@@ -36,7 +36,7 @@ export const InputFieldRender = ({field}: {field: InputField}): React.JSX.Elemen
             disabled={field.isDisabled()}
             readOnly={field.isReadOnly()}
             maxLength={fieldProps.maxLength}
-            name={fieldName}
+            name={fieldId}
             onBlur={onBlur}
             onChange={onChange}
             placeholder={fieldProps.placeholder}
