@@ -12,14 +12,18 @@ export const useGetTreeProps = (
     editFormProps: IDFormModalProps,
     dataSet: IExtTreeNode<{
         fieldInfo: BaseComponentInfo;
-    }>[]
+    }>[],
+    sourceChanged?: boolean
 ) => {
     const {formInfo} = useContext(FormInfoContext);
-    const {setSelectedField} = useContext(SelectedFieldContext);
+    const {selectedField, setSelectedField} = useContext(SelectedFieldContext);
 
     const prevDataSetRef = useRef(dataSet);
-    useTransferNodesState(treeApi, prevDataSetRef.current, dataSet);
+    useTransferNodesState(sourceChanged, treeApi, prevDataSetRef.current, dataSet);
+
     if (prevDataSetRef.current !== dataSet) prevDataSetRef.current = dataSet;
+
+    const selectedKeys = selectedField ? [selectedField.NODE_ID] : ([] as IKey[]);
 
     return {
         apiRef: treeApi,
@@ -28,6 +32,7 @@ export const useGetTreeProps = (
         buttonsIconsOnly: true,
         draggableOrder: true,
         selectable: true,
+        selectedKeys: selectedKeys,
         buttons: {
             update: null,
             clone: null,
@@ -44,9 +49,10 @@ export const useGetTreeProps = (
         editFormProps: editFormProps,
         dataSet: dataSet,
         onDelete: node => {
-            const componentInfo = node['fieldInfo'] as BaseComponentInfo;
-            if (!componentInfo.getParent()) return false; // root field can't be removed
-            componentInfo.removeFromTree();
+            const fieldInfo = node['fieldInfo'] as BaseComponentInfo;
+            if (!fieldInfo.getParent()) return false; // root field can't be removed
+            if (selectedField === fieldInfo) setSelectedField(undefined);
+            fieldInfo.removeFromTree();
             formInfo.emitFieldsTreeRerender();
             formInfo.emitFormPreviewRerender();
             formInfo.emitPropsEditorRerender();
@@ -92,12 +98,15 @@ export const useGetTreeProps = (
  * We need to get old node state in new dataSet (by field id and code) and reset it
  */
 const useTransferNodesState = (
+    sourceChanged: boolean | undefined,
     treeApi: IExtTreeApi,
     oldDataSet: IExtTreeNode<{fieldInfo: BaseComponentInfo}>[],
     newDataSet: IExtTreeNode<{fieldInfo: BaseComponentInfo}>[]
 ) => {
     const {setSelectedField} = useContext(SelectedFieldContext);
     useEffect(() => {
+        if (!sourceChanged) return;
+
         /* transfer selection */
         // check if new data set already has selected node (for example, it happens when new node create)
         const alreadySelNode = treeApi.getSelectedNodes(newDataSet)?.[0] as
@@ -129,5 +138,5 @@ const useTransferNodesState = (
             if (newNode && newNode.id) newExpandedKeys.push(newNode.id);
         }
         treeApi.setExpandedKeys(newExpandedKeys);
-    }, [newDataSet, oldDataSet, setSelectedField, treeApi]);
+    }, [newDataSet, oldDataSet, setSelectedField, sourceChanged, treeApi]);
 };

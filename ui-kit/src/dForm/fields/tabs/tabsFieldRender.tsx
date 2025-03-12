@@ -1,5 +1,6 @@
 import {LoadingOutlined, CloseCircleFilled} from '@ant-design/icons';
 import {IBaseField} from '@src/dForm/fields/base';
+import {useOnClick} from "@src/dForm/fields/base/baseFieldRender";
 import {TabsField} from '@src/dForm/fields/tabs/tabsField';
 import {FieldsRender} from '@src/dForm/renders/fieldsRender';
 import {LoadingContainer} from '@src/loadingContainer';
@@ -15,7 +16,6 @@ export const TabsFieldRender = ({field}: {field: TabsField}): React.JSX.Element 
     }, [field]);
 
     const fieldProps = field.getProps();
-    const tabsRootFields = field.getTabsRootFields();
     const model = field.getModel();
 
     useSyncExternalStore(field.subscribe.bind(field), field.getSnapshot.bind(field));
@@ -23,15 +23,52 @@ export const TabsFieldRender = ({field}: {field: TabsField}): React.JSX.Element 
     const activeTab = field.getActiveTab() || fieldProps.activeTab;
 
     const onChange = useOnChange(field);
+    let onClick = useOnClick(field);
+    if (field.getParent()) onClick = undefined;
+
+    const items: TabsProps['items'] = useGetTabsItems(field)
 
     if (!field.hasVisibleChildren()) return <> </>;
+
+    const tabBarRender = (props: TabNavListProps, DefaultTabBar: ComponentType<TabNavListProps>) => TabBarRender(props, DefaultTabBar, field);
+
+    const defStyle: CSSProperties = {width: field.getWidth() ?? '100%'};
+    if (fieldProps.autoHeightResize) defStyle.height = '100%';
+
+    const highlightedFieldStyle: CSSProperties | undefined =
+        !field.getParent() && field.getId() === model.getHighlightedId() ? field.getHighlightedStyle() : undefined;
+
+    const style: React.CSSProperties = {...defStyle, ...highlightedFieldStyle, ...fieldProps.style};
+
+
+    return (
+        <Tabs
+            className={fieldProps.className}
+            type={fieldProps.type ?? 'card'}
+            size={'small'}
+            tabBarStyle={fieldProps.tabBarStyle}
+            tabBarExtraContent={fieldProps.tabBarExtraContent}
+            tabBarGutter={fieldProps.tabBarGutter}
+            items={items}
+            style={style}
+            activeKey={activeTab}
+            renderTabBar={tabBarRender}
+            onChange={onChange}
+            onClick={onClick}
+        />
+    );
+};
+
+const useGetTabsItems = (field: TabsField)=>{
+    //there is no sense to use memo (rendering is not very often)
+    const fieldProps = field.getProps();
+    const tabsRootFields = field.getTabsRootFields();
 
     const containerStyle: CSSProperties = {};
     if (fieldProps.panelsHeight) containerStyle.height = fieldProps.panelsHeight;
     if (fieldProps.panelsMinHeight) containerStyle.minHeight = fieldProps.panelsMinHeight;
     if (fieldProps.panelsMaxHeight) containerStyle.height = fieldProps.panelsMaxHeight;
 
-    //there is no sense to use memo (rendering is not very often)
     const items: TabsProps['items'] = [];
     for (const tabName in tabsRootFields) {
         if (!field.tabHasVisibleChildren(tabName)) continue;
@@ -64,32 +101,8 @@ export const TabsFieldRender = ({field}: {field: TabsField}): React.JSX.Element 
         });
     }
 
-    const tabBarRender = (props: TabNavListProps, DefaultTabBar: ComponentType<TabNavListProps>) => TabBarRender(props, DefaultTabBar, field);
-
-    const defStyle: CSSProperties = {width: field.getWidth() ?? '100%'};
-    if (fieldProps.autoHeightResize) defStyle.height = '100%';
-
-    const highlightedFieldStyle: CSSProperties | undefined =
-        !field.getParent() && field.getId() === model.getHighlightedId() ? field.getHighlightedStyle() : undefined;
-
-    const style: React.CSSProperties = {...defStyle, ...highlightedFieldStyle, ...fieldProps.style};
-
-    return (
-        <Tabs
-            className={fieldProps.className}
-            type={fieldProps.type ?? 'card'}
-            size={'small'}
-            tabBarStyle={fieldProps.tabBarStyle}
-            tabBarExtraContent={fieldProps.tabBarExtraContent}
-            tabBarGutter={fieldProps.tabBarGutter}
-            items={items}
-            style={style}
-            activeKey={activeTab}
-            renderTabBar={tabBarRender}
-            onChange={onChange}
-        />
-    );
-};
+    return items
+}
 
 const TabLabel = ({
     field,

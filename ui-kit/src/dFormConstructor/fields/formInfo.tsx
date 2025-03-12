@@ -1,13 +1,13 @@
-import {BaseComponentInfo, IComponentPropsInfo} from '@src/dFormConstructor/fields/baseComponentInfo';
-import {IDFormProps} from '@src/dForm';
 import {FormOutlined} from '@ant-design/icons';
-import React from 'react';
-import {IExtTreeNode} from '@src/tree';
-import {IBaseFieldProps} from '@src/dForm/fields/base';
-import {AnyType, IKey} from '@krinopotam/service-types';
-import {setChildrenProps} from '@src/dFormConstructor/renders/fieldsTree/tools/setChildrenProps';
-import {getFieldInfoClassByClassName} from '@src/dFormConstructor/renders/fieldsTree/tools/getFieldInfoClassByClassName';
 import {RemovePropertiesByValue} from '@krinopotam/js-helpers/helpersObjects/removePropertiesByValue';
+import {AnyType} from '@krinopotam/service-types';
+import {IDFormProps} from '@src/dForm';
+import {IBaseFieldProps} from '@src/dForm/fields/base';
+import {BaseComponentInfo, IComponentPropsInfo} from '@src/dFormConstructor/fields/baseComponentInfo';
+import {getFieldInfoClassByClassName} from '@src/dFormConstructor/renders/fieldsTree/tools/getFieldInfoClassByClassName';
+import {setChildrenProps} from '@src/dFormConstructor/renders/fieldsTree/tools/setChildrenProps';
+import {IExtTreeNode} from '@src/tree';
+import React from 'react';
 
 export class FormInfo extends BaseComponentInfo {
     public override readonly TITLE = 'Form';
@@ -17,7 +17,7 @@ export class FormInfo extends BaseComponentInfo {
     public override readonly ICON = (<FormOutlined />);
 
     private readonly fieldsTreeSubscribers = new Set<() => void>();
-    private fieldsTreeRerenderSnapshot = {};
+    private fieldsTreeRerenderSnapshot: {sourceVer: number} = {sourceVer: 0};
 
     private readonly propsEditorSubscribers = new Set<() => void>();
     private propsEditorRerenderSnapshot = {};
@@ -202,10 +202,10 @@ export class FormInfo extends BaseComponentInfo {
         return 'const formProps = ' + serialize(this.getProps(), 0);
     }
 
-    getFieldInfoByNodeId(nodeId: IKey) {
+    getFieldInfoById(id: string) {
         const recursive = (fields: BaseComponentInfo[]): BaseComponentInfo | undefined => {
             for (const field of fields) {
-                if (field.NODE_ID === nodeId) return field;
+                if (field.getId() === id) return field;
                 const result = recursive(field.getChildren());
                 if (result) return result;
             }
@@ -213,7 +213,7 @@ export class FormInfo extends BaseComponentInfo {
             return undefined;
         };
 
-        if (this.NODE_ID === nodeId) return this;
+        if (this.getId() === id) return this;
         return recursive(this.getChildren());
     }
 
@@ -224,8 +224,8 @@ export class FormInfo extends BaseComponentInfo {
     }
 
     /* method to rerender FieldsTree component */
-    emitFieldsTreeRerender() {
-        this.fieldsTreeRerenderSnapshot = {}; //refresh snapshot
+    emitFieldsTreeRerender(sourceChanged?: boolean) {
+        this.fieldsTreeRerenderSnapshot = {sourceVer: this.fieldsTreeRerenderSnapshot.sourceVer + (sourceChanged ? 1 : 0)}; //refresh snapshot
         this.fieldsTreeSubscribers.forEach(callback => callback());
     }
 

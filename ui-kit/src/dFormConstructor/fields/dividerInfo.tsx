@@ -16,6 +16,7 @@ export class DividerInfo extends BaseComponentInfo {
             label: 'string',
             plain: 'boolean',
             dashed: 'boolean',
+            type: ['vertical', 'horizontal'],
             orientation: ['center', 'left', 'right'],
             orientationMargin: 'string',
             className: 'string',

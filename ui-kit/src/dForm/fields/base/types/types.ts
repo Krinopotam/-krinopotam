@@ -100,7 +100,7 @@ export interface IBaseFieldProps<TField extends IBaseField, TValue> extends Reco
     onFieldDataFetch?: (field: TField) => IDFormDataSourcePromise | undefined;
 
     /** fires when the field fetch success */
-    onFieldDataFetchSuccess?: (result: { data: Record<string, AnyType> }, field: TField) => void;
+    onFieldDataFetchSuccess?: (result: {data: Record<string, AnyType>}, field: TField) => void;
 
     /** fires when the field fetch failed */
     onFieldDataFetchError?: (error: IError, field: TField) => void;

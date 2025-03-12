@@ -148,6 +148,9 @@ export interface IDFormPropsNoCB<TFieldsProps extends Record<string, AnyType> = 
 export interface IDFormCallbacks<TApi = IDFormApi, TProps = IDFormProps> extends IDFormBaseCallbacks<TApi> {
     /** On first render callback */
     onFirstRender?: (props: TProps) => IDFormProps | void;
+
+    /** fires when the highlighted field changed (in CONSTRUCTOR MODE) */
+    onHighlightedFieldChanged?: (fieldId: string | undefined, prevFieldId: string | undefined, formApi: TApi) => void;
 }
 
 export type IDFormProps<TFieldsProps extends Record<string, AnyType> = Record<string, AnyType>> = IDFormPropsNoCB<TFieldsProps> & IDFormCallbacks;

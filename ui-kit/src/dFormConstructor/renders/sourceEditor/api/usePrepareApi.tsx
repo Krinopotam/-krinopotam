@@ -26,7 +26,7 @@ export const usePrepareApi = (apiRef: ISourceEditorApi | undefined, editorRef: R
         formInfo.setProps(formProps ?? {});
         formInfo.emitFormPreviewRerender();
         formInfo.emitPropsEditorRerender();
-        formInfo.emitFieldsTreeRerender();
+        formInfo.emitFieldsTreeRerender(true);
     };
 
     return api;

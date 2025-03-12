@@ -1,4 +1,5 @@
 import {IBaseField} from '@src/dForm/fields/base';
+import {useOnClick} from "@src/dForm/fields/base/baseFieldRender";
 import React, {CSSProperties, useEffect, useRef, useSyncExternalStore} from 'react';
 import {Form} from 'antd';
 import {InlineGroupField} from '@src/dForm/fields/inlineGroup/inlineGroupField';
@@ -53,17 +54,14 @@ export const InlineGroupRender = ({field}: {field: InlineGroupField}): React.JSX
 
     const gapOffset = getGapOffset(childrenFields, gap);
 
-    const highlightedFieldStyle: CSSProperties | undefined =
-        field.getId() === model.getHighlightedId()
-            ? {
-                border: 'dashed 1px blue',
-            }
-            : undefined;
+    const highlightedFieldStyle: CSSProperties | undefined = field.getId() === model.getHighlightedId() ? field.getHighlightedStyle() : undefined;
     const containerStyle: CSSProperties = {...highlightedFieldStyle};
+
+    const onClick = useOnClick(field)
 
     return (
         <CSSTransition nodeRef={nodeRef} in={!fieldHidden} timeout={300} classNames="zoom" unmountOnExit>
-            <div ref={nodeRef} className={'dform-field-container'} style={containerStyle}>
+            <div ref={nodeRef} className={'dform-field-container'} style={containerStyle} onClick={onClick}>
                 <Form.Item label={groupLabel} style={groupItemStyle} className={fieldProps.className}>
                     <div style={groupContainerStyle}>
                         {Object.keys(childrenFields).map(fieldName => {
@@ -77,7 +75,12 @@ export const InlineGroupRender = ({field}: {field: InlineGroupField}): React.JSX
 
                             const altLabel = formProps.layout === 'horizontal' && childField === firstField ? null : undefined;
                             return (
-                                <React.Fragment key={`item_${field.getId()}_subitem_${childField.getId()}`}>{childField.renderField({altLabel, fieldContainerStyle})}</React.Fragment>
+                                <React.Fragment key={`item_${field.getId()}_subitem_${childField.getId()}`}>
+                                    {childField.renderField({
+                                        altLabel,
+                                        fieldContainerStyle,
+                                    })}
+                                </React.Fragment>
                             );
                         })}
                     </div>

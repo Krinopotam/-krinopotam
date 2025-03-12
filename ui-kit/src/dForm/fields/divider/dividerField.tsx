@@ -14,7 +14,10 @@ export interface IDividerFieldProps extends IBaseFieldProps<DividerField, string
     orientation?: "center" | "left" | "right",
 
     /** The margin-left/right between the title and its closest border, while the orientation must be left or right */
-    orientationMargin?: string | number
+    orientationMargin?: string | number,
+
+    /** Divider type */
+    type?: 'vertical' | 'horizontal'
 }
 
 export class DividerField extends BaseField<IDividerFieldProps> {

@@ -1,10 +1,10 @@
+import {DForm} from '@src/dForm';
+import {FormInfoContext} from '@src/dFormConstructor/context/formInfoProvider';
 import {SelectedFieldContext} from '@src/dFormConstructor/context/selectedFieldProvider';
 import {FormInfo} from '@src/dFormConstructor/fields/formInfo';
-import React, {CSSProperties, useContext, useRef, useSyncExternalStore} from 'react';
-import {DForm} from '@src/dForm';
 import {ErrorBoundary} from '@src/dFormConstructor/renders/formPreview/errorBoundary';
 import {ErrorMessage} from '@src/dFormConstructor/renders/formPreview/errorMessage';
-import {FormInfoContext} from '@src/dFormConstructor/context/formInfoProvider';
+import React, {CSSProperties, useCallback, useContext, useRef, useSyncExternalStore} from 'react';
 
 export const FormPreview = (): React.JSX.Element => {
     const {formInfo} = useContext(FormInfoContext);
@@ -19,6 +19,7 @@ export const FormPreview = (): React.JSX.Element => {
     const clearError = prevSourceRef.current !== source ? {} : undefined;
     prevSourceRef.current = source;
 
+    const onHighlightedFieldChanged = useOnHighlightedFieldChanged();
     const formWrapperStyle: CSSProperties | undefined =
         selectedField instanceof FormInfo
             ? {
@@ -41,10 +42,20 @@ export const FormPreview = (): React.JSX.Element => {
             ) : (
                 <ErrorBoundary clearError={clearError}>
                     <div style={formWrapperStyle}>
-                        <DForm {...formProps} formMode={'constructor'} />
+                        <DForm {...formProps} formMode={'constructor'} onHighlightedFieldChanged={onHighlightedFieldChanged} />
                     </div>
                 </ErrorBoundary>
             )}
         </div>
     );
+};
+
+const useOnHighlightedFieldChanged = () => {
+    const {formInfo} = useContext(FormInfoContext);
+    const {setSelectedField} = useContext(SelectedFieldContext);
+
+    return useCallback((fieldId: string | undefined) => {
+        const selectedField = fieldId ? formInfo.getFieldInfoById(fieldId) : undefined;
+        setSelectedField(selectedField);
+    }, [formInfo, setSelectedField]);
 };

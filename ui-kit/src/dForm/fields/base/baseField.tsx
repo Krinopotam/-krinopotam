@@ -430,22 +430,27 @@ export class BaseField<TFieldProps extends IAnyFieldProps> {
     }
 
     /** Sets field highlighted status for CONSTRUCTOR MODE  */
-    setHighlighted(value: boolean, noRerender?: boolean) {
-        if (value) {
-            const prevValue = this.model.getHighlightedId();
-            if (prevValue === this.getId()) return;
-            this.model.setHighlightedId(this.getId());
-        } else {
-            if (this.model.getHighlightedId() !== this.getId()) return;
-            this.model.setHighlightedId('');
-        }
+    setHighlighted(value: boolean, noEvents?: boolean, noRerender?: boolean) {
+        const prevId = this.model.getHighlightedId();
+        const newId = value ? this.getId() : '';
+        if (prevId === newId) return;
 
-        if (!noRerender) this.emitRender();
+        this.model.setHighlightedId(newId);
+
+        if (!noEvents) this.getFormProps()?.onHighlightedFieldChanged?.(newId, prevId, this.model.getFormApi());
+
+        if (noRerender) return;
+
+        this.emitRender();
+        if (!prevId) return;
+
+        const prevField = this.model.getField(prevId);
+        prevField?.emitRender();
     }
 
     /** Toggles field highlighted status for CONSTRUCTOR MODE  */
-    toggleHighlighted(noRerender?: boolean) {
-        this.setHighlighted(!this.isHighlighted(), noRerender);
+    toggleHighlighted(noEvents?: boolean, noRerender?: boolean) {
+        this.setHighlighted(!this.isHighlighted(), noEvents, noRerender);
     }
 
     //endregion
@@ -499,11 +504,8 @@ export class BaseField<TFieldProps extends IAnyFieldProps> {
         altLabel?: React.ReactNode;
         fieldContainerStyle?: CSSProperties;
     }) {
-        const highlightedFieldStyle: CSSProperties | undefined = this.getId() === this.model.getHighlightedId() ? this.getHighlightedStyle() : undefined;
-        const _fieldContainerStyle: CSSProperties = {...fieldContainerStyle, ...highlightedFieldStyle};
-
         return (
-            <BaseFieldRender key={this.getId()} field={this} altLabel={altLabel} fieldContainerStyle={_fieldContainerStyle}>
+            <BaseFieldRender key={this.getId()} field={this} altLabel={altLabel} fieldContainerStyle={fieldContainerStyle}>
                 {field}
             </BaseFieldRender>
         );
