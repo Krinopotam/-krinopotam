@@ -73,7 +73,7 @@ export const useOnClick = (field: IBaseField) => {
     const onClick = useEvent((e: React.MouseEvent) => {
         e.stopPropagation();
         const focusedElement = document.activeElement as HTMLElement
-        field.toggleHighlighted();
+        field.setHighlighted(true);
         setTimeout(()=>{
             focusedElement?.focus();
         }, 100)

@@ -220,7 +220,7 @@ const TabBarRender = (props: TabNavListProps, DefaultTabBar: ComponentType<TabNa
 /** Highlight field on click */
 export const useOnTabClick = (field: TabsField, props: TabNavListProps) => {
     const onClick = useEvent((activeKey: string, e: React.MouseEvent | React.KeyboardEvent) => {
-        field.toggleHighlightedTab(activeKey);
+        field.setHighlightedTab(activeKey);
         props.onTabClick(activeKey, e)
         e.stopPropagation();
     });
