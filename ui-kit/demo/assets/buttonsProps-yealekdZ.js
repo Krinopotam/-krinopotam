@@ -1,0 +1,1 @@
+import{j as e,a as t}from"./index-CAK7O9l6.js";const o=o=>({layout:{type:"element",title:e.jsx(t,{checkedChildren:"hor",unCheckedChildren:"ver",onChange:e=>{o.updateProps({layout:e?"horizontal":"vertical"})}}),position:"left"}});export{o as F};
