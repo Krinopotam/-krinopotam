@@ -503,7 +503,7 @@ export class BaseField<TFieldProps extends IAnyFieldProps> {
         field: React.ReactNode;
         altLabel?: React.ReactNode;
         fieldContainerStyle?: CSSProperties;
-    }) {
+    }):React.JSX.Element {
         return (
             <BaseFieldRender key={this.getId()} field={this} altLabel={altLabel} fieldContainerStyle={fieldContainerStyle}>
                 {field}

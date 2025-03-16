@@ -36,8 +36,7 @@ export const TabsFieldRender = ({field}: {field: TabsField}): React.JSX.Element 
     const defStyle: CSSProperties = {width: field.getWidth() ?? '100%'};
     if (fieldProps.autoHeightResize) defStyle.height = '100%';
 
-    console.log('field.getHighlightedTab()',field.getHighlightedTab())
-    // check is field has no parent because parent has own highlights check
+    // check is field has no parent because parent has own highlights processing
     const highlightedFieldStyle: CSSProperties | undefined =
         !field.getParent() && field.getId() === model.getHighlightedId() && !field.getHighlightedTab() ? field.getHighlightedStyle() : undefined;
 

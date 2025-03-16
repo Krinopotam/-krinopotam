@@ -72,7 +72,11 @@ export const BaseFieldRender = ({
 export const useOnClick = (field: IBaseField) => {
     const onClick = useEvent((e: React.MouseEvent) => {
         e.stopPropagation();
+        const focusedElement = document.activeElement as HTMLElement
         field.toggleHighlighted();
+        setTimeout(()=>{
+            focusedElement?.focus();
+        }, 100)
     });
 
     const model = field.getModel();
