@@ -1,6 +1,7 @@
 import {LoadingOutlined, CloseCircleFilled} from '@ant-design/icons';
+import {useEvent} from '@krinopotam/common-hooks';
 import {IBaseField} from '@src/dForm/fields/base';
-import {useOnClick} from "@src/dForm/fields/base/baseFieldRender";
+import {useOnClick} from '@src/dForm/fields/base/baseFieldRender';
 import {TabsField} from '@src/dForm/fields/tabs/tabsField';
 import {FieldsRender} from '@src/dForm/renders/fieldsRender';
 import {LoadingContainer} from '@src/loadingContainer';
@@ -26,7 +27,7 @@ export const TabsFieldRender = ({field}: {field: TabsField}): React.JSX.Element 
     let onClick = useOnClick(field);
     if (field.getParent()) onClick = undefined;
 
-    const items: TabsProps['items'] = useGetTabsItems(field)
+    const items: TabsProps['items'] = useGetTabsItems(field);
 
     if (!field.hasVisibleChildren()) return <> </>;
 
@@ -35,11 +36,12 @@ export const TabsFieldRender = ({field}: {field: TabsField}): React.JSX.Element 
     const defStyle: CSSProperties = {width: field.getWidth() ?? '100%'};
     if (fieldProps.autoHeightResize) defStyle.height = '100%';
 
+    console.log('field.getHighlightedTab()',field.getHighlightedTab())
+    // check is field has no parent because parent has own highlights check
     const highlightedFieldStyle: CSSProperties | undefined =
-        !field.getParent() && field.getId() === model.getHighlightedId() ? field.getHighlightedStyle() : undefined;
+        !field.getParent() && field.getId() === model.getHighlightedId() && !field.getHighlightedTab() ? field.getHighlightedStyle() : undefined;
 
     const style: React.CSSProperties = {...defStyle, ...highlightedFieldStyle, ...fieldProps.style};
-
 
     return (
         <Tabs
@@ -59,7 +61,7 @@ export const TabsFieldRender = ({field}: {field: TabsField}): React.JSX.Element 
     );
 };
 
-const useGetTabsItems = (field: TabsField)=>{
+const useGetTabsItems = (field: TabsField) => {
     //there is no sense to use memo (rendering is not very often)
     const fieldProps = field.getProps();
     const tabsRootFields = field.getTabsRootFields();
@@ -77,8 +79,8 @@ const useGetTabsItems = (field: TabsField)=>{
         const tabStyleDef: React.CSSProperties = {};
         if (fieldProps.autoHeightResize) tabStyleDef.height = '100%';
 
-        const highlightedTabStyle: CSSProperties | undefined = tabName === fieldProps.highlightedTab ? field.getHighlightedStyle() : undefined;
-        const _containerStyle = {...highlightedTabStyle,...containerStyle};
+        const highlightedTabStyle: CSSProperties | undefined = tabName === field.getHighlightedTab() ? field.getHighlightedStyle() : undefined;
+        const _containerStyle = {...highlightedTabStyle, ...containerStyle};
 
         items.push({
             key: tabName,
@@ -88,6 +90,7 @@ const useGetTabsItems = (field: TabsField)=>{
             forceRender: true,
             disabled: field.isDisabled(),
             style: {...tabStyleDef, ...fieldProps.tabsStyle},
+
             children: (
                 <TabContent
                     field={field}
@@ -101,8 +104,8 @@ const useGetTabsItems = (field: TabsField)=>{
         });
     }
 
-    return items
-}
+    return items;
+};
 
 const TabLabel = ({
     field,
@@ -196,11 +199,13 @@ const TabBarRender = (props: TabNavListProps, DefaultTabBar: ComponentType<TabNa
     const indent = formProps.contentIndent ?? 0;
     const indentStyle = {height: indent, backgroundColor: style.backgroundColor};
 
+    const onTabClick = useOnTabClick(field, props);
+
     if (field.getParent()) {
         return (
             <>
                 <div style={indentStyle} />
-                <DefaultTabBar {...props} style={style} />
+                <DefaultTabBar style={style} {...props} onTabClick={onTabClick} />
             </>
         );
     }
@@ -208,7 +213,19 @@ const TabBarRender = (props: TabNavListProps, DefaultTabBar: ComponentType<TabNa
     return (
         <StickyBox style={{zIndex: 15}}>
             <div style={indentStyle} />
-            <DefaultTabBar {...props} style={style} />
+            <DefaultTabBar style={style} {...props} onTabClick={onTabClick} />
         </StickyBox>
     );
+};
+
+/** Highlight field on click */
+export const useOnTabClick = (field: TabsField, props: TabNavListProps) => {
+    const onClick = useEvent((activeKey: string, e: React.MouseEvent | React.KeyboardEvent) => {
+        field.toggleHighlightedTab(activeKey);
+        props.onTabClick(activeKey, e)
+        e.stopPropagation();
+    });
+
+    const model = field.getModel();
+    return model.getFormMode() === 'constructor' ? onClick : props.onTabClick;
 };

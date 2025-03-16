@@ -11,7 +11,7 @@ export interface IInlineGroupFieldProps<TFieldsProps extends Record<string, AnyT
 }
 
 export class InlineGroupField extends BaseField<IInlineGroupFieldProps> {
-    override initChildrenFields(): [InlineGroupField['fieldsMap'], InlineGroupField['rootFields']] {
+    override prepareChildrenFieldsCollection(): [InlineGroupField['fieldsMap'], InlineGroupField['rootFields']] {
         const groupProps = this.getProps();
         const fieldsProps = groupProps.fieldsProps;
         if (!groupProps.fieldsProps) return [{}, {}];

@@ -1,11 +1,11 @@
 import {AnyType, IError} from '@krinopotam/service-types';
+
+import {IDFormDataSet, IDFormDataSourcePromise, IDFormFieldsProps} from '@src/dForm';
 import {IBaseFieldProps} from '@src/dForm/fields/base';
 import {BaseField} from '@src/dForm/fields/base/baseField';
 import {TabsFieldRender} from '@src/dForm/fields/tabs/tabsFieldRender';
 import {TabBarExtraContent} from 'rc-tabs/lib/interface';
 import React, {CSSProperties} from 'react';
-
-import {IDFormDataSet, IDFormDataSourcePromise, IDFormFieldsProps} from '@src/dForm';
 
 export interface ITabsFieldProps<TFieldsProps extends Record<string, AnyType> = Record<string, AnyType>> extends IBaseFieldProps<TabsField, undefined> {
     /** Tabs fields properties */
@@ -83,6 +83,9 @@ export class TabsField extends BaseField<ITabsFieldProps> {
     /** Current active tab */
     private _activeTab: string = '';
 
+    /** Highlighted tab (in CONSTRUCTOR MODE) */
+    private _highlightedTab: string | undefined = undefined;
+
     /** disabled tabs statuses */
     private _disabledTabs: Record<string, boolean | undefined> = {};
 
@@ -105,7 +108,7 @@ export class TabsField extends BaseField<ITabsFieldProps> {
 
     //endregion
 
-    override initChildrenFields(): [TabsField['fieldsMap'], TabsField['rootFields']] {
+    override prepareChildrenFieldsCollection(): [TabsField['fieldsMap'], TabsField['rootFields']] {
         const tabsProps = this.getProps();
         if (!tabsProps.tabs) return [{}, {}];
 
@@ -125,6 +128,10 @@ export class TabsField extends BaseField<ITabsFieldProps> {
         }
 
         return [this.fieldsMap, this.rootFields];
+    }
+
+    override initFieldParameters(_fieldProps: ITabsFieldProps) {
+        this._highlightedTab = _fieldProps.highlightedTab || '';
     }
 
     /**
@@ -150,7 +157,12 @@ export class TabsField extends BaseField<ITabsFieldProps> {
         return <TabsFieldRender field={this} />;
     }
 
-    override renderField(props: {altLabel?: React.ReactNode; fieldContainerStyle?: CSSProperties} = {}): React.ReactNode {
+    override renderField(
+        props: {
+            altLabel?: React.ReactNode;
+            fieldContainerStyle?: CSSProperties;
+        } = {}
+    ): React.ReactNode {
         if (this.parent) return super.renderField(props);
         return this.render();
     }
@@ -164,6 +176,30 @@ export class TabsField extends BaseField<ITabsFieldProps> {
     /**@return tabs grouped root field collection (only fields placed directly on the tab, excluding child fields) */
     getTabsRootFields() {
         return this._tabsRootFields;
+    }
+
+    /** Sets field highlighted status for CONSTRUCTOR MODE  */
+    setHighlighted(value: boolean, noEvents?: boolean, noRerender?: boolean) {
+        const prevId = this.model.getHighlightedId();
+        const newId = value ? this.getId() : '';
+        if (prevId === newId) return;
+
+        this.model.setHighlightedId(newId);
+        this.setHighlightedTab(undefined);
+
+        const prevField = prevId ? this.model.getField(prevId) : undefined;
+        if (!noEvents) this.getFormProps()?.onHighlightedFieldChanged?.(value ? this : undefined, prevField, undefined, this.model.getFormApi());
+        if (noRerender) return;
+
+        this.emitRender();
+        if (!prevField) return;
+        prevField?.emitRender();
+    }
+
+    /** Toggles field highlighted status for CONSTRUCTOR MODE  */
+    toggleHighlighted(noEvents?: boolean, noRerender?: boolean) {
+        this.setHighlightedTab(undefined);
+        super.toggleHighlighted(noEvents, noRerender);
     }
 
     //endregion
@@ -283,10 +319,39 @@ export class TabsField extends BaseField<ITabsFieldProps> {
     setActiveTab(tabName: string, noEvents?: boolean, noRerender?: boolean) {
         if (!this._tabsFieldsMap[tabName]) return;
 
+        if (this._activeTab === tabName) return;
         this._activeTab = tabName;
 
         if (!noEvents) this.getProps().onActiveTabChanged?.(tabName, this);
         if (!noRerender) this.emitRender();
+    }
+
+    /** @returns field highlighted status for CONSTRUCTOR MODE  */
+    getHighlightedTab(): string | undefined {
+        return this._highlightedTab;
+    }
+
+    /** Sets field highlighted status for CONSTRUCTOR MODE  */
+    setHighlightedTab(tabName: string | undefined, noEvents?: boolean, noRerender?: boolean) {
+        if (tabName && !this._tabsFieldsMap[tabName]) return;
+
+        if (this._highlightedTab === tabName && this.model.getHighlightedId() === this.getId()) return;
+
+        this._highlightedTab = tabName;
+        this.model.setHighlightedId(tabName ? this.getId() : undefined);
+
+        const prevId = this.model.getHighlightedId();
+        const prevField = prevId ? this.model.getField(prevId) : undefined;
+        if (!noEvents) this.getFormProps()?.onHighlightedFieldChanged?.(tabName ? this : undefined, prevField, tabName, this.model.getFormApi());
+
+        if (noRerender) return;
+        this.emitRender();
+        prevField?.emitRender();
+    }
+
+    /** Toggles field highlighted status for CONSTRUCTOR MODE  */
+    toggleHighlightedTab(tabName: string | undefined, noEvents?: boolean, noRerender?: boolean) {
+        this.setHighlightedTab(this._highlightedTab === tabName ? undefined : tabName, noEvents, noRerender);
     }
 
     /** @return true if tab contains visible fields */
@@ -346,7 +411,7 @@ export class TabsField extends BaseField<ITabsFieldProps> {
 
                 const values = result.data as IDFormDataSet;
 
-                this.model.setValues(values)
+                this.model.setValues(values);
                 this.model.checkFormReadyState();
                 this.emitTabRender(tabName);
             },

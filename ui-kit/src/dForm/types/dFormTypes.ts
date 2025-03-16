@@ -3,7 +3,7 @@ import {IBaseComponentApi} from '@src/_shared/hooks/componentApiMethods/types/ap
 import {IButtonProps} from '@src/button';
 import {IButtonRowProps, IButtonsRowApi, IFormButtons} from '@src/buttonsRow';
 import {DModel, IDFormBaseCallbacks, IRuleType} from '@src/dForm';
-import {IBaseFieldProps} from '@src/dForm/fields/base';
+import {IBaseField, IBaseFieldProps} from '@src/dForm/fields/base';
 import {translations} from '@src/dForm/translations/translations';
 import {ColProps} from 'antd';
 import {RequiredMark} from 'antd/es/form/Form';
@@ -150,7 +150,7 @@ export interface IDFormCallbacks<TApi = IDFormApi, TProps = IDFormProps> extends
     onFirstRender?: (props: TProps) => IDFormProps | void;
 
     /** fires when the highlighted field changed (in CONSTRUCTOR MODE) */
-    onHighlightedFieldChanged?: (fieldId: string | undefined, prevFieldId: string | undefined, formApi: TApi) => void;
+    onHighlightedFieldChanged?: (field: IBaseField | undefined, prevField: IBaseField | undefined, extraKey:string | undefined, formApi: TApi) => void;
 }
 
 export type IDFormProps<TFieldsProps extends Record<string, AnyType> = Record<string, AnyType>> = IDFormPropsNoCB<TFieldsProps> & IDFormCallbacks;

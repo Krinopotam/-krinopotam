@@ -12,7 +12,7 @@ import {IsArray} from '@krinopotam/js-helpers/helpersObjects/isArray';
 
 import {AnyType, IError} from '@krinopotam/service-types';
 import {CallbackControl} from '@src/_shared/classes/callbackControl';
-import {DModel, IDFormDataSet} from '@src/dForm';
+import {DModel, IDFormDataSet, IDFormMode, IDFormProps} from '@src/dForm';
 import {IAnyFieldProps, IBaseField} from '@src/dForm/fields/base/types/types';
 import React, {CSSProperties} from 'react';
 import {BaseFieldRender} from './baseFieldRender';
@@ -48,9 +48,12 @@ export class BaseField<TFieldProps extends IAnyFieldProps> {
         this.parent = parent;
     }
 
-    initChildrenFields(): [Record<string, IBaseField>, Record<string, IBaseField>] {
+    prepareChildrenFieldsCollection(): [Record<string, IBaseField>, Record<string, IBaseField>] {
         return [{}, {}];
     }
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    initFieldParameters(_fieldProps: TFieldProps, _formProps: IDFormProps) {}
 
     //region Fields methods
     /** @returns get current field properties  */
@@ -436,15 +439,12 @@ export class BaseField<TFieldProps extends IAnyFieldProps> {
         if (prevId === newId) return;
 
         this.model.setHighlightedId(newId);
-
-        if (!noEvents) this.getFormProps()?.onHighlightedFieldChanged?.(newId, prevId, this.model.getFormApi());
-
+        const prevField = prevId ? this.model.getField(prevId) : undefined;
+        if (!noEvents) this.getFormProps()?.onHighlightedFieldChanged?.(value ? this : undefined, prevField, undefined, this.model.getFormApi());
         if (noRerender) return;
 
         this.emitRender();
-        if (!prevId) return;
-
-        const prevField = this.model.getField(prevId);
+        if (!prevField) return;
         prevField?.emitRender();
     }
 

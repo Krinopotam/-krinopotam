@@ -166,7 +166,7 @@ export class DModel {
             fieldsMap[fieldId] = field;
             rootFields[fieldId] = field;
 
-            const [plainChildren] = field.initChildrenFields();
+            const [plainChildren] = field.prepareChildrenFieldsCollection();
 
             for (const childName in plainChildren) {
                 if (fieldsMap[childName]) console.error(`The form contains duplicate field names  "${childName}"!`);
@@ -208,13 +208,15 @@ export class DModel {
         const disabled: Record<string, boolean | undefined> = {};
         const labels: Record<string, React.ReactNode> = {};
 
+        const formProps = this.getFormProps();
+
         for (const fieldId in fieldsMap) {
             const field = fieldsMap[fieldId];
             const oldField = prevFieldsMap[fieldId];
 
             const fieldProps = field.getProps();
 
-            const formProps = this.getFormProps();
+            field.initFieldParameters(fieldProps, formProps);
 
             labels[fieldId] = fieldProps.label;
 
@@ -325,7 +327,7 @@ export class DModel {
     }
 
     /** set selected field ID in CONSTRUCTOR MODE: */
-    setHighlightedId(id: string) {
+    setHighlightedId(id: string | undefined) {
         this._highlightedId = id;
     }
 

@@ -1,4 +1,6 @@
+import {useEvent} from '@krinopotam/common-hooks';
 import {DForm} from '@src/dForm';
+import {IBaseField} from '@src/dForm/fields/base';
 import {FormInfoContext} from '@src/dFormConstructor/context/formInfoProvider';
 import {SelectedFieldContext} from '@src/dFormConstructor/context/selectedFieldProvider';
 import {FormInfo} from '@src/dFormConstructor/fields/formInfo';
@@ -8,7 +10,7 @@ import React, {CSSProperties, useCallback, useContext, useRef, useSyncExternalSt
 
 export const FormPreview = (): React.JSX.Element => {
     const {formInfo} = useContext(FormInfoContext);
-    const {selectedField} = useContext(SelectedFieldContext);
+    const {selectedField, setSelectedField} = useContext(SelectedFieldContext);
 
     const source = formInfo.toSource();
     const prevSourceRef = useRef(source);
@@ -20,13 +22,17 @@ export const FormPreview = (): React.JSX.Element => {
     prevSourceRef.current = source;
 
     const onHighlightedFieldChanged = useOnHighlightedFieldChanged();
-    const formWrapperStyle: CSSProperties | undefined =
-        selectedField instanceof FormInfo
-            ? {
-                  border: 'dashed 1px blue',
-              }
-            : undefined;
+    const formWrapperStyle: CSSProperties | undefined = selectedField instanceof FormInfo ? {border: 'dashed 1px blue'} : undefined;
 
+    const onClick = useEvent((e: React.MouseEvent) => {
+        e.stopPropagation();
+        if (selectedField === formInfo) {
+            setSelectedField(undefined);
+            return;
+        }
+
+        setSelectedField(formInfo);
+    });
     return (
         <div
             style={{
@@ -41,7 +47,7 @@ export const FormPreview = (): React.JSX.Element => {
                 <ErrorMessage />
             ) : (
                 <ErrorBoundary clearError={clearError}>
-                    <div style={formWrapperStyle}>
+                    <div style={formWrapperStyle} onClick={onClick}>
                         <DForm {...formProps} formMode={'constructor'} onHighlightedFieldChanged={onHighlightedFieldChanged} />
                     </div>
                 </ErrorBoundary>
@@ -54,8 +60,13 @@ const useOnHighlightedFieldChanged = () => {
     const {formInfo} = useContext(FormInfoContext);
     const {setSelectedField} = useContext(SelectedFieldContext);
 
-    return useCallback((fieldId: string | undefined) => {
-        const selectedField = fieldId ? formInfo.getFieldInfoById(fieldId) : undefined;
-        setSelectedField(selectedField);
-    }, [formInfo, setSelectedField]);
+    return useCallback(
+        (field: IBaseField | undefined, _prevField: IBaseField | undefined, extraKey:string | undefined) => {
+            const fieldId = field ? field.getId() : undefined;
+            let selectedField = fieldId ? formInfo.getFieldInfoById(fieldId) : undefined;
+            if (extraKey) selectedField = selectedField?.getChildById(extraKey, false);
+            setSelectedField(selectedField);
+        },
+        [formInfo, setSelectedField]
+    );
 };
