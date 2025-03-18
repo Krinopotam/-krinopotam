@@ -1,3 +1,4 @@
+import {ObjectEditor} from "@src/dFormConstructor/renders/propsEditor/editors/objectEditor";
 import React, {useContext, useSyncExternalStore} from 'react';
 import type {DescriptionsProps} from 'antd';
 import {Descriptions} from 'antd';
@@ -53,7 +54,7 @@ const usePrepareFieldsProps = (fieldInfo: BaseComponentInfo | undefined): Descri
             propKey: key,
         };
 
-        let editor: string | React.ReactNode = dataType;
+        let editor: React.ReactNode;
         if (dataType === 'string') editor = <StringEditor {...editorProps} />;
         else if (dataType === 'number') editor = <NumberEditor {...editorProps} />;
         else if (dataType === 'boolean') editor = <BooleanEditor {...editorProps} />;
@@ -61,6 +62,7 @@ const usePrepareFieldsProps = (fieldInfo: BaseComponentInfo | undefined): Descri
             if (dataType[0]==='multi') editor = <SelectEditor {...editorProps} options={dataType.slice(1)} multiple />;
             else editor = <SelectEditor {...editorProps} options={dataType} />;
         }
+        else if (typeof dataType === 'object') editor = <ObjectEditor {...editorProps} />;
         else if (dataType === 'fieldIds') editor = <SelectEditor {...editorProps} options={allIds.filter(f => f !== fieldInfo.getId())} multiple />;
 
         result.push({key, label: key, children: editor});

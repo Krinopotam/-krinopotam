@@ -6,7 +6,8 @@ import React from 'react';
 import {GetNanoId} from '@krinopotam/js-helpers/helpersString/getNanoId';
 import {Space} from 'antd';
 
-export type IPropsType = 'string' | 'number' | 'boolean' | 'fieldIds' | string[];
+export type IPropsTypeBase = 'string' | 'number' | 'boolean' | 'fieldIds' | string[] | Record<string, unknown>;
+export type IPropsType = IPropsTypeBase | Record<string, IPropsTypeBase>;
 
 export type IComponentPropsInfo<TFieldProps> = {id?: 'string'} & {
     [K in keyof TFieldProps]?: IPropsType;
