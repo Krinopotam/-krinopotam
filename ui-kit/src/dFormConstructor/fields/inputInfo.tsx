@@ -13,7 +13,7 @@ export class InputInfo extends BaseComponentInfo {
     override getPropsInfo() {
         const baseProps = super.getPropsInfo();
         return {
-            test:{val1:'number', val2:'string', arr:['one', 'two', 'three'], arrMulti:['multi','one', 'two', 'three'], val5:'fieldIds'},
+            test:{val1:'number', val2:'string', arr:['one', 'two', 'three'], arrMulti:['multi','one', 'two', 'three'], val5:'fieldIds', valObj:{val:'string', val2:'number'}},
             ...baseProps,
             showCount: 'boolean',
             maxLength: 'number',

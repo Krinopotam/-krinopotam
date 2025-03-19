@@ -15,8 +15,7 @@ export const useOverrideCallbacks = (props: IDFormProps) => {
                 props?.onFormReadyChanged?.(state, api, cbControl);
                 if (cbControl.isPrevented()) return;
 
-                if (state) api.getButtonsApi().disabled?.('ok', false);
-                else api.getButtonsApi().disabled?.('ok', true);
+                api.getButtonsApi().disabled?.('ok', !state);
             },
 
             /** fires when the form has no errors */

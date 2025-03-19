@@ -1,4 +1,4 @@
-import {useOnClick} from "@src/dForm/fields/base/baseFieldRender";
+import {useOnClick} from '@src/dForm/fields/base/baseFieldRender';
 import React, {CSSProperties, useEffect, useRef, useSyncExternalStore} from 'react';
 import {CustomField} from '@src/dForm/fields/custom/customField';
 import {CSSTransition} from 'react-transition-group';
@@ -9,7 +9,7 @@ export const CustomFieldRender = ({field}: {field: CustomField}): React.JSX.Elem
     const fieldProps = field.getProps();
 
     const value = field.getValue();
-    const curValue = fieldProps?.onRender?.(value, field) ?? value;
+    const render = fieldProps?.onRender?.(value, field) ?? value;
 
     useEffect(() => {
         field.setReady(true);
@@ -25,10 +25,12 @@ export const CustomFieldRender = ({field}: {field: CustomField}): React.JSX.Elem
 
     const onClick = useOnClick(field);
 
+    if (fieldProps.fieldWrapper) return <>{render}</>;
+
     return (
         <CSSTransition nodeRef={nodeRef} in={!fieldHidden} timeout={300} classNames="zoom" unmountOnExit>
             <div ref={nodeRef} style={style} className={'dform-field-container' + fieldProps.className} onClick={onClick}>
-                {curValue}
+                {render}
             </div>
         </CSSTransition>
     );
