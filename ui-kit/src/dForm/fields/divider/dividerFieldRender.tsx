@@ -16,10 +16,11 @@ export const DividerFieldRender = ({field}: {field: DividerField}): React.JSX.El
         field.setReady(true);
     }, [field]);
 
-    const defStyle: CSSProperties = {width: field.getWidth() ?? '100%', margin: 0};
+    const defStyle: CSSProperties = { margin: 0};
     const style = {...defStyle, ...fieldProps.style};
 
     return (
+        <div style={{width: field.getWidth() ?? '100%'}}>
         <Divider
             className={fieldProps.className}
             orientation={fieldProps.orientation}
@@ -31,5 +32,6 @@ export const DividerFieldRender = ({field}: {field: DividerField}): React.JSX.El
         >
             {fieldProps.label}
         </Divider>
+        </div>
     );
 };

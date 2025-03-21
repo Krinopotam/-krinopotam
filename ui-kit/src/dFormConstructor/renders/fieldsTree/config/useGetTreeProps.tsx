@@ -43,6 +43,7 @@ export const useGetTreeProps = (
                     const componentInfo = node?.['fieldInfo'] as BaseComponentInfo;
                     return !componentInfo?.getParent();
                 },
+                hotKeys: [{key: 'Delete'}],
             },
         },
         confirmDelete: false,
