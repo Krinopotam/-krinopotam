@@ -62,8 +62,8 @@ export const InlineGroupRender = ({field}: {field: InlineGroupField}): React.JSX
     return (
         <CSSTransition nodeRef={nodeRef} in={!fieldHidden} timeout={300} classNames="zoom" unmountOnExit>
             <div ref={nodeRef} className={'dform-field-container'} style={containerStyle} onClick={onClick}>
-                <Form.Item label={groupLabel} style={groupItemStyle} className={fieldProps.className}>
-                    <div style={groupContainerStyle}>
+                <Form.Item label={groupLabel} style={groupItemStyle} className={fieldProps.itemClassName}>
+                    <div style={groupContainerStyle} className={fieldProps.className}>
                         {Object.keys(childrenFields).map(fieldName => {
                             const childField = childrenFields[fieldName];
                             const childProps = childField.getProps();

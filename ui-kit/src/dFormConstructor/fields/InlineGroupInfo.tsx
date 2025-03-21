@@ -21,6 +21,14 @@ export class InlineGroupInfo extends BaseComponentInfo {
     override getPropsInfo() {
         return {
             id: 'string',
+            width: 'string',
+            readOnly: 'boolean',
+            disabled: 'boolean',
+            hidden: 'boolean',
+            dependsOn: 'fieldIds',
+            itemClassName: 'string',
+            className: 'string',
+            autoHeightResize: 'boolean',
         } satisfies IComponentPropsInfo<IInlineGroupFieldProps>;
     }
 

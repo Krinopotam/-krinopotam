@@ -18,7 +18,7 @@ export const TabsFieldRender = ({field}: {field: TabsField}): React.JSX.Element 
 
     const fieldProps = field.getProps();
     const model = field.getModel();
-
+    const fieldHidden = field.isHidden();
     useSyncExternalStore(field.subscribe.bind(field), field.getSnapshot.bind(field));
 
     const activeTab = field.getActiveTab() || fieldProps.activeTab;
@@ -31,8 +31,6 @@ export const TabsFieldRender = ({field}: {field: TabsField}): React.JSX.Element 
 
     if (!field.hasVisibleChildren()) return <> </>;
 
-    const tabBarRender = (props: TabNavListProps, DefaultTabBar: ComponentType<TabNavListProps>) => TabBarRender(props, DefaultTabBar, field);
-
     const defStyle: CSSProperties = {width: field.getWidth() ?? '100%'};
     if (fieldProps.autoHeightResize) defStyle.height = '100%';
 
@@ -41,6 +39,10 @@ export const TabsFieldRender = ({field}: {field: TabsField}): React.JSX.Element 
         !field.getParent() && field.getId() === model.getHighlightedId() && !field.getHighlightedTab() ? field.getHighlightedStyle() : undefined;
 
     const style: React.CSSProperties = {...defStyle, ...highlightedFieldStyle, ...fieldProps.style};
+
+    const tabBarRender = (props: TabNavListProps, DefaultTabBar: ComponentType<TabNavListProps>) => TabBarRender(props, DefaultTabBar, field);
+
+    if (fieldHidden) return <></>;
 
     return (
         <Tabs
@@ -221,7 +223,7 @@ const TabBarRender = (props: TabNavListProps, DefaultTabBar: ComponentType<TabNa
 export const useOnTabClick = (field: TabsField, props: TabNavListProps) => {
     const onClick = useEvent((activeKey: string, e: React.MouseEvent | React.KeyboardEvent) => {
         field.setHighlightedTab(activeKey);
-        props.onTabClick(activeKey, e)
+        props.onTabClick(activeKey, e);
         e.stopPropagation();
     });
 
