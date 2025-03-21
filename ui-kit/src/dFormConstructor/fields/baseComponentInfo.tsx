@@ -68,6 +68,8 @@ export class BaseComponentInfo {
             autoHeightResize: 'boolean',
             autoFocus: 'boolean',
             requiredMark: 'boolean',
+            noContainer: 'boolean',
+            noItemWrapper: 'boolean',
         } satisfies IComponentPropsInfo<IBaseFieldProps<AnyType, AnyType>>;
     }
 

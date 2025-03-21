@@ -11,19 +11,14 @@ export class DividerInfo extends BaseComponentInfo {
     public override readonly TITLE = 'Divider';
 
     override getPropsInfo() {
+        const {placeholder, defaultValue, nonEditable, autoFocus, readOnly, disabled,  ...baseProps} = super.getPropsInfo();
         return {
-            id: 'string',
-            label: 'string',
+            ...baseProps,
             plain: 'boolean',
             dashed: 'boolean',
             type: ['vertical', 'horizontal'],
             orientation: ['center', 'left', 'right'],
-            orientationMargin: 'string',
-            width: 'string',
-            hidden: 'boolean',
-            dependsOn: 'fieldIds',
-            className: 'string',
-            containerClassName: 'string',
+            orientationMargin: 'string'
         } satisfies IComponentPropsInfo<IDividerFieldProps>;
     }
 }
