@@ -14,11 +14,14 @@ export interface IBaseFieldProps<TField extends IBaseField, TValue> extends Reco
     /** Field label */
     label?: string | React.ReactNode;
 
-    /** Field item class name (unlike className, this is the name of the class of the field item container) */
-    itemClassName?: string;
-
     /** Field class name (directly the field itself, not the container) */
     className?: string;
+
+    /** Field item class name (field item is field wrapper with label and error status) */
+    itemWrapperClassName?: string;
+
+    /** Field container class name (container for field wrapper or field) */
+    containerClassName?: string;
 
     /** Field placeholder*/
     placeholder?: string;
@@ -59,8 +62,17 @@ export interface IBaseFieldProps<TField extends IBaseField, TValue> extends Reco
     /** Field CSS style */
     style?: React.CSSProperties;
 
-    /** Row field container CSS style */
-    rowStyle?: React.CSSProperties;
+    /** Form item CSS style (form item is field wrapper with label and error status) */
+    itemWrapperStyle?: React.CSSProperties;
+
+    /** Field container CSS style (container for field wrapper or field) */
+    containerStyle?: React.CSSProperties;
+
+    /** Render field item without wrapper */
+    noItemWrapper?: boolean;
+
+    /**  Render field or field wrapper without container */
+    noContainer?: boolean;
 
     /** Field validation rules */
     rules?: IRuleType[];

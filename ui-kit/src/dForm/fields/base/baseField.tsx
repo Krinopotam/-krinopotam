@@ -12,10 +12,11 @@ import {IsArray} from '@krinopotam/js-helpers/helpersObjects/isArray';
 
 import {AnyType, IError} from '@krinopotam/service-types';
 import {CallbackControl} from '@src/_shared/classes/callbackControl';
-import {DModel, IDFormDataSet, IDFormMode, IDFormProps} from '@src/dForm';
+import {DModel, IDFormDataSet, IDFormProps} from '@src/dForm';
 import {IAnyFieldProps, IBaseField} from '@src/dForm/fields/base/types/types';
 import React, {CSSProperties} from 'react';
 import {BaseFieldRender} from './baseFieldRender';
+import {ContainerRender} from '@src/dForm/fields/base/containerRender';
 
 export class BaseField<TFieldProps extends IAnyFieldProps> {
     /** form field props */
@@ -53,7 +54,9 @@ export class BaseField<TFieldProps extends IAnyFieldProps> {
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    initFieldParameters(_fieldProps: TFieldProps, _formProps: IDFormProps) {}
+    initFieldParameters(_fieldProps: TFieldProps, _formProps: IDFormProps) {
+        /* can be implemented in child classes */
+    }
 
     //region Fields methods
     /** @returns get current field properties  */
@@ -230,7 +233,12 @@ export class BaseField<TFieldProps extends IAnyFieldProps> {
 
     /** @returns field disable status */
     isDisabled(): boolean {
-        if (this.model.isFormDisabled() || (this.getProps().nonEditable === 'disabled' && this.model.getFormMode() === 'update') || this.getParent()?.isDisabled()) return true;
+        if (
+            this.model.isFormDisabled() ||
+            (this.getProps().nonEditable === 'disabled' && this.model.getFormMode() === 'update') ||
+            this.getParent()?.isDisabled()
+        )
+            return true;
         return this.model.getDisabledFields()[this.fieldId] ?? false;
     }
 
@@ -253,8 +261,8 @@ export class BaseField<TFieldProps extends IAnyFieldProps> {
     isReadOnly(): boolean {
         if (
             this.model.isFormReadOnly() ||
-            ((this.getProps().nonEditable === true || this.getProps().nonEditable === 'readOnly') && this.model.getFormMode() === 'update')
-            || this.getParent()?.isReadOnly()
+            ((this.getProps().nonEditable === true || this.getProps().nonEditable === 'readOnly') && this.model.getFormMode() === 'update') ||
+            this.getParent()?.isReadOnly()
         )
             return true;
         return this.model.getReadOnlyFields()[this.fieldId] ?? false;
@@ -491,25 +499,54 @@ export class BaseField<TFieldProps extends IAnyFieldProps> {
 
     renderField({
         altLabel = undefined,
-        fieldContainerStyle = undefined,
-    }: {altLabel?: React.ReactNode; fieldContainerStyle?: CSSProperties} = {}): React.ReactNode {
-        return this.renderFieldWrapper({field: this.render(), altLabel, fieldContainerStyle});
+        extraContainerStyle = undefined,
+    }: {altLabel?: React.ReactNode; extraContainerStyle?: CSSProperties} = {}): React.ReactNode {
+        return this.renderFieldItem({children: this.render(), altLabel, extraContainerStyle: extraContainerStyle});
     }
 
-    protected renderFieldWrapper({
-        field,
+    protected renderFieldItem({
+        children,
         altLabel,
-        fieldContainerStyle,
+        extraContainerStyle,
+        noHighlightContainer,
     }: {
-        field: React.ReactNode;
+        children: React.ReactNode;
         altLabel?: React.ReactNode;
-        fieldContainerStyle?: CSSProperties;
-    }):React.JSX.Element {
+        extraContainerStyle?: CSSProperties;
+        noHighlightContainer?: boolean;
+    }): React.JSX.Element {
+        if (this.noContainer()) {
+            if (this.noItemWrapper()) return <>{children}</>;
+            return (
+                <BaseFieldRender field={this} altLabel={altLabel}>
+                    {children}
+                </BaseFieldRender>
+            );
+        }
+
+        if (this.noItemWrapper()) {
+            return (
+                <ContainerRender key={this.getId()} field={this} style={extraContainerStyle} noHighlightContainer={noHighlightContainer}>
+                    {children}
+                </ContainerRender>
+            );
+        }
+
         return (
-            <BaseFieldRender key={this.getId()} field={this} altLabel={altLabel} fieldContainerStyle={fieldContainerStyle}>
-                {field}
-            </BaseFieldRender>
+            <ContainerRender key={this.getId()} field={this} style={extraContainerStyle} noHighlightContainer={noHighlightContainer}>
+                <BaseFieldRender field={this} altLabel={altLabel}>
+                    {children}
+                </BaseFieldRender>
+            </ContainerRender>
         );
+    }
+
+    protected noItemWrapper() {
+        return this.getProps().noItemWrapper;
+    }
+
+    protected noContainer() {
+        return this.getProps().noContainer;
     }
 
     /** @return field highlighted style */

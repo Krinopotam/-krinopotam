@@ -44,7 +44,7 @@ export const PasswordFieldRender = ({field}:{field:PasswordField}):React.JSX.Ele
             showCount={fieldProps.showCount}
             value={value}
             style={style}
-            autoComplete={fieldProps.autocomplete}
+            autoComplete={fieldProps.autocomplete ?? 'current-password'}
             spellCheck={fieldProps.spellcheck}
         />
     );

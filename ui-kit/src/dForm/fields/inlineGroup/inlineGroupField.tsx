@@ -24,23 +24,10 @@ export class InlineGroupField extends BaseField<IInlineGroupFieldProps> {
         return <InlineGroupRender field={this} />;
     }
 
-    /** In the base class, almost all components are wrapped in the BaseField wrapper. This component is displayed without wrapping */
-    override renderField(): React.ReactNode {
-        return this.render();
+    override noItemWrapper() {
+        // noinspection PointlessBooleanExpressionJS
+        return this.getProps().noItemWrapper !== false;
     }
-
-    //region Fields collection getters
-    /** return@ field collection (plain list of all fields in all component tabs, including child fields) */
-    override getFieldsMap() {
-        return this.fieldsMap;
-    }
-
-    /** @return root fields collection (only root fields, without children) */
-    override getRootFields() {
-        return this.rootFields;
-    }
-
-    //endregion
 
     //region Field methods
     /**
@@ -101,6 +88,10 @@ export class InlineGroupField extends BaseField<IInlineGroupFieldProps> {
         }
 
         super.setReadOnly(value, noEvents, noRerender);
+    }
+
+    override isHidden(): boolean {
+        return super.isHidden() || !this.hasVisibleChildren(); //has visible field
     }
 
     //endregion

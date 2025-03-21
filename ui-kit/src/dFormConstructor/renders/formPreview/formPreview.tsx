@@ -33,6 +33,7 @@ export const FormPreview = (): React.JSX.Element => {
 
         setSelectedField(formInfo);
     });
+
     return (
         <div
             style={{

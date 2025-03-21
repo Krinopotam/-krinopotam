@@ -30,7 +30,7 @@ export const useSplitTreeSelectProps = (props: IAnyFieldProps) => {
             placeholder: true,
             readOnly: true,
             requiredMark: true,
-            rowStyle: true,
+            itemWrapperStyle: true,
             rules: true,
             style: true,
             tab: true,
@@ -46,7 +46,11 @@ export const useSplitTreeSelectProps = (props: IAnyFieldProps) => {
             onFieldDataFetchError: true,
             onFieldDataFetchSuccess: true,
             className: true,
-            itemClassName: true,
+            itemWrapperClassName: true,
+            containerClassName: true,
+            containerStyle: true,
+            noContainer: true,
+            noItemWrapper: true,
         });
 
         return result[1];

@@ -50,7 +50,7 @@ export const InlineGroupRender = ({field}: {field: InlineGroupField}): React.JSX
     const gapOffset = getGapOffset(childrenFields, gap);
 
     return (
-        <Form.Item label={groupLabel} style={groupItemStyle} className={fieldProps.itemWrapperClassName}>
+
             <div style={groupContainerStyle} className={fieldProps.className}>
                 {Object.keys(childrenFields).map(fieldName => {
                     const childField = childrenFields[fieldName];
@@ -72,7 +72,7 @@ export const InlineGroupRender = ({field}: {field: InlineGroupField}): React.JSX
                     );
                 })}
             </div>
-        </Form.Item>
+        
     );
 };
 

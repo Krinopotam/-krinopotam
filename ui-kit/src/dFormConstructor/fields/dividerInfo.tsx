@@ -19,7 +19,11 @@ export class DividerInfo extends BaseComponentInfo {
             type: ['vertical', 'horizontal'],
             orientation: ['center', 'left', 'right'],
             orientationMargin: 'string',
+            width: 'string',
+            hidden: 'boolean',
+            dependsOn: 'fieldIds',
             className: 'string',
+            containerClassName: 'string',
         } satisfies IComponentPropsInfo<IDividerFieldProps>;
     }
 }

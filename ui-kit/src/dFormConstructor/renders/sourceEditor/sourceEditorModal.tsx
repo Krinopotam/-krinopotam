@@ -2,9 +2,9 @@ import {DFormModal, IDFormModalApi, IDFormModalProps} from '@src/dFormModal';
 import React, {useState} from 'react';
 import {SourceEditor} from '@src/dFormConstructor/renders/sourceEditor/sourceEditor';
 import {CustomField, ICustomFieldProps} from '@src/dForm/fields/custom';
-import {ISourceEditorApi} from "@src/dFormConstructor/renders/sourceEditor/api/usePrepareApi";
+import {ISourceEditorApi} from '@src/dFormConstructor/renders/sourceEditor/api/usePrepareApi';
 
-export const SourceEditorModal = ({sourceFormApi}: { sourceFormApi: IDFormModalApi }) => {
+export const SourceEditorModal = ({sourceFormApi}: {sourceFormApi: IDFormModalApi}) => {
     const [codeEditorApi] = useState({} as ISourceEditorApi);
 
     const formProps: IDFormModalProps = {
@@ -15,9 +15,8 @@ export const SourceEditorModal = ({sourceFormApi}: { sourceFormApi: IDFormModalA
         fieldsProps: {
             codeEditor: {
                 component: CustomField,
-                onRender: () => <SourceEditor apiRef={codeEditorApi}/>,
-                style: {position: 'relative', display: "flex", flex: 1,        minHeight: 0,
-                    minWidth:0,}
+                onRender: () => <SourceEditor apiRef={codeEditorApi} />,
+                style: {position: 'relative', display: 'flex', flex: 1, minHeight: 0, minWidth: 0},
             } as ICustomFieldProps,
         },
 

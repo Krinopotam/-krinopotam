@@ -131,7 +131,7 @@ export class TabsField extends BaseField<ITabsFieldProps> {
     }
 
     override initFieldParameters(_fieldProps: ITabsFieldProps) {
-        this._highlightedTab = _fieldProps.highlightedTab || '';
+        this._highlightedTab = _fieldProps.highlightedTab;
     }
 
     /**
@@ -153,18 +153,18 @@ export class TabsField extends BaseField<ITabsFieldProps> {
         return false;
     }
 
-    protected override render() {
+    override render() {
         return <TabsFieldRender field={this} />;
     }
 
-    override renderField(
-        props: {
-            altLabel?: React.ReactNode;
-            fieldContainerStyle?: CSSProperties;
-        } = {}
-    ): React.ReactNode {
-        if (this.parent) return super.renderField(props);
-        return this.render();
+    override renderFieldItem(props: {children: React.ReactNode; altLabel?: React.ReactNode; extraContainerStyle?: CSSProperties}) {
+        const noHighlightContainer = !this.isHighlighted() || (this.isHighlighted() && !!this.getHighlightedTab());
+        return super.renderFieldItem({...props, noHighlightContainer: noHighlightContainer});
+    }
+
+    override noItemWrapper() {
+        // noinspection PointlessBooleanExpressionJS
+        return (!this.parent && this.getProps().noItemWrapper !== false) || super.noItemWrapper();
     }
 
     //region Tabs grouped fields collections getters
@@ -182,10 +182,10 @@ export class TabsField extends BaseField<ITabsFieldProps> {
     setHighlighted(value: boolean, noEvents?: boolean, noRerender?: boolean) {
         const prevId = this.model.getHighlightedId();
         const newId = value ? this.getId() : '';
-        if (prevId === newId) return;
 
-        this.model.setHighlightedId(newId);
         this.setHighlightedTab(undefined);
+        // noinspection DuplicatedCode
+        this.model.setHighlightedId(newId);
 
         const prevField = prevId ? this.model.getField(prevId) : undefined;
         if (!noEvents) this.getFormProps()?.onHighlightedFieldChanged?.(value ? this : undefined, prevField, undefined, this.model.getFormApi());

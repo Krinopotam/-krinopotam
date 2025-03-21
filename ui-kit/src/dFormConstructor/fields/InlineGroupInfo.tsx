@@ -26,7 +26,7 @@ export class InlineGroupInfo extends BaseComponentInfo {
             disabled: 'boolean',
             hidden: 'boolean',
             dependsOn: 'fieldIds',
-            itemClassName: 'string',
+            itemWrapperClassName: 'string',
             className: 'string',
             autoHeightResize: 'boolean',
         } satisfies IComponentPropsInfo<IInlineGroupFieldProps>;

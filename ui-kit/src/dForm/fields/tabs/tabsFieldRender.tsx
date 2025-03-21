@@ -1,7 +1,6 @@
-import {LoadingOutlined, CloseCircleFilled} from '@ant-design/icons';
+import {CloseCircleFilled, LoadingOutlined} from '@ant-design/icons';
 import {useEvent} from '@krinopotam/common-hooks';
 import {IBaseField} from '@src/dForm/fields/base';
-import {useOnClick} from '@src/dForm/fields/base/baseFieldRender';
 import {TabsField} from '@src/dForm/fields/tabs/tabsField';
 import {FieldsRender} from '@src/dForm/renders/fieldsRender';
 import {LoadingContainer} from '@src/loadingContainer';
@@ -17,15 +16,11 @@ export const TabsFieldRender = ({field}: {field: TabsField}): React.JSX.Element 
     }, [field]);
 
     const fieldProps = field.getProps();
-    const model = field.getModel();
-    const fieldHidden = field.isHidden();
     useSyncExternalStore(field.subscribe.bind(field), field.getSnapshot.bind(field));
 
     const activeTab = field.getActiveTab() || fieldProps.activeTab;
 
     const onChange = useOnChange(field);
-    let onClick = useOnClick(field);
-    if (field.getParent()) onClick = undefined;
 
     const items: TabsProps['items'] = useGetTabsItems(field);
 
@@ -34,15 +29,9 @@ export const TabsFieldRender = ({field}: {field: TabsField}): React.JSX.Element 
     const defStyle: CSSProperties = {width: field.getWidth() ?? '100%'};
     if (fieldProps.autoHeightResize) defStyle.height = '100%';
 
-    // check is field has no parent because parent has own highlights processing
-    const highlightedFieldStyle: CSSProperties | undefined =
-        !field.getParent() && field.getId() === model.getHighlightedId() && !field.getHighlightedTab() ? field.getHighlightedStyle() : undefined;
-
-    const style: React.CSSProperties = {...defStyle, ...highlightedFieldStyle, ...fieldProps.style};
+    const style: React.CSSProperties = {...defStyle,  ...fieldProps.style};
 
     const tabBarRender = (props: TabNavListProps, DefaultTabBar: ComponentType<TabNavListProps>) => TabBarRender(props, DefaultTabBar, field);
-
-    if (fieldHidden) return <></>;
 
     return (
         <Tabs
@@ -57,7 +46,6 @@ export const TabsFieldRender = ({field}: {field: TabsField}): React.JSX.Element 
             activeKey={activeTab}
             renderTabBar={tabBarRender}
             onChange={onChange}
-            onClick={onClick}
         />
     );
 };
