@@ -7,8 +7,9 @@ import {IInputFieldProps, InputField} from '@src/dForm/fields/input';
 import {INumberFieldProps, NumberField} from '@src/dForm/fields/number';
 import {ISelectFieldProps, SelectField} from '@src/dForm/fields/select';
 import {ISwitchFieldProps, SwitchField} from '@src/dForm/fields/switch';
-import {BaseComponentInfo, IPropsTypeBase} from '@src/dFormConstructor/fields/baseComponentInfo';
+import {BaseComponentInfo, IPropsType} from '@src/dFormConstructor/fields/baseComponentInfo';
 import {FormInfo} from '@src/dFormConstructor/fields/formInfo';
+import {ObjectListEditorComponent} from '@src/dFormConstructor/renders/propsEditor/editors/objectListEditor';
 import {DFormModal, IDFormModalApi, IDFormModalProps} from '@src/dFormModal';
 import {ISelectBaseProps} from '@src/select';
 import {Input, Space} from 'antd';
@@ -22,7 +23,7 @@ export const ObjectEditor = ({formInfo, field, propKey}: {formInfo: FormInfo; fi
     const [formApi] = useState({} as IDFormModalApi);
     const formProps = useGetFormProps({
         fieldId: field.getId(),
-        propInfo: field.getPropsInfo()[propKey] as Record<string, IPropsTypeBase>,
+        propInfo: field.getPropsInfo()[propKey] as IPropsType,
         allIds,
     });
 
@@ -40,7 +41,7 @@ export const ObjectEditor = ({formInfo, field, propKey}: {formInfo: FormInfo; fi
     return <ObjectEditorRender val={val} formApi={formApi} formProps={formProps} onClick={onClick} onSubmit={onSubmit} />;
 };
 
-const ObjectEditorRender = (props: {
+export const ObjectEditorRender = (props: {
     formApi: IDFormModalApi;
     formProps: IDFormModalProps;
     val: Record<string, unknown> | undefined;
@@ -66,7 +67,7 @@ export const ObjectEditorComponent = ({
 }: {
     fieldId: string;
     field: IBaseField;
-    propInfo: Record<string, IPropsTypeBase> | undefined;
+    propInfo: IPropsType | undefined;
     allIds: string[];
 }): React.JSX.Element => {
     const [formApi] = useState({} as IDFormModalApi);
@@ -85,9 +86,10 @@ export const ObjectEditorComponent = ({
     return <ObjectEditorRender val={val} formApi={formApi} formProps={formProps} onClick={onClick} onSubmit={onSubmit} />;
 };
 
-export const useGetFormProps = ({fieldId, propInfo, allIds}: {fieldId: string; propInfo: Record<string, IPropsTypeBase> | undefined; allIds: string[]}) => {
+export const useGetFormProps = ({fieldId, propInfo, allIds}: {fieldId: string; propInfo: IPropsType | undefined; allIds: string[]}) => {
     const formProps: IDFormModalProps & {fieldsProps: Record<string, unknown>} = {
         layout: 'horizontal',
+        height:500,
         fieldsProps: {},
     };
     if (!propInfo) return formProps;
@@ -115,20 +117,6 @@ export const useGetFormProps = ({fieldId, propInfo, allIds}: {fieldId: string; p
                 component: SwitchField,
                 label: key,
             } satisfies ISwitchFieldProps;
-        } else if (Array.isArray(dataType)) {
-            if (dataType[0] === 'multi')
-                formProps.fieldsProps[key] = {
-                    component: SelectField,
-                    label: key,
-                    dataSet: optionsToDataSet(dataType.slice(1)),
-                    mode: 'multiple',
-                } satisfies ISelectFieldProps;
-            else
-                formProps.fieldsProps[key] = {
-                    component: SelectField,
-                    label: key,
-                    dataSet: optionsToDataSet(dataType),
-                } satisfies ISelectFieldProps;
         } else if (dataType === 'fieldIds') {
             formProps.fieldsProps[key] = {
                 component: SelectField,
@@ -136,14 +124,38 @@ export const useGetFormProps = ({fieldId, propInfo, allIds}: {fieldId: string; p
                 dataSet: optionsToDataSet(allIds.filter(f => f !== fieldId)),
                 mode: 'multiple',
             } satisfies ISelectFieldProps;
+        } else if (Array.isArray(dataType)) {
+            if (typeof dataType[0] === 'string') {
+                const options = dataType as string[];
+                if (options[0] === 'multi')
+                    formProps.fieldsProps[key] = {
+                        component: SelectField,
+                        label: key,
+                        dataSet: optionsToDataSet(options.slice(1)),
+                        mode: 'multiple',
+                    } satisfies ISelectFieldProps;
+                else
+                    formProps.fieldsProps[key] = {
+                        component: SelectField,
+                        label: key,
+                        dataSet: optionsToDataSet(options),
+                    } satisfies ISelectFieldProps;
+            } else if (typeof dataType[0] === 'object') {
+                formProps.fieldsProps[key] = {
+                    component: CustomField,
+                    label: key,
+                    noItemWrapper: false,
+                    onRender: (_value, field) => (
+                        <ObjectListEditorComponent fieldId={fieldId} field={field} propInfo={dataType as unknown as IPropsType} allIds={allIds} />
+                    ),
+                } satisfies ICustomFieldProps;
+            }
         } else if (typeof dataType === 'object') {
             formProps.fieldsProps[key] = {
                 component: CustomField,
                 label: key,
                 noItemWrapper: false,
-                onRender: (_value, field) => (
-                    <ObjectEditorComponent fieldId={fieldId} field={field} propInfo={dataType as Record<string, IPropsTypeBase>} allIds={allIds} />
-                ),
+                onRender: (_value, field) => <ObjectEditorComponent fieldId={fieldId} field={field} propInfo={dataType as IPropsType} allIds={allIds} />,
             } satisfies ICustomFieldProps;
         }
     }

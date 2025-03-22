@@ -42,6 +42,7 @@ const formProps: IDFormModalProps = {
             layout: 'fitColumns',
             autoHeightResize: true,
             editFormProps: editFormProps,
+            onDelete: () => {},
             confirmDelete: true,
         },
     },

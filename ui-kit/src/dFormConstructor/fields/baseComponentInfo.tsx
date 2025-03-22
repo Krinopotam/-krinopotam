@@ -6,12 +6,14 @@ import React from 'react';
 import {GetNanoId} from '@krinopotam/js-helpers/helpersString/getNanoId';
 import {Space} from 'antd';
 
-export type IPropsTypeBase = 'string' | 'number' | 'boolean' | 'fieldIds' | string[] | Record<string, unknown>;
-export type IPropsType = IPropsTypeBase | Record<string, IPropsTypeBase>;
+export type IPropsTypeBase = 'string' | 'number' | 'boolean' | 'fieldIds' | string[];
+export type IPropsType = {[key: string]: IPropsTypeBase | IPropsType | IPropsType[]};
 
-export type IComponentPropsInfo<TFieldProps> = {id?: 'string'} & {
-    [K in keyof TFieldProps]?: IPropsType;
-};
+export type IComponentPropsInfo<T> = T extends object
+    ? {
+          id?: 'string';
+      } & {[K in keyof T]?: IPropsTypeBase | IComponentPropsInfo<T[K]> | IComponentPropsInfo<T[K]>[]}
+    : never;
 
 export class BaseComponentInfo {
     public readonly CODE: string = 'base';
@@ -207,7 +209,7 @@ export class BaseComponentInfo {
         return '';
     }
 
-    protected validateId(id: string):string | undefined {
+    protected validateId(id: string): string | undefined {
         const recursiveSearch = (fields: BaseComponentInfo[], searchId: string) => {
             for (const field of fields) {
                 if (field === this) continue;

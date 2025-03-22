@@ -1,6 +1,7 @@
-import {ObjectEditor} from "@src/dFormConstructor/renders/propsEditor/editors/objectEditor";
+import {ObjectEditor} from '@src/dFormConstructor/renders/propsEditor/editors/objectEditor';
+import {ObjectListEditor} from '@src/dFormConstructor/renders/propsEditor/editors/objectListEditor';
 import React, {useContext, useSyncExternalStore} from 'react';
-import type {DescriptionsProps} from 'antd';
+import {DescriptionsProps, Tooltip} from 'antd';
 import {Descriptions} from 'antd';
 import {SelectedFieldContext} from '@src/dFormConstructor/context/selectedFieldProvider';
 import type {AnyType} from '@krinopotam/service-types';
@@ -58,14 +59,18 @@ const usePrepareFieldsProps = (fieldInfo: BaseComponentInfo | undefined): Descri
         if (dataType === 'string') editor = <StringEditor {...editorProps} />;
         else if (dataType === 'number') editor = <NumberEditor {...editorProps} />;
         else if (dataType === 'boolean') editor = <BooleanEditor {...editorProps} />;
-        else if (Array.isArray(dataType)) {
-            if (dataType[0]==='multi') editor = <SelectEditor {...editorProps} options={dataType.slice(1)} multiple />;
-            else editor = <SelectEditor {...editorProps} options={dataType} />;
-        }
-        else if (typeof dataType === 'object') editor = <ObjectEditor {...editorProps} />;
         else if (dataType === 'fieldIds') editor = <SelectEditor {...editorProps} options={allIds.filter(f => f !== fieldInfo.getId())} multiple />;
+        else if (Array.isArray(dataType)) {
+            if (typeof dataType[0] === 'string') {
+                const options = dataType as string[];
+                if (dataType[0] === 'multi') editor = <SelectEditor {...editorProps} options={options.slice(1)} multiple />;
+                else editor = <SelectEditor {...editorProps} options={options} />;
+            } else if (typeof dataType[0] === 'object') editor = <ObjectListEditor {...editorProps} />;
+        } else if (typeof dataType === 'object') editor = <ObjectEditor {...editorProps} />;
 
-        result.push({key, label: key, children: editor});
+        const label = key.length<=15 ? key : <Tooltip title={key}>{`${key.slice(0, 15)}...`}</Tooltip>;
+
+        result.push({key, label: label, children: editor});
     }
 
     return result;
