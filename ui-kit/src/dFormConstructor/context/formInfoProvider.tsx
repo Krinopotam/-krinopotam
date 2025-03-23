@@ -1,5 +1,5 @@
 import {FormInfo} from '@src/dFormConstructor/fields/formInfo';
-import React, {createContext, PropsWithChildren, useMemo, useState} from 'react';
+import React, {createContext, useMemo, useState} from 'react';
 
 export interface IFormInfoContext {
     formInfo: FormInfo;
@@ -8,8 +8,8 @@ export interface IFormInfoContext {
 
 export const FormInfoContext = createContext<IFormInfoContext>({} as IFormInfoContext);
 
-export const FormInfoProvider = ({children}: PropsWithChildren) => {
-    const [formInfo, setFormInfo] = useState(new FormInfo({id: 'form1', label: 'MyForm'}));
+export const FormInfoProvider = ({children, initialForm}: {children: React.ReactNode; initialForm?: FormInfo}) => {
+    const [formInfo, setFormInfo] = useState(initialForm ?? new FormInfo({id: 'form1', label: 'Form'}));
 
     const value: IFormInfoContext = useMemo(() => {
         return {formInfo, setFormInfo};

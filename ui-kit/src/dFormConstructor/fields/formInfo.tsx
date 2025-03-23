@@ -10,10 +10,10 @@ import {IExtTreeNode} from '@src/tree';
 import React from 'react';
 
 export class FormInfo extends BaseComponentInfo {
-    public override readonly TITLE = 'Form';
-    public override readonly CODE = 'form';
+    public override readonly TITLE: string = 'Form';
+    public override readonly CODE: string = 'form';
     public override readonly CLASS = null;
-    public override readonly INTERFACE_NAME = 'IDFormProps';
+    public override readonly INTERFACE_NAME: string = 'IDFormProps';
     public override readonly ICON = (<FormOutlined />);
 
     private readonly fieldsTreeSubscribers = new Set<() => void>();
@@ -35,7 +35,7 @@ export class FormInfo extends BaseComponentInfo {
         return child?.CODE !== 'tab';
     }
 
-    override getPropsInfo() {
+    override getPropsInfo(): IComponentPropsInfo<AnyType> {
         return {
             id: 'string',
             disabled: 'boolean',
@@ -49,6 +49,44 @@ export class FormInfo extends BaseComponentInfo {
             labelAlign: ['left', 'right'],
             disableDepended: 'boolean',
             submitConfirmMessage: 'string',
+            buttons: {
+                ok: {
+                    type: ['button', 'link', 'divider', 'group', 'element', 'hotkey'],
+                    title: 'string',
+                    tooltip: 'string',
+                    position: ['center', 'left', 'right'],
+                    ghost: 'boolean',
+                    disabled: 'boolean',
+                    loading: 'boolean',
+                    active: 'boolean',
+                    iconPosition: ['start', 'end'],
+                    shape: ['default', 'circle', 'round'],
+                    size: ['small', 'middle', 'large'],
+                    weight: 'number',
+                    width: 'number',
+                    variant: ['outlined', 'dashed', 'solid', 'filled', 'text', 'link'],
+                    color: ['default', 'primary', 'info', 'success', 'warning', 'danger'],
+                    className: 'string',
+                },
+                cancel: {
+                    type: ['button', 'link', 'divider', 'group', 'element', 'hotkey'],
+                    title: 'string',
+                    tooltip: 'string',
+                    position: ['center', 'left', 'right'],
+                    ghost: 'boolean',
+                    disabled: 'boolean',
+                    loading: 'boolean',
+                    active: 'boolean',
+                    iconPosition: ['start', 'end'],
+                    shape: ['default', 'circle', 'round'],
+                    size: ['small', 'middle', 'large'],
+                    weight: 'number',
+                    width: 'number',
+                    variant: ['outlined', 'dashed', 'solid', 'filled', 'text', 'link'],
+                    color: ['default', 'primary', 'info', 'success', 'warning', 'danger'],
+                    className: 'string',
+                },
+            },
         } satisfies IComponentPropsInfo<IDFormProps>;
     }
 
@@ -75,9 +113,9 @@ export class FormInfo extends BaseComponentInfo {
         setChildrenProps(this, fieldsProps);
     }
 
-    override getLabel() {
-        return 'FORM';
-    }
+    /*    override getLabel() {
+            return 'FORM';
+        }*/
 
     /** Generate unique field id */
     generateNewFieldId(prefix: string = 'Field'): string {
@@ -199,7 +237,7 @@ export class FormInfo extends BaseComponentInfo {
             return `{\n${nextPad}${entries}\n${pad}}${fieldTypeName ? ' satisfies ' + fieldTypeName : ''}`;
         }
 
-        return 'const formProps = ' + serialize(this.getProps(), 0);
+        return `const formProps:${this.INTERFACE_NAME} = ${serialize(this.getProps(), 0)}`;
     }
 
     getFieldInfoById(id: string) {

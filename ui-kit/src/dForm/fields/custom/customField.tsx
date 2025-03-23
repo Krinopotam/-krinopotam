@@ -12,14 +12,4 @@ export class CustomField extends BaseField<ICustomFieldProps> {
     protected render() {
         return <CustomFieldRender field={this} />;
     }
-
-    override noItemWrapper() {
-        // noinspection PointlessBooleanExpressionJS
-        return this.getProps().noItemWrapper !== false;
-    }
-
-    override noContainer() {
-        // noinspection PointlessBooleanExpressionJS
-        return this.getProps().noContainer !== false;
-    }
 }

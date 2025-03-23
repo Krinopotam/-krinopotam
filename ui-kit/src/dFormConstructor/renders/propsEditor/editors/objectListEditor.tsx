@@ -10,8 +10,7 @@ import {IDFormModalApi, IDFormModalProps} from '@src/dFormModal';
 import {ITabulatorColumn, ITabulatorProps} from '@src/tabulatorBase';
 import React, {useState} from 'react';
 
-export const ObjectListEditor = ({formInfo, field, propKey}: {formInfo: FormInfo; field: BaseComponentInfo; propKey: string}): React.JSX.Element => {
-    const allIds = formInfo.getAllFieldIds({tab: true, tabs: true, inlineGroup: true});
+export const ObjectListEditor = ({formInfo, field, propKey, allIds}: {formInfo: FormInfo; field: BaseComponentInfo; propKey: string; allIds: string[]}): React.JSX.Element => {
     const val = field.getProp(propKey);
 
     const [, setCurVal] = useState<unknown>(val);
@@ -40,7 +39,8 @@ export const ObjectListEditor = ({formInfo, field, propKey}: {formInfo: FormInfo
 
 const useGetTableFormProps = ({fieldId, propInfo, allIds}: {fieldId: string; propInfo: IPropsType; allIds: string[]}) => {
     const formProps: IDFormModalProps & {fieldsProps: Record<string, unknown>} = {
-        height: 500,
+        height: 600,
+        width: 800,
         fieldsProps: {},
     };
 

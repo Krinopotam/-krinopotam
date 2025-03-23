@@ -1,3 +1,4 @@
+import {FormModalInfo} from "@src/dFormConstructor/fields/formModalInfo";
 import {FIELDS_INFO_MAP} from '@src/dFormConstructor/renders/fieldsTree/config/fieldsList';
 import {FormInfo} from '@src/dFormConstructor/fields/formInfo';
 
@@ -14,6 +15,9 @@ export const generateDummyTypes = () => {
 
     const formInfo = new FormInfo();
     if (formInfo.INTERFACE_NAME) result = result + `declare interface ${formInfo.INTERFACE_NAME} {}\n`;
+
+    const formModalInfo = new FormModalInfo();
+    if (formModalInfo.INTERFACE_NAME) result = result + `declare interface ${formModalInfo.INTERFACE_NAME} {}\n`;
 
     return result;
 };

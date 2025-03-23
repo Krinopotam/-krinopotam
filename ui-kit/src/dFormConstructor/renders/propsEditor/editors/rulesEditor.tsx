@@ -1,27 +1,25 @@
 import {useEvent} from '@krinopotam/common-hooks';
 import {DModel} from '@src/dForm';
-import {IInputFieldProps, InputField} from "@src/dForm/fields/input";
+import {IBaseField} from '@src/dForm/fields/base';
+import {IInputFieldProps, InputField} from '@src/dForm/fields/input';
 import {ISelectFieldProps, SelectField} from '@src/dForm/fields/select';
-import {ITabulatorGridFieldProps, TabulatorGridField} from "@src/dForm/fields/tabulatorGrid";
-import {BaseComponentInfo, IPropsType} from '@src/dFormConstructor/fields/baseComponentInfo';
+import {ITabulatorGridFieldProps, TabulatorGridField} from '@src/dForm/fields/tabulatorGrid';
+import {BaseComponentInfo} from '@src/dFormConstructor/fields/baseComponentInfo';
 import {FormInfo} from '@src/dFormConstructor/fields/formInfo';
 import {ObjectEditorRender} from '@src/dFormConstructor/renders/propsEditor/editors/objectEditor';
-import {addIds} from "@src/dFormConstructor/renders/propsEditor/tools/addIds";
-import {removeIds} from "@src/dFormConstructor/renders/propsEditor/tools/removeIds";
+import {addIds} from '@src/dFormConstructor/renders/propsEditor/tools/addIds';
+import {removeIds} from '@src/dFormConstructor/renders/propsEditor/tools/removeIds';
 import {IDFormModalApi, IDFormModalProps} from '@src/dFormModal';
 import {ISelectNode} from '@src/select';
 import React, {useState} from 'react';
 
 export const RulesEditor = ({formInfo, field, propKey}: {formInfo: FormInfo; field: BaseComponentInfo; propKey: string}): React.JSX.Element => {
-    const allIds = formInfo.getAllFieldIds({tab: true, tabs: true, inlineGroup: true});
     const val = field.getProp(propKey);
     const [, setCurVal] = useState<unknown>(val);
 
     const [formApi] = useState({} as IDFormModalApi);
     const formProps = useGetFormProps({
         fieldId: field.getId(),
-        propInfo: field.getPropsInfo()[propKey] as IPropsType,
-        allIds,
     });
 
     const onClick = useEvent(() => {
@@ -39,8 +37,25 @@ export const RulesEditor = ({formInfo, field, propKey}: {formInfo: FormInfo; fie
     return <ObjectEditorRender val={val} formApi={formApi} formProps={formProps} onClick={onClick} onSubmit={onSubmit} />;
 };
 
+export const RulesEditorComponent = ({fieldId, field}: {fieldId: string; field: IBaseField}): React.JSX.Element => {
+    const [formApi] = useState({} as IDFormModalApi);
+    const val = field.getValue();
+
+    const formProps = useGetFormProps({fieldId});
+
+    const onClick = useEvent(() => {
+        formApi.open('update', {...formProps, dataSet: {rules: val}});
+    });
+
+    const onSubmit = useEvent((values: Record<string, unknown>) => {
+        field.setValue(values['rules']);
+    });
+
+    return <ObjectEditorRender val={val} formApi={formApi} formProps={formProps} onClick={onClick} onSubmit={onSubmit} />;
+};
+
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const useGetFormProps = (_props: {fieldId: string; propInfo: IPropsType | undefined; allIds: string[]}) => {
+export const useGetFormProps = (_props: {fieldId: string}) => {
     const rulesMap = {
         string: ['not-empty', 'max-length', 'min-length', '=', '!=', 'is-email', 'is-email-or-empty', 'is-uuid', 'is-uuid-or-empty'],
         number: ['not-empty', 'number-or-empty', '=', '!=', '>', '>=', '<', '<='],
@@ -117,11 +132,8 @@ export const useGetFormProps = (_props: {fieldId: string; propInfo: IPropsType |
 
                 //dataSet: typesDataSet,
             } satisfies ITabulatorGridFieldProps,
-
         },
     };
 
     return formProps;
 };
-
-

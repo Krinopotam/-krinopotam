@@ -3,6 +3,7 @@ import {FormInfoContext} from '@src/dFormConstructor/context/formInfoProvider';
 import {SelectedFieldContext} from '@src/dFormConstructor/context/selectedFieldProvider';
 import {BaseComponentInfo, IComponentPropsInfo} from '@src/dFormConstructor/fields/baseComponentInfo';
 import {BooleanEditor} from '@src/dFormConstructor/renders/propsEditor/editors/booleanEditor';
+import {FormEditor} from "@src/dFormConstructor/renders/propsEditor/editors/formEditor";
 import {NumberEditor} from '@src/dFormConstructor/renders/propsEditor/editors/numberEditor';
 import {ObjectEditor} from '@src/dFormConstructor/renders/propsEditor/editors/objectEditor';
 import {ObjectListEditor} from '@src/dFormConstructor/renders/propsEditor/editors/objectListEditor';
@@ -53,6 +54,7 @@ const usePrepareFieldsProps = (fieldInfo: BaseComponentInfo | undefined): Descri
             formInfo,
             field: fieldInfo,
             propKey: key,
+            allIds
         };
 
         let editor: React.ReactNode;
@@ -61,6 +63,8 @@ const usePrepareFieldsProps = (fieldInfo: BaseComponentInfo | undefined): Descri
         else if (dataType === 'boolean') editor = <BooleanEditor {...editorProps} />;
         else if (dataType === 'fieldIds') editor = <SelectEditor {...editorProps} options={allIds.filter(f => f !== fieldInfo.getId())} multiple />;
         else if (dataType === 'rules') editor = <RulesEditor {...editorProps} />;
+        else if (dataType === 'form') editor = <FormEditor {...editorProps} />;
+        else if (dataType === 'formModal') editor = <FormEditor {...editorProps} modal />;
         else if (Array.isArray(dataType)) {
             if (typeof dataType[0] === 'string') {
                 const options = dataType as string[];

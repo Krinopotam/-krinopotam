@@ -11,13 +11,13 @@ import {ISwitchFieldProps, SwitchField} from '@src/dForm/fields/switch';
 import {BaseComponentInfo, IPropsType} from '@src/dFormConstructor/fields/baseComponentInfo';
 import {FormInfo} from '@src/dFormConstructor/fields/formInfo';
 import {ObjectListEditorComponent} from '@src/dFormConstructor/renders/propsEditor/editors/objectListEditor';
+import {RulesEditorComponent} from '@src/dFormConstructor/renders/propsEditor/editors/rulesEditor';
 import {DFormModal, IDFormModalApi, IDFormModalProps} from '@src/dFormModal';
 import {ISelectBaseProps} from '@src/select';
 import {Input, Space} from 'antd';
 import React, {useState} from 'react';
 
-export const ObjectEditor = ({formInfo, field, propKey}: {formInfo: FormInfo; field: BaseComponentInfo; propKey: string}): React.JSX.Element => {
-    const allIds = formInfo.getAllFieldIds({tab: true, tabs: true, inlineGroup: true});
+export const ObjectEditor = ({formInfo, field, propKey, allIds}: {formInfo: FormInfo; field: BaseComponentInfo; propKey: string; allIds:string[]}): React.JSX.Element => {
     const val = field.getProp(propKey);
     const [, setCurVal] = useState<Record<string, unknown> | undefined>(val);
 
@@ -99,12 +99,17 @@ export const useGetFormProps = ({fieldId, propInfo, allIds}: {fieldId: string; p
         const dataType = propInfo[key];
         const editor = getEditorField(dataType, key, fieldId, allIds);
         if (!editor) continue;
-        formProps.fieldsProps[key] = editor
+        formProps.fieldsProps[key] = editor;
     }
     return formProps;
 };
 
-export const getEditorField = (dataType: IPropsType[keyof IPropsType], key:string, parentFieldId: string, allIds: string[]): IBaseFieldProps<AnyType, AnyType> | undefined => {
+export const getEditorField = (
+    dataType: IPropsType[keyof IPropsType],
+    key: string,
+    parentFieldId: string,
+    allIds: string[]
+): IBaseFieldProps<AnyType, AnyType> | undefined => {
     if (dataType === 'string') {
         return {
             component: InputField,
@@ -127,6 +132,12 @@ export const getEditorField = (dataType: IPropsType[keyof IPropsType], key:strin
             dataSet: optionsToDataSet(allIds.filter(f => f !== parentFieldId)),
             mode: 'multiple',
         } satisfies ISelectFieldProps;
+    } else if (dataType === 'rules') {
+        return {
+            component: CustomField,
+            label: key,
+            onRender: (_value, field) => <RulesEditorComponent fieldId={parentFieldId} field={field} />,
+        } satisfies ICustomFieldProps;
     } else if (Array.isArray(dataType)) {
         if (typeof dataType[0] === 'string') {
             const options = dataType as string[];
@@ -147,7 +158,6 @@ export const getEditorField = (dataType: IPropsType[keyof IPropsType], key:strin
             return {
                 component: CustomField,
                 label: key,
-                noItemWrapper: false,
                 onRender: (_value, field) => (
                     <ObjectListEditorComponent fieldId={parentFieldId} field={field} propInfo={dataType as unknown as IPropsType} allIds={allIds} />
                 ),
@@ -157,7 +167,6 @@ export const getEditorField = (dataType: IPropsType[keyof IPropsType], key:strin
         return {
             component: CustomField,
             label: key,
-            noItemWrapper: false,
             onRender: (_value, field) => <ObjectEditorComponent fieldId={parentFieldId} field={field} propInfo={dataType} allIds={allIds} />,
         } satisfies ICustomFieldProps;
     }

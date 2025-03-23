@@ -16,6 +16,8 @@ export const SourceEditorModal = ({sourceFormApi}: {sourceFormApi: IDFormModalAp
             codeEditor: {
                 component: CustomField,
                 onRender: () => <SourceEditor apiRef={codeEditorApi} />,
+                noContainer: true,
+                noItemWrapper:true,
                 style: {position: 'relative', display: 'flex', flex: 1, minHeight: 0, minWidth: 0},
             } as ICustomFieldProps,
         },

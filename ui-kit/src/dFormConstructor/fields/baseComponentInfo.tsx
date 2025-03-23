@@ -6,7 +6,7 @@ import React from 'react';
 import {GetNanoId} from '@krinopotam/js-helpers/helpersString/getNanoId';
 import {Space} from 'antd';
 
-export type IPropsTypeBase = 'string' | 'number' | 'boolean' | 'fieldIds' | 'rules' | string[];
+export type IPropsTypeBase = 'string' | 'number' | 'boolean' | 'fieldIds' | 'rules' | 'form' | 'formModal' | string[];
 export type IPropsType = {[key: string]: IPropsTypeBase | IPropsType | IPropsType[]};
 
 export type IComponentPropsInfo<T> = T extends object
@@ -41,7 +41,7 @@ export class BaseComponentInfo {
 
     /** @returns true if field can be child of the specified parent */
     canHaveParent(parent?: BaseComponentInfo) {
-        return parent?.CODE === 'form' || parent?.CODE === 'tab' || parent?.CODE === 'inlineGroup';
+        return parent?.CODE === 'form' || parent?.CODE === 'formModal' || parent?.CODE === 'tab' || parent?.CODE === 'inlineGroup';
     }
 
     /** @returns true if field can be a parent of the specified child. If child is not specified, returns true if field potentially can have children */
