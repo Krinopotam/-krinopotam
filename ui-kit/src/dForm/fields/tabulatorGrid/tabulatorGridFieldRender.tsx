@@ -143,10 +143,10 @@ const usePrepareCallbacks = (field: TabulatorGridField, fieldProps: ITabulatorGr
             return fieldProps.onSelectionChange?.(selectedData, rows, selectedRows, deselectedRows, gridApi, field);
         },
 
-        onRowMoved: (row,  gridApi) => {
+        onRowMoved: (row, gridApi) => {
             if (field.isReady()) {
                 if (!fieldProps.selectionMode) {
-                    const dataSet = gridApi.getDataSet()
+                    const dataSet = gridApi.getDataSet();
                     field.setValue(dataSet ?? [], false, true, true);
                     field.setDirty(true);
                 }

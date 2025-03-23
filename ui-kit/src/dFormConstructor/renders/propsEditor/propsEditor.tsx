@@ -1,16 +1,16 @@
-import {ObjectEditor} from '@src/dFormConstructor/renders/propsEditor/editors/objectEditor';
-import {ObjectListEditor} from '@src/dFormConstructor/renders/propsEditor/editors/objectListEditor';
-import React, {useContext, useSyncExternalStore} from 'react';
-import {DescriptionsProps, Tooltip} from 'antd';
-import {Descriptions} from 'antd';
-import {SelectedFieldContext} from '@src/dFormConstructor/context/selectedFieldProvider';
 import type {AnyType} from '@krinopotam/service-types';
-import {BaseComponentInfo, IComponentPropsInfo} from '@src/dFormConstructor/fields/baseComponentInfo';
-import {StringEditor} from '@src/dFormConstructor/renders/propsEditor/editors/stringEditor';
 import {FormInfoContext} from '@src/dFormConstructor/context/formInfoProvider';
+import {SelectedFieldContext} from '@src/dFormConstructor/context/selectedFieldProvider';
+import {BaseComponentInfo, IComponentPropsInfo} from '@src/dFormConstructor/fields/baseComponentInfo';
 import {BooleanEditor} from '@src/dFormConstructor/renders/propsEditor/editors/booleanEditor';
 import {NumberEditor} from '@src/dFormConstructor/renders/propsEditor/editors/numberEditor';
+import {ObjectEditor} from '@src/dFormConstructor/renders/propsEditor/editors/objectEditor';
+import {ObjectListEditor} from '@src/dFormConstructor/renders/propsEditor/editors/objectListEditor';
+import {RulesEditor} from "@src/dFormConstructor/renders/propsEditor/editors/rulesEditor";
 import {SelectEditor} from '@src/dFormConstructor/renders/propsEditor/editors/selectEditor';
+import {StringEditor} from '@src/dFormConstructor/renders/propsEditor/editors/stringEditor';
+import {Descriptions, DescriptionsProps, Tooltip} from 'antd';
+import React, {useContext, useSyncExternalStore} from 'react';
 
 export const PropsEditor = (): React.JSX.Element => {
     const {formInfo} = useContext(FormInfoContext);
@@ -60,15 +60,16 @@ const usePrepareFieldsProps = (fieldInfo: BaseComponentInfo | undefined): Descri
         else if (dataType === 'number') editor = <NumberEditor {...editorProps} />;
         else if (dataType === 'boolean') editor = <BooleanEditor {...editorProps} />;
         else if (dataType === 'fieldIds') editor = <SelectEditor {...editorProps} options={allIds.filter(f => f !== fieldInfo.getId())} multiple />;
+        else if (dataType === 'rules') editor = <RulesEditor {...editorProps} />;
         else if (Array.isArray(dataType)) {
             if (typeof dataType[0] === 'string') {
                 const options = dataType as string[];
-                if (dataType[0] === 'multi') editor = <SelectEditor {...editorProps} options={options.slice(1)} multiple />;
+                if (dataType[0] === '__multi') editor = <SelectEditor {...editorProps} options={options.slice(1)} multiple />;
                 else editor = <SelectEditor {...editorProps} options={options} />;
             } else if (typeof dataType[0] === 'object') editor = <ObjectListEditor {...editorProps} />;
         } else if (typeof dataType === 'object') editor = <ObjectEditor {...editorProps} />;
 
-        const label = key.length<=15 ? key : <Tooltip title={key}>{`${key.slice(0, 15)}...`}</Tooltip>;
+        const label = key.length <= 15 ? key : <Tooltip title={key}>{`${key.slice(0, 15)}...`}</Tooltip>;
 
         result.push({key, label: label, children: editor});
     }

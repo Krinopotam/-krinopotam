@@ -33,7 +33,6 @@ export const useSplitTreeSelectProps = (props: IAnyFieldProps) => {
             itemWrapperStyle: true,
             rules: true,
             style: true,
-            tab: true,
             tooltip: true,
             defaultValue: true,
             width: true,

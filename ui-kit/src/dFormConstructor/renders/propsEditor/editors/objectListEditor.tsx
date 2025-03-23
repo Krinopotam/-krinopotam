@@ -3,7 +3,9 @@ import {IBaseField} from '@src/dForm/fields/base';
 import {ITabulatorGridFieldProps, TabulatorGridField} from '@src/dForm/fields/tabulatorGrid';
 import {BaseComponentInfo, IPropsType} from '@src/dFormConstructor/fields/baseComponentInfo';
 import {FormInfo} from '@src/dFormConstructor/fields/formInfo';
+import {addIds} from '@src/dFormConstructor/renders/propsEditor/tools/addIds';
 import {ObjectEditorRender, useGetFormProps} from '@src/dFormConstructor/renders/propsEditor/editors/objectEditor';
+import {removeIds} from '@src/dFormConstructor/renders/propsEditor/tools/removeIds';
 import {IDFormModalApi, IDFormModalProps} from '@src/dFormModal';
 import {ITabulatorColumn, ITabulatorProps} from '@src/tabulatorBase';
 import React, {useState} from 'react';
@@ -36,20 +38,6 @@ export const ObjectListEditor = ({formInfo, field, propKey}: {formInfo: FormInfo
     return <ObjectEditorRender val={val} formApi={formApi} formProps={formProps} onClick={onClick} onSubmit={onSubmit} />;
 };
 
-const addIds = <T extends Record<string, unknown>>(data: T[]): T[] => {
-    let index = 0;
-    return data.map(item => {
-        return {...item, id: item.id ?? index++};
-    });
-};
-
-const removeIds = <T extends Record<string, unknown>>(data: T[]): T[] => {
-    return data.map(item => {
-        delete item.id;
-        return item;
-    });
-};
-
 const useGetTableFormProps = ({fieldId, propInfo, allIds}: {fieldId: string; propInfo: IPropsType; allIds: string[]}) => {
     const formProps: IDFormModalProps & {fieldsProps: Record<string, unknown>} = {
         height: 500,
@@ -76,8 +64,7 @@ const useGetTableFormProps = ({fieldId, propInfo, allIds}: {fieldId: string; pro
         onDelete: () => {},
         autoHeightResize: true,
         movableRows: true,
-        rowHeader:{headerSort:false, resizable: false, minWidth:30, width:30, rowHandle:true, formatter:"handle"},
-
+        rowHeader: {headerSort: false, resizable: false, minWidth: 30, width: 30, rowHandle: true, formatter: 'handle'},
     } satisfies ITabulatorGridFieldProps;
     return formProps;
 };

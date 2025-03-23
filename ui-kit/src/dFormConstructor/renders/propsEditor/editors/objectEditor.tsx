@@ -1,7 +1,8 @@
 import {EllipsisOutlined} from '@ant-design/icons';
 import {useEvent} from '@krinopotam/common-hooks';
+import {AnyType} from '@krinopotam/service-types';
 import {Button} from '@src/button';
-import {IBaseField} from '@src/dForm/fields/base';
+import {IBaseField, IBaseFieldProps} from '@src/dForm/fields/base';
 import {CustomField, ICustomFieldProps} from '@src/dForm/fields/custom';
 import {IInputFieldProps, InputField} from '@src/dForm/fields/input';
 import {INumberFieldProps, NumberField} from '@src/dForm/fields/number';
@@ -89,75 +90,80 @@ export const ObjectEditorComponent = ({
 export const useGetFormProps = ({fieldId, propInfo, allIds}: {fieldId: string; propInfo: IPropsType | undefined; allIds: string[]}) => {
     const formProps: IDFormModalProps & {fieldsProps: Record<string, unknown>} = {
         layout: 'horizontal',
-        height:500,
+        height: 500,
         fieldsProps: {},
     };
     if (!propInfo) return formProps;
 
-    const optionsToDataSet = (options: string[]) => {
-        const dataSet: ISelectBaseProps['dataSet'] = options.map(item => ({id: item, label: item}));
-        return dataSet;
-    };
-
     for (const key in propInfo) {
         const dataType = propInfo[key];
+        const editor = getEditorField(dataType, key, fieldId, allIds);
+        if (!editor) continue;
+        formProps.fieldsProps[key] = editor
+    }
+    return formProps;
+};
 
-        if (dataType === 'string') {
-            formProps.fieldsProps[key] = {
-                component: InputField,
-                label: key,
-            } satisfies IInputFieldProps;
-        } else if (dataType === 'number') {
-            formProps.fieldsProps[key] = {
-                component: NumberField,
-                label: key,
-            } satisfies INumberFieldProps;
-        } else if (dataType === 'boolean') {
-            formProps.fieldsProps[key] = {
-                component: SwitchField,
-                label: key,
-            } satisfies ISwitchFieldProps;
-        } else if (dataType === 'fieldIds') {
-            formProps.fieldsProps[key] = {
-                component: SelectField,
-                label: key,
-                dataSet: optionsToDataSet(allIds.filter(f => f !== fieldId)),
-                mode: 'multiple',
-            } satisfies ISelectFieldProps;
-        } else if (Array.isArray(dataType)) {
-            if (typeof dataType[0] === 'string') {
-                const options = dataType as string[];
-                if (options[0] === 'multi')
-                    formProps.fieldsProps[key] = {
-                        component: SelectField,
-                        label: key,
-                        dataSet: optionsToDataSet(options.slice(1)),
-                        mode: 'multiple',
-                    } satisfies ISelectFieldProps;
-                else
-                    formProps.fieldsProps[key] = {
-                        component: SelectField,
-                        label: key,
-                        dataSet: optionsToDataSet(options),
-                    } satisfies ISelectFieldProps;
-            } else if (typeof dataType[0] === 'object') {
-                formProps.fieldsProps[key] = {
-                    component: CustomField,
+export const getEditorField = (dataType: IPropsType[keyof IPropsType], key:string, parentFieldId: string, allIds: string[]): IBaseFieldProps<AnyType, AnyType> | undefined => {
+    if (dataType === 'string') {
+        return {
+            component: InputField,
+            label: key,
+        } satisfies IInputFieldProps;
+    } else if (dataType === 'number') {
+        return {
+            component: NumberField,
+            label: key,
+        } satisfies INumberFieldProps;
+    } else if (dataType === 'boolean') {
+        return {
+            component: SwitchField,
+            label: key,
+        } satisfies ISwitchFieldProps;
+    } else if (dataType === 'fieldIds') {
+        return {
+            component: SelectField,
+            label: key,
+            dataSet: optionsToDataSet(allIds.filter(f => f !== parentFieldId)),
+            mode: 'multiple',
+        } satisfies ISelectFieldProps;
+    } else if (Array.isArray(dataType)) {
+        if (typeof dataType[0] === 'string') {
+            const options = dataType as string[];
+            if (options[0] === '__multi')
+                return {
+                    component: SelectField,
                     label: key,
-                    noItemWrapper: false,
-                    onRender: (_value, field) => (
-                        <ObjectListEditorComponent fieldId={fieldId} field={field} propInfo={dataType as unknown as IPropsType} allIds={allIds} />
-                    ),
-                } satisfies ICustomFieldProps;
-            }
-        } else if (typeof dataType === 'object') {
-            formProps.fieldsProps[key] = {
+                    dataSet: optionsToDataSet(options.slice(1)),
+                    mode: 'multiple',
+                } satisfies ISelectFieldProps;
+            else
+                return {
+                    component: SelectField,
+                    label: key,
+                    dataSet: optionsToDataSet(options),
+                } satisfies ISelectFieldProps;
+        } else if (typeof dataType[0] === 'object') {
+            return {
                 component: CustomField,
                 label: key,
                 noItemWrapper: false,
-                onRender: (_value, field) => <ObjectEditorComponent fieldId={fieldId} field={field} propInfo={dataType} allIds={allIds} />,
+                onRender: (_value, field) => (
+                    <ObjectListEditorComponent fieldId={parentFieldId} field={field} propInfo={dataType as unknown as IPropsType} allIds={allIds} />
+                ),
             } satisfies ICustomFieldProps;
         }
+    } else if (typeof dataType === 'object') {
+        return {
+            component: CustomField,
+            label: key,
+            noItemWrapper: false,
+            onRender: (_value, field) => <ObjectEditorComponent fieldId={parentFieldId} field={field} propInfo={dataType} allIds={allIds} />,
+        } satisfies ICustomFieldProps;
     }
-    return formProps;
+};
+
+const optionsToDataSet = (options: string[]) => {
+    const dataSet: ISelectBaseProps['dataSet'] = options.map(item => ({id: item, label: item}));
+    return dataSet;
 };
