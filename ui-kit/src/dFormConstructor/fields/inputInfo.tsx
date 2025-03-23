@@ -8,7 +8,7 @@ export class InputInfo extends BaseComponentInfo {
     public override readonly CODE = 'input';
     public override readonly CLASS = InputField;
     public override readonly INTERFACE_NAME = 'IInputFieldProps';
-    public override readonly ICON = (<FieldStringOutlined />);
+    public override readonly ICON = (<FieldStringOutlined/>);
 
     override getPropsInfo() {
         const baseProps = super.getPropsInfo();
@@ -16,6 +16,7 @@ export class InputInfo extends BaseComponentInfo {
             ...baseProps,
             showCount: 'boolean',
             maxLength: 'number',
+            spellcheck: ['true', 'false'],
         } satisfies IComponentPropsInfo<IInputFieldProps>;
     }
 }

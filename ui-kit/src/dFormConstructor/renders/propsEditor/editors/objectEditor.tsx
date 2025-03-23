@@ -155,7 +155,7 @@ export const useGetFormProps = ({fieldId, propInfo, allIds}: {fieldId: string; p
                 component: CustomField,
                 label: key,
                 noItemWrapper: false,
-                onRender: (_value, field) => <ObjectEditorComponent fieldId={fieldId} field={field} propInfo={dataType as IPropsType} allIds={allIds} />,
+                onRender: (_value, field) => <ObjectEditorComponent fieldId={fieldId} field={field} propInfo={dataType} allIds={allIds} />,
             } satisfies ICustomFieldProps;
         }
     }

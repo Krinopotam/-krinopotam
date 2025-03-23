@@ -75,6 +75,9 @@ const useGetTableFormProps = ({fieldId, propInfo, allIds}: {fieldId: string; pro
         editFormProps: editFormProps,
         onDelete: () => {},
         autoHeightResize: true,
+        movableRows: true,
+        rowHeader:{headerSort:false, resizable: false, minWidth:30, width:30, rowHandle:true, formatter:"handle"},
+
     } satisfies ITabulatorGridFieldProps;
     return formProps;
 };

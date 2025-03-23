@@ -128,6 +128,9 @@ export interface IGridPropsCallbacks {
     /** Callback executed when selected rows change */
     onSelectionChange?: (data: IGridRowData[], rows: RowComponent[], selectedRows: RowComponent[], deselectedRows: RowComponent[], gridApi: IGridApi) => void;
 
+    /** Callback will be triggered when a row has been successfully moved.*/
+    onRowMoved?:(row: RowComponent, gridApi: IGridApi)=>void
+
     /** Callback executed when selected rows delete */
     onDelete?: (selectedRows: IGridRowData[], gridApi: IGridApi) => IGridDeletePromise | void | undefined;
 }

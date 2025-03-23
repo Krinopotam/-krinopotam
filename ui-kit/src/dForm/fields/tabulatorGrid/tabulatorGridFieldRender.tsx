@@ -68,6 +68,7 @@ const useSplitTabulatorProps = (props: ITabulatorGridFieldProps) => {
             fetchInCreateMode: true,
             onSelectionChange: true,
             onActiveRowChanged: true,
+            onRowMoved: true,
             onDelete: true,
             readOnly: true,
             onValueChanged: true,
@@ -141,6 +142,18 @@ const usePrepareCallbacks = (field: TabulatorGridField, fieldProps: ITabulatorGr
             }
             return fieldProps.onSelectionChange?.(selectedData, rows, selectedRows, deselectedRows, gridApi, field);
         },
+
+        onRowMoved: (row,  gridApi) => {
+            if (field.isReady()) {
+                if (!fieldProps.selectionMode) {
+                    const dataSet = gridApi.getDataSet()
+                    field.setValue(dataSet ?? [], false, true, true);
+                    field.setDirty(true);
+                }
+            }
+            return fieldProps.onRowMoved?.(row, gridApi, field);
+        },
+
         onDataLoading: (dataSet, gridApi) => {
             field.setReady(false);
             return fieldProps.onDataLoading?.(dataSet, gridApi, field);

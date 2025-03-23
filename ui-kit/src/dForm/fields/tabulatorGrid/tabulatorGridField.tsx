@@ -55,6 +55,9 @@ export interface ITabulatorGridFieldPropsCallbacks {
     /** Callback executed when active rows changed */
     onActiveRowChanged?: (row: RowComponent, gridApi: IGridApi, field: TabulatorGridField) => void;
 
+    /** Callback executed when row moved */
+    onRowMoved?: (row: RowComponent, gridApi: IGridApi, field: TabulatorGridField) => void;
+
     ajaxRequestFunc?: (url: string, config: IAjaxConfig, params: IRequestProps) => IGridDataSourcePromise | undefined;
 
     /** Callback executed when selected rows delete */

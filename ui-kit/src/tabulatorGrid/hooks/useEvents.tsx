@@ -78,6 +78,11 @@ export const useEvents = (api: IGridApi, events: IGridProps['events']): ITabulat
                 api.getProps().onSelectionChange?.(data, rows, selectedRows, deselectedRows, api);
                 triggerButtonEvent(api, 'onSelectionChange', [data, rows, selectedRows, deselectedRows, api]);
             },
+
+            rowMoved: (row,) => {
+                events?.rowMoved?.(row);
+                api.getProps().onRowMoved?.(row, api);
+            }
         };
     }, [events, api]);
 };
