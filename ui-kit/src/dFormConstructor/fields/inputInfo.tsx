@@ -14,8 +14,8 @@ export class InputInfo extends BaseComponentInfo {
         const baseProps = super.getPropsInfo();
         return {
             ...baseProps,
-            showCount: 'boolean',
             maxLength: 'number',
+            showCount: 'boolean',
             spellcheck: ['true', 'false'],
         } satisfies IComponentPropsInfo<IInputFieldProps>;
     }

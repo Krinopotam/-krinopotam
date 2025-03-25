@@ -1,41 +1,63 @@
+import {useEvent} from '@krinopotam/common-hooks';
 import type {AnyType} from '@krinopotam/service-types';
 import {FormInfoContext} from '@src/dFormConstructor/context/formInfoProvider';
 import {SelectedFieldContext} from '@src/dFormConstructor/context/selectedFieldProvider';
 import {BaseComponentInfo, IComponentPropsInfo} from '@src/dFormConstructor/fields/baseComponentInfo';
 import {BooleanEditor} from '@src/dFormConstructor/renders/propsEditor/editors/booleanEditor';
-import {FormEditor} from "@src/dFormConstructor/renders/propsEditor/editors/formEditor";
+import {FormEditor} from '@src/dFormConstructor/renders/propsEditor/editors/formEditor';
 import {NumberEditor} from '@src/dFormConstructor/renders/propsEditor/editors/numberEditor';
 import {ObjectEditor} from '@src/dFormConstructor/renders/propsEditor/editors/objectEditor';
 import {ObjectListEditor} from '@src/dFormConstructor/renders/propsEditor/editors/objectListEditor';
-import {RulesEditor} from "@src/dFormConstructor/renders/propsEditor/editors/rulesEditor";
+import {RulesEditor} from '@src/dFormConstructor/renders/propsEditor/editors/rulesEditor';
 import {SelectEditor} from '@src/dFormConstructor/renders/propsEditor/editors/selectEditor';
 import {StringEditor} from '@src/dFormConstructor/renders/propsEditor/editors/stringEditor';
-import {Descriptions, DescriptionsProps, Tooltip} from 'antd';
-import React, {useContext, useSyncExternalStore} from 'react';
+import {Descriptions, DescriptionsProps, Input, Tooltip} from 'antd';
+import runDebounce from 'lodash.debounce';
+import React, {ChangeEvent, useContext, useMemo, useSyncExternalStore} from 'react';
 
 export const PropsEditor = (): React.JSX.Element => {
     const {formInfo} = useContext(FormInfoContext);
     useSyncExternalStore(formInfo.propsEditorSubscribe.bind(formInfo), formInfo.getPropsEditorRerenderSnapshot.bind(formInfo));
     const {selectedField} = useContext(SelectedFieldContext);
+    const [filter, setFilter] = React.useState<string>('');
 
     const title = undefined; //selectedField?.getId();
-    const items = usePrepareFieldsProps(selectedField);
+    const allItems = usePrepareFieldsProps(selectedField);
+
+    const items = allItems?.filter(item => !filter || (item?.key as string)?.toLowerCase().includes(filter.toLowerCase()));
+
+    const debounceSetFilter = useMemo(
+        () =>
+            runDebounce((search: string) => {
+                setFilter(search);
+            }, 100),
+        []
+    );
+
+    const onSearch = useEvent((e: ChangeEvent<HTMLInputElement>) => {
+        const search = e.target.value;
+        debounceSetFilter(search);
+    });
 
     if (!selectedField) return <></>;
 
     return (
-        <div
-            style={{
-                flex: 1,
-                overflow: 'auto',
-                scrollbarColor: 'rgb(234, 234, 234)',
-                scrollbarGutter: 'stable',
-                scrollbarWidth: 'thin',
-                paddingRight: 20,
-            }}
-        >
-            <Descriptions bordered title={title} column={1} size={'small'} items={items} />
-        </div>
+        <>
+            {' '}
+            <Input placeholder={'Search...'} style={{marginBottom: 10}} onChange={onSearch} />
+            <div
+                style={{
+                    flex: 1,
+                    overflow: 'auto',
+                    scrollbarColor: 'rgb(234, 234, 234)',
+                    scrollbarGutter: 'stable',
+                    scrollbarWidth: 'thin',
+                    paddingRight: 20,
+                }}
+            >
+                <Descriptions bordered title={title} column={1} size={'small'} items={items} />
+            </div>
+        </>
     );
 };
 
@@ -54,7 +76,7 @@ const usePrepareFieldsProps = (fieldInfo: BaseComponentInfo | undefined): Descri
             formInfo,
             field: fieldInfo,
             propKey: key,
-            allIds
+            allIds,
         };
 
         let editor: React.ReactNode;
