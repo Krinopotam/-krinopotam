@@ -10,24 +10,38 @@ import {IDFormModalApi, IDFormModalProps} from '@src/dFormModal';
 import {ITabulatorColumn, ITabulatorProps} from '@src/tabulatorBase';
 import React, {useState} from 'react';
 
-export const ObjectListEditor = ({formInfo, field, propKey, allIds}: {formInfo: FormInfo; field: BaseComponentInfo; propKey: string; allIds: string[]}): React.JSX.Element => {
+export const ObjectListEditor = ({
+    formInfo,
+    field,
+    propKey,
+    allIds,
+}: {
+    formInfo: FormInfo;
+    field: BaseComponentInfo;
+    propKey: string;
+    allIds: string[];
+}): React.JSX.Element => {
     const val = field.getProp(propKey);
 
     const [, setCurVal] = useState<unknown>(val);
 
     const [formApi] = useState({} as IDFormModalApi);
+    const propInfo = field.getPropsInfo()[propKey] as IPropsType;
+    const pInfo = propInfo[0] as IPropsType;
+
     const formProps = useGetTableFormProps({
         fieldId: field.getId(),
-        propInfo: field.getPropsInfo()[propKey] as IPropsType,
+        propInfo,
         allIds,
     });
 
     const onClick = useEvent(() => {
-        formApi.open('update', {...formProps, dataSet: {data: addIds(val)}});
+        const data = pInfo['id'] ? val : addIds(val);
+        formApi.open('update', {...formProps, dataSet: {data: data}});
     });
 
     const onSubmit = useEvent((values: Record<string, unknown>) => {
-        const newVal = removeIds(values['data'] as Record<string, unknown>[]);
+        const newVal = pInfo['id'] ? values['data'] : removeIds(values['data'] as Record<string, unknown>[]);
         setCurVal(newVal);
         field.setProp(propKey, newVal);
         formInfo.emitFormPreviewRerender();

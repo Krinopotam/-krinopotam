@@ -375,7 +375,7 @@ const TreeSelect = React.forwardRef<BaseSelectRef, TreeSelectProps>((props, ref)
           const labelInValueItem = toLabeledValues(internalValue).find(
             labeledItem => labeledItem.value === rawValue,
           );
-          rawLabel = labelInValueItem.label;
+          rawLabel = labelInValueItem?.label;
         }
         return {
           label: rawLabel,
