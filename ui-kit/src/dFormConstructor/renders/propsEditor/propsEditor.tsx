@@ -12,8 +12,7 @@ import {RulesEditor} from '@src/dFormConstructor/renders/propsEditor/editors/rul
 import {SelectEditor} from '@src/dFormConstructor/renders/propsEditor/editors/selectEditor';
 import {StringEditor} from '@src/dFormConstructor/renders/propsEditor/editors/stringEditor';
 import {Descriptions, DescriptionsProps, Input, Tooltip} from 'antd';
-import runDebounce from 'lodash.debounce';
-import React, {ChangeEvent, useContext, useMemo, useSyncExternalStore} from 'react';
+import React, {ChangeEvent, useContext, useSyncExternalStore, useTransition} from 'react';
 
 export const PropsEditor = (): React.JSX.Element => {
     const {formInfo} = useContext(FormInfoContext);
@@ -21,22 +20,17 @@ export const PropsEditor = (): React.JSX.Element => {
     const {selectedField} = useContext(SelectedFieldContext);
     const [filter, setFilter] = React.useState<string>('');
 
+    const [, setTransition] = useTransition();
     const title = undefined; //selectedField?.getId();
     const allItems = usePrepareFieldsProps(selectedField);
 
     const items = allItems?.filter(item => !filter || (item?.key as string)?.toLowerCase().includes(filter.toLowerCase()));
 
-    const debounceSetFilter = useMemo(
-        () =>
-            runDebounce((search: string) => {
-                setFilter(search);
-            }, 100),
-        []
-    );
-
     const onSearch = useEvent((e: ChangeEvent<HTMLInputElement>) => {
         const search = e.target.value;
-        debounceSetFilter(search);
+        setTransition(() => {
+            setFilter(search);
+        });
     });
 
     if (!selectedField) return <></>;
