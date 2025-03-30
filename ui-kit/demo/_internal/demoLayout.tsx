@@ -1,7 +1,7 @@
 import {Divider, Layout, Menu, Space, Switch, theme} from 'antd';
 import {Outlet} from 'react-router-dom';
 
-import React, {useCallback} from 'react';
+import React, {useCallback, useState} from 'react';
 import {menuItems} from '../_generated/menuProps';
 
 const {Sider, Content} = Layout;
@@ -10,6 +10,8 @@ export const DemoLayout = (props: {setDarkMode: (mode: boolean) => void}): React
     const {
         token: {colorBgContainer},
     } = theme.useToken();
+
+    const [collapsed, setCollapsed] = useState(false);
 
     const onChange = useCallback(
         (checked: boolean) => {
@@ -29,7 +31,13 @@ export const DemoLayout = (props: {setDarkMode: (mode: boolean) => void}): React
                 </div>
             </Space>
             <Layout style={{height: '100%', paddingBottom: 24}}>
-                <Sider width={400} style={{background: colorBgContainer, overflow: 'auto', height: '100%', scrollbarWidth: 'thin'}}>
+                <Sider
+                    width={400}
+                    style={{background: colorBgContainer, overflow: 'auto', height: '100%', scrollbarWidth: 'thin'}}
+                    collapsible
+                    collapsed={collapsed}
+                    onCollapse={value => setCollapsed(value)}
+                >
                     <Menu
                         mode="inline"
                         defaultSelectedKeys={['1']}
