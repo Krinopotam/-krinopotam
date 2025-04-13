@@ -1,3 +1,5 @@
+set CURRENT_DRIVE=%~d0
+
 call npm update
 
-call d:\Projects\@krinopotam\build-tools\build-and-publish.bat
+call %CURRENT_DRIVE%\Projects\@krinopotam\build-tools\build-and-publish.bat

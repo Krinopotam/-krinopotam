@@ -16,9 +16,11 @@ if %errorlevel% neq 0 (
   exit /b 1
 )
 
+set CURRENT_DRIVE=%~d0
+
 @echo:
 @echo --------------- Update package.json version ---------------------
-node d:\Projects\@krinopotam\build-tools\update-package-version.js package.json
+node %CURRENT_DRIVE%\Projects\@krinopotam\build-tools\update-package-version.js package.json
 
 @echo:
 @echo --------------- Copy package.json to dist folder ----------------
