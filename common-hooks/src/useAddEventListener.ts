@@ -12,7 +12,7 @@ import {useEvent} from './useEvent';
 export const useAddEventListener = <K extends keyof DocumentEventMap, Target extends EventTarget, TReturn>(
     name: K,
     handler: (ev: DocumentEventMap[K]) => TReturn,
-    target?: Target | (() => Target) | React.RefObject<Target> | null,
+    target?: Target | (() => Target) | React.RefObject<Target | null | undefined> | null,
     options?: boolean | AddEventListenerOptions,
     skip?: boolean
 ) => {
@@ -21,6 +21,7 @@ export const useAddEventListener = <K extends keyof DocumentEventMap, Target ext
     useEffect(() => {
         if (skip) return;
         const targetElement = getTarget(target);
+        if (!targetElement) return;
         targetElement.addEventListener(name, callback, options);
         return () => {
             targetElement.removeEventListener(name, callback, options);
@@ -28,7 +29,7 @@ export const useAddEventListener = <K extends keyof DocumentEventMap, Target ext
     }, [callback, name, options, target]);
 };
 
-export const getTarget = <Target extends EventTarget>(target?: Target | (() => Target) | React.RefObject<Target> | null) => {
+export const getTarget = <Target extends EventTarget>(target?: Target | (() => Target) | React.RefObject<Target | null | undefined> | null) => {
     if (target instanceof EventTarget) return target;
     if (typeof target === 'function') return target();
     if (target?.current instanceof EventTarget) return target.current;

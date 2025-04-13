@@ -1,15 +1,13 @@
 @echo off
 setlocal
 
-:: Run tests using PowerShell
-:: call powershell -Command "Invoke-Expression 'npm run test'"
-powershell -Command "npm run test --mode run; if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }"
+call npm run test run
 
 :: Check the exit code of the tests
 if %ERRORLEVEL% NEQ 0 (
     echo Tests failed! Aborting build.
 	pause
-    exit /b 1
+    exit /b %ERRORLEVEL%
 )
 
 :: If tests passed, proceed with the build
