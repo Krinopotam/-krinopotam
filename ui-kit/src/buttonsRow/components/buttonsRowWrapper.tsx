@@ -1,4 +1,4 @@
-import {IsDescendant} from '@krinopotam/js-helpers/helpersDOM/isDescendant';
+import {IsDescendant} from '@krinopotam/js-helpers/helpersDom/isDescendant';
 import {GetNanoId} from '@krinopotam/js-helpers/helpersString/getNanoId';
 import React, {CSSProperties, forwardRef, RefObject, useEffect, useMemo, useRef, useState} from 'react';
 

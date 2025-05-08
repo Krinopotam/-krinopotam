@@ -16,7 +16,6 @@ export const getCanHaveChildrenOnly = <T extends Record<string, AnyType> = Recor
         const result: T[] = [];
         for (const node of nodes) {
             if (node[fieldNames.isLeaf] || node[fieldNames.key] === removeBranch) continue;
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
             const {[fieldNames.children]: children, ...clonedNode} = node;
             result.push(clonedNode as T);
             if (node[fieldNames.children]) clonedNode[fieldNames.children] = recursive(node[fieldNames.children], removeBranch);
