@@ -1,9 +1,8 @@
-import {FormInfo} from "@src/dFormConstructor/fields/formInfo";
 import {FieldsTree} from '@src/dFormConstructor/renders/fieldsTree/fieldsTree';
 import {theme} from 'antd';
 import React from 'react';
 
-export const FieldsTreeLayout = (props:{initialFormInfo?: FormInfo}): React.JSX.Element => {
+export const FieldsTreeLayout = (): React.JSX.Element => {
     const {
         token: {colorBgContainer, colorBorder},
     } = theme.useToken();

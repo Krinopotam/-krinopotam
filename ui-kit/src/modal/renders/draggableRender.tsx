@@ -8,7 +8,7 @@
 
 import React, {RefObject, useCallback, useRef, useState} from 'react';
 import Draggable, {DraggableData} from 'react-draggable';
-import {IsDescendant} from '@krinopotam/js-helpers/helpersDOM/isDescendant';
+import {IsDescendant} from '@krinopotam/js-helpers/helpersDom/isDescendant';
 
 export const DraggableRender = ({node, targetId, onStartCallback}: { node: React.ReactNode; targetId?: string; onStartCallback?: () => void }) => {
     const draggableNodeRef = React.createRef<HTMLDivElement>();

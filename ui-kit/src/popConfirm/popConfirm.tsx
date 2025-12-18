@@ -1,4 +1,3 @@
-import {GetNanoId} from '@krinopotam/js-helpers/helpersString/getNanoId';
 import {IButtonProps} from '@src/button/button';
 import {ButtonsRowWrapper, IFormButton, IFormButtons, mergeButtons} from '@src/buttonsRow';
 import {ButtonsRow} from '@src/buttonsRow/buttonsRow';
@@ -13,7 +12,7 @@ export interface IPopConfirmProps extends Omit<PopconfirmProps, 'okType' | 'okBu
 }
 
 export const PopConfirm = ({content, ...props}: IPopConfirmProps): React.JSX.Element => {
-    const [formId] = useState(GetNanoId());
+    //const [formId] = useState(GetNanoId());
 
     const buttons = useInitButtons(props);
 
